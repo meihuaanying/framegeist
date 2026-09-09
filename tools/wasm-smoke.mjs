@@ -9,7 +9,8 @@ import { dirname, join } from "node:path";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sha = (b) => createHash("sha256").update(b).digest("hex");
 
-const { engineCli } = { engineCli: join(ROOT, "target/release/framegeist.exe") };
+const cliName = process.platform === "win32" ? "framegeist.exe" : "framegeist";
+const engineCli = join(ROOT, "target/release", cliName);
 const photo = await readFile(join(ROOT, "templates/assets/test-photos/sample-landscape.jpg"));
 const wasmBytes = await readFile(join(ROOT, "web/pkg/framegeist_wasm_bg.wasm"));
 const font = await readFile(join(ROOT, "templates/assets/fonts/JetBrainsMono-Regular.ttf"));
