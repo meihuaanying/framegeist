@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>下载 — FrameGeist</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #faf9f7; color: #1a1a1a; }
+  header { display: flex; gap: 24px; align-items: center; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e2dc; }
+  header a { color: #333; text-decoration: none; font-size: 14px; }
+  header .logo { font-weight: 700; font-size: 18px; }
+  h1 { font-size: 22px; margin: 30px 28px 6px; }
+  .note { color: #888; font-size: 13px; margin: 0 28px 22px; }
+  #rel { margin: 0 28px 40px; max-width: 860px; }
+  .rel-head { background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; }
+  .rel-head h2 { margin: 0 0 4px; font-size: 18px; }
+  .rel-head small { color: #888; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e5e2dc; border-radius: 8px; }
+  td, th { text-align: left; padding: 10px 14px; border-bottom: 1px solid #eee; font-size: 14px; }
+  a { color: #1a73e8; text-decoration: none; }
+  .sha { font-family: monospace; font-size: 11px; color: #999; }
+  #err { color: #a33; margin: 20px 28px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">FrameGeist · 框灵</span>
+  <a href="/">首页</a>
+  <a href="templates.html">模板墙</a>
+  <a href="/web/">在线使用</a>
+</header>
+<h1>下载</h1>
+<p class="note">版本与校验和实时读取 GitHub Releases API，页面不硬编码任何版本号（PRD K2）。</p>
+<div id="rel">读取 Releases…</div>
+<script>
+const REPO = "meihuaanying/framegeist";
+const el = document.getElementById("rel");
+async function main() {
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
+    if (!r.ok) throw new Error(`GitHub API ${r.status}`);
+    const rel = await r.json();
+    const rows = (rel.assets || []).map(a => `
+      <tr>
+        <td>${a.name}</td>
+        <td>${(a.size / 1048576).toFixed(1)} MB</td>
+        <td><a href="${a.browser_download_url}">下载</a></td>
+      </tr>`).join("");
+    el.innerHTML = `
+      <div class="rel-head">
+        <h2>${rel.tag_name} · ${rel.name || ""}</h2>
+        <small>发布于 ${new Date(rel.published_at).toLocaleString()} · 更新日志 <a href="${rel.html_url}">GitHub Release</a></small>
+      </div>
+      <table>
+        <tr><th>文件</th><th>大小</th><th>链接</th></tr>
+        ${rows || "<tr><td colspan=3>该版本暂无附件</td></tr>"}
+      </table>`;
+  } catch (e) {
+    el.innerHTML = `<div id="err">读取失败：${e.message}。请前往 <a href="https://github.com/${REPO}/releases">GitHub Releases</a> 手动下载。</div>`;
+  }
+}
+main();
+</script>
+</body>
+</html>

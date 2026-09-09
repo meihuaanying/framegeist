@@ -1,0 +1,47 @@
+name: pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: render sample wall (PRD C6/K1)
+        shell: pwsh
+        run: |
+          # Rust on ubuntu: install toolchain + build CLI, then render samples
+          rustup toolchain install stable --profile minimal
+          cargo run --release -p framegeist-cli --example make_test_photos
+          cargo build --release -p framegeist-cli
+          pwsh tools/gen-samples.ps1 || true
+        env:
+          CARGO_TARGET_DIR: target
+      - name: assemble site
+        run: |
+          mkdir -p upload
+          cp -r site/* upload/
+          cp -r web upload/web
+          mkdir -p upload/samples
+          cp templates/samples/*.jpg upload/samples/ || echo "no samples"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: upload
+      - id: deployment
+        uses: actions/deploy-pages@v4

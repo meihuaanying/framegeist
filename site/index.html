@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FrameGeist · 框灵 — 照片边框水印拼图，全免费开源</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; margin: 0; background: #faf9f7; color: #1a1a1a; }
+  header { display: flex; gap: 24px; align-items: center; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e2dc; }
+  header a { color: #333; text-decoration: none; font-size: 14px; }
+  header a:hover { color: #1a73e8; }
+  header .logo { font-weight: 700; font-size: 18px; }
+  .hero { max-width: 900px; margin: 60px auto 30px; padding: 0 20px; text-align: center; }
+  .hero h1 { font-size: 40px; margin: 0 0 12px; }
+  .hero p { color: #555; font-size: 17px; line-height: 1.7; }
+  .cta { display: flex; gap: 14px; justify-content: center; margin: 28px 0; }
+  .cta a { padding: 12px 26px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; }
+  .cta .primary { background: #1a1a1a; color: #fff; }
+  .cta .secondary { background: #fff; color: #1a1a1a; border: 1px solid #ccc; }
+  .features { max-width: 980px; margin: 50px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { background: #fff; border: 1px solid #e5e2dc; border-radius: 10px; padding: 20px; }
+  .card h3 { margin: 0 0 8px; font-size: 16px; }
+  .card p { margin: 0; color: #666; font-size: 14px; line-height: 1.6; }
+  .stats { text-align: center; color: #888; font-size: 14px; margin: 40px 0 80px; }
+  .stats b { color: #333; }
+  footer { text-align: center; padding: 30px; color: #999; font-size: 13px; border-top: 1px solid #e5e2dc; }
+  footer a { color: #777; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">FrameGeist · 框灵</span>
+  <a href="templates.html">模板墙</a>
+  <a href="download.html">下载</a>
+  <a href="docs.html">文档</a>
+  <a href="market.html">模板市场</a>
+  <a href="sponsor.html">赞助</a>
+  <a href="/web/">在线使用</a>
+</header>
+<div class="hero">
+  <h1>给照片加上它自己的故事</h1>
+  <p>带 EXIF 参数的边框、水印与拼图。<b>全免费、开源（MIT）、可离线、四端一致</b>——同一张照片、同一份模板，在 Windows / Android / 鸿蒙 / Web 上产出像素级一致的成品。照片永不离开你的设备。</p>
+  <div class="cta">
+    <a class="primary" href="download.html">下载客户端</a>
+    <a class="secondary" href="/web/">浏览器直接用</a>
+  </div>
+</div>
+<div class="features">
+  <div class="card"><h3>60+ 内置模板 · 106 种拼图</h3><p>经典白边、胶片齿孔、拍立得、画廊卡纸、技术铭牌、杂志排版、极简角标、相机机身——全部 JSON 声明式，可自制可流通。</p></div>
+  <div class="card"><h3>真实 EXIF，不是装饰</h3><p>机型美化（ILCE-7CM2 → Sony α7C II）、镜头、光圈、快门、ISO、焦距一键呈现；GPS 与设备序列号默认剥离。</p></div>
+  <div class="card"><h3>像素级一致</h3><p>CLI 渲染的黄金图基线约束四端；Web 端已验证与 CLI 字节级一致。导出 JPEG 质量 100 + 4:4:4，绝不下采样。</p></div>
+  <div class="card"><h3>零账号 · 零付费 · 零上传</h3><p>没有登录、没有订阅、没有授权校验。全部功能与模板免费，模板以 <code>.fgt</code> 文件流通。</p></div>
+</div>
+<div class="stats" id="stats">加载模板库数据…</div>
+<footer>
+  FrameGeist（工作名，商标检索中）· MIT 开源 ·
+  <a href="https://github.com/meihuaanying/framegeist">GitHub</a>
+</footer>
+<script>
+fetch("/web/templates.json").then(r => r.json()).then(t => {
+  const cats = new Set(t.map(x => x.category));
+  document.getElementById("stats").innerHTML =
+    `当前内置 <b>${t.length}</b> 套模板（<b>${cats.size}</b> 个分类）+ <b>106</b> 种拼图布局 · <a href="templates.html">查看模板墙 →</a>`;
+}).catch(() => {
+  document.getElementById("stats").textContent = "模板库数据加载失败";
+});
+</script>
+</body>
+</html>

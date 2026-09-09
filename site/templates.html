@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>模板墙 — FrameGeist</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; background: #faf9f7; color: #1a1a1a; }
+  header { display: flex; gap: 24px; align-items: center; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e2dc; }
+  header a { color: #333; text-decoration: none; font-size: 14px; }
+  header .logo { font-weight: 700; font-size: 18px; }
+  h1 { font-size: 22px; margin: 24px 28px 6px; }
+  .note { color: #888; font-size: 13px; margin: 0 28px 18px; }
+  #filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 28px 20px; }
+  #filters button { padding: 6px 14px; border: 1px solid #ccc; border-radius: 16px; background: #fff; cursor: pointer; font-size: 13px; }
+  #filters button.on { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  #wall { columns: 3 320px; column-gap: 14px; padding: 0 28px 60px; }
+  .cell { break-inside: avoid; margin-bottom: 14px; background: #fff; border: 1px solid #e5e2dc; border-radius: 8px; overflow: hidden; }
+  .cell img { width: 100%; display: block; }
+  .cell .cap { padding: 8px 12px; font-size: 12px; color: #555; display: flex; justify-content: space-between; }
+  .cell .cap b { color: #1a1a1a; font-weight: 600; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">FrameGeist · 框灵</span>
+  <a href="/">首页</a>
+  <a href="download.html">下载</a>
+  <a href="/web/">在线使用</a>
+</header>
+<h1>模板墙</h1>
+<p class="note">以下样张全部由 CLI 用固定测试照片真实渲染（PRD C6），禁止设计稿冒充。</p>
+<div id="filters"></div>
+<div id="wall">加载中…</div>
+<script>
+const CATS = ["classic-white","film","polaroid","gallery","technical","magazine","minimal","frame-shell"];
+let all = [];
+const filters = document.getElementById("filters");
+const wall = document.getElementById("wall");
+[["all", "全部"], ...CATS.map(c => [c, c])].forEach(([id, label], i) => {
+  const b = document.createElement("button");
+  b.textContent = label;
+  if (i === 0) b.classList.add("on");
+  b.onclick = () => {
+    document.querySelectorAll("#filters button").forEach(x => x.classList.remove("on"));
+    b.classList.add("on");
+    show(id);
+  };
+  filters.appendChild(b);
+});
+function show(cat) {
+  wall.innerHTML = "";
+  for (const t of all.filter(t => cat === "all" || t.category === cat)) {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.innerHTML = `<img loading="lazy" src="/samples/${t.id}.jpg" alt="${t.name}">
+      <div class="cap"><b>${t.name}</b><span>${t.category}</span></div>`;
+    wall.appendChild(cell);
+  }
+}
+fetch("/web/templates.json").then(r => r.json()).then(t => { all = t; show("all"); })
+  .catch(() => wall.textContent = "模板数据加载失败");
+</script>
+</body>
+</html>
