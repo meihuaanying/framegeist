@@ -169,6 +169,22 @@ fn load_template() -> Result<framegeist_core::Template> {
 }
 
 #[test]
+fn png_render_retains_exif() {
+    let photo = full_photo().expect("build");
+    let tpl = load_template().expect("template");
+    let opts = framegeist_core::RenderOptions {
+        format: framegeist_core::OutputFormat::Png,
+        ..framegeist_core::RenderOptions::default()
+    };
+    let out = framegeist_core::render(&photo, &tpl, &opts).expect("render");
+    assert_eq!(&out[1..4], b"PNG", "output must be PNG");
+    let info = probe_exif(&out).expect("probe png");
+    assert_eq!(info.model.as_deref(), Some("X-T5"));
+    assert_eq!(info.iso, Some(400));
+    assert_eq!(info.aperture, Some(1.4));
+}
+
+#[test]
 fn png_encode_is_lossless() {
     let mut img = image::RgbaImage::new(8, 8);
     for (x, y, px) in img.enumerate_pixels_mut() {

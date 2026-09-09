@@ -290,7 +290,23 @@ manifest.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCom
 mkdirSync("web", { recursive: true });
 writeFileSync(join("web", "templates.json"), JSON.stringify(manifest, null, 2) + "\n");
 
-console.log(`generated ${TEMPLATES.length} templates + web/templates.json manifest`);
+// Mirror templates + fonts into web/ so the page and the Tauri desktop shell
+// can resolve everything page-relative (self-contained dist).
+const webTemplates = join("web", "templates");
+mkdirSync(join(webTemplates, "fonts"), { recursive: true });
+for (const f of readdirSync(OUT)) {
+  if (f.endsWith(".json")) {
+    writeFileSync(join(webTemplates, f), readFileSync(join(OUT, f)));
+  }
+}
+if (existsSync(join(OUT, "assets/fonts/JetBrainsMono-Regular.ttf"))) {
+  writeFileSync(
+    join(webTemplates, "fonts/JetBrainsMono-Regular.ttf"),
+    readFileSync(join(OUT, "assets/fonts/JetBrainsMono-Regular.ttf")),
+  );
+}
+
+console.log(`generated ${TEMPLATES.length} templates + web/templates.json + web/templates/ mirror`);
 const byCat = {};
 for (const t of TEMPLATES) byCat[t.meta.category] = (byCat[t.meta.category] ?? 0) + 1;
 console.log(byCat);

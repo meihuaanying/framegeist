@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "id": "film-v3",
+    "name": "Film V3",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.07,
+      "right": 0.07,
+      "bottom": 0.13,
+      "left": 0.07
+    },
+    "background": {
+      "type": "solid",
+      "color": "#1A1611"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "filmstock",
+      "anchor": "top-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.018,
+        "weight": 400,
+        "color": "#F0D08A"
+      },
+      "content": [
+        {
+          "expr": "'KODAK 400 3'",
+          "fallback": "FILM"
+        }
+      ],
+      "offset": {
+        "x": 0.015,
+        "y": 0.02
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.026,
+        "weight": 600,
+        "color": "#F0D08A"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.02,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.018,
+        "weight": 400,
+        "color": "#F0D08A"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm  f/{aperture}  {shutter}  ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0.02,
+        "y": -0.055
+      }
+    }
+  ]
+}

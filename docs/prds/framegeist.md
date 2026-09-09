@@ -271,7 +271,7 @@ framegeist/
 - **Q4（user decision ✅ 已决策）** 模板产能：**官方首批 60 套（C4 已同步）+ 模板市场社区投稿填充至 200+**。不做全原创 200 套的一次性美术投入；社区投稿走 E3 的 PR + CI 审核制。
 - **Q5（user decision ✅ 已决策）** 模板市场：**v1.0 即开放用户上传**，采用 GitHub PR + CI 自动校验（Schema / 样张渲染 / 感知哈希查重）审核制；人工仅处理滥用。E3/E4 已从 P1 提升为 P0。
 - **Q6（user decision ✅ 已决策）** 上架资质：**当前无企业开发者资质与软件著作权。v1.0 放弃商店上架**，Android 走官网 APK 直下 + 侧载安装，HarmonyOS 走官网侧载说明（含开发者模式步骤）；I5/J4 已改写。资质与软著办理列为独立后续任务，不阻塞 v1.0。
-- **Q7（needs exploration）** **鸿蒙 NAPI 调用 Rust .so 的可行性**：需用最小样例验证 ArkTS ↔ NAPI ↔ Rust 的构建链路，确认大图零拷贝传参方案。
+- **Q7（needs exploration ｜ 2026-09-09 部分推进）** **鸿蒙 NAPI 调用 Rust .so 的可行性**：已通过 winget 安装 DevEco Studio（**3.1.0.501**，仅支持 HarmonyOS 3/4 / OpenHarmony API 9-10；**HarmonyOS NEXT 需 DevEco 5.0+，winget 渠道没有，须从华为开发者站下载**）。DevEco 自带 llvm 工具链但 SDK/Native sysroot 未随附（首次建工程时才下载）。Rust 侧 `aarch64-unknown-linux-ohos` target 已可编译 rlib（见 A1）。**剩余验证**：NEXT 版 DevEco 安装 → 建 API 10+ 工程 → SDK Native sysroot + llvm 链接 cdylib → NAPI 绑定最小样例（建议直接评估 napi-rs 的 ohos 支持，避免手写 C 绑定）。阻塞点：华为开发者账号登录下载 5.x + 模拟器/真机。
 - **Q8（user decision ✅ 已决策）** 验收基准机：**绑定本机 Lenovo 21J8**（i5-13500H / 64GB / RTX 4060 Laptop / Win11），规格已写入 N3。
 
 ---
@@ -289,6 +289,7 @@ framegeist/
 - **2026-09-09 ｜ 模板语言定稿 + 库扩容 ｜** ① `docs/TEMPLATE-SPEC.md` 落稿：padding 口径（left/right 相对宽、top/bottom 相对高）、九宫格锚点与偏移语义、`font.size` 相对照片高度、表达式文法（`exif.<key>` / 裸字面量常量 / `fmt` / `if_empty` / `date`，全部白名单）。② 文法补齐 C3：新增裸字符串常量、`if_empty()`、`date()`（YYYY/MM/DD/HH/mm/SS token）。③ 60 套模板由 `tools/gen-templates.mjs` 确定性生成（8 分类各 7–8 套，共 63 套含 3 手写种子），全部通过引擎校验并真实渲染。④ **样张体积教训**：q100+4:4:4 的 1600×1200 样张约 3.2MB/张，63 张 200MB 不可进 git → 样张定性为派生物（gitignore），由 `tools/gen-samples.ps1` + CI 生成并作为 artifact 上传；测试改为在内存中对每套模板跑真实渲染（C6 不可静默回退）。 ｜ C4（60 套）与 C3 达成；24 测试 + clippy 全绿。
 - **2026-09-09 ｜ Q1/Q3 勘察 ｜** ① 商标初查：USPTO 无 "FrameGeist" 完全相同在册商标（近邻 FRAMEGENIE/GEIST/FRAME 类别均不同，风险低），中国商标网 9/42 类仍需人工查。② HEIF：发现 `heif-oxide`（纯 Rust、MIT/Apache、零 C 依赖）——Q3 的许可死结解除，代价是解码慢（12MP≈1s）与年轻（0.1.0）；AGPL 的 imazen/heic 仅在需要平台硬件后端时按"可选特性隔离"考虑。 ｜ Q3 从"需探索"降级为"有可行路径待集成验证"；实施第 11 步（Live Photo）前的 HEIF 集成测试据此推进。
 - **2026-09-09 ｜ Web 客户端骨架 ｜** ① `framegeist-wasm`（wasm-bindgen 0.2.128）绑定三 API，wasm 产物 1.5MB（G3 预算 8MB gzip 内）；`FontBook::from_bytes` 支持内存字体注入（无文件系统的 WASM/Android/鸿蒙外壳共用）。② `web/` 静态页（拖拽/模板选择/快速预览/导出，`tools/serve.mjs` 零依赖本地服务）。③ **N2 提前达成（CLI↔Web）**：`tools/wasm-smoke.mjs` 验证 WASM 与 CLI 对同一照片+同一模板输出**字节级一致**（SHA-256 相同）。④ 模板清单由生成器产出 `web/templates.json`。 ｜ G1（零上传）/G2（单张渲染+导出）骨架达成；批量与 PWA（G4）待做。
+- **2026-09-09 ｜ B2 补完 + 桌面骨架 ｜** ① PNG `eXIf` chunk 回写实现并测试通过（含 CRC32 手写实现），B2 的 JPEG/PNG 双路径关闭。② `framegeist-desktop`（Tauri 2）Windows 外壳：嵌入 `web/` 前端，release exe 8.3MB，启动验证通过；NSIS 安装包（H1）与自动更新（H4）待做。③ DevEco Studio 3.1.0.501 经 winget 装好，但 **NEXT 需 5.x（winget 无）**，Q7 最小样例阻塞在华为开发者站下载 + 设备/模拟器。 ｜ 实施顺序 1-7 全部有交付物（7 为骨架）。
 
 ---
 

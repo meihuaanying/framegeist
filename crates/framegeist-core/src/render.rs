@@ -350,6 +350,14 @@ pub fn render(photo: &[u8], template: &Template, opts: &RenderOptions) -> Result
             }
             Ok(out)
         }
-        OutputFormat::Png => encode::encode_png(&canvas),
+        OutputFormat::Png => {
+            let mut out = encode::encode_png(&canvas)?;
+            if opts.write_exif {
+                if let Some(tiff) = cleaned_exif_tiff(photo)? {
+                    encode::splice_png_exif(&mut out, &tiff)?;
+                }
+            }
+            Ok(out)
+        }
     }
 }

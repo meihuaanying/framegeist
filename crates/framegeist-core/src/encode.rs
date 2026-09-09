@@ -29,6 +29,42 @@ pub fn encode_png(img: &RgbaImage) -> Result<Vec<u8>> {
     Ok(out)
 }
 
+fn crc32(data: &[&[u8]]) -> u32 {
+    let mut crc: u32 = 0xFFFF_FFFF;
+    for part in data {
+        for &byte in *part {
+            crc ^= byte as u32;
+            for _ in 0..8 {
+                let mask = (crc & 1).wrapping_neg();
+                crc = (crc >> 1) ^ (0xEDB8_8320 & mask);
+            }
+        }
+    }
+    !crc
+}
+
+/// Insert an EXIF TIFF blob as a `eXIf` chunk right after IHDR (PRD B2).
+pub fn splice_png_exif(png: &mut Vec<u8>, exif_tiff: &[u8]) -> Result<()> {
+    const PNG_SIG: [u8; 8] = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+    if png.len() < 8 + 25 || png[0..8] != PNG_SIG {
+        return Err(Error::Encode("not a PNG stream".into()));
+    }
+    // eXIf is allowed anywhere after IHDR; place it right after the first chunk.
+    let ihdr_len =
+        u32::from_be_bytes([png[8], png[9], png[10], png[11]]) as usize;
+    let insert_at = 8 + 12 + ihdr_len;
+    if insert_at > png.len() {
+        return Err(Error::Encode("PNG stream truncated (bad IHDR)".into()));
+    }
+    let mut chunk = Vec::with_capacity(12 + exif_tiff.len());
+    chunk.extend_from_slice(&(exif_tiff.len() as u32).to_be_bytes());
+    chunk.extend_from_slice(b"eXIf");
+    chunk.extend_from_slice(exif_tiff);
+    chunk.extend_from_slice(&crc32(&[b"eXIf", exif_tiff]).to_be_bytes());
+    png.splice(insert_at..insert_at, chunk);
+    Ok(())
+}
+
 /// Insert an EXIF TIFF blob as an APP1 segment right after SOI (PRD B2).
 pub fn splice_exif_app1(jpeg: &mut Vec<u8>, exif_tiff: &[u8]) -> Result<()> {
     if jpeg.len() < 2 || jpeg[0] != 0xFF || jpeg[1] != 0xD8 {

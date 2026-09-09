@@ -1,0 +1,17 @@
+[package]
+name = "framegeist-desktop"
+description = "FrameGeist Windows desktop shell (Tauri)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[[bin]]
+name = "framegeist-desktop"
+path = "src/main.rs"

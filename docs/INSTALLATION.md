@@ -58,7 +58,18 @@ Remove-Item Env:\FRAMEGEIST_UPDATE_BASELINES
 ## 尚未安装（后续步骤的前置）
 
 - Android SDK / NDK / cargo-ndk（实施顺序第 8 步前）
-- DevEco Studio + OpenHarmony SDK（第 9 步前，验证 PRD Q7 需要最小样例）
+- DevEco Studio 3.1.0.501 已装（winget `Huawei.DevEco`）；**HarmonyOS NEXT 需 DevEco 5.x，须从华为开发者站下载（Q7 剩余阻塞）**；OpenHarmony SDK/Native sysroot 需在 DevEco 内首次下载
+
+## Windows 桌面（实施顺序第 7 步，已就绪）
+
+```powershell
+cargo build -p framegeist-desktop --release
+target\release\framegeist-desktop.exe   # 内嵌 web/ 前端的 Tauri 2 外壳
+```
+
+- 前端资产在编译期嵌入（tauri.conf.json `frontendDist: ../../web`），页面内全部用相对路径
+- 图标：`crates/framegeist-desktop/icons/icon.ico`
+- NSIS 安装包需 `cargo tauri build`（tauri-cli，H1 待做）
 
 ## Web 客户端（实施顺序第 6 步，已就绪）
 

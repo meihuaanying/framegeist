@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "id": "polaroid-v3",
+    "name": "Polaroid V3",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "polaroid"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.05,
+      "right": 0.05,
+      "bottom": 0.2,
+      "left": 0.05
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FAF7F0"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "caption",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.03,
+        "weight": 600,
+        "color": "#333333"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "FrameGeist"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.1
+      }
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.02,
+        "weight": 400,
+        "color": "#777777"
+      },
+      "content": [
+        {
+          "expr": "date('YYYY-MM-DD', exif.datetime)",
+          "fallback": "2026-09-09"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.05
+      }
+    }
+  ]
+}

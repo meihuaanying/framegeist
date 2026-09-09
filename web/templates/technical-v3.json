@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "id": "technical-v3",
+    "name": "Technical Plate V3",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "technical"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.045,
+      "right": 0.045,
+      "bottom": 0.11,
+      "left": 0.045
+    },
+    "background": {
+      "type": "solid",
+      "color": "#1A0F1E"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "plate",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.02,
+        "weight": 400,
+        "color": "#F0A0E0"
+      },
+      "content": [
+        {
+          "expr": "fmt('CAM: {model}', exif)",
+          "fallback": "CAM: n/a"
+        },
+        {
+          "expr": "fmt('LNS: {lens}', exif)",
+          "fallback": "LNS: n/a"
+        },
+        {
+          "expr": "fmt('EXP: f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "EXP: n/a"
+        }
+      ],
+      "lineHeight": 1.5,
+      "offset": {
+        "x": 0.02,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "text",
+      "id": "meta",
+      "anchor": "top-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "weight": 400,
+        "color": "#F0A0E0"
+      },
+      "content": [
+        {
+          "expr": "date('YYYY/MM/DD HH:mm', exif.datetime)",
+          "fallback": "no date"
+        }
+      ],
+      "offset": {
+        "x": -0.02,
+        "y": 0.03
+      }
+    }
+  ]
+}

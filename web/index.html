@@ -80,8 +80,8 @@
 <body>
 <header>
   <h1>FrameGeist · 框灵</h1>
-  <small>照片全程在本地处理，不上传任何服务器（G1）</small>
-  <span id="status">loading engine…</span>
+  <small>照片全程在本地处理，不上传任何服务器（G1�?/small>
+  <span id="status">loading engine�?/span>
 </header>
 <main>
   <section id="controls">
@@ -89,17 +89,18 @@
       <input type="file" id="file" accept="image/*">
     </div>
     <label>模板
-      <select id="template" disabled><option>loading…</option></select>
+      <select id="template" disabled><option>loading�?/option></select>
     </label>
-    <label><input type="checkbox" id="preview" checked> 快速预览采样</label>
+    <label><input type="checkbox" id="preview" checked> 快速预览采�?/label>
     <button id="renderBtn" disabled>渲染</button>
     <button id="exportBtn" disabled>导出 JPEG</button>
     <pre id="exif">EXIF: -</pre>
   </section>
-  <section id="stage"><span style="color:#aaa">拖入一张照片开始</span></section>
+  <section id="stage"><span style="color:#aaa">拖入一张照片开�?/span></section>
 </main>
 <script type="module">
-  import init, { Engine } from "/web/pkg/framegeist_wasm.js";
+  import init, { Engine } from "./pkg/framegeist_wasm.js";
+  const BASE = new URL(".", document.baseURI).href;
 
   const $ = (id) => document.getElementById(id);
   const status = $("status");
@@ -109,13 +110,13 @@
   let photoBytes = null;
   let lastRender = null;
 
-  status.textContent = "loading wasm…";
-  await init("/web/pkg/framegeist_wasm_bg.wasm");
+  status.textContent = "loading wasm�?;
+  await init("./pkg/framegeist_wasm_bg.wasm");
 
-  const fontRes = await fetch("/templates/assets/fonts/JetBrainsMono-Regular.ttf");
+  const fontRes = await fetch(BASE + "templates/fonts/JetBrainsMono-Regular.ttf");
   engine = new Engine(["JetBrains Mono"], [new Uint8Array(await fontRes.arrayBuffer())]);
 
-  const manifest = await (await fetch("/web/templates.json")).json();
+  const manifest = await (await fetch(BASE + "templates.json")).json();
   templates = manifest;
   const sel = $("template");
   for (const t of templates) {
@@ -143,8 +144,8 @@
   async function renderNow() {
     if (!photoBytes) return;
     const id = $("template").value;
-    status.textContent = "rendering…";
-    const tpl = await (await fetch(`/templates/${id}.json`)).text();
+    status.textContent = "rendering�?;
+    const tpl = await (await fetch(BASE + `templates/${id}.json`)).text();
     const t0 = performance.now();
     try {
       const out = engine.render(photoBytes, tpl, "jpeg", $("preview").checked);

@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "id": "minimal-v7",
+    "name": "Minimal V7",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": {
+      "type": "none"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "corner",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.022,
+        "weight": 400,
+        "color": "#C8C8C8"
+      },
+      "content": [
+        {
+          "expr": "fmt('f/{aperture}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0.015,
+        "y": 0.025
+      }
+    }
+  ]
+}
