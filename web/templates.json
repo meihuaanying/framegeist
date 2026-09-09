@@ -1,0 +1,317 @@
+[
+  {
+    "id": "classic-white-bottom-param",
+    "name": "Classic White - Bottom Params",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v1",
+    "name": "Classic White V1",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v2",
+    "name": "Classic White V2",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v3",
+    "name": "Classic White V3",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v4",
+    "name": "Classic White V4",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v5",
+    "name": "Classic White V5",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v6",
+    "name": "Classic White V6",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v7",
+    "name": "Classic White V7",
+    "category": "classic-white"
+  },
+  {
+    "id": "classic-white-v8",
+    "name": "Classic White V8",
+    "category": "classic-white"
+  },
+  {
+    "id": "film-v1",
+    "name": "Film V1",
+    "category": "film"
+  },
+  {
+    "id": "film-v2",
+    "name": "Film V2",
+    "category": "film"
+  },
+  {
+    "id": "film-v3",
+    "name": "Film V3",
+    "category": "film"
+  },
+  {
+    "id": "film-v4",
+    "name": "Film V4",
+    "category": "film"
+  },
+  {
+    "id": "film-v5",
+    "name": "Film V5",
+    "category": "film"
+  },
+  {
+    "id": "film-v6",
+    "name": "Film V6",
+    "category": "film"
+  },
+  {
+    "id": "film-v7",
+    "name": "Film V7",
+    "category": "film"
+  },
+  {
+    "id": "film-v8",
+    "name": "Film V8",
+    "category": "film"
+  },
+  {
+    "id": "frame-shell-v1",
+    "name": "Camera Shell V1",
+    "category": "frame-shell"
+  },
+  {
+    "id": "frame-shell-v2",
+    "name": "Camera Shell V2",
+    "category": "frame-shell"
+  },
+  {
+    "id": "frame-shell-v3",
+    "name": "Camera Shell V3",
+    "category": "frame-shell"
+  },
+  {
+    "id": "frame-shell-v4",
+    "name": "Camera Shell V4",
+    "category": "frame-shell"
+  },
+  {
+    "id": "frame-shell-v5",
+    "name": "Camera Shell V5",
+    "category": "frame-shell"
+  },
+  {
+    "id": "frame-shell-v6",
+    "name": "Camera Shell V6",
+    "category": "frame-shell"
+  },
+  {
+    "id": "frame-shell-v7",
+    "name": "Camera Shell V7",
+    "category": "frame-shell"
+  },
+  {
+    "id": "gallery-v1",
+    "name": "Gallery Mat V1",
+    "category": "gallery"
+  },
+  {
+    "id": "gallery-v2",
+    "name": "Gallery Mat V2",
+    "category": "gallery"
+  },
+  {
+    "id": "gallery-v3",
+    "name": "Gallery Mat V3",
+    "category": "gallery"
+  },
+  {
+    "id": "gallery-v4",
+    "name": "Gallery Mat V4",
+    "category": "gallery"
+  },
+  {
+    "id": "gallery-v5",
+    "name": "Gallery Mat V5",
+    "category": "gallery"
+  },
+  {
+    "id": "gallery-v6",
+    "name": "Gallery Mat V6",
+    "category": "gallery"
+  },
+  {
+    "id": "gallery-v7",
+    "name": "Gallery Mat V7",
+    "category": "gallery"
+  },
+  {
+    "id": "magazine-v1",
+    "name": "Magazine V1",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v2",
+    "name": "Magazine V2",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v3",
+    "name": "Magazine V3",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v4",
+    "name": "Magazine V4",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v5",
+    "name": "Magazine V5",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v6",
+    "name": "Magazine V6",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v7",
+    "name": "Magazine V7",
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-v8",
+    "name": "Magazine V8",
+    "category": "magazine"
+  },
+  {
+    "id": "minimal-corner-iso",
+    "name": "Minimal Corner - ISO",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v1",
+    "name": "Minimal V1",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v2",
+    "name": "Minimal V2",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v3",
+    "name": "Minimal V3",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v4",
+    "name": "Minimal V4",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v5",
+    "name": "Minimal V5",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v6",
+    "name": "Minimal V6",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v7",
+    "name": "Minimal V7",
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-v8",
+    "name": "Minimal V8",
+    "category": "minimal"
+  },
+  {
+    "id": "polaroid-caption",
+    "name": "Polaroid - Caption",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v1",
+    "name": "Polaroid V1",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v2",
+    "name": "Polaroid V2",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v3",
+    "name": "Polaroid V3",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v4",
+    "name": "Polaroid V4",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v5",
+    "name": "Polaroid V5",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v6",
+    "name": "Polaroid V6",
+    "category": "polaroid"
+  },
+  {
+    "id": "polaroid-v7",
+    "name": "Polaroid V7",
+    "category": "polaroid"
+  },
+  {
+    "id": "technical-v1",
+    "name": "Technical Plate V1",
+    "category": "technical"
+  },
+  {
+    "id": "technical-v2",
+    "name": "Technical Plate V2",
+    "category": "technical"
+  },
+  {
+    "id": "technical-v3",
+    "name": "Technical Plate V3",
+    "category": "technical"
+  },
+  {
+    "id": "technical-v4",
+    "name": "Technical Plate V4",
+    "category": "technical"
+  },
+  {
+    "id": "technical-v5",
+    "name": "Technical Plate V5",
+    "category": "technical"
+  },
+  {
+    "id": "technical-v6",
+    "name": "Technical Plate V6",
+    "category": "technical"
+  },
+  {
+    "id": "technical-v7",
+    "name": "Technical Plate V7",
+    "category": "technical"
+  }
+]

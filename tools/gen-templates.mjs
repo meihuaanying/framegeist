@@ -1,6 +1,6 @@
 // Deterministic generator for the built-in template library (PRD C4).
 // Usage: node tools/gen-templates.mjs   (writes templates/*.json)
-import { writeFileSync, readdirSync, rmSync, existsSync } from "node:fs";
+import { writeFileSync, readdirSync, rmSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = "templates";
@@ -279,7 +279,18 @@ for (const tpl of TEMPLATES) {
   writeFileSync(join(OUT, `${tpl.meta.id}.json`), JSON.stringify(tpl, null, 2) + "\n");
 }
 
-console.log(`generated ${TEMPLATES.length} templates`);
+// Manifest for the Web client (fetched at runtime, no upload: PRD G1).
+const manifest = [];
+for (const f of readdirSync(OUT)) {
+  if (!f.endsWith(".json")) continue;
+  const raw = JSON.parse(await import("node:fs").then((m) => m.readFileSync(join(OUT, f), "utf8")));
+  manifest.push({ id: raw.meta.id, name: raw.meta.name, category: raw.meta.category });
+}
+manifest.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+mkdirSync("web", { recursive: true });
+writeFileSync(join("web", "templates.json"), JSON.stringify(manifest, null, 2) + "\n");
+
+console.log(`generated ${TEMPLATES.length} templates + web/templates.json manifest`);
 const byCat = {};
 for (const t of TEMPLATES) byCat[t.meta.category] = (byCat[t.meta.category] ?? 0) + 1;
 console.log(byCat);

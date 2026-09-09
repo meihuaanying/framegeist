@@ -29,6 +29,7 @@ pub struct RenderOptions {
     pub format: OutputFormat,
     pub sampling: Sampling,
     pub assets_dir: Option<PathBuf>,
+    pub fonts: Option<crate::text::FontBook>,
     pub write_exif: bool,
     pub keep_gps: bool,
 }
@@ -39,6 +40,7 @@ impl Default for RenderOptions {
             format: OutputFormat::Jpeg,
             sampling: Sampling::Full,
             assets_dir: None,
+            fonts: None,
             write_exif: true,
             keep_gps: false,
         }
@@ -318,9 +320,12 @@ pub fn render_rgba(
     let geo = compute_geometry(template, &rgba);
     let filt = filter(opts.sampling);
     let mut canvas = build_canvas(&geo, &rgba, template, filt);
-    let fonts = match &opts.assets_dir {
-        Some(dir) => FontBook::load(&dir.join("fonts"))?,
-        None => FontBook::empty(),
+    let fonts = match &opts.fonts {
+        Some(book) => book.clone(),
+        None => match &opts.assets_dir {
+            Some(dir) => FontBook::load(&dir.join("fonts"))?,
+            None => FontBook::empty(),
+        },
     };
     for layer in &template.layers {
         if let Layer::Text(text) = layer {

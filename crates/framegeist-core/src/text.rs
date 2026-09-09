@@ -9,6 +9,7 @@ use crate::{Error, Result};
 ///
 /// Family lookup convention: file stem, lowercased, with weight suffix
 /// removed (`JetBrainsMono-Regular.ttf` -> `jetbrainsmono`).
+#[derive(Clone, Debug)]
 pub struct FontBook {
     fonts: HashMap<String, FontArc>,
     fallback: Option<FontArc>,
@@ -46,6 +47,19 @@ impl FontBook {
                     .map_err(|e| Error::Font(format!("{}: {e}", path.display())))?;
                 fonts.insert(family_key(&stem), font);
             }
+        }
+        let fallback = fonts.values().next().cloned();
+        Ok(FontBook { fonts, fallback })
+    }
+
+    /// Register fonts from in-memory bytes (used by WASM/Android/HarmonyOS
+    /// shells that have no filesystem font directory).
+    pub fn from_bytes(entries: Vec<(String, Vec<u8>)>) -> Result<FontBook> {
+        let mut fonts = HashMap::new();
+        for (family, bytes) in entries {
+            let font = FontArc::try_from_vec(bytes)
+                .map_err(|e| Error::Font(format!("{family}: {e}")))?;
+            fonts.insert(family_key(&family), font);
         }
         let fallback = fonts.values().next().cloned();
         Ok(FontBook { fonts, fallback })

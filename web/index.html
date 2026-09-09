@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FrameGeist · 框灵</title>
+<style>
+  :root { color-scheme: light; }
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    background: #f4f4f2;
+    color: #1a1a1a;
+  }
+  header {
+    padding: 12px 20px;
+    background: #fff;
+    border-bottom: 1px solid #e2e2e2;
+    display: flex;
+    gap: 16px;
+    align-items: baseline;
+  }
+  h1 { font-size: 18px; margin: 0; }
+  header small { color: #777; }
+  main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 16px;
+    padding: 16px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  #controls {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  select, input[type="file"] { width: 100%; }
+  #drop {
+    border: 2px dashed #bbb;
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+    color: #666;
+  }
+  #drop.over { border-color: #1a73e8; background: #eef4ff; }
+  #stage {
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    padding: 12px;
+  }
+  #stage img { max-width: 100%; max-height: 82vh; }
+  #exif {
+    font-family: monospace;
+    font-size: 12px;
+    color: #555;
+    white-space: pre-wrap;
+  }
+  button {
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+  }
+  button:disabled { opacity: .5; cursor: default; }
+  #status { font-size: 12px; color: #888; }
+</style>
+</head>
+<body>
+<header>
+  <h1>FrameGeist · 框灵</h1>
+  <small>照片全程在本地处理，不上传任何服务器（G1）</small>
+  <span id="status">loading engine…</span>
+</header>
+<main>
+  <section id="controls">
+    <div id="drop">拖入照片，或
+      <input type="file" id="file" accept="image/*">
+    </div>
+    <label>模板
+      <select id="template" disabled><option>loading…</option></select>
+    </label>
+    <label><input type="checkbox" id="preview" checked> 快速预览采样</label>
+    <button id="renderBtn" disabled>渲染</button>
+    <button id="exportBtn" disabled>导出 JPEG</button>
+    <pre id="exif">EXIF: -</pre>
+  </section>
+  <section id="stage"><span style="color:#aaa">拖入一张照片开始</span></section>
+</main>
+<script type="module">
+  import init, { Engine } from "/web/pkg/framegeist_wasm.js";
+
+  const $ = (id) => document.getElementById(id);
+  const status = $("status");
+  const stage = $("stage");
+  let engine = null;
+  let templates = [];
+  let photoBytes = null;
+  let lastRender = null;
+
+  status.textContent = "loading wasm…";
+  await init("/web/pkg/framegeist_wasm_bg.wasm");
+
+  const fontRes = await fetch("/templates/assets/fonts/JetBrainsMono-Regular.ttf");
+  engine = new Engine(["JetBrains Mono"], [new Uint8Array(await fontRes.arrayBuffer())]);
+
+  const manifest = await (await fetch("/web/templates.json")).json();
+  templates = manifest;
+  const sel = $("template");
+  for (const t of templates) {
+    const opt = document.createElement("option");
+    opt.value = t.id;
+    opt.textContent = `${t.category} · ${t.name}`;
+    sel.appendChild(opt);
+  }
+  sel.disabled = false;
+  $("renderBtn").disabled = false;
+  status.textContent = "ready";
+
+  async function loadPhoto(file) {
+    photoBytes = new Uint8Array(await file.arrayBuffer());
+    try {
+      const exif = JSON.parse(engine.probe_exif(photoBytes));
+      $("exif").textContent = "EXIF: " + JSON.stringify(exif, null, 1);
+    } catch (e) {
+      $("exif").textContent = "EXIF: probe failed " + e;
+    }
+    stage.innerHTML = "";
+    await renderNow();
+  }
+
+  async function renderNow() {
+    if (!photoBytes) return;
+    const id = $("template").value;
+    status.textContent = "rendering…";
+    const tpl = await (await fetch(`/templates/${id}.json`)).text();
+    const t0 = performance.now();
+    try {
+      const out = engine.render(photoBytes, tpl, "jpeg", $("preview").checked);
+      const ms = (performance.now() - t0).toFixed(0);
+      lastRender = out;
+      const blob = new Blob([out], { type: "image/jpeg" });
+      stage.innerHTML = "";
+      const img = new Image();
+      img.src = URL.createObjectURL(blob);
+      stage.appendChild(img);
+      $("exportBtn").disabled = false;
+      status.textContent = `done in ${ms} ms (${(out.length / 1024).toFixed(0)} KB)`;
+    } catch (e) {
+      status.textContent = "render failed: " + e.message;
+    }
+  }
+
+  $("renderBtn").addEventListener("click", renderNow);
+  $("template").addEventListener("change", renderNow);
+  $("preview").addEventListener("change", renderNow);
+  $("exportBtn").addEventListener("click", () => {
+    if (!lastRender) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([lastRender], { type: "image/jpeg" }));
+    a.download = `framegeist-${$("template").value}.jpg`;
+    a.click();
+  });
+
+  const drop = $("drop");
+  ["dragover", "dragenter"].forEach((ev) =>
+    drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach((ev) =>
+    drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", (e) => {
+    const file = e.dataTransfer?.files?.[0];
+    if (file) loadPhoto(file);
+  });
+  $("file").addEventListener("change", (e) => {
+    if (e.target.files?.[0]) loadPhoto(e.target.files[0]);
+  });
+</script>
+</body>
+</html>

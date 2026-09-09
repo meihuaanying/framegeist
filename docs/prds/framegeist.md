@@ -264,9 +264,10 @@ framegeist/
 
 > 2026-09-09 更新：用户决策项（Q1/Q4/Q5/Q6/Q8）已全部拍板，结论写入下表；Q2/Q3/Q7 保持"需探测"，由实施阶段的最小样例验证。
 
-- **Q1（user decision ｜ 部分待办）** 产品名最终确认：候选为 **FrameGeist / 框灵**（已倾向）、FrameKit / 画框、Exifly、LightFrame / 光框。**已决策：先做商标检索再定名**，检索通过前一律以"FrameGeist / 框灵"为工作名（代码、仓库、文档均可用，改名只影响品牌展示层）。**待办**：中国商标网第 9/42 类检索 + WIPO/USPTO 粗查；域名决策（`framegeist.app` / `.dev` / 仅 GitHub Pages）随定名一并确认。
+- **Q1（user decision ｜ 部分待办）** 产品名最终确认：候选为 **FrameGeist / 框灵**（已倾向）、FrameKit / 画框、Exiffly、LightFrame / 光框。**已决策：先做商标检索再定名**，检索通过前一律以"FrameGeist / 框灵"为工作名（代码、仓库、文档均可用，改名只影响品牌展示层）。**待办**：中国商标网第 9/42 类检索 + WIPO/USPTO 粗查；域名决策（`framegeist.app` / `.dev` / 仅 GitHub Pages）随定名一并确认。
+  - **2026-09-09 初查结果**：USPTO 数据库检索未见 "FrameGeist" 完全相同的在册商标（近邻：FRAMEGENIE-光学零售第 35 类、GEIST-服装第 25/35 类、FRAME-混合现实、FRAME.AI-数据分析，均为不同名称与不同类别，冲突风险低）。中国商标网 9/42 类仍需人工查询后定名；域名未购。
 - **Q2（needs exploration）** **Live Photo 四端能力矩阵**：需实测确认 Android Motion Photo 的读写（小米/OPPO/vivo/荣耀/三星机型差异）、鸿蒙是否暴露对应 API、Windows 侧能否无损搬运帧数据。探测完成前，J/I/H 三端的 Live Photo 需求保持"待验证"，不写死承诺。
-- **Q3（needs exploration）** **HEIF/HEIC 解码路径**：Rust 生态无成熟纯 Rust HEIF 解码器，可能需绑定 libheif（LGPL）或调用系统解码。需确认是否影响 MIT 许可与 Android/鸿蒙打包体积。
+- **Q3（needs exploration → 2026-09-09 勘察有解）** **HEIF/HEIC 解码路径**：2026-09 勘察发现纯 Rust 生态已出现三条路径：① `heif-oxide`（MIT OR Apache-2.0，零 C 依赖，已解 44/63 真机 iPhone 样张，12MP 约 1s，标量实现约 5× 慢于 FFmpeg）——**许可干净，唯一可直接进 MIT 核心的路径**，但极年轻（0.1.0，下载量 49）；② `imazen/heic`（AGPL-3.0/商业双许可 + 平台原生后端）——AGPL 传染，按 Constraints 须隔离为可选特性，或花 $1 启动费买商业许可；③ `gamut-heic`（MIT/Apache，容器层成熟但 HEVC 像素解码走可插拔 hook）。**决策方向**：核心以可选 feature `heif` 接入 heif-oxide，解码失败优雅报错回退；真机 iPhone 样张集成测试后再定承诺范围。AVIF/HEIF 编码纯 Rust 生态仍无解（无需——本项目只解码）。
 - **Q4（user decision ✅ 已决策）** 模板产能：**官方首批 60 套（C4 已同步）+ 模板市场社区投稿填充至 200+**。不做全原创 200 套的一次性美术投入；社区投稿走 E3 的 PR + CI 审核制。
 - **Q5（user decision ✅ 已决策）** 模板市场：**v1.0 即开放用户上传**，采用 GitHub PR + CI 自动校验（Schema / 样张渲染 / 感知哈希查重）审核制；人工仅处理滥用。E3/E4 已从 P1 提升为 P0。
 - **Q6（user decision ✅ 已决策）** 上架资质：**当前无企业开发者资质与软件著作权。v1.0 放弃商店上架**，Android 走官网 APK 直下 + 侧载安装，HarmonyOS 走官网侧载说明（含开发者模式步骤）；I5/J4 已改写。资质与软著办理列为独立后续任务，不阻塞 v1.0。
@@ -286,6 +287,8 @@ framegeist/
 - **2026-09-09 ｜ 环境基线执行 ｜** rustc 1.98.1 stable-msvc 装好；MSVC BuildTools v18 本机已预装（免装）；JDK Temurin 17.0.20 已装。坑：winget 的 Rustlang.Rustup 包安装崩溃（0xC0000005），改用官方 rustup-init.exe。 ｜ **四 target 构建全绿**（msvc/wasm32/android/ohos）；wasm32 需 `.cargo/config.toml` 的 `getrandom_backend="wasm_js"` + feature 统一。详见 `docs/INSTALLATION.md`。A1 达成。
 - **2026-09-09 ｜ 引擎骨架执行 ｜** ① crates.io 的 `exif` 是占位 crate，真身 `kamadak-exif`（lib 名 exif），需 package 重命名；其 `Writer` 在 `experimental` 模块且要求 IFD 连续非空 → 清理后的 EXIF 字段统一归入 PRIMARY IFD，由 Writer 自动合成 ExifIFDPointer。② **jsonschema 0.17 无法编译到 wasm32**（reqwest blocking 依赖）→ 引擎改为内置校验器（serde `deny_unknown_fields` + 语义校验，单实现五端一致），schema 文件保留为规格文档 `docs/schema/template.schema.json`。这是对 C1"JSON Schema 严格校验"的执行口径修正：校验强度等价，但由引擎代码而非第三方 crate 执行。③ 修复 `parse_color` 逐位十六进制 bug（`#111111` 曾渲染为近黑 [1,1,1] 而非 [17,17,17]），黄金图基线随之重生成。 ｜ 引擎骨架 + CLI（render/batch/probe/templates/hash）+ 3 套最小模板 + 36 条黄金图基线就位；19 项测试 + clippy -D warnings + 四 target 构建全绿（N5 首次全量通过）。
 - **2026-09-09 ｜ 模板语言定稿 + 库扩容 ｜** ① `docs/TEMPLATE-SPEC.md` 落稿：padding 口径（left/right 相对宽、top/bottom 相对高）、九宫格锚点与偏移语义、`font.size` 相对照片高度、表达式文法（`exif.<key>` / 裸字面量常量 / `fmt` / `if_empty` / `date`，全部白名单）。② 文法补齐 C3：新增裸字符串常量、`if_empty()`、`date()`（YYYY/MM/DD/HH/mm/SS token）。③ 60 套模板由 `tools/gen-templates.mjs` 确定性生成（8 分类各 7–8 套，共 63 套含 3 手写种子），全部通过引擎校验并真实渲染。④ **样张体积教训**：q100+4:4:4 的 1600×1200 样张约 3.2MB/张，63 张 200MB 不可进 git → 样张定性为派生物（gitignore），由 `tools/gen-samples.ps1` + CI 生成并作为 artifact 上传；测试改为在内存中对每套模板跑真实渲染（C6 不可静默回退）。 ｜ C4（60 套）与 C3 达成；24 测试 + clippy 全绿。
+- **2026-09-09 ｜ Q1/Q3 勘察 ｜** ① 商标初查：USPTO 无 "FrameGeist" 完全相同在册商标（近邻 FRAMEGENIE/GEIST/FRAME 类别均不同，风险低），中国商标网 9/42 类仍需人工查。② HEIF：发现 `heif-oxide`（纯 Rust、MIT/Apache、零 C 依赖）——Q3 的许可死结解除，代价是解码慢（12MP≈1s）与年轻（0.1.0）；AGPL 的 imazen/heic 仅在需要平台硬件后端时按"可选特性隔离"考虑。 ｜ Q3 从"需探索"降级为"有可行路径待集成验证"；实施第 11 步（Live Photo）前的 HEIF 集成测试据此推进。
+- **2026-09-09 ｜ Web 客户端骨架 ｜** ① `framegeist-wasm`（wasm-bindgen 0.2.128）绑定三 API，wasm 产物 1.5MB（G3 预算 8MB gzip 内）；`FontBook::from_bytes` 支持内存字体注入（无文件系统的 WASM/Android/鸿蒙外壳共用）。② `web/` 静态页（拖拽/模板选择/快速预览/导出，`tools/serve.mjs` 零依赖本地服务）。③ **N2 提前达成（CLI↔Web）**：`tools/wasm-smoke.mjs` 验证 WASM 与 CLI 对同一照片+同一模板输出**字节级一致**（SHA-256 相同）。④ 模板清单由生成器产出 `web/templates.json`。 ｜ G1（零上传）/G2（单张渲染+导出）骨架达成；批量与 PWA（G4）待做。
 
 ---
 

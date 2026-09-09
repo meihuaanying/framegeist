@@ -60,6 +60,21 @@ Remove-Item Env:\FRAMEGEIST_UPDATE_BASELINES
 - Android SDK / NDK / cargo-ndk（实施顺序第 8 步前）
 - DevEco Studio + OpenHarmony SDK（第 9 步前，验证 PRD Q7 需要最小样例）
 
+## Web 客户端（实施顺序第 6 步，已就绪）
+
+```powershell
+# 一次性：wasm-bindgen-cli 版本必须与 wasm-bindgen crate 一致
+cargo install wasm-bindgen-cli --version 0.2.128
+
+# 构建与胶水生成
+cargo build -p framegeist-wasm --target wasm32-unknown-unknown --release
+wasm-bindgen --out-dir web\pkg --target web target\wasm32-unknown-unknown\release\framegeist_wasm.wasm
+
+# 本地服务（零依赖）+ 冒烟验证
+node tools/serve.mjs 8000        # http://localhost:8000/web/
+node tools/wasm-smoke.mjs        # 验证 WASM 与 CLI 渲染字节级一致
+```
+
 ## 已知坑（2026-09-09 实测）
 
 1. **winget 装 rustup 崩溃**（退出码 3221225477）：用官方 rustup-init.exe。
