@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "id": "grid-1x3",
+    "name": "Grid 1 x 3",
+    "version": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "slots": 3
+  },
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 1,
+      "h": 0.3333333333333333
+    },
+    {
+      "x": 0,
+      "y": 0.3333333333333333,
+      "w": 1,
+      "h": 0.3333333333333333
+    },
+    {
+      "x": 0,
+      "y": 0.6666666666666666,
+      "w": 1,
+      "h": 0.3333333333333333
+    }
+  ],
+  "gutter": 0.012,
+  "background": "#FFFFFF",
+  "aspect": 1,
+  "info_bar": {
+    "enabled": false,
+    "height": 0.075,
+    "color": "#FFFFFF",
+    "text_color": "#555555"
+  }
+}

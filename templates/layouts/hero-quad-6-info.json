@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "id": "hero-quad-6-info",
+    "name": "Hero Quad 6 + EXIF",
+    "version": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "slots": 6
+  },
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 0.66,
+      "h": 0.66
+    },
+    {
+      "x": 0.66,
+      "y": 0,
+      "w": 0.34,
+      "h": 0.33
+    },
+    {
+      "x": 0.66,
+      "y": 0.33,
+      "w": 0.34,
+      "h": 0.33
+    },
+    {
+      "x": 0,
+      "y": 0.66,
+      "w": 0.33,
+      "h": 0.34
+    },
+    {
+      "x": 0.33,
+      "y": 0.66,
+      "w": 0.34,
+      "h": 0.34
+    },
+    {
+      "x": 0.66,
+      "y": 0.66,
+      "w": 0.34,
+      "h": 0.34
+    }
+  ],
+  "gutter": 0.012,
+  "background": "#FFFFFF",
+  "aspect": 1,
+  "info_bar": {
+    "enabled": true,
+    "height": 0.075,
+    "color": "#FFFFFF",
+    "text_color": "#555555"
+  }
+}

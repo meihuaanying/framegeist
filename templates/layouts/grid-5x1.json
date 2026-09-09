@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "id": "grid-5x1",
+    "name": "Grid 5 x 1",
+    "version": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "slots": 5
+  },
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 0.2,
+      "h": 1
+    },
+    {
+      "x": 0.2,
+      "y": 0,
+      "w": 0.2,
+      "h": 1
+    },
+    {
+      "x": 0.4,
+      "y": 0,
+      "w": 0.2,
+      "h": 1
+    },
+    {
+      "x": 0.6000000000000001,
+      "y": 0,
+      "w": 0.2,
+      "h": 1
+    },
+    {
+      "x": 0.8,
+      "y": 0,
+      "w": 0.2,
+      "h": 1
+    }
+  ],
+  "gutter": 0.012,
+  "background": "#FFFFFF",
+  "aspect": 1,
+  "info_bar": {
+    "enabled": false,
+    "height": 0.075,
+    "color": "#FFFFFF",
+    "text_color": "#555555"
+  }
+}

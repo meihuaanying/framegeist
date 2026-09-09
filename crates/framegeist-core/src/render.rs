@@ -47,7 +47,7 @@ impl Default for RenderOptions {
     }
 }
 
-fn filter(sampling: Sampling) -> image::imageops::FilterType {
+pub(crate) fn filter(sampling: Sampling) -> image::imageops::FilterType {
     match sampling {
         Sampling::Preview => image::imageops::FilterType::Triangle,
         Sampling::Full => image::imageops::FilterType::Lanczos3,
@@ -340,9 +340,14 @@ pub fn render_rgba(
 /// Full render pipeline: decode -> render -> encode -> metadata write-back.
 pub fn render(photo: &[u8], template: &Template, opts: &RenderOptions) -> Result<Vec<u8>> {
     let canvas = render_rgba(photo, template, opts)?;
+    encode_output(&canvas, photo, opts)
+}
+
+/// Encode an RGBA canvas with the configured format + metadata write-back.
+pub(crate) fn encode_output(canvas: &RgbaImage, photo: &[u8], opts: &RenderOptions) -> Result<Vec<u8>> {
     match opts.format {
         OutputFormat::Jpeg => {
-            let mut out = encode::encode_jpeg_quality100(&canvas)?;
+            let mut out = encode::encode_jpeg_quality100(canvas)?;
             if opts.write_exif {
                 if let Some(tiff) = cleaned_exif_tiff(photo)? {
                     encode::splice_exif_app1(&mut out, &tiff)?;
@@ -351,7 +356,7 @@ pub fn render(photo: &[u8], template: &Template, opts: &RenderOptions) -> Result
             Ok(out)
         }
         OutputFormat::Png => {
-            let mut out = encode::encode_png(&canvas)?;
+            let mut out = encode::encode_png(canvas)?;
             if opts.write_exif {
                 if let Some(tiff) = cleaned_exif_tiff(photo)? {
                     encode::splice_png_exif(&mut out, &tiff)?;

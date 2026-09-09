@@ -40,6 +40,16 @@ enum Cmd {
         #[arg(long = "format", default_value = "jpeg")]
         format: String,
     },
+    /// Render a collage from multiple photos using a grid layout (PRD C5).
+    Collage {
+        photos: Vec<PathBuf>,
+        #[arg(long = "layout")]
+        layout: String,
+        #[arg(short, long)]
+        output: PathBuf,
+        #[arg(long = "format", default_value = "jpeg")]
+        format: String,
+    },
     /// Print EXIF metadata of a photo as JSON.
     Probe { photo: PathBuf },
     /// List built-in templates.
@@ -119,6 +129,35 @@ fn photo_files(dir: &Path) -> Result<Vec<PathBuf>, Error> {
     Ok(files)
 }
 
+fn resolve_layout(spec: &str) -> Result<framegeist_core::Layout, Error> {
+    let path = Path::new(spec);
+    if path.exists() {
+        let bytes = std::fs::read(path)?;
+        return framegeist_core::load_layout(&bytes);
+    }
+    let dir = PathBuf::from("templates/layouts");
+    let mut found = None;
+    for entry in walkdir::WalkDir::new(&dir) {
+        let entry = entry.map_err(|e| Error::Io(std::io::Error::other(e.to_string())))?;
+        if entry.path().extension().and_then(|e| e.to_str()) != Some("json") {
+            continue;
+        }
+        let bytes = std::fs::read(entry.path())?;
+        if let Ok(l) = framegeist_core::load_layout(&bytes) {
+            if l.meta.id == spec {
+                found = Some(l);
+                break;
+            }
+        }
+    }
+    found.ok_or_else(|| {
+        Error::TemplateJson(format!(
+            "layout id {spec:?} not found under {}",
+            dir.display()
+        ))
+    })
+}
+
 fn run(args: &Args) -> Result<(), Error> {
     match &args.cmd {
         Cmd::Render {
@@ -189,6 +228,40 @@ fn run(args: &Args) -> Result<(), Error> {
                 done += 1;
             }
             println!("rendered {done} photo(s)");
+            Ok(())
+        }
+        Cmd::Collage {
+            photos,
+            layout,
+            output,
+            format,
+        } => {
+            if photos.is_empty() {
+                return Err(Error::Image("collage needs photo arguments".into()));
+            }
+            let lay = resolve_layout(layout)?;
+            let opts = RenderOptions {
+                format: parse_format(format)?,
+                sampling: Sampling::Full,
+                assets_dir: Some(args.assets_dir.clone()),
+                ..RenderOptions::default()
+            };
+            let mut loaded = Vec::new();
+            for p in photos {
+                loaded.push(std::fs::read(p)?);
+            }
+            let refs: Vec<&[u8]> = loaded.iter().map(|v| v.as_slice()).collect();
+            let out = framegeist_core::render_collage(&refs, &lay, &opts)?;
+            if output.exists() {
+                return Err(Error::Io(std::io::Error::other(format!(
+                    "refusing to overwrite existing file: {}",
+                    output.display()
+                ))));
+            }
+            if let Some(parent) = output.parent() {
+                std::fs::create_dir_all(parent)?;
+            }
+            std::fs::write(output, out)?;
             Ok(())
         }
         Cmd::Probe { photo } => {

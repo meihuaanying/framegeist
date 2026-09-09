@@ -290,6 +290,7 @@ framegeist/
 - **2026-09-09 ｜ Q1/Q3 勘察 ｜** ① 商标初查：USPTO 无 "FrameGeist" 完全相同在册商标（近邻 FRAMEGENIE/GEIST/FRAME 类别均不同，风险低），中国商标网 9/42 类仍需人工查。② HEIF：发现 `heif-oxide`（纯 Rust、MIT/Apache、零 C 依赖）——Q3 的许可死结解除，代价是解码慢（12MP≈1s）与年轻（0.1.0）；AGPL 的 imazen/heic 仅在需要平台硬件后端时按"可选特性隔离"考虑。 ｜ Q3 从"需探索"降级为"有可行路径待集成验证"；实施第 11 步（Live Photo）前的 HEIF 集成测试据此推进。
 - **2026-09-09 ｜ Web 客户端骨架 ｜** ① `framegeist-wasm`（wasm-bindgen 0.2.128）绑定三 API，wasm 产物 1.5MB（G3 预算 8MB gzip 内）；`FontBook::from_bytes` 支持内存字体注入（无文件系统的 WASM/Android/鸿蒙外壳共用）。② `web/` 静态页（拖拽/模板选择/快速预览/导出，`tools/serve.mjs` 零依赖本地服务）。③ **N2 提前达成（CLI↔Web）**：`tools/wasm-smoke.mjs` 验证 WASM 与 CLI 对同一照片+同一模板输出**字节级一致**（SHA-256 相同）。④ 模板清单由生成器产出 `web/templates.json`。 ｜ G1（零上传）/G2（单张渲染+导出）骨架达成；批量与 PWA（G4）待做。
 - **2026-09-09 ｜ B2 补完 + 桌面骨架 ｜** ① PNG `eXIf` chunk 回写实现并测试通过（含 CRC32 手写实现），B2 的 JPEG/PNG 双路径关闭。② `framegeist-desktop`（Tauri 2）Windows 外壳：嵌入 `web/` 前端，release exe 8.3MB，启动验证通过；NSIS 安装包（H1）与自动更新（H4）待做。③ DevEco Studio 3.1.0.501 经 winget 装好，但 **NEXT 需 5.x（winget 无）**，Q7 最小样例阻塞在华为开发者站下载 + 设备/模拟器。 ｜ 实施顺序 1-7 全部有交付物（7 为骨架）。
+- **2026-09-09 ｜ 拼图模块（第 10 步） ｜** ① 引擎新增 `load_layout` + `render_collage`（`docs/LAYOUT-SPEC.md`）：cells 比例矩形、gutter、aspect、cover-fit 填充、每格 EXIF 信息条（model_pretty + f/光圈 ISO）、输出元数据取第一张照片；`cells` 上限 25（5×5）。② CLI 新增 `collage` 命令（照片列表 + `--layout`）。③ `tools/gen-layouts.mjs` 生成 **106 套布局**（方网格 1×1–5×5 双变体、strip 2–6、hero 非对称 1+2/4/6/8、金字塔/对角线），C5 配额达成。④ 测试：配额锁、确定性（同输入两次渲染逐字节相同）、EXIF 回写、多/少照片填充、非法布局拒绝（越界/零尺寸/超 25 格/路径穿越）。 ｜ 31 测试 + clippy + 四 target 全绿。
 
 ---
 
