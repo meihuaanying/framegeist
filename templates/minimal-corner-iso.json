@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "id": "minimal-corner-iso",
+    "name": "Minimal Corner - ISO",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": { "type": "none" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "corner",
+      "anchor": "bottom-right",
+      "offset": { "x": 0.02, "y": 0.03 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.024, "weight": 400, "color": "#DDDDDD" },
+      "content": [
+        { "expr": "fmt('f/{aperture}  ISO{iso}', exif)", "fallback": "framegeist" }
+      ]
+    }
+  ]
+}

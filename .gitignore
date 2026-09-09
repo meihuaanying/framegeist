@@ -1,0 +1,14 @@
+target/
+Cargo.lock.bak
+*.rs.bk
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
+
+# Legacy files that predate the framegeist repo (not part of the project)
+/aria2/
+/ComfyUI/
+/Mage/
+/pelican-bike*
+/_*

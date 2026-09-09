@@ -1,0 +1,24 @@
+[package]
+name = "framegeist-cli"
+description = "FrameGeist CLI: single render, batch, template listing, EXIF probe, golden baselines"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "framegeist"
+path = "src/main.rs"
+
+[dependencies]
+framegeist-core = { path = "../framegeist-core" }
+clap = { version = "4", features = ["derive"] }
+serde_json = "1"
+walkdir = "2"
+sha2 = "0.10"
+hex = "0.4"
+
+[dev-dependencies]
+exif = { package = "kamadak-exif", version = "0.6.1" }
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
+jpeg-encoder = "0.6"

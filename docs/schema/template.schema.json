@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FrameGeistTemplate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["meta", "canvas", "layers"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "version", "minEngineVersion", "author", "license", "category"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "minEngineVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "author": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "license": { "type": "string", "pattern": "^(CC0-1\\.0|CC-BY-4\\.0|CC-BY-SA-4\\.0|OFL-1\\.1|Apache-2\\.0|MIT)$" },
+        "category": { "enum": ["classic-white", "film", "polaroid", "gallery", "technical", "magazine", "minimal", "frame-shell"] }
+      }
+    },
+    "canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": { "enum": ["extend", "overlay", "cover"] },
+        "padding": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "top": { "type": "number", "minimum": 0, "maximum": 1 },
+            "right": { "type": "number", "minimum": 0, "maximum": 1 },
+            "bottom": { "type": "number", "minimum": 0, "maximum": 1 },
+            "left": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        },
+        "background": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "enum": ["blur", "solid", "image", "none"] },
+            "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$" },
+            "blur": { "type": "number", "minimum": 0, "maximum": 200 },
+            "scale": { "type": "number", "minimum": 1, "maximum": 4 }
+          }
+        },
+        "radius": { "type": "number", "minimum": 0, "maximum": 512 },
+        "shadow": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "blur": { "type": "number", "minimum": 0, "maximum": 512 },
+            "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+            "offsetX": { "type": "number", "minimum": -512, "maximum": 512 },
+            "offsetY": { "type": "number", "minimum": -512, "maximum": 512 }
+          }
+        }
+      }
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "id"],
+        "oneOf": [
+          {
+            "title": "text",
+            "properties": { "type": { "const": "text" } }
+          },
+          {
+            "title": "image",
+            "properties": { "type": { "const": "image" } }
+          }
+        ],
+        "properties": {
+          "type": { "enum": ["text", "image"] },
+          "id": { "type": "string", "pattern": "^[a-zA-Z0-9-]{1,64}$" },
+          "anchor": { "enum": ["top-left", "top-center", "top-right", "middle-left", "middle-center", "middle-right", "bottom-left", "bottom-center", "bottom-right"] },
+          "offset": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "x": { "type": "number", "minimum": -1, "maximum": 1 },
+              "y": { "type": "number", "minimum": -1, "maximum": 1 }
+            }
+          },
+          "font": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["family", "size", "color"],
+            "properties": {
+              "family": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 64 }, "minItems": 1, "maxItems": 8 },
+              "size": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.5 },
+              "weight": { "type": "integer", "minimum": 100, "maximum": 900 },
+              "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$" }
+            }
+          },
+          "lineHeight": { "type": "number", "minimum": 0.5, "maximum": 4 },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["expr"],
+              "properties": {
+                "expr": { "type": "string", "minLength": 1, "maxLength": 512 },
+                "fallback": { "type": ["string", "null"], "maxLength": 256 }
+              }
+            }
+          },
+          "asset": { "type": "string", "pattern": "^(@builtin/|assets/)[a-zA-Z0-9/._{}-]{1,200}$" },
+          "size": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+              "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+            }
+          },
+          "opacity": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "if": { "properties": { "type": { "const": "text" } } },
+        "then": { "required": ["type", "id", "anchor", "font", "content"] }
+      }
+    },
+    "fields": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "source"],
+        "properties": {
+          "type": { "enum": ["string", "number"] },
+          "source": { "enum": ["exif", "constant"] },
+          "transform": { "enum": ["model_pretty", "brand_slug", "identity"] }
+        }
+      }
+    },
+    "assets": { "type": "object" }
+  }
+}

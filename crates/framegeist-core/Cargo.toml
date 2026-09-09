@@ -1,0 +1,20 @@
+[package]
+name = "framegeist-core"
+description = "FrameGeist rendering engine: template loading, EXIF probing, pixel rendering"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp", "tiff"] }
+exif = { package = "kamadak-exif", version = "0.6.1" }
+jpeg-encoder = "0.6"
+ab_glyph = "0.2"
+imageproc = { version = "0.25", default-features = false }
+thiserror = "2"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.3", features = ["wasm_js"] }

@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  quality:
+    name: test + clippy (windows, golden regression)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo test (includes golden regression vs committed baselines)
+        run: cargo test --workspace
+      - name: cargo clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: cargo build (host)
+        run: cargo build --release
+
+  portability:
+    name: cross-target build of framegeist-core
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - wasm32-unknown-unknown
+          - aarch64-linux-android
+          - aarch64-unknown-linux-ohos
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo build --target ${{ matrix.target }}
+        run: cargo build -p framegeist-core --release --target ${{ matrix.target }}
