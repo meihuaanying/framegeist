@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "id": "frame-shell-v3",
+    "name": "Camera Shell V3",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "frame-shell"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.11,
+      "right": 0.11,
+      "bottom": 0.16,
+      "left": 0.11
+    },
+    "background": {
+      "type": "solid",
+      "color": "#2B2B2B"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "badge",
+      "anchor": "top-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.016,
+        "weight": 600,
+        "color": "#DDDDDD"
+      },
+      "content": [
+        {
+          "expr": "exif.make",
+          "fallback": "FG"
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": 0.035
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.024,
+        "weight": 600,
+        "color": "#EDEDED"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.016,
+        "weight": 400,
+        "color": "#AAAAAA"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm  f/{aperture}  {shutter}  ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": -0.055
+      }
+    }
+  ]
+}

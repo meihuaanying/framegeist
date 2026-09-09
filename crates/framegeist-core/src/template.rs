@@ -17,7 +17,7 @@ pub struct Template {
     pub fields: HashMap<String, FieldDef>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Category {
     ClassicWhite,

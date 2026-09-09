@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "id": "classic-white-v1",
+    "name": "Classic White V1",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "classic-white"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.04,
+      "right": 0.04,
+      "bottom": 0.1,
+      "left": 0.04
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.028,
+        "weight": 600,
+        "color": "#111111"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.02,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.02,
+        "weight": 400,
+        "color": "#111111"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm  f/{aperture}  {shutter}  ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0.02,
+        "y": -0.05
+      }
+    }
+  ]
+}

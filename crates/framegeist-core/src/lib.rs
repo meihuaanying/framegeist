@@ -13,7 +13,7 @@ pub mod text;
 pub use encode::{encode_jpeg_quality100, encode_png, splice_exif_app1};
 pub use exif::{cleaned_exif_tiff, probe_exif, ExifInfo};
 pub use render::{render, render_rgba, OutputFormat, RenderOptions, Sampling};
-pub use template::{load_template, load_template_from_str, Template};
+pub use template::{load_template, load_template_from_str, Category, License, Template};
 
 pub type Result<T> = std::result::Result<T, Error>;
 

@@ -50,9 +50,21 @@ fn is_ident(s: &str) -> bool {
 }
 
 /// Grammar check for a field expression. Allowed forms:
-///   exif.<key>          direct EXIF field
+///   exif.<key>              direct EXIF field
+///   '<literal>'             constant text (C3)
 ///   fmt('<literal>', exif)  format string with {key} placeholders
+///   if_empty(exif.<key>, '<literal>')  value or literal when missing
+///   date('<format>', exif.datetime)    EXIF date reformatting
 pub fn validate_expr(expr: &str) -> Result<()> {
+    if expr.len() >= 2 && expr.starts_with('\'') && expr.ends_with('\'') {
+        let literal = &expr[1..expr.len() - 1];
+        if literal.contains('\'') || literal.contains('\\') || literal.contains('\n') {
+            return Err(Error::SandboxViolation(format!(
+                "literal contains forbidden characters: {expr:?}"
+            )));
+        }
+        return Ok(());
+    }
     if let Some(key) = expr.strip_prefix("exif.") {
         if is_ident(key) {
             return Ok(());
@@ -60,6 +72,60 @@ pub fn validate_expr(expr: &str) -> Result<()> {
         return Err(Error::SandboxViolation(format!(
             "invalid exif key in expr {expr:?}"
         )));
+    }
+    if let Some(rest) = expr.strip_prefix("if_empty(") {
+        let inner = rest.strip_suffix(')').ok_or_else(|| {
+            Error::SandboxViolation(format!("if_empty() is unterminated: {expr:?}"))
+        })?;
+        let (key, literal) = inner
+            .split_once(", ")
+            .ok_or_else(|| Error::SandboxViolation(format!("if_empty() needs two arguments: {expr:?}")))?;
+        let key = key.strip_prefix("exif.").ok_or_else(|| {
+            Error::SandboxViolation(format!("if_empty() first argument must be exif.<key>: {expr:?}"))
+        })?;
+        if !is_ident(key) {
+            return Err(Error::SandboxViolation(format!(
+                "invalid exif key in {expr:?}"
+            )));
+        }
+        if !(literal.starts_with('\'') && literal.ends_with('\'') && literal.len() >= 2) {
+            return Err(Error::SandboxViolation(format!(
+                "if_empty() literal must be single-quoted: {expr:?}"
+            )));
+        }
+        if literal[1..literal.len() - 1].contains('\'') {
+            return Err(Error::SandboxViolation(format!(
+                "if_empty() literal contains a quote: {expr:?}"
+            )));
+        }
+        return Ok(());
+    }
+    if let Some(rest) = expr.strip_prefix("date(") {
+        let inner = rest.strip_suffix(')').ok_or_else(|| {
+            Error::SandboxViolation(format!("date() is unterminated: {expr:?}"))
+        })?;
+        let (literal, key) = inner
+            .split_once(", ")
+            .ok_or_else(|| Error::SandboxViolation(format!("date() needs two arguments: {expr:?}")))?;
+        if !(literal.starts_with('\'') && literal.ends_with('\'') && literal.len() >= 2) {
+            return Err(Error::SandboxViolation(format!(
+                "date() format must be a single-quoted literal: {expr:?}"
+            )));
+        }
+        if literal[1..literal.len() - 1]
+            .chars()
+            .any(|c| matches!(c, '\'' | '\\' | '\n'))
+        {
+            return Err(Error::SandboxViolation(format!(
+                "date() format contains forbidden characters: {expr:?}"
+            )));
+        }
+        if key != "exif.datetime" {
+            return Err(Error::SandboxViolation(format!(
+                "date() second argument must be exactly `exif.datetime`: {expr:?}"
+            )));
+        }
+        return Ok(());
     }
     if expr.starts_with("fmt(") && expr.ends_with(')') {
         let inner = &expr[4..expr.len() - 1];
@@ -119,8 +185,29 @@ pub fn validate_expr(expr: &str) -> Result<()> {
 /// Evaluate an expression against EXIF info. Returns None when any
 /// referenced field is missing; the template's `fallback` then applies.
 pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
+    if expr.len() >= 2 && expr.starts_with('\'') && expr.ends_with('\'') {
+        return Some(expr[1..expr.len() - 1].to_string());
+    }
     if let Some(key) = expr.strip_prefix("exif.") {
         return info.get(key);
+    }
+    if let Some(rest) = expr.strip_prefix("if_empty(") {
+        let inner = rest.strip_suffix(')')?;
+        let (key, literal) = inner.split_once(", ")?;
+        let key = key.strip_prefix("exif.")?;
+        let value = info.get(key);
+        let literal = &literal[1..literal.len() - 1];
+        return Some(value.filter(|v| !v.is_empty()).unwrap_or_else(|| literal.to_string()));
+    }
+    if let Some(rest) = expr.strip_prefix("date(") {
+        let inner = rest.strip_suffix(')')?;
+        let (literal, key) = inner.split_once(", ")?;
+        if key != "exif.datetime" {
+            return None;
+        }
+        let format = &literal[1..literal.len() - 1];
+        let raw = info.get("datetime")?;
+        return format_exif_date(&raw, format);
     }
     if expr.starts_with("fmt(") && expr.ends_with(')') {
         let inner = &expr[4..expr.len() - 1];
@@ -141,6 +228,52 @@ pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
         return Some(out);
     }
     None
+}
+
+/// Reformat an EXIF datetime (`YYYY:MM:DD HH:MM:SS`) according to a
+/// token format: YYYY, MM, DD, HH, mm, SS (other characters pass through).
+fn format_exif_date(raw: &str, format: &str) -> Option<String> {
+    let digits: Vec<u32> = raw
+        .chars()
+        .filter_map(|c| c.to_digit(10))
+        .collect();
+    if digits.len() < 14 {
+        return None;
+    }
+    let (y, m, d, hh, mi, ss) = (
+        &digits[0..4],
+        &digits[4..6],
+        &digits[6..8],
+        &digits[8..10],
+        &digits[10..12],
+        &digits[12..14],
+    );
+    let num = |slice: &[u32]| -> String {
+        slice
+            .iter()
+            .map(|d| d.to_string())
+            .collect::<Vec<_>>()
+            .concat()
+    };
+    let mut out = String::with_capacity(format.len());
+    let mut rest = format;
+    for token in ["YYYY", "MM", "DD", "HH", "mm", "SS"] {
+        if let Some(pos) = rest.find(token) {
+            out.push_str(&rest[..pos]);
+            let value = match token {
+                "YYYY" => num(y),
+                "MM" => num(m),
+                "DD" => num(d),
+                "HH" => num(hh),
+                "mm" => num(mi),
+                _ => num(ss),
+            };
+            out.push_str(&value);
+            rest = &rest[pos + token.len()..];
+        }
+    }
+    out.push_str(rest);
+    Some(out)
 }
 
 #[cfg(test)]
@@ -170,6 +303,40 @@ mod tests {
             Some("24mm  ISO200")
         );
         assert_eq!(eval_expr("fmt('{aperture}', exif)", &info), None);
+    }
+
+    #[test]
+    fn constant_text_expr() {
+        assert_eq!(eval_expr("'FrameGeist'", &ExifInfo::default()).as_deref(), Some("FrameGeist"));
+        assert!(validate_expr("'KODAK 400 1'").is_ok());
+        assert!(validate_expr("'has 'quote' inside'").is_err());
+    }
+
+    #[test]
+    fn if_empty_and_date_exprs() {
+        let with = ExifInfo {
+            model: Some("X-T5".into()),
+            datetime: Some("2026:09:09 10:00:00".into()),
+            ..ExifInfo::default()
+        };
+        let without = ExifInfo::default();
+        assert_eq!(
+            eval_expr("if_empty(exif.model, 'Unknown Camera')", &with).as_deref(),
+            Some("X-T5")
+        );
+        assert_eq!(
+            eval_expr("if_empty(exif.model, 'Unknown Camera')", &without).as_deref(),
+            Some("Unknown Camera")
+        );
+        assert_eq!(
+            eval_expr("date('YYYY-MM-DD HH:mm', exif.datetime)", &with).as_deref(),
+            Some("2026-09-09 10:00")
+        );
+        assert_eq!(eval_expr("date('YYYY-MM-DD', exif.datetime)", &without), None);
+        assert!(validate_expr("date('YYYY-MM-DD', exif.datetime)").is_ok());
+        assert!(validate_expr("date('YYYY-MM-DD', exif.model)").is_err());
+        assert!(validate_expr("if_empty(exif.model, 'ok')").is_ok());
+        assert!(validate_expr("if_empty(exif.model, exif.model)").is_err());
     }
 
     #[test]

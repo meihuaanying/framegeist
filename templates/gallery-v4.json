@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "id": "gallery-v4",
+    "name": "Gallery Mat V4",
+    "version": "0.1.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "gallery"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.116,
+      "right": 0.116,
+      "bottom": 0.196,
+      "left": 0.116
+    },
+    "background": {
+      "type": "solid",
+      "color": "#E5E5E5"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "artist",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.024,
+        "weight": 600,
+        "color": "#2B2B2B"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.025,
+        "y": -0.06
+      }
+    },
+    {
+      "type": "text",
+      "id": "series",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.016,
+        "weight": 400,
+        "color": "#6A6A6A"
+      },
+      "content": [
+        {
+          "expr": "fmt('Gallery Series 04', exif)",
+          "fallback": "Gallery Series"
+        }
+      ],
+      "offset": {
+        "x": 0.025,
+        "y": -0.06
+      }
+    }
+  ]
+}

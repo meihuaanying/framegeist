@@ -23,6 +23,15 @@ jobs:
         run: cargo clippy --workspace --all-targets -- -D warnings
       - name: cargo build (host)
         run: cargo build --release
+      - name: render template sample wall (PRD C6)
+        run: |
+          cargo run --release -p framegeist-cli --example make_test_photos
+          pwsh tools/gen-samples.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: template-samples
+          path: templates/samples/
+          retention-days: 30
 
   portability:
     name: cross-target build of framegeist-core
