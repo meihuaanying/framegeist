@@ -11,20 +11,37 @@ let photos = [];
 let lastRender = null;
 let lastBlobUrl = null;
 
-// Service workers don't exist on the Tauri custom-protocol origin; only
-// register on real http(s) origins (Web client, PRD G4).
-if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+// Service workers only make sense on real http(s) web origins; on the Tauri
+// custom-protocol origin they are disabled (PRD G4 applies to the Web client).
+if (
+  "serviceWorker" in navigator &&
+  location.protocol.startsWith("http") &&
+  !location.hostname.endsWith(".tauri.localhost") &&
+  location.hostname !== "tauri.localhost"
+) {
   navigator.serviceWorker.register("./sw.js").catch(() => {});
 }
 
 async function boot() {
   status.textContent = "loading wasm…";
-  await init("./pkg/framegeist_wasm_bg.wasm");
+  try {
+    await init({ module_or_path: "./pkg/framegeist_wasm_bg.wasm" });
+  } catch (e) {
+    status.textContent = "wasm 加载失败: " + (e.message || e);
+    throw e;
+  }
 
-  const fontRes = await fetch(BASE + "templates/fonts/JetBrainsMono-Regular.ttf");
-  engine = new Engine(["JetBrains Mono"], [new Uint8Array(await fontRes.arrayBuffer())]);
+  try {
+    const fontRes = await fetch(BASE + "templates/fonts/JetBrainsMono-Regular.ttf");
+    if (!fontRes.ok) throw new Error("font HTTP " + fontRes.status);
+    engine = new Engine(["JetBrains Mono"], [new Uint8Array(await fontRes.arrayBuffer())]);
+  } catch (e) {
+    status.textContent = "字体加载失败: " + (e.message || e);
+    throw e;
+  }
 
   const fillSelect = (sel, items, fmt) => {
+    sel.innerHTML = "";
     for (const t of items) {
       const opt = document.createElement("option");
       opt.value = t.id;

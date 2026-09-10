@@ -12,11 +12,23 @@ const PRECACHE = [
   "./manifest.webmanifest",
 ];
 
+// Tauri custom-protocol origin: never cache there (and self-destruct if an
+// older build registered us on it).
+const IS_TAURI = self.location.hostname === "tauri.localhost" || self.location.hostname.endsWith(".tauri.localhost");
+
 self.addEventListener("install", (e) => {
+  if (IS_TAURI) { self.skipWaiting(); return; }
   e.waitUntil(caches.open(VERSION).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (e) => {
+  if (IS_TAURI) {
+    e.waitUntil(
+      caches.keys().then((ks) => Promise.all(ks.map((k) => caches.delete(k))))
+        .then(() => self.registration.unregister())
+    );
+    return;
+  }
   e.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)))
@@ -25,6 +37,7 @@ self.addEventListener("activate", (e) => {
 });
 
 self.addEventListener("fetch", (e) => {
+  if (IS_TAURI) return;
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== self.location.origin) return;
   if (url.pathname.includes("/api.github.com")) return;
