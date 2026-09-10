@@ -86,10 +86,9 @@ impl Engine {
             } else {
                 core::Sampling::Full
             },
+            max_edge: if preview { Some(1600) } else { None },
             fonts: Some(self.fonts.clone()),
             model_map: self.model_map.clone(),
-            // JPEG re-encode of EXIF write-back works, but in-browser
-            // write-back keeps the original APP1 in most cases; keep it on.
             ..core::RenderOptions::default()
         };
         let out = core::render(photo, &template, &opts).map_err(|e| JsError::new(&e.to_string()))?;

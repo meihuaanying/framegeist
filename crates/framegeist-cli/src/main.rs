@@ -15,6 +15,9 @@ struct Args {
     cmd: Cmd,
     #[arg(long, global = true, default_value = "templates/assets")]
     assets_dir: PathBuf,
+    /// Keep GPS coordinates in exported EXIF (PRD B3: off by default).
+    #[arg(long = "keep-gps", global = true)]
+    keep_gps: bool,
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -30,6 +33,8 @@ enum Cmd {
         format: String,
         #[arg(long)]
         preview: bool,
+        #[arg(long = "max-edge")]
+        max_edge: Option<u32>,
     },
     /// Render a directory of photos; existing outputs are never overwritten.
     Batch {
@@ -184,6 +189,8 @@ fn build_opts(args: &Args, format: OutputFormat, preview: bool) -> Result<Render
     Ok(RenderOptions {
         format,
         sampling: if preview { Sampling::Preview } else { Sampling::Full },
+        max_edge: if preview { Some(1600) } else { None },
+        keep_gps: args.keep_gps,
         assets_dir: Some(assets_dir.clone()),
         model_map: framegeist_core::load_model_map(&assets_dir)?,
         ..RenderOptions::default()
@@ -198,10 +205,12 @@ fn run(args: &Args) -> Result<(), Error> {
             output,
             format,
             preview,
+            max_edge,
         } => {
             let (tpl, _src) = resolve_template(template)?;
             let bytes = std::fs::read(photo)?;
-            let opts = build_opts(args, parse_format(format)?, *preview)?;
+            let mut opts = build_opts(args, parse_format(format)?, *preview)?;
+            if let Some(edge) = max_edge { opts.max_edge = Some(*edge); }
             let out = render(&bytes, &tpl, &opts)?;
             if output.exists() {
                 return Err(Error::Io(std::io::Error::other(format!(
@@ -213,6 +222,15 @@ fn run(args: &Args) -> Result<(), Error> {
                 std::fs::create_dir_all(parent)?;
             }
             std::fs::write(output, out)?;
+            if let Some(r) = framegeist_core::metadata_report(&bytes, opts.keep_gps)? {
+                eprintln!(
+                    "metadata report: kept {} field(s); GPS {} (keep_gps={}); serials removed: {}",
+                    r.kept,
+                    if r.gps_stripped > 0 { format!("stripped {} entr(ies)", r.gps_stripped) } else { "none".into() },
+                    r.keep_gps,
+                    r.serial_stripped
+                );
+            }
             Ok(())
         }
         Cmd::Batch {
@@ -225,6 +243,8 @@ fn run(args: &Args) -> Result<(), Error> {
             let opts = build_opts(args, parse_format(format)?, false)?;
             std::fs::create_dir_all(output)?;
             let mut done = 0usize;
+            let mut gps_stripped = 0usize;
+            let mut serials_stripped = 0usize;
             for photo in photo_files(dir)? {
                 let name = photo
                     .file_name()
@@ -247,9 +267,16 @@ fn run(args: &Args) -> Result<(), Error> {
                 let bytes = std::fs::read(&photo)?;
                 let out = render(&bytes, &tpl, &opts)?;
                 std::fs::write(&out_path, out)?;
+                if let Some(r) = framegeist_core::metadata_report(&bytes, opts.keep_gps)? {
+                    gps_stripped += r.gps_stripped;
+                    serials_stripped += r.serial_stripped;
+                }
                 done += 1;
             }
             println!("rendered {done} photo(s)");
+            if gps_stripped > 0 || serials_stripped > 0 {
+                println!("metadata report: GPS stripped {gps_stripped} entr(ies), serials stripped {serials_stripped} (keep_gps={})", opts.keep_gps);
+            }
             Ok(())
         }
         Cmd::Collage {
@@ -279,6 +306,12 @@ fn run(args: &Args) -> Result<(), Error> {
                 std::fs::create_dir_all(parent)?;
             }
             std::fs::write(output, out)?;
+            if let Some(r) = framegeist_core::metadata_report(loaded.first().map(|v| v.as_slice()).unwrap_or(&[]), opts.keep_gps)? {
+                eprintln!(
+                    "metadata report (first photo): kept {} field(s); GPS stripped {}; serials stripped {}",
+                    r.kept, r.gps_stripped, r.serial_stripped
+                );
+            }
             Ok(())
         }
         Cmd::TemplateExport { template, output } => {

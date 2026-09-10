@@ -77,7 +77,7 @@ for (let i = 0; i < 8; i++) {
       extendCanvas({ top: pad, right: pad, bottom: padBottom, left: pad }, solid(bg)),
       [
         textLayer("title", "bottom-left", font(0.028, fg, 600), EXIF_INFO, { offset: { x: 0.02, y: -0.05 } }),
-        textLayer("params", "bottom-right", font(0.02, fg, 400), EXIF_PARAMS, { offset: { x: 0.02, y: -0.05 } }),
+        textLayer("params", "bottom-right", font(0.02, fg, 400), EXIF_PARAMS, { offset: { x: -0.02, y: -0.05 } }),
       ]
     )
   );
@@ -105,7 +105,7 @@ for (let i = 0; i < 8; i++) {
       [
         textLayer("filmstock", "top-left", font(0.018, fg, 400), [item(`'KODAK 400 ${i + 1}'`, "FILM")], { offset: { x: 0.015, y: 0.02 } }),
         textLayer("title", "bottom-left", font(0.026, fg, 600), EXIF_INFO, { offset: { x: 0.02, y: -0.05 } }),
-        textLayer("params", "bottom-right", font(0.018, fg, 400), EXIF_PARAMS, { offset: { x: 0.02, y: -0.055 } }),
+        textLayer("params", "bottom-right", font(0.018, fg, 400), EXIF_PARAMS, { offset: { x: -0.02, y: -0.055 } }),
       ]
     )
   );
@@ -143,7 +143,7 @@ for (let i = 0; i < 7; i++) {
       extendCanvas({ top: pad, right: pad, bottom: pad + 0.08, left: pad }, solid(GALLERY_BGS[i])),
       [
         textLayer("artist", "bottom-left", font(0.024, "#2B2B2B", 600), EXIF_INFO, { offset: { x: 0.025, y: -0.06 } }),
-        textLayer("series", "bottom-right", font(0.016, "#6A6A6A", 400), [item(`fmt('Gallery Series ${String(i + 1).padStart(2, "0")}', exif)`, "Gallery Series")], { offset: { x: 0.025, y: -0.06 } }),
+        textLayer("series", "bottom-right", font(0.016, "#6A6A6A", 400), [item(`fmt('Gallery Series ${String(i + 1).padStart(2, "0")}', exif)`, "Gallery Series")], { offset: { x: -0.025, y: -0.06 } }),
       ]
     )
   );
@@ -211,13 +211,13 @@ for (let i = 0; i < 8; i++) {
 
 // ---------- minimal (8) ----------
 const MINIMAL_VARIANTS = [
-  ["#DDDDDD", "bottom-right", { x: 0.02, y: 0.03 }, "fmt('f/{aperture}  ISO{iso}', exif)"],
-  ["#CCCCCC", "bottom-left", { x: 0.02, y: 0.03 }, "exif.model_pretty"],
+  ["#DDDDDD", "bottom-right", { x: -0.02, y: -0.03 }, "fmt('f/{aperture}  ISO{iso}', exif)"],
+  ["#CCCCCC", "bottom-left", { x: 0.02, y: -0.03 }, "exif.model_pretty"],
   ["#EEEEEE", "top-right", { x: -0.02, y: 0.03 }, "fmt('{focal}mm', exif)"],
   ["#BBBBBB", "top-left", { x: 0.02, y: 0.03 }, "date('YYYY.MM.DD', exif.datetime)"],
-  ["#D0D0D0", "bottom-center", { x: 0, y: 0.04 }, "fmt('{shutter}  ISO{iso}', exif)"],
+  ["#D0D0D0", "bottom-center", { x: 0, y: -0.04 }, "fmt('{shutter}  ISO{iso}', exif)"],
   ["#E0E0E0", "middle-right", { x: -0.015, y: 0 }, "exif.lens"],
-  ["#C8C8C8", "bottom-left", { x: 0.015, y: 0.025 }, "fmt('f/{aperture}', exif)"],
+  ["#C8C8C8", "bottom-left", { x: 0.015, y: -0.025 }, "fmt('f/{aperture}', exif)"],
   ["#DCDCDC", "top-center", { x: 0, y: 0.025 }, "exif.model_pretty"],
 ];
 for (let i = 0; i < 8; i++) {
@@ -256,7 +256,7 @@ for (let i = 0; i < 7; i++) {
       [
         textLayer("badge", "top-left", font(0.016, "#DDDDDD", 600), [item("exif.make", "FG")], { offset: { x: 0.03, y: 0.035 } }),
         textLayer("title", "bottom-left", font(0.024, "#EDEDED", 600), EXIF_INFO, { offset: { x: 0.03, y: -0.05 } }),
-        textLayer("params", "bottom-right", font(0.016, "#AAAAAA", 400), EXIF_PARAMS, { offset: { x: 0.03, y: -0.055 } }),
+        textLayer("params", "bottom-right", font(0.016, "#AAAAAA", 400), EXIF_PARAMS, { offset: { x: -0.03, y: -0.055 } }),
       ]
     )
   );

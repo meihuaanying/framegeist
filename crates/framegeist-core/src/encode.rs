@@ -6,16 +6,17 @@ use crate::{Error, Result};
 /// Encode RGBA pixels as JPEG with quality 100 and 4:4:4 chroma (PRD B1).
 pub fn encode_jpeg_quality100(img: &RgbaImage) -> Result<Vec<u8>> {
     let rgb = DynamicImage::ImageRgba8(img.clone()).to_rgb8();
+    let (w, h) = (rgb.width(), rgb.height());
+    if w > u16::MAX as u32 || h > u16::MAX as u32 {
+        return Err(Error::Encode(format!(
+            "image dimension {w}x{h} exceeds JPEG 65535px edge limit"
+        )));
+    }
     let mut out = Vec::new();
     let mut encoder = jpeg_encoder::Encoder::new(&mut out, 100);
     encoder.set_sampling_factor(jpeg_encoder::SamplingFactor::R_4_4_4);
     encoder
-        .encode(
-            rgb.as_raw(),
-            rgb.width().min(u16::MAX as u32) as u16,
-            rgb.height().min(u16::MAX as u32) as u16,
-            jpeg_encoder::ColorType::Rgb,
-        )
+        .encode(rgb.as_raw(), w as u16, h as u16, jpeg_encoder::ColorType::Rgb)
         .map_err(|e| Error::Encode(e.to_string()))?;
     Ok(out)
 }

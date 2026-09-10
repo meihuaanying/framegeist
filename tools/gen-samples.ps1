@@ -13,7 +13,7 @@ Get-ChildItem templates/samples -Filter *.jpg -ErrorAction SilentlyContinue | Re
 $ids = & $cli templates | ForEach-Object { ($_ -split "`t")[0] }
 $done = 0; $failed = @()
 foreach ($id in $ids) {
-  & $cli render $photo --template $id -o "templates/samples/$id.jpg" 2>$null
+  & $cli render $photo --template $id --max-edge 900 -o "templates/samples/$id.jpg" 2>$null
   if ($LASTEXITCODE -eq 0) { $done++ } else { $failed += $id }
 }
 Write-Output "rendered=$done failed=$($failed.Count)"

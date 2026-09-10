@@ -294,6 +294,15 @@ framegeist/
 - **2026-09-09 ｜ 官网与发布流水线（第 13 步）+ 建仓 ｜** ① 仓库 `github.com/meihuaanying/framegeist`（公开，MIT）建立并推送；CI 五 job 全绿（test/clippy/三跨 target/wasm 字节一致冒烟）。② 官网骨架上线 `https://meihuaanying.github.io/framegeist/`：首页/模板墙（真实样张 63 张）/下载页（实时读 Releases API，K2 无硬编码版本）/文档/市场/赞助页；Pages 工作流自动部署 site+web+样张。③ **Release 流水线打通（L1/L3）**：API 创建 annotated tag `v0.1.0` → CI 构建四产物（CLI zip/desktop zip/.fgpkg 模板包）→ 生成 update.json（L1 schema：platforms.win-x64/win-x64-cli + templates.count=63）+ SHA256SUMS.txt → 自动创建 GitHub Release，验证通过。④ 坑：本机 git 推送走的代理（127.0.0.1:7890）时断时续，断连时改用 GitHub Contents API 提交；gen-samples.ps1/gen-update.mjs 均需平台自适应 CLI 名。⑤ 本机 git 全局配置有 per-URL 代理条目，推送需 `-c http.https://github.com/.proxy=` 覆盖（或代理可用时直推）。 ｜ K1/K2/K3/L3 骨架达成；工程化 CI 门禁 N5 在云端跑通。
 - **2026-09-09 ｜ Web 拼图 + PWA + 模糊测试 + 模板包 + 机型映射 ｜** ① **G2 拼图补全**：wasm `render_collage` 绑定 + 页面「边框/拼图」双模式（多选照片、布局清单 web/layouts.json 106 套镜像）。② **N2 口径修正（重要）**：边框渲染保持 WASM↔CLI **字节级一致**；拼图因跨目标浮点舍入存在 274/3600 万字节（max 差 3，约 0.0013% 像素）的微小差异——按 PRD N2 的 ≤0.1% 像素阈值判定通过；CLI 新增 `pixel-hash`/`pixel-diff` 命令作为跨端像素门禁的正式工具。③ **G4 PWA**：manifest + Service Worker（预缓存引擎/字体/清单，模板与布局 stale-while-revalidate）。④ **N4**：模板模糊测试 10 万次变异注入（截断/翻字节/注入 http:// file:// ../ 非法 key/NUL）零 panic、全部走 Result。⑤ **E1/E2**：CLI `template-export/-import`（.fgt zip 封装 manifest+template.json）；导入强制 C2 校验，恶意载荷（http://）被字段级拒绝且不落盘，重复 id 防覆盖。⑥ **B5**：`ModelMap` 数据文件（assets/model-map.json）覆盖/扩展内置机型映射，CLI/WASM 双端接入。 ｜ 38 测试 + clippy + 四 target 全绿。
 - **2026-09-09 ｜ H1 首个安装包 ｜** tauri-cli 2.11.4 装好，`cargo tauri build` 产出 **NSIS 安装包 `FrameGeist_0.1.0_x64-setup.exe`**（含内嵌 Web UI）。H1 的 .exe 安装器口径达成（免管理员权限、卸载干净为 NSIS 默认行为）；H4 静默自更新仍待 tauri-plugin-updater + 签名密钥。
+- **2026-09-09 ｜ 全面代码与产品复核（用户实机检查触发） ｜** 桌面版打开后用户报告"问题太多"。系统复盘确认 **7 个真实缺陷**，全部修复并补防回归测试：
+  1. **文本偏移符号 bug（最严重）**：底行公式 `H-total-off` 与模板惯用的负 y 组合后，把底锚文字推到画布外——**样张墙绝大多数模板的 EXIF 文字此前是被静默裁掉的**（q100 渲染后差异只有几千像素，人眼没检查）。修正为带符号约定（右/下向内取负），63 套模板数据统一，`TEMPLATE-SPEC §4.1` 明确语义。**根因**：黄金测试只比对哈希，从不验证"文字存在"。→ 新增 `visual_sanity.rs::bottom_text_is_visible`（9 代表模板底带非背景像素断言）永久拦截。
+  2. **EXIF Orientation 完全没应用**：手机竖拍（orientation=6/8）会横躺输出。修复：解码后按 orientation 1-8 旋转像素，写出时 Orientation 归一为 1 并写 PixelX/YDimension 为最终画布尺寸（防双重旋转）。→ `orientation_is_applied` 测试（1200x900+ori6 → 900x1200）。
+  3. **桌面版 CSP 杀死整个 UI**：`default-src 'self'` 同时拦截内联 `<script type=module>` 和 WASM 编译——桌面打开必然是死页面。修复：JS 外置 `web/app.js`；CSP 改 `script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' https://api.github.com`；`dragDropEnabled: false`（否则 Tauri 原生拦截拖放，HTML5 drop 收不到文件）；Service Worker 仅在 http(s) 源注册。
+  4. **预览不缩图**：A5 要求"预览与导出仅缩放因子不同"，此前只有 filter 差异——24MP 预览走全尺寸，既慢又撑爆内存。修复：`RenderOptions.max_edge`（预览 1600 上限，导出 None 全尺寸），CLI 补 `--max-edge`。→ `preview_max_edge_and_export_full` 测试。
+  5. **透明 PNG 的 alpha 被丢弃变黑**：JPEG 编码前按白底预乘合成。
+  6. **JPEG 边长 >65535 被静默截断成坏图**：改为明确报错。
+  7. **样张墙体积**：渐变测试照在最坏情况 q100 下每张 3.2MB（共 200MB）。样张改用 `--max-edge 900`，降至 72MB 且单格下载合理。
+  因 1+2+3+4 属**渲染语义变更**，黄金基线（36 条）与样张（63 张）已按修复后引擎重生成并在提交信息注明；WASM↔CLI 字节一致复验通过。
 
 ---
 

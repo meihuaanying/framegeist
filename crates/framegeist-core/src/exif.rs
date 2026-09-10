@@ -1,4 +1,4 @@
-use std::io::Cursor;
+﻿use std::io::Cursor;
 
 use crate::{Error, Result};
 
@@ -128,28 +128,75 @@ const WHITELIST: [u16; 10] = [
     0xA434, // LensModel
 ];
 
-/// Build a cleaned EXIF TIFF blob from the source photo. Returns None when
-/// the source has no EXIF. GPS / serial are dropped by whitelist (PRD B3).
+/// Build a cleaned EXIF TIFF blob from the source photo (no report needed).
 pub fn cleaned_exif_tiff(photo: &[u8]) -> Result<Option<Vec<u8>>> {
+    Ok(cleaned_exif_tiff_full(photo, None, false)?.map(|(blob, _)| blob))
+}
+
+/// Metadata cleanup report without building the blob (PRD B3 pre-export view).
+pub fn metadata_report(photo: &[u8], keep_gps: bool) -> Result<Option<MetadataReport>> {
+    Ok(cleaned_exif_tiff_full(photo, None, keep_gps)?.map(|(_, r)| r))
+}
+
+#[derive(Debug, Clone, Copy, Default, serde::Serialize)]
+pub struct MetadataReport {
+    pub kept: usize,
+    pub gps_stripped: usize,
+    pub serial_stripped: usize,
+    pub keep_gps: bool,
+}
+
+/// Serial-number tags stripped regardless of settings (PRD B3).
+const SERIAL_TAGS: [u16; 2] = [0xA431, 0xA435]; // BodySerialNumber, LensSerialNumber
+
+/// Cleaned EXIF write-back with metadata report (PRD B3):
+/// GPS and serials are removed unless `keep_gps` (user opt-in, B3);
+/// `final_size` normalizes Orientation to 1 and records final pixel dims.
+pub fn cleaned_exif_tiff_full(
+    photo: &[u8],
+    final_size: Option<(u32, u32)>,
+    keep_gps: bool,
+) -> Result<Option<(Vec<u8>, MetadataReport)>> {
     let mut cursor = Cursor::new(photo);
     let source = match exif::Reader::new().read_from_container(&mut cursor) {
         Ok(e) => e,
         Err(_) => return Ok(None),
     };
-    let kept: Vec<exif::Field> = source
-        .fields()
-        .filter(|f| WHITELIST.contains(&f.tag.number()))
-        .map(|f| exif::Field {
-            tag: f.tag,
-            // Normalize every whitelisted field into the primary IFD; the
-            // Writer synthesizes the Exif sub-IFD pointer automatically.
-            // This avoids the writer's contiguous-IFD constraint.
-            ifd_num: exif::In::PRIMARY,
-            value: f.value.clone(),
-        })
-        .collect();
+    let mut report = MetadataReport { keep_gps, ..MetadataReport::default() };
+    let mut kept: Vec<exif::Field> = Vec::new();
+    for f in source.fields() {
+        let code = f.tag.number();
+        let is_gps = f.tag.context() == exif::Context::Gps;
+        if is_gps { report.gps_stripped += 1; }
+        if SERIAL_TAGS.contains(&code) { report.serial_stripped += 1; }
+        if WHITELIST.contains(&code) || (keep_gps && is_gps) {
+            kept.push(exif::Field {
+                tag: f.tag,
+                ifd_num: exif::In::PRIMARY,
+                value: f.value.clone(),
+            });
+        }
+    }
+    report.kept = kept.len();
     if kept.is_empty() {
         return Ok(None);
+    }
+    if let Some((w, h)) = final_size {
+        for field in kept.iter_mut() {
+            if field.tag == exif::Tag::Orientation {
+                field.value = exif::Value::Short(vec![1]);
+            }
+        }
+        kept.push(exif::Field {
+            tag: exif::Tag(exif::Context::Exif, 0xA002),
+            ifd_num: exif::In::PRIMARY,
+            value: exif::Value::Long(vec![w]),
+        });
+        kept.push(exif::Field {
+            tag: exif::Tag(exif::Context::Exif, 0xA003),
+            ifd_num: exif::In::PRIMARY,
+            value: exif::Value::Long(vec![h]),
+        });
     }
     let mut writer = exif::experimental::Writer::new();
     for field in &kept {
@@ -159,5 +206,5 @@ pub fn cleaned_exif_tiff(photo: &[u8]) -> Result<Option<Vec<u8>>> {
     writer
         .write(&mut buf, false)
         .map_err(|e| Error::Exif(e.to_string()))?;
-    Ok(Some(buf.into_inner()))
+    Ok(Some((buf.into_inner(), report)))
 }

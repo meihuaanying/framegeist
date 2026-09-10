@@ -4,7 +4,7 @@ use ab_glyph::PxScale;
 use image::{GenericImage, ImageBuffer, Rgba, RgbaImage};
 use imageproc::drawing::draw_text_mut;
 
-use crate::exif::{cleaned_exif_tiff, probe_exif, ExifInfo};
+use crate::exif::{cleaned_exif_tiff_full, probe_exif, ExifInfo};
 use crate::sandbox::eval_expr;
 use crate::template::{
     Anchor, BgKind, CanvasMode, Layer, Template, TextLayer,
@@ -33,6 +33,9 @@ pub struct RenderOptions {
     pub model_map: Option<crate::model_map::ModelMap>,
     pub write_exif: bool,
     pub keep_gps: bool,
+    /// Maximum output edge (px). None = full resolution (export path).
+    /// Preview uses Some(n); A5: same render code, only this scale differs.
+    pub max_edge: Option<u32>,
 }
 
 impl Default for RenderOptions {
@@ -45,6 +48,7 @@ impl Default for RenderOptions {
             model_map: None,
             write_exif: true,
             keep_gps: false,
+            max_edge: None,
         }
     }
 }
@@ -302,7 +306,7 @@ fn draw_text_layer(
     } else if from_middle {
         (h - total_h) / 2.0 + off_y
     } else {
-        h - total_h - off_y
+        h + off_y - total_h
     };
 
     for (i, line) in lines.iter().enumerate() {
@@ -312,7 +316,7 @@ fn draw_text_layer(
         } else if align_center {
             (w - lw) / 2.0 + off_x
         } else {
-            w - off_x - lw
+            w + off_x - lw
         };
         let y = base_y + line_h * i as f32;
         draw_text_mut(
@@ -327,15 +331,63 @@ fn draw_text_layer(
     }
 }
 
+/// Decode photo bytes, apply EXIF orientation, optionally cap the longest
+/// edge (preview path). Shared by frame and collage rendering.
+pub(crate) fn decode_oriented(photo: &[u8], max_edge: Option<u32>) -> Result<RgbaImage> {
+    let mut img = image::load_from_memory(photo)?;
+    let ori_raw = probe_exif(photo)?.orientation.unwrap_or(1);
+    let ori = match ori_raw {
+        2 => image::metadata::Orientation::FlipHorizontal,
+        3 => image::metadata::Orientation::Rotate180,
+        4 => image::metadata::Orientation::FlipVertical,
+        5 => image::metadata::Orientation::Rotate90,
+        6 => image::metadata::Orientation::Rotate90,
+        7 => image::metadata::Orientation::Rotate270,
+        8 => image::metadata::Orientation::Rotate270,
+        _ => image::metadata::Orientation::NoTransforms,
+    };
+    img.apply_orientation(ori);
+    let rgba = img.to_rgba8();
+    let (w, h) = rgba.dimensions();
+    match max_edge {
+        Some(cap) if w.max(h) > cap => {
+            let scale = cap as f64 / w.max(h) as f64;
+            let nw = ((w as f64) * scale).ceil().max(1.0) as u32;
+            let nh = ((h as f64) * scale).ceil().max(1.0) as u32;
+            Ok(image::imageops::resize(&rgba, nw, nh, image::imageops::FilterType::Triangle))
+        }
+        _ => Ok(rgba),
+    }
+}
+
+/// Flatten RGBA over white, dropping alpha (JPEG has no alpha channel).
+fn flatten_over_white(img: &RgbaImage) -> RgbaImage {
+    let mut out = img.clone();
+    for px in out.pixels_mut() {
+        let [r, g, b, a] = px.0;
+        if a < 255 {
+            let af = a as f64 / 255.0;
+            let inv = 1.0 - af;
+            px.0 = [
+                (r as f64 * af + 255.0 * inv) as u8,
+                (g as f64 * af + 255.0 * inv) as u8,
+                (b as f64 * af + 255.0 * inv) as u8,
+                255,
+            ];
+        }
+    }
+    out
+}
+
 /// Render a photo against a template into an RGBA canvas. Preview and export
-/// share this exact code path; only `RenderOptions.sampling` differs (PRD A5).
+/// share this exact code path; only `RenderOptions.max_edge`/`sampling`
+/// differ (PRD A5).
 pub fn render_rgba(
     photo: &[u8],
     template: &Template,
     opts: &RenderOptions,
 ) -> Result<RgbaImage> {
-    let img = image::load_from_memory(photo)?;
-    let rgba = img.to_rgba8();
+    let rgba = decode_oriented(photo, opts.max_edge)?;
     let mut info = probe_exif(photo)?;
     apply_model_map(&mut info, &opts.model_map);
     let geo = compute_geometry(template, &rgba);
@@ -360,30 +412,57 @@ pub fn render_rgba(
 
 /// Full render pipeline: decode -> render -> encode -> metadata write-back.
 pub fn render(photo: &[u8], template: &Template, opts: &RenderOptions) -> Result<Vec<u8>> {
+    Ok(render_with_report(photo, template, opts)?.0)
+}
+
+/// Same as `render` but also returns the PRD B3 metadata cleanup report.
+pub fn render_with_report(
+    photo: &[u8],
+    template: &Template,
+    opts: &RenderOptions,
+) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
     let canvas = render_rgba(photo, template, opts)?;
     encode_output(&canvas, photo, opts)
 }
 
 /// Encode an RGBA canvas with the configured format + metadata write-back.
-pub(crate) fn encode_output(canvas: &RgbaImage, photo: &[u8], opts: &RenderOptions) -> Result<Vec<u8>> {
+pub(crate) fn encode_output(
+    canvas: &RgbaImage,
+    photo: &[u8],
+    opts: &RenderOptions,
+) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
+    let (cw, ch) = canvas.dimensions();
     match opts.format {
         OutputFormat::Jpeg => {
-            let mut out = encode::encode_jpeg_quality100(canvas)?;
-            if opts.write_exif {
-                if let Some(tiff) = cleaned_exif_tiff(photo)? {
-                    encode::splice_exif_app1(&mut out, &tiff)?;
+            let flat = flatten_over_white(canvas);
+            let mut out = encode::encode_jpeg_quality100(&flat)?;
+            let report = if opts.write_exif {
+                match cleaned_exif_tiff_full(photo, Some((cw, ch)), opts.keep_gps)? {
+                    Some((tiff, report)) => {
+                        encode::splice_exif_app1(&mut out, &tiff)?;
+                        Some(report)
+                    }
+                    None => None,
                 }
-            }
-            Ok(out)
+            } else {
+                None
+            };
+            Ok((out, report))
         }
         OutputFormat::Png => {
             let mut out = encode::encode_png(canvas)?;
-            if opts.write_exif {
-                if let Some(tiff) = cleaned_exif_tiff(photo)? {
-                    encode::splice_png_exif(&mut out, &tiff)?;
+            let report = if opts.write_exif {
+                match cleaned_exif_tiff_full(photo, Some((cw, ch)), opts.keep_gps)? {
+                    Some((tiff, report)) => {
+                        encode::splice_png_exif(&mut out, &tiff)?;
+                        Some(report)
+                    }
+                    None => None,
                 }
-            }
-            Ok(out)
+            } else {
+                None
+            };
+            Ok((out, report))
         }
     }
 }

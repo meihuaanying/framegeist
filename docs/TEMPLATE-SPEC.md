@@ -60,12 +60,16 @@
 
 ### 4.1 锚点与偏移（九宫格）
 
-`anchor` ∈ 9 值（`top-left` … `bottom-right`）。`offset.x/y` 为相对**画布**宽/高的比例，范围 `[-1, 1]`，语义：
+`anchor` ∈ 9 值（`top-left` … `bottom-right`）。`offset.x/y` 为相对**画布**宽/高的**带符号位移**（`[-1, 1]`），约定：**正方向 = 右/下**，因此**右/下锚点的"向内"偏移取负值**：
 
-- **Top 行**：`y = offset.y * H`
+- **Left 列**：`x = offset.x * W`（正 = 向内）
+- **Right 列**：`x = W + offset.x * W - textW`（**负 = 向内**）
+- **Center 列**：`x = (W - textW) / 2 + offset.x * W`
+- **Top 行**：`y = offset.y * H`（正 = 向下向内）
 - **Middle 行**：`y = (H - textBlockH) / 2 + offset.y * H`
-- **Bottom 行**：`y = H - textBlockH - offset.y * H`
-- **Left 列**：`x = offset.x * W`；**Right 列**：`x = W - offset.x * W - lineW`；**Center 列**：居中 + `offset.x * W`
+- **Bottom 行**：`y = H + offset.y * H - textBlockH`（**负 = 向上向内**）
+
+> 引擎回归测试 `visual_sanity.rs` 锁住这一语义（底部文字必须真实落进画布，防止偏移符号再漂）。
 
 ### 4.2 `font`
 

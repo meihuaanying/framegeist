@@ -14,10 +14,12 @@ pub mod template;
 pub mod text;
 
 pub use encode::{encode_jpeg_quality100, encode_png, splice_exif_app1, splice_png_exif};
-pub use exif::{cleaned_exif_tiff, probe_exif, ExifInfo};
+pub use exif::{cleaned_exif_tiff, metadata_report, probe_exif, ExifInfo, MetadataReport};
 pub use layout::{load_layout, Layout};
 pub use model_map::ModelMap;
-pub use render::{load_model_map, render, render_rgba, OutputFormat, RenderOptions, Sampling};
+pub use render::{
+    load_model_map, render, render_rgba, render_with_report, OutputFormat, RenderOptions, Sampling,
+};
 pub use template::{load_template, load_template_from_str, Category, License, Template};
 
 pub fn render_collage(
