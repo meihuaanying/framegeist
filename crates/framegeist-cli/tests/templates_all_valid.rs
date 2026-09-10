@@ -92,4 +92,3 @@ fn every_template_renders_via_engine() {
         assert_eq!(&out[0..2], &[0xFF, 0xD8], "{id} produced non-JPEG");
     }
 }
-}
