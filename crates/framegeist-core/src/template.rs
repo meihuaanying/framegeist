@@ -261,6 +261,60 @@ pub struct FieldDef {
     pub transform: Option<String>,
 }
 
+/// User-side render overrides (PRD T4.4): three safe knobs on top of the
+/// template defaults. Values are validated/clamped at application time.
+#[derive(Debug, Clone, Default, Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct TemplateOverrides {
+    #[serde(default)]
+    pub font_size_scale: Option<f64>,
+    #[serde(default)]
+    pub padding_scale: Option<f64>,
+    #[serde(default)]
+    pub text_color: Option<String>,
+}
+
+impl TemplateOverrides {
+    pub fn from_json(json: &str) -> Result<Self> {
+        if json.trim().is_empty() {
+            return Ok(TemplateOverrides::default());
+        }
+        let o: TemplateOverrides = serde_json::from_str(json)
+            .map_err(|e| Error::TemplateJson(format!("overrides: {e}")))?;
+        o.validate()?;
+        Ok(o)
+    }
+
+    pub fn validate(&self) -> Result<()> {
+        if let Some(v) = self.font_size_scale {
+            if !v.is_finite() || !(0.5..=2.0).contains(&v) {
+                return Err(Error::SchemaViolation(
+                    "overrides.fontSizeScale must be within [0.5, 2.0]".into(),
+                ));
+            }
+        }
+        if let Some(v) = self.padding_scale {
+            if !v.is_finite() || !(0.5..=2.0).contains(&v) {
+                return Err(Error::SchemaViolation(
+                    "overrides.paddingScale must be within [0.5, 2.0]".into(),
+                ));
+            }
+        }
+        if let Some(c) = &self.text_color {
+            parse_hex_color(c)?;
+        }
+        Ok(())
+    }
+
+    pub fn font_size_scale(&self) -> f64 {
+        self.font_size_scale.unwrap_or(1.0)
+    }
+
+    pub fn padding_scale(&self) -> f64 {
+        self.padding_scale.unwrap_or(1.0)
+    }
+}
+
 pub fn parse_hex_color(hex: &str) -> Result<[u8; 4]> {
     let trimmed = hex.trim_start_matches('#');
     if !(trimmed.len() == 6 || trimmed.len() == 8)

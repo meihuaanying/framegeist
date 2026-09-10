@@ -108,5 +108,5 @@ pub fn render_collage(
         }
     }
 
-    encode_output(&canvas, photos[0], opts).map(|(bytes, _report)| bytes)
+    encode_output(&canvas, Some(photos[0]), opts).map(|(bytes, _report)| bytes)
 }

@@ -156,4 +156,20 @@ writeFileSync(
   JSON.stringify(LAYOUTS.map((l) => ({ id: l.meta.id, name: l.meta.name, slots: l.meta.slots })), null, 2) + "\n",
 );
 
-console.log(`generated ${LAYOUTS.length} layouts + web/layouts.json mirror`);
+// SVG thumbnails for the layout picker (tiny, crisp in both themes).
+mkdirSync(join("web", "layout-thumbs"), { recursive: true });
+for (const l of LAYOUTS) {
+  const W = 120, H = Math.round(W / (l.aspect || 1));
+  const rects = l.cells
+    .map((c) => {
+      const x = (c.x * W).toFixed(1), y = (c.y * H).toFixed(1);
+      const w = (c.w * W).toFixed(1), h = (c.h * H).toFixed(1);
+      const pad = Math.max(0.6, (l.gutter || 0.012) * 2);
+      return `<rect x="${(+x + pad).toFixed(1)}" y="${(+y + pad).toFixed(1)}" width="${Math.max(1, w - pad * 2).toFixed(1)}" height="${Math.max(1, h - pad * 2).toFixed(1)}" rx="2.5" fill="currentColor" opacity="0.75"/>`;
+    })
+    .join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${rects}</svg>\n`;
+  writeFileSync(join("web", "layout-thumbs", `${l.meta.id}.svg`), svg);
+}
+
+console.log(`generated ${LAYOUTS.length} layouts + web/layouts.json + layout-thumbs mirror`);

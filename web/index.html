@@ -1,125 +1,121 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FrameGeist · 框灵</title>
 <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 <link rel="manifest" href="manifest.webmanifest">
-<style>
-  :root { color-scheme: light; }
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    background: #f4f4f2;
-    color: #1a1a1a;
-  }
-  header {
-    padding: 12px 20px;
-    background: #fff;
-    border-bottom: 1px solid #e2e2e2;
-    display: flex;
-    gap: 16px;
-    align-items: baseline;
-  }
-  h1 { font-size: 18px; margin: 0; }
-  header small { color: #777; }
-  main {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 16px;
-    padding: 16px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  #controls {
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    border-radius: 8px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  select, input[type="file"] { width: 100%; }
-  #drop {
-    border: 2px dashed #bbb;
-    border-radius: 8px;
-    padding: 18px;
-    text-align: center;
-    color: #666;
-  }
-  #drop.over { border-color: #1a73e8; background: #eef4ff; }
-  #stage {
-    background: #fff;
-    border: 1px solid #e2e2e2;
-    border-radius: 8px;
-    min-height: 480px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: auto;
-    padding: 12px;
-  }
-  #stage img { max-width: 100%; max-height: 82vh; }
-  #exif {
-    font-family: monospace;
-    font-size: 12px;
-    color: #555;
-    white-space: pre-wrap;
-    max-height: 160px;
-    overflow: auto;
-  }
-  button {
-    padding: 8px 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-  }
-  button:disabled { opacity: .5; cursor: default; }
-  #status { font-size: 12px; color: #888; }
-  .mode-row { display: flex; gap: 8px; }
-  .mode-row button { flex: 1; }
-  .mode-row button.on { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-  #collageControls, #frameControls { display: flex; flex-direction: column; gap: 10px; }
-  #updateBox { font-size: 12px; background: #fffbe8; border: 1px solid #e8d98a; border-radius: 6px; padding: 8px 10px; display: none; }
-</style>
+<link rel="stylesheet" href="./styles.css">
+<script>
+  // Anti-FOUC: apply stored/system theme before first paint.
+  (function () {
+    var stored = localStorage.getItem("fg-theme") || "auto";
+    var dark = stored === "dark" || (stored === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.dataset.theme = dark ? "dark" : "light";
+  })();
+</script>
 </head>
 <body>
-<header>
-  <h1>FrameGeist · 框灵</h1>
-  <small>照片全程在本地处理，不上传任何服务器（G1）· 离线可用（G4）</small>
-  <span id="status">loading engine…</span>
+<header class="topbar">
+  <div class="brand">
+    <span class="mark">FG</span>
+    <h1>FrameGeist <span style="color:var(--text-faint)">框灵</span></h1>
+    <small data-i18n="app.tagline">照片全程本地处理 · 不上传 · 可离线</small>
+  </div>
+  <span class="spacer"></span>
+  <span class="pill busy" id="statusPill"><span class="dot"></span><span id="statusText" data-i18n="status.boot">引擎加载中…</span></span>
+  <button class="icon-btn" id="themeBtn" title="主题">◐</button>
+  <button class="icon-btn" id="langBtn">EN</button>
 </header>
-<main>
-  <section id="controls">
-    <div class="mode-row">
-      <button id="modeFrame" class="on">边框模板</button>
-      <button id="modeCollage">拼图</button>
-    </div>
-    <div id="drop">拖入照片（拼图模式可多选），
-      <input type="file" id="file" accept="image/*,.heic,.heif" multiple>
-    </div>
-    <div id="frameControls">
-      <label>模板
-        <select id="template" disabled><option>loading…</option></select>
+
+<main class="shell">
+  <aside>
+    <div class="card">
+      <div class="seg">
+        <button id="modeFrame" class="on" data-i18n="mode.frame">边框模板</button>
+        <button id="modeCollage" data-i18n="mode.collage">拼图</button>
+      </div>
+      <div style="height:12px"></div>
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <div data-i18n="drop.main">拖入照片，或点击选择</div>
+        <div class="hint" data-i18n="drop.hint">支持 JPEG / PNG / WebP / TIFF；拼图模式可多选</div>
       </label>
+      <input type="file" id="fileInput" accept="image/*,.heic,.heif" multiple hidden>
+      <div class="file-meta" id="fileMeta"></div>
     </div>
-    <div id="collageControls" style="display:none">
-      <label>布局
-        <select id="layout" disabled><option>loading…</option></select>
-      </label>
+
+    <div class="card" id="framePanels">
+      <h2 data-i18n="template.title">模板</h2>
+      <div class="search-wrap">
+        <input type="search" id="tplSearch" data-i18n-placeholder="template.search" placeholder="搜索模板…">
+      </div>
+      <div class="chips" id="catChips"></div>
+      <div class="grid" id="templateGrid"></div>
     </div>
-    <label><input type="checkbox" id="preview" checked> 快速预览采样</label>
-    <button id="renderBtn" disabled>渲染</button>
-    <button id="exportBtn" disabled>导出 JPEG</button>
-    <button id="updateBtn">检查更新</button>
-    <div id="updateBox"></div>
-    <pre id="exif">EXIF: -</pre>
+
+    <div class="card hidden" id="collagePanels">
+      <h2 data-i18n="layout.title">布局</h2>
+      <div class="search-wrap">
+        <input type="search" id="layoutSearch" data-i18n-placeholder="layout.search" placeholder="搜索布局…">
+      </div>
+      <div class="layout-grid" id="layoutGrid"></div>
+    </div>
+
+    <div class="card" id="tweakCard">
+      <h2 data-i18n="tweak.title">微调（仅此模板）</h2>
+      <div class="field">
+        <label><span data-i18n="tweak.size">文字大小</span><b id="sizeVal">100%</b></label>
+        <input type="range" id="sizeRange" min="0.5" max="2" step="0.05" value="1">
+      </div>
+      <div class="field">
+        <label><span data-i18n="tweak.padding">内边距</span><b id="padVal">100%</b></label>
+        <input type="range" id="padRange" min="0.5" max="2" step="0.05" value="1">
+      </div>
+      <div class="field">
+        <div class="color-row">
+          <input type="checkbox" id="useColor">
+          <span data-i18n="tweak.color">文字颜色</span>
+          <span class="spacer"></span>
+          <input type="color" id="colorPick" value="#111111" disabled>
+        </div>
+      </div>
+      <button class="btn ghost" id="resetTweaks" data-i18n="tweak.reset">重置微调</button>
+    </div>
+
+    <div class="card">
+      <label class="muted"><input type="checkbox" id="preview" checked> <span data-i18n="btn.preview">快速预览采样</span></label>
+      <div style="height:10px"></div>
+      <button class="btn primary" id="renderBtn" data-i18n="btn.render">渲染预览</button>
+      <div style="height:8px"></div>
+      <button class="btn" id="exportBtn" disabled data-i18n="btn.export">导出 JPEG</button>
+      <div style="height:8px"></div>
+      <button class="btn hidden" id="exportBatchBtn">导出全部</button>
+      <div style="height:12px"></div>
+      <div class="progress hidden" id="progressWrap"><i id="progressBar"></i></div>
+      <div style="height:12px"></div>
+      <button class="btn ghost" id="updateBtn" data-i18n="btn.update">检查更新</button>
+      <div id="updateBox" class="muted hidden" style="margin-top:8px"></div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="exif.title">EXIF 信息</h2>
+      <div class="muted" id="exifEmpty" data-i18n="exif.none">拖入照片后显示</div>
+      <dl class="kv hidden" id="exifList"></dl>
+    </div>
+  </aside>
+
+  <section class="card stage-card">
+    <div class="stage-head">
+      <span id="stageLabel" data-i18n="stage.placeholder">拖入一张照片开始</span>
+    </div>
+    <div class="stage" id="stage">
+      <span class="placeholder" data-i18n="stage.placeholder">拖入一张照片开始</span>
+    </div>
   </section>
-  <section id="stage"><span style="color:#aaa">拖入一张照片开始</span></section>
 </main>
+
+<div class="toasts" id="toasts"></div>
 <script type="module" src="./app.js"></script>
 </body>
 </html>

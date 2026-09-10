@@ -24,8 +24,13 @@ const MIME = {
 createServer(async (req, res) => {
   try {
     const url = new URL(req.url, "http://localhost");
-    let path = normalize(decodeURIComponent(url.pathname)).replace(/^([/\\])+/, "").replace(/[\\/]+$/, "");
+    let path = normalize(decodeURIComponent(url.pathname)).replace(/\\/g, "/").replace(/^\/+/, "").replace(/\/+$/, "");
     if (path === "" || path === "." || path === "web") path = "web/index.html";
+    if (path === "site") path = "site/index.html";
+    // Dev aliases: site pages reference ./web and ./samples which only exist
+    // merged at the Pages root; map them for local preview.
+    if (path.startsWith("site/web/")) path = path.slice("site/".length);
+    if (path.startsWith("site/samples/")) path = "templates/samples/" + path.slice("site/samples/".length);
     const file = join(ROOT, path);
     if (!file.startsWith(ROOT)) throw new Error("path traversal");
     const body = await readFile(file);

@@ -1,38 +1,53 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>文档 — FrameGeist</title>
-<style>
-  body { font-family: system-ui, sans-serif; margin: 0; background: #faf9f7; color: #1a1a1a; }
-  header { display: flex; gap: 24px; align-items: center; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e2dc; }
-  header a { color: #333; text-decoration: none; font-size: 14px; }
-  header .logo { font-weight: 700; font-size: 18px; }
-  main { max-width: 720px; margin: 30px auto 60px; padding: 0 20px; }
-  li { margin: 8px 0; line-height: 1.7; }
-  code { background: #efede9; padding: 1px 6px; border-radius: 4px; }
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs — FrameGeist</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="stylesheet" href="./site.css">
+<script>(function(){var s=localStorage.getItem("fg-theme")||"auto";var d=s==="dark"||(s==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.theme=d?"dark":"light";})();</script>
 </head>
 <body>
-<header>
-  <span class="logo">FrameGeist · 框灵</span>
-  <a href="/">首页</a><a href="templates.html">模板墙</a><a href="download.html">下载</a><a href="market.html">模板市场</a>
+<header class="topbar">
+  <a class="brand" href="./"><span class="mark">FG</span>FrameGeist <span class="muted">框灵</span></a>
+  <nav class="nav">
+    <a href="./templates.html" data-nav data-i18n="nav.templates">模板墙</a>
+    <a href="./download.html" data-nav data-i18n="nav.download">下载</a>
+    <a href="./docs.html" data-nav data-i18n="nav.docs">文档</a>
+    <a href="./market.html" data-nav data-i18n="nav.market">模板市场</a>
+    <a href="./sponsor.html" data-nav data-i18n="nav.sponsor">赞助</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="icon-btn" data-theme-btn>◐</button>
+  <button class="icon-btn" data-lang-btn>EN</button>
 </header>
-<main>
-  <h1>文档</h1>
-  <ul>
-    <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/TEMPLATE-SPEC.md">模板规格 TEMPLATE-SPEC</a> — canvas / layers / fields / 表达式文法</li>
-    <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/LAYOUT-SPEC.md">拼图布局规格 LAYOUT-SPEC</a> — cells / gutter / EXIF 信息条</li>
-    <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/INSTALLATION.md">构建环境 INSTALLATION</a> — Rust / Tauri / DevEco 基线</li>
-    <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/prds/framegeist.md">产品需求 PRD</a></li>
-  </ul>
-  <h2>CLI 速览</h2>
-  <ul>
-    <li><code>framegeist render 照片.jpg --template classic-white-v1 -o out.jpg</code></li>
-    <li><code>framegeist batch 目录 --template film-v3 -o 输出目录</code></li>
-    <li><code>framegeist collage a.jpg b.jpg c.jpg d.jpg --layout grid-2x2-info -o out.jpg</code></li>
-    <li><code>framegeist probe 照片.jpg</code> / <code>framegeist templates</code></li>
-  </ul>
+
+<main class="wrap section">
+  <h2 style="font-family:var(--font-display);font-size:26px" data-i18n="docs.title">文档</h2>
+  <div class="card" style="margin-bottom:14px">
+    <ul class="doc">
+      <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/TEMPLATE-SPEC.md">Template spec (TEMPLATE-SPEC)</a> — canvas / layers / fields / expression grammar</li>
+      <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/LAYOUT-SPEC.md">Layout spec (LAYOUT-SPEC)</a> — cells / gutter / EXIF info bar</li>
+      <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/INSTALLATION.md">Build environment (INSTALLATION)</a> — Rust / Tauri / DevEco baseline</li>
+      <li><a href="https://github.com/meihuaanying/framegeist/blob/main/docs/prds/framegeist.md">PRD</a></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3 style="font-family:var(--font-display);margin:0 0 10px">CLI</h3>
+    <ul class="doc">
+      <li><code>framegeist render photo.jpg --template classic-white-v1 -o out.jpg</code></li>
+      <li><code>framegeist batch dir --template film-v3 -o outdir</code></li>
+      <li><code>framegeist collage a.jpg b.jpg c.jpg d.jpg --layout grid-2x2-info -o out.jpg</code></li>
+      <li><code>framegeist probe photo.jpg</code> / <code>framegeist templates</code></li>
+    </ul>
+  </div>
 </main>
+
+<footer class="footer"><span data-i18n="footer"></span> · <a href="https://github.com/meihuaanying/framegeist">GitHub</a></footer>
+<script type="module">
+  import { init } from "./site.js";
+  init();
+</script>
 </body>
 </html>

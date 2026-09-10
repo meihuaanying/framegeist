@@ -1,31 +1,46 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>模板市场 — FrameGeist</title>
-<style>
-  body { font-family: system-ui, sans-serif; margin: 0; background: #faf9f7; color: #1a1a1a; }
-  header { display: flex; gap: 24px; align-items: center; padding: 14px 28px; background: #fff; border-bottom: 1px solid #e5e2dc; }
-  header a { color: #333; text-decoration: none; font-size: 14px; }
-  header .logo { font-weight: 700; font-size: 18px; }
-  main { max-width: 720px; margin: 30px auto 60px; padding: 0 20px; line-height: 1.8; }
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market — FrameGeist</title>
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<link rel="stylesheet" href="./site.css">
+<script>(function(){var s=localStorage.getItem("fg-theme")||"auto";var d=s==="dark"||(s==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.theme=d?"dark":"light";})();</script>
 </head>
 <body>
-<header>
-  <span class="logo">FrameGeist · 框灵</span>
-  <a href="/">首页</a><a href="templates.html">模板墙</a><a href="download.html">下载</a>
+<header class="topbar">
+  <a class="brand" href="./"><span class="mark">FG</span>FrameGeist <span class="muted">框灵</span></a>
+  <nav class="nav">
+    <a href="./templates.html" data-nav data-i18n="nav.templates">模板墙</a>
+    <a href="./download.html" data-nav data-i18n="nav.download">下载</a>
+    <a href="./docs.html" data-nav data-i18n="nav.docs">文档</a>
+    <a href="./market.html" data-nav data-i18n="nav.market">模板市场</a>
+    <a href="./sponsor.html" data-nav data-i18n="nav.sponsor">赞助</a>
+  </nav>
+  <span class="spacer"></span>
+  <button class="icon-btn" data-theme-btn>◐</button>
+  <button class="icon-btn" data-lang-btn>EN</button>
 </header>
-<main>
-  <h1>用户模板市场</h1>
-  <p>模板市场基于独立 GitHub 仓库 <code>framegeist-templates</code>（建仓中，PRD E3）：</p>
-  <ul>
-    <li>通过 <b>GitHub PR</b> 提交你的 <code>.fgt</code> 模板包</li>
-    <li>CI 自动校验：Schema 校验 → 真实渲染样张 → 感知哈希查重</li>
-    <li>通过即进入市场分发，<b>无需客户端发版</b>即可上新</li>
-    <li>作者署名强制保留（PRD E5），不付费、不分成</li>
-  </ul>
-  <p><a href="https://github.com/meihuaanying/framegeist-templates">前往模板市场仓库 →</a></p>
+
+<main class="wrap section">
+  <h2 style="font-family:var(--font-display);font-size:26px" data-i18n="market.title">用户模板市场</h2>
+  <div class="card">
+    <p class="muted" style="margin-top:0" data-i18n="market.lead"></p>
+    <ul class="doc">
+      <li data-i18n="market.li1"></li>
+      <li data-i18n="market.li2"></li>
+      <li data-i18n="market.li3"></li>
+      <li data-i18n="market.li4"></li>
+    </ul>
+    <a class="btn primary" href="https://github.com/meihuaanying/framegeist-templates" data-i18n="market.go">前往模板市场仓库 →</a>
+  </div>
 </main>
+
+<footer class="footer"><span data-i18n="footer"></span> · <a href="https://github.com/meihuaanying/framegeist">GitHub</a></footer>
+<script type="module">
+  import { init } from "./site.js";
+  init();
+</script>
 </body>
 </html>

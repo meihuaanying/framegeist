@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#1a1a1a"/>
+  <rect x="12" y="12" width="40" height="40" rx="6" fill="none" stroke="#f0f0eb" stroke-width="4"/>
+  <text x="32" y="41" font-family="ui-monospace, Consolas, monospace" font-size="20" font-weight="700" fill="#f0f0eb" text-anchor="middle">FG</text>
+</svg>

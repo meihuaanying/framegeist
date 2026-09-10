@@ -7,10 +7,10 @@ use imageproc::drawing::draw_text_mut;
 use crate::exif::{cleaned_exif_tiff_full, probe_exif, ExifInfo};
 use crate::sandbox::eval_expr;
 use crate::template::{
-    Anchor, BgKind, CanvasMode, Layer, Template, TextLayer,
+    Anchor, BgKind, CanvasMode, Layer, Template, TemplateOverrides, TextLayer,
 };
 use crate::text::FontBook;
-use crate::{encode, Result};
+use crate::{encode, Error, Result};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum OutputFormat {
@@ -36,6 +36,8 @@ pub struct RenderOptions {
     /// Maximum output edge (px). None = full resolution (export path).
     /// Preview uses Some(n); A5: same render code, only this scale differs.
     pub max_edge: Option<u32>,
+    /// User-side overrides (T4.4): font size scale / padding scale / text color.
+    pub overrides: Option<TemplateOverrides>,
 }
 
 impl Default for RenderOptions {
@@ -49,6 +51,7 @@ impl Default for RenderOptions {
             write_exif: true,
             keep_gps: false,
             max_edge: None,
+            overrides: None,
         }
     }
 }
@@ -172,16 +175,18 @@ struct CanvasGeometry {
     photo_h: u32,
 }
 
-fn compute_geometry(t: &Template, photo: &RgbaImage) -> CanvasGeometry {
+fn compute_geometry(t: &Template, photo: &RgbaImage, overrides: Option<&TemplateOverrides>) -> CanvasGeometry {
     let (w, h) = photo.dimensions();
+    let pad_scale = overrides.map(|o| o.padding_scale()).unwrap_or(1.0);
     let (pad_left, pad_top, pad_right, pad_bottom) = match t.canvas.mode {
         CanvasMode::Extend => {
             let p = &t.canvas.padding;
+            let clamp01 = |v: f64| (v * pad_scale).clamp(0.0, 1.0);
             (
-                (p.left * w as f64).round() as u32,
-                (p.top * h as f64).round() as u32,
-                (p.right * w as f64).round() as u32,
-                (p.bottom * h as f64).round() as u32,
+                (clamp01(p.left) * w as f64).round() as u32,
+                (clamp01(p.top) * h as f64).round() as u32,
+                (clamp01(p.right) * w as f64).round() as u32,
+                (clamp01(p.bottom) * h as f64).round() as u32,
             )
         }
         CanvasMode::Overlay | CanvasMode::Cover => (0, 0, 0, 0),
@@ -259,6 +264,7 @@ fn draw_text_layer(
     info: &ExifInfo,
     fonts: &FontBook,
     geo: &CanvasGeometry,
+    overrides: Option<&TemplateOverrides>,
 ) {
     let lines = text_lines(layer, info);
     if lines.is_empty() {
@@ -267,9 +273,13 @@ fn draw_text_layer(
     let Some(font) = fonts.pick(&layer.font.family) else {
         return;
     };
-    let size_px = (layer.font.size * geo.photo_h as f64) as f32;
+    let font_scale = overrides.map(|o| o.font_size_scale()).unwrap_or(1.0);
+    let size_px = (layer.font.size * font_scale * geo.photo_h as f64) as f32;
     let scale = PxScale::from(size_px);
-    let color = crate::template::parse_hex_color(&layer.font.color).unwrap_or([0, 0, 0, 255]);
+    let color = match overrides.and_then(|o| o.text_color.as_deref()) {
+        Some(c) => crate::template::parse_hex_color(c).unwrap_or([0, 0, 0, 255]),
+        None => crate::template::parse_hex_color(&layer.font.color).unwrap_or([0, 0, 0, 255]),
+    };
     let line_h = size_px * layer.line_height as f32;
     let sizes: Vec<(f32, f32)> = lines
         .iter()
@@ -390,9 +400,20 @@ pub fn render_rgba(
     let rgba = decode_oriented(photo, opts.max_edge)?;
     let mut info = probe_exif(photo)?;
     apply_model_map(&mut info, &opts.model_map);
-    let geo = compute_geometry(template, &rgba);
+    render_rgba_with_image(&rgba, template, &info, opts)
+}
+
+/// Same as `render_rgba` but for an already-decoded image (raw path used by
+/// the Web/Desktop preview to skip engine-side JPEG decoding).
+pub fn render_rgba_with_image(
+    rgba: &RgbaImage,
+    template: &Template,
+    info: &ExifInfo,
+    opts: &RenderOptions,
+) -> Result<RgbaImage> {
+    let geo = compute_geometry(template, rgba, opts.overrides.as_ref());
     let filt = filter(opts.sampling);
-    let mut canvas = build_canvas(&geo, &rgba, template, filt);
+    let mut canvas = build_canvas(&geo, rgba, template, filt);
     let fonts = match &opts.fonts {
         Some(book) => book.clone(),
         None => match &opts.assets_dir {
@@ -402,12 +423,33 @@ pub fn render_rgba(
     };
     for layer in &template.layers {
         if let Layer::Text(text) = layer {
-            draw_text_layer(&mut canvas, text, &info, &fonts, &geo);
+            draw_text_layer(&mut canvas, text, info, &fonts, &geo, opts.overrides.as_ref());
         }
         // Image layers resolve template-pack assets; skipped in the engine
         // skeleton until template packs ship (PRD E1).
     }
     Ok(canvas)
+}
+
+/// Raw-encode path: caller supplies decoded RGBA bytes (orientation already
+/// applied) plus optional original file bytes for EXIF text + write-back.
+pub fn render_from_rgba(
+    photo_bytes: Option<&[u8]>,
+    rgba: &[u8],
+    width: u32,
+    height: u32,
+    template: &Template,
+    opts: &RenderOptions,
+) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
+    let img = RgbaImage::from_raw(width, height, rgba.to_vec())
+        .ok_or_else(|| Error::Image(format!("rgba buffer size mismatch for {width}x{height}")))?;
+    let mut info = match photo_bytes {
+        Some(b) => probe_exif(b)?,
+        None => ExifInfo::default(),
+    };
+    apply_model_map(&mut info, &opts.model_map);
+    let canvas = render_rgba_with_image(&img, template, &info, opts)?;
+    encode_output(&canvas, photo_bytes, opts)
 }
 
 /// Full render pipeline: decode -> render -> encode -> metadata write-back.
@@ -422,13 +464,13 @@ pub fn render_with_report(
     opts: &RenderOptions,
 ) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
     let canvas = render_rgba(photo, template, opts)?;
-    encode_output(&canvas, photo, opts)
+    encode_output(&canvas, Some(photo), opts)
 }
 
 /// Encode an RGBA canvas with the configured format + metadata write-back.
 pub(crate) fn encode_output(
     canvas: &RgbaImage,
-    photo: &[u8],
+    photo: Option<&[u8]>,
     opts: &RenderOptions,
 ) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
     let (cw, ch) = canvas.dimensions();
@@ -437,11 +479,14 @@ pub(crate) fn encode_output(
             let flat = flatten_over_white(canvas);
             let mut out = encode::encode_jpeg_quality100(&flat)?;
             let report = if opts.write_exif {
-                match cleaned_exif_tiff_full(photo, Some((cw, ch)), opts.keep_gps)? {
-                    Some((tiff, report)) => {
-                        encode::splice_exif_app1(&mut out, &tiff)?;
-                        Some(report)
-                    }
+                match photo {
+                    Some(bytes) => match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
+                        Some((tiff, report)) => {
+                            encode::splice_exif_app1(&mut out, &tiff)?;
+                            Some(report)
+                        }
+                        None => None,
+                    },
                     None => None,
                 }
             } else {
@@ -452,11 +497,14 @@ pub(crate) fn encode_output(
         OutputFormat::Png => {
             let mut out = encode::encode_png(canvas)?;
             let report = if opts.write_exif {
-                match cleaned_exif_tiff_full(photo, Some((cw, ch)), opts.keep_gps)? {
-                    Some((tiff, report)) => {
-                        encode::splice_png_exif(&mut out, &tiff)?;
-                        Some(report)
-                    }
+                match photo {
+                    Some(bytes) => match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
+                        Some((tiff, report)) => {
+                            encode::splice_png_exif(&mut out, &tiff)?;
+                            Some(report)
+                        }
+                        None => None,
+                    },
                     None => None,
                 }
             } else {

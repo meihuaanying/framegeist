@@ -18,9 +18,12 @@ pub use exif::{cleaned_exif_tiff, metadata_report, probe_exif, ExifInfo, Metadat
 pub use layout::{load_layout, Layout};
 pub use model_map::ModelMap;
 pub use render::{
-    load_model_map, render, render_rgba, render_with_report, OutputFormat, RenderOptions, Sampling,
+    load_model_map, render, render_from_rgba, render_rgba, render_rgba_with_image,
+    render_with_report, OutputFormat, RenderOptions, Sampling,
 };
-pub use template::{load_template, load_template_from_str, Category, License, Template};
+pub use template::{
+    load_template, load_template_from_str, Category, License, Template, TemplateOverrides,
+};
 
 pub fn render_collage(
     photos: &[&[u8]],

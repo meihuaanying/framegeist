@@ -1,0 +1,2 @@
+Fonts: Host Grotesk (OFL-1.1), DM Sans (OFL-1.1)
+Subset latin woff2 files, self-hosted for FrameGeist UI.

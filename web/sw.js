@@ -4,12 +4,19 @@ const VERSION = "framegeist-v1";
 const PRECACHE = [
   "./",
   "./index.html",
+  "./styles.css",
+  "./app.js",
+  "./i18n.js",
   "./pkg/framegeist_wasm.js",
   "./pkg/framegeist_wasm_bg.wasm",
   "./templates.json",
   "./layouts.json",
-  "./templates/fonts/JetBrainsMono-Regular.ttf",
+  "./favicon.svg",
   "./manifest.webmanifest",
+  "./fonts/host-grotesk-latin.woff2",
+  "./fonts/dm-sans-400.woff2",
+  "./fonts/dm-sans-500.woff2",
+  "./templates/fonts/JetBrainsMono-Regular.ttf",
 ];
 
 // Tauri custom-protocol origin: never cache there (and self-destruct if an

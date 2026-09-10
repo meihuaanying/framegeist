@@ -72,12 +72,64 @@ impl Engine {
         format: &str,
         preview: bool,
     ) -> Result<Uint8Array, JsError> {
+        self.render_impl(photo, None, 0, 0, template_json, format, preview, "")
+    }
+
+    /// Render with user overrides (T4.4): `overrides_json` of
+    /// `{fontSizeScale, paddingScale, textColor}` (empty string = none).
+    pub fn render_with_overrides(
+        &self,
+        photo: &[u8],
+        template_json: &str,
+        format: &str,
+        preview: bool,
+        overrides_json: &str,
+    ) -> Result<Uint8Array, JsError> {
+        self.render_impl(photo, None, 0, 0, template_json, format, preview, overrides_json)
+    }
+
+    /// Raw-RGBA fast preview: caller (browser) pre-decoded and downscaled the
+    /// photo; `exif_bytes` may be empty (then no EXIF text/write-back).
+    #[allow(clippy::too_many_arguments)]
+    pub fn render_raw(
+        &self,
+        rgba: &[u8],
+        width: u32,
+        height: u32,
+        exif_bytes: &[u8],
+        template_json: &str,
+        format: &str,
+        overrides_json: &str,
+    ) -> Result<Uint8Array, JsError> {
+        self.render_impl(exif_bytes, Some(rgba), width, height, template_json, format, false, overrides_json)
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn render_impl(
+        &self,
+        photo: &[u8],
+        rgba: Option<&[u8]>,
+        width: u32,
+        height: u32,
+        template_json: &str,
+        format: &str,
+        preview: bool,
+        overrides_json: &str,
+    ) -> Result<Uint8Array, JsError> {
         let template = core::load_template_from_str(template_json)
             .map_err(|e| JsError::new(&e.to_string()))?;
         let fmt = match format {
             "jpeg" | "jpg" => core::OutputFormat::Jpeg,
             "png" => core::OutputFormat::Png,
             other => return Err(JsError::new(&format!("unsupported format {other:?}"))),
+        };
+        let overrides = if overrides_json.trim().is_empty() {
+            None
+        } else {
+            Some(
+                core::TemplateOverrides::from_json(overrides_json)
+                    .map_err(|e| JsError::new(&e.to_string()))?,
+            )
         };
         let opts = core::RenderOptions {
             format: fmt,
@@ -89,9 +141,21 @@ impl Engine {
             max_edge: if preview { Some(1600) } else { None },
             fonts: Some(self.fonts.clone()),
             model_map: self.model_map.clone(),
+            overrides,
             ..core::RenderOptions::default()
         };
-        let out = core::render(photo, &template, &opts).map_err(|e| JsError::new(&e.to_string()))?;
+        let (out, _report) = match rgba {
+            Some(buf) => core::render_from_rgba(
+                if photo.is_empty() { None } else { Some(photo) },
+                buf,
+                width,
+                height,
+                &template,
+                &opts,
+            ),
+            None => core::render_with_report(photo, &template, &opts),
+        }
+        .map_err(|e| JsError::new(&e.to_string()))?;
         Ok(Uint8Array::from(out.as_slice()))
     }
 

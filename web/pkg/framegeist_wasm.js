@@ -115,6 +115,60 @@ export class Engine {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
+     * Raw-RGBA fast preview: caller (browser) pre-decoded and downscaled the
+     * photo; `exif_bytes` may be empty (then no EXIF text/write-back).
+     * @param {Uint8Array} rgba
+     * @param {number} width
+     * @param {number} height
+     * @param {Uint8Array} exif_bytes
+     * @param {string} template_json
+     * @param {string} format
+     * @param {string} overrides_json
+     * @returns {Uint8Array}
+     */
+    render_raw(rgba, width, height, exif_bytes, template_json, format, overrides_json) {
+        const ptr0 = passArray8ToWasm0(rgba, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(exif_bytes, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(template_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ptr3 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len3 = WASM_VECTOR_LEN;
+        const ptr4 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len4 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_raw(this.__wbg_ptr, ptr0, len0, width, height, ptr1, len1, ptr2, len2, ptr3, len3, ptr4, len4);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Render with user overrides (T4.4): `overrides_json` of
+     * `{fontSizeScale, paddingScale, textColor}` (empty string = none).
+     * @param {Uint8Array} photo
+     * @param {string} template_json
+     * @param {string} format
+     * @param {boolean} preview
+     * @param {string} overrides_json
+     * @returns {Uint8Array}
+     */
+    render_with_overrides(photo, template_json, format, preview, overrides_json) {
+        const ptr0 = passArray8ToWasm0(photo, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(template_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ptr2 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len2 = WASM_VECTOR_LEN;
+        const ptr3 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len3 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_with_overrides(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview, ptr3, len3);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * Validate a template JSON document. Returns field-level error text on
      * rejection (PRD C2).
      * @param {string} json

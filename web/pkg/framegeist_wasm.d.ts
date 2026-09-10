@@ -33,6 +33,16 @@ export class Engine {
      */
     render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
     /**
+     * Raw-RGBA fast preview: caller (browser) pre-decoded and downscaled the
+     * photo; `exif_bytes` may be empty (then no EXIF text/write-back).
+     */
+    render_raw(rgba: Uint8Array, width: number, height: number, exif_bytes: Uint8Array, template_json: string, format: string, overrides_json: string): Uint8Array;
+    /**
+     * Render with user overrides (T4.4): `overrides_json` of
+     * `{fontSizeScale, paddingScale, textColor}` (empty string = none).
+     */
+    render_with_overrides(photo: Uint8Array, template_json: string, format: string, preview: boolean, overrides_json: string): Uint8Array;
+    /**
      * Validate a template JSON document. Returns field-level error text on
      * rejection (PRD C2).
      */
@@ -49,6 +59,8 @@ export interface InitOutput {
     readonly engine_probe_exif: (a: number, b: number, c: number) => [number, number, number, number];
     readonly engine_render: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly engine_render_collage: (a: number, b: any, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
+    readonly engine_render_raw: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => [number, number, number];
+    readonly engine_render_with_overrides: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number) => [number, number, number];
     readonly engine_validate_template: (a: number, b: number, c: number) => [number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

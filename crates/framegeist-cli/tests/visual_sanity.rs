@@ -128,3 +128,96 @@ fn preview_max_edge_and_export_full() {
     let full = render_rgba(&photo, &template, &opts()).unwrap();
     assert_eq!(full.width(), 1600 + 96 + 96, "export keeps full resolution");
 }
+
+fn count_text_pixels(img: &image::RgbaImage) -> u32 {
+    let (w, h) = img.dimensions();
+    let band = (h as f64 * 0.12).round() as u32;
+    let mut n = 0;
+    for y in (h - band)..h {
+        for x in 0..w {
+            let p = img.get_pixel(x, y).0;
+            if p[0] < 200 && p[1] < 200 && p[2] < 200 {
+                n += 1;
+            }
+        }
+    }
+    n
+}
+
+/// T4.4: overrides change the render as requested.
+#[test]
+fn overrides_affect_render() {
+    use framegeist_core::TemplateOverrides;
+    let photo = gradient_jpeg(1600, 1200);
+    let template = tpl("classic-white-bottom-param");
+    let base = render_rgba(&photo, &template, &opts()).unwrap();
+
+    let padded = RenderOptions {
+        overrides: Some(TemplateOverrides {
+            padding_scale: Some(2.0),
+            ..Default::default()
+        }),
+        ..opts()
+    };
+    let padded_img = render_rgba(&photo, &template, &padded).unwrap();
+    assert!(
+        padded_img.width() > base.width(),
+        "padding_scale 2.0 must grow the canvas: {} vs {}",
+        padded_img.width(),
+        base.width()
+    );
+
+    let bigger = RenderOptions {
+        overrides: Some(TemplateOverrides {
+            font_size_scale: Some(2.0),
+            ..Default::default()
+        }),
+        ..opts()
+    };
+    let bigger_img = render_rgba(&photo, &template, &bigger).unwrap();
+    assert!(
+        count_text_pixels(&bigger_img) > count_text_pixels(&base),
+        "font_size_scale 2.0 must paint more text pixels"
+    );
+
+    let reddish = RenderOptions {
+        overrides: Some(TemplateOverrides {
+            text_color: Some("#FF0000".into()),
+            ..Default::default()
+        }),
+        ..opts()
+    };
+    let red_img = render_rgba(&photo, &template, &reddish).unwrap();
+    let (w, h) = red_img.dimensions();
+    let mut red_dominant = 0u32;
+    for y in (h - (h / 8))..h {
+        for x in 0..w {
+            let p = red_img.get_pixel(x, y).0;
+            if p[0] > 150 && p[1] < 120 && p[2] < 120 {
+                red_dominant += 1;
+            }
+        }
+    }
+    assert!(red_dominant > 200, "text_color override must produce red pixels, got {red_dominant}");
+}
+
+/// Raw RGBA path (browser pre-decode fast preview) must match the byte path.
+#[test]
+fn raw_rgba_path_matches_byte_path() {
+    let photo = gradient_jpeg(1600, 1200);
+    let template = tpl("classic-white-bottom-param");
+    let o = opts();
+    let via_bytes = framegeist_core::render(&photo, &template, &o).unwrap();
+    let decoded = image::load_from_memory(&photo).unwrap().to_rgba8();
+    let (w, h) = decoded.dimensions();
+    let (via_raw, _report) = framegeist_core::render_from_rgba(
+        Some(&photo),
+        decoded.as_raw(),
+        w,
+        h,
+        &template,
+        &o,
+    )
+    .unwrap();
+    assert_eq!(via_bytes, via_raw, "raw path must be byte-identical to the decode path");
+}

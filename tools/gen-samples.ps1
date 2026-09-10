@@ -10,11 +10,20 @@ $photo = "templates/assets/test-photos/sample-landscape.jpg"
 if (-not (Test-Path $photo)) { cargo run --release -p framegeist-cli --example make_test_photos }
 New-Item -ItemType Directory -Force templates/samples | Out-Null
 Get-ChildItem templates/samples -Filter *.jpg -ErrorAction SilentlyContinue | Remove-Item -Force
+New-Item -ItemType Directory -Force templates/thumbs | Out-Null
+Get-ChildItem templates/thumbs -Filter *.jpg -ErrorAction SilentlyContinue | Remove-Item -Force
 $ids = & $cli templates | ForEach-Object { ($_ -split "`t")[0] }
 $done = 0; $failed = @()
 foreach ($id in $ids) {
   & $cli render $photo --template $id --max-edge 900 -o "templates/samples/$id.jpg" 2>$null
   if ($LASTEXITCODE -eq 0) { $done++ } else { $failed += $id }
+  & $cli render $photo --template $id --max-edge 240 -o "templates/thumbs/$id.jpg" 2>$null
 }
 Write-Output "rendered=$done failed=$($failed.Count)"
 if ($failed.Count -gt 0) { Write-Output $failed; exit 1 }
+
+# Mirror thumbs into web/ for the in-app template picker.
+New-Item -ItemType Directory -Force web/thumbs | Out-Null
+Get-ChildItem web/thumbs -Filter *.jpg -ErrorAction SilentlyContinue | Remove-Item -Force
+Copy-Item templates/thumbs/*.jpg web/thumbs/ -Force
+Write-Output "thumbs mirrored to web/thumbs"
