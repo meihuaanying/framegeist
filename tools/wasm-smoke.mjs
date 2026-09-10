@@ -1,6 +1,6 @@
 // Smoke test: WASM engine renders identically to the CLI (PRD N2 mini-gate).
 // Usage: node tools/wasm-smoke.mjs
-import { readFile, rm, writeFile } from "node:fs/promises";
+import { readFile, rm, writeFile, stat } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -78,10 +78,7 @@ for (const id of templateIds) {
   if (!ok) failures++;
   console.log(`${ok ? "PASS" : "FAIL"} collage grid-2x2-info (pixel ratio ${ratio} <= 0.001, PRD N2)`);
   console.log(`  wasm ${outBytes.length}B`);
-  console.log(`  cli  ${cliBytesLen(cliPath)}B`);
-}
-function cliBytesLen(f) {
-  return require("fs").statSync(f).size;
+  console.log(`  cli  ${(await stat(cliPath)).size}B`);
 }
 if (failures > 0) {
   console.error(`${failures} mismatch(es): WASM render diverges from CLI`);
