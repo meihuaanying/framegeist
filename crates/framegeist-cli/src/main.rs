@@ -35,6 +35,20 @@ enum Cmd {
         preview: bool,
         #[arg(long = "max-edge")]
         max_edge: Option<u32>,
+        #[arg(long)]
+        aspect: Option<String>,
+        #[arg(long)]
+        background: Option<String>,
+        #[arg(long = "bg-color")]
+        bg_color: Option<String>,
+        #[arg(long = "flip-h")]
+        flip_h: bool,
+        #[arg(long = "flip-v")]
+        flip_v: bool,
+        #[arg(long = "no-logo")]
+        no_logo: bool,
+        #[arg(long)]
+        font: Option<String>,
     },
     /// Render a directory of photos; existing outputs are never overwritten.
     Batch {
@@ -206,11 +220,41 @@ fn run(args: &Args) -> Result<(), Error> {
             format,
             preview,
             max_edge,
+            aspect,
+            background,
+            bg_color,
+            flip_h,
+            flip_v,
+            no_logo,
+            font,
         } => {
             let (tpl, _src) = resolve_template(template)?;
             let bytes = std::fs::read(photo)?;
             let mut opts = build_opts(args, parse_format(format)?, *preview)?;
             if let Some(edge) = max_edge { opts.max_edge = Some(*edge); }
+            let mut over = framegeist_core::TemplateOverrides {
+                aspect: aspect.clone(),
+                background: background.clone(),
+                background_color: bg_color.clone(),
+                flip_horizontal: flip_h.then_some(true),
+                flip_vertical: flip_v.then_some(true),
+                font_family: font.clone(),
+                ..framegeist_core::TemplateOverrides::default()
+            };
+            if *no_logo {
+                over.show_logo = Some(false);
+            }
+            let has_over = over.aspect.is_some()
+                || over.background.is_some()
+                || over.background_color.is_some()
+                || over.flip_horizontal.is_some()
+                || over.flip_vertical.is_some()
+                || over.font_family.is_some()
+                || over.show_logo.is_some();
+            if has_over {
+                over.validate()?;
+                opts.overrides = Some(over);
+            }
             let out = render(&bytes, &tpl, &opts)?;
             if output.exists() {
                 return Err(Error::Io(std::io::Error::other(format!(

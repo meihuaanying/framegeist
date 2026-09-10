@@ -26,6 +26,20 @@ function item(expr, fallback = null) {
   return { expr, fallback };
 }
 
+function badge(id, opts = {}) {
+  const light = opts.light ?? false;
+  const layer = {
+    type: "image",
+    id,
+    anchor: opts.anchor ?? "bottom-left",
+    asset: `@builtin/brand/{exif.brand_slug}${light ? "-light" : ""}`,
+    size: { height: opts.height ?? 0.02 },
+    ...(opts.offset ? { offset: opts.offset } : {}),
+    ...(opts.attachTo ? { attachTo: opts.attachTo, attachGap: opts.attachGap ?? 0.01 } : {}),
+  };
+  return layer;
+}
+
 const EXIF_INFO = [
   item("exif.model_pretty", "Unknown Camera"),
   item("exif.lens", null),
@@ -105,6 +119,7 @@ for (let i = 0; i < 8; i++) {
       [
         textLayer("filmstock", "top-left", font(0.018, fg, 400), [item(`'KODAK 400 ${i + 1}'`, "FILM")], { offset: { x: 0.015, y: 0.02 } }),
         textLayer("title", "bottom-left", font(0.026, fg, 600), EXIF_INFO, { offset: { x: 0.02, y: -0.05 } }),
+        badge("brand", { attachTo: "title", light: true, height: 0.022 }),
         textLayer("params", "bottom-right", font(0.018, fg, 400), EXIF_PARAMS, { offset: { x: -0.02, y: -0.055 } }),
       ]
     )
@@ -143,6 +158,7 @@ for (let i = 0; i < 7; i++) {
       extendCanvas({ top: pad, right: pad, bottom: pad + 0.08, left: pad }, solid(GALLERY_BGS[i])),
       [
         textLayer("artist", "bottom-left", font(0.024, "#2B2B2B", 600), EXIF_INFO, { offset: { x: 0.025, y: -0.06 } }),
+        badge("brand", { attachTo: "artist", height: 0.02 }),
         textLayer("series", "bottom-right", font(0.016, "#6A6A6A", 400), [item(`fmt('Gallery Series ${String(i + 1).padStart(2, "0")}', exif)`, "Gallery Series")], { offset: { x: -0.025, y: -0.06 } }),
       ]
     )
@@ -175,6 +191,7 @@ for (let i = 0; i < 7; i++) {
             item("fmt('EXP: f/{aperture} {shutter} ISO{iso}', exif)", "EXP: n/a"),
           ],
           { lineHeight: 1.5, offset: { x: 0.02, y: -0.05 } }),
+        badge("brand", { attachTo: "plate", light: true, height: 0.022 }),
         textLayer("meta", "top-right", font(0.014, fg, 400), [item("date('YYYY/MM/DD HH:mm', exif.datetime)", "no date")], { offset: { x: -0.02, y: 0.03 } }),
       ]
     )
@@ -202,6 +219,7 @@ for (let i = 0; i < 8; i++) {
       extendCanvas({ top: 0.02, right: 0.02, bottom: 0.1, left: 0.02 }, solid(bg)),
       [
         textLayer("headline", "top-left", font(size, fg, 600), [item("exif.model_pretty", "FRAMEGEIST")], { offset: { x: 0.03, y: 0.04 } }),
+        badge("brand", { attachTo: "headline", height: 0.024, light: fg !== "#111111" && false }),
         textLayer("issue", "top-right", font(0.014, "#888888", 400), [item("'ISSUE 2026-09'", "ISSUE")], { offset: { x: -0.03, y: 0.045 } }),
         textLayer("credits", "bottom-left", font(0.016, "#555555", 400), EXIF_PARAMS, { offset: { x: 0.03, y: -0.05 } }),
       ]
@@ -254,7 +272,7 @@ for (let i = 0; i < 7; i++) {
       "frame-shell",
       extendCanvas({ top: pad, right: pad, bottom: pad + 0.05, left: pad }, solid(bg)),
       [
-        textLayer("badge", "top-left", font(0.016, "#DDDDDD", 600), [item("exif.make", "FG")], { offset: { x: 0.03, y: 0.035 } }),
+        badge("brand", { anchor: "top-left", offset: { x: 0.03, y: 0.035 }, light: true, height: 0.022 }),
         textLayer("title", "bottom-left", font(0.024, "#EDEDED", 600), EXIF_INFO, { offset: { x: 0.03, y: -0.05 } }),
         textLayer("params", "bottom-right", font(0.016, "#AAAAAA", 400), EXIF_PARAMS, { offset: { x: -0.03, y: -0.055 } }),
       ]

@@ -118,4 +118,7 @@ writeFileSync(
     2,
   ) + "\n",
 );
+const slugs = Array.from(new Set([...credits.map(c => c.slug), ...wordCredits.map(w => w.slug)])).sort();
+writeFileSync(join(WEB, "index.json"), JSON.stringify(slugs, null, 2) + "\n");
+console.log(`brand index: ${slugs.length} slugs`);
 console.log("all brand assets done");

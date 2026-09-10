@@ -47,3 +47,9 @@
 
 - `templates/layouts/` 内置 ≥ 100 套（当前 106）：方网格 1×1–5×5（含 EXIF 信息条双变体）、横/竖长条 strip 2–6、非对称 hero 布局（1+2/1+4/1+6/1+8）、金字塔/对角线特殊布局。
 - 由 `tools/gen-layouts.mjs` 确定性生成，测试 `framegeist-cli/tests/collage.rs` 锁配额与确定性。
+
+## v0.2.0 说明
+
+- 拼图输出为固定长边 3000px 的 JPEG（元数据取第一张照片）；画布比例/背景/翻转/字体等
+  **渲染覆盖仅作用于模板模式**，拼图布局由 `cells`/`gutter`/`aspect` 自身声明决定。
+- 布局选择器在应用内以生成的 SVG 示意图展示（`web/layout-thumbs/`）。

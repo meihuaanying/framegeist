@@ -1,12 +1,13 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "FrameGeist",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "identifier": "app.framegeist.desktop",
   "build": {
     "frontendDist": "../../web"
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "FrameGeist · 框灵",

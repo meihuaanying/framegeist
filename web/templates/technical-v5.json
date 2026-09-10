@@ -55,6 +55,17 @@
       }
     },
     {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "asset": "@builtin/brand/{exif.brand_slug}-light",
+      "size": {
+        "height": 0.022
+      },
+      "attachTo": "plate",
+      "attachGap": 0.01
+    },
+    {
       "type": "text",
       "id": "meta",
       "anchor": "top-right",

@@ -22,7 +22,18 @@ FrameGeist（框灵）：免费开源照片边框/水印/拼图工具。一个 R
 - 本机 git 代理（127.0.0.1:7890）时断时续：`git -c "http.https://github.com/.proxy=" push`，失败重试或走 `gh api` Contents PUT。
 - CRLF 警告可忽略；误提交无关文件立即 `git rm --cached`。
 
-## v0.2.0 执行契约（2026-09-10 确认，一口气完成，中途不停）
+## v0.2.0 执行契约（2026-09-11 已完成 ✅）
+
+> 结果存档：**23/23 E2E 门禁通过**（`tools/e2e-audit.mjs`），报告与截图在 `docs/reports/v0.2.0/`。
+> 交付：固定视口编辑器（缩放/平移/翻转）、NASA 公有领域演示图重渲染缩略图与样张、
+> 18 品牌 Logo（Simple Icons CC0 + 自绘字标）、9 款 OFL 字体 + 上传、画布比例/背景面板、
+> EXIF 行编辑器 + 保存/导入 .fgt、批量导出、导出预设（不裁切）、整套微动画（View Transitions +
+> 骨架屏 + `prefers-reduced-motion`）、引擎错误码双语、HEIC 明确文案。
+> 关键实测：画布覆盖率 87.1%、页面零滚动、引擎就绪 ~0.5s、24MP 预览 186–582ms、拼图 0.9–1.7s。
+> 排障记录：CDP 注入必须用绝对路径（相对路径触发 `NotReadableError`）；品牌图标在 Web/WASM
+> 端因无文件系统而留白属预期（UI 后续可直接 register_asset 注入）。
+
+<details><summary>原始任务清单（T-A … T-J）</summary>
 
 ### 用户确认的 20 项决策（全部已 grill）
 
@@ -59,6 +70,8 @@ FrameGeist（框灵）：免费开源照片边框/水印/拼图工具。一个 R
 - **T-H 门禁**：test/clippy/四 target/wasm smoke/E2E/性能；黄金基线仅在默认渲染变化时重生成（注明）。
 - **T-I 发布**：v0.2.0 bump → push → CI 绿 → tag → Release（CLI/桌面/模板包/update.json/NSIS）→ Pages 验证（新缩略图/品牌素材/双语/双主题）。
 - **T-J 收尾**：桌面重启交用户；PRD Discoveries + 本契约状态更新；E2E 截图与性能数字归档到 `docs/reports/v0.2.0/`。
+
+</details>
 
 ### 验收总门（全部满足才算完）
 

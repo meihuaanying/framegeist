@@ -23,23 +23,13 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "badge",
+      "type": "image",
+      "id": "brand",
       "anchor": "top-left",
-      "font": {
-        "family": [
-          "JetBrains Mono"
-        ],
-        "size": 0.016,
-        "weight": 600,
-        "color": "#DDDDDD"
+      "asset": "@builtin/brand/{exif.brand_slug}-light",
+      "size": {
+        "height": 0.022
       },
-      "content": [
-        {
-          "expr": "exif.make",
-          "fallback": "FG"
-        }
-      ],
       "offset": {
         "x": 0.03,
         "y": 0.035

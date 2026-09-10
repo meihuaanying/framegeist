@@ -111,6 +111,45 @@
 
 `lineHeight`（默认 1.3，[0.5, 4]）：行间距 = `size_px * lineHeight`；多行文本总高 = `(n-1) * lineH + lastLineH`。
 
+### 4.5 图片层（`type: "image"`，v0.2.0）
+
+```jsonc
+{
+  "type": "image", "id": "brand",
+  "anchor": "bottom-left",
+  "offset": { "x": 0.02, "y": -0.05 },
+  "asset": "@builtin/brand/{exif.brand_slug}",   // 支持 {exif.<key>} 占位
+  "size": { "height": 0.03 },                     // 相对照片高度（优先）；或 width
+  "opacity": 1.0,
+  "attachTo": "primary",                          // 贴附到文本层首行左侧（水印行前置图标）
+  "attachGap": 0.01                               // 贴附间距（相对照片高度）
+}
+```
+
+- **asset 解析顺序**：调用方内存资产表（`@user/logo`、`@user/background` 等）→ `@builtin/*`（`brand/<slug>.png`）→ `assets/*`（模板包内相对路径）。**解析失败 = 留白，不显示替代图标**（v0.2.0 决策）。
+- **占位表达式**：`{exif.brand_slug}` / `{exif.lens_slug}`（品牌/镜头映射见 §8）。
+- `attachTo` 必须在同一模板内引用存在的文本层 id（加载时校验）；贴附位置 = 文本首行左侧，垂直居中。
+- `showLogo=false` 覆盖时，`@builtin/brand/`、`@builtin/lens/` 资产层整体跳过。
+
+### 4.6 渲染覆盖（TemplateOverrides，v0.2.0 UI 能力）
+
+| 字段（camelCase JSON） | 取值 | 语义 |
+|---|---|---|
+| `fontSizeScale` / `paddingScale` | 0.5–2.0 | 字号/内边距比例倍率 |
+| `textColor` | `#RRGGBB[A]` | 覆盖全部文本颜色 |
+| `fontFamily` | 字符串 | 字体覆盖（置于每层 family 链首） |
+| `aspect` | `1:1/4:3/3:2/16:9/9:16/original` | 扩画布到目标比例（居中、背景填充，不裁切） |
+| `background` | `blur/solid/image/none` | 覆盖模板背景类型（image 用 `@user/background` 或模板 `background.asset`） |
+| `backgroundColor` | 颜色 | 纯色背景色 |
+| `flipHorizontal` / `flipVertical` | bool | 照片像素翻转（在 EXIF 方向之后应用） |
+| `showLogo` | bool | 品牌图片层开关（见 4.5） |
+
+## 8. 品牌/镜头映射（v0.2.0）
+
+`exif.brand_slug`：Make 优先、Model 兜底，忽略大小写的子串匹配（sony/nikon/canon/fujifilm/leica/hasselblad/panasonic/ricoh/sigma/zeiss/dji/xiaomi/apple/olympus/pentax/epson/insta360/tamron）。
+`exif.lens_slug`：LensModel 前缀/子串（`FE `→sony、`XF/XC`→fujifilm、`RF/EF`→canon、`NIKKOR`→nikon、`DG DN`→sigma、`SUMMILUX/SUMMICRON/NOCTILUX/ELMAR`→leica、`LUMIX`→panasonic、`BATIS/TOUIT`→zeiss、`ZUIKO`→olympus、`TAMRON`、`HASSELBLAD`）。
+内置图标：`templates/assets/brand/<slug>.png`（Simple Icons CC0 + 自绘字标，见 `brand/CREDITS.json`），暗色背景用 `<slug>-light.png`。
+
 ## 5. `fields`
 
 声明块（供工具/编辑器读取字段来源），格式：`{ "<name>": { "type": "string|number", "source": "exif|constant", "transform": "model_pretty|brand_slug|identity" } }`。引擎求值不经过此块（直接按表达式），校验仅约束其结构。
