@@ -14,6 +14,7 @@ if (!version || !channel || !assetsDir || !outFile) {
 
 const PLATFORM_PATTERNS = [
   [/framegeist-cli-.*-win-x64\.zip$/, "win-x64-cli"],
+  [/FrameGeist-.*-win-x64-setup\.exe$/, "win-x64-installer"],
   [/framegeist-desktop-.*-win-x64\.zip$/, "win-x64"],
   [/.*-win-x64\.zip$/, "win-x64"],
   [/.*\.apk$/, "android-arm64"],

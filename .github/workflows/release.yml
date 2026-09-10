@@ -18,6 +18,11 @@ jobs:
         run: |
           cargo build --release -p framegeist-cli
           cargo build --release -p framegeist-desktop
+      - name: build NSIS installer (H1)
+        run: |
+          cargo install tauri-cli --version 2.11.4 --locked
+          cd crates/framegeist-desktop
+          cargo tauri build --bundles nsis
       - name: stage assets
         shell: pwsh
         run: |
@@ -26,6 +31,7 @@ jobs:
           Compress-Archive -Path target/release/framegeist.exe, templates/*.json, templates/assets -DestinationPath "dist/framegeist-cli-$ver-win-x64.zip"
           Compress-Archive -Path target/release/framegeist-desktop.exe -DestinationPath "dist/framegeist-desktop-$ver-win-x64.zip"
           Compress-Archive -Path templates/*.json, templates/assets/fonts -DestinationPath "dist/framegeist-templates-$ver.fgpkg"
+          Copy-Item target/release/bundle/nsis/*.exe "dist/FrameGeist-$ver-win-x64-setup.exe"
       - name: generate update.json + checksums
         shell: pwsh
         run: node tools/gen-update.mjs "${{ github.ref_name }}" stable dist dist/update.json
