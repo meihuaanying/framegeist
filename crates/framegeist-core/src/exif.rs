@@ -14,6 +14,8 @@ pub struct ExifInfo {
     pub iso: Option<u16>,
     pub datetime: Option<String>,
     pub orientation: Option<u16>,
+    pub brand_slug: Option<String>,
+    pub lens_slug: Option<String>,
 }
 
 impl ExifInfo {
@@ -29,6 +31,8 @@ impl ExifInfo {
             "iso" => self.iso.map(|v| v.to_string()),
             "datetime" => self.datetime.clone(),
             "orientation" => self.orientation.map(|v| v.to_string()),
+            "brand_slug" => self.brand_slug.clone(),
+            "lens_slug" => self.lens_slug.clone(),
             _ => None,
         }
     }
@@ -109,6 +113,8 @@ pub fn probe_exif(photo: &[u8]) -> Result<ExifInfo> {
         .as_deref()
         .and_then(prettify_model)
         .map(|s| s.to_string());
+    info.brand_slug = crate::brand::brand_slug(info.make.as_deref(), info.model.as_deref());
+    info.lens_slug = crate::brand::lens_slug(info.lens.as_deref());
     Ok(info)
 }
 

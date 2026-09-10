@@ -122,6 +122,9 @@ pub struct Background {
     pub blur: Option<f64>,
     #[serde(default)]
     pub scale: Option<f64>,
+    /// Optional background image reference (@builtin/..., @user/..., assets/...).
+    #[serde(default)]
+    pub asset: Option<String>,
 }
 
 impl Default for Background {
@@ -131,6 +134,7 @@ impl Default for Background {
             color: None,
             blur: None,
             scale: None,
+            asset: None,
         }
     }
 }
@@ -195,6 +199,13 @@ pub struct ImageLayer {
     pub size: ImageSize,
     #[serde(default = "default_opacity")]
     pub opacity: f64,
+    /// Attach to a text layer id: place the image just left of that layer's
+    /// first line, vertically centered (watermark prefix icon).
+    #[serde(rename = "attachTo", default)]
+    pub attach_to: Option<String>,
+    /// Gap between the attached image and the text (fraction of photo height).
+    #[serde(rename = "attachGap", default)]
+    pub attach_gap: Option<f64>,
 }
 
 fn default_opacity() -> f64 {
@@ -261,10 +272,10 @@ pub struct FieldDef {
     pub transform: Option<String>,
 }
 
-/// User-side render overrides (PRD T4.4): three safe knobs on top of the
-/// template defaults. Values are validated/clamped at application time.
+/// User-side render overrides (v0.2.0): safe knobs on top of template defaults.
+/// JSON is camelCase (the Web UI sends `fontSizeScale` etc.).
 #[derive(Debug, Clone, Default, Deserialize, serde::Serialize)]
-#[serde(deny_unknown_fields)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
 pub struct TemplateOverrides {
     #[serde(default)]
     pub font_size_scale: Option<f64>,
@@ -272,6 +283,34 @@ pub struct TemplateOverrides {
     pub padding_scale: Option<f64>,
     #[serde(default)]
     pub text_color: Option<String>,
+    /// "1:1" | "4:3" | "3:2" | "16:9" | "9:16" | "original"
+    #[serde(default)]
+    pub aspect: Option<String>,
+    /// "blur" | "solid" | "image" | "none"
+    #[serde(default)]
+    pub background: Option<String>,
+    #[serde(default)]
+    pub background_color: Option<String>,
+    #[serde(default)]
+    pub flip_horizontal: Option<bool>,
+    #[serde(default)]
+    pub flip_vertical: Option<bool>,
+    #[serde(default)]
+    pub font_family: Option<String>,
+    #[serde(default)]
+    pub show_logo: Option<bool>,
+}
+
+/// Aspect-ratio preset name -> (w, h) multiplier. None = no change.
+pub fn aspect_ratio(name: &str) -> Option<(u32, u32)> {
+    match name {
+        "1:1" => Some((1, 1)),
+        "4:3" => Some((4, 3)),
+        "3:2" => Some((3, 2)),
+        "16:9" => Some((16, 9)),
+        "9:16" => Some((9, 16)),
+        _ => None,
+    }
 }
 
 impl TemplateOverrides {
@@ -302,6 +341,30 @@ impl TemplateOverrides {
         }
         if let Some(c) = &self.text_color {
             parse_hex_color(c)?;
+        }
+        if let Some(a) = &self.aspect {
+            if a != "original" && aspect_ratio(a).is_none() {
+                return Err(Error::SchemaViolation(format!(
+                    "overrides.aspect {a:?} must be one of 1:1,4:3,3:2,16:9,9:16,original"
+                )));
+            }
+        }
+        if let Some(b) = &self.background {
+            if !matches!(b.as_str(), "blur" | "solid" | "image" | "none") {
+                return Err(Error::SchemaViolation(format!(
+                    "overrides.background {b:?} must be blur|solid|image|none"
+                )));
+            }
+        }
+        if let Some(c) = &self.background_color {
+            parse_hex_color(c)?;
+        }
+        if let Some(f) = &self.font_family {
+            if f.is_empty() || f.chars().count() > 64 {
+                return Err(Error::SchemaViolation(
+                    "overrides.fontFamily must be 1-64 characters".into(),
+                ));
+            }
         }
         Ok(())
     }
@@ -360,10 +423,38 @@ fn is_layer_id(s: &str) -> bool {
 }
 
 fn is_asset_path(s: &str) -> bool {
-    (s.starts_with("@builtin/") || s.starts_with("assets/"))
-        && s.len() <= 200
-        && s.chars()
-            .all(|c| c.is_ascii_alphanumeric() || matches!(c, '/' | '.' | '_' | '{' | '}' | '-'))
+    let stripped = s
+        .replace("{exif.brand_slug}", "sony")
+        .replace("{exif.lens_slug}", "sony");
+    (stripped.starts_with("@builtin/")
+        || stripped.starts_with("@user/")
+        || stripped.starts_with("assets/"))
+        && stripped.len() <= 200
+        && stripped.chars().all(|c| {
+            c.is_ascii_alphanumeric() || matches!(c, '/' | '.' | '_' | '{' | '}' | '-' | '@')
+        })
+        && !stripped.contains("..")
+}
+
+/// Evaluate `{exif.<key>}` placeholders inside an asset path.
+pub fn eval_asset_path(path: &str, info: &crate::exif::ExifInfo) -> Option<String> {
+    let mut out = String::with_capacity(path.len());
+    let mut rest = path;
+    while let Some(open) = rest.find('{') {
+        let after = &rest[open + 1..];
+        let close = after.find('}')?;
+        let token = &after[..close];
+        let key = token.strip_prefix("exif.")?;
+        let val = info.get(key)?;
+        if val.is_empty() {
+            return None;
+        }
+        out.push_str(&rest[..open]);
+        out.push_str(&val);
+        rest = &after[close + 1..];
+    }
+    out.push_str(rest);
+    Some(out)
 }
 
 fn range_check(name: &str, value: f64, lo: f64, hi: f64) -> Result<()> {
@@ -530,6 +621,34 @@ fn validate_semantics(t: &Template) -> Result<()> {
                     0.0,
                     1.0,
                 )?;
+            }
+        }
+    }
+    let text_ids: std::collections::HashSet<&str> = t
+        .layers
+        .iter()
+        .filter_map(|l| match l {
+            Layer::Text(text) => Some(text.id.as_str()),
+            _ => None,
+        })
+        .collect();
+    for layer in &t.layers {
+        if let Layer::Image(image) = layer {
+            if let Some(target) = &image.attach_to {
+                if !text_ids.contains(target.as_str()) {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{}].attachTo references unknown text layer {target:?}",
+                        image.id
+                    )));
+                }
+                if let Some(gap) = image.attach_gap {
+                    if !gap.is_finite() || !(0.0..=0.2).contains(&gap) {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{}].attachGap must be within [0, 0.2]",
+                            image.id
+                        )));
+                    }
+                }
             }
         }
     }

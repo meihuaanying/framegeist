@@ -7,7 +7,7 @@ use imageproc::drawing::draw_text_mut;
 use crate::exif::{cleaned_exif_tiff_full, probe_exif, ExifInfo};
 use crate::sandbox::eval_expr;
 use crate::template::{
-    Anchor, BgKind, CanvasMode, Layer, Template, TemplateOverrides, TextLayer,
+    Anchor, BgKind, CanvasMode, ImageLayer, Layer, Template, TemplateOverrides, TextLayer,
 };
 use crate::text::FontBook;
 use crate::{encode, Error, Result};
@@ -29,6 +29,10 @@ pub struct RenderOptions {
     pub format: OutputFormat,
     pub sampling: Sampling,
     pub assets_dir: Option<PathBuf>,
+    /// In-memory asset map (v0.2.0): resolved image bytes for image layers /
+    /// backgrounds, e.g. keys "@user/logo", "@user/background",
+    /// "@builtin/brand/sony". Takes precedence over assets_dir.
+    pub assets: Option<std::collections::HashMap<String, Vec<u8>>>,
     pub fonts: Option<crate::text::FontBook>,
     pub model_map: Option<crate::model_map::ModelMap>,
     pub write_exif: bool,
@@ -36,7 +40,7 @@ pub struct RenderOptions {
     /// Maximum output edge (px). None = full resolution (export path).
     /// Preview uses Some(n); A5: same render code, only this scale differs.
     pub max_edge: Option<u32>,
-    /// User-side overrides (T4.4): font size scale / padding scale / text color.
+    /// User-side overrides (T4.4 + v0.2.0): font/padding/color/aspect/…
     pub overrides: Option<TemplateOverrides>,
 }
 
@@ -46,6 +50,7 @@ impl Default for RenderOptions {
             format: OutputFormat::Jpeg,
             sampling: Sampling::Full,
             assets_dir: None,
+            assets: None,
             fonts: None,
             model_map: None,
             write_exif: true,
@@ -167,6 +172,7 @@ fn box_blur_pass(src: &RgbaImage, radius: u32) -> RgbaImage {
     out
 }
 
+#[derive(Clone, Copy)]
 struct CanvasGeometry {
     width: u32,
     height: u32,
@@ -200,44 +206,187 @@ fn compute_geometry(t: &Template, photo: &RgbaImage, overrides: Option<&Template
     }
 }
 
+#[derive(Clone)]
+struct BgPlan {
+    kind: BgKind,
+    color: Option<String>,
+    blur: Option<f64>,
+    scale: Option<f64>,
+    asset: Option<String>,
+}
+
+fn bg_plan(t: &Template, overrides: Option<&TemplateOverrides>) -> BgPlan {
+    let mut plan = BgPlan {
+        kind: t.canvas.background.kind,
+        color: t.canvas.background.color.clone(),
+        blur: t.canvas.background.blur,
+        scale: t.canvas.background.scale,
+        asset: t.canvas.background.asset.clone(),
+    };
+    if let Some(o) = overrides {
+        if let Some(b) = &o.background {
+            plan.kind = match b.as_str() {
+                "blur" => BgKind::Blur,
+                "solid" => BgKind::Solid,
+                "image" => BgKind::Image,
+                _ => BgKind::None,
+            };
+        }
+        if let Some(c) = &o.background_color {
+            plan.color = Some(c.clone());
+        }
+    }
+    plan
+}
+
+/// Resolve image bytes for an asset path: in-memory map first, then
+/// `assets_dir` (builtin brand/@user/, package-relative `assets/`).
+#[allow(clippy::question_mark)]
+fn resolve_asset_bytes(opts: &RenderOptions, path: &str) -> Option<Vec<u8>> {
+    if let Some(map) = &opts.assets {
+        if let Some(bytes) = map.get(path) {
+            return Some(bytes.clone());
+        }
+    }
+    let dir = opts.assets_dir.as_ref()?;
+    let (base, rel) = if let Some(rel) = path.strip_prefix("@builtin/") {
+        (dir.join("brand"), rel.to_string())
+    } else if let Some(rel) = path.strip_prefix("@user/") {
+        (dir.join("user"), rel.to_string())
+    } else if let Some(rel) = path.strip_prefix("assets/") {
+        (dir.clone(), rel.to_string())
+    } else {
+        return None;
+    };
+    let candidate = base.join(&rel);
+    if candidate.is_file() {
+        return std::fs::read(candidate).ok();
+    }
+    let with_png = base.join(format!("{rel}.png"));
+    if with_png.is_file() {
+        return std::fs::read(with_png).ok();
+    }
+    None
+}
+
+fn fill_solid(canvas: &mut RgbaImage, color: Option<&str>) {
+    let c = color
+        .and_then(|c| crate::template::parse_hex_color(c).ok())
+        .unwrap_or([255u8, 255, 255, 255]);
+    for px in canvas.pixels_mut() {
+        *px = Rgba(c);
+    }
+}
+
 fn build_canvas(
     geo: &CanvasGeometry,
     photo: &RgbaImage,
     t: &Template,
+    plan: &BgPlan,
+    opts: &RenderOptions,
     filt: image::imageops::FilterType,
 ) -> RgbaImage {
     let mut canvas = ImageBuffer::new(geo.width, geo.height);
-    let bg = &t.canvas.background;
-    match (t.canvas.mode, bg.kind) {
+    match (t.canvas.mode, plan.kind) {
         (CanvasMode::Overlay, _) | (_, BgKind::None) | (CanvasMode::Cover, _) => {
             canvas.copy_from(photo, geo.pad_left, geo.pad_top).ok();
         }
         (CanvasMode::Extend, BgKind::Solid) => {
-            let color = bg
-                .color
-                .as_deref()
-                .and_then(|c| crate::template::parse_hex_color(c).ok())
-                .unwrap_or([255u8, 255, 255, 255]);
-            for px in canvas.pixels_mut() {
-                *px = Rgba(color);
-            }
+            fill_solid(&mut canvas, plan.color.as_deref());
             canvas.copy_from(photo, geo.pad_left, geo.pad_top).ok();
         }
         (CanvasMode::Extend, BgKind::Blur) => {
-            let bg_scale = bg.scale.unwrap_or(1.2);
+            let bg_scale = plan.scale.unwrap_or(1.2);
             let tw = ((geo.width as f64) * bg_scale).ceil().max(1.0) as u32;
             let th = ((geo.height as f64) * bg_scale).ceil().max(1.0) as u32;
             let scaled = resize_to_cover(photo, tw, th, filt);
-            let radius = ((bg.blur.unwrap_or(40.0) as u32) / 3).max(1);
+            let radius = ((plan.blur.unwrap_or(40.0) as u32) / 3).max(1);
             let blurred = box_blur_rgba(&scaled, radius);
             let cover = center_crop(&blurred, geo.width, geo.height);
             canvas.copy_from(&cover, 0, 0).ok();
             canvas.copy_from(photo, geo.pad_left, geo.pad_top).ok();
         }
         (CanvasMode::Extend, BgKind::Image) => {
+            let bytes = plan
+                .asset
+                .as_deref()
+                .and_then(|a| resolve_asset_bytes(opts, a))
+                .or_else(|| resolve_asset_bytes(opts, "@user/background"));
+            let mut covered = false;
+            if let Some(bytes) = bytes {
+                if let Ok(bg_img) = image::load_from_memory(&bytes) {
+                    let rgba = bg_img.to_rgba8();
+                    let fitted = resize_to_cover(&rgba, geo.width, geo.height, filt);
+                    canvas.copy_from(&center_crop(&fitted, geo.width, geo.height), 0, 0).ok();
+                    covered = true;
+                }
+            }
+            if !covered {
+                fill_solid(&mut canvas, plan.color.as_deref());
+            }
             canvas.copy_from(photo, geo.pad_left, geo.pad_top).ok();
         }
     }
+    canvas
+}
+
+/// Expand the canvas to a target aspect ratio (W:H), centering the existing
+/// content and filling the margins with the background plan (PRD C7).
+fn expand_to_aspect(
+    base: RgbaImage,
+    photo: &RgbaImage,
+    plan: &BgPlan,
+    opts: &RenderOptions,
+    target: (u32, u32),
+    filt: image::imageops::FilterType,
+) -> RgbaImage {
+    let (w, h) = base.dimensions();
+    let cur = w as f64 / h as f64;
+    let tgt = target.0 as f64 / target.1 as f64;
+    if (cur - tgt).abs() < 0.002 {
+        return base;
+    }
+    let (nw, nh) = if cur < tgt {
+        (((h as f64) * tgt).ceil() as u32, h)
+    } else {
+        (w, ((w as f64) / tgt).ceil() as u32)
+    };
+    let mut canvas = ImageBuffer::new(nw, nh);
+    match plan.kind {
+        BgKind::Blur => {
+            let bg_scale = plan.scale.unwrap_or(1.2);
+            let tw = ((nw as f64) * bg_scale).ceil().max(1.0) as u32;
+            let th = ((nh as f64) * bg_scale).ceil().max(1.0) as u32;
+            let scaled = resize_to_cover(photo, tw, th, filt);
+            let radius = ((plan.blur.unwrap_or(40.0) as u32) / 3).max(1);
+            let blurred = box_blur_rgba(&scaled, radius);
+            canvas.copy_from(&center_crop(&blurred, nw, nh), 0, 0).ok();
+        }
+        BgKind::Image => {
+            let bytes = plan
+                .asset
+                .as_deref()
+                .and_then(|a| resolve_asset_bytes(opts, a))
+                .or_else(|| resolve_asset_bytes(opts, "@user/background"));
+            let mut covered = false;
+            if let Some(bytes) = bytes {
+                if let Ok(bg_img) = image::load_from_memory(&bytes) {
+                    let rgba = bg_img.to_rgba8();
+                    let fitted = resize_to_cover(&rgba, nw, nh, filt);
+                    canvas.copy_from(&center_crop(&fitted, nw, nh), 0, 0).ok();
+                    covered = true;
+                }
+            }
+            if !covered {
+                fill_solid(&mut canvas, plan.color.as_deref());
+            }
+        }
+        BgKind::None => {}
+        BgKind::Solid => fill_solid(&mut canvas, plan.color.as_deref()),
+    }
+    let x = (nw.saturating_sub(w)) / 2;
+    let y = (nh.saturating_sub(h)) / 2;
+    canvas.copy_from(&base, x, y).ok();
     canvas
 }
 
@@ -258,6 +407,14 @@ fn measure_text(
     imageproc::drawing::text_size(scale, font, text)
 }
 
+/// Layout of a drawn text layer's first line (for attached logo placement).
+#[derive(Debug, Clone, Copy)]
+struct TextLayout {
+    first_line_x: f32,
+    first_line_y: f32,
+    first_line_h: f32,
+}
+
 fn draw_text_layer(
     canvas: &mut RgbaImage,
     layer: &TextLayer,
@@ -265,14 +422,16 @@ fn draw_text_layer(
     fonts: &FontBook,
     geo: &CanvasGeometry,
     overrides: Option<&TemplateOverrides>,
-) {
+) -> Option<TextLayout> {
     let lines = text_lines(layer, info);
     if lines.is_empty() {
-        return;
+        return None;
     }
-    let Some(font) = fonts.pick(&layer.font.family) else {
-        return;
-    };
+    let mut families = layer.font.family.clone();
+    if let Some(f) = overrides.and_then(|o| o.font_family.as_deref()) {
+        families.insert(0, f.to_string());
+    }
+    let font = fonts.pick(&families)?;
     let font_scale = overrides.map(|o| o.font_size_scale()).unwrap_or(1.0);
     let size_px = (layer.font.size * font_scale * geo.photo_h as f64) as f32;
     let scale = PxScale::from(size_px);
@@ -319,6 +478,7 @@ fn draw_text_layer(
         h + off_y - total_h
     };
 
+    let mut first_line: Option<TextLayout> = None;
     for (i, line) in lines.iter().enumerate() {
         let (lw, _lh) = sizes[i];
         let x = if align_left {
@@ -329,6 +489,13 @@ fn draw_text_layer(
             w + off_x - lw
         };
         let y = base_y + line_h * i as f32;
+        if i == 0 {
+            first_line = Some(TextLayout {
+                first_line_x: x,
+                first_line_y: y,
+                first_line_h: sizes[0].1,
+            });
+        }
         draw_text_mut(
             canvas,
             Rgba(color),
@@ -339,11 +506,119 @@ fn draw_text_layer(
             line,
         );
     }
+    first_line
 }
 
-/// Decode photo bytes, apply EXIF orientation, optionally cap the longest
-/// edge (preview path). Shared by frame and collage rendering.
-pub(crate) fn decode_oriented(photo: &[u8], max_edge: Option<u32>) -> Result<RgbaImage> {
+/// Draw an image layer (brand badge / user asset). Returns silently when the
+/// asset is missing (blank slot, no fake icon — v0.2.0 decision).
+#[allow(clippy::question_mark)]
+fn draw_image_layer(
+    canvas: &mut RgbaImage,
+    layer: &ImageLayer,
+    info: &ExifInfo,
+    geo: &CanvasGeometry,
+    opts: &RenderOptions,
+    text_layouts: &std::collections::HashMap<String, TextLayout>,
+) {
+    if opts.overrides.as_ref().and_then(|o| o.show_logo) == Some(false) {
+        let is_brand = layer.asset.starts_with("@builtin/brand/")
+            || layer.asset.starts_with("@builtin/lens/");
+        if is_brand {
+            return;
+        }
+    }
+    let Some(path) = crate::template::eval_asset_path(&layer.asset, info) else {
+        return;
+    };
+    let Some(bytes) = resolve_asset_bytes(opts, &path) else {
+        return;
+    };
+    let Ok(img) = image::load_from_memory(&bytes) else {
+        return;
+    };
+    let rgba = img.to_rgba8();
+    let (iw, ih) = rgba.dimensions();
+    if iw == 0 || ih == 0 {
+        return;
+    }
+    let photo_h = geo.photo_h as f64;
+    let target_h = layer
+        .size
+        .height
+        .map(|h| (h * photo_h).round().max(2.0))
+        .or_else(|| layer.size.width.map(|w| (w * geo.photo_h as f64).round().max(2.0) * ih as f64 / iw as f64));
+    let scale = target_h.unwrap_or(0.03 * photo_h) / ih as f64;
+    let tw = ((iw as f64) * scale).round().max(2.0) as u32;
+    let th = ((ih as f64) * scale).round().max(2.0) as u32;
+    let fitted = image::imageops::resize(&rgba, tw, th, image::imageops::FilterType::Lanczos3);
+
+    let (ix, iy) = if let Some(target_id) = &layer.attach_to {
+        let Some(tl) = text_layouts.get(target_id) else {
+            return;
+        };
+        let gap = (layer.attach_gap.unwrap_or(0.01) * photo_h) as f32;
+        let x = tl.first_line_x - gap - tw as f32;
+        let y = tl.first_line_y + (tl.first_line_h - th as f32) / 2.0;
+        (x.round() as i32, y.round() as i32)
+    } else {
+        let w = geo.width as f32;
+        let h = geo.height as f32;
+        let align_left = matches!(layer.anchor, Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft);
+        let align_center = matches!(layer.anchor, Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter);
+        let from_top = matches!(layer.anchor, Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight);
+        let from_middle = matches!(layer.anchor, Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight);
+        let off_x = layer.offset.x as f32 * w;
+        let off_y = layer.offset.y as f32 * h;
+        let x = if align_left {
+            off_x
+        } else if align_center {
+            (w - tw as f32) / 2.0 + off_x
+        } else {
+            w + off_x - tw as f32
+        };
+        let y = if from_top {
+            off_y
+        } else if from_middle {
+            (h - th as f32) / 2.0 + off_y
+        } else {
+            h + off_y - th as f32
+        };
+        (x.round() as i32, y.round() as i32)
+    };
+
+    let opacity = layer.opacity.clamp(0.0, 1.0) as f32;
+    for (x, y, p) in fitted.enumerate_pixels() {
+        let dx = ix + x as i32;
+        let dy = iy + y as i32;
+        if dx < 0 || dy < 0 || dx >= geo.width as i32 || dy >= geo.height as i32 {
+            continue;
+        }
+        let src = p.0;
+        let a = (src[3] as f32 * opacity) as u8;
+        if a == 0 {
+            continue;
+        }
+        let dst = canvas.get_pixel(dx as u32, dy as u32).0;
+        let af = a as f32 / 255.0;
+        let inv = 1.0 - af;
+        let blended = [
+            (src[0] as f32 * af + dst[0] as f32 * inv) as u8,
+            (src[1] as f32 * af + dst[1] as f32 * inv) as u8,
+            (src[2] as f32 * af + dst[2] as f32 * inv) as u8,
+            dst[3].max(a),
+        ];
+        canvas.put_pixel(dx as u32, dy as u32, Rgba(blended));
+    }
+}
+
+/// Decode photo bytes, apply EXIF orientation + optional flips, optionally cap
+/// the longest edge (preview path). Shared by frame and collage rendering.
+pub(crate) fn decode_oriented(
+    photo: &[u8],
+    max_edge: Option<u32>,
+    flip_h: bool,
+    flip_v: bool,
+) -> Result<RgbaImage> {
     let mut img = image::load_from_memory(photo)?;
     let ori_raw = probe_exif(photo)?.orientation.unwrap_or(1);
     let ori = match ori_raw {
@@ -357,6 +632,12 @@ pub(crate) fn decode_oriented(photo: &[u8], max_edge: Option<u32>) -> Result<Rgb
         _ => image::metadata::Orientation::NoTransforms,
     };
     img.apply_orientation(ori);
+    if flip_h {
+        img = img.fliph();
+    }
+    if flip_v {
+        img = img.flipv();
+    }
     let rgba = img.to_rgba8();
     let (w, h) = rgba.dimensions();
     match max_edge {
@@ -389,6 +670,14 @@ fn flatten_over_white(img: &RgbaImage) -> RgbaImage {
     out
 }
 
+fn flip_flags(opts: &RenderOptions) -> (bool, bool) {
+    let o = opts.overrides.as_ref();
+    (
+        o.and_then(|o| o.flip_horizontal).unwrap_or(false),
+        o.and_then(|o| o.flip_vertical).unwrap_or(false),
+    )
+}
+
 /// Render a photo against a template into an RGBA canvas. Preview and export
 /// share this exact code path; only `RenderOptions.max_edge`/`sampling`
 /// differ (PRD A5).
@@ -397,23 +686,44 @@ pub fn render_rgba(
     template: &Template,
     opts: &RenderOptions,
 ) -> Result<RgbaImage> {
-    let rgba = decode_oriented(photo, opts.max_edge)?;
+    let (fh, fv) = flip_flags(opts);
+    let rgba = decode_oriented(photo, opts.max_edge, fh, fv)?;
     let mut info = probe_exif(photo)?;
     apply_model_map(&mut info, &opts.model_map);
     render_rgba_with_image(&rgba, template, &info, opts)
 }
 
-/// Same as `render_rgba` but for an already-decoded image (raw path used by
-/// the Web/Desktop preview to skip engine-side JPEG decoding).
+/// Same as `render_rgba` but for an already-decoded (and already flipped)
+/// image; used by the Web/Desktop preview raw path.
 pub fn render_rgba_with_image(
     rgba: &RgbaImage,
     template: &Template,
     info: &ExifInfo,
     opts: &RenderOptions,
 ) -> Result<RgbaImage> {
-    let geo = compute_geometry(template, rgba, opts.overrides.as_ref());
+    let overrides = opts.overrides.as_ref();
+    let geo = compute_geometry(template, rgba, overrides);
     let filt = filter(opts.sampling);
-    let mut canvas = build_canvas(&geo, rgba, template, filt);
+    let plan = bg_plan(template, overrides);
+    let base = build_canvas(&geo, rgba, template, &plan, opts, filt);
+    let (mut canvas, geo) = match overrides.and_then(|o| o.aspect.as_deref()) {
+        Some(name) => match crate::template::aspect_ratio(name) {
+            Some(target) => {
+                let expanded = expand_to_aspect(base, rgba, &plan, opts, target, filt);
+                let (w2, h2) = expanded.dimensions();
+                (
+                    expanded,
+                    CanvasGeometry {
+                        width: w2,
+                        height: h2,
+                        ..geo
+                    },
+                )
+            }
+            None => (base, geo),
+        },
+        None => (base, geo),
+    };
     let fonts = match &opts.fonts {
         Some(book) => book.clone(),
         None => match &opts.assets_dir {
@@ -421,12 +731,21 @@ pub fn render_rgba_with_image(
             None => FontBook::empty(),
         },
     };
+    let mut text_layouts: std::collections::HashMap<String, TextLayout> =
+        std::collections::HashMap::new();
     for layer in &template.layers {
         if let Layer::Text(text) = layer {
-            draw_text_layer(&mut canvas, text, info, &fonts, &geo, opts.overrides.as_ref());
+            if let Some(layout) =
+                draw_text_layer(&mut canvas, text, info, &fonts, &geo, overrides)
+            {
+                text_layouts.insert(text.id.clone(), layout);
+            }
         }
-        // Image layers resolve template-pack assets; skipped in the engine
-        // skeleton until template packs ship (PRD E1).
+    }
+    for layer in &template.layers {
+        if let Layer::Image(image) = layer {
+            draw_image_layer(&mut canvas, image, info, &geo, opts, &text_layouts);
+        }
     }
     Ok(canvas)
 }
@@ -441,8 +760,15 @@ pub fn render_from_rgba(
     template: &Template,
     opts: &RenderOptions,
 ) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
-    let img = RgbaImage::from_raw(width, height, rgba.to_vec())
+    let mut img = RgbaImage::from_raw(width, height, rgba.to_vec())
         .ok_or_else(|| Error::Image(format!("rgba buffer size mismatch for {width}x{height}")))?;
+    let (fh, fv) = flip_flags(opts);
+    if fh {
+        img = image::imageops::flip_horizontal(&img);
+    }
+    if fv {
+        img = image::imageops::flip_vertical(&img);
+    }
     let mut info = match photo_bytes {
         Some(b) => probe_exif(b)?,
         None => ExifInfo::default(),

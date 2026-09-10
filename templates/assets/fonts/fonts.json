@@ -1,0 +1,49 @@
+{
+  "fonts": [
+    {
+      "family": "Inter",
+      "file": "Inter-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Playfair Display",
+      "file": "PlayfairDisplay-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Bebas Neue",
+      "file": "BebasNeue-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Oswald",
+      "file": "Oswald-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Cormorant Garamond",
+      "file": "CormorantGaramond-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Space Grotesk",
+      "file": "SpaceGrotesk-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "JetBrains Mono",
+      "file": "JetBrainsMono-Regular.ttf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "NotoSansSC-Regular.otf",
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Noto Serif SC",
+      "file": "NotoSerifSC-Regular.otf",
+      "license": "OFL-1.1"
+    }
+  ]
+}

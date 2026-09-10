@@ -70,7 +70,7 @@ pub fn render_collage(
     let info_color = parse_hex_color(&layout.info_bar.text_color).unwrap_or([85, 85, 85, 255]);
 
     for (i, cell) in layout.cells.iter().take(filled).enumerate() {
-        let rgba = crate::render::decode_oriented(photos[i], None)?;
+        let rgba = crate::render::decode_oriented(photos[i], None, false, false)?;
 
         let x0 = (cell.x * base_w as f64).round() as i64 + gutter_x;
         let y0 = (cell.y * base_h as f64).round() as i64 + gutter_y;

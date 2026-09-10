@@ -1,0 +1,46 @@
+{
+  "landscape": {
+    "file": "landscape.jpg",
+    "title": "Aurora Borealis and city lights on the horizon  taken by the Expedition 29 crew",
+    "nasaId": "iss029e012564",
+    "source": "https://images.nasa.gov/details/iss029e012564",
+    "credit": "Mike Fossum",
+    "license": "Public Domain (NASA media usage guidelines)",
+    "licenseUrl": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "size": "1920x1277",
+    "bytes": 319411
+  },
+  "night": {
+    "file": "night.jpg",
+    "title": "Earth Observations taken by the Expedition 35 Crew",
+    "nasaId": "iss035e017673",
+    "source": "https://images.nasa.gov/details/iss035e017673",
+    "credit": "Chris Hadfield",
+    "license": "Public Domain (NASA media usage guidelines)",
+    "licenseUrl": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "size": "1920x1277",
+    "bytes": 375053
+  },
+  "square": {
+    "file": "square.jpg",
+    "title": "Full Moon",
+    "nasaId": "GSFC_20171208_Archive_e000868",
+    "source": "https://images.nasa.gov/details/GSFC_20171208_Archive_e000868",
+    "credit": "NASA",
+    "license": "Public Domain (NASA media usage guidelines)",
+    "licenseUrl": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "size": "1920x1920",
+    "bytes": 336726
+  },
+  "portrait": {
+    "file": "portrait.jpg",
+    "title": "Portrait of Astronaut Eugene A. Cernan",
+    "nasaId": "s64-31845",
+    "source": "https://images.nasa.gov/details/s64-31845",
+    "credit": "NASA",
+    "license": "Public Domain (NASA media usage guidelines)",
+    "licenseUrl": "https://www.nasa.gov/nasa-brand-center/images-and-media/",
+    "size": "1540x1919",
+    "bytes": 204446
+  }
+}

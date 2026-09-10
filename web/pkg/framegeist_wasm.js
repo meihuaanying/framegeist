@@ -1,7 +1,7 @@
 /* @ts-self-types="./framegeist_wasm.d.ts" */
 
 /**
- * Engine instance holding registered fonts (loaded once, reused per render).
+ * Engine instance holding registered fonts + assets (loaded once, reused).
  */
 export class Engine {
     __destroy_into_raw() {
@@ -15,8 +15,35 @@ export class Engine {
         wasm.__wbg_engine_free(ptr, 0);
     }
     /**
-     * Register an optional model-map override (PRD B5), JSON object of
-     * raw model code -> vendor-official name.
+     * Lazily register one font (selected family / uploaded font, v0.2.0).
+     * @param {string} family
+     * @param {Uint8Array} bytes
+     */
+    add_font(family, bytes) {
+        const ptr0 = passStringToWasm0(family, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(bytes, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_add_font(this.__wbg_ptr, ptr0, len0, ptr1, len1);
+        if (ret[1]) {
+            throw takeFromExternrefTable0(ret[0]);
+        }
+    }
+    clear_assets() {
+        wasm.engine_clear_assets(this.__wbg_ptr);
+    }
+    /**
+     * Registered font family names (normalized, lowercase).
+     * @returns {string[]}
+     */
+    font_families() {
+        const ret = wasm.engine_font_families(this.__wbg_ptr);
+        var v1 = getArrayJsValueFromWasm0(ret[0], ret[1]);
+        wasm.__wbindgen_free(ret[0], ret[1] * 4, 4);
+        return v1;
+    }
+    /**
+     * Register an optional model-map override (PRD B5).
      * @param {Uint8Array} json
      */
     load_model_map(json) {
@@ -28,9 +55,7 @@ export class Engine {
         }
     }
     /**
-     * Create an engine and register fonts by (family, bytes) pairs.
-     * Family names follow the same normalization as the filesystem loader
-     * (`JetBrains Mono` -> `jetbrainsmono`).
+     * Create an engine and register the boot fonts by (family, bytes) pairs.
      * @param {any[]} font_names
      * @param {any[]} font_bytes
      */
@@ -73,8 +98,20 @@ export class Engine {
         }
     }
     /**
-     * Render a photo against a template.
-     * `format`: "jpeg" | "png"; `preview`: true for fast low-quality sampling.
+     * Register an image asset: "@user/logo", "@user/background",
+     * "@builtin/brand/<slug>" (test/preview), etc.
+     * @param {string} name
+     * @param {Uint8Array} bytes
+     */
+    register_asset(name, bytes) {
+        const ptr0 = passStringToWasm0(name, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passArray8ToWasm0(bytes, wasm.__wbindgen_malloc);
+        const len1 = WASM_VECTOR_LEN;
+        wasm.engine_register_asset(this.__wbg_ptr, ptr0, len0, ptr1, len1);
+    }
+    /**
+     * Render a photo against a template (legacy signature).
      * @param {Uint8Array} photo
      * @param {string} template_json
      * @param {string} format
@@ -95,8 +132,7 @@ export class Engine {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
-     * Render a collage: `photos` is a JS Array of Uint8Array, filled into
-     * the layout's cells in order (PRD C5/G2).
+     * Render a collage (PRD C5).
      * @param {Array<any>} photos
      * @param {string} layout_json
      * @param {string} format
@@ -115,8 +151,8 @@ export class Engine {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
-     * Raw-RGBA fast preview: caller (browser) pre-decoded and downscaled the
-     * photo; `exif_bytes` may be empty (then no EXIF text/write-back).
+     * Raw-RGBA fast preview: caller pre-decoded/downscaled the photo;
+     * `exif_bytes` may be empty (then no EXIF text/write-back).
      * @param {Uint8Array} rgba
      * @param {number} width
      * @param {number} height
@@ -144,16 +180,17 @@ export class Engine {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
-     * Render with user overrides (T4.4): `overrides_json` of
-     * `{fontSizeScale, paddingScale, textColor}` (empty string = none).
+     * Render with user overrides JSON (camelCase; empty = none).
+     * `max_edge`: 0 = full resolution, >0 = longest-edge cap (export presets).
      * @param {Uint8Array} photo
      * @param {string} template_json
      * @param {string} format
      * @param {boolean} preview
      * @param {string} overrides_json
+     * @param {number} max_edge
      * @returns {Uint8Array}
      */
-    render_with_overrides(photo, template_json, format, preview, overrides_json) {
+    render_with_overrides(photo, template_json, format, preview, overrides_json, max_edge) {
         const ptr0 = passArray8ToWasm0(photo, wasm.__wbindgen_malloc);
         const len0 = WASM_VECTOR_LEN;
         const ptr1 = passStringToWasm0(template_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -162,15 +199,15 @@ export class Engine {
         const len2 = WASM_VECTOR_LEN;
         const ptr3 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len3 = WASM_VECTOR_LEN;
-        const ret = wasm.engine_render_with_overrides(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview, ptr3, len3);
+        const ret = wasm.engine_render_with_overrides(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview, ptr3, len3, max_edge);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }
         return takeFromExternrefTable0(ret[0]);
     }
     /**
-     * Validate a template JSON document. Returns field-level error text on
-     * rejection (PRD C2).
+     * Validate a template JSON document (PRD C2). Field-level error text on
+     * rejection, as the JSON error object.
      * @param {string} json
      */
     validate_template(json) {
@@ -220,6 +257,11 @@ function __wbg_get_imports() {
         __wbg_prototypesetcall_ae9f5e7459250748: function(arg0, arg1, arg2) {
             Uint8Array.prototype.set.call(getArrayU8FromWasm0(arg0, arg1), arg2);
         },
+        __wbindgen_generic_0000000000000001: function(arg0, arg1) {
+            // Cast intrinsic for `Ref(String) -> Externref`.
+            const ret = getStringFromWasm0(arg0, arg1);
+            return ret;
+        },
         __wbindgen_init_externref_table: function() {
             const table = wasm.__wbindgen_externrefs;
             const offset = table.grow(4);
@@ -244,6 +286,17 @@ function addToExternrefTable0(obj) {
     const idx = wasm.__externref_table_alloc();
     wasm.__wbindgen_externrefs.set(idx, obj);
     return idx;
+}
+
+function getArrayJsValueFromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    const mem = getDataViewMemory0();
+    const result = [];
+    for (let i = ptr; i < ptr + 4 * len; i += 4) {
+        result.push(wasm.__wbindgen_externrefs.get(mem.getUint32(i, true)));
+    }
+    wasm.__externref_drop_slice(ptr, len);
+    return result;
 }
 
 function getArrayU8FromWasm0(ptr, len) {

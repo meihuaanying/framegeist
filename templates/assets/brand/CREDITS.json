@@ -1,0 +1,85 @@
+{
+  "source": "Simple Icons (https://simpleicons.org) + framegeist-rendered wordmarks (OFL fonts)",
+  "license": "CC0-1.0 (icon files); wordmarks rendered from OFL fonts; brand names remain trademarks of their owners",
+  "disclaimer": "Icons/wordmarks indicate the camera/lens brand from EXIF metadata. No endorsement implied.",
+  "icons": [
+    {
+      "slug": "sony",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/sony.svg"
+    },
+    {
+      "slug": "fujifilm",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/fujifilm.svg"
+    },
+    {
+      "slug": "leica",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/leica.svg"
+    },
+    {
+      "slug": "panasonic",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/panasonic.svg"
+    },
+    {
+      "slug": "dji",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/dji.svg"
+    },
+    {
+      "slug": "xiaomi",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/xiaomi.svg"
+    },
+    {
+      "slug": "apple",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/apple.svg"
+    },
+    {
+      "slug": "epson",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/epson.svg"
+    },
+    {
+      "slug": "insta360",
+      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/insta360.svg"
+    }
+  ],
+  "wordmarks": [
+    {
+      "slug": "canon",
+      "kind": "wordmark",
+      "font": "CormorantGaramond-Regular.ttf"
+    },
+    {
+      "slug": "ricoh",
+      "kind": "wordmark",
+      "font": "Inter-Regular.ttf"
+    },
+    {
+      "slug": "sigma",
+      "kind": "wordmark",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "zeiss",
+      "kind": "wordmark",
+      "font": "Inter-Regular.ttf"
+    },
+    {
+      "slug": "hasselblad",
+      "kind": "wordmark",
+      "font": "CormorantGaramond-Regular.ttf"
+    },
+    {
+      "slug": "olympus",
+      "kind": "wordmark",
+      "font": "CormorantGaramond-Regular.ttf"
+    },
+    {
+      "slug": "pentax",
+      "kind": "wordmark",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "tamron",
+      "kind": "wordmark",
+      "font": "SpaceGrotesk-Regular.ttf"
+    }
+  ]
+}

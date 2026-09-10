@@ -65,6 +65,22 @@ impl FontBook {
         Ok(FontBook { fonts, fallback })
     }
 
+    /// Add/replace a single font at runtime (lazy loading, v0.2.0).
+    pub fn insert(&mut self, family: &str, bytes: Vec<u8>) -> Result<()> {
+        let font = FontArc::try_from_vec(bytes)
+            .map_err(|e| Error::Font(format!("{family}: {e}")))?;
+        self.fonts.insert(family_key(family), font);
+        if self.fallback.is_none() {
+            self.fallback = self.fonts.values().next().cloned();
+        }
+        Ok(())
+    }
+
+    /// Family names currently registered.
+    pub fn families(&self) -> Vec<String> {
+        self.fonts.keys().cloned().collect()
+    }
+
     pub fn empty() -> FontBook {
         FontBook {
             fonts: HashMap::new(),

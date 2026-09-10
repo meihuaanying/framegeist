@@ -3,6 +3,7 @@
 //! Public API (PRD A2): `load_template`, `probe_exif`, `render`.
 //! GUI clients must not implement any drawing logic themselves.
 
+pub mod brand;
 pub mod collage;
 pub mod encode;
 pub mod exif;
@@ -57,6 +58,24 @@ pub enum Error {
     Encode(String),
     #[error("io error: {0}")]
     Io(#[from] std::io::Error),
+}
+
+impl Error {
+    /// Stable machine-readable code for client-side localization (v0.2.0).
+    pub fn code(&self) -> &'static str {
+        match self {
+            Error::TemplateJson(_) => "template_json",
+            Error::SchemaViolation(_) => "template_schema",
+            Error::SandboxViolation(_) => "template_sandbox",
+            Error::TemplateTooLarge { .. } => "template_too_large",
+            Error::Image(_) => "image",
+            Error::UnsupportedFormat(_) => "unsupported_format",
+            Error::Exif(_) => "exif",
+            Error::Font(_) => "font",
+            Error::Encode(_) => "encode",
+            Error::Io(_) => "io",
+        }
+    }
 }
 
 impl From<image::ImageError> for Error {
