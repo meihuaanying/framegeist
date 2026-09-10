@@ -17,6 +17,21 @@ fn opts() -> RenderOptions {
     }
 }
 
+/// In-memory synthetic photo (test-photos are derived artifacts, CI-checkout
+/// safe: nothing on disk is assumed beyond templates/ + fonts).
+fn gradient_jpeg(w: u32, h: u32) -> Vec<u8> {
+    let mut img = image::RgbaImage::new(w, h);
+    for (x, y, px) in img.enumerate_pixels_mut() {
+        *px = image::Rgba([
+            ((x * 255) / w.max(1)) as u8,
+            ((y * 255) / h.max(1)) as u8,
+            (((x + y) * 3) % 256) as u8,
+            255,
+        ]);
+    }
+    framegeist_core::encode_jpeg_quality100(&img).expect("jpeg")
+}
+
 fn tpl(id: &str) -> framegeist_core::Template {
     let path = repo_root().join(format!("templates/{id}.json"));
     let bytes = std::fs::read(&path).expect("template");
@@ -27,7 +42,7 @@ fn tpl(id: &str) -> framegeist_core::Template {
 /// bottom-anchored text layer must paint SOMETHING into the bottom band.
 #[test]
 fn bottom_text_is_visible() {
-    let photo = std::fs::read(repo_root().join("templates/assets/test-photos/sample-landscape.jpg")).unwrap();
+    let photo = gradient_jpeg(1600, 1200);
     for id in [
         "classic-white-bottom-param",
         "classic-white-v1",
@@ -102,7 +117,7 @@ fn orientation_is_applied() {
 /// Preview path is capped; export path stays full (PRD A5).
 #[test]
 fn preview_max_edge_and_export_full() {
-    let photo = std::fs::read(repo_root().join("templates/assets/test-photos/sample-landscape.jpg")).unwrap();
+    let photo = gradient_jpeg(1600, 1200);
     let template = tpl("classic-white-bottom-param");
     let preview_opts = RenderOptions {
         max_edge: Some(800),

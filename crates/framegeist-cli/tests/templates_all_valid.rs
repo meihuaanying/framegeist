@@ -70,17 +70,18 @@ fn unique_ids_and_valid_versions() {
 
 #[test]
 fn every_template_renders_via_engine() {
-    // Render each template in-memory against the fixed sample photo used by
-    // the sample-wall pipeline, so C6 can never regress silently. Sample
-    // JPEGs themselves are derived artifacts (tools/gen-samples.ps1, CI).
-    let photo_path = repo_root().join("templates/assets/test-photos");
-    let photo = if photo_path.exists() {
-        std::fs::read(photo_path.join("sample-landscape.jpg")).expect("sample photo")
-    } else {
-        // regenerate deterministic test photos when absent
-        eprintln!("test photos missing; run: cargo run -p framegeist-cli --example make_test_photos");
-        return;
-    };
+    // Render each template against an in-memory synthetic photo (test-photos
+    // are derived artifacts, so nothing on disk is assumed here).
+    let mut img = image::RgbaImage::new(1600, 1200);
+    for (x, y, px) in img.enumerate_pixels_mut() {
+        *px = image::Rgba([
+            ((x * 255) / 1600) as u8,
+            ((y * 255) / 1200) as u8,
+            (((x + y) * 3) % 256) as u8,
+            255,
+        ]);
+    }
+    let photo = framegeist_core::encode_jpeg_quality100(&img).expect("synthetic photo");
     let opts = framegeist_core::RenderOptions {
         assets_dir: Some(repo_root().join("templates/assets")),
         ..framegeist_core::RenderOptions::default()
@@ -90,4 +91,5 @@ fn every_template_renders_via_engine() {
             .unwrap_or_else(|e| panic!("render failed for {id}: {e}"));
         assert_eq!(&out[0..2], &[0xFF, 0xD8], "{id} produced non-JPEG");
     }
+}
 }
