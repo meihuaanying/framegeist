@@ -8,6 +8,11 @@ export class Engine {
     free(): void;
     [Symbol.dispose](): void;
     /**
+     * Register an optional model-map override (PRD B5), JSON object of
+     * raw model code -> vendor-official name.
+     */
+    load_model_map(json: Uint8Array): void;
+    /**
      * Create an engine and register fonts by (family, bytes) pairs.
      * Family names follow the same normalization as the filesystem loader
      * (`JetBrains Mono` -> `jetbrainsmono`).
@@ -23,6 +28,11 @@ export class Engine {
      */
     render(photo: Uint8Array, template_json: string, format: string, preview: boolean): Uint8Array;
     /**
+     * Render a collage: `photos` is a JS Array of Uint8Array, filled into
+     * the layout's cells in order (PRD C5/G2).
+     */
+    render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
+    /**
      * Validate a template JSON document. Returns field-level error text on
      * rejection (PRD C2).
      */
@@ -34,15 +44,17 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_engine_free: (a: number, b: number) => void;
+    readonly engine_load_model_map: (a: number, b: number, c: number) => [number, number];
     readonly engine_new: (a: number, b: number, c: number, d: number) => [number, number, number];
     readonly engine_probe_exif: (a: number, b: number, c: number) => [number, number, number, number];
     readonly engine_render: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
+    readonly engine_render_collage: (a: number, b: any, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
     readonly engine_validate_template: (a: number, b: number, c: number) => [number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;
-    readonly __externref_table_alloc: () => number;
     readonly __externref_table_dealloc: (a: number) => void;
+    readonly __externref_table_alloc: () => number;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
     readonly __wbindgen_start: () => void;
 }

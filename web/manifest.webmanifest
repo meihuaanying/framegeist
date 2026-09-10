@@ -1,0 +1,10 @@
+{
+  "name": "FrameGeist · 框灵",
+  "short_name": "FrameGeist",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f4f2",
+  "theme_color": "#1a1a1a",
+  "description": "照片边框水印拼图，全本地处理（G1/G4）",
+  "icons": []
+}

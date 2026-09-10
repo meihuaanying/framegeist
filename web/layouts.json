@@ -1,0 +1,532 @@
+[
+  {
+    "id": "grid-1x1",
+    "name": "Grid 1 x 1",
+    "slots": 1
+  },
+  {
+    "id": "grid-1x1-info",
+    "name": "Grid 1 x 1 + EXIF",
+    "slots": 1
+  },
+  {
+    "id": "grid-1x2",
+    "name": "Grid 1 x 2",
+    "slots": 2
+  },
+  {
+    "id": "grid-1x2-info",
+    "name": "Grid 1 x 2 + EXIF",
+    "slots": 2
+  },
+  {
+    "id": "grid-1x3",
+    "name": "Grid 1 x 3",
+    "slots": 3
+  },
+  {
+    "id": "grid-1x3-info",
+    "name": "Grid 1 x 3 + EXIF",
+    "slots": 3
+  },
+  {
+    "id": "grid-1x4",
+    "name": "Grid 1 x 4",
+    "slots": 4
+  },
+  {
+    "id": "grid-1x4-info",
+    "name": "Grid 1 x 4 + EXIF",
+    "slots": 4
+  },
+  {
+    "id": "grid-1x5",
+    "name": "Grid 1 x 5",
+    "slots": 5
+  },
+  {
+    "id": "grid-1x5-info",
+    "name": "Grid 1 x 5 + EXIF",
+    "slots": 5
+  },
+  {
+    "id": "grid-2x1",
+    "name": "Grid 2 x 1",
+    "slots": 2
+  },
+  {
+    "id": "grid-2x1-info",
+    "name": "Grid 2 x 1 + EXIF",
+    "slots": 2
+  },
+  {
+    "id": "grid-2x2",
+    "name": "Grid 2 x 2",
+    "slots": 4
+  },
+  {
+    "id": "grid-2x2-info",
+    "name": "Grid 2 x 2 + EXIF",
+    "slots": 4
+  },
+  {
+    "id": "grid-2x3",
+    "name": "Grid 2 x 3",
+    "slots": 6
+  },
+  {
+    "id": "grid-2x3-info",
+    "name": "Grid 2 x 3 + EXIF",
+    "slots": 6
+  },
+  {
+    "id": "grid-2x4",
+    "name": "Grid 2 x 4",
+    "slots": 8
+  },
+  {
+    "id": "grid-2x4-info",
+    "name": "Grid 2 x 4 + EXIF",
+    "slots": 8
+  },
+  {
+    "id": "grid-2x5",
+    "name": "Grid 2 x 5",
+    "slots": 10
+  },
+  {
+    "id": "grid-2x5-info",
+    "name": "Grid 2 x 5 + EXIF",
+    "slots": 10
+  },
+  {
+    "id": "grid-3x1",
+    "name": "Grid 3 x 1",
+    "slots": 3
+  },
+  {
+    "id": "grid-3x1-info",
+    "name": "Grid 3 x 1 + EXIF",
+    "slots": 3
+  },
+  {
+    "id": "grid-3x2",
+    "name": "Grid 3 x 2",
+    "slots": 6
+  },
+  {
+    "id": "grid-3x2-info",
+    "name": "Grid 3 x 2 + EXIF",
+    "slots": 6
+  },
+  {
+    "id": "grid-3x3",
+    "name": "Grid 3 x 3",
+    "slots": 9
+  },
+  {
+    "id": "grid-3x3-info",
+    "name": "Grid 3 x 3 + EXIF",
+    "slots": 9
+  },
+  {
+    "id": "grid-3x4",
+    "name": "Grid 3 x 4",
+    "slots": 12
+  },
+  {
+    "id": "grid-3x4-info",
+    "name": "Grid 3 x 4 + EXIF",
+    "slots": 12
+  },
+  {
+    "id": "grid-3x5",
+    "name": "Grid 3 x 5",
+    "slots": 15
+  },
+  {
+    "id": "grid-3x5-info",
+    "name": "Grid 3 x 5 + EXIF",
+    "slots": 15
+  },
+  {
+    "id": "grid-4x1",
+    "name": "Grid 4 x 1",
+    "slots": 4
+  },
+  {
+    "id": "grid-4x1-info",
+    "name": "Grid 4 x 1 + EXIF",
+    "slots": 4
+  },
+  {
+    "id": "grid-4x2",
+    "name": "Grid 4 x 2",
+    "slots": 8
+  },
+  {
+    "id": "grid-4x2-info",
+    "name": "Grid 4 x 2 + EXIF",
+    "slots": 8
+  },
+  {
+    "id": "grid-4x3",
+    "name": "Grid 4 x 3",
+    "slots": 12
+  },
+  {
+    "id": "grid-4x3-info",
+    "name": "Grid 4 x 3 + EXIF",
+    "slots": 12
+  },
+  {
+    "id": "grid-4x4",
+    "name": "Grid 4 x 4",
+    "slots": 16
+  },
+  {
+    "id": "grid-4x4-info",
+    "name": "Grid 4 x 4 + EXIF",
+    "slots": 16
+  },
+  {
+    "id": "grid-4x5",
+    "name": "Grid 4 x 5",
+    "slots": 20
+  },
+  {
+    "id": "grid-4x5-info",
+    "name": "Grid 4 x 5 + EXIF",
+    "slots": 20
+  },
+  {
+    "id": "grid-5x1",
+    "name": "Grid 5 x 1",
+    "slots": 5
+  },
+  {
+    "id": "grid-5x1-info",
+    "name": "Grid 5 x 1 + EXIF",
+    "slots": 5
+  },
+  {
+    "id": "grid-5x2",
+    "name": "Grid 5 x 2",
+    "slots": 10
+  },
+  {
+    "id": "grid-5x2-info",
+    "name": "Grid 5 x 2 + EXIF",
+    "slots": 10
+  },
+  {
+    "id": "grid-5x3",
+    "name": "Grid 5 x 3",
+    "slots": 15
+  },
+  {
+    "id": "grid-5x3-info",
+    "name": "Grid 5 x 3 + EXIF",
+    "slots": 15
+  },
+  {
+    "id": "grid-5x4",
+    "name": "Grid 5 x 4",
+    "slots": 20
+  },
+  {
+    "id": "grid-5x4-info",
+    "name": "Grid 5 x 4 + EXIF",
+    "slots": 20
+  },
+  {
+    "id": "grid-5x5",
+    "name": "Grid 5 x 5",
+    "slots": 25
+  },
+  {
+    "id": "grid-5x5-info",
+    "name": "Grid 5 x 5 + EXIF",
+    "slots": 25
+  },
+  {
+    "id": "grid-2x1-wide",
+    "name": "Grid 2x1 Wide",
+    "slots": 2
+  },
+  {
+    "id": "grid-2x1-tall",
+    "name": "Grid 2x1 Tall",
+    "slots": 2
+  },
+  {
+    "id": "grid-2x1-wide-info",
+    "name": "Grid 2x1 Wide + EXIF",
+    "slots": 2
+  },
+  {
+    "id": "grid-3x1-wide",
+    "name": "Grid 3x1 Wide",
+    "slots": 3
+  },
+  {
+    "id": "grid-3x1-tall",
+    "name": "Grid 3x1 Tall",
+    "slots": 3
+  },
+  {
+    "id": "grid-3x1-wide-info",
+    "name": "Grid 3x1 Wide + EXIF",
+    "slots": 3
+  },
+  {
+    "id": "grid-4x1-wide",
+    "name": "Grid 4x1 Wide",
+    "slots": 4
+  },
+  {
+    "id": "grid-4x1-tall",
+    "name": "Grid 4x1 Tall",
+    "slots": 4
+  },
+  {
+    "id": "grid-4x1-wide-info",
+    "name": "Grid 4x1 Wide + EXIF",
+    "slots": 4
+  },
+  {
+    "id": "grid-2x2-wide",
+    "name": "Grid 2x2 Wide",
+    "slots": 4
+  },
+  {
+    "id": "grid-2x2-tall",
+    "name": "Grid 2x2 Tall",
+    "slots": 4
+  },
+  {
+    "id": "grid-2x2-wide-info",
+    "name": "Grid 2x2 Wide + EXIF",
+    "slots": 4
+  },
+  {
+    "id": "grid-3x2-wide",
+    "name": "Grid 3x2 Wide",
+    "slots": 6
+  },
+  {
+    "id": "grid-3x2-tall",
+    "name": "Grid 3x2 Tall",
+    "slots": 6
+  },
+  {
+    "id": "grid-3x2-wide-info",
+    "name": "Grid 3x2 Wide + EXIF",
+    "slots": 6
+  },
+  {
+    "id": "grid-3x3-wide",
+    "name": "Grid 3x3 Wide",
+    "slots": 9
+  },
+  {
+    "id": "grid-3x3-tall",
+    "name": "Grid 3x3 Tall",
+    "slots": 9
+  },
+  {
+    "id": "grid-3x3-wide-info",
+    "name": "Grid 3x3 Wide + EXIF",
+    "slots": 9
+  },
+  {
+    "id": "grid-4x2-wide",
+    "name": "Grid 4x2 Wide",
+    "slots": 8
+  },
+  {
+    "id": "grid-4x2-tall",
+    "name": "Grid 4x2 Tall",
+    "slots": 8
+  },
+  {
+    "id": "grid-4x2-wide-info",
+    "name": "Grid 4x2 Wide + EXIF",
+    "slots": 8
+  },
+  {
+    "id": "grid-5x2-wide",
+    "name": "Grid 5x2 Wide",
+    "slots": 10
+  },
+  {
+    "id": "grid-5x2-tall",
+    "name": "Grid 5x2 Tall",
+    "slots": 10
+  },
+  {
+    "id": "grid-5x2-wide-info",
+    "name": "Grid 5x2 Wide + EXIF",
+    "slots": 10
+  },
+  {
+    "id": "grid-4x3-wide",
+    "name": "Grid 4x3 Wide",
+    "slots": 12
+  },
+  {
+    "id": "grid-4x3-tall",
+    "name": "Grid 4x3 Tall",
+    "slots": 12
+  },
+  {
+    "id": "grid-4x3-wide-info",
+    "name": "Grid 4x3 Wide + EXIF",
+    "slots": 12
+  },
+  {
+    "id": "grid-4x4-wide",
+    "name": "Grid 4x4 Wide",
+    "slots": 16
+  },
+  {
+    "id": "grid-4x4-tall",
+    "name": "Grid 4x4 Tall",
+    "slots": 16
+  },
+  {
+    "id": "grid-4x4-wide-info",
+    "name": "Grid 4x4 Wide + EXIF",
+    "slots": 16
+  },
+  {
+    "id": "hero-1-2",
+    "name": "Hero + 2",
+    "slots": 2
+  },
+  {
+    "id": "hero-1-2-side",
+    "name": "Hero + 2 (left)",
+    "slots": 2
+  },
+  {
+    "id": "hero-1-2-info",
+    "name": "Hero + 2 + EXIF",
+    "slots": 2
+  },
+  {
+    "id": "hero-1-4",
+    "name": "Hero + 4",
+    "slots": 3
+  },
+  {
+    "id": "hero-1-4-side",
+    "name": "Hero + 4 (left)",
+    "slots": 3
+  },
+  {
+    "id": "hero-1-4-info",
+    "name": "Hero + 4 + EXIF",
+    "slots": 3
+  },
+  {
+    "id": "hero-1-6",
+    "name": "Hero + 6",
+    "slots": 4
+  },
+  {
+    "id": "hero-1-6-side",
+    "name": "Hero + 6 (left)",
+    "slots": 4
+  },
+  {
+    "id": "hero-1-6-info",
+    "name": "Hero + 6 + EXIF",
+    "slots": 4
+  },
+  {
+    "id": "hero-1-8",
+    "name": "Hero + 8",
+    "slots": 5
+  },
+  {
+    "id": "hero-1-8-side",
+    "name": "Hero + 8 (left)",
+    "slots": 5
+  },
+  {
+    "id": "hero-1-8-info",
+    "name": "Hero + 8 + EXIF",
+    "slots": 5
+  },
+  {
+    "id": "strip-h2",
+    "name": "Horizontal Strip 2",
+    "slots": 2
+  },
+  {
+    "id": "strip-v2",
+    "name": "Vertical Strip 2",
+    "slots": 2
+  },
+  {
+    "id": "strip-h3",
+    "name": "Horizontal Strip 3",
+    "slots": 3
+  },
+  {
+    "id": "strip-v3",
+    "name": "Vertical Strip 3",
+    "slots": 3
+  },
+  {
+    "id": "strip-h4",
+    "name": "Horizontal Strip 4",
+    "slots": 4
+  },
+  {
+    "id": "strip-v4",
+    "name": "Vertical Strip 4",
+    "slots": 4
+  },
+  {
+    "id": "strip-h5",
+    "name": "Horizontal Strip 5",
+    "slots": 5
+  },
+  {
+    "id": "strip-v5",
+    "name": "Vertical Strip 5",
+    "slots": 5
+  },
+  {
+    "id": "strip-h6",
+    "name": "Horizontal Strip 6",
+    "slots": 6
+  },
+  {
+    "id": "strip-v6",
+    "name": "Vertical Strip 6",
+    "slots": 6
+  },
+  {
+    "id": "hero-quad-6",
+    "name": "Hero Quad 6",
+    "slots": 6
+  },
+  {
+    "id": "hero-quad-6-info",
+    "name": "Hero Quad 6 + EXIF",
+    "slots": 6
+  },
+  {
+    "id": "split-2-diag",
+    "name": "Diagonal Split 2",
+    "slots": 2
+  },
+  {
+    "id": "pyramid-6",
+    "name": "Pyramid 6",
+    "slots": 6
+  }
+]

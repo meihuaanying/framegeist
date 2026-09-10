@@ -145,4 +145,15 @@ for (const f of readdirSync(OUT)) {
 for (const l of LAYOUTS) {
   writeFileSync(join(OUT, `${l.meta.id}.json`), JSON.stringify(l, null, 2) + "\n");
 }
-console.log(`generated ${LAYOUTS.length} layouts`);
+
+// Mirror layouts + manifest into web/ (page-relative, self-contained dist).
+mkdirSync(join("web", "layouts"), { recursive: true });
+for (const l of LAYOUTS) {
+  writeFileSync(join("web/layouts", `${l.meta.id}.json`), JSON.stringify(l, null, 2) + "\n");
+}
+writeFileSync(
+  join("web", "layouts.json"),
+  JSON.stringify(LAYOUTS.map((l) => ({ id: l.meta.id, name: l.meta.name, slots: l.meta.slots })), null, 2) + "\n",
+);
+
+console.log(`generated ${LAYOUTS.length} layouts + web/layouts.json mirror`);

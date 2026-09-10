@@ -85,7 +85,8 @@ pub fn render_collage(
 
         if layout.info_bar.enabled {
             if let Some(font) = &font {
-                let info = probe_exif(photos[i])?;
+                let mut info = probe_exif(photos[i])?;
+                crate::render::apply_model_map(&mut info, &opts.model_map);
                 let model = info
                     .get("model_pretty")
                     .unwrap_or_else(|| "Unknown".to_string());

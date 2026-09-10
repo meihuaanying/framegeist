@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use std::io::Write as _;
 use std::process::ExitCode;
 
 use clap::Parser;
@@ -50,12 +51,32 @@ enum Cmd {
         #[arg(long = "format", default_value = "jpeg")]
         format: String,
     },
+    /// Export a template as a portable .fgt package (PRD E1).
+    TemplateExport {
+        #[arg(long = "template")]
+        template: String,
+        #[arg(short, long)]
+        output: PathBuf,
+    },
+    /// Import a .fgt package; rejects anything failing sandbox validation (PRD E2).
+    TemplateImport {
+        file: PathBuf,
+        #[arg(long = "dir", default_value = "templates")]
+        dir: PathBuf,
+        #[arg(long)]
+        force: bool,
+    },
     /// Print EXIF metadata of a photo as JSON.
     Probe { photo: PathBuf },
     /// List built-in templates.
     Templates,
     /// Compute sha256 of an output file (golden regression helper).
     Hash { file: PathBuf },
+    /// Decode an image and hash its RGBA pixels (cross-end pixel gate, PRD N2).
+    PixelHash { file: PathBuf },
+    /// Decode two images and report the ratio of differing RGBA pixels
+    /// (PRD N2 gate: ratio <= 0.1% passes).
+    PixelDiff { a: PathBuf, b: PathBuf },
 }
 
 fn find_template_dir() -> PathBuf {
@@ -158,6 +179,17 @@ fn resolve_layout(spec: &str) -> Result<framegeist_core::Layout, Error> {
     })
 }
 
+fn build_opts(args: &Args, format: OutputFormat, preview: bool) -> Result<RenderOptions, Error> {
+    let assets_dir = args.assets_dir.clone();
+    Ok(RenderOptions {
+        format,
+        sampling: if preview { Sampling::Preview } else { Sampling::Full },
+        assets_dir: Some(assets_dir.clone()),
+        model_map: framegeist_core::load_model_map(&assets_dir)?,
+        ..RenderOptions::default()
+    })
+}
+
 fn run(args: &Args) -> Result<(), Error> {
     match &args.cmd {
         Cmd::Render {
@@ -169,12 +201,7 @@ fn run(args: &Args) -> Result<(), Error> {
         } => {
             let (tpl, _src) = resolve_template(template)?;
             let bytes = std::fs::read(photo)?;
-            let opts = RenderOptions {
-                format: parse_format(format)?,
-                sampling: if *preview { Sampling::Preview } else { Sampling::Full },
-                assets_dir: Some(args.assets_dir.clone()),
-                ..RenderOptions::default()
-            };
+            let opts = build_opts(args, parse_format(format)?, *preview)?;
             let out = render(&bytes, &tpl, &opts)?;
             if output.exists() {
                 return Err(Error::Io(std::io::Error::other(format!(
@@ -195,12 +222,7 @@ fn run(args: &Args) -> Result<(), Error> {
             format,
         } => {
             let (tpl, _src) = resolve_template(template)?;
-            let opts = RenderOptions {
-                format: parse_format(format)?,
-                sampling: Sampling::Full,
-                assets_dir: Some(args.assets_dir.clone()),
-                ..RenderOptions::default()
-            };
+            let opts = build_opts(args, parse_format(format)?, false)?;
             std::fs::create_dir_all(output)?;
             let mut done = 0usize;
             for photo in photo_files(dir)? {
@@ -240,12 +262,7 @@ fn run(args: &Args) -> Result<(), Error> {
                 return Err(Error::Image("collage needs photo arguments".into()));
             }
             let lay = resolve_layout(layout)?;
-            let opts = RenderOptions {
-                format: parse_format(format)?,
-                sampling: Sampling::Full,
-                assets_dir: Some(args.assets_dir.clone()),
-                ..RenderOptions::default()
-            };
+            let opts = build_opts(args, parse_format(format)?, false)?;
             let mut loaded = Vec::new();
             for p in photos {
                 loaded.push(std::fs::read(p)?);
@@ -262,6 +279,65 @@ fn run(args: &Args) -> Result<(), Error> {
                 std::fs::create_dir_all(parent)?;
             }
             std::fs::write(output, out)?;
+            Ok(())
+        }
+        Cmd::TemplateExport { template, output } => {
+            let (tpl, src) = resolve_template(template)?;
+            if output.exists() {
+                return Err(Error::Io(std::io::Error::other(format!(
+                    "refusing to overwrite existing file: {}",
+                    output.display()
+                ))));
+            }
+            if let Some(parent) = output.parent() {
+                std::fs::create_dir_all(parent)?;
+            }
+            let file = std::fs::File::create(output)?;
+            let mut zip = zip::ZipWriter::new(file);
+            let opts: zip::write::FileOptions<'_, ()> =
+                zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Deflated);
+            zip.start_file("manifest.json", opts).map_err(|e| Error::Encode(e.to_string()))?;
+            zip.write_all(
+                serde_json::to_string_pretty(&serde_json::json!({
+                    "formatVersion": 1,
+                    "kind": "framegeist-template",
+                    "templateId": tpl.meta.id,
+                }))
+                .map_err(|e| Error::TemplateJson(e.to_string()))?
+                .as_bytes(),
+            )?;
+            zip.start_file("template.json", opts).map_err(|e| Error::Encode(e.to_string()))?;
+            let raw = std::fs::read(&src)?;
+            zip.write_all(&raw)?;
+            zip.finish().map_err(|e| Error::Encode(e.to_string()))?;
+            Ok(())
+        }
+        Cmd::TemplateImport { file, dir, force } => {
+            let f = std::fs::File::open(file)?;
+            let mut zip = zip::ZipArchive::new(f)
+                .map_err(|e| Error::TemplateJson(format!("not a valid .fgt zip: {e}")))?;
+            let raw = {
+                let mut entry = zip
+                    .by_name("template.json")
+                    .map_err(|e| Error::TemplateJson(format!(".fgt missing template.json: {e}")))?;
+                let mut buf = Vec::new();
+                std::io::Read::read_to_end(&mut entry, &mut buf)?;
+                buf
+            };
+            // Mandatory C2 sandbox + schema validation BEFORE anything is
+            // written to disk (PRD E2); errors are field-level.
+            let tpl = load_template(&raw)?;
+            let target = dir.join(format!("{}.json", tpl.meta.id));
+            if target.exists() && !force {
+                return Err(Error::TemplateJson(format!(
+                    "template id {:?} already exists at {} (use --force to replace)",
+                    tpl.meta.id,
+                    target.display()
+                )));
+            }
+            std::fs::create_dir_all(dir)?;
+            std::fs::write(&target, &raw)?;
+            println!("imported {} -> {}", tpl.meta.id, target.display());
             Ok(())
         }
         Cmd::Probe { photo } => {
@@ -287,6 +363,38 @@ fn run(args: &Args) -> Result<(), Error> {
             let bytes = std::fs::read(file)?;
             let digest = Sha256::digest(&bytes);
             println!("{}", hex::encode(digest));
+            Ok(())
+        }
+        Cmd::PixelHash { file } => {
+            let bytes = std::fs::read(file)?;
+            let img = image::load_from_memory(&bytes)
+                .map_err(|e| Error::Image(e.to_string()))?
+                .to_rgba8();
+            let digest = Sha256::digest(img.as_raw());
+            println!("{}", hex::encode(digest));
+            Ok(())
+        }
+        Cmd::PixelDiff { a, b } => {
+            let ia = image::load_from_memory(&std::fs::read(a)?)
+                .map_err(|e| Error::Image(e.to_string()))?
+                .to_rgba8();
+            let ib = image::load_from_memory(&std::fs::read(b)?)
+                .map_err(|e| Error::Image(e.to_string()))?
+                .to_rgba8();
+            if ia.dimensions() != ib.dimensions() {
+                let (aw, ah) = ia.dimensions();
+                let (bw, bh) = ib.dimensions();
+                println!("mismatched-dimensions {aw}x{ah} vs {bw}x{bh}");
+                return Ok(());
+            }
+            let total = ia.as_raw().len() / 4;
+            let mut diff = 0usize;
+            for (pa, pb) in ia.as_raw().as_chunks::<4>().0.iter().zip(ib.as_raw().as_chunks::<4>().0.iter()) {
+                if pa[..3] != pb[..3] {
+                    diff += 1;
+                }
+            }
+            println!("diff={diff} total={total} ratio={:.6}", diff as f64 / total.max(1) as f64);
             Ok(())
         }
     }

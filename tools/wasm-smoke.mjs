@@ -1,6 +1,6 @@
 // Smoke test: WASM engine renders identically to the CLI (PRD N2 mini-gate).
 // Usage: node tools/wasm-smoke.mjs
-import { readFile, rm } from "node:fs/promises";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -45,8 +45,46 @@ for (const id of templateIds) {
   console.log(`  wasm ${outBytes.length}B ${a.slice(0, 16)}…`);
   console.log(`  cli  ${cliBytes.length}B ${b.slice(0, 16)}…`);
 }
+
+// collage pixel-identity (PRD C5/N2): cross-end renders may differ in a
+// handful of resize rounding pixels, so the gate is DECODED PIXEL identity.
+{
+  const layoutJson = await readFile(join(ROOT, "templates/layouts/grid-2x2-info.json"), "utf8");
+  const photoFiles = [
+    join(ROOT, "templates/assets/test-photos/sample-landscape.jpg"),
+    join(ROOT, "templates/assets/test-photos/sample-portrait.jpg"),
+    join(ROOT, "templates/assets/test-photos/sample-square.jpg"),
+    join(ROOT, "templates/assets/test-photos/sample-noexif.png"),
+  ];
+  const photos = await Promise.all(photoFiles.map((p) => readFile(p)));
+  const jsPhotos = photos.map((p) => new Uint8Array(p));
+  const outBytes = Buffer.from(engine.render_collage(jsPhotos, layoutJson, "jpeg", false));
+  const outPath = join(process.env.TEMP ?? "/tmp", "fg-smoke-collage.jpg");
+  await rm(outPath, { force: true });
+  await writeFile(outPath, outBytes);
+  const cliPath = join(process.env.TEMP ?? "/tmp", "fg-smoke-collage-cli.jpg");
+  await rm(cliPath, { force: true });
+  execFileSync(engineCli, [
+    "collage",
+    ...photoFiles,
+    "--layout", "grid-2x2-info",
+    "-o", cliPath,
+  ], { cwd: ROOT });
+  const pix = (f) =>
+    execFileSync(engineCli, ["pixel-hash", f], { cwd: ROOT }).toString().trim();
+  const diffOut = execFileSync(engineCli, ["pixel-diff", outPath, cliPath], { cwd: ROOT }).toString().trim();
+  const ratio = Number(diffOut.match(/ratio=([0-9.]+)/)?.[1] ?? 1);
+  const ok = ratio <= 0.001;
+  if (!ok) failures++;
+  console.log(`${ok ? "PASS" : "FAIL"} collage grid-2x2-info (pixel ratio ${ratio} <= 0.001, PRD N2)`);
+  console.log(`  wasm ${outBytes.length}B`);
+  console.log(`  cli  ${cliBytesLen(cliPath)}B`);
+}
+function cliBytesLen(f) {
+  return require("fs").statSync(f).size;
+}
 if (failures > 0) {
   console.error(`${failures} mismatch(es): WASM render diverges from CLI`);
   process.exit(1);
 }
-console.log("wasm smoke: WASM renders byte-identical to CLI");
+console.log("wasm smoke: frames byte-identical, collage within PRD N2 pixel gate");

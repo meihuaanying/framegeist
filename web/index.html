@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FrameGeist · 框灵</title>
+<link rel="manifest" href="manifest.webmanifest">
 <style>
   :root { color-scheme: light; }
   body {
@@ -24,7 +25,7 @@
   header small { color: #777; }
   main {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 300px 1fr;
     gap: 16px;
     padding: 16px;
     max-width: 1400px;
@@ -65,6 +66,8 @@
     font-size: 12px;
     color: #555;
     white-space: pre-wrap;
+    max-height: 160px;
+    overflow: auto;
   }
   button {
     padding: 8px 14px;
@@ -75,64 +78,93 @@
   }
   button:disabled { opacity: .5; cursor: default; }
   #status { font-size: 12px; color: #888; }
+  .mode-row { display: flex; gap: 8px; }
+  .mode-row button { flex: 1; }
+  .mode-row button.on { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  #collageControls, #frameControls { display: flex; flex-direction: column; gap: 10px; }
+  #updateBox { font-size: 12px; background: #fffbe8; border: 1px solid #e8d98a; border-radius: 6px; padding: 8px 10px; display: none; }
 </style>
 </head>
 <body>
 <header>
   <h1>FrameGeist · 框灵</h1>
-  <small>照片全程在本地处理，不上传任何服务器（G1�?/small>
-  <span id="status">loading engine�?/span>
+  <small>照片全程在本地处理，不上传任何服务器（G1）· 离线可用（G4）</small>
+  <span id="status">loading engine…</span>
 </header>
 <main>
   <section id="controls">
-    <div id="drop">拖入照片，或
-      <input type="file" id="file" accept="image/*">
+    <div class="mode-row">
+      <button id="modeFrame" class="on">边框模板</button>
+      <button id="modeCollage">拼图</button>
     </div>
-    <label>模板
-      <select id="template" disabled><option>loading�?/option></select>
-    </label>
-    <label><input type="checkbox" id="preview" checked> 快速预览采�?/label>
+    <div id="drop">拖入照片（拼图模式可多选），
+      <input type="file" id="file" accept="image/*" multiple>
+    </div>
+    <div id="frameControls">
+      <label>模板
+        <select id="template" disabled><option>loading…</option></select>
+      </label>
+    </div>
+    <div id="collageControls" style="display:none">
+      <label>布局
+        <select id="layout" disabled><option>loading…</option></select>
+      </label>
+    </div>
+    <label><input type="checkbox" id="preview" checked> 快速预览采样</label>
     <button id="renderBtn" disabled>渲染</button>
     <button id="exportBtn" disabled>导出 JPEG</button>
+    <button id="updateBtn">检查更新</button>
+    <div id="updateBox"></div>
     <pre id="exif">EXIF: -</pre>
   </section>
-  <section id="stage"><span style="color:#aaa">拖入一张照片开�?/span></section>
+  <section id="stage"><span style="color:#aaa">拖入一张照片开始</span></section>
 </main>
 <script type="module">
   import init, { Engine } from "./pkg/framegeist_wasm.js";
-  const BASE = new URL(".", document.baseURI).href;
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
 
   const $ = (id) => document.getElementById(id);
   const status = $("status");
   const stage = $("stage");
   let engine = null;
-  let templates = [];
-  let photoBytes = null;
+  let mode = "frame";
+  let photos = [];
   let lastRender = null;
 
-  status.textContent = "loading wasm�?;
+  const BASE = new URL(".", document.baseURI).href;
+
+  status.textContent = "loading wasm…";
   await init("./pkg/framegeist_wasm_bg.wasm");
 
   const fontRes = await fetch(BASE + "templates/fonts/JetBrainsMono-Regular.ttf");
   engine = new Engine(["JetBrains Mono"], [new Uint8Array(await fontRes.arrayBuffer())]);
 
-  const manifest = await (await fetch(BASE + "templates.json")).json();
-  templates = manifest;
-  const sel = $("template");
-  for (const t of templates) {
-    const opt = document.createElement("option");
-    opt.value = t.id;
-    opt.textContent = `${t.category} · ${t.name}`;
-    sel.appendChild(opt);
-  }
-  sel.disabled = false;
+  const fillSelect = (sel, items, fmt) => {
+    for (const t of items) {
+      const opt = document.createElement("option");
+      opt.value = t.id;
+      opt.textContent = fmt(t);
+      sel.appendChild(opt);
+    }
+    sel.disabled = false;
+  };
+  fillSelect($("template"), await (await fetch(BASE + "templates.json")).json(),
+    (t) => `${t.category} · ${t.name}`);
+  fillSelect($("layout"), await (await fetch(BASE + "layouts.json")).json(),
+    (l) => `${l.name} (${l.slots}格)`);
+
   $("renderBtn").disabled = false;
   status.textContent = "ready";
 
-  async function loadPhoto(file) {
-    photoBytes = new Uint8Array(await file.arrayBuffer());
+  async function loadPhoto(files) {
+    photos = [];
+    const names = [];
+    for (const f of files) {
+      photos.push(new Uint8Array(await f.arrayBuffer()));
+      names.push(f.name);
+    }
     try {
-      const exif = JSON.parse(engine.probe_exif(photoBytes));
+      const exif = JSON.parse(engine.probe_exif(photos[0]));
       $("exif").textContent = "EXIF: " + JSON.stringify(exif, null, 1);
     } catch (e) {
       $("exif").textContent = "EXIF: probe failed " + e;
@@ -142,13 +174,18 @@
   }
 
   async function renderNow() {
-    if (!photoBytes) return;
-    const id = $("template").value;
-    status.textContent = "rendering�?;
-    const tpl = await (await fetch(BASE + `templates/${id}.json`)).text();
+    if (!photos.length) return;
+    status.textContent = "rendering…";
     const t0 = performance.now();
     try {
-      const out = engine.render(photoBytes, tpl, "jpeg", $("preview").checked);
+      let out;
+      if (mode === "frame") {
+        const tpl = await (await fetch(BASE + `templates/${$("template").value}.json`)).text();
+        out = engine.render(photos[0], tpl, "jpeg", $("preview").checked);
+      } else {
+        const lay = await (await fetch(BASE + `layouts/${$("layout").value}.json`)).text();
+        out = engine.render_collage(photos, lay, "jpeg", $("preview").checked);
+      }
       const ms = (performance.now() - t0).toFixed(0);
       lastRender = out;
       const blob = new Blob([out], { type: "image/jpeg" });
@@ -159,19 +196,42 @@
       $("exportBtn").disabled = false;
       status.textContent = `done in ${ms} ms (${(out.length / 1024).toFixed(0)} KB)`;
     } catch (e) {
-      status.textContent = "render failed: " + e.message;
+      status.textContent = "render failed: " + (e.message || e);
     }
   }
 
+  function setMode(m) {
+    mode = m;
+    $("modeFrame").classList.toggle("on", m === "frame");
+    $("modeCollage").classList.toggle("on", m === "collage");
+    $("frameControls").style.display = m === "frame" ? "flex" : "none";
+    $("collageControls").style.display = m === "collage" ? "flex" : "none";
+  }
+  $("modeFrame").addEventListener("click", () => setMode("frame"));
+  $("modeCollage").addEventListener("click", () => setMode("collage"));
+
   $("renderBtn").addEventListener("click", renderNow);
   $("template").addEventListener("change", renderNow);
+  $("layout").addEventListener("change", renderNow);
   $("preview").addEventListener("change", renderNow);
   $("exportBtn").addEventListener("click", () => {
     if (!lastRender) return;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob([lastRender], { type: "image/jpeg" }));
-    a.download = `framegeist-${$("template").value}.jpg`;
+    a.download = `framegeist-${mode}-${(mode === "frame" ? $("template") : $("layout")).value}.jpg`;
     a.click();
+  });
+
+  $("updateBtn").addEventListener("click", async () => {
+    const box = $("updateBox");
+    box.style.display = "block";
+    box.textContent = "检查更新…";
+    try {
+      const rel = await (await fetch("https://api.github.com/repos/meihuaanying/framegeist/releases/latest")).json();
+      box.innerHTML = `最新版本 <b>${rel.tag_name}</b> · <a href="${rel.html_url}" target="_blank">查看发布</a>`;
+    } catch (e) {
+      box.textContent = "更新检查失败（离线？）";
+    }
   });
 
   const drop = $("drop");
@@ -180,11 +240,11 @@
   ["dragleave", "drop"].forEach((ev) =>
     drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
   drop.addEventListener("drop", (e) => {
-    const file = e.dataTransfer?.files?.[0];
-    if (file) loadPhoto(file);
+    const files = e.dataTransfer?.files;
+    if (files?.length) loadPhoto(files);
   });
   $("file").addEventListener("change", (e) => {
-    if (e.target.files?.[0]) loadPhoto(e.target.files[0]);
+    if (e.target.files?.length) loadPhoto(e.target.files);
   });
 </script>
 </body>

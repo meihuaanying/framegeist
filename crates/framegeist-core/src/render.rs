@@ -30,6 +30,7 @@ pub struct RenderOptions {
     pub sampling: Sampling,
     pub assets_dir: Option<PathBuf>,
     pub fonts: Option<crate::text::FontBook>,
+    pub model_map: Option<crate::model_map::ModelMap>,
     pub write_exif: bool,
     pub keep_gps: bool,
 }
@@ -41,8 +42,27 @@ impl Default for RenderOptions {
             sampling: Sampling::Full,
             assets_dir: None,
             fonts: None,
+            model_map: None,
             write_exif: true,
             keep_gps: false,
+        }
+    }
+}
+
+/// Load the optional model-map override from `<assets_dir>/model-map.json`.
+pub fn load_model_map(assets_dir: &std::path::Path) -> Result<Option<crate::model_map::ModelMap>> {
+    let path = assets_dir.join("model-map.json");
+    if !path.exists() {
+        return Ok(None);
+    }
+    let bytes = std::fs::read(&path)?;
+    Ok(Some(crate::model_map::ModelMap::from_json(&bytes)?))
+}
+
+pub(crate) fn apply_model_map(info: &mut ExifInfo, map: &Option<crate::model_map::ModelMap>) {
+    if let (Some(map), Some(model)) = (map, info.model.as_deref()) {
+        if let Some(pretty) = map.resolve(model) {
+            info.model_pretty = Some(pretty);
         }
     }
 }
@@ -316,7 +336,8 @@ pub fn render_rgba(
 ) -> Result<RgbaImage> {
     let img = image::load_from_memory(photo)?;
     let rgba = img.to_rgba8();
-    let info = probe_exif(photo)?;
+    let mut info = probe_exif(photo)?;
+    apply_model_map(&mut info, &opts.model_map);
     let geo = compute_geometry(template, &rgba);
     let filt = filter(opts.sampling);
     let mut canvas = build_canvas(&geo, &rgba, template, filt);

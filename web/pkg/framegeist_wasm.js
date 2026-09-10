@@ -15,6 +15,19 @@ export class Engine {
         wasm.__wbg_engine_free(ptr, 0);
     }
     /**
+     * Register an optional model-map override (PRD B5), JSON object of
+     * raw model code -> vendor-official name.
+     * @param {Uint8Array} json
+     */
+    load_model_map(json) {
+        const ptr0 = passArray8ToWasm0(json, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_load_model_map(this.__wbg_ptr, ptr0, len0);
+        if (ret[1]) {
+            throw takeFromExternrefTable0(ret[0]);
+        }
+    }
+    /**
      * Create an engine and register fonts by (family, bytes) pairs.
      * Family names follow the same normalization as the filesystem loader
      * (`JetBrains Mono` -> `jetbrainsmono`).
@@ -82,6 +95,26 @@ export class Engine {
         return takeFromExternrefTable0(ret[0]);
     }
     /**
+     * Render a collage: `photos` is a JS Array of Uint8Array, filled into
+     * the layout's cells in order (PRD C5/G2).
+     * @param {Array<any>} photos
+     * @param {string} layout_json
+     * @param {string} format
+     * @param {boolean} preview
+     * @returns {Uint8Array}
+     */
+    render_collage(photos, layout_json, format, preview) {
+        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * Validate a template JSON document. Returns field-level error text on
      * rejection (PRD C2).
      * @param {string} json
@@ -114,7 +147,15 @@ function __wbg_get_imports() {
         __wbg___wbindgen_throw_5d9e815e6fdf150f: function(arg0, arg1) {
             throw new Error(getStringFromWasm0(arg0, arg1));
         },
+        __wbg_get_unchecked_363572bdd397d473: function(arg0, arg1) {
+            const ret = arg0[arg1 >>> 0];
+            return ret;
+        },
         __wbg_length_31bdaf014f5fbde2: function(arg0) {
+            const ret = arg0.length;
+            return ret;
+        },
+        __wbg_length_4e1adc0d42e23620: function(arg0) {
             const ret = arg0.length;
             return ret;
         },
