@@ -22,7 +22,44 @@ FrameGeist（框灵）：免费开源照片边框/水印/拼图工具。一个 R
 - 本机 git 代理（127.0.0.1:7890）时断时续：`git -c "http.https://github.com/.proxy=" push`，失败重试或走 `gh api` Contents PUT。
 - CRLF 警告可忽略；误提交无关文件立即 `git rm --cached`。
 
-## v0.2.0 执行契约（2026-09-11 已完成 ✅）
+## v0.3.0 执行契约（2026-09-11 确认，一口气完成，中途不停）
+
+> 优先级仍为：PRD 红线 > 本文件 > 保守默认。遇未预见决策自主推进并记入 PRD Discoveries。
+
+### 用户确认的决策（三轮 grill）
+
+1. **禁紫**：全局移除紫色。采用知乎实采蓝系：`--accent-a #1772F6 → --accent-b #50C8FD`（蓝→浅蓝渐变），底 `#F8F8FA`、深灰字 `#373A40`、辅橙 `#FB6622`；深色模式同色系降亮。应用 + 官网 + favicon 全覆盖。
+2. **预览照片**：6 张（3 风光 + 3 建筑），来源 Met/Cleveland CC0 + picsum（已测可达），入仓并记 CREDITS；**按分类映射**（风光→film/minimal/technical，建筑→classic-white/gallery/magazine/frame-shell，游戏按主题选）；缩略图/样张分类轮换。新增 **640px 预览图**（web/previews/）供 Lightbox。
+3. **模板扩容 → 130 套**（63+67）：frameelf 对标 37（相机相框 8 / 手持 5 / 镜头图标 4 / 胶片加强 6 / 无边框 6 / 签名 4 / 壳体 4）+ 游戏 18（6 游戏 × 3）+ 开源灵感 12（frosted/gallery-noir/expo×3/card×3/instax/wordmark/postmark）；后续迭代 200+。全部走引擎校验 + CLI 真实样张 + 缩略图。
+4. **游戏主题**：使用对应游戏的设计语言原创视觉；名称 = 游戏名+元素名（中英双语 `meta.nameI18n`）；随包仅 **原创字标**（`@builtin/game/<slug>`，resvg 生成）+ 用户上传位；**禁止随包任何官方素材**；模板加"非官方"免责声明字段。
+5. **Logo/相框资产补全**：补品牌缺口（GoPro/Phase One/OM System 等可得即加）；**镜头系列徽章**（GM/L/S/Art/DG DN/XCD/XF，原创字标 + 自动识别 `exif.lens_series`）；**手持相机相框**与**机身轮廓增强**（原创矢量 → resvg 栅格化）；节庆素材本次不做。
+6. **修复 Logo 不显示的三个根因**：① 引擎 `@builtin/` 路径双重 `brand/` 拼接 bug；② Web/WASM 端由 UI 按需 `fetch(./brand/<slug>.png)` → `register_asset`（含 -light 变体）；③ 徽章覆盖扩大到全部适配分类；④ **E2E 增加徽章像素断言**（修我 0.2.0 只断言文字的漏洞）。
+7. **自动对比度**（全自动 + 可覆盖）：引擎对每个文本层采样文字区域背景平均亮度——保持模板色，若对比度 < 2.5:1 自动切黑/白较优者；支持 `color:"auto"`；品牌徽章按背景亮度自动选黑/白变体（`autoTint` 默认开）；用户手选颜色 < 3:1 时 UI 警告但不阻止。
+8. **Lightbox 双通道**：有照片时单击缩略图=应用；缩略图放大镜按钮=大图预览；无照片时单击=大图预览（含"应用"按钮、←/→、ESC）。
+9. **设置页**：顶栏齿轮 + `Ctrl+,` 打开对话框式面板；模块：导出默认值 / 文字与 Logo 默认值 / 外观与语言 / 隐私与元数据（GPS 默认关）/ 本地数据管理（逐项清空 + 存储占用统计）/ 关于与许可 / 桌面专有（保存方式可切、更新通道）。默认值影响新会话；存储 `fg-settings-v1`。
+10. **字体补两款**：Great Vibes（签名体）+ Ma Shan Zheng（中文书法，GB2312 子集），OFL；引擎字体共 11 款。
+11. **验收**：E2E 断言扩到 ≥30 项（新增：**无紫色扫描**、**徽章像素**、**自动对比度**、**Lightbox 交互**、**设置持久化**、130 套配额/双语名/游戏分类）；性能维持（启动 ≤2s、24MP 预览 ≤600ms/导出 ≤2s、60MP 预览 ≤1.5s/导出 ≤4s）。
+12. **发布 v0.3.0**：Release 含 CLI/桌面/模板包/update.json/NSIS；Pages 验证。
+
+### 任务分解（执行顺序）
+
+- **T-A 修 Logo 链路**：引擎路径 bug 修复（`@builtin/brand/x` → `assets_dir/brand/x.png`）+ 单元测试像素断言；UI `ensureBrandAssets(slugs)` 按需注册；模板生成器徽章覆盖扩展。
+- **T-B 配色替换**：web/styles.css + site/site.css + favicon + manifest 主题色；E2E 扫描无紫断言。
+- **T-C 自动对比度**：引擎实现（文本层对比度修正 + `auto` 色 + 徽章 autoTint）+ 单测；UI 手选色警告。
+- **T-D 照片与预览资产**：fetch 6 照片（Met/Cleveland/picsum + CREDITS）→ 分类映射；gen-samples 输出 samples(900)/thumbs(240)/previews(640) 三档 + web 镜像；Lightbox UI。
+- **T-E 设置页**：面板 UI + 全部模块 + 持久化 + 桌面保存方式切换（system dialog / downloads）。
+- **T-F 模板扩容 67 套**：gen-templates v2 分类/双语名/免责字段；gen-game-templates.mjs（6×3）；gen-frame-assets.mjs（手持/机身/胶片齿孔/节庆略/系列徽章/游戏字标）；新字体下载+子集；全部校验+样张+缩略图；配额断言 ≥130。
+- **T-G UI 补齐**：游戏分类 chip、系列徽章开关、Lightbox、品牌面板扩展、模板名双语、模板放大预览 hover。
+- **T-H 门禁**：cargo test/clippy/四 target/wasm smoke/E2E ≥30 断言/性能；黄金基线仅在语义变化时重生成（注明）。
+- **T-I 发布**：v0.3.0 bump → push → CI → tag → Release → Pages 验证。
+- **T-J 收尾**：桌面重启；PRD Discoveries + 本文件状态；报告截图归档 `docs/reports/v0.3.0/`。
+
+### 红线补充
+
+- 游戏模板**不得随包官方素材**（Logo/立绘/图标），只允许原创字标与用户上传；模板 meta 须含"非官方"声明。
+- 色彩禁用清单：`#a06bff #8b5cf6 #7c3aed #9b5cff` 及任何紫色系；E2E 扫描强制。
+
+
 
 > 结果存档：**23/23 E2E 门禁通过**（`tools/e2e-audit.mjs`），报告与截图在 `docs/reports/v0.2.0/`。
 > 交付：固定视口编辑器（缩放/平移/翻转）、NASA 公有领域演示图重渲染缩略图与样张、
@@ -33,7 +70,7 @@ FrameGeist（框灵）：免费开源照片边框/水印/拼图工具。一个 R
 > 排障记录：CDP 注入必须用绝对路径（相对路径触发 `NotReadableError`）；品牌图标在 Web/WASM
 > 端因无文件系统而留白属预期（UI 后续可直接 register_asset 注入）。
 
-<details><summary>原始任务清单（T-A … T-J）</summary>
+<details><summary>v0.2.0 历史任务清单（已完成，23/23 E2E 通过，见 PRD Discoveries）</summary>
 
 ### 用户确认的 20 项决策（全部已 grill）
 
