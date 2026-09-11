@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "id": "os-postmark-v1",
+    "name": "Postmark",
+    "nameI18n": {
+      "zh": "邮戳款",
+      "en": "Postmark"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "gallery"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.08,
+      "right": 0.14,
+      "bottom": 0.1,
+      "left": 0.14
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "stamp1",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.02,
+        "weight": 700,
+        "color": "#333333"
+      },
+      "content": [
+        {
+          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "fallback": "2026.09.12"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.065
+      }
+    },
+    {
+      "type": "text",
+      "id": "stamp2",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "weight": 400,
+        "color": "#777777"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm · f/{aperture}', exif)",
+          "fallback": "35mm · f/2.8"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.03
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.016
+      },
+      "anchor": "bottom-center",
+      "offset": {
+        "x": 0,
+        "y": -0.005
+      },
+      "tint": "dark"
+    }
+  ]
+}

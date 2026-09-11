@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "id": "os-expo-around-v1",
+    "name": "Expo Around",
+    "nameI18n": {
+      "zh": "展览环绕",
+      "en": "Expo Around"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "gallery"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.1,
+      "right": 0.1,
+      "bottom": 0.18,
+      "left": 0.1
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.022,
+        "weight": 600,
+        "color": "#1A1A1A"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.065
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.018
+      },
+      "anchor": "bottom-center",
+      "offset": {
+        "x": 0,
+        "y": -0.035
+      },
+      "tint": "dark"
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "weight": 400,
+        "color": "#777777"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.01
+      }
+    }
+  ]
+}

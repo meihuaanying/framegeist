@@ -4,7 +4,7 @@
 import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-const SHOTS = process.argv[2] ?? "docs/reports/v0.2.0";
+const SHOTS = process.argv[2] ?? "docs/reports/v0.3.0";
 mkdirSync(SHOTS, { recursive: true });
 
 import { resolve as pathResolve } from "node:path";
@@ -299,6 +299,106 @@ function makeFgt(jsonBuf) {
   end.writeUInt16LE(central.length, 8); end.writeUInt16LE(central.length, 10);
   end.writeUInt32LE(centralSize, 12); end.writeUInt32LE(offset, 16);
   return Buffer.concat([...parts, ...central, end]);
+}
+
+
+/* ================= v0.3.0 assertions ================= */
+
+/* 17. palette: no purple anywhere (files + runtime token) */
+{
+  const { readFileSync } = await import("node:fs");
+  const banned = ["#a06bff", "#8b5cf6", "#7c3aed", "#9b5cff", "#6e8bff", "160,107,255", "155,92,255"];
+  const files = ["web/styles.css", "site/site.css", "web/favicon.svg", "site/favicon.svg"];
+  let hits = [];
+  for (const f of files) {
+    const txt = readFileSync(f, "utf8").toLowerCase();
+    for (const b of banned) if (txt.includes(b)) hits.push(`${f}:${b}`);
+  }
+  check("palette: no purple in styles", hits.length === 0, hits.join(","));
+  const accent = await ev(`getComputedStyle(document.documentElement).getPropertyValue("--accent-a").trim()`);
+  check("palette: accent is zhihu blue", accent.toLowerCase() === "#1772f6", accent);
+}
+
+/* 18. library: 130 templates incl. game category + notice */
+{
+  const count = await ev(`window.__fg.state.templates.length`);
+  check("library: 130 templates", count === 130, String(count));
+  const hasGame = await ev(`window.__fg.state.templates.some(t => t.category === "game")`);
+  check("library: game category present", hasGame === true);
+  const chip = await ev(`[...document.querySelectorAll("#catChips button")].some(b => b.textContent.includes("游戏"))`);
+  check("library: game chip localized", chip === true);
+  const { readFileSync } = await import("node:fs");
+  const g = JSON.parse(readFileSync("templates/game-genshin-v1.json", "utf8"));
+  check("game: notice present", !!g.meta.notice && /Unofficial/i.test(g.meta.notice));
+  check("game: bilingual name", !!g.meta.nameI18n?.zh && !!g.meta.nameI18n?.en);
+}
+
+/* 19. badge pixels: logo toggle must change the render */
+{
+  await ev(`[...document.querySelectorAll("#catChips button")].find(b => b.textContent.includes("胶片") || b.textContent === "film").click()`);
+  await new Promise((r) => setTimeout(r, 300));
+  await ev(`document.querySelectorAll(".thumb")[0].click()`);
+  await waitLabel(30000);
+  const hash = () => ev(`(() => { const b = window.__fg.state.lastRender; let h = 0; for (let i = 0; i < b.length; i += 97) h = (h * 31 + b[i]) >>> 0; return h; })()`);
+  const withLogo = await hash();
+  await ev(`document.getElementById("brandShow").checked = false; document.getElementById("brandShow").dispatchEvent(new Event("change"))`);
+  await waitLabel(30000);
+  const withoutLogo = await hash();
+  check("brand: logo toggles real pixels", withLogo !== withoutLogo, `${withLogo} vs ${withoutLogo}`);
+  await ev(`document.getElementById("brandShow").checked = true; document.getElementById("brandShow").dispatchEvent(new Event("change"))`);
+  await waitLabel(30000);
+}
+
+/* 20. borderless auto-contrast template renders */
+{
+  const ok = await ev(`
+    (async () => {
+      const tpl = await (await fetch("./templates/borderless-v1.json")).text();
+      try {
+        const out = window.__fg.engine.render_with_overrides(window.__fg.state.photos[0].bytes, tpl, "jpeg", true, "", 0, false);
+        return out.length > 1000;
+      } catch (e) { return String(e); }
+    })()
+  `);
+  check("auto-contrast: borderless renders", ok === true, String(ok));
+}
+
+/* 21. lightbox: open, navigate, close */
+{
+  await ev(`document.querySelector(".thumb .zoom").click()`);
+  await new Promise((r) => setTimeout(r, 800));
+  const open = await ev(`!document.getElementById("lightbox").classList.contains("hidden")`);
+  check("lightbox: opens from magnifier", open === true);
+  const name1 = await ev(`document.getElementById("lbName").textContent`);
+  const imgReady = await ev(`(async () => { const i = document.getElementById("lbImg"); for (let k = 0; k < 40 && !i.src; k++) await new Promise(r => setTimeout(r, 100)); return !!i.src; })()`);
+  check("lightbox: preview image loads", imgReady === true);
+  await ev(`document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }))`);
+  await new Promise((r) => setTimeout(r, 500));
+  const name2 = await ev(`document.getElementById("lbName").textContent`);
+  check("lightbox: navigates", name1 !== name2, `${name1} -> ${name2}`);
+  await ev(`document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }))`);
+  const closed = await ev(`document.getElementById("lightbox").classList.contains("hidden")`);
+  check("lightbox: ESC closes", closed === true);
+  await shot("05-lightbox");
+}
+
+/* 22. settings: open, change, persist across reload */
+{
+  await ev(`document.getElementById("settingsBtn").click()`);
+  await new Promise((r) => setTimeout(r, 400));
+  const open = await ev(`!document.getElementById("settings").classList.contains("hidden")`);
+  check("settings: opens (gear)", open === true);
+  await ev(`const s = document.getElementById("setExportSize"); s.value = "2048"; s.dispatchEvent(new Event("change"))`);
+  const stored = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1")); null`);
+  const val = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1")).exportSize`);
+  check("settings: export size persists", val === "2048", String(val));
+  await ev(`document.getElementById("settingsClose").click()`);
+  await send("Page.reload");
+  await new Promise((r) => setTimeout(r, 7000));
+  const after = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1")).exportSize`);
+  check("settings: persists across reload", after === "2048", String(after));
+  await shot("06-settings");
+  await ev(`localStorage.setItem("fg-theme","dark")`);
 }
 
 ws.close();

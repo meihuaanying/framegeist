@@ -1,0 +1,50 @@
+{
+  "landscape-1.jpg": {
+    "title": "Twilight in the Wilderness",
+    "author": "Frederic Edwin Church (American, 1826–1900)",
+    "source": "https://clevelandart.org/art/1965.233",
+    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
+    "url": "https://openaccess-cdn.clevelandart.org/1965.233/1965.233_web.jpg",
+    "bytes": 245118
+  },
+  "landscape-2.jpg": {
+    "title": "Shepherds in a Landscape",
+    "author": "Giulio Campagnola (Italian, 1482–1515)",
+    "source": "https://clevelandart.org/art/1948.12",
+    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
+    "url": "https://openaccess-cdn.clevelandart.org/1948.12/1948.12_web.jpg",
+    "bytes": 867958
+  },
+  "landscape-3.jpg": {
+    "title": "Mountain river (Lorem Picsum #1015)",
+    "author": "Unsplash contributor via Lorem Picsum",
+    "source": "https://picsum.photos/id/1015/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1015/2400/1600.jpg",
+    "bytes": 651520
+  },
+  "architecture-1.jpg": {
+    "title": "Architecture",
+    "author": "Marie Bracquemond (French, 1840–1916)",
+    "source": "https://clevelandart.org/art/2023.165",
+    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
+    "url": "https://openaccess-cdn.clevelandart.org/2023.165/2023.165_web.jpg",
+    "bytes": 273230
+  },
+  "architecture-2.jpg": {
+    "title": "Gothic Church among Oaks",
+    "author": "Karl Friedrich Schinkel (German, 1781–1841)",
+    "source": "https://clevelandart.org/art/1940.1173",
+    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
+    "url": "https://openaccess-cdn.clevelandart.org/1940.1173/1940.1173_web.jpg",
+    "bytes": 569977
+  },
+  "architecture-3.jpg": {
+    "title": "City architecture (Lorem Picsum #1076)",
+    "author": "Unsplash contributor via Lorem Picsum",
+    "source": "https://picsum.photos/id/1076/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1076/1600/2400.jpg",
+    "bytes": 631571
+  }
+}

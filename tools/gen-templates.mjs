@@ -91,6 +91,7 @@ for (let i = 0; i < 8; i++) {
       extendCanvas({ top: pad, right: pad, bottom: padBottom, left: pad }, solid(bg)),
       [
         textLayer("title", "bottom-left", font(0.028, fg, 600), EXIF_INFO, { offset: { x: 0.02, y: -0.05 } }),
+        badge("brand", { attachTo: "title", height: 0.022 }),
         textLayer("params", "bottom-right", font(0.02, fg, 400), EXIF_PARAMS, { offset: { x: -0.02, y: -0.05 } }),
       ]
     )
@@ -140,6 +141,7 @@ for (let i = 0; i < 7; i++) {
       ),
       [
         textLayer("caption", "bottom-center", font(0.03, "#333333", 600), [item("exif.model_pretty", "FrameGeist")], { offset: { x: 0, y: -0.1 } }),
+        badge("brand", { attachTo: "caption", height: 0.02 }),
         textLayer("date", "bottom-center", font(0.02, "#777777", 400), [item("date('YYYY-MM-DD', exif.datetime)", "2026-09-09")], { offset: { x: 0, y: -0.05 } }),
       ]
     )
@@ -285,11 +287,10 @@ if (!existsSync(OUT)) {
   console.error(`missing ${OUT}/ directory; run from repo root`);
   process.exit(1);
 }
+const ownRe = /^(classic-white|film|polaroid|gallery|technical|magazine|minimal|frame-shell)-v\d+\.json$/;
 for (const f of readdirSync(OUT)) {
-  if (f.endsWith(".json") && f.includes("-v")) {
-    if (!TEMPLATES.some((t) => t.meta.id + ".json" === f)) {
-      rmSync(join(OUT, f));
-    }
+  if (ownRe.test(f) && !TEMPLATES.some((t) => t.meta.id + ".json" === f)) {
+    rmSync(join(OUT, f));
   }
 }
 // The three hand-written seed templates are preserved untouched.
@@ -302,7 +303,13 @@ const manifest = [];
 for (const f of readdirSync(OUT)) {
   if (!f.endsWith(".json")) continue;
   const raw = JSON.parse(await import("node:fs").then((m) => m.readFileSync(join(OUT, f), "utf8")));
-  manifest.push({ id: raw.meta.id, name: raw.meta.name, category: raw.meta.category });
+  manifest.push({
+    id: raw.meta.id,
+    name: raw.meta.name,
+    names: raw.meta.nameI18n ?? null,
+    notice: raw.meta.notice ?? null,
+    category: raw.meta.category,
+  });
 }
 manifest.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
 mkdirSync("web", { recursive: true });

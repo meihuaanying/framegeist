@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "id": "camera-frame-v5",
+    "name": "Camera Frame 5",
+    "nameI18n": {
+      "zh": "相机相框 5",
+      "en": "Camera Frame 5"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "frame-shell"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.09,
+      "right": 0.05,
+      "bottom": 0.16,
+      "left": 0.05
+    },
+    "background": {
+      "type": "solid",
+      "color": "#1E1408"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "strip-top",
+      "asset": "@builtin/frame/film-strip",
+      "size": {
+        "height": 0.022
+      },
+      "anchor": "top-center",
+      "offset": {
+        "x": 0,
+        "y": 0.012
+      },
+      "tint": "light"
+    },
+    {
+      "type": "image",
+      "id": "strip-bottom",
+      "asset": "@builtin/frame/film-strip",
+      "size": {
+        "height": 0.022
+      },
+      "anchor": "bottom-center",
+      "offset": {
+        "x": 0,
+        "y": -0.005
+      },
+      "tint": "light"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.026,
+        "weight": 600,
+        "color": "#FFD37F"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.02,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}-light",
+      "size": {
+        "height": 0.021
+      },
+      "anchor": "bottom-left",
+      "attachTo": "title",
+      "attachGap": 0.01
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.018,
+        "weight": 400,
+        "color": "#FFD37F"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": -0.02,
+        "y": -0.055
+      }
+    },
+    {
+      "type": "image",
+      "id": "series",
+      "asset": "@builtin/series/{exif.lens_series}",
+      "size": {
+        "height": 0.026
+      },
+      "anchor": "top-left",
+      "offset": {
+        "x": 0.02,
+        "y": 0.035
+      },
+      "tint": "light"
+    }
+  ]
+}

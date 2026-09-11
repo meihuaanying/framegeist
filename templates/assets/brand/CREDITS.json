@@ -47,43 +47,108 @@
   "wordmarks": [
     {
       "slug": "canon",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "CormorantGaramond-Regular.ttf"
     },
     {
       "slug": "ricoh",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "Inter-Regular.ttf"
     },
     {
       "slug": "sigma",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "SpaceGrotesk-Regular.ttf"
     },
     {
       "slug": "zeiss",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "Inter-Regular.ttf"
     },
     {
       "slug": "hasselblad",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "CormorantGaramond-Regular.ttf"
     },
     {
       "slug": "olympus",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "CormorantGaramond-Regular.ttf"
     },
     {
       "slug": "pentax",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "SpaceGrotesk-Regular.ttf"
     },
     {
       "slug": "tamron",
-      "kind": "wordmark",
+      "kind": "brand",
       "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "sony-gm",
+      "kind": "series",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "canon-l",
+      "kind": "series",
+      "font": "CormorantGaramond-Regular.ttf"
+    },
+    {
+      "slug": "nikon-s",
+      "kind": "series",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "sigma-art",
+      "kind": "series",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "sigma-dgdn",
+      "kind": "series",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "hasselblad-xcd",
+      "kind": "series",
+      "font": "Inter-Regular.ttf"
+    },
+    {
+      "slug": "fujifilm-xf",
+      "kind": "series",
+      "font": "Inter-Regular.ttf"
+    },
+    {
+      "slug": "genshin",
+      "kind": "game",
+      "font": "CormorantGaramond-Regular.ttf"
+    },
+    {
+      "slug": "zzz",
+      "kind": "game",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "honkai",
+      "kind": "game",
+      "font": "SpaceGrotesk-Regular.ttf"
+    },
+    {
+      "slug": "arknights",
+      "kind": "game",
+      "font": "Oswald-Regular.ttf"
+    },
+    {
+      "slug": "wwmeet",
+      "kind": "game",
+      "font": "MaShanZheng-Regular.ttf"
+    },
+    {
+      "slug": "wukong",
+      "kind": "game",
+      "font": "Oswald-Regular.ttf"
     }
   ]
 }

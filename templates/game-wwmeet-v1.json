@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "id": "game-wwmeet-v1",
+    "name": "Where Winds Meet · Hero Frame",
+    "nameI18n": {
+      "zh": "燕云十六声 · 主题边框",
+      "en": "Where Winds Meet · Hero Frame"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "game",
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners."
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.08,
+      "right": 0.05,
+      "bottom": 0.16,
+      "left": 0.05
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F4EFE6"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "game-mark",
+      "asset": "@builtin/game/wwmeet",
+      "size": {
+        "height": 0.045
+      },
+      "anchor": "top-left",
+      "offset": {
+        "x": 0.03,
+        "y": 0.035
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.027,
+        "weight": 600,
+        "color": "#2B2B2B"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.022
+      },
+      "anchor": "bottom-left",
+      "attachTo": "title",
+      "attachGap": 0.01
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.017,
+        "weight": 400,
+        "color": "#2B2B2B"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": -0.03,
+        "y": -0.055
+      }
+    },
+    {
+      "type": "text",
+      "id": "accent",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "weight": 500,
+        "color": "#B33A3A"
+      },
+      "content": [
+        {
+          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "fallback": "2026.09.12"
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": -0.095
+      }
+    }
+  ]
+}

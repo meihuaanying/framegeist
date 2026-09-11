@@ -75,6 +75,34 @@ pub fn lens_slug(lens: Option<&str>) -> Option<String> {
     lens.and_then(|l| lookup(l, LENS_MAP))
 }
 
+/// Resolve a lens SERIES badge slug (GM/L/S/Art/DG DN/XCD/XF) from LensModel.
+pub fn lens_series(lens: Option<&str>) -> Option<String> {
+    let l = lens?.to_ascii_lowercase();
+    let has = |needle: &str| l.contains(needle);
+    if has(" gm") || has("g master") {
+        return Some("sony-gm".into());
+    }
+    if has("dg dn") {
+        return Some("sigma-dgdn".into());
+    }
+    if has(" art") || l.contains("art ") {
+        return Some("sigma-art".into());
+    }
+    if has("xcd") {
+        return Some("hasselblad-xcd".into());
+    }
+    if has("xf") || has("xc") {
+        return Some("fujifilm-xf".into());
+    }
+    if has("l is") || has("l usm") || has(" l ") {
+        return Some("canon-l".into());
+    }
+    if l.ends_with(" s") || has(" s line") {
+        return Some("nikon-s".into());
+    }
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -97,5 +125,16 @@ mod tests {
         assert_eq!(lens_slug(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(), Some("nikon"));
         assert_eq!(lens_slug(Some("DG DN 35mm F1.4")).as_deref(), Some("sigma"));
         assert_eq!(lens_slug(Some("Noctilux-M 50mm")).as_deref(), Some("leica"));
+    }
+
+    #[test]
+    fn lens_series_resolves() {
+        assert_eq!(lens_series(Some("FE 35mm F1.4 GM")).as_deref(), Some("sony-gm"));
+        assert_eq!(lens_series(Some("RF24-70mm F2.8 L IS USM")).as_deref(), Some("canon-l"));
+        assert_eq!(lens_series(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(), Some("nikon-s"));
+        assert_eq!(lens_series(Some("35mm F1.4 DG DN")).as_deref(), Some("sigma-dgdn"));
+        assert_eq!(lens_series(Some("XF23mmF1.4 R LM WR")).as_deref(), Some("fujifilm-xf"));
+        assert_eq!(lens_series(Some("XCD 45mm F3.5")).as_deref(), Some("hasselblad-xcd"));
+        assert_eq!(lens_series(Some("Plain 50mm")).as_deref(), None);
     }
 }

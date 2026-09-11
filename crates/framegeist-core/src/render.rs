@@ -240,7 +240,7 @@ fn bg_plan(t: &Template, overrides: Option<&TemplateOverrides>) -> BgPlan {
 }
 
 /// Resolve image bytes for an asset path: in-memory map first, then
-/// `assets_dir` (builtin brand/@user/, package-relative `assets/`).
+/// `assets_dir` (builtin brand/game/lens/@user/package-relative `assets/`).
 #[allow(clippy::question_mark)]
 fn resolve_asset_bytes(opts: &RenderOptions, path: &str) -> Option<Vec<u8>> {
     if let Some(map) = &opts.assets {
@@ -249,22 +249,21 @@ fn resolve_asset_bytes(opts: &RenderOptions, path: &str) -> Option<Vec<u8>> {
         }
     }
     let dir = opts.assets_dir.as_ref()?;
-    let (base, rel) = if let Some(rel) = path.strip_prefix("@builtin/") {
-        (dir.join("brand"), rel.to_string())
-    } else if let Some(rel) = path.strip_prefix("@user/") {
-        (dir.join("user"), rel.to_string())
-    } else if let Some(rel) = path.strip_prefix("assets/") {
-        (dir.clone(), rel.to_string())
-    } else {
-        return None;
-    };
-    let candidate = base.join(&rel);
-    if candidate.is_file() {
-        return std::fs::read(candidate).ok();
-    }
-    let with_png = base.join(format!("{rel}.png"));
-    if with_png.is_file() {
-        return std::fs::read(with_png).ok();
+    // NOTE: rel keeps its sub-path ("brand/sony"); base must NOT add it again
+    // (v0.2.0 had a double "brand/brand/" bug that blanked every badge).
+    if let Some(rel) = path
+        .strip_prefix("@builtin/")
+        .or_else(|| path.strip_prefix("@user/"))
+        .or_else(|| path.strip_prefix("assets/"))
+    {
+        let candidate = dir.join(rel);
+        if candidate.is_file() {
+            return std::fs::read(candidate).ok();
+        }
+        let with_png = dir.join(format!("{rel}.png"));
+        if with_png.is_file() {
+            return std::fs::read(with_png).ok();
+        }
     }
     None
 }
@@ -390,6 +389,70 @@ fn expand_to_aspect(
     canvas
 }
 
+fn srgb_channel(u: u8) -> f32 {
+    let s = u as f32 / 255.0;
+    if s <= 0.04045 {
+        s / 12.92
+    } else {
+        ((s + 0.055) / 1.055).powf(2.4)
+    }
+}
+
+fn srgb_luminance(c: [u8; 3]) -> f32 {
+    0.2126 * srgb_channel(c[0]) + 0.7152 * srgb_channel(c[1]) + 0.0722 * srgb_channel(c[2])
+}
+
+fn contrast_ratio(l1: f32, l2: f32) -> f32 {
+    let (a, b) = if l1 > l2 { (l1, l2) } else { (l2, l1) };
+    (a + 0.05) / (b + 0.05)
+}
+
+/// Average relative luminance of a canvas region (transparent = white).
+fn region_luminance(img: &RgbaImage, x: i32, y: i32, w: u32, h: u32) -> f32 {
+    let (iw, ih) = img.dimensions();
+    let x0 = x.max(0).min(iw as i32 - 1);
+    let y0 = y.max(0).min(ih as i32 - 1);
+    let x1 = (x + w as i32).max(0).min(iw as i32);
+    let y1 = (y + h as i32).max(0).min(ih as i32);
+    if x1 <= x0 || y1 <= y0 {
+        return 1.0;
+    }
+    let mut sum = 0f64;
+    let mut n = 0f64;
+    for py in y0..y1 {
+        for px in x0..x1 {
+            let p = img.get_pixel(px as u32, py as u32).0;
+            let a = p[3] as f32 / 255.0;
+            let r = p[0] as f32 * a + 255.0 * (1.0 - a);
+            let g = p[1] as f32 * a + 255.0 * (1.0 - a);
+            let b = p[2] as f32 * a + 255.0 * (1.0 - a);
+            sum += srgb_luminance([r as u8, g as u8, b as u8]) as f64;
+            n += 1.0;
+        }
+    }
+    (sum / n.max(1.0)) as f32
+}
+
+/// Keep the preferred color when it has decent contrast; otherwise fall back
+/// to whichever of near-black/near-white reads better (v0.3.0 auto-contrast).
+fn adapt_text_color(preferred: [u8; 4], bg_lum: f32, force_auto: bool) -> [u8; 4] {
+    let dark = [17u8, 17, 17, 255];
+    let light = [255u8, 255, 255, 255];
+    if !force_auto {
+        let ratio = contrast_ratio(srgb_luminance([preferred[0], preferred[1], preferred[2]]), bg_lum);
+        if ratio >= 2.5 {
+            return preferred;
+        }
+    }
+    let dl = srgb_luminance([dark[0], dark[1], dark[2]]);
+    let ll = srgb_luminance([light[0], light[1], light[2]]);
+    if contrast_ratio(ll, bg_lum) >= contrast_ratio(dl, bg_lum) {
+        light
+    } else {
+        dark
+    }
+}
+
 fn text_lines(layer: &TextLayer, info: &ExifInfo) -> Vec<String> {
     layer
         .content
@@ -435,8 +498,11 @@ fn draw_text_layer(
     let font_scale = overrides.map(|o| o.font_size_scale()).unwrap_or(1.0);
     let size_px = (layer.font.size * font_scale * geo.photo_h as f64) as f32;
     let scale = PxScale::from(size_px);
-    let color = match overrides.and_then(|o| o.text_color.as_deref()) {
+    let manual = overrides.and_then(|o| o.text_color.as_deref());
+    let force_auto = manual.is_none() && layer.font.color.eq_ignore_ascii_case("auto");
+    let base_color = match manual {
         Some(c) => crate::template::parse_hex_color(c).unwrap_or([0, 0, 0, 255]),
+        None if force_auto => [17, 17, 17, 255],
         None => crate::template::parse_hex_color(&layer.font.color).unwrap_or([0, 0, 0, 255]),
     };
     let line_h = size_px * layer.line_height as f32;
@@ -496,6 +562,12 @@ fn draw_text_layer(
                 first_line_h: sizes[0].1,
             });
         }
+        let color = if manual.is_some() {
+            base_color
+        } else {
+            let bg = region_luminance(canvas, x.round() as i32, y.round() as i32, lw.ceil() as u32 + 2, sizes[i].1.ceil() as u32 + 2);
+            adapt_text_color(base_color, bg, force_auto)
+        };
         draw_text_mut(
             canvas,
             Rgba(color),
@@ -550,7 +622,6 @@ fn draw_image_layer(
     let scale = target_h.unwrap_or(0.03 * photo_h) / ih as f64;
     let tw = ((iw as f64) * scale).round().max(2.0) as u32;
     let th = ((ih as f64) * scale).round().max(2.0) as u32;
-    let fitted = image::imageops::resize(&rgba, tw, th, image::imageops::FilterType::Lanczos3);
 
     let (ix, iy) = if let Some(target_id) = &layer.attach_to {
         let Some(tl) = text_layouts.get(target_id) else {
@@ -585,6 +656,26 @@ fn draw_image_layer(
         };
         (x.round() as i32, y.round() as i32)
     };
+
+    // Built-in badges pick their black/white variant by local background
+    // luminance unless the template pins a tint (v0.3.0 autoTint).
+    let mut rgba = rgba;
+    let explicit = layer.tint.as_deref();
+    let is_builtin = path.starts_with("@builtin/") && !path.ends_with("-light");
+    if is_builtin && explicit != Some("light") && explicit != Some("dark") {
+        let bg = region_luminance(canvas, ix, iy, tw, th);
+        let want_light = bg < 0.5;
+        if want_light {
+            let light_path = format!("{path}-light");
+            if let Some(lb) = resolve_asset_bytes(opts, &light_path) {
+                if let Ok(li) = image::load_from_memory(&lb) {
+                    rgba = li.to_rgba8();
+                }
+            }
+        }
+    }
+
+    let fitted = image::imageops::resize(&rgba, tw, th, image::imageops::FilterType::Lanczos3);
 
     let opacity = layer.opacity.clamp(0.0, 1.0) as f32;
     for (x, y, p) in fitted.enumerate_pixels() {

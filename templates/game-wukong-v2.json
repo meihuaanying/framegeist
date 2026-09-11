@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "id": "game-wukong-v2",
+    "name": "Black Myth Wukong · Corner Mark",
+    "nameI18n": {
+      "zh": "黑神话悟空 · 极简角标",
+      "en": "Black Myth Wukong · Corner Mark"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "game",
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners."
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": {
+      "type": "none"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "game-mark",
+      "asset": "@builtin/game/wukong",
+      "size": {
+        "height": 0.035
+      },
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.025,
+        "y": -0.045
+      },
+      "opacity": 0.95
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.016,
+        "weight": 500,
+        "color": "auto"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": -0.025,
+        "y": -0.095
+      }
+    }
+  ]
+}

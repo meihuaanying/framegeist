@@ -49,8 +49,9 @@ export class Engine {
     /**
      * Render with user overrides JSON (camelCase; empty = none).
      * `max_edge`: 0 = full resolution, >0 = longest-edge cap (export presets).
+     * `keep_gps`: retain GPS tags in exported EXIF (default false, PRD B3).
      */
-    render_with_overrides(photo: Uint8Array, template_json: string, format: string, preview: boolean, overrides_json: string, max_edge: number): Uint8Array;
+    render_with_overrides(photo: Uint8Array, template_json: string, format: string, preview: boolean, overrides_json: string, max_edge: number, keep_gps: boolean): Uint8Array;
     /**
      * Validate a template JSON document (PRD C2). Field-level error text on
      * rejection, as the JSON error object.
@@ -73,7 +74,7 @@ export interface InitOutput {
     readonly engine_render: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly engine_render_collage: (a: number, b: any, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
     readonly engine_render_raw: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => [number, number, number];
-    readonly engine_render_with_overrides: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number) => [number, number, number];
+    readonly engine_render_with_overrides: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number) => [number, number, number];
     readonly engine_validate_template: (a: number, b: number, c: number) => [number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

@@ -8,7 +8,7 @@ import sys
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FONTS_DIR = os.path.join(REPO, "templates", "assets", "fonts")
 WEB_DIR = os.path.join(REPO, "web", "fonts", "engine")
-TARGETS = ["NotoSansSC-Regular.otf", "NotoSerifSC-Regular.otf"]
+TARGETS = ["NotoSansSC-Regular.otf", "NotoSerifSC-Regular.otf", "MaShanZheng-Regular.ttf"]
 
 
 def gb2312_level1() -> set:

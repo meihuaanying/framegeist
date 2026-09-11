@@ -25,7 +25,9 @@
 | `version` / `minEngineVersion` | semver `X.Y.Z`；引擎版本低于 `minEngineVersion` 时拒绝加载（C8） |
 | `author` | 署名，**强制保留且不可被下游删除**（E5） |
 | `license` | 枚举：`CC0-1.0 / CC-BY-4.0 / CC-BY-SA-4.0 / OFL-1.1 / Apache-2.0 / MIT` |
-| `category` | 枚举 8 分类：`classic-white / film / polaroid / gallery / technical / magazine / minimal / frame-shell` |
+| `category` | 枚举 9 分类：`classic-white / film / polaroid / gallery / technical / magazine / minimal / frame-shell / game` |
+| `nameI18n` | 可选 `{"zh": "…", "en": "…"}`，客户端按界面语言显示（缺失回退 `name`） |
+| `notice` | 可选免责声明（游戏模板使用："Unofficial fan-made design…"） |
 
 ## 3. `canvas`
 
@@ -75,7 +77,7 @@
 
 - `size`：相对**照片高度**的比例 `(0, 0.5]`
 - `family`：回退链（D4），按**字体目录内文件名**解析：`JetBrainsMono-Regular.ttf` → `jetbrainsmono`（小写、去空格/下划线、去 `-权重` 后缀）
-- `color`：`#RRGGBB[A]`
+- `color`：`#RRGGBB[A]`，或 `"auto"`（按文字区域背景亮度自动选黑/白）
 - `weight`：结构保留（100–900），骨架阶段单字重文件忽略
 
 ### 4.3 `content[]` 与字段表达式（C3）
@@ -144,7 +146,15 @@
 | `flipHorizontal` / `flipVertical` | bool | 照片像素翻转（在 EXIF 方向之后应用） |
 | `showLogo` | bool | 品牌图片层开关（见 4.5） |
 
-## 8. 品牌/镜头映射（v0.2.0）
+## 8. 品牌/镜头/系列映射（v0.2.0+）
+
+`exif.lens_series`（v0.3.0）：由 LensModel 推断系列徽章 slug（`sony-gm / canon-l / nikon-s / sigma-art / sigma-dgdn / hasselblad-xcd / fujifilm-xf`），模板可引用 `@builtin/series/{exif.lens_series}`，无匹配留白。
+
+**自动对比度（v0.3.0）**：所有文本层在绘制前采样文字区域背景平均亮度（WCAG 相对亮度）；模板色对比度 < 2.5:1 时自动切换为黑/白较优者；`color:"auto"` 强制自动；用户手动覆盖色不受自动修改（UI 提示对比风险）。
+
+**徽章自适应（v0.3.0）**：`@builtin/brand|series|game/*` 图片层默认 `tint:"auto"`——按落点区域背景亮度自动选用 `-light` 或深色变体；`tint:"light"|"dark"` 可固定。
+
+**@builtin/frame/\***：内置原创线稿素材（camera-body / phone-frame / film-strip，黑/浅两版，由 `tools/gen-frame-assets.mjs` 生成）。
 
 `exif.brand_slug`：Make 优先、Model 兜底，忽略大小写的子串匹配（sony/nikon/canon/fujifilm/leica/hasselblad/panasonic/ricoh/sigma/zeiss/dji/xiaomi/apple/olympus/pentax/epson/insta360/tamron）。
 `exif.lens_slug`：LensModel 前缀/子串（`FE `→sony、`XF/XC`→fujifilm、`RF/EF`→canon、`NIKKOR`→nikon、`DG DN`→sigma、`SUMMILUX/SUMMICRON/NOCTILUX/ELMAR`→leica、`LUMIX`→panasonic、`BATIS/TOUIT`→zeiss、`ZUIKO`→olympus、`TAMRON`、`HASSELBLAD`）。

@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "id": "game-honkai-v2",
+    "name": "Honkai · Corner Mark",
+    "nameI18n": {
+      "zh": "崩坏 · 极简角标",
+      "en": "Honkai · Corner Mark"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "game",
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners."
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": {
+      "type": "none"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "game-mark",
+      "asset": "@builtin/game/honkai",
+      "size": {
+        "height": 0.035
+      },
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.025,
+        "y": -0.045
+      },
+      "opacity": 0.95
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.016,
+        "weight": 500,
+        "color": "auto"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": -0.025,
+        "y": -0.095
+      }
+    }
+  ]
+}

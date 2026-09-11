@@ -5,6 +5,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
+const APP_VERSION = "0.3.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -39,6 +40,8 @@ const settings = loadJson(LS.settings, {
   aspect: "original", background: "default", bgColor: "#FFFFFF",
   flipH: false, flipV: false, showLogo: true, exportSize: "0",
   exportCustom: 3000, fontFamily: "",
+  defaultFontSize: 1, defaultUseColor: false, defaultTextColor: "#111111",
+  saveMode: "dialog", keepGps: false, channel: "stable",
 });
 
 function loadJson(key, fallback) {
@@ -119,7 +122,15 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if
 /* --------------------------------------------------------------- overrides */
 function overridesStore() { try { return JSON.parse(localStorage.getItem(LS.overrides) ?? "{}"); } catch { return {}; } }
 function loadOverrides(id) {
-  return overridesStore()[id] ?? { fontSizeScale: 1, paddingScale: 1, useColor: false, textColor: "#111111", fontFamily: "" };
+  const stored = overridesStore()[id] ?? {};
+  return {
+    fontSizeScale: settings.defaultFontSize ?? 1,
+    paddingScale: 1,
+    useColor: settings.defaultUseColor ?? false,
+    textColor: settings.defaultTextColor ?? "#111111",
+    fontFamily: settings.fontFamily ?? "",
+    ...stored,
+  };
 }
 function saveOverrides(id, o) {
   const store = overridesStore();
@@ -218,10 +229,24 @@ function effectiveTemplateJson() {
 }
 
 /* --------------------------------------------------------------- pickers */
-const CATS = ["classic-white", "film", "polaroid", "gallery", "technical", "magazine", "minimal", "frame-shell"];
+const CATS = ["classic-white", "film", "polaroid", "gallery", "technical", "magazine", "minimal", "frame-shell", "game"];
 let activeCat = "all";
 let templateQuery = "";
 let pickerMode = localStorage.getItem(LS.picker) || "compact";
+
+function filteredTemplates() {
+  const all = activeCat === "mine"
+    ? state.userTemplates.map((u) => ({ id: u.id, name: u.name, category: "user" }))
+    : state.templates;
+  return all.filter(
+    (x) => (activeCat === "all" || activeCat === "mine" || x.category === activeCat) &&
+      (!templateQuery || x.name.toLowerCase().includes(templateQuery) || x.id.includes(templateQuery))
+  );
+}
+
+function tplName(tpl) {
+  return tpl.names?.[currentLang()] ?? tpl.name ?? tpl.id;
+}
 
 function thumbSrc(tpl) {
   return state.userTemplates.some((u) => u.id === tpl.id) ? null : `./thumbs/${tpl.id}.jpg`;
@@ -238,16 +263,10 @@ function buildTemplatePicker() {
   };
   mk("all", t("chip.all"));
   mk("mine", t("chip.mine"));
-  for (const c of CATS) mk(c, c);
+  for (const c of CATS) mk(c, t("cat." + c));
 
-  const all = activeCat === "mine"
-    ? state.userTemplates.map((u) => ({ id: u.id, name: u.name, category: "user" }))
-    : state.templates;
-  const list = all.filter(
-    (x) => (activeCat === "all" || activeCat === "mine" || x.category === activeCat) &&
-      (!templateQuery || x.name.toLowerCase().includes(templateQuery) || x.id.includes(templateQuery))
-  );
-  $("tplCount").textContent = `${list.length} / ${all.length}`;
+  const list = filteredTemplates();
+  $("tplCount").textContent = `${list.length}`;
 
   const grid = $("templateGrid");
   grid.className = `grid${pickerMode === "large" ? " large" : ""}`;
@@ -263,10 +282,15 @@ function buildTemplatePicker() {
     const isUser = !src;
     cell.innerHTML = (src
       ? `<img loading="lazy" src="${src}" alt="">`
-      : `<div style="display:grid;place-items:center;height:100%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)));font-family:var(--font-display)">${tpl.name.slice(0, 14)}</div>`) +
+      : `<div style="display:grid;place-items:center;height:100%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)));font-family:var(--font-display)">${tplName(tpl).slice(0, 14)}</div>`) +
       (isUser ? `<span class="badge">${t("chip.mine")}</span>` : "") +
-      `<span class="tname">${tpl.name}</span>`;
-    cell.onclick = () => selectTemplate(tpl.id);
+      `<span class="tname">${tplName(tpl)}</span>` +
+      `<button class="zoom">⤢</button>`;
+    cell.onclick = (e) => {
+      if (e.target.classList.contains("zoom")) { e.stopPropagation(); openLightbox(tpl.id); return; }
+      if (state.photos.length) selectTemplate(tpl.id);
+      else openLightbox(tpl.id);
+    };
     grid.appendChild(cell);
     io.observe(cell);
   }
@@ -275,7 +299,7 @@ function buildTemplatePicker() {
 function updatePinned() {
   const tpl = state.templates.find((x) => x.id === state.templateId)
     || state.userTemplates.find((x) => x.id === state.templateId);
-  $("pinnedName").textContent = tpl ? tpl.name : "—";
+  $("pinnedName").textContent = tpl ? tplName(tpl) : "—";
   $("pinnedCat").textContent = tpl ? (tpl.category ?? "user") : "";
 }
 async function selectTemplate(id) {
@@ -562,6 +586,38 @@ async function ensureFont(family) {
 /* ----------------------------------------------------------------- render */
 function renderOverridesJson() { return buildOverridesJson(); }
 
+const builtinAssetCache = new Set();
+/// Fetch and register built-in image assets (@builtin/<kind>/<slug>[-light].png)
+/// on demand — the WASM engine has no filesystem (v0.3.0 T-A fix).
+async function ensureBuiltinAssets(templateJson) {
+  const wanted = new Set();
+  for (const m of String(templateJson).matchAll(/@builtin\/([a-z]+)\/([a-z0-9-]+)/g)) {
+    wanted.add(`${m[1]}/${m[2]}`);
+  }
+  const info = state.photos[0]?.exif;
+  if (info?.brand_slug) wanted.add(`brand/${info.brand_slug}`);
+  if (info?.lens_slug) wanted.add(`brand/${info.lens_slug}`);
+  if (info?.lens_series) wanted.add(`series/${info.lens_series}`);
+  if (state.brandOverride.startsWith("brand:")) {
+    wanted.add(`brand/${state.brandOverride.slice("brand:".length)}`);
+  }
+  for (const key of wanted) {
+    if (builtinAssetCache.has(key)) continue;
+    builtinAssetCache.add(key);
+    const [kind, slug] = key.split("/");
+    for (const variant of ["", "-light"]) {
+      try {
+        const res = await fetch(`${BASE}${kind}/${slug}${variant}.png`);
+        if (!res.ok) continue;
+        state.engine.register_asset(
+          `@builtin/${kind}/${slug}${variant}`,
+          new Uint8Array(await res.arrayBuffer()),
+        );
+      } catch { /* missing asset -> blank slot (by design) */ }
+    }
+  }
+}
+
 async function fastPreviewRgba(photoBytes) {
   const blob = new Blob([photoBytes]);
   const bmp = await createImageBitmap(blob, { imageOrientation: "from-image" });
@@ -589,16 +645,17 @@ async function renderNow() {
     if (state.mode === "frame") {
       await ensureFont(loadOverrides(state.templateId).fontFamily || settings.fontFamily);
       const tpl = effectiveTemplateJson();
+      await ensureBuiltinAssets(tpl);
       const ojson = renderOverridesJson();
       if ($("preview").checked) {
         try {
           const { rgba, w, h } = await fastPreviewRgba(state.photos[0].bytes);
           out = state.engine.render_raw(rgba, w, h, state.photos[0].bytes, tpl, "jpeg", ojson);
         } catch {
-          out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", true, ojson, 0);
+          out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", true, ojson, 0, settings.keepGps);
         }
       } else {
-        out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", false, ojson, exportMaxEdge());
+        out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", false, ojson, exportMaxEdge(), settings.keepGps);
       }
     } else {
       const lay = await (await fetch(BASE + `layouts/${state.layoutId}.json`)).text();
@@ -695,7 +752,7 @@ function download(bytes, filename) {
 async function saveBytes(bytes, filename, { dialog = true } = {}) {
   if (IS_TAURI) {
     try {
-      if (dialog) {
+      if (dialog && settings.saveMode === "dialog") {
         const path = await window.__TAURI__.core.invoke("plugin:dialog|save", {
           options: { defaultPath: filename, filters: [{ name: filename.split(".").pop().toUpperCase(), extensions: [filename.split(".").pop()] }] },
         });
@@ -740,7 +797,7 @@ async function exportBatch() {
   let ok = 0;
   for (let i = 0; i < photos.length; i++) {
     try {
-      const out = state.engine.render_with_overrides(photos[i].bytes, tpl, "jpeg", false, ojson, exportMaxEdge());
+      const out = state.engine.render_with_overrides(photos[i].bytes, tpl, "jpeg", false, ojson, exportMaxEdge(), settings.keepGps);
       const name = uniqueName(`${stem(photos[i].name)}-${state.templateId}.jpg`);
       if (await saveBytes(out, name, { dialog: false })) ok++;
     } catch (e) {
@@ -1110,6 +1167,50 @@ function wire() {
 
   wireViewport();
 
+  document.getElementById("settingsBtn").onclick = openSettings;
+  document.getElementById("settingsClose").onclick = closeSettings;
+  document.getElementById("settingsBackdrop").onclick = closeSettings;
+  document.getElementById("setTheme").onchange = (e) => { localStorage.setItem(LS.theme, e.target.value); applyTheme(); };
+  document.getElementById("setLang").onchange = (e) => setLang(e.target.value);
+  document.getElementById("setExportSize").onchange = (e) => { settings.exportSize = e.target.value; saveSettings(); syncCanvasUI(); };
+  document.getElementById("setDefaultFont").onchange = (e) => { settings.fontFamily = e.target.value; saveSettings(); ensureFont(e.target.value); updateTweakUI(); };
+  document.getElementById("setDefaultSize").oninput = (e) => {
+    settings.defaultFontSize = Number(e.target.value);
+    document.getElementById("setSizeVal").textContent = Math.round(settings.defaultFontSize * 100) + "%";
+    saveSettings();
+  };
+  document.getElementById("setDefaultColorOn").onchange = (e) => {
+    settings.defaultUseColor = e.target.checked;
+    document.getElementById("setDefaultColor").disabled = !e.target.checked;
+    saveSettings();
+  };
+  document.getElementById("setDefaultColor").oninput = (e) => { settings.defaultTextColor = e.target.value; saveSettings(); };
+  document.getElementById("setDefaultLogo").onchange = (e) => { settings.showLogo = e.target.checked; saveSettings(); syncCanvasUI(); };
+  document.getElementById("setKeepGps").onchange = (e) => { settings.keepGps = e.target.checked; saveSettings(); };
+  document.getElementById("setSaveMode").onchange = (e) => { settings.saveMode = e.target.value; saveSettings(); };
+  document.getElementById("setChannel").onchange = (e) => { settings.channel = e.target.value; saveSettings(); };
+  document.getElementById("aboutCheck").onclick = checkUpdates;
+  document.getElementById("clearTweaks").onclick = () => clearScope("tweaks");
+  document.getElementById("clearMyTemplates").onclick = () => clearScope("mine");
+  document.getElementById("clearAssets").onclick = () => clearScope("assets");
+  document.getElementById("clearCache").onclick = () => clearScope("cache");
+  document.getElementById("resetAll").onclick = () => clearScope("all");
+
+  document.getElementById("lbClose").onclick = closeLightbox;
+  document.getElementById("lbBackdrop").onclick = closeLightbox;
+  document.getElementById("lbPrev").onclick = () => navLightbox(-1);
+  document.getElementById("lbNext").onclick = () => navLightbox(1);
+  document.getElementById("lbApply").onclick = () => { if (lbId) { selectTemplate(lbId); closeLightbox(); } };
+
+  document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === ",") { e.preventDefault(); openSettings(); return; }
+    if (e.key === "Escape") { closeLightbox(); closeSettings(); return; }
+    if (!document.getElementById("lightbox").classList.contains("hidden")) {
+      if (e.key === "ArrowLeft") navLightbox(-1);
+      if (e.key === "ArrowRight") navLightbox(1);
+    }
+  });
+
   window.addEventListener("fg-lang-changed", () => {
     applyTheme();
     $("langBtn").textContent = t("lang.toggle");
@@ -1142,5 +1243,135 @@ async function checkUpdates() {
 wire();
 boot().catch((e) => setStatus("error", String(e.message || e)));
 
+
+/* --------------------------------------------------------------- lightbox */
+let lbId = null;
+function lbList() { return filteredTemplates(); }
+function openLightbox(id) {
+  lbId = id;
+  const list = lbList();
+  const tpl = list.find((x) => x.id === id) || { id, name: id, category: "" };
+  document.getElementById("lbName").textContent = tplName(tpl);
+  document.getElementById("lbCat").textContent = t(`cat.${tpl.category}`) !== `cat.${tpl.category}` ? t(`cat.${tpl.category}`) : (tpl.category ?? "");
+  const notice = tpl.notice;
+  const noticeEl = document.getElementById("lbNotice");
+  noticeEl.textContent = notice ?? "";
+  noticeEl.classList.toggle("hidden", !notice);
+  const img = document.getElementById("lbImg");
+  img.removeAttribute("src");
+  (async () => {
+    try {
+      const res = await fetch(BASE + "previews/" + id + ".jpg");
+      if (!res.ok) throw new Error("no preview");
+      img.src = URL.createObjectURL(await res.blob());
+    } catch {
+      if (state.photos.length && state.engine) {
+        try {
+          const tplJson = await fetchTemplateJson(id);
+          const out = state.engine.render_with_overrides(
+            state.photos[0].bytes, JSON.stringify(tplJson), "jpeg", false, "", 640, settings.keepGps);
+          img.src = URL.createObjectURL(new Blob([out], { type: "image/jpeg" }));
+        } catch { /* leave blank */ }
+      }
+    }
+  })();
+  withViewTransition(() => document.getElementById("lightbox").classList.remove("hidden"));
+}
+function closeLightbox() {
+  document.getElementById("lightbox").classList.add("hidden");
+  lbId = null;
+}
+function navLightbox(dir) {
+  const list = lbList();
+  if (!list.length || !lbId) return;
+  let i = list.findIndex((x) => x.id === lbId);
+  if (i < 0) i = 0;
+  openLightbox(list[(i + dir + list.length) % list.length].id);
+}
+
+/* --------------------------------------------------------------- settings */
+async function storageUsed() {
+  try {
+    const est = await navigator.storage.estimate();
+    return ((est.usage || 0) / 1048576).toFixed(1) + " MB";
+  } catch { return "?"; }
+}
+function openSettings() {
+  document.getElementById("setTheme").value = currentTheme();
+  document.getElementById("setLang").value = currentLang();
+  document.getElementById("setExportSize").value = settings.exportSize;
+  const sel = document.getElementById("setDefaultFont");
+  sel.innerHTML = "";
+  const def = document.createElement("option");
+  def.value = "";
+  def.textContent = t("tweak.fontDefault");
+  sel.appendChild(def);
+  for (const f of state.fonts) {
+    const o = document.createElement("option");
+    o.value = f.family;
+    o.textContent = f.family;
+    sel.appendChild(o);
+  }
+  sel.value = settings.fontFamily ?? "";
+  document.getElementById("setDefaultSize").value = settings.defaultFontSize ?? 1;
+  document.getElementById("setSizeVal").textContent = Math.round((settings.defaultFontSize ?? 1) * 100) + "%";
+  document.getElementById("setDefaultColorOn").checked = !!settings.defaultUseColor;
+  document.getElementById("setDefaultColor").value = settings.defaultTextColor ?? "#111111";
+  document.getElementById("setDefaultColor").disabled = !settings.defaultUseColor;
+  document.getElementById("setDefaultLogo").checked = !!settings.showLogo;
+  document.getElementById("setKeepGps").checked = !!settings.keepGps;
+  document.getElementById("setSaveMode").value = settings.saveMode ?? "dialog";
+  document.getElementById("setChannel").value = settings.channel ?? "stable";
+  document.getElementById("desktopSection").classList.toggle("hidden", !IS_TAURI);
+  document.getElementById("aboutVersion").textContent = t("settings.version", { v: APP_VERSION });
+  storageUsed().then((v) => {
+    document.getElementById("storageInfo").textContent = t("settings.storage", { v });
+  });
+  withViewTransition(() => document.getElementById("settings").classList.remove("hidden"));
+}
+function closeSettings() { document.getElementById("settings").classList.add("hidden"); }
+
+async function clearScope(name) {
+  if (!confirm(t("settings.confirmClear"))) return false;
+  try {
+    if (name === "tweaks") localStorage.removeItem(LS.overrides);
+    if (name === "mine") {
+      localStorage.removeItem(LS.userTpl);
+      state.userTemplates = [];
+      state.templateCache.clear();
+      buildTemplatePicker();
+    }
+    if (name === "assets") {
+      await idbDelete("assets", "logo");
+      await idbDelete("assets", "background");
+      const db = await idb();
+      await new Promise((res) => { const tx = db.transaction("fonts", "readwrite"); tx.objectStore("fonts").clear(); tx.oncomplete = res; });
+      delete state.customAssets["@user/logo"];
+      delete state.customAssets["@user/background"];
+      state.userFonts = [];
+      updateTweakUI();
+    }
+    if (name === "cache") {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    }
+    if (name === "all") {
+      localStorage.clear();
+      const dbs = await indexedDB.databases();
+      for (const d of dbs || []) indexedDB.deleteDatabase(d.name);
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      location.reload();
+      return true;
+    }
+    toast("ok", t("settings.cleared", { name }));
+    updateTweakUI();
+    renderNow();
+  } catch (e) {
+    toast("error", String(e.message || e));
+  }
+  return true;
+}
+
 // Debug hook for perf/automation.
-window.__fg = { state, renderNow, fitStage };
+window.__fg = { state, renderNow, fitStage, get engine() { return state.engine; } };

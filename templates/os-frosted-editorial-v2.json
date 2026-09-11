@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "id": "os-frosted-editorial-v2",
+    "name": "Frosted Editorial 2",
+    "nameI18n": {
+      "zh": "磨砂编辑风 2",
+      "en": "Frosted Editorial 2"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "classic-white"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.14,
+      "right": 0.12,
+      "bottom": 0.24,
+      "left": 0.12
+    },
+    "background": {
+      "type": "blur",
+      "scale": 1.3,
+      "blur": 46
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.028,
+        "weight": 600,
+        "color": "#FFFFFF"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.09
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}-light",
+      "size": {
+        "height": 0.02
+      },
+      "anchor": "bottom-center",
+      "offset": {
+        "x": 0,
+        "y": -0.05
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.016,
+        "weight": 400,
+        "color": "#EAEAEA"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.015
+      }
+    }
+  ]
+}

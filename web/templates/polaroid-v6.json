@@ -46,6 +46,17 @@
       }
     },
     {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.02
+      },
+      "attachTo": "caption",
+      "attachGap": 0.01
+    },
+    {
       "type": "text",
       "id": "date",
       "anchor": "bottom-center",

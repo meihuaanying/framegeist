@@ -12,7 +12,7 @@ export const engine_register_asset: (a: number, b: number, c: number, d: number,
 export const engine_render: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
 export const engine_render_collage: (a: number, b: any, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
 export const engine_render_raw: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => [number, number, number];
-export const engine_render_with_overrides: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number) => [number, number, number];
+export const engine_render_with_overrides: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number) => [number, number, number];
 export const engine_validate_template: (a: number, b: number, c: number) => [number, number];
 export const __wbindgen_malloc: (a: number, b: number) => number;
 export const __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

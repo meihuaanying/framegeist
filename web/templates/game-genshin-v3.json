@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "id": "game-genshin-v3",
+    "name": "Genshin · Poster Card",
+    "nameI18n": {
+      "zh": "原神 · 海报卡",
+      "en": "Genshin · Poster Card"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "game",
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners."
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.16,
+      "right": 0.09,
+      "bottom": 0.2,
+      "left": 0.09
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F7F3E8"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "game-mark",
+      "asset": "@builtin/game/genshin",
+      "size": {
+        "height": 0.05
+      },
+      "anchor": "top-center",
+      "offset": {
+        "x": 0,
+        "y": 0.05
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.024,
+        "weight": 600,
+        "color": "#3E6B5A"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.08
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.02
+      },
+      "anchor": "bottom-center",
+      "offset": {
+        "x": 0,
+        "y": -0.045
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.015,
+        "weight": 400,
+        "color": "#C9A227"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.012
+      }
+    }
+  ]
+}

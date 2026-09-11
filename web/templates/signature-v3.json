@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "id": "signature-v3",
+    "name": "Signature 3",
+    "nameI18n": {
+      "zh": "签名款 3",
+      "en": "Signature 3"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "gallery"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.05,
+      "right": 0.06,
+      "bottom": 0.18,
+      "left": 0.06
+    },
+    "background": {
+      "type": "solid",
+      "color": "#101010"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "signature",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "Great Vibes",
+          "Cormorant Garamond"
+        ],
+        "size": 0.085,
+        "weight": 400,
+        "color": "#F2F2F0"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "FrameGeist"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.075
+      },
+      "lineHeight": 1
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.015,
+        "weight": 400,
+        "color": "#9A9A9A"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0,
+        "y": -0.035
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}-light",
+      "size": {
+        "height": 0.016
+      },
+      "anchor": "bottom-center",
+      "offset": {
+        "x": 0,
+        "y": -0.012
+      }
+    }
+  ]
+}

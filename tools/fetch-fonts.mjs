@@ -22,6 +22,8 @@ const FONTS = [
   { family: "Space Grotesk", file: "SpaceGrotesk-Regular.ttf", url: `${GF}/ofl/spacegrotesk/SpaceGrotesk%5Bwght%5D.ttf`, license: "OFL-1.1", licenseUrl: `${GF}/ofl/spacegrotesk/OFL.txt` },
   { family: "JetBrains Mono", file: "JetBrainsMono-Regular.ttf", url: "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/fonts/ttf/JetBrainsMono-Regular.ttf", license: "OFL-1.1", licenseUrl: "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/OFL.txt" },
   { family: "Noto Sans SC", file: "NotoSansSC-Regular.otf", url: `${CJK}/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf`, license: "OFL-1.1", licenseUrl: `${CJK}/LICENSE` },
+  { family: "Great Vibes", file: "GreatVibes-Regular.ttf", url: `${GF}/ofl/greatvibes/GreatVibes-Regular.ttf`, license: "OFL-1.1", licenseUrl: `${GF}/ofl/greatvibes/OFL.txt` },
+  { family: "Ma Shan Zheng", file: "MaShanZheng-Regular.ttf", url: `${GF}/ofl/mashanzheng/MaShanZheng-Regular.ttf`, license: "OFL-1.1", licenseUrl: `${GF}/ofl/mashanzheng/OFL.txt` },
   { family: "Noto Serif SC", file: "NotoSerifSC-Regular.otf", url: `${CJK}/Serif/OTF/SimplifiedChinese/NotoSerifCJKsc-Regular.otf`, license: "OFL-1.1", licenseUrl: `${CJK}/LICENSE` },
 ];
 

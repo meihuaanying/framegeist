@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "id": "os-expo-right-v1",
+    "name": "Expo Right",
+    "nameI18n": {
+      "zh": "展览右栏",
+      "en": "Expo Right"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "gallery"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.06,
+      "right": 0.06,
+      "bottom": 0.08,
+      "left": 0.3
+    },
+    "background": {
+      "type": "solid",
+      "color": "#0F0F10"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "middle-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.022,
+        "weight": 600,
+        "color": "#F2F2F0"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": -0.03,
+        "y": 0.03
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "middle-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "weight": 400,
+        "color": "#A9A9A4"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": -0.03,
+        "y": -0.005
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.02
+      },
+      "anchor": "middle-right",
+      "offset": {
+        "x": -0.03,
+        "y": -0.04
+      },
+      "tint": "light"
+    }
+  ]
+}

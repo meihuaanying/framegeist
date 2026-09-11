@@ -182,15 +182,17 @@ export class Engine {
     /**
      * Render with user overrides JSON (camelCase; empty = none).
      * `max_edge`: 0 = full resolution, >0 = longest-edge cap (export presets).
+     * `keep_gps`: retain GPS tags in exported EXIF (default false, PRD B3).
      * @param {Uint8Array} photo
      * @param {string} template_json
      * @param {string} format
      * @param {boolean} preview
      * @param {string} overrides_json
      * @param {number} max_edge
+     * @param {boolean} keep_gps
      * @returns {Uint8Array}
      */
-    render_with_overrides(photo, template_json, format, preview, overrides_json, max_edge) {
+    render_with_overrides(photo, template_json, format, preview, overrides_json, max_edge, keep_gps) {
         const ptr0 = passArray8ToWasm0(photo, wasm.__wbindgen_malloc);
         const len0 = WASM_VECTOR_LEN;
         const ptr1 = passStringToWasm0(template_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -199,7 +201,7 @@ export class Engine {
         const len2 = WASM_VECTOR_LEN;
         const ptr3 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len3 = WASM_VECTOR_LEN;
-        const ret = wasm.engine_render_with_overrides(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview, ptr3, len3, max_edge);
+        const ret = wasm.engine_render_with_overrides(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview, ptr3, len3, max_edge, keep_gps);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

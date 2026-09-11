@@ -139,6 +139,28 @@ fn missing_brand_asset_leaves_blank_not_fake() {
     assert_eq!(count_red(&img), 0, "no asset -> blank slot");
 }
 
+/// Regression: `@builtin/brand/{slug}` must resolve against assets_dir
+/// (`<assets>/brand/<slug>.png`) — v0.2.0 had a double-"brand/" bug that
+/// silently blanked every built-in badge (CLI included).
+#[test]
+fn builtin_brand_badge_renders_from_assets_dir() {
+    let photo = jpeg_with_exif("ILCE-7CM2");
+    let tpl = load_template(&std::fs::read(repo_root().join("templates/film-v1.json")).unwrap()).unwrap();
+    let with_logo = render(&photo, &tpl, &opts()).unwrap();
+    let o = RenderOptions {
+        overrides: Some(TemplateOverrides {
+            show_logo: Some(false),
+            ..Default::default()
+        }),
+        ..opts()
+    };
+    let without = render(&photo, &tpl, &o).unwrap();
+    // outputs must differ: the badge is present on disk (svg->png assets)
+    assert_ne!(with_logo, without, "brand badge must render from assets_dir");
+    let brand_file = repo_root().join("templates/assets/brand/sony-light.png");
+    assert!(brand_file.is_file(), "brand asset missing: {}", brand_file.display());
+}
+
 #[test]
 fn aspect_override_changes_dimensions() {
     let photo = gradient_jpeg(1600, 1200);
@@ -232,4 +254,131 @@ fn error_codes_are_stable() {
     assert_eq!(Error::TemplateTooLarge { size: 1, max: 2 }.code(), "template_too_large");
     let err = load_template(b"{").unwrap_err();
     assert!(matches!(err.code(), "template_json" | "template_schema"));
+}
+
+/* ------------------------- v0.3.0: auto contrast ------------------------- */
+
+const AUTO_CONTRAST_TEMPLATE: &str = r##"{
+  "meta": { "id": "contrast-test", "name": "Contrast", "version": "0.1.0", "minEngineVersion": "0.1.0",
+            "author": "t", "license": "CC0-1.0", "category": "minimal" },
+  "canvas": { "mode": "extend", "padding": { "bottom": 0.2 }, "background": { "type": "solid", "color": "#FFFFFF" } },
+  "layers": [
+    { "type": "text", "id": "line", "anchor": "bottom-left", "offset": { "x": 0.05, "y": -0.08 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.05, "color": "#EEEEEE" },
+      "content": [ { "expr": "'CONTRAST'", "fallback": null } ] }
+  ]
+}"##;
+
+/// Count dark pixels only in the bottom band (the padded caption area), so
+/// the photo content cannot pollute the assertion.
+fn dark_text_pixels(img: &image::RgbaImage) -> u32 {
+    let (_, h) = img.dimensions();
+    let y0 = (h as f64 * 0.78) as u32;
+    img.enumerate_pixels()
+        .filter(|(_, y, p)| *y >= y0 && p.0[0] < 90 && p.0[1] < 90 && p.0[2] < 90)
+        .count() as u32
+}
+fn light_text_pixels(img: &image::RgbaImage) -> u32 {
+    let (_, h) = img.dimensions();
+    let y0 = (h as f64 * 0.78) as u32;
+    img.enumerate_pixels()
+        .filter(|(_, y, p)| *y >= y0 && p.0[0] > 200 && p.0[1] > 200 && p.0[2] > 200)
+        .count() as u32
+}
+
+#[test]
+fn auto_contrast_darkens_low_contrast_text_on_light_bg() {
+    let photo = gradient_jpeg(800, 600);
+    let tpl = load_template(AUTO_CONTRAST_TEMPLATE.as_bytes()).unwrap();
+    let img = render_rgba(&photo, &tpl, &opts()).unwrap();
+    // light-gray #EEE text on white would be ~invisible; engine must darken it
+    assert!(dark_text_pixels(&img) > 200, "auto-contrast must darken text on light bg");
+    // manual override is respected even when low contrast
+    let o = RenderOptions {
+        overrides: Some(TemplateOverrides {
+            text_color: Some("#EEEEEE".into()),
+            ..Default::default()
+        }),
+        ..opts()
+    };
+    let manual = render_rgba(&photo, &tpl, &o).unwrap();
+    assert!(dark_text_pixels(&manual) < 50, "manual color must not be auto-changed");
+}
+
+#[test]
+fn auto_color_picks_by_background() {
+    let photo = gradient_jpeg(800, 600);
+    let white = AUTO_CONTRAST_TEMPLATE.replace("#EEEEEE", "auto");
+    let dark = white.replace("#FFFFFF", "#0B0B0B");
+    let tpl_w = load_template(white.as_bytes()).unwrap();
+    let tpl_d = load_template(dark.as_bytes()).unwrap();
+    let img_w = render_rgba(&photo, &tpl_w, &opts()).unwrap();
+    let img_d = render_rgba(&photo, &tpl_d, &opts()).unwrap();
+    assert!(dark_text_pixels(&img_w) > 200, "'auto' must choose dark on white");
+    assert!(light_text_pixels(&img_d) > 200, "'auto' must choose light on dark");
+}
+
+const TINT_TEMPLATE: &str = r##"{
+  "meta": { "id": "tint-test", "name": "Tint", "version": "0.1.0", "minEngineVersion": "0.1.0",
+            "author": "t", "license": "CC0-1.0", "category": "minimal" },
+  "canvas": { "mode": "extend", "padding": { "bottom": 0.14 }, "background": { "type": "solid", "color": "#FFFFFF" } },
+  "layers": [
+    { "type": "text", "id": "primary", "anchor": "bottom-left", "offset": { "x": 0.08, "y": -0.05 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.03, "color": "#111111" },
+      "content": [ { "expr": "'X'", "fallback": null } ] },
+    { "type": "image", "id": "badge", "anchor": "bottom-left", "asset": "@builtin/brand/test",
+      "size": { "height": 0.04 }, "attachTo": "primary" }
+  ]
+}"##;
+
+fn solid_png(rgb: [u8; 3], size: u32) -> Vec<u8> {
+    let mut img = image::RgbaImage::new(size, size);
+    for px in img.pixels_mut() {
+        *px = image::Rgba([rgb[0], rgb[1], rgb[2], 255]);
+    }
+    let mut out = Vec::new();
+    image::DynamicImage::ImageRgba8(img)
+        .write_to(&mut std::io::Cursor::new(&mut out), image::ImageFormat::Png)
+        .unwrap();
+    out
+}
+
+#[test]
+fn badge_autotint_picks_light_variant_on_dark_bg() {
+    let photo = gradient_jpeg(800, 600);
+    let mut assets = HashMap::new();
+    assets.insert("@builtin/brand/test".to_string(), solid_png([255, 0, 0], 64)); // dark-variant red
+    assets.insert("@builtin/brand/test-light".to_string(), solid_png([0, 0, 255], 64)); // light-variant blue
+    let count = |img: &image::RgbaImage, c: [u8; 4]| img.pixels().filter(|p| p.0 == c).count() as u32;
+
+    let on_light = RenderOptions { assets: Some(assets.clone()), ..opts() };
+    let img = render_rgba(&photo, &load_template(TINT_TEMPLATE.as_bytes()).unwrap(), &on_light).unwrap();
+    assert!(count(&img, [255, 0, 0, 255]) > 100, "light bg must use dark (red) badge");
+    assert_eq!(count(&img, [0, 0, 255, 255]), 0);
+
+    let dark_src = TINT_TEMPLATE.replace("#FFFFFF", "#0B0B0B");
+    let on_dark = RenderOptions { assets: Some(assets), ..opts() };
+    let img2 = render_rgba(&photo, &load_template(dark_src.as_bytes()).unwrap(), &on_dark).unwrap();
+    assert!(count(&img2, [0, 0, 255, 255]) > 100, "dark bg must auto-pick light (blue) badge");
+    assert_eq!(count(&img2, [255, 0, 0, 255]), 0);
+}
+
+#[test]
+fn probe_reports_lens_series() {
+    let mut jpeg = gradient_jpeg(400, 300);
+    let fields = vec![exif::Field {
+        tag: exif::Tag::LensModel,
+        ifd_num: exif::In::PRIMARY,
+        value: exif::Value::Ascii(vec![b"FE 35mm F1.4 GM".to_vec()]),
+    }];
+    let mut writer = exif::experimental::Writer::new();
+    for field in &fields {
+        writer.push_field(field);
+    }
+    let mut buf = Cursor::new(Vec::new());
+    writer.write(&mut buf, false).expect("exif");
+    framegeist_core::splice_exif_app1(&mut jpeg, &buf.into_inner()).expect("splice");
+    let info = framegeist_core::probe_exif(&jpeg).expect("probe");
+    assert_eq!(info.lens_slug.as_deref(), Some("sony"));
+    assert_eq!(info.lens_series.as_deref(), Some("sony-gm"));
 }

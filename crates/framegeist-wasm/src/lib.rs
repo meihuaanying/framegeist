@@ -89,11 +89,13 @@ impl Engine {
         format: &str,
         preview: bool,
     ) -> Result<Uint8Array, JsError> {
-        self.render_impl(photo, None, 0, 0, template_json, format, preview, "", 0)
+        self.render_impl(photo, None, 0, 0, template_json, format, preview, "", 0, false)
     }
 
     /// Render with user overrides JSON (camelCase; empty = none).
     /// `max_edge`: 0 = full resolution, >0 = longest-edge cap (export presets).
+    /// `keep_gps`: retain GPS tags in exported EXIF (default false, PRD B3).
+    #[allow(clippy::too_many_arguments)]
     pub fn render_with_overrides(
         &self,
         photo: &[u8],
@@ -102,8 +104,9 @@ impl Engine {
         preview: bool,
         overrides_json: &str,
         max_edge: u32,
+        keep_gps: bool,
     ) -> Result<Uint8Array, JsError> {
-        self.render_impl(photo, None, 0, 0, template_json, format, preview, overrides_json, max_edge)
+        self.render_impl(photo, None, 0, 0, template_json, format, preview, overrides_json, max_edge, keep_gps)
     }
 
     /// Raw-RGBA fast preview: caller pre-decoded/downscaled the photo;
@@ -119,7 +122,7 @@ impl Engine {
         format: &str,
         overrides_json: &str,
     ) -> Result<Uint8Array, JsError> {
-        self.render_impl(exif_bytes, Some(rgba), width, height, template_json, format, false, overrides_json, 0)
+        self.render_impl(exif_bytes, Some(rgba), width, height, template_json, format, false, overrides_json, 0, false)
     }
 
     /// Render a collage (PRD C5).
@@ -161,6 +164,7 @@ impl Engine {
         preview: bool,
         overrides_json: &str,
         max_edge: u32,
+        keep_gps: bool,
     ) -> Result<Uint8Array, JsError> {
         let template = core::load_template_from_str(template_json).map_err(js_err)?;
         let fmt = parse_format(format)?;
@@ -177,6 +181,7 @@ impl Engine {
             model_map: self.model_map.clone(),
             assets: Some(self.assets.clone()),
             overrides,
+            keep_gps,
             ..core::RenderOptions::default()
         };
         let (out, _report) = match rgba {

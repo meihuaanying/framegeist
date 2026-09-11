@@ -1,317 +1,1113 @@
 [
   {
+    "id": "os-card-frame-v1",
+    "name": "Card · Frame",
+    "names": {
+      "zh": "卡片·框线",
+      "en": "Card · Frame"
+    },
+    "notice": null,
+    "category": "classic-white"
+  },
+  {
     "id": "classic-white-bottom-param",
     "name": "Classic White - Bottom Params",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v1",
     "name": "Classic White V1",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v2",
     "name": "Classic White V2",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v3",
     "name": "Classic White V3",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v4",
     "name": "Classic White V4",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v5",
     "name": "Classic White V5",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v6",
     "name": "Classic White V6",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v7",
     "name": "Classic White V7",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
   },
   {
     "id": "classic-white-v8",
     "name": "Classic White V8",
+    "names": null,
+    "notice": null,
     "category": "classic-white"
+  },
+  {
+    "id": "os-frosted-editorial-v1",
+    "name": "Frosted Editorial 1",
+    "names": {
+      "zh": "磨砂编辑风 1",
+      "en": "Frosted Editorial 1"
+    },
+    "notice": null,
+    "category": "classic-white"
+  },
+  {
+    "id": "os-frosted-editorial-v2",
+    "name": "Frosted Editorial 2",
+    "names": {
+      "zh": "磨砂编辑风 2",
+      "en": "Frosted Editorial 2"
+    },
+    "notice": null,
+    "category": "classic-white"
+  },
+  {
+    "id": "film-plus-v1",
+    "name": "Film Plus 1",
+    "names": {
+      "zh": "胶片加强 1",
+      "en": "Film Plus 1"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-plus-v2",
+    "name": "Film Plus 2",
+    "names": {
+      "zh": "胶片加强 2",
+      "en": "Film Plus 2"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-plus-v3",
+    "name": "Film Plus 3",
+    "names": {
+      "zh": "胶片加强 3",
+      "en": "Film Plus 3"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-plus-v4",
+    "name": "Film Plus 4",
+    "names": {
+      "zh": "胶片加强 4",
+      "en": "Film Plus 4"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-plus-v5",
+    "name": "Film Plus 5",
+    "names": {
+      "zh": "胶片加强 5",
+      "en": "Film Plus 5"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-plus-v6",
+    "name": "Film Plus 6",
+    "names": {
+      "zh": "胶片加强 6",
+      "en": "Film Plus 6"
+    },
+    "notice": null,
+    "category": "film"
   },
   {
     "id": "film-v1",
     "name": "Film V1",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v2",
     "name": "Film V2",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v3",
     "name": "Film V3",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v4",
     "name": "Film V4",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v5",
     "name": "Film V5",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v6",
     "name": "Film V6",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v7",
     "name": "Film V7",
+    "names": null,
+    "notice": null,
     "category": "film"
   },
   {
     "id": "film-v8",
     "name": "Film V8",
+    "names": null,
+    "notice": null,
     "category": "film"
+  },
+  {
+    "id": "shell-plus-v1",
+    "name": "Body Outline 1",
+    "names": {
+      "zh": "机身轮廓 1",
+      "en": "Body Outline 1"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "shell-plus-v2",
+    "name": "Body Outline 2",
+    "names": {
+      "zh": "机身轮廓 2",
+      "en": "Body Outline 2"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "shell-plus-v3",
+    "name": "Body Outline 3",
+    "names": {
+      "zh": "机身轮廓 3",
+      "en": "Body Outline 3"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "shell-plus-v4",
+    "name": "Body Outline 4",
+    "names": {
+      "zh": "机身轮廓 4",
+      "en": "Body Outline 4"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v1",
+    "name": "Camera Frame 1",
+    "names": {
+      "zh": "相机相框 1",
+      "en": "Camera Frame 1"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v2",
+    "name": "Camera Frame 2",
+    "names": {
+      "zh": "相机相框 2",
+      "en": "Camera Frame 2"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v3",
+    "name": "Camera Frame 3",
+    "names": {
+      "zh": "相机相框 3",
+      "en": "Camera Frame 3"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v4",
+    "name": "Camera Frame 4",
+    "names": {
+      "zh": "相机相框 4",
+      "en": "Camera Frame 4"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v5",
+    "name": "Camera Frame 5",
+    "names": {
+      "zh": "相机相框 5",
+      "en": "Camera Frame 5"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v6",
+    "name": "Camera Frame 6",
+    "names": {
+      "zh": "相机相框 6",
+      "en": "Camera Frame 6"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v7",
+    "name": "Camera Frame 7",
+    "names": {
+      "zh": "相机相框 7",
+      "en": "Camera Frame 7"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "camera-frame-v8",
+    "name": "Camera Frame 8",
+    "names": {
+      "zh": "相机相框 8",
+      "en": "Camera Frame 8"
+    },
+    "notice": null,
+    "category": "frame-shell"
   },
   {
     "id": "frame-shell-v1",
     "name": "Camera Shell V1",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
   },
   {
     "id": "frame-shell-v2",
     "name": "Camera Shell V2",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
   },
   {
     "id": "frame-shell-v3",
     "name": "Camera Shell V3",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
   },
   {
     "id": "frame-shell-v4",
     "name": "Camera Shell V4",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
   },
   {
     "id": "frame-shell-v5",
     "name": "Camera Shell V5",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
   },
   {
     "id": "frame-shell-v6",
     "name": "Camera Shell V6",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
   },
   {
     "id": "frame-shell-v7",
     "name": "Camera Shell V7",
+    "names": null,
+    "notice": null,
     "category": "frame-shell"
+  },
+  {
+    "id": "handheld-v1",
+    "name": "Handheld 1",
+    "names": {
+      "zh": "手持相框 1",
+      "en": "Handheld 1"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "handheld-v2",
+    "name": "Handheld 2",
+    "names": {
+      "zh": "手持相框 2",
+      "en": "Handheld 2"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "handheld-v3",
+    "name": "Handheld 3",
+    "names": {
+      "zh": "手持相框 3",
+      "en": "Handheld 3"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "handheld-v4",
+    "name": "Handheld 4",
+    "names": {
+      "zh": "手持相框 4",
+      "en": "Handheld 4"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "handheld-v5",
+    "name": "Handheld 5",
+    "names": {
+      "zh": "手持相框 5",
+      "en": "Handheld 5"
+    },
+    "notice": null,
+    "category": "frame-shell"
+  },
+  {
+    "id": "os-expo-around-v1",
+    "name": "Expo Around",
+    "names": {
+      "zh": "展览环绕",
+      "en": "Expo Around"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "os-expo-left-v1",
+    "name": "Expo Left",
+    "names": {
+      "zh": "展览左栏",
+      "en": "Expo Left"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "os-expo-right-v1",
+    "name": "Expo Right",
+    "names": {
+      "zh": "展览右栏",
+      "en": "Expo Right"
+    },
+    "notice": null,
+    "category": "gallery"
   },
   {
     "id": "gallery-v1",
     "name": "Gallery Mat V1",
+    "names": null,
+    "notice": null,
     "category": "gallery"
   },
   {
     "id": "gallery-v2",
     "name": "Gallery Mat V2",
+    "names": null,
+    "notice": null,
     "category": "gallery"
   },
   {
     "id": "gallery-v3",
     "name": "Gallery Mat V3",
+    "names": null,
+    "notice": null,
     "category": "gallery"
   },
   {
     "id": "gallery-v4",
     "name": "Gallery Mat V4",
+    "names": null,
+    "notice": null,
     "category": "gallery"
   },
   {
     "id": "gallery-v5",
     "name": "Gallery Mat V5",
+    "names": null,
+    "notice": null,
     "category": "gallery"
   },
   {
     "id": "gallery-v6",
     "name": "Gallery Mat V6",
+    "names": null,
+    "notice": null,
     "category": "gallery"
   },
   {
     "id": "gallery-v7",
     "name": "Gallery Mat V7",
+    "names": null,
+    "notice": null,
     "category": "gallery"
+  },
+  {
+    "id": "os-gallery-noir-v1",
+    "name": "Gallery Noir",
+    "names": {
+      "zh": "画廊夜黑",
+      "en": "Gallery Noir"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "os-postmark-v1",
+    "name": "Postmark",
+    "names": {
+      "zh": "邮戳款",
+      "en": "Postmark"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "signature-v1",
+    "name": "Signature 1",
+    "names": {
+      "zh": "签名款 1",
+      "en": "Signature 1"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "signature-v2",
+    "name": "Signature 2",
+    "names": {
+      "zh": "签名款 2",
+      "en": "Signature 2"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "signature-v3",
+    "name": "Signature 3",
+    "names": {
+      "zh": "签名款 3",
+      "en": "Signature 3"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "signature-v4",
+    "name": "Signature 4",
+    "names": {
+      "zh": "签名款 4",
+      "en": "Signature 4"
+    },
+    "notice": null,
+    "category": "gallery"
+  },
+  {
+    "id": "game-arknights-v2",
+    "name": "Arknights · Corner Mark",
+    "names": {
+      "zh": "明日方舟 · 极简角标",
+      "en": "Arknights · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-arknights-v1",
+    "name": "Arknights · Hero Frame",
+    "names": {
+      "zh": "明日方舟 · 主题边框",
+      "en": "Arknights · Hero Frame"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-arknights-v3",
+    "name": "Arknights · Poster Card",
+    "names": {
+      "zh": "明日方舟 · 海报卡",
+      "en": "Arknights · Poster Card"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-wukong-v2",
+    "name": "Black Myth Wukong · Corner Mark",
+    "names": {
+      "zh": "黑神话悟空 · 极简角标",
+      "en": "Black Myth Wukong · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-wukong-v1",
+    "name": "Black Myth Wukong · Hero Frame",
+    "names": {
+      "zh": "黑神话悟空 · 主题边框",
+      "en": "Black Myth Wukong · Hero Frame"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-wukong-v3",
+    "name": "Black Myth Wukong · Poster Card",
+    "names": {
+      "zh": "黑神话悟空 · 海报卡",
+      "en": "Black Myth Wukong · Poster Card"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-genshin-v2",
+    "name": "Genshin · Corner Mark",
+    "names": {
+      "zh": "原神 · 极简角标",
+      "en": "Genshin · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-genshin-v1",
+    "name": "Genshin · Hero Frame",
+    "names": {
+      "zh": "原神 · 主题边框",
+      "en": "Genshin · Hero Frame"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-genshin-v3",
+    "name": "Genshin · Poster Card",
+    "names": {
+      "zh": "原神 · 海报卡",
+      "en": "Genshin · Poster Card"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-honkai-v2",
+    "name": "Honkai · Corner Mark",
+    "names": {
+      "zh": "崩坏 · 极简角标",
+      "en": "Honkai · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-honkai-v1",
+    "name": "Honkai · Hero Frame",
+    "names": {
+      "zh": "崩坏 · 主题边框",
+      "en": "Honkai · Hero Frame"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-honkai-v3",
+    "name": "Honkai · Poster Card",
+    "names": {
+      "zh": "崩坏 · 海报卡",
+      "en": "Honkai · Poster Card"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-wwmeet-v2",
+    "name": "Where Winds Meet · Corner Mark",
+    "names": {
+      "zh": "燕云十六声 · 极简角标",
+      "en": "Where Winds Meet · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-wwmeet-v1",
+    "name": "Where Winds Meet · Hero Frame",
+    "names": {
+      "zh": "燕云十六声 · 主题边框",
+      "en": "Where Winds Meet · Hero Frame"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-wwmeet-v3",
+    "name": "Where Winds Meet · Poster Card",
+    "names": {
+      "zh": "燕云十六声 · 海报卡",
+      "en": "Where Winds Meet · Poster Card"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-zzz-v2",
+    "name": "Zenless Zone Zero · Corner Mark",
+    "names": {
+      "zh": "绝区零 · 极简角标",
+      "en": "Zenless Zone Zero · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-zzz-v1",
+    "name": "Zenless Zone Zero · Hero Frame",
+    "names": {
+      "zh": "绝区零 · 主题边框",
+      "en": "Zenless Zone Zero · Hero Frame"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "game-zzz-v3",
+    "name": "Zenless Zone Zero · Poster Card",
+    "names": {
+      "zh": "绝区零 · 海报卡",
+      "en": "Zenless Zone Zero · Poster Card"
+    },
+    "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
+    "category": "game"
+  },
+  {
+    "id": "os-card-logo-v1",
+    "name": "Card · Logo",
+    "names": {
+      "zh": "卡片·徽标",
+      "en": "Card · Logo"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "os-card-param-v1",
+    "name": "Card · Param",
+    "names": {
+      "zh": "卡片·参数",
+      "en": "Card · Param"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "os-wordmark-city-v1",
+    "name": "Cityword",
+    "names": {
+      "zh": "城市字标",
+      "en": "Cityword"
+    },
+    "notice": null,
+    "category": "magazine"
   },
   {
     "id": "magazine-v1",
     "name": "Magazine V1",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v2",
     "name": "Magazine V2",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v3",
     "name": "Magazine V3",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v4",
     "name": "Magazine V4",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v5",
     "name": "Magazine V5",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v6",
     "name": "Magazine V6",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v7",
     "name": "Magazine V7",
+    "names": null,
+    "notice": null,
     "category": "magazine"
   },
   {
     "id": "magazine-v8",
     "name": "Magazine V8",
+    "names": null,
+    "notice": null,
     "category": "magazine"
+  },
+  {
+    "id": "borderless-v1",
+    "name": "Borderless 1",
+    "names": {
+      "zh": "无边框 1",
+      "en": "Borderless 1"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "borderless-v2",
+    "name": "Borderless 2",
+    "names": {
+      "zh": "无边框 2",
+      "en": "Borderless 2"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "borderless-v3",
+    "name": "Borderless 3",
+    "names": {
+      "zh": "无边框 3",
+      "en": "Borderless 3"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "borderless-v4",
+    "name": "Borderless 4",
+    "names": {
+      "zh": "无边框 4",
+      "en": "Borderless 4"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "borderless-v5",
+    "name": "Borderless 5",
+    "names": {
+      "zh": "无边框 5",
+      "en": "Borderless 5"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "borderless-v6",
+    "name": "Borderless 6",
+    "names": {
+      "zh": "无边框 6",
+      "en": "Borderless 6"
+    },
+    "notice": null,
+    "category": "minimal"
   },
   {
     "id": "minimal-corner-iso",
     "name": "Minimal Corner - ISO",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v1",
     "name": "Minimal V1",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v2",
     "name": "Minimal V2",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v3",
     "name": "Minimal V3",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v4",
     "name": "Minimal V4",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v5",
     "name": "Minimal V5",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v6",
     "name": "Minimal V6",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v7",
     "name": "Minimal V7",
+    "names": null,
+    "notice": null,
     "category": "minimal"
   },
   {
     "id": "minimal-v8",
     "name": "Minimal V8",
+    "names": null,
+    "notice": null,
     "category": "minimal"
+  },
+  {
+    "id": "os-instax-v1",
+    "name": "Instax Wide",
+    "names": {
+      "zh": "宽白拍立得",
+      "en": "Instax Wide"
+    },
+    "notice": null,
+    "category": "polaroid"
   },
   {
     "id": "polaroid-caption",
     "name": "Polaroid - Caption",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v1",
     "name": "Polaroid V1",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v2",
     "name": "Polaroid V2",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v3",
     "name": "Polaroid V3",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v4",
     "name": "Polaroid V4",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v5",
     "name": "Polaroid V5",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v6",
     "name": "Polaroid V6",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
   },
   {
     "id": "polaroid-v7",
     "name": "Polaroid V7",
+    "names": null,
+    "notice": null,
     "category": "polaroid"
+  },
+  {
+    "id": "lens-icon-v1",
+    "name": "Lens Badge 1",
+    "names": {
+      "zh": "镜头徽章 1",
+      "en": "Lens Badge 1"
+    },
+    "notice": null,
+    "category": "technical"
+  },
+  {
+    "id": "lens-icon-v2",
+    "name": "Lens Badge 2",
+    "names": {
+      "zh": "镜头徽章 2",
+      "en": "Lens Badge 2"
+    },
+    "notice": null,
+    "category": "technical"
+  },
+  {
+    "id": "lens-icon-v3",
+    "name": "Lens Badge 3",
+    "names": {
+      "zh": "镜头徽章 3",
+      "en": "Lens Badge 3"
+    },
+    "notice": null,
+    "category": "technical"
+  },
+  {
+    "id": "lens-icon-v4",
+    "name": "Lens Badge 4",
+    "names": {
+      "zh": "镜头徽章 4",
+      "en": "Lens Badge 4"
+    },
+    "notice": null,
+    "category": "technical"
   },
   {
     "id": "technical-v1",
     "name": "Technical Plate V1",
+    "names": null,
+    "notice": null,
     "category": "technical"
   },
   {
     "id": "technical-v2",
     "name": "Technical Plate V2",
+    "names": null,
+    "notice": null,
     "category": "technical"
   },
   {
     "id": "technical-v3",
     "name": "Technical Plate V3",
+    "names": null,
+    "notice": null,
     "category": "technical"
   },
   {
     "id": "technical-v4",
     "name": "Technical Plate V4",
+    "names": null,
+    "notice": null,
     "category": "technical"
   },
   {
     "id": "technical-v5",
     "name": "Technical Plate V5",
+    "names": null,
+    "notice": null,
     "category": "technical"
   },
   {
     "id": "technical-v6",
     "name": "Technical Plate V6",
+    "names": null,
+    "notice": null,
     "category": "technical"
   },
   {
     "id": "technical-v7",
     "name": "Technical Plate V7",
+    "names": null,
+    "notice": null,
     "category": "technical"
   }
 ]

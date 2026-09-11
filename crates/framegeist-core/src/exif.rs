@@ -16,6 +16,7 @@ pub struct ExifInfo {
     pub orientation: Option<u16>,
     pub brand_slug: Option<String>,
     pub lens_slug: Option<String>,
+    pub lens_series: Option<String>,
 }
 
 impl ExifInfo {
@@ -33,6 +34,7 @@ impl ExifInfo {
             "orientation" => self.orientation.map(|v| v.to_string()),
             "brand_slug" => self.brand_slug.clone(),
             "lens_slug" => self.lens_slug.clone(),
+            "lens_series" => self.lens_series.clone(),
             _ => None,
         }
     }
@@ -115,6 +117,7 @@ pub fn probe_exif(photo: &[u8]) -> Result<ExifInfo> {
         .map(|s| s.to_string());
     info.brand_slug = crate::brand::brand_slug(info.make.as_deref(), info.model.as_deref());
     info.lens_slug = crate::brand::lens_slug(info.lens.as_deref());
+    info.lens_series = crate::brand::lens_series(info.lens.as_deref());
     Ok(info)
 }
 

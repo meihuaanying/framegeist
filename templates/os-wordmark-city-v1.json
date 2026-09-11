@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "id": "os-wordmark-city-v1",
+    "name": "Cityword",
+    "nameI18n": {
+      "zh": "城市字标",
+      "en": "Cityword"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.02,
+      "right": 0.02,
+      "bottom": 0.1,
+      "left": 0.02
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "wordmark",
+      "anchor": "top-left",
+      "font": {
+        "family": [
+          "Space Grotesk",
+          "Host Grotesk"
+        ],
+        "size": 0.06,
+        "weight": 700,
+        "color": "#111111"
+      },
+      "content": [
+        {
+          "expr": "exif.make",
+          "fallback": "FRAMEGEIST"
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": 0.05
+      },
+      "lineHeight": 1
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.015,
+        "weight": 400,
+        "color": "#555555"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": -0.03,
+        "y": -0.04
+      }
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.018
+      },
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.03,
+        "y": -0.035
+      },
+      "tint": "dark"
+    }
+  ]
+}

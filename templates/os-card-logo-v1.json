@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "id": "os-card-logo-v1",
+    "name": "Card · Logo",
+    "nameI18n": {
+      "zh": "卡片·徽标",
+      "en": "Card · Logo"
+    },
+    "version": "0.3.0",
+    "minEngineVersion": "0.1.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.03,
+      "right": 0.03,
+      "bottom": 0.16,
+      "left": 0.03
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.035
+      },
+      "anchor": "top-left",
+      "offset": {
+        "x": 0.03,
+        "y": 0.035
+      },
+      "tint": "dark"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.022,
+        "weight": 600,
+        "color": "#141414"
+      },
+      "content": [
+        {
+          "expr": "exif.model_pretty",
+          "fallback": "Unknown Camera"
+        },
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": -0.075
+      }
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "weight": 400,
+        "color": "#666666"
+      },
+      "content": [
+        {
+          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+          "fallback": "framegeist"
+        }
+      ],
+      "offset": {
+        "x": 0.03,
+        "y": -0.035
+      }
+    }
+  ]
+}

@@ -28,6 +28,7 @@ pub enum Category {
     Magazine,
     Minimal,
     FrameShell,
+    Game,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
@@ -52,6 +53,12 @@ pub enum License {
 pub struct Meta {
     pub id: String,
     pub name: String,
+    /// Localized display names, e.g. {"zh": "原神·风起", "en": "Genshin: Anemo"}.
+    #[serde(rename = "nameI18n", default)]
+    pub name_i18n: Option<std::collections::HashMap<String, String>>,
+    /// Optional disclaimer (game templates: "Unofficial fan-made design…").
+    #[serde(default)]
+    pub notice: Option<String>,
     pub version: String,
     #[serde(rename = "minEngineVersion")]
     pub min_engine_version: String,
@@ -85,6 +92,7 @@ impl std::fmt::Display for Category {
             Category::Magazine => "magazine",
             Category::Minimal => "minimal",
             Category::FrameShell => "frame-shell",
+            Category::Game => "game",
         };
         f.write_str(s)
     }
@@ -206,6 +214,10 @@ pub struct ImageLayer {
     /// Gap between the attached image and the text (fraction of photo height).
     #[serde(rename = "attachGap", default)]
     pub attach_gap: Option<f64>,
+    /// Badge tint strategy: "auto" (pick black/white by background luminance,
+    /// default) | "light" | "dark".
+    #[serde(default)]
+    pub tint: Option<String>,
 }
 
 fn default_opacity() -> f64 {
@@ -425,7 +437,8 @@ fn is_layer_id(s: &str) -> bool {
 fn is_asset_path(s: &str) -> bool {
     let stripped = s
         .replace("{exif.brand_slug}", "sony")
-        .replace("{exif.lens_slug}", "sony");
+        .replace("{exif.lens_slug}", "sony")
+        .replace("{exif.lens_series}", "sony-gm");
     (stripped.starts_with("@builtin/")
         || stripped.starts_with("@user/")
         || stripped.starts_with("assets/"))
@@ -570,7 +583,9 @@ fn validate_semantics(t: &Template) -> Result<()> {
                         "layers[{i}].font.size must be > 0"
                     )));
                 }
-                parse_hex_color(&text.font.color)?;
+                if !text.font.color.eq_ignore_ascii_case("auto") {
+                    parse_hex_color(&text.font.color)?;
+                }
                 range_check(
                     &format!("layers[{i}].lineHeight"),
                     text.line_height,
@@ -648,6 +663,14 @@ fn validate_semantics(t: &Template) -> Result<()> {
                             image.id
                         )));
                     }
+                }
+            }
+            if let Some(tint) = &image.tint {
+                if !matches!(tint.as_str(), "auto" | "light" | "dark") {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{}].tint must be auto|light|dark",
+                        image.id
+                    )));
                 }
             }
         }
