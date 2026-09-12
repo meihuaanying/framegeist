@@ -1,0 +1,79 @@
+{
+  "meta": {
+    "id": "camera-stencil-mono-05",
+    "name": "Stencil Mono",
+    "nameI18n": { "zh": "丝印极简机身", "en": "Stencil Mono" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "camera"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.055, "bottom": 0.16, "left": 0.055 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.050, "y": 0.032 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "stencil",
+      "anchor": "top-left",
+      "offset": { "x": 0.050, "y": 0.062 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#C2C6CB" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'STENCIL 05'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.050, "y": 0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "body",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.050, "y": -0.032 },
+      "asset": "@builtin/frame/camera-body",
+      "size": { "height": 0.10 },
+      "opacity": 0.9,
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.050, "y": -0.062 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.016, "color": "#1A1A1A" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.050, "y": -0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "fmt('{focal}mm  f/{aperture}  {shutter}  ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

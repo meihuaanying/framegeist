@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "id": "colorwalk-vbar-01",
+    "name": "Side Column",
+    "nameI18n": { "zh": "左侧色柱", "en": "Side Column" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorwalk"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.10, "bottom": 0.16, "left": 0.17 },
+    "background": { "type": "tint" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "vbar",
+      "anchor": "middle-left",
+      "offset": { "x": 0.0354, "y": -0.031 },
+      "shape": "rect",
+      "size": { "width": 0.02, "height": 0.52 },
+      "color": "#17181A",
+      "opacity": 0.9
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.0354, "y": 0.035 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.15,
+      "opacity": 0.85,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "paramstack",
+      "anchor": "middle-left",
+      "offset": { "x": 0.0693, "y": -0.031 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.10,
+      "lineHeight": 1.95,
+      "opacity": 0.85,
+      "content": [
+        { "expr": "fmt('FOCAL {focal}MM', exif)", "fallback": null },
+        { "expr": "fmt('F {aperture}', exif)", "fallback": null },
+        { "expr": "exif.shutter", "fallback": null },
+        { "expr": "fmt('ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0693, "y": -0.093 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "auto" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0787, "y": -0.093 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

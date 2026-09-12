@@ -20,14 +20,36 @@ pub struct Template {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum Category {
+    // Legacy (pre-v0.4.0) values, kept so older template files stay loadable.
     ClassicWhite,
-    Film,
-    Polaroid,
     Gallery,
     Technical,
+    FrameShell,
+    // v0.4.0 taxonomy (frameelf-aligned, original designs).
+    WhiteBorder,
+    Camera,
+    Phone,
+    Drone,
+    Fuji,
+    Film,
+    Colorwalk,
+    Colorful,
+    ClassicWatermark,
+    Portfolio,
+    BlackFrame,
+    Sports,
+    Calendar,
     Magazine,
     Minimal,
-    FrameShell,
+    Borderless,
+    Master,
+    Personal,
+    Polaroid,
+    Festival,
+    Effect,
+    Colorcard,
+    BlurBg,
+    Ticket,
     Game,
 }
 
@@ -85,13 +107,33 @@ impl std::fmt::Display for Category {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
             Category::ClassicWhite => "classic-white",
-            Category::Film => "film",
-            Category::Polaroid => "polaroid",
             Category::Gallery => "gallery",
             Category::Technical => "technical",
+            Category::FrameShell => "frame-shell",
+            Category::WhiteBorder => "white-border",
+            Category::Camera => "camera",
+            Category::Phone => "phone",
+            Category::Drone => "drone",
+            Category::Fuji => "fuji",
+            Category::Film => "film",
+            Category::Colorwalk => "colorwalk",
+            Category::Colorful => "colorful",
+            Category::ClassicWatermark => "classic-watermark",
+            Category::Portfolio => "portfolio",
+            Category::BlackFrame => "black-frame",
+            Category::Sports => "sports",
+            Category::Calendar => "calendar",
             Category::Magazine => "magazine",
             Category::Minimal => "minimal",
-            Category::FrameShell => "frame-shell",
+            Category::Borderless => "borderless",
+            Category::Master => "master",
+            Category::Personal => "personal",
+            Category::Polaroid => "polaroid",
+            Category::Festival => "festival",
+            Category::Effect => "effect",
+            Category::Colorcard => "colorcard",
+            Category::BlurBg => "blur-bg",
+            Category::Ticket => "ticket",
             Category::Game => "game",
         };
         f.write_str(s)
@@ -153,6 +195,8 @@ pub enum BgKind {
     Blur,
     Solid,
     Image,
+    /// v0.4.0: average color of the photo fills the canvas (seamless extension).
+    Tint,
     #[serde(rename = "none")]
     None,
 }
@@ -176,6 +220,8 @@ pub struct Shadow {
 pub enum Layer {
     Text(TextLayer),
     Image(ImageLayer),
+    Shape(ShapeLayer),
+    Palette(PaletteLayer),
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -189,6 +235,19 @@ pub struct TextLayer {
     #[serde(rename = "lineHeight", default = "default_line_height")]
     pub line_height: f64,
     pub content: Vec<ContentItem>,
+    /// v0.4.0: extra advance between glyphs, in em units ([-0.05, 0.5]).
+    #[serde(rename = "letterSpacing", default)]
+    pub letter_spacing: f64,
+    /// v0.4.0: rotation around the text block center, degrees ([-360, 360]).
+    #[serde(default)]
+    pub rotation: f64,
+    /// v0.4.0: layer opacity ([0, 1]), watermarks use 0.7–0.95.
+    #[serde(default = "default_opacity")]
+    pub opacity: f64,
+    /// v0.4.0: explicit per-line alignment ("left"|"center"|"right");
+    /// defaults to the anchor column.
+    #[serde(default)]
+    pub align: Option<String>,
 }
 
 fn default_line_height() -> f64 {
@@ -222,6 +281,108 @@ pub struct ImageLayer {
 
 fn default_opacity() -> f64 {
     1.0
+}
+
+/// v0.4.0: primitive shapes for rules, borders, dots and chips.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ShapeLayer {
+    pub id: String,
+    pub anchor: Anchor,
+    #[serde(default)]
+    pub offset: Offset,
+    pub shape: ShapeKind,
+    #[serde(default)]
+    pub size: ShapeSize,
+    pub color: String,
+    #[serde(default = "default_opacity")]
+    pub opacity: f64,
+    /// Corner radius for `rect`, relative to min(width,height) (0–0.5).
+    #[serde(default)]
+    pub radius: Option<f64>,
+    /// When set, draw an outline instead of a fill (relative to photo width).
+    #[serde(rename = "strokeWidth", default)]
+    pub stroke_width: Option<f64>,
+    /// Degrees, rotation around the shape center ([-360, 360]).
+    #[serde(default)]
+    pub rotation: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ShapeKind {
+    Line,
+    Rect,
+    Ellipse,
+    Diamond,
+    Hexagon,
+}
+
+#[derive(Debug, Clone, Copy, Default, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ShapeSize {
+    /// Relative to photo width (0–1).
+    #[serde(default)]
+    pub width: Option<f64>,
+    /// Relative to photo height (0–1).
+    #[serde(default)]
+    pub height: Option<f64>,
+}
+
+fn default_palette_count() -> u32 {
+    5
+}
+
+fn default_chip_shape() -> ChipShape {
+    ChipShape::Circle
+}
+
+/// v0.4.0: dominant-color chips extracted from the photo (color card).
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PaletteLayer {
+    pub id: String,
+    pub anchor: Anchor,
+    #[serde(default)]
+    pub offset: Offset,
+    #[serde(default = "default_palette_count")]
+    pub count: u32,
+    #[serde(default = "default_chip_shape")]
+    pub shape: ChipShape,
+    /// "horizontal" (default) | "vertical".
+    #[serde(default)]
+    pub direction: Option<String>,
+    /// Chip size, relative to photo height (default 0.035).
+    #[serde(default)]
+    pub size: Option<f64>,
+    /// Gap between chips, relative to photo height (default = size * 0.35).
+    #[serde(default)]
+    pub gap: Option<f64>,
+    /// Draw the #RRGGBB hex label next to each chip.
+    #[serde(rename = "showHex", default)]
+    pub show_hex: bool,
+    #[serde(default)]
+    pub label: Option<PaletteLabel>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ChipShape {
+    Circle,
+    Square,
+    Diamond,
+    Hexagon,
+    Strip,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PaletteLabel {
+    /// Relative to photo height (default 0.012).
+    pub size: f64,
+    pub color: String,
+    #[serde(default)]
+    pub family: Vec<String>,
 }
 
 #[derive(Debug, Clone, Copy, Default, Deserialize)]
@@ -523,26 +684,29 @@ fn validate_semantics(t: &Template) -> Result<()> {
         range_check("canvas.background.scale", scale, 1.0, 4.0)?;
     }
     if let Some(radius) = t.canvas.radius {
-        range_check("canvas.radius", radius, 0.0, 512.0)?;
+        // v0.4.0: fraction of min(photo_w, photo_h) so previews and exports match.
+        range_check("canvas.radius", radius, 0.0, 0.25)?;
     }
     if let Some(shadow) = &t.canvas.shadow {
-        range_check("canvas.shadow.blur", shadow.blur, 0.0, 512.0)?;
+        // v0.4.0: blur/offsets are fractions of photo height; opacity 0–1.
+        range_check("canvas.shadow.blur", shadow.blur, 0.0, 0.5)?;
         range_check("canvas.shadow.opacity", shadow.opacity, 0.0, 1.0)?;
-        range_check("canvas.shadow.offsetX", shadow.offset_x, -512.0, 512.0)?;
-        range_check("canvas.shadow.offsetY", shadow.offset_y, -512.0, 512.0)?;
+        range_check("canvas.shadow.offsetX", shadow.offset_x, -0.5, 0.5)?;
+        range_check("canvas.shadow.offsetY", shadow.offset_y, -0.5, 0.5)?;
     }
 
     for (i, layer) in t.layers.iter().enumerate() {
-        let (id, anchor_present, offset) = match layer {
-            Layer::Text(text) => (&text.id, true, text.offset),
-            Layer::Image(image) => (&image.id, true, image.offset),
+        let (id, offset) = match layer {
+            Layer::Text(text) => (&text.id, text.offset),
+            Layer::Image(image) => (&image.id, image.offset),
+            Layer::Shape(shape) => (&shape.id, shape.offset),
+            Layer::Palette(palette) => (&palette.id, palette.offset),
         };
         if !is_layer_id(id) {
             return Err(Error::SchemaViolation(format!(
                 "layers[{i}].id {id:?} must be 1-64 chars of [a-zA-Z0-9-]"
             )));
         }
-        let _ = anchor_present;
         range_check(&format!("layers[{i}].offset.x"), offset.x, -1.0, 1.0)?;
         range_check(&format!("layers[{i}].offset.y"), offset.y, -1.0, 1.0)?;
         match layer {
@@ -592,6 +756,21 @@ fn validate_semantics(t: &Template) -> Result<()> {
                     0.5,
                     4.0,
                 )?;
+                range_check(
+                    &format!("layers[{i}].letterSpacing"),
+                    text.letter_spacing,
+                    -0.05,
+                    0.5,
+                )?;
+                range_check(&format!("layers[{i}].rotation"), text.rotation, -360.0, 360.0)?;
+                range_check(&format!("layers[{i}].opacity"), text.opacity, 0.0, 1.0)?;
+                if let Some(align) = &text.align {
+                    if !matches!(align.as_str(), "left" | "center" | "right") {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].align must be left|center|right"
+                        )));
+                    }
+                }
                 for item in &text.content {
                     if item.expr.is_empty() || item.expr.chars().count() > 512 {
                         return Err(Error::SchemaViolation(format!(
@@ -636,6 +815,52 @@ fn validate_semantics(t: &Template) -> Result<()> {
                     0.0,
                     1.0,
                 )?;
+            }
+            Layer::Shape(shape) => {
+                parse_hex_color(&shape.color)?;
+                range_check(&format!("layers[{i}].opacity"), shape.opacity, 0.0, 1.0)?;
+                range_check(&format!("layers[{i}].rotation"), shape.rotation, -360.0, 360.0)?;
+                if let Some(w) = shape.size.width {
+                    range_check(&format!("layers[{i}].size.width"), w, 0.0, 1.0)?;
+                }
+                if let Some(h) = shape.size.height {
+                    range_check(&format!("layers[{i}].size.height"), h, 0.0, 1.0)?;
+                }
+                if let Some(r) = shape.radius {
+                    range_check(&format!("layers[{i}].radius"), r, 0.0, 0.5)?;
+                }
+                if let Some(sw) = shape.stroke_width {
+                    range_check(&format!("layers[{i}].strokeWidth"), sw, 0.0, 0.2)?;
+                }
+            }
+            Layer::Palette(palette) => {
+                if !(2..=8).contains(&palette.count) {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].count must be within [2, 8]"
+                    )));
+                }
+                if let Some(direction) = &palette.direction {
+                    if !matches!(direction.as_str(), "horizontal" | "vertical") {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].direction must be horizontal|vertical"
+                        )));
+                    }
+                }
+                if let Some(size) = palette.size {
+                    range_check(&format!("layers[{i}].size"), size, 0.005, 0.3)?;
+                }
+                if let Some(gap) = palette.gap {
+                    range_check(&format!("layers[{i}].gap"), gap, 0.0, 0.3)?;
+                }
+                if let Some(label) = &palette.label {
+                    range_check(&format!("layers[{i}].label.size"), label.size, 0.005, 0.05)?;
+                    parse_hex_color(&label.color)?;
+                    if label.family.len() > 2 {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].label.family must contain at most 2 families"
+                        )));
+                    }
+                }
             }
         }
     }

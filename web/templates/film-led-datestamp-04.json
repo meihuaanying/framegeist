@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "id": "film-led-datestamp-04",
+    "name": "LED Datestamp",
+    "nameI18n": { "zh": "橙红日期章", "en": "LED Datestamp" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.07, "bottom": 0.26, "left": 0.07 },
+    "background": { "type": "solid", "color": "#121212" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "strip-corner",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.035 },
+      "asset": "@builtin/frame/film-strip",
+      "size": { "width": 0.62 }
+    },
+    {
+      "type": "text",
+      "id": "micro-top",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8C877D" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "'NIGHT PROCESS · C.NEG'", "fallback": "FILM" }]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.1486 },
+      "shape": "line",
+      "size": { "width": 0.34, "height": 0.0015 },
+      "color": "#3A3632"
+    },
+    {
+      "type": "text",
+      "id": "datestamp",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.0217 },
+      "font": { "family": ["Bebas Neue"], "size": 0.085, "color": "#FF5A2D" },
+      "letterSpacing": 0.04,
+      "lineHeight": 0.92,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY', exif.datetime)", "fallback": "2026" },
+        { "expr": "date('MM  DD', exif.datetime)", "fallback": "01  01" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.0714 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#8C877D" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.0489 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#B9B3A8" },
+      "letterSpacing": 0.10,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.018 },
+      "font": { "family": ["Bebas Neue"], "size": 0.030, "color": "#EFE9DC" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'FG 800'", "fallback": "FILM" }]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.018 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "stock",
+      "attachGap": 0.012
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

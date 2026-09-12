@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "id": "minimal-corner-mono",
+    "name": "Corner Mono",
+    "nameI18n": { "zh": "角落打字机", "en": "Corner Mono" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": { "mode": "overlay", "background": { "type": "none" } },
+  "layers": [
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.030, "y": -0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "auto" },
+      "letterSpacing": 0.08,
+      "opacity": 0.85,
+      "content": [
+        { "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" }
+  }
+}

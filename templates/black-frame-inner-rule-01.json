@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "id": "black-frame-inner-rule-01",
+    "name": "Inner Rule",
+    "nameI18n": { "zh": "细线黑框", "en": "Inner Rule" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "black-frame"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.08, "bottom": 0.16, "left": 0.08 },
+    "background": { "type": "solid", "color": "#111214" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "inner-rule",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.945, "height": 0.945 },
+      "color": "#FFFFFF59",
+      "strokeWidth": 0.0012
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.03 },
+      "font": { "family": ["Inter"], "size": 0.0085, "color": "#5E5E5E" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'FRAMEGEIST STUDIO'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.10 },
+      "font": { "family": ["Inter"], "size": 0.0115, "color": "#D6D6D6" },
+      "letterSpacing": 0.12,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0095, "color": "#8A8A8A" },
+      "letterSpacing": 0.1,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

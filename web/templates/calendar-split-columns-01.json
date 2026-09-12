@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "id": "calendar-split-columns-01",
+    "name": "Split Calendar",
+    "nameI18n": { "zh": "双栏日历", "en": "Split Calendar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "calendar"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.08, "bottom": 0.30, "left": 0.08 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.20 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "shape",
+      "id": "divider",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.045 },
+      "shape": "line",
+      "size": { "width": 0.0015, "height": 0.165 },
+      "color": "#E0E0E0"
+    },
+    {
+      "type": "text",
+      "id": "month",
+      "anchor": "bottom-center",
+      "offset": { "x": -0.25, "y": -0.185 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.2,
+      "align": "center",
+      "content": [{ "expr": "date('MMM', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "bigday",
+      "anchor": "bottom-center",
+      "offset": { "x": -0.25, "y": -0.09 },
+      "font": { "family": ["Bebas Neue"], "size": 0.15, "color": "#1A1A1A" },
+      "letterSpacing": 0.01,
+      "align": "center",
+      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "year",
+      "anchor": "bottom-center",
+      "offset": { "x": -0.25, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9AA0A6" },
+      "letterSpacing": 0.15,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "cndate",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.25, "y": -0.175 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.016, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "weekday",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.25, "y": -0.14 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.0125, "color": "#6B7280" },
+      "letterSpacing": 0.08,
+      "align": "center",
+      "content": [{ "expr": "exif.weekday_cn", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.25, "y": -0.095 },
+      "font": { "family": ["Inter"], "size": 0.0125, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.25, "y": -0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "id": "fuji-recipe-column-03",
+    "name": "Recipe Column",
+    "nameI18n": { "zh": "左侧配方栏", "en": "Recipe Column" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "fuji"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.07, "bottom": 0.08, "left": 0.34 },
+    "background": { "type": "solid", "color": "#EFE9DE" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "column-top",
+      "anchor": "top-left",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.34, "height": 1.0 },
+      "color": "#17181A"
+    },
+    {
+      "type": "shape",
+      "id": "column-bottom",
+      "anchor": "bottom-left",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.34, "height": 0.16 },
+      "color": "#17181A"
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.026 },
+      "asset": "@builtin/brand/fujifilm",
+      "size": { "height": 0.026 }
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.062 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'RECIPE CARD C3'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "l1",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.115 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'FILM SIMULATION'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "v1",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.141 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F1EDE6" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "'ACROS'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "l2",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.200 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'WHITE BALANCE'", "fallback": "WB" }]
+    },
+    {
+      "type": "text",
+      "id": "v2",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.226 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F1EDE6" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "'5600K'", "fallback": "WB" }]
+    },
+    {
+      "type": "text",
+      "id": "l3",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.285 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'DYNAMIC RANGE'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "v3",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.311 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F1EDE6" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "'DR400'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "l4",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.370 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'GRAIN'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "v4",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.396 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F1EDE6" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "'STRONG LARGE'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "l5",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.455 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'HIGHLIGHT'", "fallback": "HIGHLIGHT" }]
+    },
+    {
+      "type": "text",
+      "id": "v5",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.481 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F1EDE6" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "'-1'", "fallback": "-1" }]
+    },
+    {
+      "type": "text",
+      "id": "l6",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.540 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'SHADOW'", "fallback": "SHADOW" }]
+    },
+    {
+      "type": "text",
+      "id": "v6",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.566 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F1EDE6" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "'+1'", "fallback": "+1" }]
+    },
+    {
+      "type": "text",
+      "id": "spine",
+      "anchor": "middle-left",
+      "offset": { "x": -0.031, "y": 0.24 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#2E2F33" },
+      "letterSpacing": 0.40,
+      "rotation": -90,
+      "content": [{ "expr": "'FUJIFILM · RECIPE CARD C3'", "fallback": "FUJIFILM" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.035, "y": -0.078 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#F1EDE6" },
+      "letterSpacing": 0.08,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.035, "y": -0.050 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "fmt('ISO {iso} · {focal}mm f/{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.035, "y": -0.024 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

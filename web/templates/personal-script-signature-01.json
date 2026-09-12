@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "id": "personal-script-signature-01",
+    "name": "Script Signature",
+    "nameI18n": { "zh": "手写签名", "en": "Script Signature" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.1, "right": 0.09, "bottom": 0.26, "left": 0.09 },
+    "background": { "type": "solid", "color": "#FAF8F4" },
+    "radius": 0.02,
+    "shadow": { "enabled": true, "blur": 0.06, "opacity": 0.18, "offsetX": 0, "offsetY": 0.015 }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0763, "y": 0.028 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.138 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.1,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.075 },
+      "font": { "family": ["Great Vibes"], "size": 0.045, "color": "#1A1A1A" },
+      "content": [{ "expr": "'YOUR NAME'", "fallback": "YOUR NAME" }]
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "date('© YYYY COPYRIGHT', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0763, "y": -0.055 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.05 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

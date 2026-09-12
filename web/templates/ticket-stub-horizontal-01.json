@@ -1,0 +1,148 @@
+{
+  "meta": {
+    "id": "ticket-stub-horizontal-01",
+    "name": "Horizontal Stub",
+    "nameI18n": { "zh": "票根·横版存根", "en": "Horizontal Stub" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "ticket"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.07, "right": 0.06, "bottom": 0.26, "left": 0.06 },
+    "background": { "type": "solid", "color": "#D9DEE3" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "card",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.8146 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.22 },
+      "color": "#FBF9F5",
+      "radius": 0.05
+    },
+    {
+      "type": "shape",
+      "id": "perf",
+      "anchor": "top-left",
+      "offset": { "x": 0.6962, "y": 0.8209 },
+      "shape": "line",
+      "size": { "width": 0.0006, "height": 0.2033 },
+      "color": "#B9BFC7"
+    },
+    {
+      "type": "shape",
+      "id": "notch-top",
+      "anchor": "top-left",
+      "offset": { "x": 0.6878, "y": 0.8048 },
+      "shape": "ellipse",
+      "size": { "width": 0.0195, "height": 0.026 },
+      "color": "#D9DEE3"
+    },
+    {
+      "type": "shape",
+      "id": "notch-bottom",
+      "anchor": "top-left",
+      "offset": { "x": 0.6878, "y": 0.9702 },
+      "shape": "ellipse",
+      "size": { "width": 0.0195, "height": 0.026 },
+      "color": "#D9DEE3"
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.067, "y": 0.833 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C828B" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'E-TICKET'", "fallback": "TICKET" }]
+    },
+    {
+      "type": "text",
+      "id": "route",
+      "anchor": "top-left",
+      "offset": { "x": 0.067, "y": 0.856 },
+      "font": { "family": ["Bebas Neue"], "size": 0.048, "color": "#23262B" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'SHANGHAI · HANGZHOU'", "fallback": "FROM · TO" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.067, "y": 0.906 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7178" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "date('YYYY.MM.DD HH:mm', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-left",
+      "offset": { "x": 0.067, "y": 0.938 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0095, "color": "#8C929A" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "barcode",
+      "anchor": "top-left",
+      "offset": { "x": 0.7043, "y": 0.8326 },
+      "asset": "@builtin/frame/barcode",
+      "size": { "height": 0.045 }
+    },
+    {
+      "type": "text",
+      "id": "serial",
+      "anchor": "top-left",
+      "offset": { "x": 0.7043, "y": 0.878 },
+      "font": { "family": ["Bebas Neue"], "size": 0.030, "color": "#23262B" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'NO. 0042'", "fallback": "TICKET NO." }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.026 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#3A3F46" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "topright",
+      "anchor": "top-right",
+      "offset": { "x": -0.0536, "y": 0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C828B" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

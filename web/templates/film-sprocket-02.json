@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "id": "film-sprocket-02",
+    "name": "Vertical Perfs",
+    "nameI18n": { "zh": "竖齿孔", "en": "Vertical Perfs" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.085, "bottom": 0.17, "left": 0.085 },
+    "background": { "type": "solid", "color": "#0E0E0E" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "perf-left",
+      "anchor": "middle-left",
+      "offset": { "x": 0, "y": 0 },
+      "asset": "@builtin/frame/film-strip-v",
+      "size": { "width": 0.0873 }
+    },
+    {
+      "type": "image",
+      "id": "perf-right",
+      "anchor": "middle-right",
+      "offset": { "x": 0, "y": 0 },
+      "asset": "@builtin/frame/film-strip-v",
+      "size": { "width": 0.0873 }
+    },
+    {
+      "type": "text",
+      "id": "safety",
+      "anchor": "top-left",
+      "offset": { "x": 0.0727, "y": 0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7A756C" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'SAFETY FILM · 35MM'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-right",
+      "offset": { "x": -0.0727, "y": 0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#7A756C" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0727, "y": -0.0787 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#8C877D" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0727, "y": -0.0165 },
+      "font": { "family": ["Bebas Neue"], "size": 0.028, "color": "#EFE9DC" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'FG 800'", "fallback": "FILM" }]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0727, "y": -0.0165 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "stock",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0727, "y": -0.0787 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#8C877D" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

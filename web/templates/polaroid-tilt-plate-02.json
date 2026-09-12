@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "id": "polaroid-tilt-plate-02",
+    "name": "Tilt Plate",
+    "nameI18n": { "zh": "斜置日期卡", "en": "Tilt Plate" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "polaroid"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.09, "bottom": 0.30, "left": 0.09 },
+    "background": { "type": "solid", "color": "#E8DFD2" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "plate",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.10, "y": -0.055 },
+      "shape": "rect",
+      "size": { "width": 0.58, "height": 0.20 },
+      "color": "#FFFFFF",
+      "radius": 0.02,
+      "rotation": -2.5
+    },
+    {
+      "type": "image",
+      "id": "stamp",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.09, "y": -0.050 },
+      "asset": "@builtin/frame/stamp-card",
+      "size": { "height": 0.18 }
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.076, "y": 0.026 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'FIELD NOTES'", "fallback": "FIELD NOTES" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.076, "y": 0.050 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#2A2723" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.076, "y": 0.050 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.076, "y": 0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "dateblock",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.135, "y": -0.120 },
+      "font": { "family": ["Bebas Neue"], "size": 0.045, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "lineHeight": 0.95,
+      "rotation": -2.5,
+      "content": [
+        { "expr": "date('YYYY', exif.datetime)", "fallback": "2026" },
+        { "expr": "date('MM.DD', exif.datetime)", "fallback": "01.01" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "place",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.135, "y": -0.075 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6E6A62" },
+      "letterSpacing": 0.12,
+      "rotation": -2.5,
+      "content": [{ "expr": "'SHANGHAI, CN'", "fallback": "CITY" }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

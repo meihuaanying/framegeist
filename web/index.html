@@ -29,7 +29,23 @@
   <button class="icon-btn" id="langBtn">EN</button>
 </header>
 
-<main class="shell">
+<section class="wall" id="wall">
+  <div class="wall-main">
+    <div class="wall-head">
+      <h2 data-i18n="wall.title">模板墙</h2>
+      <span class="muted" id="wallCount"></span>
+      <span class="spacer" style="flex:1"></span>
+      <button class="btn small ghost" id="wallImport" style="width:auto;padding:0 14px" data-i18n="wall.import">导入照片</button>
+      <div class="search-wrap wall-search">
+        <input type="search" id="wallSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…">
+      </div>
+    </div>
+    <div class="wall-tabs" id="wallCats"></div>
+    <div class="wall-grid" id="wallGrid"></div>
+  </div>
+</section>
+
+<main class="shell hidden" id="editor">
   <aside class="sidebar">
     <div class="card">
       <div class="seg">
@@ -209,6 +225,7 @@
   <section class="workspace">
     <div class="stage-card">
       <div class="stage-head">
+        <button class="icon-btn" id="backToWall" data-i18n-title="editor.back" title="返回模板墙">←</button>
         <span id="stageLabel" data-i18n="stage.placeholder">拖入一张照片开始</span>
         <span class="spacer"></span>
         <button class="icon-btn" id="zoomOut" data-i18n-title="stage.zoomOut">−</button>

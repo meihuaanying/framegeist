@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "id": "calendar-portrait-stack-01",
+    "name": "Portrait Stack",
+    "nameI18n": { "zh": "竖幅日历", "en": "Portrait Stack" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "calendar"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.14, "right": 0.10, "bottom": 0.26, "left": 0.10 },
+    "background": { "type": "solid", "color": "#F5F2EC" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.045 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "align": "center",
+      "content": [{ "expr": "'FRAMEGEIST CALENDAR'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.045 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "bigday",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.10 },
+      "font": { "family": ["Bebas Neue"], "size": 0.11, "color": "#1A1A1A" },
+      "letterSpacing": 0.01,
+      "align": "center",
+      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "cndate",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.055 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.016, "color": "#373A40" },
+      "letterSpacing": 0.05,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "weekday",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.026 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.1,
+      "align": "center",
+      "content": [{ "expr": "exif.weekday_cn", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -5,12 +5,13 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.3.0";
+const APP_VERSION = "0.4.0";
 
 /* ------------------------------------------------------------------ state */
 
 const state = {
   engine: null,
+  view: "wall",            // wall | editor
   fonts: [],              // [{family,file,license}] from fonts.json
   loadedFonts: new Set(),
   templates: [],
@@ -99,7 +100,18 @@ const b64encode = (bytes) => {
 const b64decode = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
 const stem = (name) => name.replace(/\.[^.]+$/, "");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const withViewTransition = (fn) => (document.startViewTransition ? document.startViewTransition(fn) : fn());
+const withViewTransition = (fn) => {
+  if (!document.startViewTransition) return fn();
+  try {
+    const vt = document.startViewTransition(fn);
+    vt.ready?.catch(() => {});
+    vt.finished?.catch(() => {});
+    vt.updateCallbackDone?.catch(() => {});
+    return vt;
+  } catch {
+    return fn();
+  }
+};
 
 /* ------------------------------------------------------------------- theme */
 function currentTheme() { return localStorage.getItem(LS.theme) ?? "auto"; }
@@ -229,7 +241,12 @@ function effectiveTemplateJson() {
 }
 
 /* --------------------------------------------------------------- pickers */
-const CATS = ["classic-white", "film", "polaroid", "gallery", "technical", "magazine", "minimal", "frame-shell", "game"];
+const CATS = [
+  "white-border", "camera", "phone", "drone", "fuji", "film", "colorwalk", "colorful",
+  "classic-watermark", "portfolio", "black-frame", "sports", "calendar", "magazine",
+  "minimal", "borderless", "master", "personal", "polaroid", "festival", "effect",
+  "colorcard", "blur-bg", "ticket", "game",
+];
 let activeCat = "all";
 let templateQuery = "";
 let pickerMode = localStorage.getItem(LS.picker) || "compact";
@@ -257,6 +274,7 @@ function buildTemplatePicker() {
   const mk = (id, label) => {
     const b = document.createElement("button");
     b.textContent = label;
+    b.dataset.cat = id;
     b.className = activeCat === id ? "on" : "";
     b.onclick = () => { activeCat = id; buildTemplatePicker(); };
     chips.appendChild(b);
@@ -310,6 +328,105 @@ async function selectTemplate(id) {
   buildLineEditor();
   updateBrandDetected();
   renderNow();
+}
+
+/* ---------------------------------------------------------- template wall */
+function showWall() {
+  state.view = "wall";
+  withViewTransition(() => {
+    $("wall").classList.remove("hidden");
+    $("editor").classList.add("hidden");
+  });
+  buildWall();
+}
+function showEditor() {
+  state.view = "editor";
+  withViewTransition(() => {
+    $("wall").classList.add("hidden");
+    $("editor").classList.remove("hidden");
+  });
+  if (state.photos.length) renderNow();
+  else showTemplatePreview();
+  requestAnimationFrame(() => { if (state.zoom.autoFit) fitStage(); });
+  setTimeout(() => { if (state.zoom.autoFit) fitStage(); }, 240);
+}
+function showTemplatePreview() {
+  const tpl = currentTemplateObject();
+  if (!tpl || !state.templateId) return;
+  const wrap = $("canvasWrap");
+  wrap.innerHTML = "";
+  const img = document.createElement("img");
+  img.className = "template-preview";
+  img.src = `./previews/${state.templateId}.jpg`;
+  img.alt = "";
+  img.onload = () => { img.classList.add("shown"); if (state.zoom.autoFit) fitStage(); };
+  wrap.appendChild(img);
+  $("stagePlaceholder").classList.add("hidden");
+  const meta = state.templates.find((x) => x.id === state.templateId);
+  if (meta) $("stageLabel").textContent = tplName(meta);
+}
+async function useTemplate(id) {
+  state.templateId = id;
+  await fetchTemplateJson(id);
+  showEditor();
+  buildTemplatePicker();
+  updatePinned();
+  updateTweakUI();
+  buildLineEditor();
+  updateBrandDetected();
+  if (state.photos.length) renderNow();
+  else showTemplatePreview();
+}
+function buildWall() {
+  const tabs = $("wallCats");
+  tabs.innerHTML = "";
+  const mk = (id, label) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.dataset.cat = id;
+    b.className = activeCat === id ? "on" : "";
+    b.onclick = () => { activeCat = id; buildWall(); buildTemplatePicker(); };
+    tabs.appendChild(b);
+  };
+  mk("all", t("chip.all"));
+  mk("mine", t("chip.mine"));
+  for (const c of CATS) mk(c, t("cat." + c));
+
+  const list = filteredTemplates();
+  $("wallCount").textContent = t("wall.count", { n: list.length });
+
+  const grid = $("wallGrid");
+  grid.innerHTML = "";
+  if (!list.length) {
+    const empty = document.createElement("div");
+    empty.className = "wall-empty";
+    empty.textContent = t("wall.empty");
+    grid.appendChild(empty);
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }, { rootMargin: "140px" });
+  for (const tpl of list) {
+    const cell = document.createElement("div");
+    cell.className = `wall-card${tpl.id === state.templateId ? " on" : ""}`;
+    cell.tabIndex = 0;
+    const src = thumbSrc(tpl) ? `./previews/${tpl.id}.jpg` : null;
+    const catLabel = t("cat." + tpl.category) !== `cat.${tpl.category}` ? t("cat." + tpl.category) : (tpl.category ?? "");
+    cell.innerHTML = (src
+      ? `<img loading="lazy" src="${src}" alt="">`
+      : `<div style="display:grid;place-items:center;aspect-ratio:3/2;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)))">${tplName(tpl).slice(0, 16)}</div>`) +
+      `<div class="wall-name"><b>${tplName(tpl)}</b><span class="wall-cat"></span></div>` +
+      `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">⤢</button></div>`;
+    cell.querySelector(".wall-cat").textContent = catLabel;
+    cell.onclick = (e) => {
+      if (e.target.classList.contains("icon")) { e.stopPropagation(); openLightbox(tpl.id); return; }
+      useTemplate(tpl.id);
+    };
+    cell.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); useTemplate(tpl.id); } };
+    grid.appendChild(cell);
+    io.observe(cell);
+  }
 }
 
 let layoutQuery = "";
@@ -413,7 +530,7 @@ function setStage(url, label) {
   const wrap = $("canvasWrap");
   wrap.innerHTML = "";
   const img = new Image();
-  img.onload = () => { img.classList.add("shown"); fitStage(); };
+  img.onload = () => { img.classList.add("shown"); if (state.view === "editor") fitStage(); };
   img.src = url;
   wrap.appendChild(img);
   $("stagePlaceholder").classList.add("hidden");
@@ -635,7 +752,7 @@ async function fastPreviewRgba(photoBytes) {
 
 let renderToken = 0;
 async function renderNow() {
-  if (!state.engine || !state.photos.length) return;
+  if (!state.engine || !state.photos.length) { showTemplatePreview(); return; }
   const token = ++renderToken;
   setStatus("busy", t("status.rendering"));
   const skeletonTimer = setTimeout(() => $("skeleton").classList.add("on"), 250);
@@ -686,6 +803,7 @@ async function renderNow() {
 /* -------------------------------------------------------------- zoom/pan */
 function fitStage() {
   const vp = $("viewport").getBoundingClientRect();
+  if (vp.width < 10 || vp.height < 10) return;
   const img = $("canvasWrap").querySelector("img");
   if (!img || !img.naturalWidth) return;
   const pad = 48;
@@ -1015,6 +1133,7 @@ async function boot() {
   showExif();
   updateBrandDetected();
   syncCanvasUI();
+  showWall();
   setStatus("ready", t("status.ready"));
   window.__bootMs = Math.round(performance.now());
 }
@@ -1075,6 +1194,9 @@ function wire() {
   $("preview").onchange = renderNow;
 
   $("tplSearch").oninput = (e) => { templateQuery = e.target.value.trim().toLowerCase(); buildTemplatePicker(); };
+  $("wallSearch").oninput = (e) => { templateQuery = e.target.value.trim().toLowerCase(); buildWall(); buildTemplatePicker(); };
+  $("wallImport").onclick = () => $("fileInput").click();
+  $("backToWall").onclick = showWall;
   $("layoutSearch").oninput = (e) => { layoutQuery = e.target.value.trim().toLowerCase(); buildLayoutPicker(); };
   $("pickerCompact").onclick = () => { pickerMode = "compact"; localStorage.setItem(LS.picker, pickerMode); syncCanvasUI(); buildTemplatePicker(); };
   $("pickerLarge").onclick = () => { pickerMode = "large"; localStorage.setItem(LS.picker, pickerMode); syncCanvasUI(); buildTemplatePicker(); };
@@ -1163,7 +1285,10 @@ function wire() {
   ["dragover", "dragenter"].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add("over"); }));
   ["dragleave", "drop"].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove("over"); }));
   dz.addEventListener("drop", (e) => { if (e.dataTransfer?.files?.length) acceptFiles(e.dataTransfer.files); });
-  $("fileInput").onchange = (e) => { if (e.target.files?.length) acceptFiles(e.target.files); };
+  $("fileInput").onchange = async (e) => {
+    if (e.target.files?.length) { await acceptFiles(e.target.files); showEditor(); }
+    e.target.value = "";
+  };
 
   wireViewport();
 
@@ -1200,7 +1325,7 @@ function wire() {
   document.getElementById("lbBackdrop").onclick = closeLightbox;
   document.getElementById("lbPrev").onclick = () => navLightbox(-1);
   document.getElementById("lbNext").onclick = () => navLightbox(1);
-  document.getElementById("lbApply").onclick = () => { if (lbId) { selectTemplate(lbId); closeLightbox(); } };
+  document.getElementById("lbApply").onclick = () => { if (lbId) { useTemplate(lbId); closeLightbox(); } };
 
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === ",") { e.preventDefault(); openSettings(); return; }
@@ -1217,15 +1342,13 @@ function wire() {
     applyI18n();
     buildTemplatePicker();
     buildLayoutPicker();
+    buildWall();
     updateTweakUI();
     buildLineEditor();
     showExif();
     updateBrandDetected();
     syncCanvasUI();
-    if (!state.photos.length) {
-      $("stagePlaceholder").classList.remove("hidden");
-      $("canvasWrap").innerHTML = "";
-    }
+    if (!state.photos.length && state.view === "editor") showTemplatePreview();
   });
 }
 
@@ -1374,4 +1497,4 @@ async function clearScope(name) {
 }
 
 // Debug hook for perf/automation.
-window.__fg = { state, renderNow, fitStage, get engine() { return state.engine; } };
+window.__fg = { state, renderNow, fitStage, showWall, showEditor, useTemplate, buildWall, get engine() { return state.engine; } };

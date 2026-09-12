@@ -1,0 +1,195 @@
+{
+  "meta": {
+    "id": "fuji-recipe-panel-01",
+    "name": "Recipe Panel",
+    "nameI18n": { "zh": "配方暗板", "en": "Recipe Panel" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "fuji"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.07, "bottom": 0.38, "left": 0.07 },
+    "background": { "type": "solid", "color": "#101011" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "panel-left",
+      "anchor": "bottom-left",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.38 },
+      "color": "#1B1C1F"
+    },
+    {
+      "type": "shape",
+      "id": "panel-right",
+      "anchor": "bottom-right",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.14, "height": 0.38 },
+      "color": "#1B1C1F"
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.026 },
+      "asset": "@builtin/brand/fujifilm",
+      "size": { "height": 0.030 }
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.115, "y": 0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'RECIPE CARD C1'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-right",
+      "offset": { "x": -0.0526, "y": 0.030 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#C9C5BC" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "cell1v",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.772 },
+      "font": { "family": ["Space Grotesk"], "size": 0.030, "color": "#F2EFE9" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "'CLASSIC CHROME'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "cell1l",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.806 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'FILM SIMULATION'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "cell2v",
+      "anchor": "top-left",
+      "offset": { "x": 0.2763, "y": 0.772 },
+      "font": { "family": ["Space Grotesk"], "size": 0.030, "color": "#F2EFE9" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "'AUTO'", "fallback": "AUTO" }]
+    },
+    {
+      "type": "text",
+      "id": "cell2l",
+      "anchor": "top-left",
+      "offset": { "x": 0.2763, "y": 0.806 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'WHITE BALANCE'", "fallback": "WB" }]
+    },
+    {
+      "type": "text",
+      "id": "cell3v",
+      "anchor": "top-left",
+      "offset": { "x": 0.5000, "y": 0.772 },
+      "font": { "family": ["Space Grotesk"], "size": 0.030, "color": "#F2EFE9" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "'DR200'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "cell3l",
+      "anchor": "top-left",
+      "offset": { "x": 0.5000, "y": 0.806 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'DYNAMIC RANGE'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "cell4v",
+      "anchor": "top-left",
+      "offset": { "x": 0.7237, "y": 0.772 },
+      "font": { "family": ["Space Grotesk"], "size": 0.030, "color": "#F2EFE9" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "'WEAK SMALL'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "cell4l",
+      "anchor": "top-left",
+      "offset": { "x": 0.7237, "y": 0.806 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'GRAIN'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "secondary",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.862 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#A9A6A0" },
+      "letterSpacing": 0.12,
+      "content": [
+        { "expr": "'HIGHLIGHT 0 · SHADOW +1 · COLOR +1 · SHARPNESS -1'", "fallback": "HIGHLIGHT 0 · SHADOW +1" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "iso",
+      "anchor": "top-right",
+      "offset": { "x": -0.0526, "y": 0.856 },
+      "font": { "family": ["Space Grotesk"], "size": 0.020, "color": "#F2EFE9" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "fmt('ISO {iso}', exif)", "fallback": "ISO 200" }]
+    },
+    {
+      "type": "shape",
+      "id": "panel-rule",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.905 },
+      "shape": "line",
+      "size": { "width": 0.8947, "height": 0.0012 },
+      "color": "#2A2B2E"
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0526, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0526, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8E8B84" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

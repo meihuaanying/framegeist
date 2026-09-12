@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "id": "borderless-right-roll-01",
+    "name": "Right Roll",
+    "nameI18n": { "zh": "右列参数", "en": "Right Roll" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.03, "y": -0.055 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "auto" },
+      "letterSpacing": 0.15,
+      "opacity": 0.9,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.03, "y": -0.055 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto",
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "roll",
+      "anchor": "top-right",
+      "offset": { "x": -0.03, "y": 0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.014, "color": "auto" },
+      "letterSpacing": 0.1,
+      "lineHeight": 1.55,
+      "opacity": 0.88,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}MM', exif)", "fallback": null },
+        { "expr": "fmt('F{aperture}', exif)", "fallback": null },
+        { "expr": "exif.shutter", "fallback": null },
+        { "expr": "fmt('ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.03, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.12,
+      "opacity": 0.8,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

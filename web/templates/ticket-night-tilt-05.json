@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "id": "ticket-night-tilt-05",
+    "name": "Night Tilt",
+    "nameI18n": { "zh": "夜行票·斜卡", "en": "Night Tilt" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "ticket"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.08, "bottom": 0.34, "left": 0.08 },
+    "background": { "type": "solid", "color": "#14161A" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "card",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.60 },
+      "shape": "rect",
+      "size": { "width": 0.72, "height": 0.20 },
+      "color": "#F7F5F0",
+      "radius": 0.04,
+      "rotation": -6
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.135, "y": 0.636 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C828B" },
+      "letterSpacing": 0.22,
+      "rotation": -6,
+      "content": [{ "expr": "'NIGHT PASS'", "fallback": "TICKET" }]
+    },
+    {
+      "type": "text",
+      "id": "route",
+      "anchor": "top-left",
+      "offset": { "x": 0.135, "y": 0.655 },
+      "font": { "family": ["Bebas Neue"], "size": 0.044, "color": "#1C1F23" },
+      "letterSpacing": 0.04,
+      "rotation": -6,
+      "content": [{ "expr": "'CHENGDU · LHASA'", "fallback": "FROM · TO" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.135, "y": 0.696 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#4A5057" },
+      "letterSpacing": 0.08,
+      "rotation": -6,
+      "content": [{ "expr": "date('YYYY.MM.DD HH:mm', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "station",
+      "anchor": "top-left",
+      "offset": { "x": 0.135, "y": 0.722 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C828B" },
+      "letterSpacing": 0.20,
+      "rotation": -6,
+      "content": [{ "expr": "'THIS STATION'", "fallback": "STATION" }]
+    },
+    {
+      "type": "image",
+      "id": "barcode",
+      "anchor": "top-left",
+      "offset": { "x": 0.135, "y": 0.80 },
+      "asset": "@builtin/frame/barcode",
+      "size": { "height": 0.042 }
+    },
+    {
+      "type": "text",
+      "id": "serial",
+      "anchor": "top-left",
+      "offset": { "x": 0.269, "y": 0.803 },
+      "font": { "family": ["Bebas Neue"], "size": 0.034, "color": "#D8D5CE" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'NO. 0007'", "fallback": "TICKET NO." }]
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "top-left",
+      "offset": { "x": 0.78, "y": 0.79 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.075 }
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.069, "y": 0.026 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#CFCCC6" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.069, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "topright",
+      "anchor": "top-right",
+      "offset": { "x": -0.069, "y": 0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6E737C" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [{ "expr": "'NIGHT RAIL · SLEEPER'", "fallback": "NIGHT RAIL" }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

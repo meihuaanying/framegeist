@@ -104,18 +104,15 @@ pub fn validate_expr(expr: &str) -> Result<()> {
         let inner = rest.strip_suffix(')').ok_or_else(|| {
             Error::SandboxViolation(format!("date() is unterminated: {expr:?}"))
         })?;
-        let (literal, key) = inner
-            .split_once(", ")
-            .ok_or_else(|| Error::SandboxViolation(format!("date() needs two arguments: {expr:?}")))?;
-        if !(literal.starts_with('\'') && literal.ends_with('\'') && literal.len() >= 2) {
-            return Err(Error::SandboxViolation(format!(
+        let inner = inner.strip_prefix('\'').ok_or_else(|| {
+            Error::SandboxViolation(format!(
                 "date() format must be a single-quoted literal: {expr:?}"
-            )));
-        }
-        if literal[1..literal.len() - 1]
-            .chars()
-            .any(|c| matches!(c, '\'' | '\\' | '\n'))
-        {
+            ))
+        })?;
+        let (literal, key) = inner.split_once("', ").ok_or_else(|| {
+            Error::SandboxViolation(format!("date() needs two arguments: {expr:?}"))
+        })?;
+        if literal.contains('\'') || literal.contains('\\') || literal.contains('\n') {
             return Err(Error::SandboxViolation(format!(
                 "date() format contains forbidden characters: {expr:?}"
             )));
@@ -201,11 +198,11 @@ pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
     }
     if let Some(rest) = expr.strip_prefix("date(") {
         let inner = rest.strip_suffix(')')?;
-        let (literal, key) = inner.split_once(", ")?;
+        let inner = inner.strip_prefix('\'')?;
+        let (format, key) = inner.split_once("', ")?;
         if key != "exif.datetime" {
             return None;
         }
-        let format = &literal[1..literal.len() - 1];
         let raw = info.get("datetime")?;
         return format_exif_date(&raw, format);
     }
@@ -230,8 +227,9 @@ pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
     None
 }
 
-/// Reformat an EXIF datetime (`YYYY:MM:DD HH:MM:SS`) according to a
-/// token format: YYYY, MM, DD, HH, mm, SS (other characters pass through).
+/// Reformat an EXIF datetime (`YYYY:MM:DD HH:MM:SS`) according to a token
+/// format. Tokens (longest match first): YYYY, MMMM, MMM, MM, M, DD, Do, D,
+/// HH, mm, SS, WW (English weekday). Other characters pass through.
 fn format_exif_date(raw: &str, format: &str) -> Option<String> {
     let digits: Vec<u32> = raw
         .chars()
@@ -240,39 +238,70 @@ fn format_exif_date(raw: &str, format: &str) -> Option<String> {
     if digits.len() < 14 {
         return None;
     }
-    let (y, m, d, hh, mi, ss) = (
-        &digits[0..4],
-        &digits[4..6],
-        &digits[6..8],
-        &digits[8..10],
-        &digits[10..12],
-        &digits[12..14],
-    );
-    let num = |slice: &[u32]| -> String {
-        slice
-            .iter()
-            .map(|d| d.to_string())
-            .collect::<Vec<_>>()
-            .concat()
+    let num = |slice: &[u32]| -> u32 {
+        slice.iter().fold(0u32, |acc, d| acc * 10 + d)
     };
+    let year = num(&digits[0..4]);
+    let month = num(&digits[4..6]);
+    let day = num(&digits[6..8]);
+    let hour = num(&digits[8..10]);
+    let minute = num(&digits[10..12]);
+    let second = num(&digits[12..14]);
+
+    const MONTHS: [&str; 12] = [
+        "January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December",
+    ];
+    let month_name = MONTHS.get(month.saturating_sub(1) as usize).copied().unwrap_or("");
+    let weekday = crate::exif::weekday_en(raw).unwrap_or("");
+    let ordinal = |d: u32| -> String {
+        let suffix = if (11..=13).contains(&(d % 100)) {
+            "th"
+        } else {
+            match d % 10 {
+                1 => "st",
+                2 => "nd",
+                3 => "rd",
+                _ => "th",
+            }
+        };
+        format!("{d}{suffix}")
+    };
+    let token_value = |token: &str| -> String {
+        match token {
+            "YYYY" => format!("{year:04}"),
+            "MMMM" => month_name.to_string(),
+            "MMM" => month_name.chars().take(3).collect(),
+            "MM" => format!("{month:02}"),
+            "M" => month.to_string(),
+            "DD" => format!("{day:02}"),
+            "Do" => ordinal(day),
+            "D" => day.to_string(),
+            "HH" => format!("{hour:02}"),
+            "mm" => format!("{minute:02}"),
+            "SS" => format!("{second:02}"),
+            "WW" => weekday.to_string(),
+            _ => String::new(),
+        }
+    };
+
+    const TOKENS: [&str; 12] = [
+        "YYYY", "MMMM", "MMM", "MM", "M", "DD", "Do", "D", "HH", "mm", "SS", "WW",
+    ];
     let mut out = String::with_capacity(format.len());
     let mut rest = format;
-    for token in ["YYYY", "MM", "DD", "HH", "mm", "SS"] {
-        if let Some(pos) = rest.find(token) {
-            out.push_str(&rest[..pos]);
-            let value = match token {
-                "YYYY" => num(y),
-                "MM" => num(m),
-                "DD" => num(d),
-                "HH" => num(hh),
-                "mm" => num(mi),
-                _ => num(ss),
-            };
-            out.push_str(&value);
-            rest = &rest[pos + token.len()..];
+    'outer: while !rest.is_empty() {
+        for token in TOKENS {
+            if let Some(after) = rest.strip_prefix(token) {
+                out.push_str(&token_value(token));
+                rest = after;
+                continue 'outer;
+            }
         }
+        let ch = rest.chars().next()?;
+        out.push(ch);
+        rest = &rest[ch.len_utf8()..];
     }
-    out.push_str(rest);
     Some(out)
 }
 

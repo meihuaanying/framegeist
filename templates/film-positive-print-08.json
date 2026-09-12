@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "id": "film-positive-print-08",
+    "name": "Positive Print",
+    "nameI18n": { "zh": "黑白正片", "en": "Positive Print" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.11, "right": 0.10, "bottom": 0.22, "left": 0.10 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "thin-frame",
+      "anchor": "top-left",
+      "offset": { "x": 0.0833, "y": 0.0827 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 1.0 },
+      "color": "#111111",
+      "strokeWidth": 0.0015
+    },
+    {
+      "type": "image",
+      "id": "edgecode",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0833, "y": -0.1053 },
+      "asset": "@builtin/frame/film-edge",
+      "size": { "width": 0.5 },
+      "opacity": 0.30
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "top-left",
+      "offset": { "x": 0.0833, "y": 0.035 },
+      "font": { "family": ["Space Grotesk"], "size": 0.020, "color": "#1A1A1A" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'FG 100'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.0833, "y": 0.042 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0833, "y": -0.0226 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#1A1A1A" },
+      "letterSpacing": 0.08,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0833, "y": -0.0226 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.021 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0833, "y": -0.0526 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0833, "y": -0.0226 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

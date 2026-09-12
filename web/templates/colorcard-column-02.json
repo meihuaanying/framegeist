@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "id": "colorcard-column-02",
+    "name": "Night Column",
+    "nameI18n": { "zh": "夜幕色柱", "en": "Night Column" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorcard"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.30, "bottom": 0.14, "left": 0.08 },
+    "background": { "type": "solid", "color": "#1C1C1E" },
+    "radius": 0.03,
+    "shadow": { "enabled": true, "blur": 0.12, "opacity": 0.40, "offsetX": 0, "offsetY": 0.02 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9BA0A8" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.07, "y": 0.04 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    },
+    {
+      "type": "palette",
+      "id": "chips",
+      "anchor": "middle-right",
+      "offset": { "x": -0.10, "y": 0.02 },
+      "count": 5,
+      "shape": "square",
+      "direction": "vertical",
+      "size": 0.036,
+      "gap": 0.016,
+      "showHex": true,
+      "label": { "size": 0.0095, "color": "#C9CCD2", "family": ["JetBrains Mono"] }
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.06 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "#F0EFEA" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9BA0A8" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

@@ -4,9 +4,8 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 
 ## 演示照片（`templates/assets/photos/`）
 
-6 张（3 风光 + 3 建筑），详见 `CREDITS-DEMO.json`：
-- Cleveland Museum of Art Open Access（**CC0-1.0**）：Twilight in the Wilderness、Shepherds in a Landscape、Architecture、Gothic Church among Oaks（建筑/风光画作）。
-- Lorem Picsum（**Unsplash License**，可免费商用，建议署名）：Mountain river (#1015)、City architecture (#1076)。
+11 张真实摄影（3 风光 + 2 建筑 + 街景/雾气/黄昏城市/人像/人物/方形草莓），详见 `CREDITS-DEMO.json`：
+- Lorem Picsum（**Unsplash License**，免费商用，建议署名）：Fjord #1015、Canyon #1016、Snow #1036、Skyline #1029、Castle #1040、Street #1071、Mist #1044、Dusk #1067、Portrait #1027、Canoe #1011、Strawberries #1080。
 
 用途：模板缩略图（240px）/ 应用内预览（640px）/ 样张（900px）的分分类演示素材。
 
@@ -40,5 +39,5 @@ Host Grotesk、DM Sans（OFL-1.1，自托管 latin 子集）。
 
 ## 模板
 
-内置模板（`templates/*.json`）由 FrameGeist 原创生成（`tools/gen-templates.mjs`），
-许可以模板 meta 为准（当前全部 CC0-1.0）。
+内置模板（`templates/*.json`）由 FrameGeist 原创设计（v0.4.0 起为手工创作/子 Agent 设计产出，
+清单由 `tools/gen-templates.mjs` 扫描重建），许可以模板 meta 为准（当前全部 CC0-1.0）。

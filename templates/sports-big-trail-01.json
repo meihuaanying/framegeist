@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "id": "sports-big-trail-01",
+    "name": "Big Trail",
+    "nameI18n": { "zh": "大标题山径", "en": "Big Trail" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "sports"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.07, "right": 0.09, "bottom": 0.28, "left": 0.09 },
+    "background": { "type": "solid", "color": "#FAF8F3" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.1706 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [
+        { "expr": "'MOUNTAIN RIDE · 2026'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "bigword",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.0685 },
+      "font": { "family": ["Bebas Neue"], "size": 0.115, "color": "#1A1A1A" },
+      "letterSpacing": 0.03,
+      "content": [
+        { "expr": "'TRAIL'", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0763, "y": -0.1022 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.024 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.0511 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0763, "y": -0.0515 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

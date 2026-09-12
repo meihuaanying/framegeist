@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "id": "phone-midnight-bar-01",
+    "name": "Midnight Bar",
+    "nameI18n": { "zh": "午夜黑条", "en": "Midnight Bar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "phone"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.055, "right": 0.07, "bottom": 0.185, "left": 0.07 },
+    "background": { "type": "solid", "color": "#101216" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0614, "y": -0.139 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#FFFFFF2E"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0614, "y": -0.087 },
+      "font": { "family": ["Space Grotesk"], "size": 0.018, "color": "#F5F5F7" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')", "fallback": "MOBILE CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0614, "y": -0.0516 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#8A8F98" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0614, "y": -0.0847 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.019 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0614, "y": -0.0524 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#6B7280" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

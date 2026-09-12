@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "id": "magazine-poster-manifesto-01",
+    "name": "Quiet Manifesto",
+    "nameI18n": { "zh": "静默宣言", "en": "Quiet Manifesto" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.15, "bottom": 0.34, "left": 0.15 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "anchor": "top-left",
+      "offset": { "x": 0.115, "y": 0.028 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "#9AA0A6" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'POSTER Nº 09'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.115, "y": 0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.115, "y": -0.2144 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0016 },
+      "color": "#1A1A1A",
+      "opacity": 0.8
+    },
+    {
+      "type": "text",
+      "id": "slogan-en",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.115, "y": -0.128 },
+      "font": { "family": ["Playfair Display"], "size": 0.034, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'LET LIGHT SPEAK.'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "slogan-cn",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.115, "y": -0.075 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.020, "color": "#373A40" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "'光影自有主张'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.115, "y": -0.17 },
+      "font": { "family": ["Inter"], "size": 0.015, "color": "#373A40" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.115, "y": -0.125 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.115, "y": -0.075 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

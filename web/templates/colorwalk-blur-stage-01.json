@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "id": "colorwalk-blur-stage-01",
+    "name": "Blur Stage",
+    "nameI18n": { "zh": "模糊舞台", "en": "Blur Stage" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorwalk"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.11, "right": 0.13, "bottom": 0.24, "left": 0.13 },
+    "background": { "type": "blur", "blur": 48, "scale": 1.25 },
+    "radius": 0.03,
+    "shadow": { "enabled": true, "blur": 0.10, "opacity": 0.32, "offsetX": 0, "offsetY": 0.02 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.035 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.24,
+      "opacity": 0.85,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.06, "y": -0.083 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.1144 },
+      "shape": "line",
+      "size": { "width": 0.18, "height": 0.0016 },
+      "color": "#FFFFFF66"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.1234 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "auto" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.0824 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.06,
+      "opacity": 0.9,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

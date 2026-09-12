@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "id": "festival-lantern-night-01",
+    "name": "Night Lanterns",
+    "nameI18n": { "zh": "灯会之夜", "en": "Night Lanterns" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "festival"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "gold-frame",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.94, "height": 0.94 },
+      "color": "#D4A017",
+      "strokeWidth": 0.0018
+    },
+    {
+      "type": "image",
+      "id": "lantern-1",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.035 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.038 },
+      "tint": "auto"
+    },
+    {
+      "type": "image",
+      "id": "lantern-2",
+      "anchor": "top-left",
+      "offset": { "x": 0.083, "y": 0.035 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.038 },
+      "tint": "auto"
+    },
+    {
+      "type": "image",
+      "id": "lantern-3",
+      "anchor": "top-left",
+      "offset": { "x": 0.131, "y": 0.035 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.038 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-right",
+      "offset": { "x": -0.04, "y": 0.038 },
+      "font": { "family": ["Inter"], "size": 0.009, "color": "auto" },
+      "letterSpacing": 0.22,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [{ "expr": "'LANTERN NIGHT · FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.04, "y": -0.045 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.06 }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.04, "y": -0.10 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.05, "color": "auto" },
+      "letterSpacing": 0.04,
+      "opacity": 0.95,
+      "align": "right",
+      "content": [{ "expr": "'灯会'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.04, "y": -0.04 },
+      "font": { "family": ["Bebas Neue"], "size": 0.038, "color": "auto" },
+      "letterSpacing": 0.06,
+      "opacity": 0.9,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "date": { "type": "string", "source": "exif" }
+  }
+}

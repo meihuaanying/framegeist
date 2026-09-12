@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "id": "personal-polaroid-script-01",
+    "name": "Polaroid Script",
+    "nameI18n": { "zh": "拍立得题字", "en": "Polaroid Script" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.12, "bottom": 0.32, "left": 0.12 },
+    "background": { "type": "solid", "color": "#FFFFFF" },
+    "radius": 0.005,
+    "shadow": { "enabled": true, "blur": 0.06, "opacity": 0.16, "offsetX": 0, "offsetY": 0.015 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "signature",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.12 },
+      "font": { "family": ["Great Vibes"], "size": 0.042, "color": "#1A1A1A" },
+      "align": "center",
+      "content": [{ "expr": "'YOUR NAME'", "fallback": "YOUR NAME" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.07 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.035 },
+      "font": { "family": ["Inter"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.08,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

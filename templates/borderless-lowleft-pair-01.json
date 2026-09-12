@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "id": "borderless-lowleft-pair-01",
+    "name": "Low Left Pair",
+    "nameI18n": { "zh": "左下双行", "en": "Low Left Pair" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.03, "y": 0.028 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "top-left",
+      "offset": { "x": 0.03, "y": 0.072 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.08,
+      "opacity": 0.8,
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.03, "y": 0.03 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.14,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.03, "y": -0.082 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "auto" },
+      "letterSpacing": 0.13,
+      "opacity": 0.9,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.03, "y": -0.044 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.09,
+      "opacity": 0.85,
+      "content": [
+        { "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

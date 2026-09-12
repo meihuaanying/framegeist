@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "id": "borderless-vertical-spine-01",
+    "name": "Vertical Spine",
+    "nameI18n": { "zh": "左轴竖排", "en": "Vertical Spine" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "spine",
+      "anchor": "middle-left",
+      "offset": { "x": -0.03, "y": 0 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.12,
+      "opacity": 0.85,
+      "rotation": 90,
+      "content": [
+        { "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.03, "y": 0.028 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-right",
+      "offset": { "x": -0.03, "y": 0.072 },
+      "font": { "family": ["Inter"], "size": 0.015, "color": "auto" },
+      "letterSpacing": 0.12,
+      "opacity": 0.9,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "tail",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.03, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.08,
+      "lineHeight": 1.6,
+      "opacity": 0.8,
+      "align": "right",
+      "content": [
+        { "expr": "exif.lens", "fallback": null },
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

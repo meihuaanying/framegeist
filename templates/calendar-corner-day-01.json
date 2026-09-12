@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "id": "calendar-corner-day-01",
+    "name": "Corner Day",
+    "nameI18n": { "zh": "角标日历", "en": "Corner Day" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "calendar"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.04, "y": 0.035 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "auto" },
+      "letterSpacing": 0.22,
+      "opacity": 0.8,
+      "content": [{ "expr": "'CALENDAR · FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "bigday",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.04, "y": -0.045 },
+      "font": { "family": ["Bebas Neue"], "size": 0.155, "color": "auto" },
+      "letterSpacing": 0.01,
+      "opacity": 0.92,
+      "align": "right",
+      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "month",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.04, "y": -0.215 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.2,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [{ "expr": "date('MMM', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "cndate",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.04, "y": -0.045 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.014, "color": "auto" },
+      "letterSpacing": 0.05,
+      "opacity": 0.9,
+      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "weekday",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.04, "y": -0.085 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.1,
+      "opacity": 0.85,
+      "content": [{ "expr": "exif.weekday_cn", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "date": { "type": "string", "source": "exif" }
+  }
+}

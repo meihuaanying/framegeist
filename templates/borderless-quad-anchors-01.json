@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "id": "borderless-quad-anchors-01",
+    "name": "Quad Anchors",
+    "nameI18n": { "zh": "四角逐格", "en": "Quad Anchors" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.03, "y": 0.028 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.03, "y": 0.072 },
+      "font": { "family": ["Inter"], "size": 0.015, "color": "auto" },
+      "letterSpacing": 0.12,
+      "opacity": 0.9,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.03, "y": 0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.08,
+      "lineHeight": 1.6,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}MM', exif)", "fallback": null },
+        { "expr": "fmt('F{aperture}', exif)", "fallback": null },
+        { "expr": "exif.shutter", "fallback": null },
+        { "expr": "fmt('ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.03, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.08,
+      "opacity": 0.8,
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.03, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "auto" },
+      "letterSpacing": 0.16,
+      "opacity": 0.9,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

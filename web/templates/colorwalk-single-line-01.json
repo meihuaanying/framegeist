@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "id": "colorwalk-single-line-01",
+    "name": "One Line Walk",
+    "nameI18n": { "zh": "单行漫步", "en": "One Line Walk" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorwalk"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.045, "right": 0.04, "bottom": 0.115, "left": 0.04 },
+    "background": { "type": "tint" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.0891 },
+      "shape": "line",
+      "size": { "width": 0.24, "height": 0.0016 },
+      "color": "#FFFFFF66"
+    },
+    {
+      "type": "shape",
+      "id": "spark",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.4103 },
+      "shape": "diamond",
+      "size": { "width": 0.007, "height": 0.009 },
+      "color": "#E10600"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.049 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.014, "color": "auto" },
+      "letterSpacing": 0.32,
+      "opacity": 0.92,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "date": { "type": "string", "source": "exif" }
+  }
+}

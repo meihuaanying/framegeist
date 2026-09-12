@@ -22,10 +22,12 @@ await init(wasmBytes);
 
 const engine = new Engine(["JetBrains Mono"], [font]);
 
+const fixtureDir = join(ROOT, "crates/framegeist-cli/tests/fixtures");
 const templateIds = ["classic-white-bottom-param", "polaroid-caption", "minimal-corner-iso"];
 let failures = 0;
 for (const id of templateIds) {
-  const tpl = await readFile(join(ROOT, `templates/${id}.json`), "utf8");
+  const fixturePath = join(fixtureDir, `${id}.json`);
+  const tpl = await readFile(fixturePath, "utf8");
   const out = engine.render(photo, tpl, "jpeg", false);
   const outBytes = Buffer.from(out);
   const outPath = join(process.env.TEMP ?? "/tmp", `fg-smoke-${id}.jpg`);
@@ -33,7 +35,7 @@ for (const id of templateIds) {
   execFileSync(engineCli, [
     "render",
     join(ROOT, "templates/assets/test-photos/sample-landscape.jpg"),
-    "--template", id,
+    "--template", fixturePath,
     "-o", outPath,
   ], { cwd: ROOT });
   const cliBytes = await readFile(outPath);

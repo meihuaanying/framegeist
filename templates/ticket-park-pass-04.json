@@ -1,0 +1,141 @@
+{
+  "meta": {
+    "id": "ticket-park-pass-04",
+    "name": "Park Pass",
+    "nameI18n": { "zh": "公园通行证", "en": "Park Pass" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "ticket"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.22, "right": 0.06, "bottom": 0.24, "left": 0.06 },
+    "background": { "type": "solid", "color": "#E7E4DA" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "card",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.0137 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.20 },
+      "color": "#FDFCF9",
+      "radius": 0.05
+    },
+    {
+      "type": "image",
+      "id": "icon",
+      "anchor": "top-left",
+      "offset": { "x": 0.067, "y": 0.0331 },
+      "asset": "@builtin/frame/icon-mountain",
+      "size": { "height": 0.055 }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "top-left",
+      "offset": { "x": 0.112, "y": 0.033 },
+      "font": { "family": ["Bebas Neue"], "size": 0.040, "color": "#2A2E2A" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'NATIONAL PARK PASS'", "fallback": "PARK PASS" }]
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "anchor": "top-left",
+      "offset": { "x": 0.112, "y": 0.064 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8278" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'EXPLORE · PRESERVE'", "fallback": "EXPLORE" }]
+    },
+    {
+      "type": "image",
+      "id": "barcode",
+      "anchor": "top-left",
+      "offset": { "x": 0.112, "y": 0.095 },
+      "asset": "@builtin/frame/barcode",
+      "size": { "height": 0.034 }
+    },
+    {
+      "type": "text",
+      "id": "serial",
+      "anchor": "top-right",
+      "offset": { "x": -0.067, "y": 0.033 },
+      "font": { "family": ["Bebas Neue"], "size": 0.034, "color": "#2A2E2A" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "'NO. 0231'", "fallback": "TICKET NO." }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.067, "y": 0.075 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8278" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "admit",
+      "anchor": "top-right",
+      "offset": { "x": -0.067, "y": 0.103 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.009, "color": "#7C8278" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "'ADMIT ONE'", "fallback": "ADMIT" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.045 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#3A3F46" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.045 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "bottomcenter",
+      "anchor": "top-left",
+      "offset": { "x": 0.448, "y": 0.948 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8278" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'PARK PASS · VALID ALL DAY'", "fallback": "VALID" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0536, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8278" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

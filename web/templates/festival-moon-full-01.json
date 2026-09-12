@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "id": "festival-moon-full-01",
+    "name": "Full Moon",
+    "nameI18n": { "zh": "中秋月满", "en": "Full Moon" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "festival"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.14, "right": 0.10, "bottom": 0.26, "left": 0.10 },
+    "background": { "type": "solid", "color": "#221C16" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.035 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9C8A68" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'MID-AUTUMN · 2026'", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "moon",
+      "anchor": "top-right",
+      "offset": { "x": -0.06, "y": 0.018 },
+      "shape": "ellipse",
+      "size": { "width": 0.10, "height": 0.10 },
+      "color": "#E8C66A"
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.155 },
+      "shape": "line",
+      "size": { "width": 0.18, "height": 0.0015 },
+      "color": "#8A6F3A"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.112 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.065, "color": "#E8C66A" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "'团圆'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "phrase",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.068 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.014, "color": "#D9C9A8" },
+      "letterSpacing": 0.08,
+      "align": "center",
+      "content": [{ "expr": "'月满人间 · 团圆安康'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.028 },
+      "font": { "family": ["Inter"], "size": 0.0115, "color": "#B9A88A" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#9C8A68" },
+      "letterSpacing": 0.1,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

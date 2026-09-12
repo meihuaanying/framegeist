@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "id": "white-border-top-note",
+    "name": "Top Note",
+    "nameI18n": {
+      "zh": "顶部微注",
+      "en": "Top Note"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "white-border"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.13,
+      "right": 0.075,
+      "bottom": 0.22,
+      "left": 0.075
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F2F0EC"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": {
+        "x": 0.0652,
+        "y": 0.04
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.013,
+        "color": "#9AA0A6"
+      },
+      "letterSpacing": 0.18,
+      "content": [
+        {
+          "expr": "if_empty(exif.weekday, 'ARCHIVE FRAME')",
+          "fallback": "ARCHIVE FRAME"
+        }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.0652,
+        "y": -0.125
+      },
+      "shape": "line",
+      "size": {
+        "width": 1,
+        "height": 0.0016
+      },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.022
+      },
+      "tint": "auto",
+      "attachTo": "model",
+      "attachGap": 0.014
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.0968,
+        "y": -0.09
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.018,
+        "color": "#1A1A1A"
+      },
+      "letterSpacing": 0.04,
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+          "fallback": "Unknown Camera"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.0652,
+        "y": -0.09
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.014,
+        "color": "#6B7280"
+      },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        {
+          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": null
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.0652,
+        "y": -0.045
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "#9AA0A6"
+      },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [
+        {
+          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "params": {
+      "type": "string",
+      "source": "exif"
+    },
+    "date": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

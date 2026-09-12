@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "id": "film-sprocket-01",
+    "name": "Sprocket Classic",
+    "nameI18n": { "zh": "齿孔边码", "en": "Sprocket Classic" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.13, "right": 0.065, "bottom": 0.26, "left": 0.065 },
+    "background": { "type": "solid", "color": "#0E0E0E" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "strip-top",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.0144 },
+      "asset": "@builtin/frame/film-strip",
+      "size": { "width": 1.0 }
+    },
+    {
+      "type": "image",
+      "id": "strip-bottom",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": 0 },
+      "asset": "@builtin/frame/film-strip",
+      "size": { "width": 1.0 }
+    },
+    {
+      "type": "image",
+      "id": "edgecode",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.1151 },
+      "asset": "@builtin/frame/film-edge",
+      "size": { "width": 1.0 },
+      "opacity": 0.9
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.058, "y": -0.1719 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#A8A298" },
+      "letterSpacing": 0.10,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.058, "y": -0.1568 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6E6A62" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.058, "y": -0.1266 },
+      "font": { "family": ["Bebas Neue"], "size": 0.030, "color": "#EFE9DC" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'FG 400'", "fallback": "FILM" }]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.058, "y": -0.1266 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "attachTo": "stock",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.058, "y": -0.1719 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6E6A62" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

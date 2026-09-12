@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "id": "borderless-center-caption-01",
+    "name": "Center Caption",
+    "nameI18n": { "zh": "居中铭牌", "en": "Center Caption" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "shotline",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.05 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "auto" },
+      "letterSpacing": 0.18,
+      "opacity": 0.92,
+      "align": "center",
+      "content": [{ "expr": "fmt('SHOT ON {model_pretty}', exif)", "fallback": "SHOT ON CAMERA" }]
+    },
+    {
+      "type": "image",
+      "id": "cameraicon",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.05 },
+      "asset": "@builtin/frame/icon-camera",
+      "size": { "height": 0.018 },
+      "tint": "auto",
+      "attachTo": "shotline",
+      "attachGap": 0.014
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.012 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.1,
+      "opacity": 0.85,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

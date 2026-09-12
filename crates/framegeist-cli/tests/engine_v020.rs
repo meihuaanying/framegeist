@@ -145,7 +145,7 @@ fn missing_brand_asset_leaves_blank_not_fake() {
 #[test]
 fn builtin_brand_badge_renders_from_assets_dir() {
     let photo = jpeg_with_exif("ILCE-7CM2");
-    let tpl = load_template(&std::fs::read(repo_root().join("templates/film-v1.json")).unwrap()).unwrap();
+    let tpl = load_template(&std::fs::read(repo_root().join("templates/film-sprocket-01.json")).unwrap()).unwrap();
     let with_logo = render(&photo, &tpl, &opts()).unwrap();
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {
@@ -164,7 +164,7 @@ fn builtin_brand_badge_renders_from_assets_dir() {
 #[test]
 fn aspect_override_changes_dimensions() {
     let photo = gradient_jpeg(1600, 1200);
-    let tpl = load_template(&std::fs::read(repo_root().join("templates/classic-white-bottom-param.json")).unwrap()).unwrap();
+    let tpl = load_template(&std::fs::read(repo_root().join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json")).unwrap()).unwrap();
     for (name, w, h) in [("1:1", 1u32, 1u32), ("16:9", 16, 9), ("3:2", 3, 2)] {
         let o = RenderOptions {
             overrides: Some(TemplateOverrides {
@@ -187,7 +187,7 @@ fn aspect_override_changes_dimensions() {
 #[test]
 fn background_override_solid_color() {
     let photo = gradient_jpeg(800, 600);
-    let tpl = load_template(&std::fs::read(repo_root().join("templates/classic-white-bottom-param.json")).unwrap()).unwrap();
+    let tpl = load_template(&std::fs::read(repo_root().join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json")).unwrap()).unwrap();
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {
             background: Some("solid".into()),
@@ -204,7 +204,7 @@ fn background_override_solid_color() {
 #[test]
 fn flip_override_changes_pixels() {
     let photo = gradient_jpeg(800, 600);
-    let tpl = load_template(&std::fs::read(repo_root().join("templates/classic-white-bottom-param.json")).unwrap()).unwrap();
+    let tpl = load_template(&std::fs::read(repo_root().join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json")).unwrap()).unwrap();
     let normal = render_rgba(&photo, &tpl, &opts()).unwrap();
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {

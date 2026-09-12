@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "id": "colorful-rainbow-lines-01",
+    "name": "Spectrum Rules",
+    "nameI18n": { "zh": "彩虹刻度", "en": "Spectrum Rules" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorful"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.06, "bottom": 0.22, "left": 0.06 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.033 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "#9AA0A6" },
+      "letterSpacing": 0.26,
+      "content": [{ "expr": "'SPECTRUM'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.0536, "y": 0.033 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#1A1A1A" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "line-1",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.1574 },
+      "shape": "line",
+      "size": { "width": 0.30, "height": 0.0038 },
+      "color": "#E63946"
+    },
+    {
+      "type": "shape",
+      "id": "line-2",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.1467 },
+      "shape": "line",
+      "size": { "width": 0.26, "height": 0.0038 },
+      "color": "#F4A261"
+    },
+    {
+      "type": "shape",
+      "id": "line-3",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.1360 },
+      "shape": "line",
+      "size": { "width": 0.22, "height": 0.0038 },
+      "color": "#E9C46A"
+    },
+    {
+      "type": "shape",
+      "id": "line-4",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.1253 },
+      "shape": "line",
+      "size": { "width": 0.18, "height": 0.0038 },
+      "color": "#2A9D8F"
+    },
+    {
+      "type": "shape",
+      "id": "line-5",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.1146 },
+      "shape": "line",
+      "size": { "width": 0.14, "height": 0.0038 },
+      "color": "#457B9D"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.348, "y": -0.105 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "#1A1A1A" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.348, "y": -0.062 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0536, "y": -0.062 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

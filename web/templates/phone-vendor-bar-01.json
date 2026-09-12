@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "id": "phone-vendor-bar-01",
+    "name": "Vendor Dot Bar",
+    "nameI18n": { "zh": "厂商圆点白条", "en": "Vendor Dot Bar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "phone"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.075, "bottom": 0.2, "left": 0.075 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.149 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "shape",
+      "id": "vendordot",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.0933 },
+      "shape": "ellipse",
+      "size": { "width": 0.012, "height": 0.015 },
+      "color": "#E10600"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.086, "y": -0.0925 },
+      "font": { "family": ["Inter"], "size": 0.017, "color": "#1A1A1A" },
+      "letterSpacing": 0.03,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'SHOT ON MOBILE')", "fallback": "SHOT ON MOBILE" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.0548 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0652, "y": -0.0929 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0652, "y": -0.0556 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

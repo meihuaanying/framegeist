@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "id": "borderless-dot-corners-01",
+    "name": "Dot Corners",
+    "nameI18n": { "zh": "细点四角", "en": "Dot Corners" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "dot-tl",
+      "anchor": "top-left",
+      "offset": { "x": 0.028, "y": 0.032 },
+      "shape": "ellipse",
+      "size": { "width": 0.005, "height": 0.0067 },
+      "color": "#9AA0A6",
+      "opacity": 0.9
+    },
+    {
+      "type": "shape",
+      "id": "dot-tr",
+      "anchor": "top-right",
+      "offset": { "x": -0.028, "y": 0.032 },
+      "shape": "ellipse",
+      "size": { "width": 0.005, "height": 0.0067 },
+      "color": "#9AA0A6",
+      "opacity": 0.9
+    },
+    {
+      "type": "shape",
+      "id": "dot-bl",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.028, "y": -0.04 },
+      "shape": "ellipse",
+      "size": { "width": 0.005, "height": 0.0067 },
+      "color": "#9AA0A6",
+      "opacity": 0.9
+    },
+    {
+      "type": "shape",
+      "id": "dot-br",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.028, "y": -0.04 },
+      "shape": "ellipse",
+      "size": { "width": 0.005, "height": 0.0067 },
+      "color": "#9AA0A6",
+      "opacity": 0.9
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.046, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.046, "y": 0.068 },
+      "font": { "family": ["Inter"], "size": 0.014, "color": "auto" },
+      "letterSpacing": 0.14,
+      "opacity": 0.9,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "parex",
+      "anchor": "top-right",
+      "offset": { "x": -0.046, "y": 0.026 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.08,
+      "lineHeight": 1.6,
+      "opacity": 0.82,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}MM F{aperture}', exif)", "fallback": null },
+        { "expr": "fmt('{shutter} ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.046, "y": -0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.08,
+      "opacity": 0.8,
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.046, "y": -0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.14,
+      "opacity": 0.88,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

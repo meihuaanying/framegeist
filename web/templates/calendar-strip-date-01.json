@@ -1,0 +1,91 @@
+{
+  "meta": {
+    "id": "calendar-strip-date-01",
+    "name": "Bottom Strip Date",
+    "nameI18n": { "zh": "底栏日历", "en": "Bottom Strip Date" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "calendar"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.08, "bottom": 0.26, "left": 0.08 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.185 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "bigday",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.055 },
+      "font": { "family": ["Bebas Neue"], "size": 0.14, "color": "#1A1A1A" },
+      "letterSpacing": 0.01,
+      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "yearmonth",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.018 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9AA0A6" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "date('YYYY.MM', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "cndate",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.125 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.018, "color": "#373A40" },
+      "letterSpacing": 0.05,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "weekday",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.08 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.0135, "color": "#6B7280" },
+      "letterSpacing": 0.1,
+      "align": "center",
+      "content": [{ "expr": "exif.weekday_cn", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.125 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.08 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

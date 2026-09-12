@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "id": "sports-side-rail-01",
+    "name": "Trail Rail",
+    "nameI18n": { "zh": "侧栏竖排", "en": "Trail Rail" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "sports"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.05, "bottom": 0.06, "left": 0.13 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.017, "y": 0.016 },
+      "font": { "family": ["Inter"], "size": 0.009, "color": "#9AA0A6" },
+      "letterSpacing": 0.22,
+      "content": [
+        { "expr": "'ELEVATION RECORD'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "railalt",
+      "anchor": "middle-center",
+      "offset": { "x": -0.467, "y": 0 },
+      "font": { "family": ["Bebas Neue"], "size": 0.026, "color": "#1A1A1A" },
+      "letterSpacing": 0.06,
+      "rotation": -90,
+      "align": "left",
+      "content": [
+        { "expr": "if_empty(exif.gps_alt, 'TRAIL')", "fallback": "TRAIL" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "railparams",
+      "anchor": "middle-center",
+      "offset": { "x": -0.43, "y": 0 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "rotation": -90,
+      "align": "left",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "raildate",
+      "anchor": "middle-center",
+      "offset": { "x": -0.4, "y": 0 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.1,
+      "rotation": -90,
+      "align": "left",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "TRAIL DAY" }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "railrule",
+      "anchor": "middle-center",
+      "offset": { "x": -0.392, "y": 0 },
+      "shape": "line",
+      "size": { "width": 0.6, "height": 0.0015 },
+      "rotation": 90,
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.017, "y": -0.0277 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

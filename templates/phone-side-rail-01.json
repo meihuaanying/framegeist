@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "id": "phone-side-rail-01",
+    "name": "Side Rail",
+    "nameI18n": { "zh": "侧栏竖标", "en": "Side Rail" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "phone"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.05, "right": 0.11, "bottom": 0.05, "left": 0.05 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.0431, "y": 0.022 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [
+        { "expr": "'SHOT ON MOBILE'", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "railrule",
+      "anchor": "middle-center",
+      "offset": { "x": 0.399, "y": 0 },
+      "shape": "line",
+      "size": { "width": 0.55, "height": 0.0015 },
+      "rotation": 90,
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "railmodel",
+      "anchor": "middle-center",
+      "offset": { "x": 0.428, "y": 0 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "rotation": 90,
+      "align": "left",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')", "fallback": "MOBILE CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "railparams",
+      "anchor": "middle-center",
+      "offset": { "x": 0.45, "y": 0 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "rotation": 90,
+      "align": "left",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "railmeta",
+      "anchor": "middle-center",
+      "offset": { "x": 0.472, "y": 0 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.1,
+      "rotation": 90,
+      "align": "left",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "MOBILE IMAGING" }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "raildot",
+      "anchor": "top-center",
+      "offset": { "x": 0.452, "y": 0.034 },
+      "shape": "ellipse",
+      "size": { "width": 0.01, "height": 0.013 },
+      "color": "#E10600"
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0948, "y": -0.0173 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

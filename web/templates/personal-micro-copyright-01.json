@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "id": "personal-micro-copyright-01",
+    "name": "Micro Copyright",
+    "nameI18n": { "zh": "版权微字", "en": "Micro Copyright" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.08, "bottom": 0.2, "left": 0.08 },
+    "background": { "type": "solid", "color": "#FFFFFF" },
+    "radius": 0.01,
+    "shadow": { "enabled": true, "blur": 0.045, "opacity": 0.14, "offsetX": 0, "offsetY": 0.01 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.06897, "y": -0.078 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.06897, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "date('© YYYY COPYRIGHT', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.06897, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

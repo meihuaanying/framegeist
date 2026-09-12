@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "id": "fuji-recipe-band-02",
+    "name": "Recipe Band",
+    "nameI18n": { "zh": "奶白配方格", "en": "Recipe Band" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "fuji"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.07, "bottom": 0.34, "left": 0.07 },
+    "background": { "type": "solid", "color": "#F4EFE6" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "band-left",
+      "anchor": "top-left",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.12 },
+      "color": "#17181A"
+    },
+    {
+      "type": "shape",
+      "id": "band-right",
+      "anchor": "top-right",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.14, "height": 0.12 },
+      "color": "#17181A"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.030 },
+      "font": { "family": ["Space Grotesk"], "size": 0.014, "color": "#EDE8DE" },
+      "letterSpacing": 0.08,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.030 },
+      "asset": "@builtin/brand/fujifilm",
+      "size": { "height": 0.026 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "codeline",
+      "anchor": "top-right",
+      "offset": { "x": -0.0526, "y": 0.040 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#B9B5AC" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('RECIPE CARD C2 · ISO {iso}', exif)", "fallback": "RECIPE CARD C2 · ISO 200" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "r1c1v",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.795 },
+      "font": { "family": ["Space Grotesk"], "size": 0.032, "color": "#1B1C1E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'NOSTALGIC NEG'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "r1c1l",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.828 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'FILM SIMULATION'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "r1c2v",
+      "anchor": "top-left",
+      "offset": { "x": 0.3509, "y": 0.795 },
+      "font": { "family": ["Space Grotesk"], "size": 0.032, "color": "#1B1C1E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'AUTO'", "fallback": "AUTO" }]
+    },
+    {
+      "type": "text",
+      "id": "r1c2l",
+      "anchor": "top-left",
+      "offset": { "x": 0.3509, "y": 0.828 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'WHITE BALANCE'", "fallback": "WB" }]
+    },
+    {
+      "type": "text",
+      "id": "r1c3v",
+      "anchor": "top-left",
+      "offset": { "x": 0.6491, "y": 0.795 },
+      "font": { "family": ["Space Grotesk"], "size": 0.032, "color": "#1B1C1E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'DR100'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "r1c3l",
+      "anchor": "top-left",
+      "offset": { "x": 0.6491, "y": 0.828 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'DYNAMIC RANGE'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "r2c1v",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.885 },
+      "font": { "family": ["Space Grotesk"], "size": 0.032, "color": "#1B1C1E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'STRONG LARGE'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "r2c1l",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.918 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'GRAIN'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "r2c2v",
+      "anchor": "top-left",
+      "offset": { "x": 0.3509, "y": 0.885 },
+      "font": { "family": ["Space Grotesk"], "size": 0.032, "color": "#1B1C1E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'0'", "fallback": "0" }]
+    },
+    {
+      "type": "text",
+      "id": "r2c2l",
+      "anchor": "top-left",
+      "offset": { "x": 0.3509, "y": 0.918 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'HIGHLIGHT'", "fallback": "HIGHLIGHT" }]
+    },
+    {
+      "type": "text",
+      "id": "r2c3v",
+      "anchor": "top-left",
+      "offset": { "x": 0.6491, "y": 0.885 },
+      "font": { "family": ["Space Grotesk"], "size": 0.032, "color": "#1B1C1E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'+1'", "fallback": "+1" }]
+    },
+    {
+      "type": "text",
+      "id": "r2c3l",
+      "anchor": "top-left",
+      "offset": { "x": 0.6491, "y": 0.918 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'SHADOW'", "fallback": "SHADOW" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0526, "y": -0.018 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0526, "y": -0.018 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877C" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

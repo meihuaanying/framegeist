@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "id": "calendar-center-rule-01",
+    "name": "Center Day Rules",
+    "nameI18n": { "zh": "居中日历", "en": "Center Day Rules" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "calendar"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.12, "bottom": 0.28, "left": 0.12 },
+    "background": { "type": "solid", "color": "#FAF7F2" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.035 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [{ "expr": "'CALENDAR · FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "lattice",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0095, "color": "#1A1A1A" },
+      "letterSpacing": 0.18,
+      "lineHeight": 1.45,
+      "opacity": 0.10,
+      "content": [
+        { "expr": "'1 2 3 4 5 6 7'", "fallback": null },
+        { "expr": "'8 9 10 11 12 13 14'", "fallback": null },
+        { "expr": "'15 16 17 18 19 20 21'", "fallback": null },
+        { "expr": "'22 23 24 25 26 27 28'", "fallback": null },
+        { "expr": "'29 30 31'", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "rule-left",
+      "anchor": "bottom-center",
+      "offset": { "x": -0.085, "y": -0.16 },
+      "shape": "line",
+      "size": { "width": 0.085, "height": 0.0015 },
+      "color": "#D8D2C6"
+    },
+    {
+      "type": "shape",
+      "id": "rule-right",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.085, "y": -0.16 },
+      "shape": "line",
+      "size": { "width": 0.085, "height": 0.0015 },
+      "color": "#D8D2C6"
+    },
+    {
+      "type": "text",
+      "id": "bigday",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.08 },
+      "font": { "family": ["Bebas Neue"], "size": 0.15, "color": "#1A1A1A" },
+      "letterSpacing": 0.01,
+      "align": "center",
+      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "dateweek",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.042 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.016, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "lineHeight": 1.5,
+      "align": "center",
+      "content": [
+        { "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null },
+        { "expr": "exif.weekday_cn", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.105 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.065 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

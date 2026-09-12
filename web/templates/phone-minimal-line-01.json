@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "id": "phone-minimal-line-01",
+    "name": "Minimal Line",
+    "nameI18n": { "zh": "极简单行", "en": "Minimal Line" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "phone"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.05, "right": 0.05, "bottom": 0.075, "left": 0.05 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.1,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "MOBILE IMAGING" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto",
+      "attachTo": "params",
+      "attachGap": 0.014
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" }
+  }
+}

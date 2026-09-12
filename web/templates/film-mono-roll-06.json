@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "id": "film-mono-roll-06",
+    "name": "Mono Roll",
+    "nameI18n": { "zh": "机型卷轴", "en": "Mono Roll" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.09, "bottom": 0.10, "left": 0.28 },
+    "background": { "type": "solid", "color": "#0D0D0D" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "perf-right",
+      "anchor": "middle-right",
+      "offset": { "x": 0, "y": 0 },
+      "asset": "@builtin/frame/film-strip-v",
+      "size": { "width": 0.0825 }
+    },
+    {
+      "type": "text",
+      "id": "roll",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.035 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6E6A62" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'ROLL 06 · SAFETY FILM'", "fallback": "ROLL" }]
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.075 },
+      "font": { "family": ["Bebas Neue"], "size": 0.040, "color": "#EFE9DC" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'FG 100'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "spine",
+      "anchor": "middle-left",
+      "offset": { "x": 0.028, "y": 0.10 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#57534B" },
+      "letterSpacing": 0.30,
+      "rotation": -90,
+      "content": [{ "expr": "'FINE GRAIN · PROCESS FG'", "fallback": "FINE GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.160 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.016, "color": "#B9B3A8" },
+      "letterSpacing": 0.08,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.195 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8C877D" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.225 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8C877D" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.160 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.040 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6E6A62" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "id": "personal-cn-inscription-01",
+    "name": "Ink Inscription",
+    "nameI18n": { "zh": "墨色题记", "en": "Ink Inscription" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.1, "right": 0.12, "bottom": 0.3, "left": 0.12 },
+    "background": { "type": "solid", "color": "#FAF8F3" },
+    "radius": 0.01,
+    "shadow": { "enabled": true, "blur": 0.05, "opacity": 0.15, "offsetX": 0, "offsetY": 0.012 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0968, "y": -0.128 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.055, "color": "#1A1A1A" },
+      "letterSpacing": 0.1,
+      "content": [{ "expr": "'光影手记'", "fallback": "光影手记" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0968, "y": -0.066 },
+      "font": { "family": ["Noto Sans SC"], "size": 0.013, "color": "#6B7280" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0968, "y": -0.036 },
+      "font": { "family": ["Inter"], "size": 0.0115, "color": "#9AA0A6" },
+      "letterSpacing": 0.08,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0968, "y": -0.052 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.055 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,8 +1,9 @@
-# Renders template samples with per-category demo photos (v0.3.0):
+# Renders template samples with per-category demo photos (v0.4.0):
 #   samples/<id>.jpg   900px  (site wall + golden visual reference)
-#   previews/<id>.jpg  640px  (in-app Lightbox)
+#   previews/<id>.jpg  640px  (wall cards + in-app Lightbox)
 #   thumbs/<id>.jpg    240px  (picker grid)
-# Photos: 3 landscape + 3 architecture (CC0 Cleveland + Unsplash/Picsum).
+# Photos: real photography via Lorem Picsum (Unsplash License) — landscape,
+# architecture, street, mist, dusk city, portrait, people, square.
 # Usage: pwsh tools/gen-samples.ps1   (run from repo root)
 $ErrorActionPreference = "Continue"
 $cliName = if ($IsWindows -or $env:OS -eq "Windows_NT") { "framegeist.exe" } else { "framegeist" }
@@ -10,22 +11,45 @@ $cli = if (Test-Path "target/release/$cliName") { "target/release/$cliName" }
        elseif (Test-Path "target/debug/$cliName") { "target/debug/$cliName" }
        else { cargo build --release -p framegeist-cli; "target/release/$cliName" }
 
-$landscape = @("landscape-1", "landscape-2", "landscape-3") | ForEach-Object { "templates/assets/photos/$_.jpg" }
-$architecture = @("architecture-1", "architecture-2", "architecture-3") | ForEach-Object { "templates/assets/photos/$_.jpg" }
+$photoDir = "templates/assets/photos"
+$landscape = @("$photoDir/landscape-1.jpg", "$photoDir/landscape-2.jpg", "$photoDir/landscape-3.jpg")
+$architecture = @("$photoDir/architecture-1.jpg", "$photoDir/architecture-2.jpg")
+$portrait = @("$photoDir/portrait-1.jpg")
+$people = @("$photoDir/people-1.jpg")
+$street = @("$photoDir/street-1.jpg")
+$mist = @("$photoDir/mist-1.jpg")
+$night = @("$photoDir/night-1.jpg")
+$square = @("$photoDir/square-1.jpg")
 if (-not (Test-Path $landscape[0])) {
   Write-Error "demo photos missing: run 'node tools/fetch-demo-photos.mjs' first"
   exit 1
 }
 
 $categoryPhotos = @{
-  "classic-white" = $architecture
-  "film"          = $landscape
-  "polaroid"      = $landscape
-  "gallery"       = $architecture
-  "technical"     = $landscape
-  "magazine"      = $architecture
-  "minimal"       = $landscape
-  "frame-shell"   = $architecture
+  "white-border"      = $architecture
+  "camera"            = $street
+  "phone"             = $portrait
+  "drone"             = $landscape
+  "fuji"              = $landscape
+  "film"              = $landscape
+  "colorwalk"         = $architecture
+  "colorful"          = $square
+  "classic-watermark" = $architecture
+  "portfolio"         = $mist
+  "black-frame"       = $mist
+  "sports"            = $landscape
+  "calendar"          = $architecture
+  "magazine"          = $people
+  "minimal"           = $landscape
+  "borderless"        = $people
+  "master"            = $architecture
+  "personal"          = $portrait
+  "polaroid"          = $portrait
+  "festival"          = $square
+  "effect"            = $night
+  "colorcard"         = $square
+  "blur-bg"           = $night
+  "ticket"            = $street
 }
 $gamePhotos = @{
   "genshin"   = $landscape
@@ -34,16 +58,6 @@ $gamePhotos = @{
   "arknights" = $architecture
   "wwmeet"    = $landscape
   "wukong"    = $landscape
-}
-$idPrefixPhotos = @{
-  "camera-frame" = $architecture
-  "handheld"     = $architecture
-  "lens-icon"    = $landscape
-  "film-plus"    = $landscape
-  "borderless"   = $landscape
-  "signature"    = $landscape
-  "shell-plus"   = $architecture
-  "os-"          = $architecture
 }
 
 foreach ($dir in @("templates/samples", "templates/previews", "templates/thumbs")) {
@@ -55,13 +69,8 @@ $ids = & $cli templates | ForEach-Object { ($_ -split "`t")[0] }
 $done = 0; $failed = @(); $i = 0
 foreach ($id in $ids) {
   $photo = $null
-  foreach ($pfx in $idPrefixPhotos.Keys) {
-    if ($id -like "$pfx*") { $photo = $idPrefixPhotos[$pfx]; break }
-  }
-  if (-not $photo) {
-    foreach ($cat in $categoryPhotos.Keys) {
-      if ($id -like "$cat-*") { $photo = $categoryPhotos[$cat]; break }
-    }
+  foreach ($cat in $categoryPhotos.Keys) {
+    if ($id -like "$cat-*") { $photo = $categoryPhotos[$cat]; break }
   }
   if (-not $photo -and $id -like "game-*") {
     foreach ($g in $gamePhotos.Keys) {

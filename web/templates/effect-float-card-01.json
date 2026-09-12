@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "id": "effect-float-card-01",
+    "name": "Float Card",
+    "nameI18n": { "zh": "悬浮卡片", "en": "Float Card" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "effect"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.09, "bottom": 0.20, "left": 0.09 },
+    "background": { "type": "blur", "blur": 60, "scale": 1.2 },
+    "radius": 0.06,
+    "shadow": { "enabled": true, "blur": 0.12, "opacity": 0.35, "offsetX": 0, "offsetY": 0.035 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.038 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.045, "y": 0.034 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.045 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "auto" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

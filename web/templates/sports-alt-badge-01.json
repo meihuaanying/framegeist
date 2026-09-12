@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "id": "sports-alt-badge-01",
+    "name": "Altitude Badge",
+    "nameI18n": { "zh": "海拔徽章", "en": "Altitude Badge" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "sports"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.07, "bottom": 0.24, "left": 0.07 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.0161 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.22,
+      "content": [
+        { "expr": "'ALPINE STAGE'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "topweekday",
+      "anchor": "top-right",
+      "offset": { "x": -0.0614, "y": 0.0161 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [
+        { "expr": "exif.weekday", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0614, "y": -0.1833 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "alt",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.15, "y": -0.0786 },
+      "font": { "family": ["Bebas Neue"], "size": 0.055, "color": "#1A1A1A" },
+      "letterSpacing": 0.03,
+      "content": [
+        { "expr": "if_empty(exif.gps_alt, 'SUMMIT')", "fallback": "SUMMIT" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "mountain",
+      "anchor": "bottom-left",
+      "asset": "@builtin/frame/icon-mountain",
+      "size": { "height": 0.026 },
+      "tint": "auto",
+      "attachTo": "alt",
+      "attachGap": 0.014
+    },
+    {
+      "type": "text",
+      "id": "altnote",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.15, "y": -0.0367 },
+      "font": { "family": ["Inter"], "size": 0.009, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [
+        { "expr": "'ALTITUDE · METERS'", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0614, "y": -0.1254 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.019 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0614, "y": -0.0685 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#6B7280" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0614, "y": -0.0278 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "weekday": { "type": "string", "source": "exif" }
+  }
+}

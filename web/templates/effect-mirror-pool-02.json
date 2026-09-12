@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "id": "effect-mirror-pool-02",
+    "name": "Mirror Pool",
+    "nameI18n": { "zh": "镜池倒影", "en": "Mirror Pool" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "effect"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.10, "bottom": 0.44, "left": 0.10 },
+    "background": { "type": "blur", "blur": 80, "scale": 1.25 },
+    "radius": 0.045,
+    "shadow": { "enabled": true, "blur": 0.14, "opacity": 0.30, "offsetX": 0, "offsetY": 0.04 }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "pool-outer",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.295 },
+      "shape": "rect",
+      "size": { "width": 0.95, "height": 0.16 },
+      "color": "#FFFFFF",
+      "opacity": 0.08,
+      "radius": 0.5
+    },
+    {
+      "type": "shape",
+      "id": "pool-inner",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.295 },
+      "shape": "rect",
+      "size": { "width": 0.78, "height": 0.10 },
+      "color": "#FFFFFF",
+      "opacity": 0.05,
+      "radius": 0.5
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.095 },
+      "font": { "family": ["Inter"], "size": 0.017, "color": "auto" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.068 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.042 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "auto" },
+      "letterSpacing": 0.16,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

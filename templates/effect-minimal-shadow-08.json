@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "id": "effect-minimal-shadow-08",
+    "name": "Minimal Shadow",
+    "nameI18n": { "zh": "极简投影", "en": "Minimal Shadow" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "effect"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.07, "bottom": 0.22, "left": 0.07 },
+    "background": { "type": "solid", "color": "#FCFBF9" },
+    "radius": 0.055,
+    "shadow": { "enabled": true, "blur": 0.16, "opacity": 0.35, "offsetX": 0, "offsetY": 0.05 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.045, "y": 0.036 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.015 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.118 },
+      "font": { "family": ["Inter"], "size": 0.017, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.05,
+      "align": "center",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "id": "phone-shot-on-01",
+    "name": "Shot On Center",
+    "nameI18n": { "zh": "居中出品", "en": "Shot On Center" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "phone"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "shoton",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.1445 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "auto" },
+      "letterSpacing": 0.3,
+      "opacity": 0.85,
+      "align": "center",
+      "content": [
+        { "expr": "'SHOT ON'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.089 },
+      "font": { "family": ["Space Grotesk"], "size": 0.022, "color": "auto" },
+      "letterSpacing": 0.06,
+      "opacity": 0.95,
+      "align": "center",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')", "fallback": "MOBILE CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.049 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.08,
+      "opacity": 0.85,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "id": "blur-bg-center-01",
+    "name": "Center Bloom",
+    "nameI18n": { "zh": "居中晕影", "en": "Center Bloom" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "blur-bg"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.11, "bottom": 0.10, "left": 0.11 },
+    "background": { "type": "blur", "blur": 90, "scale": 1.3 },
+    "shadow": { "enabled": false }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.036 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "auto" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.035 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "auto" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "body",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.055, "y": -0.025 },
+      "asset": "@builtin/frame/camera-body",
+      "size": { "height": 0.06 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,38 +1,43 @@
-// Downloads 6 demo photos for template previews/thumbnails:
-// 3 landscape + 3 architecture, CC0 from the Cleveland Museum of Art
-// (open access API) plus one real photograph from Lorem Picsum (Unsplash).
-// Records sources in CREDITS.json. Usage: node tools/fetch-demo-photos.mjs
-import { writeFileSync, mkdirSync, readFileSync, existsSync } from "node:fs";
+// Downloads real-photography demo images for template previews/thumbnails
+// (v0.4.0: real photos instead of museum paintings): 3 landscape, 2
+// architecture, street, mist, dusk city, portrait, people, square — all from
+// Lorem Picsum (Unsplash License, attribution appreciated).
+// Usage: node tools/fetch-demo-photos.mjs
+import { writeFileSync, mkdirSync, readFileSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 
 const OUT = "templates/assets/photos";
 mkdirSync(OUT, { recursive: true });
-const UA = { "user-agent": "FrameGeist/0.3 (+https://github.com/meihuaanying/framegeist)" };
+const UA = { "user-agent": "FrameGeist/0.4 (+https://github.com/meihuaanying/framegeist)" };
 
-async function cleveland(q, want) {
-  const url = `https://openaccess-api.clevelandart.org/api/artworks/?q=${encodeURIComponent(q)}&cc0=1&has_image=1&limit=25&fields=id,title,creation_date,creators,images,share_license_status,url`;
-  const res = await fetch(url, { headers: UA });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const json = await res.json();
-  const out = [];
-  for (const a of json.data ?? []) {
-    if (a.share_license_status && a.share_license_status !== "CC0") continue;
-    const img = a.images?.web?.url ?? a.images?.print?.url;
-    if (!img) continue;
-    out.push({
-      title: a.title ?? "untitled",
-      author: (a.creators?.[0]?.description ?? "Cleveland Museum of Art").replace(/<[^>]+>/g, ""),
-      source: a.url ?? "https://www.clevelandart.org",
-      license: "CC0-1.0 (Cleveland Museum of Art Open Access)",
-      url: img,
-    });
-    if (out.length >= want) break;
+const JOBS = [
+  { file: "landscape-1.jpg", id: 1015, w: 2400, h: 1600, subject: "fjord cliffs" },
+  { file: "landscape-2.jpg", id: 1016, w: 2400, h: 1600, subject: "red rock canyon" },
+  { file: "landscape-3.jpg", id: 1036, w: 2400, h: 1600, subject: "snow mountains" },
+  { file: "architecture-1.jpg", id: 1029, w: 2400, h: 1600, subject: "city skyline" },
+  { file: "architecture-2.jpg", id: 1040, w: 2400, h: 1600, subject: "castle" },
+  { file: "street-1.jpg", id: 1071, w: 2400, h: 1600, subject: "classic car street" },
+  { file: "mist-1.jpg", id: 1044, w: 2400, h: 1600, subject: "misty river" },
+  { file: "night-1.jpg", id: 1067, w: 2400, h: 1600, subject: "city at dusk" },
+  { file: "portrait-1.jpg", id: 1027, w: 1600, h: 2400, subject: "portrait" },
+  { file: "people-1.jpg", id: 1011, w: 2400, h: 1600, subject: "person canoeing" },
+  { file: "square-1.jpg", id: 1080, w: 1600, h: 1600, subject: "strawberries" },
+];
+
+const REMOVED = ["architecture-3.jpg"];
+
+async function info(id) {
+  try {
+    const res = await fetch(`https://picsum.photos/id/${id}/info`, { headers: UA });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
   }
-  return out;
 }
 
 async function download(url, path) {
-  const res = await fetch(url, { headers: UA });
+  const res = await fetch(url, { headers: UA, redirect: "follow" });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const buf = Buffer.from(await res.arrayBuffer());
   if (buf.length < 30_000) throw new Error(`too small (${buf.length})`);
@@ -40,39 +45,26 @@ async function download(url, path) {
   return buf.length;
 }
 
-const credits = existsSync(join(OUT, "CREDITS-DEMO.json"))
-  ? JSON.parse(readFileSync(join(OUT, "CREDITS-DEMO.json"), "utf8"))
-  : {};
+for (const f of REMOVED) {
+  try { rmSync(join(OUT, f), { force: true }); } catch { /* ignore */ }
+}
 
-const jobs = [
-  { file: "landscape-1.jpg", source: () => cleveland("landscape painting", 2).then((r) => r[0]) },
-  { file: "landscape-2.jpg", source: () => cleveland("landscape print", 3).then((r) => r[1]) },
-  { file: "landscape-3.jpg", source: async () => ({
-      title: "Mountain river (Lorem Picsum #1015)",
-      author: "Unsplash contributor via Lorem Picsum",
-      source: "https://picsum.photos/id/1015/info",
-      license: "Unsplash License (free to use; attribution appreciated)",
-      url: "https://picsum.photos/id/1015/2400/1600.jpg",
-    }) },
-  { file: "architecture-1.jpg", source: () => cleveland("architecture drawing", 2).then((r) => r[0]) },
-  { file: "architecture-2.jpg", source: () => cleveland("cathedral church building", 3).then((r) => r[1]) },
-  { file: "architecture-3.jpg", source: async () => ({
-      title: "City architecture (Lorem Picsum #1076)",
-      author: "Unsplash contributor via Lorem Picsum",
-      source: "https://picsum.photos/id/1076/info",
-      license: "Unsplash License (free to use; attribution appreciated)",
-      url: "https://picsum.photos/id/1076/1600/2400.jpg",
-    }) },
-];
-
-for (const job of jobs) {
+const credits = {};
+for (const job of JOBS) {
   const path = join(OUT, job.file);
+  const meta = await info(job.id);
+  const url = `https://picsum.photos/id/${job.id}/${job.w}/${job.h}.jpg`;
   try {
-    const meta = await job.source();
-    if (!meta) { console.log(`${job.file}: no candidate`); continue; }
-    const size = await download(meta.url, path);
-    credits[job.file] = { ...meta, bytes: size };
-    console.log(`${job.file}: ${(size / 1024).toFixed(0)} KB — ${meta.title.slice(0, 60)}`);
+    const size = await download(url, path);
+    credits[job.file] = {
+      title: `${job.subject} (Picsum #${job.id})`,
+      author: meta?.author ? `${meta.author} via Lorem Picsum` : "Unsplash contributor via Lorem Picsum",
+      source: `https://picsum.photos/id/${job.id}/info`,
+      license: "Unsplash License (free to use; attribution appreciated)",
+      url,
+      bytes: size,
+    };
+    console.log(`${job.file}: ${(size / 1024).toFixed(0)} KB — ${job.subject}`);
   } catch (e) {
     console.log(`${job.file}: FAILED ${e.message}`);
   }

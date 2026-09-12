@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "id": "ticket-boarding-pass-03",
+    "name": "Boarding Pass",
+    "nameI18n": { "zh": "登机牌·双站", "en": "Boarding Pass" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "ticket"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.07, "right": 0.07, "bottom": 0.30, "left": 0.07 },
+    "background": { "type": "solid", "color": "#E3E1DC" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "card",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.7944 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.26 },
+      "color": "#FFFFFF",
+      "radius": 0.06
+    },
+    {
+      "type": "shape",
+      "id": "card-edge",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.7944 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.26 },
+      "color": "#D2CFC8",
+      "radius": 0.06,
+      "strokeWidth": 0.004
+    },
+    {
+      "type": "shape",
+      "id": "perf-1",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.8017 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-2",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.8236 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-3",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.8455 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-4",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.8674 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-5",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.8893 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-6",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.9112 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-7",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.9331 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "perf-8",
+      "anchor": "top-left",
+      "offset": { "x": 0.69255, "y": 0.9549 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.0167 },
+      "color": "#C7C9C4"
+    },
+    {
+      "type": "shape",
+      "id": "notch-top",
+      "anchor": "top-left",
+      "offset": { "x": 0.6844, "y": 0.7850 },
+      "shape": "ellipse",
+      "size": { "width": 0.0195, "height": 0.026 },
+      "color": "#E3E1DC"
+    },
+    {
+      "type": "shape",
+      "id": "notch-bottom",
+      "anchor": "top-left",
+      "offset": { "x": 0.6844, "y": 0.9748 },
+      "shape": "ellipse",
+      "size": { "width": 0.0195, "height": 0.026 },
+      "color": "#E3E1DC"
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.0748, "y": 0.8114 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#82868C" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'BOARDING PASS'", "fallback": "TICKET" }]
+    },
+    {
+      "type": "text",
+      "id": "fromlabel",
+      "anchor": "top-left",
+      "offset": { "x": 0.0748, "y": 0.846 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.009, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'FROM'", "fallback": "FROM" }]
+    },
+    {
+      "type": "text",
+      "id": "fromstation",
+      "anchor": "top-left",
+      "offset": { "x": 0.0748, "y": 0.862 },
+      "font": { "family": ["Bebas Neue"], "size": 0.052, "color": "#1F2226" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'SHANGHAI'", "fallback": "CITY" }]
+    },
+    {
+      "type": "text",
+      "id": "tolabel",
+      "anchor": "top-left",
+      "offset": { "x": 0.34, "y": 0.846 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.009, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'TO'", "fallback": "TO" }]
+    },
+    {
+      "type": "text",
+      "id": "tostation",
+      "anchor": "top-left",
+      "offset": { "x": 0.34, "y": 0.862 },
+      "font": { "family": ["Bebas Neue"], "size": 0.052, "color": "#1F2226" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'HANGZHOU'", "fallback": "CITY" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.0748, "y": 0.928 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#30343A" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-left",
+      "offset": { "x": 0.34, "y": 0.928 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.009, "color": "#82868C" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stubdate-label",
+      "anchor": "top-left",
+      "offset": { "x": 0.7006, "y": 0.811 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.009, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'DATE'", "fallback": "DATE" }]
+    },
+    {
+      "type": "text",
+      "id": "stubdate",
+      "anchor": "top-left",
+      "offset": { "x": 0.7006, "y": 0.828 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#30343A" },
+      "letterSpacing": 0.08,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "stubtime-label",
+      "anchor": "top-left",
+      "offset": { "x": 0.7006, "y": 0.858 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.009, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'TIME'", "fallback": "TIME" }]
+    },
+    {
+      "type": "text",
+      "id": "stubtime",
+      "anchor": "top-left",
+      "offset": { "x": 0.7006, "y": 0.875 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#30343A" },
+      "letterSpacing": 0.08,
+      "content": [{ "expr": "date('HH:mm', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "barcode",
+      "anchor": "top-left",
+      "offset": { "x": 0.7006, "y": 0.905 },
+      "asset": "@builtin/frame/barcode",
+      "size": { "height": 0.042 }
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.026 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#3A3F46" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "topright",
+      "anchor": "top-right",
+      "offset": { "x": -0.0614, "y": 0.028 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C828B" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

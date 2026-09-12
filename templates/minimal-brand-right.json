@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "id": "minimal-brand-right",
+    "name": "Brand Right",
+    "nameI18n": {
+      "zh": "右下品牌",
+      "en": "Brand Right"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": {
+      "type": "none"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.032,
+        "y": -0.138
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.013,
+        "color": "auto"
+      },
+      "letterSpacing": 0.1,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'FRAMEGEIST')",
+          "fallback": "FRAMEGEIST"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.032,
+        "y": -0.085
+      },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.022
+      },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.032,
+        "y": -0.036
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "auto"
+      },
+      "letterSpacing": 0.12,
+      "opacity": 0.9,
+      "align": "right",
+      "content": [
+        {
+          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "date": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

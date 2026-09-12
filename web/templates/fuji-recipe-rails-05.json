@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "id": "fuji-recipe-rails-05",
+    "name": "Recipe Rails",
+    "nameI18n": { "zh": "右侧配方栏", "en": "Recipe Rails" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "fuji"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.32, "bottom": 0.08, "left": 0.07 },
+    "background": { "type": "solid", "color": "#E9E3D8" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "column-top",
+      "anchor": "top-right",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.32, "height": 1.0 },
+      "color": "#17181A"
+    },
+    {
+      "type": "shape",
+      "id": "column-bottom",
+      "anchor": "bottom-right",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.32, "height": 0.16 },
+      "color": "#17181A"
+    },
+    {
+      "type": "shape",
+      "id": "accent",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.098 },
+      "shape": "rect",
+      "size": { "width": 0.012, "height": 0.006 },
+      "color": "#0B8A3E"
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.026 },
+      "asset": "@builtin/brand/fujifilm",
+      "size": { "height": 0.026 }
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.062 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [{ "expr": "'RECIPE CARD C5'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "l1",
+      "anchor": "top-left",
+      "offset": { "x": 0.782, "y": 0.150 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'FILM SIMULATION'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "v1",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.150 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#F1EDE6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "'PROVIA'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "l2",
+      "anchor": "top-left",
+      "offset": { "x": 0.782, "y": 0.245 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'WHITE BALANCE'", "fallback": "WB" }]
+    },
+    {
+      "type": "text",
+      "id": "v2",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.245 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#F1EDE6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "'5200K'", "fallback": "WB" }]
+    },
+    {
+      "type": "text",
+      "id": "l3",
+      "anchor": "top-left",
+      "offset": { "x": 0.782, "y": 0.340 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'DYNAMIC RANGE'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "v3",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.340 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#F1EDE6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "'DR200'", "fallback": "DR" }]
+    },
+    {
+      "type": "text",
+      "id": "l4",
+      "anchor": "top-left",
+      "offset": { "x": 0.782, "y": 0.435 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'GRAIN'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "v4",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.435 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#F1EDE6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "'WEAK SMALL'", "fallback": "GRAIN" }]
+    },
+    {
+      "type": "text",
+      "id": "l5",
+      "anchor": "top-left",
+      "offset": { "x": 0.782, "y": 0.530 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'HIGHLIGHT'", "fallback": "HIGHLIGHT" }]
+    },
+    {
+      "type": "text",
+      "id": "v5",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.530 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#F1EDE6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "'0'", "fallback": "0" }]
+    },
+    {
+      "type": "text",
+      "id": "l6",
+      "anchor": "top-left",
+      "offset": { "x": 0.782, "y": 0.625 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.16,
+      "content": [{ "expr": "'SHADOW'", "fallback": "SHADOW" }]
+    },
+    {
+      "type": "text",
+      "id": "v6",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.625 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#F1EDE6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "'0'", "fallback": "0" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.035, "y": -0.072 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#F1EDE6" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.035, "y": -0.046 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('ISO {iso} · {focal}mm f/{aperture}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.035, "y": -0.022 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8D8A84" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

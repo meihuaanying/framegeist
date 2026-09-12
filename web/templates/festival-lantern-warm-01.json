@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "id": "festival-lantern-warm-01",
+    "name": "Lantern Warmth",
+    "nameI18n": { "zh": "元宵灯火", "en": "Lantern Warmth" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "festival"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.09, "bottom": 0.28, "left": 0.09 },
+    "background": { "type": "solid", "color": "#FBF3E4" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "lantern-1",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.035 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.034 },
+      "tint": "dark"
+    },
+    {
+      "type": "image",
+      "id": "lantern-2",
+      "anchor": "top-left",
+      "offset": { "x": 0.095, "y": 0.035 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.034 },
+      "tint": "dark"
+    },
+    {
+      "type": "image",
+      "id": "lantern-3",
+      "anchor": "top-left",
+      "offset": { "x": 0.145, "y": 0.035 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.034 },
+      "tint": "dark"
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.19 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E8D3A3"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.135 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.07, "color": "#C8102E" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'元宵'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "phrase",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.075 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.014, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'灯火可亲 · 人月两圆'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.042 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#9AA0A6" },
+      "letterSpacing": 0.1,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.075 },
+      "font": { "family": ["Inter"], "size": 0.0125, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.042 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

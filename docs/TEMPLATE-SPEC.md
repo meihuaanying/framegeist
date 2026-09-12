@@ -1,7 +1,8 @@
 # FrameGeist 模板规格（TEMPLATE-SPEC）
 
-> 版本 v0.1 ｜ 对应引擎 `framegeist-core` v0.1.x ｜ 机器可读 schema：`docs/schema/template.schema.json`
+> 版本 v0.4 ｜ 对应引擎 `framegeist-core` v0.4.x ｜ 机器可读 schema：`docs/schema/template.schema.json`
 > 模板是**声明式 JSON**（C1），不可执行代码、不可联网、不可读包外路径（C2）。本文件是模板语言唯一的语义来源；引擎内置校验器按本规格执行，JSON Schema 文件是同规格的机器可读对照。
+> 设计语言见 `docs/DESIGN-LANGUAGE.md`（v0.4.0 起模板必须遵循）。
 
 ## 1. 文件与尺寸限制
 
@@ -25,7 +26,7 @@
 | `version` / `minEngineVersion` | semver `X.Y.Z`；引擎版本低于 `minEngineVersion` 时拒绝加载（C8） |
 | `author` | 署名，**强制保留且不可被下游删除**（E5） |
 | `license` | 枚举：`CC0-1.0 / CC-BY-4.0 / CC-BY-SA-4.0 / OFL-1.1 / Apache-2.0 / MIT` |
-| `category` | 枚举 9 分类：`classic-white / film / polaroid / gallery / technical / magazine / minimal / frame-shell / game` |
+| `category` | v0.4 枚举（29 值）：新分类 `white-border / camera / phone / drone / fuji / film / colorwalk / colorful / classic-watermark / portfolio / black-frame / sports / calendar / magazine / minimal / borderless / master / personal / polaroid / festival / effect / colorcard / blur-bg / ticket / game`；旧值 `classic-white / gallery / technical / frame-shell` 保留可加载（迁移映射：classic-white→white-border、frame-shell→camera、gallery→portfolio、technical→classic-watermark） |
 | `nameI18n` | 可选 `{"zh": "…", "en": "…"}`，客户端按界面语言显示（缺失回退 `name`） |
 | `notice` | 可选免责声明（游戏模板使用："Unofficial fan-made design…"） |
 
@@ -49,16 +50,18 @@
 |---|---|
 | `solid` | 纯色填充，`color` 为 `#RRGGBB` 或 `#RRGGBBAA`；缺省白 |
 | `blur` | 照片放大 `scale`（默认 1.2，[1,4]）至覆盖画布，按 `blur`（[0,200]，实现为 3-pass box blur）模糊后居中裁切 |
-| `image` | 骨架阶段回退为直接铺照片；v1.x 支持指定包内图片 |
+| `image` | 包内图片（`asset`）或 `@user/background` 铺满；缺失回退纯色 |
+| `tint` | **v0.4 新增**：照片平均色填充画布（ColorWalk 无缝延伸）；`color` 可覆盖 |
 | `none` | 不处理背景（透明/保留照片） |
 
-### 3.4 `radius` / `shadow`
+### 3.4 `radius` / `shadow`（v0.4 起实际渲染）
 
-结构已定义（圆角 0–512px、阴影 blur/opacity/offsetX/offsetY），骨架阶段渲染器忽略；黄金图不含这两项效果，启用前会变更基线。
+- `radius`：照片四角圆角，**相对 min(照片宽, 照片高) 的比例**（0–0.25）；预览与导出等比一致。
+- `shadow`：照片投影。`blur`/`offsetX`/`offsetY` 为**相对照片高度的比例**（blur 0–0.5、offset ±0.5），`opacity` 0–1；`enabled:false` 关闭。仅在 `extend` + 非 `none` 背景时绘制（否则入画布即被照片覆盖或无底可见）。
 
 ## 4. `layers[]`
 
-`type` 目前支持 `text` 与 `image`（`image` 的资产渲染在模板包阶段实现 E1，引擎当前跳过该层）。
+`type` 支持 `text` / `image` / `shape`（v0.4）/ `palette`（v0.4）。
 
 ### 4.1 锚点与偏移（九宫格）
 
@@ -90,7 +93,9 @@
 | `'<literal>'` | 常量文本（C3） |
 | `fmt('<literal>', exif)` | `{key}` 占位替换；**任一 key 缺失 → 整条为 None**（走 `fallback`） |
 | `if_empty(exif.<key>, '<literal>')` | 值为空/缺失时取字面量 |
-| `date('<format>', exif.datetime)` | EXIF 日期（`YYYY:MM:DD HH:MM:SS`）重排，token：`YYYY MM DD HH mm SS` |
+| `date('<format>', exif.datetime)` | EXIF 日期（`YYYY:MM:DD HH:MM:SS`）重排 |
+
+`date()` token（v0.4）：`YYYY MM MMM MMMM M`（年/月补零/月缩写/月全称/月不补零）、`DD Do D`（日补零/英文序数 15th/日不补零）、`HH mm SS`、`WW`（英文星期 Wednesday）。其余字符原样输出；**格式串内的文字避免大写 D/M/S/H 等 token 字母**（如 "Documentary" 中 `Do` 会被拆解），需要英文月/星期一律用 token。
 
 条目求值结果为 `None` 时取该条目的 `fallback`（可为 `null` = 整行省略）。全部条目为空 → **整层隐藏**（条件显示）。
 
@@ -108,6 +113,14 @@
 | `iso` | PhotographicSensitivity | 整数 |
 | `datetime` | DateTimeOriginal | `YYYY:MM:DD HH:MM:SS` |
 | `orientation` | Orientation | 1–8 整数 |
+| `brand_slug` | Make/Model 映射 | `sony` 等 |
+| `lens_slug` / `lens_series` | LensModel 映射 | v0.2/v0.3 |
+| `weekday` / `weekday_cn` | datetime 推算 | `Wednesday` / `星期三`（v0.4） |
+| `gps_lat` / `gps_lon` | EXIF GPS | `23°8'13"N` / `113°19'28"E`（v0.4） |
+| `gps_latlon` | GPS | `23°8'13"N 113°19'28"E`（v0.4） |
+| `gps_alt` | GPSAltitude | `2459m`（v0.4） |
+
+> **GPS 隐私（B3）**：GPS 表达式仅在渲染参数 `keep_gps=true`（用户显式开启）时求值；默认返回 None（走 `fallback`，通常整层隐藏）。
 
 ### 4.4 行高
 
@@ -132,6 +145,51 @@
 - **占位表达式**：`{exif.brand_slug}` / `{exif.lens_slug}`（品牌/镜头映射见 §8）。
 - `attachTo` 必须在同一模板内引用存在的文本层 id（加载时校验）；贴附位置 = 文本首行左侧，垂直居中。
 - `showLogo=false` 覆盖时，`@builtin/brand/`、`@builtin/lens/` 资产层整体跳过。
+
+### 4.5b 文本层扩展（v0.4.0）
+
+| 字段 | 取值 | 语义 |
+|---|---|---|
+| `letterSpacing` | -0.05–0.5（em） | 字距，微排版刚需（大写小字 0.06–0.22） |
+| `rotation` | -360–360（度） | 绕文本块中心旋转（差值为 0.01 度以内不旋转） |
+| `opacity` | 0–1 | 文本层不透明度（水印 0.75–0.95） |
+| `align` | `left/center/right` | 逐行对齐；缺省跟随锚点列 |
+
+### 4.5c 形层（`type: "shape"`，v0.4.0）
+
+```jsonc
+{
+  "type": "shape", "id": "rule",
+  "anchor": "middle-center",
+  "shape": "line",                       // line | rect | ellipse | diamond | hexagon
+  "size": { "width": 0.6, "height": 0.002 },  // 宽相对照片宽、高相对照片高
+  "color": "#E4E6EA",
+  "opacity": 1.0,
+  "radius": 0.0,                         // rect 圆角（相对 min(w,h)，0–0.5）
+  "strokeWidth": 0.002,                  // 可选：描边（相对照片宽）；缺省实心
+  "rotation": 0.0
+}
+```
+
+默认尺寸：line `0.2 × 0.0015`；rect `0.2 × 0.2`；ellipse/diamond/hexagon `0.05 × 0.05`。用于分隔线、双线框、圆点、色块。
+
+### 4.5d 色卡层（`type: "palette"`，v0.4.0）
+
+```jsonc
+{
+  "type": "palette", "id": "chips",
+  "anchor": "bottom-left", "offset": { "x": 0.06, "y": -0.08 },
+  "count": 5,                            // 2–8，取照片主色
+  "shape": "circle",                     // circle | square | diamond | hexagon | strip
+  "direction": "horizontal",             // horizontal（默认）| vertical
+  "size": 0.035,                         // 色块尺寸（相对照片高）
+  "gap": 0.012,                          // 间距（默认 size*0.35）
+  "showHex": true,
+  "label": { "size": 0.012, "color": "#6B7280", "family": ["JetBrains Mono"] }
+}
+```
+
+主色由引擎对照片做确定性 median-cut（64×64 采样、按聚类大小排序、去近似色）提取；模板不声明具体颜色。
 
 ### 4.6 渲染覆盖（TemplateOverrides，v0.2.0 UI 能力）
 

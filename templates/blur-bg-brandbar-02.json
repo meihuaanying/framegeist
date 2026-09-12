@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "id": "blur-bg-brandbar-02",
+    "name": "Brand Bar",
+    "nameI18n": { "zh": "品牌底栏", "en": "Brand Bar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "blur-bg"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.10, "bottom": 0.30, "left": 0.10 },
+    "background": { "type": "blur", "blur": 70, "scale": 1.25 },
+    "radius": 0.04,
+    "shadow": { "enabled": true, "blur": 0.10, "opacity": 0.30, "offsetX": 0, "offsetY": 0.03 }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "bar",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.404 },
+      "shape": "rect",
+      "size": { "width": 0.98, "height": 0.1512 },
+      "color": "#101418",
+      "opacity": 0.72,
+      "radius": 0.2
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "middle-left",
+      "offset": { "x": 0.12, "y": 0.404 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.030 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.160 },
+      "font": { "family": ["Inter"], "size": 0.017, "color": "auto" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.160 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

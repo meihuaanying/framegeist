@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "id": "colorwalk-tint-seam-01",
+    "name": "Seamless Walk",
+    "nameI18n": { "zh": "无缝色延", "en": "Seamless Walk" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorwalk"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.05, "right": 0.05, "bottom": 0.19, "left": 0.05 },
+    "background": { "type": "tint" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.0455, "y": 0.013 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.18,
+      "opacity": 0.9,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0455, "y": -0.092 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0455, "y": -0.096 },
+      "font": { "family": ["Inter"], "size": 0.02, "color": "auto" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0455, "y": -0.0675 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.05,
+      "opacity": 0.85,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

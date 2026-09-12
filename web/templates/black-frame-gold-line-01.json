@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "id": "black-frame-gold-line-01",
+    "name": "Gold Line",
+    "nameI18n": { "zh": "黑金一线", "en": "Gold Line" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "black-frame"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.07, "bottom": 0.26, "left": 0.07 },
+    "background": { "type": "solid", "color": "#1A1A1A" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.03 },
+      "font": { "family": ["Inter"], "size": 0.009, "color": "#D4A017" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'GOLD EDGE'", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "goldline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.175 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#D4A017"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.075 },
+      "font": { "family": ["Bebas Neue"], "size": 0.045, "color": "#D4A017" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.125 },
+      "font": { "family": ["Inter"], "size": 0.0125, "color": "#E6E6E6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.075 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#9A9A9A" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

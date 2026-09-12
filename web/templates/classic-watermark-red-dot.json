@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "id": "classic-watermark-red-dot",
+    "name": "Vermilion Dot Bar",
+    "nameI18n": {
+      "zh": "朱点白条",
+      "en": "Vermilion Dot Bar"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "classic-watermark"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0.08,
+      "left": 0
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "dot",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.03,
+        "y": -0.031
+      },
+      "shape": "ellipse",
+      "size": {
+        "width": 0.01,
+        "height": 0.0133
+      },
+      "color": "#E10600"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.054,
+        "y": -0.03
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.015,
+        "color": "#1A1A1A"
+      },
+      "letterSpacing": 0.05,
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+          "fallback": "Unknown Camera"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.03,
+        "y": -0.03
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "#6B7280"
+      },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        {
+          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "params": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

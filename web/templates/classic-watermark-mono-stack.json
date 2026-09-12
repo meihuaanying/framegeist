@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "id": "classic-watermark-mono-stack",
+    "name": "Grey Mono Stack",
+    "nameI18n": {
+      "zh": "暖灰参数堆叠",
+      "en": "Grey Mono Stack"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "classic-watermark"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0.12,
+      "left": 0
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F2F0EC"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.03,
+        "y": -0.043
+      },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.024
+      },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.03,
+        "y": -0.061
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "#373A40"
+      },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        {
+          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": null
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.03,
+        "y": -0.032
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "#9AA0A6"
+      },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [
+        {
+          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "params": {
+      "type": "string",
+      "source": "exif"
+    },
+    "date": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "id": "borderless-one-liner-01",
+    "name": "One Liner",
+    "nameI18n": { "zh": "右下单行", "en": "One Liner" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "borderless"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "oneliner",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.03, "y": -0.035 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "auto" },
+      "letterSpacing": 0.1,
+      "opacity": 0.88,
+      "align": "right",
+      "content": [
+        {
+          "expr": "fmt('{model_pretty} · {focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": "CAMERA · DETAILS"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.03, "y": -0.035 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "tint": "auto",
+      "attachTo": "oneliner",
+      "attachGap": 0.012
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

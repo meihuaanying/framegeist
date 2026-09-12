@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "id": "magazine-triptych-slices-01",
+    "name": "Triptych Slices",
+    "nameI18n": { "zh": "三联切片", "en": "Triptych Slices" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "slice-1",
+      "anchor": "top-left",
+      "offset": { "x": 0.333, "y": 0.16 },
+      "shape": "rect",
+      "size": { "width": 0.0015, "height": 0.68 },
+      "color": "#FFFFFF",
+      "opacity": 0.55
+    },
+    {
+      "type": "shape",
+      "id": "slice-2",
+      "anchor": "top-left",
+      "offset": { "x": 0.6658, "y": 0.16 },
+      "shape": "rect",
+      "size": { "width": 0.0015, "height": 0.68 },
+      "color": "#FFFFFF",
+      "opacity": 0.55
+    },
+    {
+      "type": "text",
+      "id": "head",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.045 },
+      "font": { "family": ["Space Grotesk"], "size": 0.011, "color": "#FFFFFF" },
+      "letterSpacing": 0.45,
+      "lineHeight": 1.9,
+      "opacity": 0.85,
+      "align": "center",
+      "content": [
+        { "expr": "'TRIPTYCH'", "fallback": null },
+        { "expr": "'I — II — III'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.035, "y": -0.045 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "auto" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.035, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "meta": {
+    "id": "portfolio-double-rule-01",
+    "name": "Double Rule",
+    "nameI18n": { "zh": "双线题签", "en": "Double Rule" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.13, "right": 0.09, "bottom": 0.30, "left": 0.09 },
+    "background": { "type": "solid", "color": "#F7F5F0" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "corner-date",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.045 },
+      "font": { "family": ["Bebas Neue"], "size": 0.030, "color": "#1A1A1A" },
+      "letterSpacing": 0.02,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "rail-l",
+      "anchor": "bottom-center",
+      "offset": { "x": -0.16, "y": -0.15 },
+      "shape": "line",
+      "size": { "width": 0.0015, "height": 0.055 },
+      "color": "#B9B2A4"
+    },
+    {
+      "type": "shape",
+      "id": "rail-r",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.16, "y": -0.15 },
+      "shape": "line",
+      "size": { "width": 0.0015, "height": 0.055 },
+      "color": "#B9B2A4"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.145 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.045, "color": "#1A1A1A" },
+      "letterSpacing": 0.1,
+      "align": "center",
+      "content": [{ "expr": "'《光年》'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.095 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.22,
+      "align": "center",
+      "content": [{ "expr": "'FRAMEGEIST FINE ART'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.08 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "edition",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.045 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [{ "expr": "'NO. 07'", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "id": "colorcard-index-05",
+    "name": "Index Row",
+    "nameI18n": { "zh": "索引色带", "en": "Index Row" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorcard"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.08, "bottom": 0.28, "left": 0.08 },
+    "background": { "type": "solid", "color": "#EDF1F5" },
+    "radius": 0.035,
+    "shadow": { "enabled": true, "blur": 0.09, "opacity": 0.22, "offsetX": 0, "offsetY": 0.02 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.33 },
+      "shape": "rect",
+      "size": { "width": 0.5, "height": 0.0018 },
+      "color": "#AEB7C2",
+      "opacity": 0.95
+    },
+    {
+      "type": "text",
+      "id": "index",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.05 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'PALETTE 05'", "fallback": null }]
+    },
+    {
+      "type": "palette",
+      "id": "chips",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.075 },
+      "count": 7,
+      "shape": "circle",
+      "direction": "horizontal",
+      "size": 0.032,
+      "gap": 0.013,
+      "showHex": true,
+      "label": { "size": 0.010, "color": "#6B7280", "family": ["JetBrains Mono"] }
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" }
+  }
+}

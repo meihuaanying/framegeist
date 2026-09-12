@@ -78,11 +78,10 @@ node tools/fetch-demo-photos.mjs     # 6 张演示照片（Cleveland CC0 + Picsu
 node tools/fetch-fonts.mjs           # 11 款 OFL 引擎字体
 python tools/subset-cjk.py           # 中文字体 GB2312 一级子集
 node tools/gen-brand-assets.mjs      # 品牌图标 + 系列徽章 + 游戏字标（resvg）
-node tools/gen-frame-assets.mjs      # 原创相框线稿（机身份轮廓/手机/胶片条）
-node tools/gen-extras.mjs            # 67 套扩展模板（130 总量）
-node tools/gen-templates.mjs         # 基础 60 套 + 清单/镜像
+node tools/gen-frame-assets.mjs      # 原创相框线稿（机身份轮廓/手机/胶片条/票卡/印章）
+node tools/gen-templates.mjs         # 重建 web/templates.json 清单 + web/templates/ 镜像
 pwsh tools/gen-samples.ps1           # samples(900)/previews(640)/thumbs(240)
-node tools/e2e-audit.mjs             # 39 项真机 E2E 门禁（需桌面版带 CDP 运行）
+node tools/e2e-audit.mjs             # E2E 真机门禁（需桌面版带 CDP 运行）
 ```
 
 ## Web 客户端（实施顺序第 6 步，已就绪）

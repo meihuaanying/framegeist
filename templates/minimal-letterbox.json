@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "id": "minimal-letterbox",
+    "name": "Letterbox",
+    "nameI18n": { "zh": "上下细带", "en": "Letterbox" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.055, "right": 0.05, "bottom": 0.105, "left": 0.05 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.018 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.20,
+      "align": "center",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'FRAMEGEIST')", "fallback": "FRAMEGEIST" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

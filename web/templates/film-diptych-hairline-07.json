@@ -1,0 +1,108 @@
+{
+  "meta": {
+    "id": "film-diptych-hairline-07",
+    "name": "Diptych Hairline",
+    "nameI18n": { "zh": "双联细线", "en": "Diptych Hairline" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.075, "bottom": 0.20, "left": 0.075 },
+    "background": { "type": "solid", "color": "#F5F0E8" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "edgecode",
+      "anchor": "top-left",
+      "offset": { "x": 0.06, "y": 0.032 },
+      "asset": "@builtin/frame/film-edge",
+      "size": { "width": 0.45 },
+      "opacity": 0.5
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-right",
+      "offset": { "x": -0.06, "y": 0.036 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "divider",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.132 },
+      "shape": "line",
+      "size": { "width": 0.86, "height": 0.0015 },
+      "color": "#D8D2C6"
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.082 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.08,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.06, "y": -0.0069 },
+      "font": { "family": ["Bebas Neue"], "size": 0.030, "color": "#1A1A1A" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'FG 200'", "fallback": "FILM" }]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.06, "y": -0.0069 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "stock",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "frameindex",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.06, "y": -0.020 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "split",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.0385 },
+      "shape": "line",
+      "size": { "width": 0.0015, "height": 1.0 },
+      "color": "#1A1A1A",
+      "opacity": 0.28
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

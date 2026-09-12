@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "id": "sports-finish-line-01",
+    "name": "Finish Line",
+    "nameI18n": { "zh": "终点线", "en": "Finish Line" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "sports"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.14, "right": 0.07, "bottom": 0.1, "left": 0.07 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.0226 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#373A40" },
+      "letterSpacing": 0.1,
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "RACE DAY" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "place",
+      "anchor": "top-right",
+      "offset": { "x": -0.0614, "y": 0.0226 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#1A1A1A" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [
+        { "expr": "'RIVERSIDE LOOP'", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "finishline1",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.0605 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0012 },
+      "color": "#1A1A1A"
+    },
+    {
+      "type": "shape",
+      "id": "finishline2",
+      "anchor": "top-left",
+      "offset": { "x": 0.0614, "y": 0.0661 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0008 },
+      "color": "#1A1A1A",
+      "opacity": 0.4
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0614, "y": -0.048 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "alt",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.048 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('ALT {gps_alt}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "weekday",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0614, "y": -0.0484 },
+      "font": { "family": ["Inter"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [
+        { "expr": "exif.weekday", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "weekday": { "type": "string", "source": "exif" }
+  }
+}

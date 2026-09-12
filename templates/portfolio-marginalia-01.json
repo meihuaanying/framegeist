@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "id": "portfolio-marginalia-01",
+    "name": "Marginal Notes",
+    "nameI18n": { "zh": "左右侧注", "en": "Marginal Notes" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.17, "bottom": 0.16, "left": 0.17 },
+    "background": { "type": "solid", "color": "#FAFAF8" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "rail-left",
+      "anchor": "middle-left",
+      "offset": { "x": 0.115, "y": 0 },
+      "shape": "line",
+      "size": { "width": 0.0012, "height": 0.62 },
+      "color": "#DAD5CB"
+    },
+    {
+      "type": "shape",
+      "id": "rail-right",
+      "anchor": "middle-right",
+      "offset": { "x": -0.127, "y": 0 },
+      "shape": "line",
+      "size": { "width": 0.0012, "height": 0.62 },
+      "color": "#DAD5CB"
+    },
+    {
+      "type": "text",
+      "id": "series-cn",
+      "anchor": "top-left",
+      "offset": { "x": 0.028, "y": 0.06 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.015, "color": "#373A40" },
+      "letterSpacing": 0.08,
+      "content": [{ "expr": "'静物系列'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "series-en",
+      "anchor": "top-left",
+      "offset": { "x": 0.028, "y": 0.105 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [{ "expr": "'ARCHIVAL PRINT'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "year",
+      "anchor": "top-left",
+      "offset": { "x": 0.028, "y": 0.145 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#9AA0A6" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "'2026'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.028, "y": -0.05 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'摄影 FrameGeist'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "edition",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.028, "y": -0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "'EDITION 1/8'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "anchor": "top-right",
+      "offset": { "x": -0.028, "y": 0.06 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "align": "right",
+      "content": [{ "expr": "'FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.028, "y": -0.12 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.028, "y": -0.085 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.03,
+      "align": "right",
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.028, "y": -0.05 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

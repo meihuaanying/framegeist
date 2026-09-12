@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "id": "colorwalk-round-card-01",
+    "name": "Round Card",
+    "nameI18n": { "zh": "圆角卡片", "en": "Round Card" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorwalk"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.09, "bottom": 0.27, "left": 0.09 },
+    "background": { "type": "tint" },
+    "radius": 0.045,
+    "shadow": { "enabled": true, "blur": 0.13, "opacity": 0.36, "offsetX": 0, "offsetY": 0.03 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.076, "y": 0.042 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.16,
+      "opacity": 0.9,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.076, "y": 0.038 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.076, "y": -0.139 },
+      "font": { "family": ["Inter"], "size": 0.019, "color": "auto" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.076, "y": -0.094 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.05,
+      "opacity": 0.9,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "series",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.076, "y": -0.1427 },
+      "asset": "@builtin/series/{exif.lens_series}",
+      "size": { "height": 0.019 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

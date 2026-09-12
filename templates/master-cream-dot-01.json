@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "id": "master-cream-dot-01",
+    "name": "Cream Dot",
+    "nameI18n": { "zh": "奶油朱点", "en": "Cream Dot" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "master"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.085, "bottom": 0.3, "left": 0.085 },
+    "background": { "type": "solid", "color": "#FAF8F3" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.026 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "script",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.07 },
+      "font": { "family": ["Great Vibes"], "size": 0.024, "color": "#1A1A1A" },
+      "align": "center",
+      "content": [{ "expr": "'Signature'" }]
+    },
+    {
+      "type": "shape",
+      "id": "reddot",
+      "anchor": "top-right",
+      "offset": { "x": -0.148, "y": 0.038 },
+      "shape": "ellipse",
+      "size": { "width": 0.005, "height": 0.0067 },
+      "color": "#E10600"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.07265, "y": 0.03 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.18 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0014 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.15 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "val-focal",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "fmt('{focal}MM', exif)", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "val-aperture",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.291, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "fmt('F{aperture}', exif)", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "val-shutter",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.509, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "exif.shutter", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "val-iso",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.728, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "exif.iso", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-focal",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'FL'" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-aperture",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.291, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'Aperture'" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-shutter",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.509, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'Shutter'" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-iso",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.728, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'ISO'" }]
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.07265, "y": -0.05 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.05 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

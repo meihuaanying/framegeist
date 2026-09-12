@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "id": "minimal-copyright",
+    "name": "Quiet Copyright",
+    "nameI18n": {
+      "zh": "仅版权微字",
+      "en": "Quiet Copyright"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": {
+      "type": "none"
+    }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "copyright",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.028,
+        "y": -0.028
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "auto"
+      },
+      "letterSpacing": 0.1,
+      "opacity": 0.8,
+      "align": "right",
+      "content": [
+        {
+          "expr": "date('(C) YYYY', exif.datetime)",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "date": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

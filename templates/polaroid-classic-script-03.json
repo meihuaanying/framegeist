@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "id": "polaroid-classic-script-03",
+    "name": "Classic Script",
+    "nameI18n": { "zh": "经典手写白框", "en": "Classic Script" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "polaroid"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.06, "bottom": 0.34, "left": 0.06 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.07, "y": 0.022 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#9A9A9A" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'INSTANT PRINT'", "fallback": "INSTANT" }]
+    },
+    {
+      "type": "text",
+      "id": "index",
+      "anchor": "top-right",
+      "offset": { "x": -0.07, "y": 0.022 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#9A9A9A" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · ISO{iso}', exif)", "fallback": "35mm · f/2.8" }]
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07, "y": -0.155 },
+      "font": { "family": ["Great Vibes"], "size": 0.085, "color": "#2A2A2A" },
+      "letterSpacing": 0.0,
+      "content": [{ "expr": "'with love'", "fallback": "with love" }]
+    },
+    {
+      "type": "text",
+      "id": "place",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07, "y": -0.095 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#2A2A2A" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'SEASIDE'", "fallback": "SEASIDE" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.07, "y": -0.095 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8A8A8A" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07, "y": -0.062 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8A8A8A" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07, "y": -0.062 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#A6A6A6" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

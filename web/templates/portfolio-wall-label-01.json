@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "id": "portfolio-wall-label-01",
+    "name": "Wall Label",
+    "nameI18n": { "zh": "展览标签", "en": "Wall Label" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.08, "bottom": 0.10, "left": 0.34 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "label-head",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.16 },
+      "font": { "family": ["Noto Sans SC"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "'WORK / 作品'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.20 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.042, "color": "#1A1A1A" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'《夜色温柔》'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "year",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.28 },
+      "font": { "family": ["Bebas Neue"], "size": 0.030, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'2026'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.345 },
+      "font": { "family": ["Inter"], "size": 0.014, "color": "#373A40" },
+      "letterSpacing": 0.1,
+      "content": [{ "expr": "'FrameGeist'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "medium",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.385 },
+      "font": { "family": ["Noto Sans SC"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.08,
+      "content": [{ "expr": "'数字微喷 · 收藏级'", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.155 },
+      "shape": "line",
+      "size": { "width": 0.28, "height": 0.0016 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.10 },
+      "font": { "family": ["Inter"], "size": 0.014, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

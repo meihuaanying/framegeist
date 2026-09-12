@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "id": "sports-ride-stats-01",
+    "name": "Ride Stats",
+    "nameI18n": { "zh": "骑行数据行", "en": "Ride Stats" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "sports"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.08, "bottom": 0.15, "left": 0.08 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "anchor": "top-left",
+      "offset": { "x": 0.069, "y": 0.0182 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.22,
+      "content": [
+        { "expr": "'RIDE DATA'", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.069, "y": 0.0231 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.069, "y": -0.074 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "RIDE DAY" }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "rule1",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.25, "y": -0.0661 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.03 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "stat1",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.3, "y": -0.074 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "'AVG 32.6 KM/H'", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "rule2",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.47, "y": -0.0661 },
+      "shape": "rect",
+      "size": { "width": 0.0008, "height": 0.03 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "stat2",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.52, "y": -0.074 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "'CLIMB 1250 M'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.069, "y": -0.0742 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#6B7280" },
+      "letterSpacing": 0.03,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

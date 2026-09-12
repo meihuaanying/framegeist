@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "id": "festival-spring-gold-01",
+    "name": "Spring Gold",
+    "nameI18n": { "zh": "新春金岁", "en": "Spring Gold" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "festival"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.10, "bottom": 0.30, "left": 0.10 },
+    "background": { "type": "solid", "color": "#C8102E" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.032 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#F2C94C" },
+      "letterSpacing": 0.24,
+      "opacity": 0.9,
+      "content": [{ "expr": "'SPRING FESTIVAL'", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "seal-patch",
+      "anchor": "top-right",
+      "offset": { "x": -0.045, "y": 0.012 },
+      "shape": "ellipse",
+      "size": { "width": 0.09, "height": 0.09 },
+      "color": "#FAF7F0"
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "top-right",
+      "offset": { "x": -0.0525, "y": 0.019 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.075 }
+    },
+    {
+      "type": "image",
+      "id": "lantern-left",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.045 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.042 },
+      "tint": "auto"
+    },
+    {
+      "type": "image",
+      "id": "lantern-right",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.045 },
+      "asset": "@builtin/frame/icon-lantern",
+      "size": { "height": 0.042 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.115 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.075, "color": "#F2C94C" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "'新春'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "year",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.042 },
+      "font": { "family": ["Bebas Neue"], "size": 0.055, "color": "#F7E6C4" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY', exif.datetime)", "fallback": "2026" }]
+    },
+    {
+      "type": "text",
+      "id": "micro",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.014 },
+      "font": { "family": ["Inter"], "size": 0.0085, "color": "#F2C94C" },
+      "letterSpacing": 0.25,
+      "opacity": 0.9,
+      "align": "center",
+      "content": [{ "expr": "'FRAMEGEIST'", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "date": { "type": "string", "source": "exif" }
+  }
+}

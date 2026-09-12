@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "id": "festival-gold-frame-01",
+    "name": "Gold Frame",
+    "nameI18n": { "zh": "庆典金框", "en": "Gold Frame" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "festival"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.10, "bottom": 0.22, "left": 0.10 },
+    "background": { "type": "solid", "color": "#C8102E" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "frame-outer",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.008 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 1.0 },
+      "color": "#F2C94C",
+      "strokeWidth": 0.0022
+    },
+    {
+      "type": "shape",
+      "id": "frame-inner",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.008 },
+      "shape": "rect",
+      "size": { "width": 0.96, "height": 0.96 },
+      "color": "#F2C94C",
+      "strokeWidth": 0.0012
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.022 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.052, "color": "#F2C94C" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [{ "expr": "'喜乐常在'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.026 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "#F2C94C" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.045, "y": 0.026 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#F2C94C" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.075 },
+      "font": { "family": ["Bebas Neue"], "size": 0.045, "color": "#F2C94C" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "micro",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.025 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#F2C94C" },
+      "letterSpacing": 0.24,
+      "opacity": 0.9,
+      "align": "center",
+      "content": [{ "expr": "'CELEBRATION · FRAMEGEIST'", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

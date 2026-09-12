@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "id": "effect-top-gradient-band-07",
+    "name": "Top Gradient Band",
+    "nameI18n": { "zh": "顶部渐隐带", "en": "Top Gradient Band" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "effect"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.16, "right": 0.09, "bottom": 0.16, "left": 0.09 },
+    "background": { "type": "tint" },
+    "radius": 0.03,
+    "shadow": { "enabled": true, "blur": 0.10, "opacity": 0.25, "offsetX": 0, "offsetY": 0.02 }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "band-solid",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.3561 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.06 },
+      "color": "#14181C",
+      "opacity": 0.40
+    },
+    {
+      "type": "shape",
+      "id": "band-fade",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": -0.2803 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.14 },
+      "color": "#14181C",
+      "opacity": 0.15
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.04 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.068 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "auto" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

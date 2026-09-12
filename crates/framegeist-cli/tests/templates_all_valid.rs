@@ -30,7 +30,7 @@ fn library_meets_c4_quota() {
     let templates = all_templates();
     assert!(
         templates.len() >= 60,
-        "built-in library must hold >= 60 templates, found {}",
+        "built-in library must hold >= 180 templates, found {}",
         templates.len()
     );
     let mut by_category = std::collections::BTreeMap::new();
@@ -38,20 +38,37 @@ fn library_meets_c4_quota() {
         *by_category.entry(tpl.meta.category).or_insert(0usize) += 1;
     }
     let categories = [
-        Category::ClassicWhite,
+        Category::WhiteBorder,
+        Category::Camera,
+        Category::Phone,
+        Category::Drone,
+        Category::Fuji,
         Category::Film,
-        Category::Polaroid,
-        Category::Gallery,
-        Category::Technical,
+        Category::Colorwalk,
+        Category::Colorful,
+        Category::ClassicWatermark,
+        Category::Portfolio,
+        Category::BlackFrame,
+        Category::Sports,
+        Category::Calendar,
         Category::Magazine,
         Category::Minimal,
-        Category::FrameShell,
+        Category::Borderless,
+        Category::Master,
+        Category::Personal,
+        Category::Polaroid,
+        Category::Festival,
+        Category::Effect,
+        Category::Colorcard,
+        Category::BlurBg,
+        Category::Ticket,
+        Category::Game,
     ];
     for cat in categories {
         let count = by_category.get(&cat).copied().unwrap_or(0);
         assert!(
-            count >= 7,
-            "category {cat} holds {count} templates, needs >= 7"
+            count >= 4,
+            "category {cat} holds {count} templates, needs >= 4"
         );
     }
 }

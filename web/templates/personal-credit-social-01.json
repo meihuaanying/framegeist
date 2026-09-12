@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "id": "personal-credit-social-01",
+    "name": "Credit Social",
+    "nameI18n": { "zh": "署名社交", "en": "Credit Social" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.1, "right": 0.09, "bottom": 0.28, "left": 0.09 },
+    "background": { "type": "solid", "color": "#F2F0EC" },
+    "radius": 0.01,
+    "shadow": { "enabled": true, "blur": 0.05, "opacity": 0.16, "offsetX": 0, "offsetY": 0.012 }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0763, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.16 },
+      "font": { "family": ["Inter"], "size": 0.02, "color": "#1A1A1A" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "credit",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.112 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.18,
+      "content": [
+        { "expr": "'PHOTOGRAPHY BY YOUR NAME · @INSTAGRAM'", "fallback": "PHOTOGRAPHY BY YOUR NAME" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.06 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stamp",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.03 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD · WW', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

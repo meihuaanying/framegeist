@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "id": "black-frame-mono-slate-01",
+    "name": "Mono Slate",
+    "nameI18n": { "zh": "黑框参数", "en": "Mono Slate" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "black-frame"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.045, "right": 0.045, "bottom": 0.15, "left": 0.045 },
+    "background": { "type": "solid", "color": "#111214" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.041, "y": 0.012 },
+      "font": { "family": ["Inter"], "size": 0.009, "color": "#6E6E6E" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.041, "y": -0.062 },
+      "font": { "family": ["Inter"], "size": 0.014, "color": "#E8E8E8" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.041, "y": -0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9A9A9A" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.041, "y": -0.062 },
+      "font": { "family": ["Inter"], "size": 0.0115, "color": "#9A9A9A" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.041, "y": -0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "#7A7A7A" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

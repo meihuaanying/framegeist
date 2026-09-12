@@ -33,7 +33,12 @@ fn gradient_jpeg(w: u32, h: u32) -> Vec<u8> {
 }
 
 fn tpl(id: &str) -> framegeist_core::Template {
-    let path = repo_root().join(format!("templates/{id}.json"));
+    let fixture = repo_root().join(format!("crates/framegeist-cli/tests/fixtures/{id}.json"));
+    let path = if fixture.is_file() {
+        fixture
+    } else {
+        repo_root().join(format!("templates/{id}.json"))
+    };
     let bytes = std::fs::read(&path).expect("template");
     load_template(&bytes).expect("valid")
 }
@@ -45,14 +50,14 @@ fn bottom_text_is_visible() {
     let photo = gradient_jpeg(1600, 1200);
     for id in [
         "classic-white-bottom-param",
-        "classic-white-v1",
-        "film-v1",
         "polaroid-caption",
-        "gallery-v1",
-        "technical-v1",
-        "magazine-v1",
-        "frame-shell-v1",
-        "minimal-v1",
+        "white-border-editorial-01",
+        "film-sprocket-01",
+        "magazine-cover-banner-01",
+        "portfolio-atelier-plate-01",
+        "camera-topdeck-bar-01",
+        "classic-watermark-single-row",
+        "ticket-stub-horizontal-01",
     ] {
         let template = tpl(id);
         let img = render_rgba(&photo, &template, &opts()).unwrap();

@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "id": "fuji-recipe-hero-04",
+    "name": "Recipe Hero",
+    "nameI18n": { "zh": "奶白配方卡", "en": "Recipe Hero" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "fuji"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.08, "bottom": 0.36, "left": 0.08 },
+    "background": { "type": "solid", "color": "#F5F1E8" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "card",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.069, "y": -0.045 },
+      "shape": "rect",
+      "size": { "width": 0.88, "height": 0.30 },
+      "color": "#FFFFFF"
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.08, "y": 0.028 },
+      "asset": "@builtin/brand/fujifilm",
+      "size": { "height": 0.026 }
+    },
+    {
+      "type": "text",
+      "id": "codeline",
+      "anchor": "top-right",
+      "offset": { "x": -0.08, "y": 0.038 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6E6A62" },
+      "letterSpacing": 0.16,
+      "align": "right",
+      "content": [{ "expr": "'RECIPE CARD C4 · VELVIA'", "fallback": "RECIPE CARD" }]
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.772 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'FILM SIMULATION'", "fallback": "FILM" }]
+    },
+    {
+      "type": "text",
+      "id": "hero",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.790 },
+      "font": { "family": ["Space Grotesk"], "size": 0.055, "color": "#17181A" },
+      "letterSpacing": 0.02,
+      "content": [{ "expr": "'VELVIA'", "fallback": "RECIPE" }]
+    },
+    {
+      "type": "text",
+      "id": "secondary",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.868 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6E6A62" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'WB AUTO · DR100 · GRAIN OFF · H+1 S-1'", "fallback": "WB AUTO · DR100" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.905 },
+      "font": { "family": ["Space Grotesk"], "size": 0.012, "color": "#17181A" },
+      "letterSpacing": 0.08,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.10, "y": 0.905 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6E6A62" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "isolabel",
+      "anchor": "top-left",
+      "offset": { "x": 0.85, "y": 0.775 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'ISO'", "fallback": "ISO" }]
+    },
+    {
+      "type": "text",
+      "id": "isovalue",
+      "anchor": "top-left",
+      "offset": { "x": 0.85, "y": 0.790 },
+      "font": { "family": ["Space Grotesk"], "size": 0.040, "color": "#17181A" },
+      "letterSpacing": 0.02,
+      "content": [{ "expr": "exif.iso", "fallback": "200" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.85, "y": 0.868 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6E6A62" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

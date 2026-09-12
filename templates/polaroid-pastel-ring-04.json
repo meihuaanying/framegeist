@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "id": "polaroid-pastel-ring-04",
+    "name": "Pastel Ring",
+    "nameI18n": { "zh": "粉彩圆环", "en": "Pastel Ring" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "polaroid"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.06, "bottom": 0.26, "left": 0.06 },
+    "background": { "type": "solid", "color": "#DCE8E4" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "ring",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.0455 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 1.0 },
+      "color": "#FFFFFF",
+      "strokeWidth": 0.003
+    },
+    {
+      "type": "shape",
+      "id": "circle",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.075, "y": -0.02 },
+      "shape": "ellipse",
+      "size": { "width": 0.1275, "height": 0.17 },
+      "color": "#FFFFFF",
+      "strokeWidth": 0.0025
+    },
+    {
+      "type": "text",
+      "id": "day",
+      "anchor": "top-left",
+      "offset": { "x": 0.852, "y": 0.893 },
+      "font": { "family": ["Bebas Neue"], "size": 0.060, "color": "#2F3E3A" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": "09" }]
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.0536, "y": 0.022 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8F89" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'PASTEL INSTANT'", "fallback": "INSTANT" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.0536, "y": 0.024 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8F89" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "monthyear",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.150 },
+      "font": { "family": ["Space Grotesk"], "size": 0.020, "color": "#2F3E3A" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "date('MMMM YYYY', exif.datetime)", "fallback": "SEPTEMBER 2026" }]
+    },
+    {
+      "type": "text",
+      "id": "place",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.105 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#5A6E68" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "'BY THE SEA'", "fallback": "SEASIDE" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.070 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#5A6E68" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.070 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0536, "y": -0.035 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#7C8F89" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

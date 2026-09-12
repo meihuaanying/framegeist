@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "id": "blur-bg-topcap-04",
+    "name": "Top Cap",
+    "nameI18n": { "zh": "顶部题头", "en": "Top Cap" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "blur-bg"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.26, "right": 0.09, "bottom": 0.12, "left": 0.09 },
+    "background": { "type": "blur", "blur": 75, "scale": 1.25 },
+    "shadow": { "enabled": false }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.045 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "auto" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.082 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "auto" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.04 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

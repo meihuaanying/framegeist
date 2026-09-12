@@ -1,50 +1,90 @@
 {
   "landscape-1.jpg": {
-    "title": "Twilight in the Wilderness",
-    "author": "Frederic Edwin Church (American, 1826–1900)",
-    "source": "https://clevelandart.org/art/1965.233",
-    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
-    "url": "https://openaccess-cdn.clevelandart.org/1965.233/1965.233_web.jpg",
-    "bytes": 245118
-  },
-  "landscape-2.jpg": {
-    "title": "Shepherds in a Landscape",
-    "author": "Giulio Campagnola (Italian, 1482–1515)",
-    "source": "https://clevelandart.org/art/1948.12",
-    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
-    "url": "https://openaccess-cdn.clevelandart.org/1948.12/1948.12_web.jpg",
-    "bytes": 867958
-  },
-  "landscape-3.jpg": {
-    "title": "Mountain river (Lorem Picsum #1015)",
-    "author": "Unsplash contributor via Lorem Picsum",
+    "title": "fjord cliffs (Picsum #1015)",
+    "author": "Alexey Topolyanskiy via Lorem Picsum",
     "source": "https://picsum.photos/id/1015/info",
     "license": "Unsplash License (free to use; attribution appreciated)",
     "url": "https://picsum.photos/id/1015/2400/1600.jpg",
     "bytes": 651520
   },
+  "landscape-2.jpg": {
+    "title": "red rock canyon (Picsum #1016)",
+    "author": "Philippe Wuyts via Lorem Picsum",
+    "source": "https://picsum.photos/id/1016/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1016/2400/1600.jpg",
+    "bytes": 638488
+  },
+  "landscape-3.jpg": {
+    "title": "snow mountains (Picsum #1036)",
+    "author": "Wolfgang Lutz via Lorem Picsum",
+    "source": "https://picsum.photos/id/1036/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1036/2400/1600.jpg",
+    "bytes": 464702
+  },
   "architecture-1.jpg": {
-    "title": "Architecture",
-    "author": "Marie Bracquemond (French, 1840–1916)",
-    "source": "https://clevelandart.org/art/2023.165",
-    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
-    "url": "https://openaccess-cdn.clevelandart.org/2023.165/2023.165_web.jpg",
-    "bytes": 273230
+    "title": "city skyline (Picsum #1029)",
+    "author": "freddie marriage via Lorem Picsum",
+    "source": "https://picsum.photos/id/1029/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1029/2400/1600.jpg",
+    "bytes": 635010
   },
   "architecture-2.jpg": {
-    "title": "Gothic Church among Oaks",
-    "author": "Karl Friedrich Schinkel (German, 1781–1841)",
-    "source": "https://clevelandart.org/art/1940.1173",
-    "license": "CC0-1.0 (Cleveland Museum of Art Open Access)",
-    "url": "https://openaccess-cdn.clevelandart.org/1940.1173/1940.1173_web.jpg",
-    "bytes": 569977
-  },
-  "architecture-3.jpg": {
-    "title": "City architecture (Lorem Picsum #1076)",
-    "author": "Unsplash contributor via Lorem Picsum",
-    "source": "https://picsum.photos/id/1076/info",
+    "title": "castle (Picsum #1040)",
+    "author": "Rachel Davis via Lorem Picsum",
+    "source": "https://picsum.photos/id/1040/info",
     "license": "Unsplash License (free to use; attribution appreciated)",
-    "url": "https://picsum.photos/id/1076/1600/2400.jpg",
-    "bytes": 631571
+    "url": "https://picsum.photos/id/1040/2400/1600.jpg",
+    "bytes": 500939
+  },
+  "street-1.jpg": {
+    "title": "classic car street (Picsum #1071)",
+    "author": "Tim Stief via Lorem Picsum",
+    "source": "https://picsum.photos/id/1071/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1071/2400/1600.jpg",
+    "bytes": 346580
+  },
+  "mist-1.jpg": {
+    "title": "misty river (Picsum #1044)",
+    "author": "Steve Carter via Lorem Picsum",
+    "source": "https://picsum.photos/id/1044/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1044/2400/1600.jpg",
+    "bytes": 753842
+  },
+  "night-1.jpg": {
+    "title": "city at dusk (Picsum #1067)",
+    "author": "Kevin Young via Lorem Picsum",
+    "source": "https://picsum.photos/id/1067/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1067/2400/1600.jpg",
+    "bytes": 420651
+  },
+  "portrait-1.jpg": {
+    "title": "portrait (Picsum #1027)",
+    "author": "Roksolana Zasiadko via Lorem Picsum",
+    "source": "https://picsum.photos/id/1027/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1027/1600/2400.jpg",
+    "bytes": 255073
+  },
+  "people-1.jpg": {
+    "title": "person canoeing (Picsum #1011)",
+    "author": "Roberto Nickson via Lorem Picsum",
+    "source": "https://picsum.photos/id/1011/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1011/2400/1600.jpg",
+    "bytes": 234580
+  },
+  "square-1.jpg": {
+    "title": "strawberries (Picsum #1080)",
+    "author": "veeterzy via Lorem Picsum",
+    "source": "https://picsum.photos/id/1080/info",
+    "license": "Unsplash License (free to use; attribution appreciated)",
+    "url": "https://picsum.photos/id/1080/1600/1600.jpg",
+    "bytes": 389365
   }
 }

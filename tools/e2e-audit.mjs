@@ -1,10 +1,10 @@
 // FrameGeist E2E audit gate (v0.2.0): drives the real Tauri WebView2 over CDP.
 // Prereq: app started with WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9223
 // Usage: node tools/e2e-audit.mjs [screenshotDir]
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
-const SHOTS = process.argv[2] ?? "docs/reports/v0.3.0";
+const SHOTS = process.argv[2] ?? "docs/reports/v0.4.0";
 mkdirSync(SHOTS, { recursive: true });
 
 import { resolve as pathResolve } from "node:path";
@@ -75,7 +75,68 @@ const boot = await ev(`document.getElementById("statusText").textContent`);
 check("boot: ready", boot === "就绪", `status=${boot}`);
 check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__bootMs")) < 2000, `${await ev("window.__bootMs")}ms`);
 
-/* ---- 1. layout metrics (user's complaint) ---- */
+/* ---- 0b. template wall (v0.4.0 first screen) ---- */
+{
+  const wall = await ev(`(() => ({
+    view: window.__fg.state.view,
+    wallHidden: document.getElementById("wall").classList.contains("hidden"),
+    editorHidden: document.getElementById("editor").classList.contains("hidden"),
+    count: document.getElementById("wallCount").textContent,
+    tabs: document.querySelectorAll("#wallCats button").length,
+  }))()`);
+  check("wall: opens as first view", wall.view === "wall" && !wall.wallHidden && wall.editorHidden, JSON.stringify(wall));
+  check("wall: 184 templates counted", /184/.test(wall.count), wall.count);
+  check("wall: 27 category tabs (all+mine+25)", wall.tabs === 27, String(wall.tabs));
+
+  const cards = await ev(`
+    (async () => {
+      const list = [...document.querySelectorAll(".wall-card")];
+      const img = list[0]?.querySelector("img");
+      if (img && !(img.complete && img.naturalWidth)) await new Promise((r) => { img.onload = r; img.onerror = r; setTimeout(r, 5000); });
+      const cols = getComputedStyle(document.getElementById("wallGrid")).gridTemplateColumns.split(" ").length;
+      return { n: list.length, src: img?.getAttribute("src") ?? "", w: img?.naturalWidth ?? 0, cols };
+    })()
+  `);
+  check("wall: responsive card grid", cards.n >= 180 && cards.cols >= 3, JSON.stringify({ n: cards.n, cols: cards.cols }));
+  check("wall: real-photo preview loads", /\/previews\//.test(cards.src) && cards.w > 50, `${cards.src} w=${cards.w}`);
+  check("wall: card has name + category chip", await ev(`(() => { const c = document.querySelector(".wall-card"); return !!c.querySelector(".wall-name b")?.textContent && !!c.querySelector(".wall-cat")?.textContent; })()`));
+
+  const manifest = JSON.parse(readFileSync("web/templates.json", "utf8"));
+  const ENUM = new Set(["white-border", "camera", "phone", "drone", "fuji", "film", "colorwalk", "colorful", "classic-watermark", "portfolio", "black-frame", "sports", "calendar", "magazine", "minimal", "borderless", "master", "personal", "polaroid", "festival", "effect", "colorcard", "blur-bg", "ticket", "game"]);
+  check("library: 184 templates in manifest", manifest.length === 184, String(manifest.length));
+  check("library: categories within v0.4 enum", manifest.every((t) => ENUM.has(t.category)), manifest.filter((t) => !ENUM.has(t.category)).map((t) => t.category).join(",") || "ok");
+  check("library: bilingual names complete", manifest.every((t) => t.names?.zh && t.names?.en));
+  const previews = readdirSync("web/previews").filter((f) => f.endsWith(".jpg")).length;
+  check("library: preview image per template", previews === manifest.length, `previews=${previews}`);
+
+  await ev(`document.querySelector(".wall-card .wall-actions .icon").click()`);
+  await new Promise((r) => setTimeout(r, 700));
+  check("wall: magnifier opens lightbox", await ev(`!document.getElementById("lightbox").classList.contains("hidden")`));
+  await ev(`document.getElementById("lbClose").click()`);
+
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); })()`);
+  await new Promise((r) => setTimeout(r, 600));
+  const edit = await ev(`(() => {
+    const wallHidden = document.getElementById("wall").classList.contains("hidden");
+    const editorShown = !document.getElementById("editor").classList.contains("hidden");
+    const sb = document.querySelector(".sidebar").getBoundingClientRect();
+    const ws = document.querySelector(".workspace").getBoundingClientRect();
+    const vp = document.getElementById("viewport").getBoundingClientRect();
+    return { wallHidden, editorShown, right: sb.left > ws.left, vpW: Math.round(vp.width), vpH: Math.round(vp.height) };
+  })()`);
+  check("wall -> editor: selecting a template enters editor", edit.wallHidden && edit.editorShown, JSON.stringify(edit));
+  check("editor: controls column on the right", edit.right === true);
+  check("editor: large preview viewport", edit.vpW > 600 && edit.vpH > 400, `${edit.vpW}x${edit.vpH}`);
+  await shot("00-editor");
+
+  await ev(`document.getElementById("backToWall").click()`);
+  await new Promise((r) => setTimeout(r, 500));
+  check("editor: back button returns to wall", await ev(`window.__fg.state.view === "wall"`));
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); })()`);
+  await new Promise((r) => setTimeout(r, 500));
+}
+
+/* ---- 1. layout metrics (editor) ---- */
 const layout = await ev(`
   (() => {
     const body = document.body;
@@ -103,11 +164,11 @@ const thumbs = await ev(`
 check("thumbnails: loaded", thumbs.sizes.every(([w]) => w > 50), JSON.stringify(thumbs.sizes.slice(0, 3)));
 
 /* ---- 3. pinned selection visible when filtering ---- */
-await ev(`[...document.querySelectorAll("#catChips button")].find(b => b.textContent === "film").click()`);
+await ev(`document.querySelector('#catChips [data-cat="film"]').click()`);
 await new Promise((r) => setTimeout(r, 300));
 const pinned = await ev(`document.getElementById("pinnedName").textContent`);
 check("selection: pinned name visible after category switch", pinned && pinned !== "—", pinned);
-await ev(`[...document.querySelectorAll("#catChips button")].find(b => b.textContent.includes("全部")).click()`);
+await ev(`document.querySelector('#catChips [data-cat="all"]').click()`);
 await new Promise((r) => setTimeout(r, 300));
 
 /* ---- 4. inject 24MP photo, preview render ---- */
@@ -237,7 +298,7 @@ check("batch: button visible with 2 photos", batchVisible === true);
 // build a store-only zip fixture in node (mirrors app.js format)
 const { execFileSync } = await import("node:child_process");
 const fs = await import("node:fs");
-const templateFixture = JSON.parse(fs.readFileSync("templates/minimal-corner-iso.json", "utf8"));
+const templateFixture = JSON.parse(fs.readFileSync("crates/framegeist-cli/tests/fixtures/minimal-corner-iso.json", "utf8"));
 templateFixture.meta.id = "user-imported-fixture";
 templateFixture.meta.name = "Imported Fixture";
 const fgt = makeFgt(Buffer.from(JSON.stringify(templateFixture)));
@@ -322,7 +383,7 @@ function makeFgt(jsonBuf) {
 /* 18. library: 130 templates incl. game category + notice */
 {
   const count = await ev(`window.__fg.state.templates.length`);
-  check("library: 130 templates", count === 130, String(count));
+  check("library: 184 templates", count === 184, String(count));
   const hasGame = await ev(`window.__fg.state.templates.some(t => t.category === "game")`);
   check("library: game category present", hasGame === true);
   const chip = await ev(`[...document.querySelectorAll("#catChips button")].some(b => b.textContent.includes("游戏"))`);
@@ -335,7 +396,7 @@ function makeFgt(jsonBuf) {
 
 /* 19. badge pixels: logo toggle must change the render */
 {
-  await ev(`[...document.querySelectorAll("#catChips button")].find(b => b.textContent.includes("胶片") || b.textContent === "film").click()`);
+  await ev(`document.querySelector('#catChips [data-cat="film"]').click()`);
   await new Promise((r) => setTimeout(r, 300));
   await ev(`document.querySelectorAll(".thumb")[0].click()`);
   await waitLabel(30000);
@@ -353,7 +414,7 @@ function makeFgt(jsonBuf) {
 {
   const ok = await ev(`
     (async () => {
-      const tpl = await (await fetch("./templates/borderless-v1.json")).text();
+      const tpl = await (await fetch("./templates/borderless-center-caption-01.json")).text();
       try {
         const out = window.__fg.engine.render_with_overrides(window.__fg.state.photos[0].bytes, tpl, "jpeg", true, "", 0, false);
         return out.length > 1000;
@@ -399,6 +460,88 @@ function makeFgt(jsonBuf) {
   check("settings: persists across reload", after === "2048", String(after));
   await shot("06-settings");
   await ev(`localStorage.setItem("fg-theme","dark")`);
+}
+
+/* 23. v0.4 engine: letter-spacing + rotation pixel assertions */
+{
+  const probe = await ev(`
+    (async () => {
+      try {
+      const engine = window.__fg.engine;
+      const c0 = new OffscreenCanvas(1600, 1200);
+      const g0 = c0.getContext("2d");
+      const grad = g0.createLinearGradient(0, 0, 1600, 1200);
+      grad.addColorStop(0, "#2050C0"); grad.addColorStop(0.5, "#3FBF63"); grad.addColorStop(1, "#E04020");
+      g0.fillStyle = grad; g0.fillRect(0, 0, 1600, 1200);
+      const bytes = new Uint8Array(await (await c0.convertToBlob({ type: "image/jpeg", quality: 0.92 })).arrayBuffer());
+      const mk = (spacing, rotation) => JSON.stringify({
+        meta: { id: "e2e-probe", name: "probe", version: "1.0.0", minEngineVersion: "0.4.0", author: "FrameGeist", license: "CC0-1.0", category: "minimal" },
+        canvas: { mode: "extend", padding: { top: 0.05, right: 0.05, bottom: 0.35, left: 0.05 }, background: { type: "solid", color: "#000000" } },
+        layers: [
+          { type: "shape", id: "blind", anchor: "middle-center", shape: "rect", size: { width: 1, height: 1 }, color: "#000000", opacity: 1 },
+          { type: "text", id: "t", anchor: "bottom-center", offset: { x: 0, y: -0.12 },
+            font: { family: ["JetBrains Mono"], size: 0.05, color: "#FF0000" },
+            letterSpacing: spacing, rotation: rotation,
+            content: [{ expr: "'SPACING PROBE'", fallback: null }] }
+        ]
+      });
+      const measure = async (spacing, rotation) => {
+        const out = engine.render_with_overrides(bytes, mk(spacing, rotation), "jpeg", false, "", 640, false);
+        const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
+        const c = new OffscreenCanvas(bmp.width, bmp.height);
+        const g = c.getContext("2d");
+        g.drawImage(bmp, 0, 0);
+        const d = g.getImageData(0, 0, bmp.width, bmp.height).data;
+        let minX = 1e9, maxX = -1, minY = 1e9, maxY = -1, n = 0;
+        for (let y = 0; y < bmp.height; y++) {
+          for (let x = 0; x < bmp.width; x++) {
+            const i = (y * bmp.width + x) * 4;
+            if (d[i] > 170 && d[i + 1] < 90 && d[i + 2] < 90) { n++; minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y); }
+          }
+        }
+        return { n, w: maxX - minX + 1, h: maxY - minY + 1 };
+      };
+      const a = await measure(0, 0);
+      const b = await measure(0.4, 0);
+      const r = await measure(0, 90);
+      return { a, b, r };
+      } catch (e) { return { error: String((e && e.message) || e) }; }
+    })()
+  `);
+  if (probe?.error) console.log("PROBE-ERROR:", probe.error);
+  check("engine: letterSpacing widens the text block", !!probe?.b && probe.b.n > 50 && probe.b.w > probe.a.w * 1.12, probe?.error ?? `w ${probe?.a?.w} -> ${probe?.b?.w}`);
+  check("engine: rotation swaps the text extent", !!probe?.r && probe.r.n > 50 && probe.r.h > probe.a.h * 1.4, probe?.error ?? `h ${probe?.a?.h} -> ${probe?.r?.h}`);
+}
+
+/* 24. v0.4 engine: palette chips paint distinct saturated colors */
+{
+  const bins = await ev(`
+    (async () => {
+      const tpl = await (await fetch("./templates/colorcard-tint-chips-01.json")).text();
+      const c0 = new OffscreenCanvas(1600, 1200);
+      const g0 = c0.getContext("2d");
+      const grad = g0.createLinearGradient(0, 0, 1600, 1200);
+      grad.addColorStop(0, "#2050C0"); grad.addColorStop(0.5, "#3FBF63"); grad.addColorStop(1, "#E04020");
+      g0.fillStyle = grad; g0.fillRect(0, 0, 1600, 1200);
+      const bytes = new Uint8Array(await (await c0.convertToBlob({ type: "image/jpeg", quality: 0.92 })).arrayBuffer());
+      const out = window.__fg.engine.render_with_overrides(bytes, tpl, "jpeg", false, JSON.stringify({ showLogo: false }), 640, false);
+      const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
+      const c = new OffscreenCanvas(bmp.width, bmp.height);
+      const g = c.getContext("2d");
+      g.drawImage(bmp, 0, 0);
+      const y0 = Math.floor(bmp.height * 0.72);
+      const d = g.getImageData(0, y0, bmp.width, bmp.height - y0).data;
+      const map = new Map();
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], gg = d[i + 1], b = d[i + 2];
+        if (Math.max(r, gg, b) - Math.min(r, gg, b) < 48) continue;
+        const key = (r >> 5) + "," + (gg >> 5) + "," + (b >> 5);
+        map.set(key, (map.get(key) ?? 0) + 1);
+      }
+      return [...map.values()].filter((n) => n >= 15).length;
+    })()
+  `);
+  check("engine: palette chips paint >=3 distinct saturated colors", bins >= 3, String(bins));
 }
 
 ws.close();

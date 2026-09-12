@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "id": "colorcard-sunrise-chips-01",
+    "name": "Sunrise Chips",
+    "nameI18n": { "zh": "暖阳色卡", "en": "Sunrise Chips" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorcard"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.08, "bottom": 0.26, "left": 0.08 },
+    "background": { "type": "solid", "color": "#F6E8DC" },
+    "radius": 0.04,
+    "shadow": { "enabled": true, "blur": 0.10, "opacity": 0.26, "offsetX": 0, "offsetY": 0.025 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#7A6A5D" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.04 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9A8B7E" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.14 },
+      "font": { "family": ["Inter"], "size": 0.017, "color": "#4A4038" },
+      "letterSpacing": 0.04,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "palette",
+      "id": "chips",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.075 },
+      "count": 6,
+      "shape": "circle",
+      "direction": "horizontal",
+      "size": 0.034,
+      "gap": 0.014,
+      "showHex": true,
+      "label": { "size": 0.011, "color": "#4A4038", "family": ["JetBrains Mono"] }
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

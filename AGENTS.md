@@ -22,6 +22,69 @@ FrameGeist（框灵）：免费开源照片边框/水印/拼图工具。一个 R
 - 本机 git 代理（127.0.0.1:7890）时断时续：`git -c "http.https://github.com/.proxy=" push`，失败重试或走 `gh api` Contents PUT。
 - CRLF 警告可忽略；误提交无关文件立即 `git rm --cached`。
 
+## v0.4.0 执行契约（2026-09-12 已完成 ✅）
+
+> 结果：**184 套 / 25 分类**（166 套新设计 + 18 套游戏）；引擎 A1–A9 全落地（字距/旋转/透明度/形层/色卡/tint/圆角投影/GPS/25 分类）；模板墙 → 编辑器主导流程 + 11 张真实摄影；**E2E 57/57**（≥45 门禁）；cargo test/clippy/WASM 字节一致全绿；性能 24MP 预览 231ms、24MP 导出 0.69s、60MP 导出 1.27s。报告与截图 `docs/reports/v0.4.0/`。发布（push/tag/Release/Pages）待执行。
+
+> 目标：**design-first 大版本**。① 学习 frameelf 后把**全部模板推倒重做**（原创构图，子 Agent 分工设计，180+ 套）② 应用改为**模板墙 → 编辑器**主导流程 ③ 预览图换**真实摄影** ④ 引擎补齐设计语言所需能力（字距/旋转/色卡/圆角投影/形层/GPS/日历）。
+> 设计语言规范：`docs/DESIGN-LANGUAGE.md`（子 Agent 必读）。研究语料在临时目录，**严禁入仓**。
+
+### 用户确认的决策（2026-09-12 指令 + 前次 grill）
+
+1. **frameelf 深研**：已下载桌面版（Pake 套壳→Web），逐类研读 22 分类 217 套；蒸馏成 DESIGN-LANGUAGE.md。**只学语言，不抄版式/资产/文案**（红线 6 不破）。
+2. **全部模板重做**：现有 130 套（含自研 63 + frameelf 对标 37 + 开源灵感 12 + 游戏 18）全部重新设计与实现；目标 **180+ 套 / 24+ 分类**（对齐 frameelf 生态分类，用户找得到熟悉的类目）。游戏 18 套保留定位，按新引擎能力精修。
+3. **子 Agent 分工设计**：指定子 Agent（Task/general）按分类分组产出模板 JSON；每套必须 CLI 真实渲染自检 + QA 清单通过；主 Agent 负责集成、视觉审计、修复派单。
+4. **UI 重构**（前次 grill 已确认）：先选模板 → 再导照片；**全屏模板墙**（顶栏 + 横向分类 tabs + 搜索 + 响应式大卡 + hover 使用/放大镜）；**编辑器 = 顶栏 + 大预览 + 右侧手风琴面板**（模板/照片/画布/文字/Logo/导出）。
+5. **真实摄影预览**：预览/样张/缩略图从博物馆画作换成真实摄影（picsum/CC0），按分类映射；CREDITS 记录；640px Lightbox 图保留。
+6. **配色不变**：知乎蓝 `#1772F6 → #50C8FD`，禁紫扫描保留。游戏模板保持"原创字标 + 用户上传位"，零官方素材。
+
+### 引擎 v0.4.0 特性（T-A，先于模板设计冻结规格）
+
+- **A1 字距**：`TextLayer.letterSpacing`（em 倍率，-0.05–0.5，默认 0）——微排版刚需。
+- **A2 旋转**：`TextLayer.rotation` 与 `ShapeLayer.rotation`（度，-360–360，绕自身锚点）。
+- **A3 不透明度**：`TextLayer.opacity`（0–1，水印层用）。
+- **A4 形层**：`type:"shape"`（line/rect/ellipse；size 相对照片宽高；color/opacity/radius/rotation）——分隔线/圆点/色块/双线框。
+- **A5 色卡层**：`type:"palette"`（k-means 主色提取，count 3–8，shape circle/square/diamond/hexagon/strip，direction，size/gap，showHex+字体）——色卡/ColorWalk 差异化。
+- **A6 画布圆角/投影**：实现既有 `canvas.radius`/`canvas.shadow`（当前仅校验未渲染）。
+- **A7 底色**：`background.type:"tint"`（照片主色铺底，ColorWalk 无缝延伸；可 `color` 覆盖）。
+- **A8 新表达式**：`exif.gps_lat/gps_lon/gps_latlon/gps_alt`（格式化 DMS/米）、`exif.weekday_cn`、`date` 新增 `WW`（Wednesday）/`MMM`（Aug）token。
+- **A9 分类枚举扩展**：25 值（white-border / camera / phone / drone / fuji / film / colorwalk / colorful / classic-watermark / portfolio / black-frame / sports / calendar / magazine / minimal / borderless / master / personal / polaroid / festival / effect / colorcard / blur-bg / ticket / game）；旧值迁移映射 classic-white→white-border、frame-shell→camera、gallery→portfolio、technical→classic-watermark、其余同名保留。
+- 同步更新 `docs/TEMPLATE-SPEC.md` + `docs/schema/template.schema.json` + 回归测试（每特性像素/结构断言）。
+
+### 原创资产（T-B，gen-frame-assets.mjs 扩展）
+
+35mm 齿孔条（横/竖）、胶片边码条、邮票齿孔、票卡缺口、原创条码、朱文印章（方/圆）、自创图标（龙舟/灯笼/山峰/相机/无人机/电影）、细线/双线装饰、纸纹噪点（可选）；品牌/系列/游戏字标按需扩 slug。全部 resvg 生成、CC0、可追溯。
+
+### 模板重做工作流（T-C，子 Agent 波次）
+
+1. **冻结**：引擎 A1–A9 落地 + TEMPLATE-SPEC 更新 + release CLI 预编译 + `tools/validate-templates.mjs`（schema+语义+沙箱预检）就绪。
+2. **派单**：按分类分组派 6–7 个子 Agent（每组 3–4 分类 / 20–30 套），任务书 = DESIGN-LANGUAGE.md + TEMPLATE-SPEC + 2 套黄金范例 + QA 清单；产出到 `templates/`（扁平 `<category>-<variant>.json`）。
+3. **自检**：子 Agent 必须 `validate` + CLI `render` 真实照片 + 肉眼审查（可读 render 图）+ 至少一轮自修，附自检摘要。
+4. **集成**：主 Agent 全量重渲染（gen-samples 三档：samples 900 / previews 640 / thumbs 240）+ 分类接触表视觉审计 + 相邻差异断言（>3%）。
+5. **修复**：不合格模板派修复 Agent 或主 Agent 直改；重复达到全绿。
+6. **旧模板清理**：130 旧 JSON 全部删除替换（黄金基线按语义变化重生成并注明）；`web/templates.json` 重建。
+
+### UI 重构（T-D）
+
+- **模板墙**：首屏全屏；顶栏（logo/搜索/语言/主题/设置/导入）；分类 tabs 横向滚动；卡片 = 真实摄影预览 + 名称 + 分类 chip + hover「使用/放大镜」；响应式 2–4 列；骨架屏/懒加载/微动画沿用 v0.2 契约。
+- **编辑器**：顶栏（返回模板墙/模板名/导出/设置）+ 中央大预览（自适应 contain、缩放/平移/翻转保留）+ 右侧手风琴（模板/照片/画布/文字/Logo/导出预设）；导入照片后自动渲染；无照片时显示模板占位预览。
+- **真实预览**：`templates/assets/photos/` 换真实摄影（≥8 张，含横/竖/方/夜/人像/建筑），gen-samples 分类映射更新；web/photos 镜像。
+- i18n（zh/en）与既有设置/Lightbox/批量/EXIF 编辑器全兼容；`fg-settings-v1` 不破坏。
+
+### 门禁与发布（T-E）
+
+- `cargo test --release --workspace` + clippy -D warnings + 四 target + wasm smoke 全绿。
+- E2E `tools/e2e-audit.mjs` ≥45 断言：新增模板墙布局指标、编辑器布局指标、分类 tabs、180+ 模板配额/双语/分类枚举、色卡像素断言、字距/旋转像素断言、真实预览图存在性、无紫扫描保留。
+- 性能维持 v0.3 基线（24MP 预览 ≤600ms/导出 ≤2s）。
+- 版本 0.4.0；Release 含 CLI/桌面/模板包/update.json/NSIS；Pages 在线验证；报告归档 `docs/reports/v0.4.0/`。
+- 收尾：PRD Discoveries + 本契约状态更新 + 桌面重启。
+
+### 红线补充
+
+- frameelf 研究语料（预览图/API 响应/接触表）**不入仓、不进 Release、不二次分发**。
+- 模板不得与 frameelf 版式 1:1 对应；命名与文案全部自创（禁止照抄 "The Master Watermark / MASTER PHOTOGRAPHY / TICKET STUB" 等原句用作模板名或固定文案时可保留通用词组合的原创变体，但禁止逐字复制其完整文案）。
+- 子 Agent 禁止访问 frameelf 研究语料目录；只读 DESIGN-LANGUAGE.md/TEMPLATE-SPEC 与本契约（避免诱导复刻）。
+
 ## v0.3.0 执行契约（2026-09-12 已完成 ✅）
 
 > 结果：39/39 E2E 全绿；130 套模板；禁紫蓝系；Logo 三层根因修复+像素断言；自动对比度；设置页；Lightbox；11 款字体；游戏 18 套（原创字标+免责声明）。报告见 `docs/reports/v0.3.0/`。

@@ -1,0 +1,124 @@
+{
+  "meta": {
+    "id": "effect-polaroid-float-06",
+    "name": "Polaroid Float",
+    "nameI18n": { "zh": "拍立得悬浮", "en": "Polaroid Float" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "effect"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.125, "right": 0.145, "bottom": 0.42, "left": 0.145 },
+    "background": { "type": "solid", "color": "#FFFFFF" },
+    "shadow": { "enabled": true, "blur": 0.06, "opacity": 0.22, "offsetX": 0, "offsetY": 0.015 }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "desk-top-l",
+      "anchor": "middle-center",
+      "offset": { "x": -0.2364, "y": -0.4838 },
+      "shape": "rect",
+      "size": { "width": 0.68, "height": 0.05 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-top-r",
+      "anchor": "middle-center",
+      "offset": { "x": 0.2364, "y": -0.4838 },
+      "shape": "rect",
+      "size": { "width": 0.68, "height": 0.05 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-bottom-l",
+      "anchor": "middle-center",
+      "offset": { "x": -0.2364, "y": 0.4547 },
+      "shape": "rect",
+      "size": { "width": 0.68, "height": 0.14 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-bottom-r",
+      "anchor": "middle-center",
+      "offset": { "x": 0.2364, "y": 0.4547 },
+      "shape": "rect",
+      "size": { "width": 0.68, "height": 0.14 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-left-t",
+      "anchor": "middle-center",
+      "offset": { "x": -0.4767, "y": -0.2411 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 0.70 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-left-b",
+      "anchor": "middle-center",
+      "offset": { "x": -0.4767, "y": 0.1829 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 0.70 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-right-t",
+      "anchor": "middle-center",
+      "offset": { "x": 0.4767, "y": -0.2411 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 0.70 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "shape",
+      "id": "desk-right-b",
+      "anchor": "middle-center",
+      "offset": { "x": 0.4767, "y": 0.1829 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 0.70 },
+      "color": "#E6DFD3"
+    },
+    {
+      "type": "text",
+      "id": "script",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.085, "y": -0.145 },
+      "font": { "family": ["Great Vibes"], "size": 0.034, "color": "#3A3A3A" },
+      "content": [{ "expr": "'Memento'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.085, "y": -0.148 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.085, "y": -0.118 },
+      "font": { "family": ["Inter"], "size": 0.0125, "color": "#9AA0A6" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

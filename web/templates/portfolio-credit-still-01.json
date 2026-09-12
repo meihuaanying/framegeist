@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "id": "portfolio-credit-still-01",
+    "name": "Still Credits",
+    "nameI18n": { "zh": "片尾小字", "en": "Still Credits" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": { "mode": "overlay" },
+  "layers": [
+    {
+      "type": "text",
+      "id": "stillno",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.035 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "auto" },
+      "letterSpacing": 0.22,
+      "opacity": 0.8,
+      "align": "right",
+      "content": [{ "expr": "'STILL FRAME 01'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "credit-main",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.035, "y": -0.045 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.2,
+      "opacity": 0.9,
+      "content": [{ "expr": "'A PHOTOGRAPH BY FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "credit-sub",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.035, "y": -0.078 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0105, "color": "auto" },
+      "letterSpacing": 0.1,
+      "opacity": 0.85,
+      "content": [
+        { "expr": "fmt('{model_pretty} · {focal}MM · F{aperture} · {shutter}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

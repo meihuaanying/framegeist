@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "id": "portfolio-atelier-plate-01",
+    "name": "Atelier Plate",
+    "nameI18n": { "zh": "展签·标题", "en": "Atelier Plate" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.10, "bottom": 0.34, "left": 0.10 },
+    "background": { "type": "solid", "color": "#FAF8F3" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.045, "y": 0.032 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'PORTFOLIO · FRAMEGEIST'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "plateno",
+      "anchor": "top-right",
+      "offset": { "x": -0.045, "y": 0.032 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "align": "right",
+      "content": [{ "expr": "'PLATE NO. 01'", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.205 },
+      "shape": "line",
+      "size": { "width": 0.9, "height": 0.0016 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.165 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.052, "color": "#1A1A1A" },
+      "letterSpacing": 0.05,
+      "content": [{ "expr": "'《静物·晚餐》'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.165 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.018, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "'摄影 / FrameGeist'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.088 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.088 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#6B7280" },
+      "letterSpacing": 0.03,
+      "align": "right",
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.045, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.045, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.08,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

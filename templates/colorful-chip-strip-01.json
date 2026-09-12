@@ -1,0 +1,129 @@
+{
+  "meta": {
+    "id": "colorful-chip-strip-01",
+    "name": "Chip Strip",
+    "nameI18n": { "zh": "色卡条", "en": "Chip Strip" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorful"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.075, "right": 0, "bottom": 0.24, "left": 0 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "anchor": "top-left",
+      "offset": { "x": 0.035, "y": 0.028 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#9AA0A6" },
+      "letterSpacing": 0.20,
+      "content": [{ "expr": "'COLOR STUDY Nº 07'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-right",
+      "offset": { "x": -0.035, "y": 0.028 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "chip-1",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0, "y": -0.129 },
+      "shape": "rect",
+      "size": { "width": 0.167, "height": 0.03 },
+      "color": "#E63946"
+    },
+    {
+      "type": "shape",
+      "id": "chip-2",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.16667, "y": -0.129 },
+      "shape": "rect",
+      "size": { "width": 0.167, "height": 0.03 },
+      "color": "#F4A261"
+    },
+    {
+      "type": "shape",
+      "id": "chip-3",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.33333, "y": -0.129 },
+      "shape": "rect",
+      "size": { "width": 0.167, "height": 0.03 },
+      "color": "#E9C46A"
+    },
+    {
+      "type": "shape",
+      "id": "chip-4",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.5, "y": -0.129 },
+      "shape": "rect",
+      "size": { "width": 0.167, "height": 0.03 },
+      "color": "#2A9D8F"
+    },
+    {
+      "type": "shape",
+      "id": "chip-5",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.66667, "y": -0.129 },
+      "shape": "rect",
+      "size": { "width": 0.167, "height": 0.03 },
+      "color": "#457B9D"
+    },
+    {
+      "type": "shape",
+      "id": "chip-6",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.83333, "y": -0.129 },
+      "shape": "rect",
+      "size": { "width": 0.167, "height": 0.03 },
+      "color": "#1A1A1A"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0135, "color": "#1A1A1A" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.035, "y": -0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.042 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.30,
+      "content": [{ "expr": "'FRAME · COLORWALK'", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

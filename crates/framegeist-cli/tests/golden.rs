@@ -114,7 +114,7 @@ fn repo_root() -> PathBuf {
 }
 
 fn load_all_templates() -> Vec<(String, framegeist_core::Template)> {
-    let templates_dir = repo_root().join("templates");
+    let templates_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
     let mut out = Vec::new();
     for id in TEMPLATE_IDS {
         let path = templates_dir.join(format!("{id}.json"));

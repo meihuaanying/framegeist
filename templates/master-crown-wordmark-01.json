@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "id": "master-crown-wordmark-01",
+    "name": "Crown Wordmark",
+    "nameI18n": { "zh": "顶冠底铭", "en": "Crown Wordmark" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "master"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.16, "right": 0.085, "bottom": 0.26, "left": 0.085 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.04 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.026 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "script",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.092 },
+      "font": { "family": ["Great Vibes"], "size": 0.024, "color": "#1A1A1A" },
+      "align": "center",
+      "content": [{ "expr": "'with light'" }]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "top-left",
+      "offset": { "x": 0.244, "y": -0.13 },
+      "shape": "line",
+      "size": { "width": 0.6, "height": 0.0014 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.155 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.105 },
+      "font": { "family": ["Space Grotesk"], "size": 0.024, "color": "#1A1A1A" },
+      "letterSpacing": 0.22,
+      "align": "center",
+      "content": [{ "expr": "'PHOTOGRAPHIC WORKS'" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.06 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.08,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.07265, "y": -0.026 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "id": "magazine-gallery-left-01",
+    "name": "Gallery Column",
+    "nameI18n": { "zh": "左文画廊", "en": "Gallery Column" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.08, "bottom": 0.15, "left": 0.34 },
+    "background": { "type": "solid", "color": "#F7F4EE" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "title",
+      "anchor": "top-left",
+      "offset": { "x": 0.0493, "y": 0.055 },
+      "font": { "family": ["Playfair Display"], "size": 0.042, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "lineHeight": 1.15,
+      "content": [
+        { "expr": "'THE QUIET'", "fallback": null },
+        { "expr": "'FRAME'", "fallback": null }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "top-left",
+      "offset": { "x": 0.0493, "y": 0.21 },
+      "shape": "line",
+      "size": { "width": 0.26, "height": 0.0016 },
+      "color": "#1A1A1A",
+      "opacity": 0.7
+    },
+    {
+      "type": "text",
+      "id": "intro",
+      "anchor": "top-left",
+      "offset": { "x": 0.0493, "y": 0.25 },
+      "font": { "family": ["Inter"], "size": 0.0125, "color": "#6B7280" },
+      "letterSpacing": 0.02,
+      "lineHeight": 1.75,
+      "content": [
+        { "expr": "'A study of light, glass and'", "fallback": null },
+        { "expr": "'patient seeing — one frame,'", "fallback": null },
+        { "expr": "'held still until the world'", "fallback": null },
+        { "expr": "'agrees to stand quietly.'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0493, "y": -0.156 },
+      "font": { "family": ["Inter"], "size": 0.015, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0493, "y": -0.1134 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0493, "y": -0.0709 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0563, "y": -0.072 },
+      "font": { "family": ["Inter"], "size": 0.012, "color": "#373A40" },
+      "letterSpacing": 0.03,
+      "align": "right",
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0563, "y": -0.032 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.04,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "id": "polaroid-duo-stamps-05",
+    "name": "Duo Stamps",
+    "nameI18n": { "zh": "双邮票", "en": "Duo Stamps" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "polaroid"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.08, "right": 0.07, "bottom": 0.28, "left": 0.07 },
+    "background": { "type": "solid", "color": "#F6F2EA" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "stamp-back",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.075, "y": -0.075 },
+      "asset": "@builtin/frame/stamp-card",
+      "size": { "height": 0.16 }
+    },
+    {
+      "type": "image",
+      "id": "stamp-front",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0526, "y": -0.030 },
+      "asset": "@builtin/frame/stamp-card",
+      "size": { "height": 0.17 }
+    },
+    {
+      "type": "text",
+      "id": "topnote",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.024 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.24,
+      "content": [{ "expr": "'DOUBLE EXPOSURE'", "fallback": "EXPOSURE" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.048 },
+      "font": { "family": ["Space Grotesk"], "size": 0.013, "color": "#1A1A1A" },
+      "letterSpacing": 0.06,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0526, "y": 0.048 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.020 },
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.0526, "y": 0.026 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "year",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0526, "y": -0.145 },
+      "font": { "family": ["Bebas Neue"], "size": 0.055, "color": "#1A1A1A" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "date('YYYY', exif.datetime)", "fallback": "2026" }]
+    },
+    {
+      "type": "text",
+      "id": "place",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0526, "y": -0.100 },
+      "font": { "family": ["Space Grotesk"], "size": 0.016, "color": "#1A1A1A" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'SUMMER'", "fallback": "SUMMER" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0526, "y": -0.065 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#8C877D" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

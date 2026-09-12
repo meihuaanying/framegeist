@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "id": "minimal-topright-date",
+    "name": "Top Right Date",
+    "nameI18n": {
+      "zh": "右上日期",
+      "en": "Top Right Date"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "overlay",
+    "background": {
+      "type": "none"
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "top-right",
+      "offset": {
+        "x": -0.032,
+        "y": 0.028
+      },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.024
+      },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-right",
+      "offset": {
+        "x": -0.032,
+        "y": 0.084
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "auto"
+      },
+      "letterSpacing": 0.12,
+      "opacity": 0.9,
+      "align": "right",
+      "content": [
+        {
+          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "fallback": null
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.032,
+        "y": -0.028
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.013,
+        "color": "auto"
+      },
+      "letterSpacing": 0.04,
+      "opacity": 0.8,
+      "content": [
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "lens": {
+      "type": "string",
+      "source": "exif"
+    },
+    "date": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

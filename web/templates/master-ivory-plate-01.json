@@ -1,0 +1,138 @@
+{
+  "meta": {
+    "id": "master-ivory-plate-01",
+    "name": "Ivory Plate",
+    "nameI18n": { "zh": "象牙衬板", "en": "Ivory Plate" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "master"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.12, "right": 0.085, "bottom": 0.3, "left": 0.085 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.026 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.072 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.24,
+      "align": "center",
+      "content": [{ "expr": "'SIGNATURE EDITION'" }]
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.18 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0014 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.15 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "align": "center",
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "val-focal",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "fmt('{focal}MM', exif)", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "val-aperture",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.291, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "fmt('F{aperture}', exif)", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "val-shutter",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.509, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "exif.shutter", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "val-iso",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.728, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.019, "color": "#1A1A1A" },
+      "content": [{ "expr": "exif.iso", "fallback": "--" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-focal",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'FL'" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-aperture",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.291, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'Aperture'" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-shutter",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.509, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'Shutter'" }]
+    },
+    {
+      "type": "text",
+      "id": "lab-iso",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.728, "y": -0.066 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.18,
+      "content": [{ "expr": "'ISO'" }]
+    },
+    {
+      "type": "image",
+      "id": "seal",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.07265, "y": -0.05 },
+      "asset": "@builtin/frame/seal-red",
+      "size": { "height": 0.05 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

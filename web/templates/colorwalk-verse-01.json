@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "id": "colorwalk-verse-01",
+    "name": "Light Verse",
+    "nameI18n": { "zh": "光影诗行", "en": "Light Verse" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorwalk"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.10, "right": 0.08, "bottom": 0.28, "left": 0.08 },
+    "background": { "type": "tint" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "verse",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.069, "y": -0.108 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.030, "color": "auto" },
+      "letterSpacing": 0.14,
+      "lineHeight": 1.75,
+      "opacity": 0.95,
+      "content": [
+        { "expr": "'光影入纸'", "fallback": null },
+        { "expr": "'山河为证'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.069, "y": -0.079 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "auto" },
+      "letterSpacing": 0.15,
+      "opacity": 0.85,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.069, "y": -0.155 },
+      "font": { "family": ["Inter"], "size": 0.016, "color": "auto" },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.069, "y": -0.131 },
+      "font": { "family": ["Inter"], "size": 0.0105, "color": "auto" },
+      "letterSpacing": 0.04,
+      "opacity": 0.8,
+      "align": "right",
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.069, "y": -0.101 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "auto" },
+      "letterSpacing": 0.04,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

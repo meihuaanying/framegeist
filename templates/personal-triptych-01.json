@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "id": "personal-triptych-01",
+    "name": "Triptych Card",
+    "nameI18n": { "zh": "三联卡", "en": "Triptych Card" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.1, "right": 0.09, "bottom": 0.3, "left": 0.09 },
+    "background": { "type": "solid", "color": "#FFFFFF" },
+    "radius": 0.012,
+    "shadow": { "enabled": true, "blur": 0.05, "opacity": 0.15, "offsetX": 0, "offsetY": 0.012 }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.0763, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "shape",
+      "id": "rule",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.152 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0014 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "label-params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.125 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [{ "expr": "'PARAMS'" }]
+    },
+    {
+      "type": "text",
+      "id": "label-signature",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.4, "y": -0.125 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [{ "expr": "'SIGNATURE'" }]
+    },
+    {
+      "type": "text",
+      "id": "label-social",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.66, "y": -0.125 },
+      "font": { "family": ["Inter"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [{ "expr": "'SOCIAL'" }]
+    },
+    {
+      "type": "text",
+      "id": "col-params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0763, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#373A40" },
+      "letterSpacing": 0.06,
+      "lineHeight": 1.6,
+      "content": [
+        { "expr": "fmt('{focal}MM · F{aperture}', exif)", "fallback": null },
+        { "expr": "fmt('{shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "col-signature",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.4, "y": -0.085 },
+      "font": { "family": ["Great Vibes"], "size": 0.036, "color": "#1A1A1A" },
+      "content": [{ "expr": "'YOUR NAME'", "fallback": "YOUR NAME" }]
+    },
+    {
+      "type": "text",
+      "id": "col-social",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.66, "y": -0.098 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.1,
+      "lineHeight": 1.6,
+      "content": [
+        { "expr": "'INSTAGRAM'", "fallback": "INSTAGRAM" },
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

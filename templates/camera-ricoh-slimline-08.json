@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "id": "camera-ricoh-slimline-08",
+    "name": "Slimline Bar",
+    "nameI18n": { "zh": "顶置细条参数", "en": "Slimline Bar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "camera"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.16, "right": 0.06, "bottom": 0.14, "left": 0.06 },
+    "background": { "type": "solid", "color": "#F7F4EE" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "bar",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.030 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.045 },
+      "color": "#101010",
+      "radius": 0.12
+    },
+    {
+      "type": "shape",
+      "id": "bar-dot",
+      "anchor": "top-left",
+      "offset": { "x": 0.070, "y": 0.0435 },
+      "shape": "ellipse",
+      "size": { "width": 0.010, "height": 0.010 },
+      "color": "#C8102E"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.058, "y": 0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#1A1A1A" },
+      "letterSpacing": 0.14,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-right",
+      "offset": { "x": -0.058, "y": 0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.055, "y": -0.045 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.016 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "slimline",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.048 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#B4B8BE" },
+      "letterSpacing": 0.22,
+      "align": "center",
+      "content": [{ "expr": "'SLIMLINE'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.055, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#8E9298" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

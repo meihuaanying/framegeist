@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "id": "camera-retro-sidecar-04",
+    "name": "Retro Sidecar",
+    "nameI18n": { "zh": "复古侧挂机身", "en": "Retro Sidecar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "camera"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.06, "bottom": 0.12, "left": 0.34 },
+    "background": { "type": "solid", "color": "#E8DDC4" }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "body",
+      "anchor": "top-left",
+      "offset": { "x": 0.055, "y": 0.075 },
+      "asset": "@builtin/frame/camera-body",
+      "size": { "height": 0.25 },
+      "tint": "auto"
+    },
+    {
+      "type": "shape",
+      "id": "dot",
+      "anchor": "top-left",
+      "offset": { "x": 0.060, "y": 0.336 },
+      "shape": "ellipse",
+      "size": { "width": 0.008, "height": 0.008 },
+      "color": "#A33B2A"
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "top-left",
+      "offset": { "x": 0.085, "y": 0.340 },
+      "font": { "family": ["Inter"], "size": 0.022, "color": "#2A2118" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "lens",
+      "anchor": "top-left",
+      "offset": { "x": 0.060, "y": 0.378 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#4A3F32" },
+      "letterSpacing": 0.03,
+      "content": [{ "expr": "exif.lens", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "top-left",
+      "offset": { "x": 0.060, "y": 0.408 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#6B6255" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "top-left",
+      "offset": { "x": 0.060, "y": 0.438 },
+      "shape": "line",
+      "size": { "width": 0.145, "height": 0.001 },
+      "color": "#C9B99A"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.060, "y": 0.452 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8C8272" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "motto",
+      "anchor": "top-left",
+      "offset": { "x": 0.060, "y": 0.478 },
+      "font": { "family": ["Playfair Display"], "size": 0.016, "color": "#A08B66" },
+      "letterSpacing": 0.06,
+      "content": [{ "expr": "'Analogue Notes'", "fallback": null }]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.060, "y": -0.050 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.018 },
+      "tint": "auto"
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

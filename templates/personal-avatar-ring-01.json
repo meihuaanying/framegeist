@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "id": "personal-avatar-ring-01",
+    "name": "Avatar Ring",
+    "nameI18n": { "zh": "头像圆环", "en": "Avatar Ring" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "personal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.1, "right": 0.085, "bottom": 0.3, "left": 0.085 },
+    "background": { "type": "solid", "color": "#FFFFFF" },
+    "radius": 0.015,
+    "shadow": { "enabled": true, "blur": 0.05, "opacity": 0.15, "offsetX": 0, "offsetY": 0.012 }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-left",
+      "offset": { "x": 0.07265, "y": 0.026 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "shape",
+      "id": "avatar",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.07265, "y": -0.105 },
+      "shape": "ellipse",
+      "size": { "width": 0.075, "height": 0.099 },
+      "color": "#C4C9D0",
+      "strokeWidth": 0.0018
+    },
+    {
+      "type": "text",
+      "id": "name",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.1548, "y": -0.077 },
+      "font": { "family": ["Inter"], "size": 0.018, "color": "#1A1A1A" },
+      "letterSpacing": 0.04,
+      "content": [{ "expr": "'YOUR NAME'", "fallback": "YOUR NAME" }]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.1548, "y": -0.045 },
+      "font": { "family": ["Inter"], "size": 0.0115, "color": "#6B7280" },
+      "letterSpacing": 0.08,
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.07265, "y": -0.045 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#9AA0A6" },
+      "letterSpacing": 0.12,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

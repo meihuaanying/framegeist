@@ -1,0 +1,148 @@
+{
+  "meta": {
+    "id": "film-darkroom-pillar-03",
+    "name": "Darkroom Pillar",
+    "nameI18n": { "zh": "暗房立柱", "en": "Darkroom Pillar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "film"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.06, "bottom": 0.24, "left": 0.06 },
+    "background": { "type": "solid", "color": "#EFE8DC" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "pillar-left",
+      "anchor": "top-left",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 1.0 },
+      "color": "#101010"
+    },
+    {
+      "type": "shape",
+      "id": "pillar-right",
+      "anchor": "top-right",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 1.0 },
+      "color": "#101010"
+    },
+    {
+      "type": "shape",
+      "id": "pillar-left-base",
+      "anchor": "top-left",
+      "offset": { "x": 0, "y": 0.7519 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 0.09 },
+      "color": "#101010"
+    },
+    {
+      "type": "shape",
+      "id": "pillar-right-base",
+      "anchor": "top-right",
+      "offset": { "x": 0, "y": 0.7519 },
+      "shape": "rect",
+      "size": { "width": 0.06, "height": 0.09 },
+      "color": "#101010"
+    },
+    {
+      "type": "shape",
+      "id": "plate",
+      "anchor": "bottom-left",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 1.0, "height": 0.24 },
+      "color": "#101010"
+    },
+    {
+      "type": "shape",
+      "id": "plate-tab",
+      "anchor": "bottom-right",
+      "offset": { "x": 0, "y": 0 },
+      "shape": "rect",
+      "size": { "width": 0.12, "height": 0.24 },
+      "color": "#101010"
+    },
+    {
+      "type": "image",
+      "id": "edgecode",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.12 },
+      "asset": "@builtin/frame/film-edge",
+      "size": { "width": 0.82 },
+      "opacity": 0.75
+    },
+    {
+      "type": "text",
+      "id": "micro-top",
+      "anchor": "top-left",
+      "offset": { "x": 0.10, "y": 0.030 },
+      "font": { "family": ["Inter"], "size": 0.010, "color": "#9A938A" },
+      "letterSpacing": 0.22,
+      "content": [{ "expr": "'DARKROOM · FIBER PRINT'", "fallback": "DARKROOM" }]
+    },
+    {
+      "type": "text",
+      "id": "date-top",
+      "anchor": "top-right",
+      "offset": { "x": -0.10, "y": 0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#6B7280" },
+      "letterSpacing": 0.10,
+      "align": "right",
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.10, "y": -0.0714 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.011, "color": "#8F897C" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.10, "y": -0.0489 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#CFC8BA" },
+      "letterSpacing": 0.10,
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')", "fallback": "UNKNOWN CAMERA" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "stock",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.10, "y": -0.018 },
+      "font": { "family": ["Bebas Neue"], "size": 0.034, "color": "#F1ECDF" },
+      "letterSpacing": 0.10,
+      "content": [{ "expr": "'FG 400'", "fallback": "FILM" }]
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.10, "y": -0.018 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.022 },
+      "attachTo": "stock",
+      "attachGap": 0.012
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "stock": { "type": "string", "source": "constant" }
+  }
+}

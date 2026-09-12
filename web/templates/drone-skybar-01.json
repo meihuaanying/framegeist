@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "id": "drone-skybar-01",
+    "name": "Drone Sky Bar",
+    "nameI18n": { "zh": "航拍白条", "en": "Drone Sky Bar" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "drone"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.06, "right": 0.075, "bottom": 0.22, "left": 0.075 },
+    "background": { "type": "solid", "color": "#FFFFFF" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.162 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.1275 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.2,
+      "content": [
+        { "expr": "'AERIAL CAPTURE'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params1",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.085 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params2",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.0484 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "fmt('{shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0652, "y": -0.0824 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.019 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0652, "y": -0.0492 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.14,
+      "align": "right",
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "geotag",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.0652, "y": -0.0172 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.06,
+      "align": "right",
+      "content": [
+        { "expr": "exif.gps_latlon", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" }
+  }
+}

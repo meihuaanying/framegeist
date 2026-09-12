@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "id": "colorcard-tint-chips-01",
+    "name": "Chromatic Edge",
+    "nameI18n": { "zh": "主色卡片", "en": "Chromatic Edge" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "colorcard"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.13, "right": 0.10, "bottom": 0.26, "left": 0.10 },
+    "background": { "type": "tint" },
+    "radius": 0.035,
+    "shadow": { "enabled": true, "blur": 0.09, "opacity": 0.30, "offsetX": 0, "offsetY": 0.02 }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0, "y": 0.030 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.016, "color": "#FFFFFF" },
+      "letterSpacing": 0.12,
+      "opacity": 0.92,
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "place",
+      "anchor": "top-right",
+      "offset": { "x": 0, "y": 0.030 },
+      "font": { "family": ["Inter"], "size": 0.014, "color": "#FFFFFF" },
+      "letterSpacing": 0.14,
+      "opacity": 0.85,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.weekday, 'A DAY TO REMEMBER')", "fallback": "A DAY TO REMEMBER" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": { "x": 0, "y": -0.095 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.013, "color": "#FFFFFF" },
+      "letterSpacing": 0.05,
+      "opacity": 0.90,
+      "align": "right",
+      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+    },
+    {
+      "type": "palette",
+      "id": "chips",
+      "anchor": "bottom-left",
+      "offset": { "x": 0, "y": -0.075 },
+      "count": 5,
+      "shape": "circle",
+      "direction": "horizontal",
+      "size": 0.034,
+      "gap": 0.014,
+      "showHex": true,
+      "label": { "size": 0.011, "color": "#FFFFFF", "family": ["JetBrains Mono"] }
+    }
+  ],
+  "fields": {
+    "date": { "type": "string", "source": "exif" },
+    "params": { "type": "string", "source": "exif" }
+  }
+}

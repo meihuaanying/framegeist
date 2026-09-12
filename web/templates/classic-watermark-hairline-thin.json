@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "id": "classic-watermark-hairline-thin",
+    "name": "Thin Bar Hairline",
+    "nameI18n": {
+      "zh": "细条上悬线",
+      "en": "Thin Bar Hairline"
+    },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "classic-watermark"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0.055,
+      "left": 0
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FAF8F4"
+    }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "hairline",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0,
+        "y": -0.0635
+      },
+      "shape": "line",
+      "size": {
+        "width": 1,
+        "height": 0.0015
+      },
+      "color": "#E10600"
+    },
+    {
+      "type": "image",
+      "id": "brandmark",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0,
+        "y": 0
+      },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.018
+      },
+      "tint": "auto",
+      "attachTo": "model",
+      "attachGap": 0.012
+    },
+    {
+      "type": "text",
+      "id": "model",
+      "anchor": "bottom-left",
+      "offset": {
+        "x": 0.06,
+        "y": -0.02
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.013,
+        "color": "#1A1A1A"
+      },
+      "letterSpacing": 0.05,
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+          "fallback": "Unknown Camera"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.03,
+        "y": -0.02
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.013,
+        "color": "#6B7280"
+      },
+      "letterSpacing": 0.05,
+      "align": "right",
+      "content": [
+        {
+          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": null
+        }
+      ]
+    }
+  ],
+  "fields": {
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "params": {
+      "type": "string",
+      "source": "exif"
+    }
+  }
+}

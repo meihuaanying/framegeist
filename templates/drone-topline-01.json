@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "id": "drone-topline-01",
+    "name": "Drone Topline",
+    "nameI18n": { "zh": "顶部航标", "en": "Drone Topline" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.4.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "drone"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.16, "right": 0.075, "bottom": 0.075, "left": 0.075 },
+    "background": { "type": "solid", "color": "#FAF8F4" }
+  },
+  "layers": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "anchor": "top-left",
+      "offset": { "x": 0.0652, "y": 0.0178 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.22,
+      "content": [
+        { "expr": "'AERIAL SURVEY'", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "date",
+      "anchor": "top-left",
+      "offset": { "x": 0.0652, "y": 0.0486 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#1A1A1A" },
+      "letterSpacing": 0.08,
+      "content": [
+        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "weekday",
+      "anchor": "top-left",
+      "offset": { "x": 0.0652, "y": 0.081 },
+      "font": { "family": ["Inter"], "size": 0.0095, "color": "#9AA0A6" },
+      "letterSpacing": 0.16,
+      "content": [
+        { "expr": "exif.weekday", "fallback": null }
+      ]
+    },
+    {
+      "type": "image",
+      "id": "brand",
+      "anchor": "top-right",
+      "offset": { "x": -0.0652, "y": 0.0178 },
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": { "height": 0.02 },
+      "tint": "auto"
+    },
+    {
+      "type": "text",
+      "id": "topmodel",
+      "anchor": "top-right",
+      "offset": { "x": -0.0652, "y": 0.0486 },
+      "font": { "family": ["Inter"], "size": 0.013, "color": "#373A40" },
+      "letterSpacing": 0.03,
+      "align": "right",
+      "content": [
+        { "expr": "if_empty(exif.model_pretty, 'AERIAL UNIT')", "fallback": "AERIAL UNIT" }
+      ]
+    },
+    {
+      "type": "shape",
+      "id": "toprule",
+      "anchor": "top-left",
+      "offset": { "x": 0.0652, "y": 0.1093 },
+      "shape": "line",
+      "size": { "width": 1.0, "height": 0.0015 },
+      "color": "#E4E6EA"
+    },
+    {
+      "type": "text",
+      "id": "params",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.0332 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "letterSpacing": 0.05,
+      "align": "center",
+      "content": [
+        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "geotag",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.0652, "y": -0.034 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.01, "color": "#9AA0A6" },
+      "letterSpacing": 0.05,
+      "content": [
+        { "expr": "exif.gps_latlon", "fallback": null }
+      ]
+    }
+  ],
+  "fields": {
+    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
+    "params": { "type": "string", "source": "exif" },
+    "date": { "type": "string", "source": "exif" },
+    "weekday": { "type": "string", "source": "exif" }
+  }
+}
