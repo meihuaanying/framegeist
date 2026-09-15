@@ -156,5 +156,16 @@ PASS  showcase: sample mirrors complete and unique — samples/previews/thumbs
 
 新增 `tools/perf-audit.mjs`：CDP 驱动真实 Web/WASM 引擎，预热 + 2 次平均，按 §4 四项门禁断言；预览走应用真实快路径（浏览器解码 → 1600px RGBA → `render_raw`），导出走 `render_with_overrides` full。
 
+## M8 — 文档 + 报告 + v0.5.0 发布 ✅ (2026-09-16)
+
+- 版本统一 **0.5.0**：`Cargo.toml` workspace（Cargo.lock 同步）、`crates/framegeist-desktop/tauri.conf.json`、`web/app.js APP_VERSION`；`web/sw.js` 缓存名 `framegeist-0.5.0`。
+- 文档同步：`docs/reports/v0.5.0/README.md`（发布报告）、`PARITY.md`（14/14）、PRD Discoveries 追加 v0.5.0 条目（PARITY 高估与补齐、Fuji LUT 无数据来源、CLI 覆盖限制、E2E 硬门禁、相邻差异断言、WASM 重建铁律）、`TEMPLATE-SPEC`/`schema` 由实现批次更新。
+- E2E 截图补至 00–10（新增 08 卡片特效 / 09 水印 / 10 背景面板）。
+- 发布执行：
+  - commit `d7d5131` → push `main`（代理 127.0.0.1:7890 不可用，改用 `-c http.https://github.com/.proxy=` 直连，重试成功）；
+  - tag `v0.5.0` 推送 → CI `ci`（tag/main）✅、`release` ✅、`pages` ✅；
+  - GitHub Release `v0.5.0` 六资产：`framegeist-cli-v0.5.0-win-x64.zip`、`framegeist-desktop-v0.5.0-win-x64.zip`、`framegeist-templates-v0.5.0.fgpkg`、`FrameGeist-v0.5.0-win-x64-setup.exe`、`SHA256SUMS.txt`、`update.json`；
+  - Pages 验证：`https://meihuaanying.github.io/framegeist/` 200、`/download.html` 200。
+
 
 
