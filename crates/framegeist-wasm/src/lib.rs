@@ -125,6 +125,57 @@ impl Engine {
         self.render_impl(exif_bytes, Some(rgba), width, height, template_json, format, false, overrides_json, 0, false)
     }
 
+    /// v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
+    /// snapping guides). Photo bytes may be empty when `rgba` is provided.
+    #[allow(clippy::too_many_arguments)]
+    pub fn layer_boxes(
+        &self,
+        photo: &[u8],
+        template_json: &str,
+        overrides_json: &str,
+    ) -> Result<String, JsError> {
+        let template = core::load_template_from_str(template_json).map_err(js_err)?;
+        let overrides = if overrides_json.trim().is_empty() {
+            None
+        } else {
+            Some(core::TemplateOverrides::from_json(overrides_json).map_err(js_err)?)
+        };
+        let opts = core::RenderOptions {
+            fonts: Some(self.fonts.clone()),
+            model_map: self.model_map.clone(),
+            assets: Some(self.assets.clone()),
+            overrides,
+            ..core::RenderOptions::default()
+        };
+        core::boxes::layer_boxes_for_photo(photo, &template, &opts).map_err(js_err)
+    }
+
+    /// v0.5.0 free collage: absolute-positioned photo items.
+    pub fn render_free_collage(
+        &self,
+        photos: js_sys::Array,
+        spec_json: &str,
+        format: &str,
+        preview: bool,
+    ) -> Result<Uint8Array, JsError> {
+        let mut bytes: Vec<Vec<u8>> = Vec::new();
+        for item in photos.iter() {
+            let arr: Uint8Array = Uint8Array::from(item);
+            bytes.push(arr.to_vec());
+        }
+        let refs: Vec<&[u8]> = bytes.iter().map(|v| v.as_slice()).collect();
+        let spec = core::free_collage::load_free_spec(spec_json.as_bytes()).map_err(js_err)?;
+        let opts = core::RenderOptions {
+            format: parse_format(format)?,
+            sampling: if preview { core::Sampling::Preview } else { core::Sampling::Full },
+            fonts: Some(self.fonts.clone()),
+            model_map: self.model_map.clone(),
+            ..core::RenderOptions::default()
+        };
+        let out = core::free_collage::render_free_collage(&refs, &spec, &opts).map_err(js_err)?;
+        Ok(Uint8Array::from(out.as_slice()))
+    }
+
     /// Render a collage (PRD C5).
     pub fn render_collage(
         &self,

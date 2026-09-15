@@ -43,6 +43,8 @@ pub struct RenderOptions {
     pub max_edge: Option<u32>,
     /// User-side overrides (T4.4 + v0.2.0): font/padding/color/aspect/…
     pub overrides: Option<TemplateOverrides>,
+    /// v0.5.0: force the legacy ab_glyph text renderer (parity/regression).
+    pub legacy_text_renderer: bool,
 }
 
 impl Default for RenderOptions {
@@ -58,6 +60,7 @@ impl Default for RenderOptions {
             keep_gps: false,
             max_edge: None,
             overrides: None,
+            legacy_text_renderer: false,
         }
     }
 }
@@ -103,7 +106,7 @@ fn center_crop(src: &RgbaImage, w: u32, h: u32) -> RgbaImage {
 }
 
 /// Separable box blur (3 passes), deterministic approximation of a Gaussian.
-fn box_blur_rgba(src: &RgbaImage, radius: u32) -> RgbaImage {
+pub(crate) fn box_blur_rgba(src: &RgbaImage, radius: u32) -> RgbaImage {
     if radius == 0 {
         return src.clone();
     }
@@ -174,22 +177,28 @@ fn box_blur_pass(src: &RgbaImage, radius: u32) -> RgbaImage {
 }
 
 #[derive(Clone, Copy)]
-struct CanvasGeometry {
-    width: u32,
-    height: u32,
-    pad_left: u32,
-    pad_top: u32,
-    photo_w: u32,
-    photo_h: u32,
+pub(crate) struct CanvasGeometry {
+    pub(crate) width: u32,
+    pub(crate) height: u32,
+    pub(crate) pad_left: u32,
+    pub(crate) pad_top: u32,
+    pub(crate) photo_w: u32,
+    pub(crate) photo_h: u32,
 }
 
-fn compute_geometry(t: &Template, photo: &RgbaImage, overrides: Option<&TemplateOverrides>) -> CanvasGeometry {
+pub(crate) fn compute_geometry(t: &Template, photo: &RgbaImage, overrides: Option<&TemplateOverrides>) -> CanvasGeometry {
     let (w, h) = photo.dimensions();
     let pad_scale = overrides.map(|o| o.padding_scale()).unwrap_or(1.0);
+    // v0.5.0: uniform extra margin, additive to canvas.padding (extend mode).
+    let margin = overrides
+        .and_then(|o| o.margin)
+        .filter(|m| m.is_finite())
+        .unwrap_or(0.0)
+        .clamp(0.0, 0.5);
     let (pad_left, pad_top, pad_right, pad_bottom) = match t.canvas.mode {
         CanvasMode::Extend => {
             let p = &t.canvas.padding;
-            let clamp01 = |v: f64| (v * pad_scale).clamp(0.0, 1.0);
+            let clamp01 = |v: f64| (v * pad_scale + margin).clamp(0.0, 1.0);
             (
                 (clamp01(p.left) * w as f64).round() as u32,
                 (clamp01(p.top) * h as f64).round() as u32,
@@ -232,11 +241,16 @@ fn bg_plan(t: &Template, overrides: Option<&TemplateOverrides>) -> BgPlan {
                 "blur" => BgKind::Blur,
                 "solid" => BgKind::Solid,
                 "image" => BgKind::Image,
+                "tint" => BgKind::Tint,
+                "texture" => BgKind::Texture,
                 _ => BgKind::None,
             };
         }
         if let Some(c) = &o.background_color {
             plan.color = Some(c.clone());
+        }
+        if let Some(a) = &o.texture_asset {
+            plan.asset = Some(a.clone());
         }
     }
     plan
@@ -245,7 +259,7 @@ fn bg_plan(t: &Template, overrides: Option<&TemplateOverrides>) -> BgPlan {
 /// Resolve image bytes for an asset path: in-memory map first, then
 /// `assets_dir` (builtin brand/game/lens/@user/package-relative `assets/`).
 #[allow(clippy::question_mark)]
-fn resolve_asset_bytes(opts: &RenderOptions, path: &str) -> Option<Vec<u8>> {
+pub(crate) fn resolve_asset_bytes(opts: &RenderOptions, path: &str) -> Option<Vec<u8>> {
     if let Some(map) = &opts.assets {
         if let Some(bytes) = map.get(path) {
             return Some(bytes.clone());
@@ -277,6 +291,65 @@ fn fill_solid(canvas: &mut RgbaImage, color: Option<&str>) {
         .unwrap_or([255u8, 255, 255, 255]);
     for px in canvas.pixels_mut() {
         *px = Rgba(c);
+    }
+}
+
+/// v0.5.0 texture background opacity: subtle grain over the base color.
+const TEXTURE_OPACITY: f32 = 0.08;
+
+/// Deterministic per-pixel hash in [0, 1) (splitmix-style finalizer). Same
+/// input -> same value on every target, so CLI/WASM textures stay identical.
+fn hash_noise(x: u32, y: u32, seed: u32) -> f32 {
+    let mut h = (x as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
+        ^ (y as u64).wrapping_mul(0xC2B2_AE3D_27D4_EB4F)
+        ^ (seed as u64).wrapping_mul(0x1656_67B1_9E37_79F9);
+    h ^= h >> 33;
+    h = h.wrapping_mul(0xFF51_AFD7_ED55_8CCD);
+    h ^= h >> 33;
+    (h >> 40) as f32 / 16_777_215.0
+}
+
+/// v0.5.0 `background.type:"texture"`: cover-fit the asset when one resolves,
+/// otherwise synthesize a two-octave paper grain; either way the result is
+/// blended over the base color at `TEXTURE_OPACITY` (6–10% range).
+#[allow(clippy::needless_range_loop)]
+fn fill_texture(
+    canvas: &mut RgbaImage,
+    plan: &BgPlan,
+    opts: &RenderOptions,
+    filt: image::imageops::FilterType,
+) {
+    let base = plan
+        .color
+        .as_deref()
+        .and_then(|c| crate::template::parse_hex_color(c).ok())
+        .unwrap_or([255u8, 255, 255, 255]);
+    let (w, h) = canvas.dimensions();
+    let texture = plan
+        .asset
+        .as_deref()
+        .and_then(|a| resolve_asset_bytes(opts, a))
+        .and_then(|bytes| image::load_from_memory(&bytes).ok())
+        .map(|img| {
+            let fitted = resize_to_cover(&img.to_rgba8(), w, h, filt);
+            center_crop(&fitted, w, h)
+        });
+    for (x, y, px) in canvas.enumerate_pixels_mut() {
+        let tex = match &texture {
+            Some(img) => img.get_pixel(x, y).0,
+            None => {
+                let grain = hash_noise(x, y, 0x51) * 0.7 + hash_noise(x / 3, y / 3, 0x9E) * 0.3;
+                let v = (grain * 255.0).round().clamp(0.0, 255.0) as u8;
+                [v, v, v, 255]
+            }
+        };
+        let mut out = base;
+        for c in 0..3 {
+            out[c] = (base[c] as f32 * (1.0 - TEXTURE_OPACITY) + tex[c] as f32 * TEXTURE_OPACITY)
+                .round()
+                .clamp(0.0, 255.0) as u8;
+        }
+        *px = Rgba(out);
     }
 }
 
@@ -316,12 +389,126 @@ fn average_color(img: &RgbaImage) -> [u8; 4] {
     ]
 }
 
-fn photo_radius_px(t: &Template, photo: &RgbaImage) -> f32 {
+fn photo_radius_px(radius: Option<f64>, photo: &RgbaImage) -> f32 {
     let (w, h) = photo.dimensions();
-    t.canvas
-        .radius
+    radius
         .map(|r| (r * w.min(h) as f64) as f32)
         .unwrap_or(0.0)
+}
+
+/// v0.5.0 card border: a stroke ring hugging the outside of the rounded card
+/// edge. Drawn before the photo, so the inner half of the ring is covered and
+/// the outer stroke stays visible around the card.
+fn draw_card_border(
+    canvas: &mut RgbaImage,
+    geo: &CanvasGeometry,
+    border: &crate::template::CardBorder,
+    radius_px: f32,
+) {
+    if border.width <= 0.0 {
+        return;
+    }
+    let width = border.width as f32 * geo.photo_w.min(geo.photo_h) as f32;
+    if width < 0.5 {
+        return;
+    }
+    let color = crate::template::parse_hex_color(&border.color).unwrap_or([0, 0, 0, 255]);
+    render_shape(
+        canvas,
+        geo.pad_left as f32 - width,
+        geo.pad_top as f32 - width,
+        geo.photo_w as f32 + width * 2.0,
+        geo.photo_h as f32 + width * 2.0,
+        ShapeForm::Rect {
+            radius_px: radius_px + width,
+        },
+        color,
+        1.0,
+        width,
+        0.0,
+    );
+}
+
+/// Anti-aliased coverage (0–1 over ~1px) of a rounded rectangle at a point.
+fn rounded_rect_coverage(px: f32, py: f32, x: f32, y: f32, w: f32, h: f32, radius_px: f32) -> f32 {
+    let hw = (w / 2.0).max(0.0);
+    let hh = (h / 2.0).max(0.0);
+    let r = radius_px.clamp(0.0, hw.min(hh));
+    let qx = (px - (x + hw)).abs() - (hw - r);
+    let qy = (py - (y + hh)).abs() - (hh - r);
+    let d = qx.max(0.0).hypot(qy.max(0.0)) + qx.max(qy).min(0.0) - r;
+    (0.5 - d).clamp(0.0, 1.0)
+}
+
+/// v0.5.0 card inner shadow: darken the inside of the rounded card rect by
+/// compositing black through `card_clip * blur(1 - shifted_card)`. Drawn over
+/// the photo (after it is placed), before later layers. Deterministic.
+fn draw_card_inner_shadow(
+    canvas: &mut RgbaImage,
+    geo: &CanvasGeometry,
+    inner: &crate::template::InnerShadow,
+    radius_px: f32,
+) {
+    if !inner.enabled || inner.opacity <= 0.0 {
+        return;
+    }
+    let unit = geo.photo_w.min(geo.photo_h) as f32;
+    if unit < 1.0 {
+        return;
+    }
+    let x = geo.pad_left as f32;
+    let y = geo.pad_top as f32;
+    let w = geo.photo_w as f32;
+    let h = geo.photo_h as f32;
+    let dx = inner.offset_x as f32 * unit;
+    let dy = inner.offset_y as f32 * unit;
+    let blur_px = (inner.blur as f32 * unit).round() as u32;
+    // Work on a region just big enough for the shadow; anything farther from
+    // the card is clipped away below, so blur edge clamping stays invisible.
+    let m = blur_px as f32 * 3.0 + dx.abs().max(dy.abs()) + 2.0;
+    let (cw, ch) = canvas.dimensions();
+    let x0 = (x - m).floor().max(0.0) as u32;
+    let y0 = (y - m).floor().max(0.0) as u32;
+    let x1 = ((x + w + m).ceil()).clamp(0.0, cw as f32) as u32;
+    let y1 = ((y + h + m).ceil()).clamp(0.0, ch as f32) as u32;
+    if x1 <= x0 || y1 <= y0 {
+        return;
+    }
+    // Source layer: 1 - (card shifted by the offset), opaque everywhere else.
+    let mut layer = RgbaImage::new(x1 - x0, y1 - y0);
+    for (lx, ly, p) in layer.enumerate_pixels_mut() {
+        let px = (x0 + lx) as f32 + 0.5;
+        let py = (y0 + ly) as f32 + 0.5;
+        let hole = rounded_rect_coverage(px - dx, py - dy, x, y, w, h, radius_px);
+        let a = ((1.0 - hole) * 255.0).round().clamp(0.0, 255.0) as u8;
+        *p = Rgba([0, 0, 0, a]);
+    }
+    let layer = if blur_px > 0 {
+        box_blur_rgba(&layer, blur_px)
+    } else {
+        layer
+    };
+    let opacity = inner.opacity.clamp(0.0, 1.0) as f32;
+    for (lx, ly, p) in layer.enumerate_pixels() {
+        let a = p.0[3] as f32 / 255.0
+            * rounded_rect_coverage(
+                (x0 + lx) as f32 + 0.5,
+                (y0 + ly) as f32 + 0.5,
+                x,
+                y,
+                w,
+                h,
+                radius_px,
+            )
+            * opacity;
+        if a <= 0.0 {
+            continue;
+        }
+        let dst = canvas.get_pixel_mut(x0 + lx, y0 + ly);
+        for c in 0..3 {
+            dst.0[c] = (dst.0[c] as f32 * (1.0 - a)).round().clamp(0.0, 255.0) as u8;
+        }
+    }
 }
 
 /// Clone the photo with its four corners rounded (1px anti-aliased mask).
@@ -398,6 +585,134 @@ fn draw_photo_shadow(
     composite_over(canvas, &layer, 0, 0, 1.0);
 }
 
+/// v0.5.0: largest fully-transparent axis-aligned rectangle (histogram
+/// method); returns normalized (x, y, w, h) inside the frame image.
+pub(crate) fn transparent_window(img: &RgbaImage) -> Option<(f64, f64, f64, f64)> {
+    let (w, h) = img.dimensions();
+    if w == 0 || h == 0 {
+        return None;
+    }
+    let mut heights = vec![0u32; w as usize];
+    let mut best = (0u64, 0u32, 0u32, 0u32, 0u32); // area, x, y, w, h
+    for y in 0..h {
+        for x in 0..w {
+            let a = img.get_pixel(x, y).0[3];
+            heights[x as usize] = if a < 16 { heights[x as usize] + 1 } else { 0 };
+        }
+        // Largest rectangle in histogram for this row.
+        let mut stack: Vec<u32> = Vec::new();
+        for x in 0..=w {
+            let cur = if x == w { 0 } else { heights[x as usize] };
+            while let Some(&top) = stack.last() {
+                if heights[top as usize] >= cur {
+                    stack.pop();
+                    let height = heights[top as usize];
+                    let left = stack.last().map(|v| v + 1).unwrap_or(0);
+                    let width = x - left;
+                    let area = height as u64 * width as u64;
+                    if area > best.0 {
+                        best = (area, left, y + 1 - height, width, height);
+                    }
+                } else {
+                    break;
+                }
+            }
+            stack.push(x);
+        }
+    }
+    if best.0 == 0 {
+        return None;
+    }
+    Some((best.1 as f64 / w as f64, best.2 as f64 / h as f64, best.3 as f64 / w as f64, best.4 as f64 / h as f64))
+}
+
+/// v0.5.0 frame overlay: draw the frame PNG (cover-fit to canvas × scale)
+/// and, when auto-detecting, re-place the photo inside its transparent window.
+fn draw_canvas_frame(
+    canvas: &mut RgbaImage,
+    photo: &RgbaImage,
+    t: &Template,
+    opts: &RenderOptions,
+    filt: image::imageops::FilterType,
+) {
+    let Some(frame) = &t.canvas.frame else { return };
+    let Some(bytes) = resolve_asset_bytes(opts, &frame.asset)
+        .or_else(|| resolve_asset_bytes(opts, "@user/frame"))
+    else {
+        return;
+    };
+    let Ok(img) = image::load_from_memory(&bytes) else { return };
+    let frame_rgba = img.to_rgba8();
+    let (fw, fh) = frame_rgba.dimensions();
+    if fw == 0 || fh == 0 {
+        return;
+    }
+    let (cw, ch) = canvas.dimensions();
+    let scale = frame.scale.unwrap_or(1.0) as f32;
+    // Cover-fit the frame to the canvas so there are no gaps.
+    let cover = (cw as f32 / fw as f32).max(ch as f32 / fh as f32);
+    let s = cover * scale;
+    let dw = ((fw as f32) * s).round().max(1.0) as u32;
+    let dh = ((fh as f32) * s).round().max(1.0) as u32;
+    let ox = if dw > cw { (dw - cw) / 2 } else { 0 };
+    let oy = if dh > ch { (dh - ch) / 2 } else { 0 };
+    let off = frame.offset.as_ref().map(|o| (o.x, o.y)).unwrap_or((0.0, 0.0));
+    let dx = ((cw as f64 - dw as f64) / 2.0 - ox as f64 + off.0 * cw as f64).round() as i32;
+    let dy = ((ch as f64 - dh as f64) / 2.0 - oy as f64 + off.1 * ch as f64).round() as i32;
+
+    let fitted = image::imageops::resize(&frame_rgba, dw, dh, filt);
+
+    // v0.5.0: the frame and its detected photo window are composed into the
+    // same coordinate space, then rotated together about the canvas center.
+    let compose = |dst: &mut RgbaImage| {
+        if frame.auto_detect {
+            if let Some((nx, ny, nw, nh)) = transparent_window(&fitted) {
+                let inset = frame.inset.unwrap_or(0.0) as f32;
+                let wx = dx as f32 + nx as f32 * dw as f32;
+                let wy = dy as f32 + ny as f32 * dh as f32;
+                let ww = (nw as f32 * dw as f32).max(7.0);
+                let wh = (nh as f32 * dh as f32).max(7.0);
+                let trim = inset * ww.min(wh);
+                let (wx, wy, ww, wh) = (wx + trim, wy + trim, (ww - trim * 2.0).max(5.0), (wh - trim * 2.0).max(5.0));
+                let cover_p = (ww / photo.width() as f32).max(wh / photo.height() as f32);
+                let pw = (photo.width() as f32 * cover_p).ceil().max(1.0) as u32;
+                let ph = (photo.height() as f32 * cover_p).ceil().max(1.0) as u32;
+                let scaled = image::imageops::resize(photo, pw, ph, filt);
+                let cropped = center_crop(&scaled, ww.round().max(1.0) as u32, wh.round().max(1.0) as u32);
+                composite_over(dst, &cropped, wx.round() as i32, wy.round() as i32, 1.0);
+            }
+        }
+        composite_over(dst, &fitted, dx, dy, 1.0);
+    };
+    if frame.rotation.abs() > 0.01 {
+        let mut layer = RgbaImage::new(cw, ch);
+        compose(&mut layer);
+        let diag = ((cw as f32).hypot(ch as f32)).ceil().max(1.0) as u32;
+        let mut padded = RgbaImage::new(diag, diag);
+        image::imageops::overlay(
+            &mut padded,
+            &layer,
+            ((diag - cw) / 2) as i64,
+            ((diag - ch) / 2) as i64,
+        );
+        let rotated = rotate_about_center(
+            &padded,
+            (frame.rotation as f32).to_radians(),
+            Interpolation::Bilinear,
+            Rgba([0, 0, 0, 0]),
+        );
+        composite_over(
+            canvas,
+            &rotated,
+            (cw as i32 - diag as i32) / 2,
+            (ch as i32 - diag as i32) / 2,
+            1.0,
+        );
+    } else {
+        compose(canvas);
+    }
+}
+
 fn build_canvas(
     geo: &CanvasGeometry,
     photo: &RgbaImage,
@@ -407,8 +722,24 @@ fn build_canvas(
     filt: image::imageops::FilterType,
 ) -> RgbaImage {
     let mut canvas = ImageBuffer::new(geo.width, geo.height);
-    let radius_px = photo_radius_px(t, photo);
-    let shadow = t.canvas.shadow.as_ref().filter(|s| s.enabled);
+    // v0.5.0 card overrides reuse the template canvas radius/shadow paths.
+    // `card.enabled: false` removes the card decoration entirely (template
+    // canvas radius/shadow included).
+    let card_override = opts.overrides.as_ref().and_then(|o| o.card.as_ref());
+    let card_off = card_override.is_some_and(|c| c.enabled == Some(false));
+    let card = card_override.filter(|c| c.enabled != Some(false));
+    let radius_px = if card_off {
+        0.0
+    } else {
+        photo_radius_px(card.and_then(|c| c.radius).or(t.canvas.radius), photo)
+    };
+    let shadow = if card_off {
+        None
+    } else {
+        card.and_then(|c| c.shadow)
+            .or(t.canvas.shadow)
+            .filter(|s| s.enabled)
+    };
     match (t.canvas.mode, plan.kind) {
         (CanvasMode::Overlay, _) | (_, BgKind::None) | (CanvasMode::Cover, _) => {
             // No backdrop: a shadow would be invisible after flattening.
@@ -419,6 +750,9 @@ fn build_canvas(
         (CanvasMode::Extend, BgKind::Tint) => {
             let c = average_color(photo);
             fill_solid(&mut canvas, Some(&format!("#{:02X}{:02X}{:02X}", c[0], c[1], c[2])));
+        }
+        (CanvasMode::Extend, BgKind::Texture) => {
+            fill_texture(&mut canvas, plan, opts, filt);
         }
         (CanvasMode::Extend, BgKind::Blur) => {
             let bg_scale = plan.scale.unwrap_or(1.2);
@@ -455,10 +789,19 @@ fn build_canvas(
             (t.canvas.mode, plan.kind),
             (CanvasMode::Overlay, _) | (_, BgKind::None) | (CanvasMode::Cover, _)
         ) {
-            draw_photo_shadow(&mut canvas, geo, sh, radius_px);
+            draw_photo_shadow(&mut canvas, geo, &sh, radius_px);
         }
     }
+    // v0.5.0 card border sits on the card edge, between shadow and photo.
+    if let Some(border) = card.and_then(|c| c.border.as_ref()) {
+        draw_card_border(&mut canvas, geo, border, radius_px);
+    }
     place_photo(&mut canvas, photo, geo, radius_px);
+    // v0.5.0 card inner shadow sits on the photo, clipped to the card rect.
+    if let Some(inner) = card.and_then(|c| c.inner_shadow.as_ref()) {
+        draw_card_inner_shadow(&mut canvas, geo, inner, radius_px);
+    }
+    draw_canvas_frame(&mut canvas, photo, t, opts, filt);
     canvas
 }
 
@@ -519,6 +862,7 @@ fn expand_to_aspect(
             let c = average_color(photo);
             fill_solid(&mut canvas, Some(&format!("#{:02X}{:02X}{:02X}", c[0], c[1], c[2])));
         }
+        BgKind::Texture => fill_texture(&mut canvas, plan, opts, filt),
     }
     let x = (nw.saturating_sub(w)) / 2;
     let y = (nh.saturating_sub(h)) / 2;
@@ -599,6 +943,11 @@ fn text_lines(layer: &TextLayer, info: &ExifInfo) -> Vec<String> {
         .collect()
 }
 
+/// v0.5.0: public wrapper for the editor box calculations.
+pub(crate) fn text_lines_public(layer: &TextLayer, info: &ExifInfo) -> Vec<String> {
+    text_lines(layer, info)
+}
+
 /// Layout of a drawn text layer's first line (for attached logo placement).
 #[derive(Debug, Clone, Copy)]
 struct TextLayout {
@@ -609,7 +958,7 @@ struct TextLayout {
 
 /// Blend `src` onto `dst` at (x, y) with a global opacity multiplier.
 #[allow(clippy::needless_range_loop)]
-fn composite_over(dst: &mut RgbaImage, src: &RgbaImage, x: i32, y: i32, opacity: f32) {
+pub(crate) fn composite_over(dst: &mut RgbaImage, src: &RgbaImage, x: i32, y: i32, opacity: f32) {
     let (dw, dh) = dst.dimensions();
     for (sx, sy, p) in src.enumerate_pixels() {
         let dx = x + sx as i32;
@@ -635,6 +984,19 @@ fn composite_over(dst: &mut RgbaImage, src: &RgbaImage, x: i32, y: i32, opacity:
         }
         d.0[3] = (out_a * 255.0).round().clamp(0.0, 255.0) as u8;
     }
+}
+
+/// Solid axis-aligned rectangle helper (calendar rules, dividers).
+pub(crate) fn draw_rect(
+    canvas: &mut RgbaImage,
+    x: f32,
+    y: f32,
+    w: f32,
+    h: f32,
+    color: [u8; 4],
+    opacity: f32,
+) {
+    render_shape(canvas, x, y, w, h, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
 }
 
 /// Per-line widths and vertical metrics for a text block (v0.4.0: with
@@ -840,7 +1202,251 @@ fn render_shape(
     }
 }
 
+/// Dispatch: v0.5.0 cosmic-text path when a shaper is available; legacy
+/// ab_glyph path when `--legacy-text-renderer` is active (render parity gate).
+#[allow(clippy::too_many_arguments)]
 fn draw_text_layer(
+    canvas: &mut RgbaImage,
+    layer: &TextLayer,
+    info: &ExifInfo,
+    fonts: &FontBook,
+    shaper: Option<&mut crate::text_shape::Shaper>,
+    geo: &CanvasGeometry,
+    overrides: Option<&TemplateOverrides>,
+    opts: &RenderOptions,
+) -> Option<TextLayout> {
+    match shaper {
+        Some(shaper) => draw_text_layer_v5(canvas, layer, info, shaper, geo, overrides, opts),
+        None => draw_text_layer_legacy(canvas, layer, info, fonts, geo, overrides),
+    }
+}
+
+/// v0.5.0: cosmic-text shaping + mask-based text effects + adaptive sizes.
+#[allow(clippy::too_many_arguments)]
+fn draw_text_layer_v5(
+    canvas: &mut RgbaImage,
+    layer: &TextLayer,
+    info: &ExifInfo,
+    shaper: &mut crate::text_shape::Shaper,
+    geo: &CanvasGeometry,
+    overrides: Option<&TemplateOverrides>,
+    opts: &RenderOptions,
+) -> Option<TextLayout> {
+    let mut lines = text_lines(layer, info);
+    if lines.is_empty() {
+        return None;
+    }
+    if let Some(effects) = &layer.effects {
+        if let Some(case) = effects.case.as_deref() {
+            lines = lines
+                .into_iter()
+                .map(|l| match case {
+                    "upper" => l.to_uppercase(),
+                    "lower" => l.to_lowercase(),
+                    "title" => l
+                        .split(' ')
+                        .map(|w| {
+                            let mut c = w.chars();
+                            match c.next() {
+                                Some(f) => f.to_uppercase().collect::<String>() + c.as_str(),
+                                None => String::new(),
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                        .join(" "),
+                    _ => l,
+                })
+                .collect();
+        }
+    }
+    let mut families = layer.font.family.clone();
+    if let Some(f) = overrides.and_then(|o| o.font_family.as_deref()) {
+        families.insert(0, f.to_string());
+    }
+    let font_scale = overrides.map(|o| o.font_size_scale()).unwrap_or(1.0);
+    let mut size_px = (layer.font.size * font_scale * geo.photo_h as f64) as f32;
+    if size_px <= 0.0 {
+        return None;
+    }
+    let w = geo.width as f32;
+    let h = geo.height as f32;
+    let col_left = matches!(layer.anchor, Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft);
+    let col_center = matches!(layer.anchor, Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter);
+    let row_top = matches!(layer.anchor, Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight);
+    let row_middle = matches!(layer.anchor, Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight);
+
+    let text_joined = lines.join("\n");
+    let wrap_width = layer.width.map(|fw| (fw as f32 * w).max(4.0));
+    let request = |size: f32, wrap: Option<f32>| crate::text_shape::ShapeRequest {
+        text: &text_joined,
+        families: &families,
+        weight: layer.font.weight,
+        size_px: size,
+        line_height: layer.line_height as f32,
+        letter_spacing_em: layer.letter_spacing as f32,
+        align: layer.align.as_deref().unwrap_or(if col_left {
+            "left"
+        } else if col_center {
+            "center"
+        } else {
+            "right"
+        }),
+        max_width: wrap,
+    };
+    let mut raster = shaper.shape(&request(size_px, wrap_width))?;
+
+    // Adaptive height: scale the font so the shaped block matches the target.
+    if let Some(target_h) = layer.height {
+        let target = (target_h as f32 * h).max(4.0);
+        let cur = raster.height as f32;
+        if cur > 0.0 && (cur - target).abs() > 1.0 {
+            size_px = (size_px * target / cur).clamp(1.0, 4096.0);
+            if let Some(r) = shaper.shape(&request(size_px, wrap_width)) {
+                raster = r;
+            }
+        }
+    }
+    // Fill-page / stretch sizing.
+    let mut target_w: Option<f32> = None;
+    if layer.fill_page {
+        let th = 0.9 * h;
+        let cur = raster.height as f32;
+        if cur > 0.0 {
+            size_px = (size_px * th / cur).clamp(1.0, 4096.0);
+            if let Some(r) = shaper.shape(&request(size_px, wrap_width)) {
+                raster = r;
+            }
+        }
+        target_w = Some(0.9 * w);
+    } else if layer.stretch_width || layer.stretch_height {
+        if layer.stretch_height {
+            let px = layer.offset.x as f32 * w;
+            let block_x = if col_left {
+                px
+            } else if col_center {
+                (w - raster.width as f32) / 2.0 + px
+            } else {
+                w + px - raster.width as f32
+            };
+            let avail = if row_top {
+                h
+            } else if row_middle {
+                h / 2.0
+            } else {
+                h
+            };
+            let _ = block_x;
+            let th = (avail * 0.9).max(8.0);
+            let cur = raster.height as f32;
+            if cur > 0.0 {
+                size_px = (size_px * th / cur).clamp(1.0, 4096.0);
+                if let Some(r) = shaper.shape(&request(size_px, wrap_width)) {
+                    raster = r;
+                }
+            }
+        }
+        if layer.stretch_width {
+            let bw = raster.width as f32;
+            target_w = Some(if col_left {
+                (w - 0.05 * w).max(bw)
+            } else if col_center {
+                0.9 * w
+            } else {
+                (w - 0.05 * w).max(bw)
+            });
+        }
+    }
+
+    let margin = 4.0;
+    let block_x = if col_left {
+        layer.offset.x as f32 * w
+    } else if col_center {
+        (w - raster.width as f32) / 2.0 + layer.offset.x as f32 * w
+    } else {
+        w + layer.offset.x as f32 * w - raster.width as f32
+    };
+    let block_y = if row_top {
+        layer.offset.y as f32 * h
+    } else if row_middle {
+        (h - raster.height as f32) / 2.0 + layer.offset.y as f32 * h
+    } else {
+        h + layer.offset.y as f32 * h - raster.height as f32
+    };
+
+    let manual = overrides.and_then(|o| o.text_color.as_deref());
+    let force_auto = manual.is_none() && layer.font.color.eq_ignore_ascii_case("auto");
+    let base_color = match manual {
+        Some(c) => crate::template::parse_hex_color(c).unwrap_or([0, 0, 0, 255]),
+        None if force_auto => [17, 17, 17, 255],
+        None => crate::template::parse_hex_color(&layer.font.color).unwrap_or([0, 0, 0, 255]),
+    };
+    let color = if manual.is_some() {
+        base_color
+    } else {
+        let bg = region_luminance(
+            canvas,
+            (block_x - margin).round() as i32,
+            (block_y - margin).round() as i32,
+            raster.width + (margin * 2.0) as u32,
+            raster.height + (margin * 2.0) as u32,
+        );
+        adapt_text_color(base_color, bg, force_auto)
+    };
+    let resources_dir = opts.assets_dir.as_deref();
+    let opacity = layer.opacity.clamp(0.0, 1.0) as f32;
+    let (mut block, pad_x, pad_y) = crate::text_art::compose_text_layer(
+        &raster,
+        layer.effects.as_ref(),
+        color,
+        opacity,
+        opts,
+        resources_dir,
+    );
+    // Horizontal stretch: rescale the composed block to the target width.
+    if let Some(tw) = target_w {
+        let bw = block.width() as f32;
+        if bw > 1.0 && (tw - bw).abs() > 1.0 {
+            let nh = block.height().max(1);
+            let nw = tw.clamp(1.0, 8192.0).round() as u32;
+            block = image::imageops::resize(&block, nw, nh, image::imageops::FilterType::Triangle);
+        }
+    }
+    let bx = block_x - pad_x as f32;
+    let by = block_y - pad_y as f32;
+    if layer.rotation.abs() > 0.01 {
+        let (bw, bh) = block.dimensions();
+        let diag = ((bw as f32).hypot(bh as f32)).ceil().max(1.0) as u32;
+        let mut padded = RgbaImage::new(diag, diag);
+        let ox = ((diag - bw) / 2) as i64;
+        let oy = ((diag - bh) / 2) as i64;
+        image::imageops::overlay(&mut padded, &block, ox, oy);
+        let rotated = rotate_about_center(
+            &padded,
+            (layer.rotation as f32).to_radians(),
+            Interpolation::Bilinear,
+            Rgba([0, 0, 0, 0]),
+        );
+        let cx = block_x + raster.width as f32 / 2.0;
+        let cy = block_y + raster.height as f32 / 2.0;
+        composite_over(
+            canvas,
+            &rotated,
+            (cx - diag as f32 / 2.0).round() as i32,
+            (cy - diag as f32 / 2.0).round() as i32,
+            1.0,
+        );
+    } else {
+        composite_over(canvas, &block, bx.round() as i32, by.round() as i32, 1.0);
+    }
+    Some(TextLayout {
+        first_line_x: block_x,
+        first_line_y: block_y,
+        first_line_h: raster.first_baseline,
+    })
+}
+
+/// v0.4.0 legacy path (ab_glyph); kept for `--legacy-text-renderer` parity.
+fn draw_text_layer_legacy(
     canvas: &mut RgbaImage,
     layer: &TextLayer,
     info: &ExifInfo,
@@ -974,15 +1580,24 @@ fn draw_text_layer(
 }
 
 /// v0.4.0 A4: primitive shape layer (rules, borders, dots, chips).
-fn draw_shape_layer(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeometry) {
+fn draw_shape_layer(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeometry, text_count: usize) {
+    // v0.5.0 auto divider: hide when there is nothing to separate.
+    if layer.auto_hide && text_count < 2 {
+        return;
+    }
     let w = geo.width as f32;
     let h = geo.height as f32;
+    // v0.5.0 layout frames are sized from the photo and ignore `size`.
+    if let Some(frame) = layer.frame.as_deref() {
+        draw_shape_frame(canvas, layer, geo, frame);
+        return;
+    }
     let (default_w, default_h) = match layer.shape {
         ShapeKind::Line => (0.2, 0.0015),
         ShapeKind::Rect => (0.2, 0.2),
         ShapeKind::Ellipse | ShapeKind::Diamond | ShapeKind::Hexagon => (0.05, 0.05),
     };
-    let sw = layer.size.width.unwrap_or(default_w) as f32 * geo.photo_w as f32;
+    let mut sw = layer.size.width.unwrap_or(default_w) as f32 * geo.photo_w as f32;
     let sh = layer.size.height.unwrap_or(default_h) as f32 * geo.photo_h as f32;
     let col_left = matches!(
         layer.anchor,
@@ -1002,12 +1617,18 @@ fn draw_shape_layer(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeom
     );
     let off_x = layer.offset.x as f32 * w;
     let off_y = layer.offset.y as f32 * h;
-    let sx = if col_left {
-        off_x
-    } else if col_center {
-        (w - sw) / 2.0 + off_x
-    } else {
-        w + off_x - sw
+    // v0.5.0 `span: auto`: a rule spans the inset width around its anchor.
+    let mut sx_override: Option<f32> = None;
+    if layer.span.as_deref() == Some("auto") {
+        let inset = layer.margin.map(|m| m as f32 * geo.photo_w as f32).unwrap_or(0.06 * geo.photo_w as f32);
+        sw = (w - inset * 2.0).max(2.0);
+        sx_override = Some(inset);
+    }
+    let sx = match sx_override {
+        Some(x) => x,
+        None if col_left => off_x,
+        None if col_center => (w - sw) / 2.0 + off_x,
+        None => w + off_x - sw,
     };
     let sy = if row_top {
         off_y
@@ -1040,6 +1661,88 @@ fn draw_shape_layer(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeom
         stroke_px,
         layer.rotation as f32,
     );
+    if layer.double && matches!(layer.shape, ShapeKind::Line) {
+        let gap = layer.gap.unwrap_or(0.006) as f32 * geo.photo_h as f32;
+        render_shape(
+            canvas,
+            sx,
+            sy - gap / 2.0,
+            sw,
+            sh,
+            form,
+            color,
+            layer.opacity as f32,
+            stroke_px,
+            layer.rotation as f32,
+        );
+        render_shape(
+            canvas,
+            sx,
+            sy + gap / 2.0,
+            sw,
+            sh,
+            form,
+            color,
+            layer.opacity as f32,
+            stroke_px,
+            layer.rotation as f32,
+        );
+    }
+}
+
+/// v0.5.0 layout frames: outer border / opposite horizontal / opposite vertical.
+fn draw_shape_frame(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeometry, frame: &str) {
+    let color = crate::template::parse_hex_color(&layer.color).unwrap_or([0, 0, 0, 255]);
+    let margin = layer.margin.unwrap_or(0.04) as f32 * geo.photo_w as f32;
+    let thickness = layer
+        .stroke_width
+        .map(|s| (s as f32 * geo.photo_w as f32).max(1.0))
+        .unwrap_or_else(|| (geo.photo_h as f32 * 0.002).max(1.0));
+    let opacity = layer.opacity as f32;
+    let x0 = margin;
+    let y0 = margin;
+    let x1 = geo.width as f32 - margin;
+    let y1 = geo.height as f32 - margin;
+    if x1 <= x0 || y1 <= y0 {
+        return;
+    }
+    match frame {
+        "opposite-h" => {
+            render_shape(canvas, x0, y0, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(canvas, x0, y1 - thickness, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+        }
+        "opposite-v" => {
+            render_shape(canvas, x0, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(canvas, x1 - thickness, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+        }
+        _ => {
+            // outer: four edges with square corners and optional double rule.
+            render_shape(canvas, x0, y0, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(canvas, x0, y1 - thickness, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(canvas, x0, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(canvas, x1 - thickness, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            if layer.double {
+                let gap = layer.gap.unwrap_or(0.004) as f32 * geo.photo_h as f32;
+                let ix0 = x0 + thickness + gap;
+                let iy0 = y0 + thickness + gap;
+                let ix1 = x1 - thickness - gap;
+                let iy1 = y1 - thickness - gap;
+                let t2 = (thickness * 0.5).max(1.0);
+                let long = match layer.shape {
+                    ShapeKind::Ellipse => ShapeForm::Ellipse,
+                    ShapeKind::Diamond => ShapeForm::Diamond,
+                    ShapeKind::Hexagon => ShapeForm::Hexagon,
+                    _ => ShapeForm::Rect { radius_px: 0.0 },
+                };
+                let _ = long;
+                let op = opacity * 0.8;
+                render_shape(canvas, ix0, iy0, (ix1 - ix0).max(1.0), t2, ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
+                render_shape(canvas, ix0, iy1 - t2, (ix1 - ix0).max(1.0), t2, ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
+                render_shape(canvas, ix0, iy0, t2, (iy1 - iy0).max(1.0), ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
+                render_shape(canvas, ix1 - t2, iy0, t2, (iy1 - iy0).max(1.0), ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
+            }
+        }
+    }
 }
 
 /// v0.4.0 A5: dominant colors via deterministic median cut over a 64x64 grid.
@@ -1462,9 +2165,33 @@ pub fn render_rgba(
 ) -> Result<RgbaImage> {
     let (fh, fv) = flip_flags(opts);
     let rgba = decode_oriented(photo, opts.max_edge, fh, fv)?;
+    let rgba = apply_crop(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
     let mut info = probe_exif(photo)?;
     apply_model_map(&mut info, &opts.model_map);
     render_rgba_with_image(&rgba, template, &info, opts)
+}
+
+/// v0.5.0 crop override: normalized rect (0–1) applied before layout.
+pub(crate) fn apply_crop_public(
+    img: RgbaImage,
+    crop: Option<crate::template::CropRect>,
+) -> RgbaImage {
+    apply_crop(img, crop)
+}
+
+fn apply_crop(img: RgbaImage, crop: Option<crate::template::CropRect>) -> RgbaImage {
+    let Some(c) = crop else { return img };
+    let (w, h) = img.dimensions();
+    let x = (c.x.clamp(0.0, 1.0) * w as f64).round() as u32;
+    let y = (c.y.clamp(0.0, 1.0) * h as f64).round() as u32;
+    let cw = (c.w.clamp(0.01, 1.0) * w as f64).round().max(1.0) as u32;
+    let ch = (c.h.clamp(0.01, 1.0) * h as f64).round().max(1.0) as u32;
+    let cw = cw.min(w.saturating_sub(x).max(1));
+    let ch = ch.min(h.saturating_sub(y).max(1));
+    if cw < 2 || ch < 2 {
+        return img;
+    }
+    image::imageops::crop_imm(&img, x, y, cw, ch).to_image()
 }
 
 /// Same as `render_rgba` but for an already-decoded (and already flipped)
@@ -1521,40 +2248,242 @@ pub fn render_rgba_with_image(
         &gps_hidden
     };
     let palette_colors = extract_palette(rgba, 8);
+    let mut shaper = if opts.legacy_text_renderer {
+        None
+    } else {
+        Some(crate::text_shape::Shaper::new(&fonts))
+    };
+    let text_count = count_text_layers(&template.layers);
     let mut text_layouts: std::collections::HashMap<String, TextLayout> =
         std::collections::HashMap::new();
-    // v0.4.0: layers draw in declaration order (photo is always at the
-    // bottom), so a shape declared before a text acts as a backing plate and
-    // one declared after can be an over-print rule. Attached badges are the
-    // one exception: they need their target text layout, so they are drawn
-    // last (icons read best on top).
-    let mut deferred_badges: Vec<&ImageLayer> = Vec::new();
-    for layer in &template.layers {
-        match layer {
-            Layer::Text(text) => {
-                if let Some(layout) =
-                    draw_text_layer(&mut canvas, text, info, &fonts, &geo, overrides)
-                {
-                    text_layouts.insert(text.id.clone(), layout);
-                }
-            }
-            Layer::Shape(shape) => draw_shape_layer(&mut canvas, shape, &geo),
-            Layer::Palette(palette) => {
-                draw_palette_layer(&mut canvas, palette, &geo, &palette_colors, &fonts);
-            }
-            Layer::Image(image) => {
-                if image.attach_to.is_some() {
-                    deferred_badges.push(image);
-                } else {
-                    draw_image_layer(&mut canvas, image, info, &geo, opts, &text_layouts);
-                }
-            }
+    // v0.5.0: layers paint by explicit `z` then declaration order (photo is
+    // always at the bottom). Attached badges are deferred until all text
+    // layouts exist, then paint last.
+    let mut order: Vec<(i32, usize)> = template
+        .layers
+        .iter()
+        .enumerate()
+        .map(|(i, l)| (layer_z(l), i))
+        .collect();
+    order.sort_by_key(|(z, i)| (*z, *i));
+    let mut deferred_badges: Vec<&Layer> = Vec::new();
+    for (_z, idx) in order {
+        let layer = &template.layers[idx];
+        if matches!(layer, Layer::Image(img) if img.attach_to.is_some()) {
+            deferred_badges.push(layer);
+            continue;
+        }
+        if let Some((id, layout)) = draw_layer(
+            &mut canvas,
+            layer,
+            info,
+            &fonts,
+            shaper.as_mut(),
+            &geo,
+            overrides,
+            opts,
+            &palette_colors,
+            text_count,
+            &text_layouts,
+        ) {
+            text_layouts.insert(id, layout);
         }
     }
-    for image in deferred_badges {
-        draw_image_layer(&mut canvas, image, info, &geo, opts, &text_layouts);
+    for layer in deferred_badges {
+        draw_layer(
+            &mut canvas,
+            layer,
+            info,
+            &fonts,
+            shaper.as_mut(),
+            &geo,
+            overrides,
+            opts,
+            &palette_colors,
+            text_count,
+            &text_layouts,
+        );
     }
     Ok(canvas)
+}
+
+fn layer_z(layer: &Layer) -> i32 {
+    match layer {
+        Layer::Text(t) => t.z.unwrap_or(0),
+        Layer::Image(i) => i.z.unwrap_or(0),
+        Layer::Shape(s) => s.z.unwrap_or(0),
+        Layer::Palette(p) => p.z.unwrap_or(0),
+        Layer::Group(g) => g.z.unwrap_or(0),
+        Layer::Calendar(c) => c.z.unwrap_or(0),
+    }
+}
+
+fn count_text_layers(layers: &[Layer]) -> usize {
+    layers
+        .iter()
+        .map(|l| match l {
+            Layer::Text(_) => 1,
+            Layer::Group(g) => count_text_layers(&g.children),
+            _ => 0,
+        })
+        .sum()
+}
+
+/// Draw one layer; returns the text layout when the layer was text.
+#[allow(clippy::too_many_arguments)]
+fn draw_layer(
+    canvas: &mut RgbaImage,
+    layer: &Layer,
+    info: &ExifInfo,
+    fonts: &FontBook,
+    shaper: Option<&mut crate::text_shape::Shaper>,
+    geo: &CanvasGeometry,
+    overrides: Option<&TemplateOverrides>,
+    opts: &RenderOptions,
+    palette_colors: &[[u8; 3]],
+    text_count: usize,
+    text_layouts: &std::collections::HashMap<String, TextLayout>,
+) -> Option<(String, TextLayout)> {
+    match layer {
+        Layer::Text(text) => {
+            let layout =
+                draw_text_layer(canvas, text, info, fonts, shaper, geo, overrides, opts)?;
+            Some((text.id.clone(), layout))
+        }
+        Layer::Image(image) => {
+            draw_image_layer(canvas, image, info, geo, opts, text_layouts);
+            None
+        }
+        Layer::Shape(shape) => {
+            draw_shape_layer(canvas, shape, geo, text_count);
+            None
+        }
+        Layer::Palette(palette) => {
+            draw_palette_layer(canvas, palette, geo, palette_colors, fonts);
+            None
+        }
+        Layer::Group(group) => {
+            draw_group_layer(
+                canvas,
+                group,
+                info,
+                fonts,
+                shaper,
+                geo,
+                overrides,
+                opts,
+                palette_colors,
+                text_count,
+                text_layouts,
+            );
+            None
+        }
+        Layer::Calendar(cal) => {
+            if let Some(s) = shaper {
+                crate::calendar::draw_calendar_layer(canvas, cal, info, s, geo, (geo.width, geo.height));
+            }
+            None
+        }
+    }
+}
+
+/// v0.5.0 group: children lay out inside the group box, then composite with
+/// the group opacity.
+#[allow(clippy::too_many_arguments)]
+fn draw_group_layer(
+    canvas: &mut RgbaImage,
+    group: &crate::template::GroupLayer,
+    info: &ExifInfo,
+    fonts: &FontBook,
+    mut shaper: Option<&mut crate::text_shape::Shaper>,
+    geo: &CanvasGeometry,
+    overrides: Option<&TemplateOverrides>,
+    opts: &RenderOptions,
+    palette_colors: &[[u8; 3]],
+    text_count: usize,
+    _outer_layouts: &std::collections::HashMap<String, TextLayout>,
+) {
+    let w = geo.width as f32;
+    let h = geo.height as f32;
+    let gw = group
+        .width
+        .map(|v| (v * geo.width as f64).round().max(1.0) as u32)
+        .unwrap_or(geo.width);
+    let gh = group
+        .height
+        .map(|v| (v * geo.height as f64).round().max(1.0) as u32)
+        .unwrap_or(geo.height);
+    let col_left = matches!(group.anchor, Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft);
+    let col_center = matches!(group.anchor, Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter);
+    let row_top = matches!(group.anchor, Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight);
+    let row_middle = matches!(group.anchor, Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight);
+    let off_x = group.offset.x as f32 * w;
+    let off_y = group.offset.y as f32 * h;
+    let gx = if col_left {
+        off_x
+    } else if col_center {
+        (w - gw as f32) / 2.0 + off_x
+    } else {
+        w + off_x - gw as f32
+    };
+    let gy = if row_top {
+        off_y
+    } else if row_middle {
+        (h - gh as f32) / 2.0 + off_y
+    } else {
+        h + off_y - gh as f32
+    };
+    let sub_geo = CanvasGeometry {
+        width: gw,
+        height: gh,
+        pad_left: 0,
+        pad_top: 0,
+        photo_w: geo.photo_w,
+        photo_h: geo.photo_h,
+    };
+    let mut sub = RgbaImage::new(gw, gh);
+    let mut layouts: std::collections::HashMap<String, TextLayout> =
+        std::collections::HashMap::new();
+    let mut deferred: Vec<&Layer> = Vec::new();
+    for child in &group.children {
+        if matches!(child, Layer::Image(img) if img.attach_to.is_some()) {
+            deferred.push(child);
+            continue;
+        }
+        if let Some((id, layout)) = draw_layer(
+            &mut sub,
+            child,
+            info,
+            fonts,
+            shaper.as_deref_mut(),
+            &sub_geo,
+            overrides,
+            opts,
+            palette_colors,
+            text_count,
+            &layouts,
+        ) {
+            layouts.insert(id, layout);
+        }
+    }
+    for child in deferred {
+        if let Some((id, layout)) = draw_layer(
+            &mut sub,
+            child,
+            info,
+            fonts,
+            shaper.as_deref_mut(),
+            &sub_geo,
+            overrides,
+            opts,
+            palette_colors,
+            text_count,
+            &layouts,
+        ) {
+            layouts.insert(id, layout);
+        }
+    }
+    composite_over(canvas, &sub, gx.round() as i32, gy.round() as i32, group.opacity.clamp(0.0, 1.0) as f32);
 }
 
 /// Raw-encode path: caller supplies decoded RGBA bytes (orientation already
@@ -1581,6 +2510,7 @@ pub fn render_from_rgba(
         None => ExifInfo::default(),
     };
     apply_model_map(&mut info, &opts.model_map);
+    let img = apply_crop(img, opts.overrides.as_ref().and_then(|o| o.crop));
     let canvas = render_rgba_with_image(&img, template, &info, opts)?;
     encode_output(&canvas, photo_bytes, opts)
 }
@@ -1607,11 +2537,14 @@ pub(crate) fn encode_output(
     opts: &RenderOptions,
 ) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
     let (cw, ch) = canvas.dimensions();
+    // v0.5.0 export option: keep EXIF metadata (default on; GPS still gated
+    // by keep_gps).
+    let write_exif = opts.write_exif && opts.overrides.as_ref().and_then(|o| o.metadata).unwrap_or(true);
     match opts.format {
         OutputFormat::Jpeg => {
             let flat = flatten_over_white(canvas);
             let mut out = encode::encode_jpeg_quality100(&flat)?;
-            let report = if opts.write_exif {
+            let report = if write_exif {
                 match photo {
                     Some(bytes) => match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
                         Some((tiff, report)) => {
@@ -1629,7 +2562,7 @@ pub(crate) fn encode_output(
         }
         OutputFormat::Png => {
             let mut out = encode::encode_png(canvas)?;
-            let report = if opts.write_exif {
+            let report = if write_exif {
                 match photo {
                     Some(bytes) => match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
                         Some((tiff, report)) => {
@@ -1646,4 +2579,13 @@ pub(crate) fn encode_output(
             Ok((out, report))
         }
     }
+}
+
+/// v0.5.0: public wrapper for free-collage / external callers in-crate.
+pub(crate) fn encode_output_public(
+    canvas: &RgbaImage,
+    photo: Option<&[u8]>,
+    opts: &RenderOptions,
+) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
+    encode_output(canvas, photo, opts)
 }

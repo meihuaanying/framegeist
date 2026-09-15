@@ -3,8 +3,8 @@
     "id": "calendar-portrait-stack-01",
     "name": "Portrait Stack",
     "nameI18n": { "zh": "竖幅日历", "en": "Portrait Stack" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -45,24 +45,18 @@
       "content": [{ "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)", "fallback": null }]
     },
     {
-      "type": "text",
-      "id": "bigday",
+      "type": "calendar",
+      "id": "daycard",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.10 },
-      "font": { "family": ["Bebas Neue"], "size": 0.11, "color": "#1A1A1A" },
-      "letterSpacing": 0.01,
-      "align": "center",
-      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
-    },
-    {
-      "type": "text",
-      "id": "cndate",
-      "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.055 },
-      "font": { "family": ["Noto Serif SC"], "size": 0.016, "color": "#373A40" },
-      "letterSpacing": 0.05,
-      "align": "center",
-      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+      "offset": { "x": 0, "y": -0.03 },
+      "size": 0.14,
+      "dateSource": "exif",
+      "year": 2026,
+      "month": 9,
+      "view": "day",
+      "color": "#373A40",
+      "accent": "#1A1A1A",
+      "fontFamily": ["Inter"]
     },
     {
       "type": "text",

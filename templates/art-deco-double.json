@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "id": "art-deco-double",
+    "name": "Deco Double Line",
+    "nameI18n": { "zh": "Art Deco 双线", "en": "Deco Double Line" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.5.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.11, "right": 0.11, "bottom": 0.15, "left": 0.11 },
+    "background": { "type": "solid", "color": "#FCFBF8" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "deco-frame-h",
+      "anchor": "middle-center",
+      "shape": "rect",
+      "size": { "width": 0.9, "height": 0.9 },
+      "color": "#14120E",
+      "opacity": 0.95,
+      "strokeWidth": 0.0014,
+      "frame": "opposite-h",
+      "margin": 0.03,
+      "z": -1
+    },
+    {
+      "type": "shape",
+      "id": "deco-frame-v",
+      "anchor": "middle-center",
+      "shape": "rect",
+      "size": { "width": 0.9, "height": 0.9 },
+      "color": "#B08D3F",
+      "opacity": 0.9,
+      "strokeWidth": 0.001,
+      "frame": "opposite-v",
+      "margin": 0.05,
+      "z": -1
+    },
+    {
+      "type": "shape",
+      "id": "deco-rule-a",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.115 },
+      "shape": "line",
+      "size": { "width": 0.2, "height": 0.0014 },
+      "color": "#B08D3F",
+      "opacity": 0.95
+    },
+    {
+      "type": "shape",
+      "id": "deco-rule-b",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.108 },
+      "shape": "line",
+      "size": { "width": 0.12, "height": 0.0014 },
+      "color": "#B08D3F",
+      "opacity": 0.95
+    },
+    {
+      "type": "shape",
+      "id": "deco-rule-c",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.039 },
+      "shape": "line",
+      "size": { "width": 0.12, "height": 0.0014 },
+      "color": "#B08D3F",
+      "opacity": 0.95
+    },
+    {
+      "type": "text",
+      "id": "deco-title",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.055 },
+      "font": { "family": ["Space Grotesk"], "size": 0.048, "color": "#17150F" },
+      "letterSpacing": 0.2,
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "'Modern Lines'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "deco-title-zh",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.008 },
+      "font": { "family": ["Noto Serif SC"], "size": 0.022, "color": "#8A6E2F" },
+      "letterSpacing": 0.32,
+      "content": [{ "expr": "'摩登双线'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "deco-model",
+      "anchor": "top-left",
+      "offset": { "x": 0.055, "y": 0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#55524A" },
+      "letterSpacing": 0.2,
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Anonymous Print')", "fallback": "Anonymous Print" }]
+    },
+    {
+      "type": "text",
+      "id": "deco-date",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#55524A" },
+      "letterSpacing": 0.2,
+      "align": "center",
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "Deco Study · 01" }]
+    },
+    {
+      "type": "text",
+      "id": "deco-params",
+      "anchor": "top-right",
+      "offset": { "x": -0.055, "y": 0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#55524A" },
+      "letterSpacing": 0.2,
+      "align": "right",
+      "effects": { "case": "upper" },
+      "content": [
+        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Geometry · Light · Order" }
+      ]
+    }
+  ]
+}

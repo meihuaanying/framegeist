@@ -32,31 +32,48 @@
 
 <footer class="footer"><span data-i18n="footer"></span> · <a href="https://github.com/meihuaanying/framegeist">GitHub</a></footer>
 <script type="module">
-  import { init, t } from "./site.js";
+  import { init, t, currentLang } from "./site.js";
   init();
   const CATS = ["white-border","camera","phone","drone","fuji","film","colorwalk","colorful","classic-watermark","portfolio","black-frame","sports","calendar","magazine","minimal","borderless","master","personal","polaroid","festival","effect","colorcard","blur-bg","ticket","game"];
   let all = [];
+  let activeCat = "all";
   const filters = document.getElementById("filters");
   const wall = document.getElementById("wall");
-  const mkBtn = (id, label) => {
-    const b = document.createElement("button");
-    b.textContent = label;
-    b.onclick = () => { document.querySelectorAll("#filters button").forEach(x => x.classList.remove("on")); b.classList.add("on"); show(id); };
-    filters.appendChild(b);
-    return b;
+  const noteEl = document.querySelector('[data-i18n="wall.note"]');
+  const tplName = (tpl) => (tpl.names && tpl.names[currentLang()]) || tpl.name || tpl.id;
+  const catLabel = (c) => (t("cat." + c) !== `cat.${c}` ? t("cat." + c) : c);
+  const buildFilters = () => {
+    filters.innerHTML = "";
+    const mk = (id, label) => {
+      const b = document.createElement("button");
+      b.textContent = label;
+      b.className = activeCat === id ? "on" : "";
+      b.onclick = () => { activeCat = id; buildFilters(); show(activeCat); };
+      filters.appendChild(b);
+    };
+    mk("all", t("wall.all"));
+    for (const c of CATS) mk(c, catLabel(c));
   };
-  let first;
-  [["all", t("wall.all")], ...CATS.map(c => [c, c])].forEach(([id, label]) => { const b = mkBtn(id, label); if (!first) { first = b; b.classList.add("on"); } });
   function show(cat) {
     wall.innerHTML = "";
-    for (const tpl of all.filter(x => cat === "all" || x.category === cat)) {
+    const list = all.filter((x) => cat === "all" || x.category === cat);
+    if (noteEl) noteEl.textContent = `${t("wall.note")} · ${t("wall.count", { n: list.length })}`;
+    for (const tpl of list) {
       const cell = document.createElement("div");
       cell.className = "cell";
-      cell.innerHTML = `<img loading="lazy" src="./samples/${tpl.id}.jpg" alt=""><div class="cap"><b>${tpl.name}</b><span>${tpl.category}</span></div>`;
+      const img = document.createElement("img");
+      img.loading = "lazy"; img.src = `./samples/${tpl.id}.jpg`; img.alt = tplName(tpl);
+      const cap = document.createElement("div");
+      cap.className = "cap";
+      const nm = document.createElement("b"); nm.textContent = tplName(tpl);
+      const catSpan = document.createElement("span"); catSpan.textContent = catLabel(tpl.category);
+      cap.appendChild(nm); cap.appendChild(catSpan);
+      cell.appendChild(img); cell.appendChild(cap);
       wall.appendChild(cell);
     }
   }
-  fetch("./web/templates.json").then(r => r.json()).then(list => { all = list; show("all"); });
+  fetch("./web/templates.json").then(r => r.json()).then(list => { all = list; buildFilters(); show(activeCat); });
+  window.addEventListener("fg-lang-changed", () => { buildFilters(); show(activeCat); });
 </script>
 </body>
 </html>

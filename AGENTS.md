@@ -2,6 +2,10 @@
 
 > 优先级：**PRD 红线 > 本文件 > 保守默认**。遇未预见决策自主推进并记入 PRD Discoveries，不打断用户。
 
+> ⚠️ **v0.5.0 进行时**：下一步（或用户令「开始 v0.5.0」后的会话）必须按 **`docs/V0.5.0-CONSTRAINTS.md`** 执行——那是已与用户逐项确认的强约束契约：展示照片唯一化、8 款自创艺术水印、frameelf 全编辑器功能对齐（含日历/相框制作/自由拼图）、cosmic-text 排版、E2E ≥70、一口气做到发布。**中途不停**。
+>
+> 📌 **会话交接（先读）**：`docs/reports/v0.5.0/HANDOFF-NEXT-SESSION.md`——环境/命令/已完成管线/M5 未验证项/M6–M8 待办/已知坑，全部在这里。
+
 ## 项目一句话
 
 FrameGeist（框灵）：免费开源照片边框/水印/拼图工具。一个 Rust 核心（`framegeist-core`）驱动 CLI/Web/Windows/Android/HarmonyOS，同一模板四端像素级一致。PRD 见 `docs/prds/framegeist.md`。

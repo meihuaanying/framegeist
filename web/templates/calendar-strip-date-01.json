@@ -3,8 +3,8 @@
     "id": "calendar-strip-date-01",
     "name": "Bottom Strip Date",
     "nameI18n": { "zh": "底栏日历", "en": "Bottom Strip Date" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -22,7 +22,8 @@
       "offset": { "x": 0.045, "y": -0.185 },
       "shape": "line",
       "size": { "width": 1.0, "height": 0.0015 },
-      "color": "#E4E6EA"
+      "color": "#E4E6EA",
+      "autoHide": true
     },
     {
       "type": "text",
@@ -43,14 +44,19 @@
       "content": [{ "expr": "date('YYYY.MM', exif.datetime)", "fallback": null }]
     },
     {
-      "type": "text",
-      "id": "cndate",
+      "type": "calendar",
+      "id": "strip",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.125 },
-      "font": { "family": ["Noto Serif SC"], "size": 0.018, "color": "#373A40" },
-      "letterSpacing": 0.05,
-      "align": "center",
-      "content": [{ "expr": "date('YYYY年MM月DD日', exif.datetime)", "fallback": null }]
+      "offset": { "x": 0, "y": -0.115 },
+      "size": 0.34,
+      "dateSource": "exif",
+      "year": 2026,
+      "month": 9,
+      "showLunar": true,
+      "view": "strip",
+      "color": "#373A40",
+      "accent": "#C8552B",
+      "fontFamily": ["Inter", "Noto Serif SC"]
     },
     {
       "type": "text",

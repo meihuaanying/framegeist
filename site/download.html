@@ -40,12 +40,15 @@
       const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`);
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const rel = await r.json();
-      const rows = (rel.assets || []).map(a => `
+      const rows = (rel.assets || []).map(a => {
+        const size = a.size < 1024 * 1024 ? `${(a.size / 1024).toFixed(1)} KB` : `${(a.size / 1048576).toFixed(1)} MB`;
+        return `
         <tr>
           <td>${a.name}</td>
-          <td>${(a.size / 1048576).toFixed(1)} MB</td>
+          <td>${size}</td>
           <td><a href="${a.browser_download_url}">${t("dl.download")}</a></td>
-        </tr>`).join("");
+        </tr>`;
+      }).join("");
       el.innerHTML = `
         <div style="margin-bottom:14px">
           <b style="font-family:var(--font-display);font-size:18px">${rel.tag_name}</b>

@@ -1,11 +1,12 @@
 import init, { Engine } from "./pkg/framegeist_wasm.js";
 import { initI18n, setLang, t, currentLang, localizeEngineError, applyI18n } from "./i18n.js";
+import "./editor.js";
 
 const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.4.0";
+const APP_VERSION = "0.5.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -20,6 +21,8 @@ const state = {
   templateCache: new Map(),
   photos: [],             // [{bytes,name,exif}]
   mode: "frame",
+  freeCollage: false,
+  freeSpec: null,
   templateId: null,
   layoutId: null,
   lastRender: null,
@@ -29,20 +32,23 @@ const state = {
   zoom: { scale: 1, tx: 0, ty: 0, autoFit: true },
   customAssets: {},        // "@user/logo" / "@user/background" -> Uint8Array
   usedNames: new Set(),
+  wmSpacing: 0,            // watermark panel letter-spacing delta (editor edit model)
 };
 
 const LS = {
   theme: "fg-theme", lang: "fg-lang", overrides: "fg-overrides-v1",
   settings: "fg-settings-v1", lineEdits: "fg-line-edits-v1",
   picker: "fg-picker-mode", userTpl: "fg-user-templates-v1",
+  recent: "fg-recent-v1",
 };
 
-const settings = loadJson(LS.settings, {
+  const settings = loadJson(LS.settings, {
   aspect: "original", background: "default", bgColor: "#FFFFFF",
   flipH: false, flipV: false, showLogo: true, exportSize: "0",
   exportCustom: 3000, fontFamily: "",
   defaultFontSize: 1, defaultUseColor: false, defaultTextColor: "#111111",
-  saveMode: "dialog", keepGps: false, channel: "stable",
+  saveMode: "dialog", keepGps: false, channel: "stable", keepMetadata: true,
+  margin: 0,
 });
 
 function loadJson(key, fallback) {
@@ -167,15 +173,133 @@ function buildOverridesJson() {
   if (settings.aspect && settings.aspect !== "original") out.aspect = settings.aspect;
   if (settings.background && settings.background !== "default") out.background = settings.background;
   if (settings.background === "solid" || settings.background === "default") out.backgroundColor = settings.bgColor;
+  if (settings.margin && settings.margin > 0) out.margin = settings.margin;
   if (settings.flipH) out.flipHorizontal = true;
   if (settings.flipV) out.flipVertical = true;
   out.showLogo = settings.showLogo && state.brandOverride !== "none";
+  if (settings.keepMetadata === false) out.metadata = false;
+  // v0.5.0: crop + editor extras.
+  const extra = window.__fgEditor?.editorOverrides?.() ?? {};
+  if (extra.crop) out.crop = extra.crop;
+  if (extra.card) out.card = extra.card;
   return Object.keys(out).length ? JSON.stringify(out) : "";
 }
 function exportMaxEdge() {
   const v = settings.exportSize;
   if (v === "custom") return Number(settings.exportCustom) || 0;
   return Number(v) || 0;
+}
+
+/* --------------------------------------- background swatches + eyedropper */
+// Retro/neutral preset board (v0.5.0 M6) + the app palette's neutrals.
+const BG_SWATCHES = [
+  "#F5F0E8", "#E8DCC8", "#D9C7A7", "#B8A88A", "#6E6357", "#2E2A26",
+  "#FFFFFF", "#F6F6F4", "#F0F0EE", "#E4E4E1", "#17171A",
+];
+function syncBgSwatches() {
+  const box = $("bgSwatches");
+  if (!box) return;
+  for (const b of box.querySelectorAll(".swatch")) {
+    b.classList.toggle("on", (b.dataset.color ?? "").toLowerCase() === (settings.bgColor ?? "").toLowerCase()
+      && settings.background === "solid");
+  }
+}
+function buildBgSwatches() {
+  const box = $("bgSwatches");
+  if (!box) return;
+  box.innerHTML = "";
+  for (const color of BG_SWATCHES) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "swatch";
+    b.dataset.color = color;
+    b.style.background = color;
+    b.title = t("canvas.swatchTitle");
+    b.setAttribute("aria-label", `${t("canvas.swatchTitle")} ${color}`);
+    b.onclick = () => {
+      settings.bgColor = color;
+      settings.background = "solid";
+      saveSettings();
+      syncCanvasUI();
+      renderNow();
+    };
+    box.appendChild(b);
+  }
+  syncBgSwatches();
+}
+
+// Eyedropper: sample a pixel from the rendered stage image -> solid bg color.
+let eyedropperOn = false;
+function setEyedropper(on) {
+  eyedropperOn = !!on;
+  $("bgEyedropper")?.classList.toggle("on", eyedropperOn);
+  $("viewport")?.classList.toggle("eyedropper", eyedropperOn);
+  const hint = $("eyedropperHint");
+  if (hint) {
+    hint.textContent = t(eyedropperOn ? "canvas.eyedropperOn" : "canvas.eyedropperHint");
+    hint.classList.toggle("hidden", !eyedropperOn);
+  }
+}
+function sampleStagePixel(clientX, clientY) {
+  const img = $("canvasWrap")?.querySelector("img");
+  if (!img || !img.complete || !img.naturalWidth) return null;
+  const r = img.getBoundingClientRect();
+  if (!r.width || !r.height || clientX < r.left || clientX > r.right || clientY < r.top || clientY > r.bottom) return null;
+  const x = Math.min(img.naturalWidth - 1, Math.max(0, Math.floor(((clientX - r.left) / r.width) * img.naturalWidth)));
+  const y = Math.min(img.naturalHeight - 1, Math.max(0, Math.floor(((clientY - r.top) / r.height) * img.naturalHeight)));
+  try {
+    const c = document.createElement("canvas");
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    const g = c.getContext("2d", { willReadFrequently: true });
+    g.drawImage(img, 0, 0);
+    const d = g.getImageData(x, y, 1, 1).data;
+    return [d[0], d[1], d[2]];
+  } catch {
+    return null;
+  }
+}
+function applyEyedropper(clientX, clientY) {
+  const rgb = sampleStagePixel(clientX, clientY);
+  if (!rgb) return false;
+  const hex = `#${rgb.map((v) => v.toString(16).padStart(2, "0")).join("")}`.toUpperCase();
+  settings.background = "solid";
+  settings.bgColor = hex;
+  saveSettings();
+  setEyedropper(false);
+  syncCanvasUI();
+  renderNow();
+  return true;
+}
+
+/* ------------------------------------------------------ free collage (v0.5) */
+/// Deterministic starter layout: photos placed in a loose 2-column grid with
+/// small rotations so the collage reads as hand-placed.
+function freeSpecDefault(aspect) {
+  const ratio = { "4:3": 4 / 3, "3:2": 3 / 2, "1:1": 1, "16:9": 16 / 9, "9:16": 9 / 16 }[aspect ?? $("freeAspect")?.value ?? "4:3"] ?? 4 / 3;
+  const width = ratio >= 1 ? 1600 : Math.round(1600 * ratio);
+  const height = ratio >= 1 ? Math.round(1600 / ratio) : 1600;
+  const photos = state.photos.length || 1;
+  const items = [];
+  for (let i = 0; i < photos; i++) {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const rows = Math.max(1, Math.ceil(photos / 2));
+    const stepY = 1 / rows;
+    items.push({
+      photo: i,
+      x: col === 0 ? 0.3 : 0.7,
+      y: (row + 0.5) * stepY,
+      w: 0.42,
+      rotation: (i % 2 === 0 ? -3 : 3) + (i % 3) * 1.5,
+      z: i,
+    });
+  }
+  return { width, height, background: $("freeBg")?.value ?? "#FFFFFF", items };
+}
+function updateFreeSpec(fn) {
+  if (!state.freeSpec) state.freeSpec = freeSpecDefault();
+  fn(state.freeSpec);
+  renderNow();
 }
 
 /* ----------------------------------------------------------- line editor */
@@ -223,6 +347,8 @@ function effectiveTemplateJson() {
   const base = currentTemplateObject();
   if (!base) return "{}";
   const clone = structuredClone(base);
+  // v0.5.0: apply canvas-editor template edits (layers/canvas/frame) first.
+  window.__fgEditor?.applyEdits?.(state.templateId, clone);
   const edits = getLayerEdits(state.templateId);
   for (const layer of clone.layers ?? []) {
     if (layer.type === "text" && edits[layer.id]) layer.content = edits[layer.id];
@@ -251,12 +377,32 @@ let activeCat = "all";
 let templateQuery = "";
 let pickerMode = localStorage.getItem(LS.picker) || "compact";
 
+/* ------------------------------------------------------- recent templates */
+// v0.5.0: ring buffer of the last applied template ids (most recent first).
+const RECENT_MAX = 12;
+function recentIds() {
+  try { return JSON.parse(localStorage.getItem(LS.recent) ?? "[]").filter((x) => typeof x === "string"); }
+  catch { return []; }
+}
+function recordRecent(id) {
+  if (!id) return;
+  const next = [id, ...recentIds().filter((x) => x !== id)].slice(0, RECENT_MAX);
+  localStorage.setItem(LS.recent, JSON.stringify(next));
+}
+
 function filteredTemplates() {
-  const all = activeCat === "mine"
-    ? state.userTemplates.map((u) => ({ id: u.id, name: u.name, category: "user" }))
-    : state.templates;
+  let all;
+  if (activeCat === "mine") {
+    all = state.userTemplates.map((u) => ({ id: u.id, name: u.name, category: "user" }));
+  } else if (activeCat === "recent") {
+    // Recency order is the order of the ring buffer, not the library order.
+    const byId = new Map([...state.templates, ...state.userTemplates].map((x) => [x.id, x]));
+    all = recentIds().map((id) => byId.get(id)).filter(Boolean);
+  } else {
+    all = state.templates;
+  }
   return all.filter(
-    (x) => (activeCat === "all" || activeCat === "mine" || x.category === activeCat) &&
+    (x) => (activeCat === "all" || activeCat === "mine" || activeCat === "recent" || x.category === activeCat) &&
       (!templateQuery || x.name.toLowerCase().includes(templateQuery) || x.id.includes(templateQuery))
   );
 }
@@ -281,6 +427,7 @@ function buildTemplatePicker() {
   };
   mk("all", t("chip.all"));
   mk("mine", t("chip.mine"));
+  if (recentIds().length) mk("recent", t("chip.recent"));
   for (const c of CATS) mk(c, t("cat." + c));
 
   const list = filteredTemplates();
@@ -295,7 +442,7 @@ function buildTemplatePicker() {
   for (const tpl of list) {
     const cell = document.createElement("div");
     cell.className = `thumb${tpl.id === state.templateId ? " on" : ""}`;
-    cell.title = `${tpl.category} · ${tpl.name}`;
+    cell.title = `${t(`cat.${tpl.category}`) !== `cat.${tpl.category}` ? t(`cat.${tpl.category}`) : tpl.category} · ${tplName(tpl)}`;
     const src = thumbSrc(tpl);
     const isUser = !src;
     cell.innerHTML = (src
@@ -318,13 +465,20 @@ function updatePinned() {
   const tpl = state.templates.find((x) => x.id === state.templateId)
     || state.userTemplates.find((x) => x.id === state.templateId);
   $("pinnedName").textContent = tpl ? tplName(tpl) : "—";
-  $("pinnedCat").textContent = tpl ? (tpl.category ?? "user") : "";
+  const cat = tpl?.category ?? "";
+  $("pinnedCat").textContent = tpl
+    ? (t(`cat.${cat}`) !== `cat.${cat}` ? t(`cat.${cat}`) : cat || "user")
+    : "";
 }
 async function selectTemplate(id) {
   state.templateId = id;
+  state.wmSpacing = 0;
+  recordRecent(id);
   await fetchTemplateJson(id);
+  window.__fgEditor?.onTemplateChanged?.();
   buildTemplatePicker();
   updateTweakUI();
+  updateWatermarkUI();
   buildLineEditor();
   updateBrandDetected();
   renderNow();
@@ -333,6 +487,7 @@ async function selectTemplate(id) {
 /* ---------------------------------------------------------- template wall */
 function showWall() {
   state.view = "wall";
+  if (eyedropperOn) setEyedropper(false);
   withViewTransition(() => {
     $("wall").classList.remove("hidden");
     $("editor").classList.add("hidden");
@@ -360,6 +515,12 @@ function showTemplatePreview() {
   img.src = `./previews/${state.templateId}.jpg`;
   img.alt = "";
   img.onload = () => { img.classList.add("shown"); if (state.zoom.autoFit) fitStage(); };
+  img.onerror = () => {
+    wrap.innerHTML = "";
+    const meta = state.templates.find((x) => x.id === state.templateId);
+    $("stagePlaceholder").textContent = meta ? tplName(meta) : t("stage.placeholder");
+    $("stagePlaceholder").classList.remove("hidden");
+  };
   wrap.appendChild(img);
   $("stagePlaceholder").classList.add("hidden");
   const meta = state.templates.find((x) => x.id === state.templateId);
@@ -367,11 +528,15 @@ function showTemplatePreview() {
 }
 async function useTemplate(id) {
   state.templateId = id;
+  state.wmSpacing = 0;
+  recordRecent(id);
   await fetchTemplateJson(id);
+  window.__fgEditor?.onTemplateChanged?.();
   showEditor();
   buildTemplatePicker();
   updatePinned();
   updateTweakUI();
+  updateWatermarkUI();
   buildLineEditor();
   updateBrandDetected();
   if (state.photos.length) renderNow();
@@ -390,6 +555,7 @@ function buildWall() {
   };
   mk("all", t("chip.all"));
   mk("mine", t("chip.mine"));
+  if (recentIds().length) mk("recent", t("chip.recent"));
   for (const c of CATS) mk(c, t("cat." + c));
 
   const list = filteredTemplates();
@@ -491,12 +657,20 @@ async function acceptFiles(fileList) {
       const bytes = new Uint8Array(await f.arrayBuffer());
       let exif = null;
       try { exif = JSON.parse(state.engine.probe_exif(bytes)); } catch { /* no exif */ }
-      state.photos.push({ bytes, name: f.name, exif });
+      const photo = { bytes, name: f.name, exif };
+      // Free-collage overlay needs the oriented aspect ratio the engine uses.
+      try {
+        const bmp = await createImageBitmap(new Blob([bytes]), { imageOrientation: "from-image" });
+        photo.ar = bmp.height / bmp.width;
+        bmp.close?.();
+      } catch { /* overlay falls back to a default box height */ }
+      state.photos.push(photo);
     } catch (e) {
       toast("error", `${f.name}: ${e.message || e}`);
     }
   }
   if (!state.photos.length) return;
+  if (state.freeCollage) state.freeSpec = freeSpecDefault();
   updateFileMeta();
   showExif();
   updateBrandDetected();
@@ -533,16 +707,52 @@ function setStage(url, label) {
   img.onload = () => { img.classList.add("shown"); if (state.view === "editor") fitStage(); };
   img.src = url;
   wrap.appendChild(img);
+  window.__fgEditor?.onStage?.(img);
   $("stagePlaceholder").classList.add("hidden");
   if (label) $("stageLabel").textContent = label;
 }
 
 /* -------------------------------------------------------------- exif panel */
+/* Fuji recipe keys exposed by the engine `exif.get()` (v0.5.0 M2). Rows are
+   only emitted for values that are actually present — never fabricated. */
+const FUJI_KEYS = [
+  ["film_mode", "exif.fuji.film_mode"],
+  ["wb_mode", "exif.fuji.wb_mode"],
+  ["wb_shift", "exif.fuji.wb_shift"],
+  ["dynamic_range", "exif.fuji.dynamic_range"],
+  ["highlight_tone", "exif.fuji.highlight_tone"],
+  ["shadow_tone", "exif.fuji.shadow_tone"],
+  ["color_chrome", "exif.fuji.color_chrome"],
+  ["chrome_fx_blue", "exif.fuji.chrome_fx_blue"],
+  ["grain", "exif.fuji.grain"],
+  ["fuji_sharpness", "exif.fuji.sharpness"],
+  ["fuji_saturation", "exif.fuji.saturation"],
+  ["fuji_nr", "exif.fuji.nr"],
+  ["fuji_clarity", "exif.fuji.clarity"],
+  ["fuji_lut1", "exif.fuji.lut1"],
+  ["fuji_lut2", "exif.fuji.lut2"],
+];
+function fujiRows(info) {
+  if (!info) return [];
+  const rows = [];
+  for (const [key, label] of FUJI_KEYS) {
+    if (key === "wb_shift") {
+      const r = info.wb_shift_r, b = info.wb_shift_b;
+      if (r == null && b == null) continue;
+      rows.push([label, `${r ?? "0"} / ${b ?? "0"}`]);
+      continue;
+    }
+    const v = info[key];
+    if (v === null || v === undefined || v === "") continue;
+    rows.push([label, String(v)]);
+  }
+  return rows;
+}
 function showExif() {
   const dl = $("exifList");
   dl.innerHTML = "";
   const info = state.photos[0]?.exif;
-  if (!info) { $("exifEmpty").classList.remove("hidden"); dl.classList.add("hidden"); return; }
+  if (!info) { $("exifEmpty").classList.remove("hidden"); dl.classList.add("hidden"); hideFujiGroup(); return; }
   $("exifEmpty").classList.add("hidden");
   dl.classList.remove("hidden");
   const rows = [
@@ -560,6 +770,29 @@ function showExif() {
     else dd.textContent = String(val);
     dl.appendChild(dt); dl.appendChild(dd);
   }
+  showFujiGroup(info);
+}
+function hideFujiGroup() {
+  const group = $("fujiGroup");
+  if (!group) return;
+  group.classList.add("hidden");
+  const list = $("fujiList");
+  if (list) list.innerHTML = "";
+}
+function showFujiGroup(info) {
+  const group = $("fujiGroup");
+  const list = $("fujiList");
+  if (!group || !list) return;
+  const rows = fujiRows(info);
+  list.innerHTML = "";
+  for (const [label, val] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = val;
+    list.appendChild(dt); list.appendChild(dd);
+  }
+  group.classList.toggle("hidden", rows.length === 0);
 }
 
 /* ----------------------------------------------------------- line editor UI */
@@ -774,6 +1007,14 @@ async function renderNow() {
       } else {
         out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", false, ojson, exportMaxEdge(), settings.keepGps);
       }
+    } else if (state.freeCollage) {
+      if (!state.freeSpec) state.freeSpec = freeSpecDefault();
+      out = state.engine.render_free_collage(
+        state.photos.map((p) => p.bytes),
+        JSON.stringify(state.freeSpec),
+        "jpeg",
+        $("preview").checked,
+      );
     } else {
       const lay = await (await fetch(BASE + `layouts/${state.layoutId}.json`)).text();
       out = state.engine.render_collage(state.photos.map((p) => p.bytes), lay, "jpeg", $("preview").checked);
@@ -783,7 +1024,9 @@ async function renderNow() {
     state.lastRender = out;
     state.lastRenderName = state.mode === "frame"
       ? `${stem(state.photos[0].name)}-${state.templateId}.jpg`
-      : `framegeist-collage-${state.layoutId}.jpg`;
+      : state.freeCollage
+        ? `framegeist-free-collage.jpg`
+        : `framegeist-collage-${state.layoutId}.jpg`;
     const url = URL.createObjectURL(new Blob([out], { type: "image/jpeg" }));
     withViewTransition(() => setStage(url, `${t("stage.rendered")} · ${ms} ms · ${(out.length / 1024).toFixed(0)} KB`));
     $("exportBtn").disabled = false;
@@ -839,7 +1082,7 @@ function wireViewport() {
   vp.addEventListener("pointerdown", (e) => {
     dragging = { x: e.clientX, y: e.clientY, tx: state.zoom.tx, ty: state.zoom.ty };
     vp.classList.add("dragging");
-    vp.setPointerCapture(e.pointerId);
+    try { vp.setPointerCapture(e.pointerId); } catch { /* synthetic/stale pointer */ }
   });
   vp.addEventListener("pointermove", (e) => {
     if (!dragging) return;
@@ -851,7 +1094,11 @@ function wireViewport() {
   const end = (e) => { dragging = null; vp.classList.remove("dragging"); try { vp.releasePointerCapture(e.pointerId); } catch {} };
   vp.addEventListener("pointerup", end);
   vp.addEventListener("pointercancel", end);
-  vp.addEventListener("dblclick", fitStage);
+  // v0.5.0: double-click on the photo enters crop; elsewhere it keeps fit.
+  vp.addEventListener("dblclick", (e) => {
+    if (window.__fgEditor?.onStageDblClick?.(e)) return;
+    fitStage();
+  });
   $("zoomIn").onclick = () => zoomBy(1.25);
   $("zoomOut").onclick = () => zoomBy(1 / 1.25);
   $("zoomFit").onclick = fitStage;
@@ -1128,6 +1375,7 @@ async function boot() {
   buildTemplatePicker();
   buildLayoutPicker();
   buildBrandGrid();
+  buildBgSwatches();
   updateTweakUI();
   buildLineEditor();
   showExif();
@@ -1142,6 +1390,10 @@ function syncCanvasUI() {
   $("aspectSelect").value = settings.aspect;
   $("bgSelect").value = settings.background;
   $("bgColor").value = settings.bgColor;
+  const margin = Number(settings.margin) || 0;
+  $("marginRange").value = margin;
+  $("marginVal").textContent = `${Math.round(margin * 100)}%`;
+  syncBgSwatches();
   $("flipH").classList.toggle("on", settings.flipH);
   $("flipV").classList.toggle("on", settings.flipV);
   $("brandShow").checked = settings.showLogo;
@@ -1165,6 +1417,33 @@ function toast(kind, text) {
   setTimeout(() => box.remove(), kind === "error" ? 7000 : 3500);
 }
 
+/* ------------------------------------------------------ watermark panel */
+function templateCategory() {
+  return currentTemplateObject()?.meta?.category ?? "";
+}
+function syncCardVisibility() {
+  const frame = state.mode === "frame";
+  const freeCollage = state.mode === "collage" && state.freeCollage;
+  for (const id of ["layersCard", "insertCard", "propsCard", "frameCard", "cardFxCard"]) {
+    $(id)?.classList.toggle("hidden", !frame);
+  }
+  // Crop works in frame mode and on a selected free-collage item (v0.5.0).
+  $("cropCard")?.classList.toggle("hidden", !(frame || freeCollage));
+  $("watermarkCard")?.classList.toggle("hidden", !frame || templateCategory() !== "classic-watermark");
+}
+function updateWatermarkUI() {
+  const card = $("watermarkCard");
+  if (!card) return;
+  const o = state.templateId ? loadOverrides(state.templateId) : {};
+  $("wmSize").value = o.fontSizeScale ?? 1;
+  $("wmSizeVal").textContent = `${Math.round((o.fontSizeScale ?? 1) * 100)}%`;
+  $("wmPad").value = o.paddingScale ?? 1;
+  $("wmPadVal").textContent = `${Math.round((o.paddingScale ?? 1) * 100)}%`;
+  $("wmSpacing").value = state.wmSpacing ?? 0;
+  $("wmSpacingVal").textContent = Number(state.wmSpacing ?? 0).toFixed(2);
+  syncCardVisibility();
+}
+
 /* ------------------------------------------------------------- mode switch */
 function switchMode(mode) {
   state.mode = mode;
@@ -1177,7 +1456,9 @@ function switchMode(mode) {
     $("brandCard").classList.toggle("hidden", mode !== "frame");
     $("exifEditCard").classList.toggle("hidden", mode !== "frame");
     $("layoutCard").classList.toggle("hidden", mode !== "collage");
+    syncCardVisibility();
   });
+  window.__fgEditor?.onModeChanged?.(mode);
   renderNow();
 }
 
@@ -1185,6 +1466,21 @@ function switchMode(mode) {
 function wire() {
   $("modeFrame").onclick = () => switchMode("frame");
   $("modeCollage").onclick = () => switchMode("collage");
+  $("freeMode").onchange = (e) => {
+    state.freeCollage = e.target.checked;
+    $("freePanel").classList.toggle("hidden", !state.freeCollage);
+    $("layoutPicker").classList.toggle("hidden", state.freeCollage);
+    if (state.freeCollage && !state.freeSpec) state.freeSpec = freeSpecDefault();
+    syncCardVisibility();
+    window.__fgEditor?.onModeChanged?.("collage");
+    renderNow();
+  };
+  $("freeAspect").onchange = () => { state.freeSpec = freeSpecDefault(); window.__fgEditor?.onModeChanged?.("collage"); renderNow(); };
+  $("freeBg").oninput = (e) => {
+    if (!state.freeSpec) state.freeSpec = freeSpecDefault();
+    state.freeSpec.background = e.target.value;
+    renderNow();
+  };
   $("renderBtn").onclick = renderNow;
   $("exportBtn").onclick = exportCurrent;
   $("exportBatchBtn").onclick = exportBatch;
@@ -1229,9 +1525,38 @@ function wire() {
   };
   $("resetTweaks").onclick = () => { if (state.templateId) saveOverrides(state.templateId, undefined); renderNow(); };
 
+  // v0.5.0 watermark adjust panel (classic-watermark templates).
+  $("wmSize").oninput = (e) => { pushOverride({ fontSizeScale: Number(e.target.value) }); updateWatermarkUI(); };
+  $("wmSize").onchange = () => renderNow();
+  $("wmPad").oninput = (e) => { pushOverride({ paddingScale: Number(e.target.value) }); updateWatermarkUI(); };
+  $("wmPad").onchange = () => renderNow();
+  $("wmSpacing").oninput = (e) => {
+    state.wmSpacing = Number(e.target.value) || 0;
+    $("wmSpacingVal").textContent = Number(state.wmSpacing).toFixed(2);
+    window.__fgEditor?.applyWatermarkSpacing?.(state.wmSpacing);
+  };
+  $("wmSelectFirst").onclick = () => window.__fgEditor?.selectFirstText?.();
+
   $("aspectSelect").onchange = (e) => { settings.aspect = e.target.value; saveSettings(); renderNow(); };
-  $("bgSelect").onchange = (e) => { settings.background = e.target.value; saveSettings(); renderNow(); };
-  $("bgColor").oninput = (e) => { settings.bgColor = e.target.value; saveSettings(); if (settings.background === "default" || settings.background === "solid") renderNow(); };
+  $("bgSelect").onchange = (e) => { settings.background = e.target.value; saveSettings(); syncBgSwatches(); renderNow(); };
+  $("bgColor").oninput = (e) => { settings.bgColor = e.target.value; saveSettings(); syncBgSwatches(); if (settings.background === "default" || settings.background === "solid") renderNow(); };
+  $("marginRange").oninput = (e) => {
+    settings.margin = Number(e.target.value) || 0;
+    $("marginVal").textContent = `${Math.round(settings.margin * 100)}%`;
+    saveSettings();
+  };
+  $("marginRange").onchange = () => renderNow();
+  $("bgEyedropper").onclick = () => setEyedropper(!eyedropperOn);
+  $("viewport").addEventListener("pointerdown", (e) => {
+    if (!eyedropperOn) return;
+    e.stopImmediatePropagation();
+  }, true);
+  $("viewport").addEventListener("click", (e) => {
+    if (!eyedropperOn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    applyEyedropper(e.clientX, e.clientY);
+  });
   $("uploadBg").onclick = () => $("bgFile").click();
   $("bgFile").onchange = async (e) => {
     const f = e.target.files?.[0];
@@ -1247,6 +1572,7 @@ function wire() {
   $("flipV").onclick = () => { settings.flipV = !settings.flipV; saveSettings(); syncCanvasUI(); renderNow(); };
   $("resetCanvas").onclick = () => {
     settings.aspect = "original"; settings.background = "default"; settings.flipH = false; settings.flipV = false;
+    settings.margin = 0;
     saveSettings(); syncCanvasUI(); renderNow();
   };
 
@@ -1312,6 +1638,7 @@ function wire() {
   document.getElementById("setDefaultColor").oninput = (e) => { settings.defaultTextColor = e.target.value; saveSettings(); };
   document.getElementById("setDefaultLogo").onchange = (e) => { settings.showLogo = e.target.checked; saveSettings(); syncCanvasUI(); };
   document.getElementById("setKeepGps").onchange = (e) => { settings.keepGps = e.target.checked; saveSettings(); };
+  document.getElementById("setKeepMetadata").onchange = (e) => { settings.keepMetadata = e.target.checked; saveSettings(); renderNow(); };
   document.getElementById("setSaveMode").onchange = (e) => { settings.saveMode = e.target.value; saveSettings(); };
   document.getElementById("setChannel").onchange = (e) => { settings.channel = e.target.value; saveSettings(); };
   document.getElementById("aboutCheck").onclick = checkUpdates;
@@ -1329,7 +1656,10 @@ function wire() {
 
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === ",") { e.preventDefault(); openSettings(); return; }
-    if (e.key === "Escape") { closeLightbox(); closeSettings(); return; }
+    if (e.key === "Escape") {
+      if (eyedropperOn) { setEyedropper(false); return; }
+      closeLightbox(); closeSettings(); return;
+    }
     if (!document.getElementById("lightbox").classList.contains("hidden")) {
       if (e.key === "ArrowLeft") navLightbox(-1);
       if (e.key === "ArrowRight") navLightbox(1);
@@ -1340,10 +1670,12 @@ function wire() {
     applyTheme();
     $("langBtn").textContent = t("lang.toggle");
     applyI18n();
+    buildBgSwatches();
     buildTemplatePicker();
     buildLayoutPicker();
     buildWall();
     updateTweakUI();
+    updateWatermarkUI();
     buildLineEditor();
     showExif();
     updateBrandDetected();
@@ -1365,6 +1697,14 @@ async function checkUpdates() {
 
 wire();
 boot().catch((e) => setStatus("error", String(e.message || e)));
+
+/* PWA offline shell (PRD G4): register only on the real web origin,
+   never inside the Tauri shell (it self-destructs there anyway). */
+if ("serviceWorker" in navigator
+  && /^https?:$/.test(location.protocol)
+  && !location.hostname.endsWith("tauri.localhost")) {
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
 
 
 /* --------------------------------------------------------------- lightbox */
@@ -1443,6 +1783,7 @@ function openSettings() {
   document.getElementById("setDefaultColor").disabled = !settings.defaultUseColor;
   document.getElementById("setDefaultLogo").checked = !!settings.showLogo;
   document.getElementById("setKeepGps").checked = !!settings.keepGps;
+  document.getElementById("setKeepMetadata").checked = settings.keepMetadata !== false;
   document.getElementById("setSaveMode").value = settings.saveMode ?? "dialog";
   document.getElementById("setChannel").value = settings.channel ?? "stable";
   document.getElementById("desktopSection").classList.toggle("hidden", !IS_TAURI);
@@ -1497,4 +1838,15 @@ async function clearScope(name) {
 }
 
 // Debug hook for perf/automation.
-window.__fg = { state, renderNow, fitStage, showWall, showEditor, useTemplate, buildWall, get engine() { return state.engine; } };
+window.__fg = {
+  state, renderNow, fitStage, showWall, showEditor, useTemplate, buildWall, toast, t,
+  currentTemplateObject, effectiveTemplateJson, buildOverridesJson,
+  freeActive: () => state.freeCollage,
+  freeSpec: () => state.freeSpec,
+  updateFreeSpec,
+  freeSpecDefault,
+  recentIds,
+  fujiRows,
+  templateCategory,
+  get engine() { return state.engine; },
+};

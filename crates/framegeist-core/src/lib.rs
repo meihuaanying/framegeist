@@ -3,16 +3,21 @@
 //! Public API (PRD A2): `load_template`, `probe_exif`, `render`.
 //! GUI clients must not implement any drawing logic themselves.
 
+pub mod boxes;
 pub mod brand;
+pub mod calendar;
 pub mod collage;
 pub mod encode;
 pub mod exif;
+pub mod free_collage;
 pub mod layout;
 pub mod model_map;
 pub mod render;
 pub mod sandbox;
 pub mod template;
 pub mod text;
+pub mod text_art;
+pub mod text_shape;
 
 pub use encode::{encode_jpeg_quality100, encode_png, splice_exif_app1, splice_png_exif};
 pub use exif::{cleaned_exif_tiff, metadata_report, probe_exif, ExifInfo, MetadataReport};

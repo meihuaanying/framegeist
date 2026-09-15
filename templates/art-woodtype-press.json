@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "id": "art-woodtype-press",
+    "name": "Woodtype Press",
+    "nameI18n": { "zh": "木刻活字", "en": "Woodtype Press" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.5.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.055, "right": 0.055, "bottom": 0.2, "left": 0.055 },
+    "background": { "type": "solid", "color": "#F2EAD9" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "wood-rule-a",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.148 },
+      "shape": "line",
+      "size": { "width": 0.5, "height": 0.0016 },
+      "color": "#241C12",
+      "opacity": 0.9,
+      "double": true,
+      "gap": 0.005
+    },
+    {
+      "type": "shape",
+      "id": "wood-rule-b",
+      "anchor": "bottom-center",
+      "offset": { "x": 0.004, "y": -0.151 },
+      "shape": "line",
+      "size": { "width": 0.49, "height": 0.0016 },
+      "color": "#5A4A38",
+      "opacity": 0.5
+    },
+    {
+      "type": "text",
+      "id": "wood-kicker",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.09 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.02, "color": "#6B5540" },
+      "letterSpacing": 0.3,
+      "align": "center",
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "'Slow Press · Small Batch'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "wood-title",
+      "anchor": "bottom-center",
+      "offset": { "x": 0, "y": -0.017 },
+      "font": { "family": ["Playfair Display"], "size": 0.068, "weight": 900, "color": "#241C12" },
+      "letterSpacing": 0.18,
+      "effects": {
+        "case": "upper",
+        "relief": { "mode": "engrave", "depth": 0.05, "highlight": "#FFF6E4", "shadow": "#0F0A06", "opacity": 0.85 }
+      },
+      "content": [{ "expr": "'Woodtype'", "fallback": null }]
+    },
+    {
+      "type": "shape",
+      "id": "wood-accent",
+      "anchor": "top-center",
+      "offset": { "x": 0, "y": 0.012 },
+      "shape": "line",
+      "size": { "width": 0.09, "height": 0.0035 },
+      "color": "#A63B2A",
+      "opacity": 1.0
+    },
+    {
+      "type": "text",
+      "id": "wood-model",
+      "anchor": "top-left",
+      "offset": { "x": 0.055, "y": 0.03 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#4A3D2E" },
+      "letterSpacing": 0.2,
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'Bench No. 09')", "fallback": "Bench No. 09" }]
+    },
+    {
+      "type": "text",
+      "id": "wood-params",
+      "anchor": "top-right",
+      "offset": { "x": -0.055, "y": 0.03 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#4A3D2E" },
+      "letterSpacing": 0.2,
+      "align": "right",
+      "effects": { "case": "upper" },
+      "content": [
+        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Ink on Cream · Proof" }
+      ]
+    }
+  ]
+}

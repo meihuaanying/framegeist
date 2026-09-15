@@ -3,8 +3,8 @@
     "id": "drone-altitude-hero-01",
     "name": "Altitude Hero",
     "nameI18n": { "zh": "高度主角", "en": "Altitude Hero" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "drone"
@@ -52,6 +52,9 @@
       "offset": { "x": 0.0833, "y": -0.075 },
       "font": { "family": ["Bebas Neue"], "size": 0.16, "color": "#1A1A1A" },
       "letterSpacing": 0.02,
+      "effects": {
+        "relief": { "mode": "emboss", "depth": 0.05, "highlight": "#FFFFFF", "shadow": "#B9B2A4", "opacity": 0.8 }
+      },
       "content": [
         { "expr": "if_empty(exif.gps_alt, 'ALTITUDE')", "fallback": "ALTITUDE" }
       ]

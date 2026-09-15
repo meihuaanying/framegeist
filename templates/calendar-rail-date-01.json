@@ -3,8 +3,8 @@
     "id": "calendar-rail-date-01",
     "name": "Side Rail Date",
     "nameI18n": { "zh": "右栏日历", "en": "Side Rail Date" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -44,24 +44,20 @@
       "color": "#D9D4C8"
     },
     {
-      "type": "text",
-      "id": "month",
+      "type": "calendar",
+      "id": "monthgrid",
       "anchor": "middle-right",
-      "offset": { "x": -0.05, "y": -0.065 },
-      "font": { "family": ["Inter"], "size": 0.014, "color": "#6B7280" },
-      "letterSpacing": 0.2,
-      "align": "right",
-      "content": [{ "expr": "date('MMM', exif.datetime)", "fallback": null }]
-    },
-    {
-      "type": "text",
-      "id": "weekday",
-      "anchor": "middle-right",
-      "offset": { "x": -0.05, "y": -0.105 },
-      "font": { "family": ["Noto Serif SC"], "size": 0.020, "color": "#373A40" },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [{ "expr": "exif.weekday_cn", "fallback": null }]
+      "offset": { "x": -0.03, "y": -0.17 },
+      "size": 0.14,
+      "dateSource": "exif",
+      "year": 2026,
+      "month": 9,
+      "showLunar": true,
+      "showWeekdays": true,
+      "view": "month",
+      "color": "#6B7280",
+      "accent": "#C8552B",
+      "fontFamily": ["Inter"]
     },
     {
       "type": "text",

@@ -43,6 +43,38 @@ export class Engine {
         return v1;
     }
     /**
+     * v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
+     * snapping guides). Photo bytes may be empty when `rgba` is provided.
+     * @param {Uint8Array} photo
+     * @param {string} template_json
+     * @param {string} overrides_json
+     * @returns {string}
+     */
+    layer_boxes(photo, template_json, overrides_json) {
+        let deferred5_0;
+        let deferred5_1;
+        try {
+            const ptr0 = passArray8ToWasm0(photo, wasm.__wbindgen_malloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(template_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            const ptr2 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len2 = WASM_VECTOR_LEN;
+            const ret = wasm.engine_layer_boxes(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2);
+            var ptr4 = ret[0];
+            var len4 = ret[1];
+            if (ret[3]) {
+                ptr4 = 0; len4 = 0;
+                throw takeFromExternrefTable0(ret[2]);
+            }
+            deferred5_0 = ptr4;
+            deferred5_1 = len4;
+            return getStringFromWasm0(ptr4, len4);
+        } finally {
+            wasm.__wbindgen_free(deferred5_0, deferred5_1, 1);
+        }
+    }
+    /**
      * Register an optional model-map override (PRD B5).
      * @param {Uint8Array} json
      */
@@ -145,6 +177,25 @@ export class Engine {
         const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len1 = WASM_VECTOR_LEN;
         const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * v0.5.0 free collage: absolute-positioned photo items.
+     * @param {Array<any>} photos
+     * @param {string} spec_json
+     * @param {string} format
+     * @param {boolean} preview
+     * @returns {Uint8Array}
+     */
+    render_free_collage(photos, spec_json, format, preview) {
+        const ptr0 = passStringToWasm0(spec_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_free_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

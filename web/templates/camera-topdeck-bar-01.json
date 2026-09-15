@@ -3,8 +3,8 @@
     "id": "camera-topdeck-bar-01",
     "name": "Top Deck Plate",
     "nameI18n": { "zh": "顶盖机身条", "en": "Top Deck Plate" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "camera"
@@ -50,7 +50,8 @@
       "offset": { "x": 0, "y": 0.936 },
       "shape": "line",
       "size": { "width": 1.0, "height": 0.0012 },
-      "color": "#DDD6C8"
+      "color": "#DDD6C8",
+      "autoHide": true
     },
     {
       "type": "text",

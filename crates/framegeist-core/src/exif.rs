@@ -22,6 +22,24 @@ pub struct ExifInfo {
     pub gps_lat: Option<f64>,
     pub gps_lon: Option<f64>,
     pub gps_alt: Option<f64>,
+    /// v0.5.0: best-effort Fujifilm recipe fields (MakerNote). Unknown values
+    /// stay `None` instead of being invented.
+    pub film_mode: Option<String>,
+    pub wb_mode: Option<String>,
+    pub wb_shift_r: Option<String>,
+    pub wb_shift_b: Option<String>,
+    pub grain: Option<String>,
+    pub color_chrome: Option<String>,
+    pub chrome_fx_blue: Option<String>,
+    pub dynamic_range: Option<String>,
+    pub highlight_tone: Option<String>,
+    pub shadow_tone: Option<String>,
+    pub fuji_sharpness: Option<String>,
+    pub fuji_saturation: Option<String>,
+    pub fuji_noise_reduction: Option<String>,
+    pub fuji_clarity: Option<String>,
+    pub fuji_lut1: Option<String>,
+    pub fuji_lut2: Option<String>,
 }
 
 fn format_dms(value: f64, positive: char, negative: char) -> String {
@@ -104,6 +122,23 @@ impl ExifInfo {
             "gps_alt" => self.gps_alt.map(|v| format!("{}m", v.round() as i64)),
             "weekday" => self.datetime.as_deref().and_then(weekday_en).map(String::from),
             "weekday_cn" => self.datetime.as_deref().and_then(weekday_cn).map(String::from),
+            // v0.5.0 Fujifilm recipe (best effort; None hides the line).
+            "film_mode" => self.film_mode.clone(),
+            "wb_mode" => self.wb_mode.clone(),
+            "wb_shift_r" => self.wb_shift_r.clone(),
+            "wb_shift_b" => self.wb_shift_b.clone(),
+            "grain" => self.grain.clone(),
+            "color_chrome" => self.color_chrome.clone(),
+            "chrome_fx_blue" => self.chrome_fx_blue.clone(),
+            "dynamic_range" => self.dynamic_range.clone(),
+            "highlight_tone" => self.highlight_tone.clone(),
+            "shadow_tone" => self.shadow_tone.clone(),
+            "fuji_sharpness" => self.fuji_sharpness.clone(),
+            "fuji_saturation" => self.fuji_saturation.clone(),
+            "fuji_nr" => self.fuji_noise_reduction.clone(),
+            "fuji_clarity" => self.fuji_clarity.clone(),
+            "fuji_lut1" => self.fuji_lut1.clone(),
+            "fuji_lut2" => self.fuji_lut2.clone(),
             _ => None,
         }
     }
@@ -217,6 +252,292 @@ fn prettify_model(model: &str) -> Option<&'static str> {
     }
 }
 
+fn shorten_option(c: &str) -> Option<String> {
+    let t = c.trim();
+    if t.is_empty() {
+        None
+    } else {
+        Some(t.to_string())
+    }
+}
+
+/// Best-effort Fujifilm MakerNote parser (v0.5.0 T2/§3.1). Only the
+/// well-documented recipe tags are mapped; unrecognized values are hidden
+/// rather than invented.
+fn parse_fuji(container: &exif::Exif, info: &mut ExifInfo) {
+    let is_fuji = info
+        .make
+        .as_deref()
+        .is_some_and(|m| m.to_ascii_lowercase().contains("fuji"));
+    if !is_fuji {
+        return;
+    }
+    let Some(bytes) = container
+        .fields()
+        .find(|f| f.tag.number() == 0x927C)
+        .and_then(|f| match &f.value {
+            exif::Value::Undefined(v, _) => Some(v.clone()),
+            _ => None,
+        })
+    else {
+        return;
+    };
+    if bytes.len() < 12 || &bytes[..8] != b"FUJIFILM" {
+        return;
+    }
+    let off = u32::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]]) as usize;
+    if off + 2 > bytes.len() {
+        return;
+    }
+    let ifd = &bytes[off..];
+    let count = u16::from_le_bytes([ifd[0], ifd[1]]) as usize;
+    let table = &ifd[2..];
+    let short_of = |tag: u16| -> Option<u16> {
+        for i in 0..count {
+            let e = table.get(i * 12..i * 12 + 12)?;
+            let t = u16::from_le_bytes([e[0], e[1]]);
+            if t != tag {
+                continue;
+            }
+            let typ = u16::from_le_bytes([e[2], e[3]]);
+            if typ != 3 {
+                return None;
+            }
+            return Some(u16::from_le_bytes([e[8], e[9]]));
+        }
+        None
+    };
+    let ascii_of = |tag: u16| -> Option<String> {
+        for i in 0..count {
+            let e = table.get(i * 12..i * 12 + 12)?;
+            let t = u16::from_le_bytes([e[0], e[1]]);
+            if t != tag {
+                continue;
+            }
+            let typ = u16::from_le_bytes([e[2], e[3]]);
+            let cnt = u32::from_le_bytes([e[4], e[5], e[6], e[7]]) as usize;
+            if typ != 2 || cnt == 0 || cnt > 256 {
+                return None;
+            }
+            let raw = if cnt <= 4 {
+                e[8..12].to_vec()
+            } else {
+                let start = off + u32::from_le_bytes([e[8], e[9], e[10], e[11]]) as usize;
+                bytes.get(start..start + cnt)?.to_vec()
+            };
+            return shorten_option(&String::from_utf8_lossy(&raw));
+        }
+        None
+    };
+    let shorts_of = |tag: u16| -> Option<(i16, i16)> {
+        for i in 0..count {
+            let e = table.get(i * 12..i * 12 + 12)?;
+            let t = u16::from_le_bytes([e[0], e[1]]);
+            if t != tag {
+                continue;
+            }
+            let typ = u16::from_le_bytes([e[2], e[3]]);
+            let cnt = u32::from_le_bytes([e[4], e[5], e[6], e[7]]);
+            if typ != 3 || cnt != 2 {
+                return None;
+            }
+            return Some((
+                i16::from_le_bytes([e[8], e[9]]),
+                i16::from_le_bytes([e[10], e[11]]),
+            ));
+        }
+        None
+    };
+    let i32_of = |tag: u16| -> Option<i32> {
+        for i in 0..count {
+            let e = table.get(i * 12..i * 12 + 12)?;
+            let t = u16::from_le_bytes([e[0], e[1]]);
+            if t != tag {
+                continue;
+            }
+            let typ = u16::from_le_bytes([e[2], e[3]]);
+            let cnt = u32::from_le_bytes([e[4], e[5], e[6], e[7]]);
+            if cnt != 1 {
+                return None;
+            }
+            return match typ {
+                3 => Some(u16::from_le_bytes([e[8], e[9]]) as i32),
+                8 => Some(i16::from_le_bytes([e[8], e[9]]) as i32),
+                9 => Some(i32::from_le_bytes([e[8], e[9], e[10], e[11]])),
+                _ => None,
+            };
+        }
+        None
+    };
+
+    info.film_mode = short_of(0x1401).and_then(|v| {
+        Some(match v {
+            0x000 => "Provia / Standard",
+            0x100 => "Studio Portrait",
+            0x110 => "Studio Portrait Enhanced",
+            0x120 => "Studio Portrait Smooth Skin",
+            0x130 => "Studio Portrait Sharp",
+            0x200 => "Velvia / Vivid",
+            0x300 => "Studio Portrait Ex",
+            0x400 => "Velvia",
+            0x500 => "Pro Neg. Std",
+            0x501 => "Pro Neg. Hi",
+            0x600 => "Classic Chrome",
+            0x700 => "Eterna",
+            0x800 => "Classic Negative",
+            0x900 => "Bleach Bypass",
+            0xa00 => "Nostalgic Neg",
+            0xb00 => "Reala ACE",
+            _ => return None,
+        }
+        .to_string())
+    });
+    info.wb_mode = short_of(0x1002).and_then(|v| {
+        Some(match v {
+            0x000 => "Auto",
+            0x100 => "Daylight",
+            0x200 => "Cloudy",
+            0x300 => "Daylight Fluorescent",
+            0x400 => "Day White Fluorescent",
+            0x500 => "White Fluorescent",
+            0x600 => "Incandescent",
+            0xf00 => "Custom",
+            0x1000 => "Kelvin",
+            _ => return None,
+        }
+        .to_string())
+    });
+    if let Some((r, b)) = shorts_of(0x100a) {
+        if r != 0 {
+            info.wb_shift_r = Some(format!("{r:+}"));
+        }
+        if b != 0 {
+            info.wb_shift_b = Some(format!("{b:+}"));
+        }
+    }
+    info.fuji_sharpness = short_of(0x1001).and_then(|v| {
+        Some(match v {
+            1 => "-2 (Softest)",
+            2 => "-1 (Soft)",
+            3 => "0 (Normal)",
+            4 => "+1 (Hard)",
+            5 => "+2 (Hardest)",
+            _ => return None,
+        }
+        .to_string())
+    });
+    info.fuji_saturation = short_of(0x1003).and_then(|v| {
+        Some(match v {
+            0 => "Normal",
+            0x80 => "Medium High",
+            0x100 => "High",
+            0x180 => "Medium Low",
+            0x200 => "Low",
+            0x300 => "B&W",
+            _ => return None,
+        }
+        .to_string())
+    });
+    info.dynamic_range = short_of(0x1402)
+        .and_then(|v| {
+            Some(
+                match v {
+                    0x000 => "Auto",
+                    0x100 => "DR100",
+                    0x200 => "DR200",
+                    0x300 => "DR400",
+                    0x400 => "DR800",
+                    0x800 => "Film Simulation",
+                    _ => return None,
+                }
+                .to_string(),
+            )
+        })
+        .or_else(|| ascii_of(0x1402));
+    let tone = |v: u16| -> Option<String> {
+        let signed = v as i16;
+        if !(-64..=64).contains(&signed) {
+            return None;
+        }
+        Some(format!("{:+.1}", signed as f64 / 16.0))
+    };
+    info.shadow_tone = short_of(0x1040).and_then(tone);
+    info.highlight_tone = short_of(0x1041).and_then(tone);
+    info.grain = short_of(0x1047).and_then(|v| {
+        Some(match v {
+            0 => "Off",
+            1 => "Weak",
+            2 => "Strong",
+            _ => return None,
+        }
+        .to_string())
+    });
+    info.color_chrome = short_of(0x1048).and_then(|v| {
+        Some(match v {
+            0 => "Off",
+            1 => "Weak",
+            2 => "Strong",
+            _ => return None,
+        }
+        .to_string())
+    });
+    info.chrome_fx_blue = short_of(0x1049).and_then(|v| {
+        Some(match v {
+            0 => "Off",
+            1 => "Weak",
+            2 => "Strong",
+            _ => return None,
+        }
+        .to_string())
+    });
+    // NoiseReduction: newer bodies carry 0x100e, older ones 0x100b. Values
+    // follow the ExifTool FujiFilm table; 0x100b's 0x100 ("n/a") stays hidden.
+    info.fuji_noise_reduction = short_of(0x100e)
+        .and_then(|v| {
+            Some(
+                match v {
+                    0x000 => "0 (normal)",
+                    0x100 => "+2 (strong)",
+                    0x180 => "+1 (medium strong)",
+                    0x1c0 => "+3 (very strong)",
+                    0x1e0 => "+4 (strongest)",
+                    0x200 => "-2 (weak)",
+                    0x280 => "-1 (medium weak)",
+                    0x2c0 => "-3 (very weak)",
+                    0x2e0 => "-4 (weakest)",
+                    _ => return None,
+                }
+                .to_string(),
+            )
+        })
+        .or_else(|| {
+            short_of(0x100b).and_then(|v| {
+                Some(
+                    match v {
+                        0x40 => "Low",
+                        0x80 => "Normal",
+                        _ => return None,
+                    }
+                    .to_string(),
+                )
+            })
+        });
+    // Clarity (0x100f): signed value in thousandths, -5..+5.
+    info.fuji_clarity = i32_of(0x100f).and_then(|v| {
+        if v % 1000 != 0 || !(-5000..=5000).contains(&v) {
+            return None;
+        }
+        Some(match v / 1000 {
+            0 => "0".to_string(),
+            n => format!("{n:+}"),
+        })
+    });
+    // LUT1 / LUT2 (+ transparency) have no Fujifilm MakerNote tag: ExifTool's
+    // FujiFilm table defines no LUT entries (LUT metadata is a Panasonic/Sony
+    // feature), and the captured fixture carries none, so `fuji_lut1` /
+    // `fuji_lut2` stay None instead of guessing a tag number.
+}
+
 pub fn probe_exif(photo: &[u8]) -> Result<ExifInfo> {
     let mut cursor = Cursor::new(photo);
     let container = match exif::Reader::new().read_from_container(&mut cursor) {
@@ -249,6 +570,7 @@ pub fn probe_exif(photo: &[u8]) -> Result<ExifInfo> {
     info.lens_slug = crate::brand::lens_slug(info.lens.as_deref());
     info.lens_series = crate::brand::lens_series(info.lens.as_deref());
     parse_gps(&container, &mut info);
+    parse_fuji(&container, &mut info);
     Ok(info)
 }
 

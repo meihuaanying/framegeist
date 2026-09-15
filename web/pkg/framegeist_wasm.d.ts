@@ -17,6 +17,11 @@ export class Engine {
      */
     font_families(): string[];
     /**
+     * v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
+     * snapping guides). Photo bytes may be empty when `rgba` is provided.
+     */
+    layer_boxes(photo: Uint8Array, template_json: string, overrides_json: string): string;
+    /**
      * Register an optional model-map override (PRD B5).
      */
     load_model_map(json: Uint8Array): void;
@@ -41,6 +46,10 @@ export class Engine {
      * Render a collage (PRD C5).
      */
     render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
+    /**
+     * v0.5.0 free collage: absolute-positioned photo items.
+     */
+    render_free_collage(photos: Array<any>, spec_json: string, format: string, preview: boolean): Uint8Array;
     /**
      * Raw-RGBA fast preview: caller pre-decoded/downscaled the photo;
      * `exif_bytes` may be empty (then no EXIF text/write-back).
@@ -67,12 +76,14 @@ export interface InitOutput {
     readonly engine_add_font: (a: number, b: number, c: number, d: number, e: number) => [number, number];
     readonly engine_clear_assets: (a: number) => void;
     readonly engine_font_families: (a: number) => [number, number];
+    readonly engine_layer_boxes: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
     readonly engine_load_model_map: (a: number, b: number, c: number) => [number, number];
     readonly engine_new: (a: number, b: number, c: number, d: number) => [number, number, number];
     readonly engine_probe_exif: (a: number, b: number, c: number) => [number, number, number, number];
     readonly engine_register_asset: (a: number, b: number, c: number, d: number, e: number) => void;
     readonly engine_render: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly engine_render_collage: (a: number, b: any, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
+    readonly engine_render_free_collage: (a: number, b: any, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
     readonly engine_render_raw: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number, m: number) => [number, number, number];
     readonly engine_render_with_overrides: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number, j: number, k: number, l: number) => [number, number, number];
     readonly engine_validate_template: (a: number, b: number, c: number) => [number, number];

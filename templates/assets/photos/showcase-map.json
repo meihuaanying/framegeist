@@ -1,0 +1,1686 @@
+{
+  "black-frame-charcoal-split-01": {
+    "file": "showcase/black-frame-charcoal-split-01.jpg",
+    "source": "picsum:884",
+    "author": "thomas shellberg",
+    "orientation": "landscape",
+    "luminance": 0.2072,
+    "saturation": 0.4671,
+    "sha256": "cbc4cff6bf7ec597c2c21db1ef06ef1b762d0eee6e39abf085537ab55fadadd9"
+  },
+  "black-frame-gold-line-01": {
+    "file": "showcase/black-frame-gold-line-01.jpg",
+    "source": "picsum:498",
+    "author": "Kim Daniel",
+    "orientation": "landscape",
+    "luminance": 0.2839,
+    "saturation": 0.5804,
+    "sha256": "43acaa3ade6e10c93dff65560f74cbc6131ca82910e39b5ee5026f3ca0f22ad4"
+  },
+  "black-frame-inner-rule-01": {
+    "file": "showcase/black-frame-inner-rule-01.jpg",
+    "source": "picsum:149",
+    "author": "Guillaume",
+    "orientation": "landscape",
+    "luminance": 0.1386,
+    "saturation": 0.7887,
+    "sha256": "2d7fd0c3fba7a40d25068892f65e8b734312bffd25dbc03bd901a132522dd6ba"
+  },
+  "black-frame-mono-slate-01": {
+    "file": "showcase/black-frame-mono-slate-01.jpg",
+    "source": "picsum:811",
+    "author": "Charles Yeager",
+    "orientation": "landscape",
+    "luminance": 0.2101,
+    "saturation": 0.4229,
+    "sha256": "d018a2ded8ada73bf610e027cb7b660656f1d9939d43271ad31612c27c6453a8"
+  },
+  "black-frame-side-stack-01": {
+    "file": "showcase/black-frame-side-stack-01.jpg",
+    "source": "picsum:878",
+    "author": "Richard Loader",
+    "orientation": "landscape",
+    "luminance": 0.2781,
+    "saturation": 0,
+    "sha256": "c106b8216409e9efc50aa57c278f50b25595cc84f842e8fef0cd968a7ae68186"
+  },
+  "black-frame-two-line-01": {
+    "file": "showcase/black-frame-two-line-01.jpg",
+    "source": "picsum:974",
+    "author": "Greg Rakozy",
+    "orientation": "landscape",
+    "luminance": 0.2262,
+    "saturation": 0.2912,
+    "sha256": "dadb4ec74b48b03431d9788e53c9de4a57a7d8541548f4af61c639a3df2fe59a"
+  },
+  "blur-bg-brandbar-02": {
+    "file": "showcase/blur-bg-brandbar-02.jpg",
+    "source": "picsum:983",
+    "author": "Padurariu Alexandru",
+    "orientation": "landscape",
+    "luminance": 0.0995,
+    "saturation": 0.2132,
+    "sha256": "47b1a3dec3ce77e8f931b3710be6cf938daed8c4e77c33896453a78d50816aa6"
+  },
+  "blur-bg-card-03": {
+    "file": "showcase/blur-bg-card-03.jpg",
+    "source": "picsum:891",
+    "author": "Oscar Keys",
+    "orientation": "landscape",
+    "luminance": 0.0551,
+    "saturation": 0.1174,
+    "sha256": "5ff57c801c39f544ac224bd30b246d3b8c7820044aa2895fb0a235077446b13e"
+  },
+  "blur-bg-center-01": {
+    "file": "showcase/blur-bg-center-01.jpg",
+    "source": "picsum:541",
+    "author": "Talia Cohen",
+    "orientation": "landscape",
+    "luminance": 0.1907,
+    "saturation": 0,
+    "sha256": "38d7e35627c5447b1a2f1fa5a8d95813a6d4c98e5f53744c7ce70ff45b8d127e"
+  },
+  "blur-bg-topcap-04": {
+    "file": "showcase/blur-bg-topcap-04.jpg",
+    "source": "picsum:325",
+    "author": "Dominik Martin",
+    "orientation": "landscape",
+    "luminance": 0.2608,
+    "saturation": 0.3919,
+    "sha256": "046cac44b4867687d6dc251a172ccaec4b8de99287a172ff33f1022a2c6a213d"
+  },
+  "borderless-center-caption-01": {
+    "file": "showcase/borderless-center-caption-01.jpg",
+    "source": "picsum:112",
+    "author": "Zugr",
+    "orientation": "landscape",
+    "luminance": 0.4965,
+    "saturation": 0.3739,
+    "sha256": "6bab621d100971b76e253f4ee240600284f1007a8db51469860392ae4330db9e"
+  },
+  "borderless-corner-stack-01": {
+    "file": "showcase/borderless-corner-stack-01.jpg",
+    "source": "picsum:159",
+    "author": "Shyamanta Baruah",
+    "orientation": "landscape",
+    "luminance": 0.484,
+    "saturation": 0.341,
+    "sha256": "c071296fb7422aee6f989ee288b85ea18480100830f3b27b7f508e162f22ed5d"
+  },
+  "borderless-date-hero-01": {
+    "file": "showcase/borderless-date-hero-01.jpg",
+    "source": "picsum:455",
+    "author": "Amanda Sandlin",
+    "orientation": "landscape",
+    "luminance": 0.5703,
+    "saturation": 0.1544,
+    "sha256": "a53af4de7c1b2ea853a303262f6ea719670e0b1e9743b6c32f46074ee4b6cf73"
+  },
+  "borderless-dot-corners-01": {
+    "file": "showcase/borderless-dot-corners-01.jpg",
+    "source": "picsum:1035",
+    "author": "Jared Erondu",
+    "orientation": "landscape",
+    "luminance": 0.566,
+    "saturation": 0.1799,
+    "sha256": "6aa17efd3274a8f5bfd9e51150ec11ba93683a64d32a5695ca6eba0e49effb82"
+  },
+  "borderless-geo-pin-01": {
+    "file": "showcase/borderless-geo-pin-01.jpg",
+    "source": "picsum:469",
+    "author": "Matthew Clark",
+    "orientation": "landscape",
+    "luminance": 0.5024,
+    "saturation": 0.3743,
+    "sha256": "abce832256f2053a096843e47007088c2a17e831109b78de04ee315f71c61814"
+  },
+  "borderless-lowleft-pair-01": {
+    "file": "showcase/borderless-lowleft-pair-01.jpg",
+    "source": "picsum:168",
+    "author": "Joeri Römer",
+    "orientation": "landscape",
+    "luminance": 0.4691,
+    "saturation": 0.225,
+    "sha256": "70c3da5e1283f47927fafaf6ffb306f59417d5d7b7ba460eaec86c5de2814499"
+  },
+  "borderless-one-liner-01": {
+    "file": "showcase/borderless-one-liner-01.jpg",
+    "source": "picsum:665",
+    "author": "Joshua Earle",
+    "orientation": "landscape",
+    "luminance": 0.5747,
+    "saturation": 0.1342,
+    "sha256": "6f4f1fd73b85c74eea2498b520856a5257f6e169f67d3257896a49371eac26fe"
+  },
+  "borderless-quad-anchors-01": {
+    "file": "showcase/borderless-quad-anchors-01.jpg",
+    "source": "picsum:815",
+    "author": "Mayur Gala",
+    "orientation": "landscape",
+    "luminance": 0.4386,
+    "saturation": 0.4268,
+    "sha256": "e4d5e5672f6580a09a799a4348a6e8c9af74c9b024905e9bcd22e4640f660f96"
+  },
+  "borderless-right-roll-01": {
+    "file": "showcase/borderless-right-roll-01.jpg",
+    "source": "picsum:527",
+    "author": "Jeff Sheldon",
+    "orientation": "landscape",
+    "luminance": 0.4936,
+    "saturation": 0.3256,
+    "sha256": "7cbf82b963d933d766dcf851faf222ed4a711b1b7dbdf67ec3b021e46d7ee6b0"
+  },
+  "borderless-signoff-block-01": {
+    "file": "showcase/borderless-signoff-block-01.jpg",
+    "source": "picsum:330",
+    "author": "Oisin Conolly",
+    "orientation": "landscape",
+    "luminance": 0.4937,
+    "saturation": 0.4864,
+    "sha256": "c9af89caf7995a0de53084df836df36ab20a3ac74e9b98752974f149e6e12e52"
+  },
+  "borderless-vertical-spine-01": {
+    "file": "showcase/borderless-vertical-spine-01.jpg",
+    "source": "picsum:925",
+    "author": "Patrick Fore",
+    "orientation": "landscape",
+    "luminance": 0.6045,
+    "saturation": 0.1096,
+    "sha256": "39e8316bed8f7b25a63c39adc37a9ad02745c0303d29d29e704e9f2db2119684"
+  },
+  "calendar-center-rule-01": {
+    "file": "showcase/calendar-center-rule-01.jpg",
+    "source": "picsum:735",
+    "author": "wyman H",
+    "orientation": "portrait",
+    "luminance": 0.5059,
+    "saturation": 0.0903,
+    "sha256": "a9a96e8b807b2b29c4a3dc8fe89a5fceeea057f26e79a6eb33119e54b3e1108d"
+  },
+  "calendar-corner-day-01": {
+    "file": "showcase/calendar-corner-day-01.jpg",
+    "source": "picsum:736",
+    "author": "Ben Dumond",
+    "orientation": "portrait",
+    "luminance": 0.5163,
+    "saturation": 0.218,
+    "sha256": "78367de2bd58c443a03334cd06e0b316d5d05d811f8026f8088a6fe707b6eb65"
+  },
+  "calendar-portrait-stack-01": {
+    "file": "showcase/calendar-portrait-stack-01.jpg",
+    "source": "picsum:35",
+    "author": "Shane Colella",
+    "orientation": "portrait",
+    "luminance": 0.5631,
+    "saturation": 0.4359,
+    "sha256": "2ced9356873cdfc495eef9a43a459326312b96ccd18c130872e0a80fc34ea510"
+  },
+  "calendar-rail-date-01": {
+    "file": "showcase/calendar-rail-date-01.jpg",
+    "source": "picsum:75",
+    "author": "Jassy Onyae",
+    "orientation": "portrait",
+    "luminance": 0.5187,
+    "saturation": 0.2884,
+    "sha256": "8db7b569fec1afa76feb10b553408cc60a79d0be673ef890f75bcaefc834672d"
+  },
+  "calendar-split-columns-01": {
+    "file": "showcase/calendar-split-columns-01.jpg",
+    "source": "picsum:1065",
+    "author": "Bertrand Zuchuat",
+    "orientation": "portrait",
+    "luminance": 0.3572,
+    "saturation": 0.2351,
+    "sha256": "f3ae3476c85114eab87533d3a34570fa131e0c6fb6970a8fbbc2d946b7d706a5"
+  },
+  "calendar-strip-date-01": {
+    "file": "showcase/calendar-strip-date-01.jpg",
+    "source": "picsum:978",
+    "author": "María Victoria Heredia Reyes",
+    "orientation": "portrait",
+    "luminance": 0.5004,
+    "saturation": 0.0997,
+    "sha256": "c4c0fed649d98c62d29e49e234da5e388fef8433ace3d002381a2206b2b1d2f9"
+  },
+  "camera-corner-body-03": {
+    "file": "showcase/camera-corner-body-03.jpg",
+    "source": "picsum:580",
+    "author": "Christopher Skor",
+    "orientation": "landscape",
+    "luminance": 0.5296,
+    "saturation": 0.5547,
+    "sha256": "291757da6baf6c6c0f38e2636aee848a18174504c5475db30ac02d3cceea49d0"
+  },
+  "camera-lens-dial-06": {
+    "file": "showcase/camera-lens-dial-06.jpg",
+    "source": "picsum:142",
+    "author": "Vadim Sherbakov",
+    "orientation": "landscape",
+    "luminance": 0.4603,
+    "saturation": 0.243,
+    "sha256": "e7ee4f2b4b9483d48d5b07d9ae63484d34fabaf6669d0a9d31f9812e699adaa3"
+  },
+  "camera-retro-sidecar-04": {
+    "file": "showcase/camera-retro-sidecar-04.jpg",
+    "source": "picsum:344",
+    "author": "Alex Gindin",
+    "orientation": "landscape",
+    "luminance": 0.6111,
+    "saturation": 0.3227,
+    "sha256": "44af9aa3853927919ddee04a2d3913c08ab78339e03c9ffafa90369db0b18753"
+  },
+  "camera-ricoh-slimline-08": {
+    "file": "showcase/camera-ricoh-slimline-08.jpg",
+    "source": "picsum:419",
+    "author": "POR7O",
+    "orientation": "landscape",
+    "luminance": 0.4209,
+    "saturation": 0.508,
+    "sha256": "65e955064180eca8fde38a763f1edb80842618ab10a66dfed450ab22afa2f282"
+  },
+  "camera-series-emblem-07": {
+    "file": "showcase/camera-series-emblem-07.jpg",
+    "source": "picsum:98",
+    "author": "Laurice Solomon",
+    "orientation": "landscape",
+    "luminance": 0.4773,
+    "saturation": 0.1983,
+    "sha256": "76f08ea5076dd8be8535ca55656666699c0b20228f382938477c0f919080b2fd"
+  },
+  "camera-stencil-mono-05": {
+    "file": "showcase/camera-stencil-mono-05.jpg",
+    "source": "picsum:977",
+    "author": "Manuel Barroso Parejo",
+    "orientation": "landscape",
+    "luminance": 0.5375,
+    "saturation": 0.5517,
+    "sha256": "e0f2a6bd2c862c22b53fc27f95385b6934fffbabd5c7810bea40bfd982ffd5c4"
+  },
+  "camera-topdeck-bar-01": {
+    "file": "showcase/camera-topdeck-bar-01.jpg",
+    "source": "picsum:418",
+    "author": "Björn Simon",
+    "orientation": "landscape",
+    "luminance": 0.4829,
+    "saturation": 0.0906,
+    "sha256": "05a6f289a604e8320801fa1ef562a434feaae3175b0913b0c9d38a286021f1da"
+  },
+  "classic-watermark-black-bar": {
+    "file": "showcase/classic-watermark-black-bar.jpg",
+    "source": "picsum:635",
+    "author": "André Freitas",
+    "orientation": "landscape",
+    "luminance": 0.4451,
+    "saturation": 0.3562,
+    "sha256": "5ae24ac02e7c292140c39b157aded02945e4714a3953b3bb53593e3403cba44a"
+  },
+  "classic-watermark-brand-center": {
+    "file": "showcase/classic-watermark-brand-center.jpg",
+    "source": "picsum:646",
+    "author": "Morgan Sessions",
+    "orientation": "landscape",
+    "luminance": 0.5267,
+    "saturation": 0.3654,
+    "sha256": "359912dcbc2c388652903ecab3f21aa87e637b7a8061c2f14daef2502c543163"
+  },
+  "classic-watermark-date-right": {
+    "file": "showcase/classic-watermark-date-right.jpg",
+    "source": "picsum:111",
+    "author": "Gabe Rodriguez",
+    "orientation": "landscape",
+    "luminance": 0.4374,
+    "saturation": 0.2431,
+    "sha256": "0742ec54aeece740bda057ba412aa8ade6cc7cd9d234f56c8b55a5cb2f31965a"
+  },
+  "classic-watermark-double-row": {
+    "file": "showcase/classic-watermark-double-row.jpg",
+    "source": "picsum:650",
+    "author": "Lou Levit",
+    "orientation": "landscape",
+    "luminance": 0.4235,
+    "saturation": 0.1045,
+    "sha256": "cf3aff11a78b7c9f5f0939003ddafcc03da2fef23bac7da0cc74debc65fb00de"
+  },
+  "classic-watermark-hairline-thin": {
+    "file": "showcase/classic-watermark-hairline-thin.jpg",
+    "source": "picsum:248",
+    "author": "Oliver Pacas",
+    "orientation": "landscape",
+    "luminance": 0.6025,
+    "saturation": 0.2643,
+    "sha256": "87cde9e001aa4c63e50156d73014d21da36a1be5c7e3cb900a794b6317abb404"
+  },
+  "classic-watermark-mono-stack": {
+    "file": "showcase/classic-watermark-mono-stack.jpg",
+    "source": "picsum:448",
+    "author": "Gabriel Santiago",
+    "orientation": "landscape",
+    "luminance": 0.5335,
+    "saturation": 0.1598,
+    "sha256": "ada54102bbe18effdb5b79b5c9fe5d53b151b680c966df6d3b08d49bde03c2e8"
+  },
+  "classic-watermark-red-dot": {
+    "file": "showcase/classic-watermark-red-dot.jpg",
+    "source": "picsum:622",
+    "author": "Rúben dos Santos",
+    "orientation": "landscape",
+    "luminance": 0.4237,
+    "saturation": 0.2784,
+    "sha256": "7019f4f9a66682834c70877b96686ada81d10c4b293e4dd314fbcefcec34d3e0"
+  },
+  "classic-watermark-single-row": {
+    "file": "showcase/classic-watermark-single-row.jpg",
+    "source": "picsum:225",
+    "author": "Vee O",
+    "orientation": "landscape",
+    "luminance": 0.4972,
+    "saturation": 0.2302,
+    "sha256": "ea66782d99ca2394606cc9badf80e842bb8acacef7b8a0a5bd3c6abf1fa6624a"
+  },
+  "colorcard-column-02": {
+    "file": "showcase/colorcard-column-02.jpg",
+    "source": "picsum:221",
+    "author": "Todd Quackenbush",
+    "orientation": "landscape",
+    "luminance": 0.2886,
+    "saturation": 0.566,
+    "sha256": "e3f404f6f39eb9ad81c798c3c4afae11c6f807d3dd19017e9582c8b821e4a15e"
+  },
+  "colorcard-cream-date-04": {
+    "file": "showcase/colorcard-cream-date-04.jpg",
+    "source": "picsum:875",
+    "author": "Raining Huang",
+    "orientation": "landscape",
+    "luminance": 0.3884,
+    "saturation": 0.7579,
+    "sha256": "e814e75608a775f8994f2e6974257b5a67a97e04b08a44f1fb53a90caa7e1cc5"
+  },
+  "colorcard-diamonds-03": {
+    "file": "showcase/colorcard-diamonds-03.jpg",
+    "source": "picsum:477",
+    "author": "Jasper van der Meij",
+    "orientation": "landscape",
+    "luminance": 0.3581,
+    "saturation": 0.4895,
+    "sha256": "9eaaa4ab95af9370156bf19e3e80a2a50db9a41f1e3cc0538fb96c043449da5e"
+  },
+  "colorcard-index-05": {
+    "file": "showcase/colorcard-index-05.jpg",
+    "source": "picsum:553",
+    "author": "Rula Sibai",
+    "orientation": "landscape",
+    "luminance": 0.2656,
+    "saturation": 0.8601,
+    "sha256": "6b0fd0a00d29d3efc96fa62143db119ba4e29370934cd1ac31417ac05641f445"
+  },
+  "colorcard-sunrise-chips-01": {
+    "file": "showcase/colorcard-sunrise-chips-01.jpg",
+    "source": "picsum:503",
+    "author": "Ramiro Checchi",
+    "orientation": "landscape",
+    "luminance": 0.379,
+    "saturation": 0.749,
+    "sha256": "41dcb8da481f473d12a75513d661f6bc5148d1165f7307c8a6e67d0cdd655b6d"
+  },
+  "colorcard-tint-chips-01": {
+    "file": "showcase/colorcard-tint-chips-01.jpg",
+    "source": "picsum:431",
+    "author": "Carli Jean",
+    "orientation": "landscape",
+    "luminance": 0.272,
+    "saturation": 0.6225,
+    "sha256": "e12234c645a448ee5dd1b7d4e2496b2b0e411390917db4e8e12fded55cb664b2"
+  },
+  "colorful-corner-blocks-01": {
+    "file": "showcase/colorful-corner-blocks-01.jpg",
+    "source": "picsum:89",
+    "author": "Vectorbeast",
+    "orientation": "landscape",
+    "luminance": 0.3319,
+    "saturation": 0.4875,
+    "sha256": "92fc0bf75c2cce6836219594b7e3cdb224793330476d64cb05e98fe11aa88036"
+  },
+  "colorful-dot-cluster-01": {
+    "file": "showcase/colorful-dot-cluster-01.jpg",
+    "source": "picsum:1069",
+    "author": "Marat Gilyadzinov",
+    "orientation": "landscape",
+    "luminance": 0.2733,
+    "saturation": 0.9562,
+    "sha256": "dc2addefe8c6350dc11c326b83a639a8fa436026e6354e51fd53701b7a4930b6"
+  },
+  "colorful-frame-quad-01": {
+    "file": "showcase/colorful-frame-quad-01.jpg",
+    "source": "picsum:1022",
+    "author": "Vashishtha Jogi",
+    "orientation": "landscape",
+    "luminance": 0.2136,
+    "saturation": 0.894,
+    "sha256": "e94b40b99992d7592b523b886666f9746605e78292b8339cc6ccd9982ecbaf04"
+  },
+  "colorful-pastel-card-01": {
+    "file": "showcase/colorful-pastel-card-01.jpg",
+    "source": "picsum:505",
+    "author": "lee Scott",
+    "orientation": "landscape",
+    "luminance": 0.2674,
+    "saturation": 0.6344,
+    "sha256": "1f8bad907f0bc90510109eee3b3567773cd4eb7a0b84eb828a35dad3d2797742"
+  },
+  "colorful-rainbow-lines-01": {
+    "file": "showcase/colorful-rainbow-lines-01.jpg",
+    "source": "picsum:871",
+    "author": "Stefan Kunze",
+    "orientation": "landscape",
+    "luminance": 0.3592,
+    "saturation": 0.5462,
+    "sha256": "f32f2e22b65427f8a7ef01c275f5ee08f17b24c3fd669f5b9461db19f6f9670b"
+  },
+  "colorful-split-duo-01": {
+    "file": "showcase/colorful-split-duo-01.jpg",
+    "source": "picsum:984",
+    "author": "Sylvain Guiheneuc",
+    "orientation": "landscape",
+    "luminance": 0.3505,
+    "saturation": 0.4828,
+    "sha256": "97125975ea773fc796a611267a83c6df7306e9fdd549199b9911c2e64d769bfb"
+  },
+  "colorful-sticker-date-01": {
+    "file": "showcase/colorful-sticker-date-01.jpg",
+    "source": "picsum:320",
+    "author": "Danka & Peter",
+    "orientation": "landscape",
+    "luminance": 0.263,
+    "saturation": 0.555,
+    "sha256": "b1f7037724cdc4dd92dfdf5fd856d6eefb925a949e236e657146e42a5b176007"
+  },
+  "colorwalk-ribbon-01": {
+    "file": "showcase/colorwalk-ribbon-01.jpg",
+    "source": "picsum:328",
+    "author": "Nathalie Gouzée",
+    "orientation": "landscape",
+    "luminance": 0.5948,
+    "saturation": 0.4079,
+    "sha256": "7c89dde84d711a5d87a98dc083f11dbc9289f0b1fdebe36ccc80472210e1febd"
+  },
+  "colorwalk-round-card-01": {
+    "file": "showcase/colorwalk-round-card-01.jpg",
+    "source": "picsum:165",
+    "author": "Linh Nguyen",
+    "orientation": "landscape",
+    "luminance": 0.5136,
+    "saturation": 0.6742,
+    "sha256": "3e3b120fe4d12a4697f57076be53d680eff988cc62effc86886e3680204a138d"
+  },
+  "colorwalk-single-line-01": {
+    "file": "showcase/colorwalk-single-line-01.jpg",
+    "source": "picsum:979",
+    "author": "Jean-Marie Grange",
+    "orientation": "landscape",
+    "luminance": 0.4574,
+    "saturation": 0.3321,
+    "sha256": "09a337047189d98b2774b3858f6e39ac9e270d64960fce1a854700167d3ad558"
+  },
+  "colorwalk-tint-seam-01": {
+    "file": "showcase/colorwalk-tint-seam-01.jpg",
+    "source": "picsum:197",
+    "author": "Kholodnitskiy Maksim",
+    "orientation": "landscape",
+    "luminance": 0.5609,
+    "saturation": 0.3291,
+    "sha256": "5d9f462488ddf396b92fd12fb5b47a78e66c2763bef46eb2309328867bd79aba"
+  },
+  "colorwalk-top-field-01": {
+    "file": "showcase/colorwalk-top-field-01.jpg",
+    "source": "picsum:689",
+    "author": "Tim Mossholder",
+    "orientation": "landscape",
+    "luminance": 0.4551,
+    "saturation": 0.2613,
+    "sha256": "aee451265d80997f1fbaa8d4cc16b6b374748cdcfde4781649c817248196f302"
+  },
+  "colorwalk-vbar-01": {
+    "file": "showcase/colorwalk-vbar-01.jpg",
+    "source": "picsum:998",
+    "author": "Joanna Kosinska",
+    "orientation": "landscape",
+    "luminance": 0.4512,
+    "saturation": 0.3197,
+    "sha256": "b7b3d974c70b505cd48b23353e1839af0ea2afc268cbe6300201f44261560440"
+  },
+  "colorwalk-verse-01": {
+    "file": "showcase/colorwalk-verse-01.jpg",
+    "source": "picsum:985",
+    "author": "Hide Obara",
+    "orientation": "landscape",
+    "luminance": 0.4117,
+    "saturation": 0.2209,
+    "sha256": "edb279e65d7a4569276068519ade1231f2bb4189c9fce11666f22ce2de1c89bb"
+  },
+  "drone-altitude-hero-01": {
+    "file": "showcase/drone-altitude-hero-01.jpg",
+    "source": "picsum:1041",
+    "author": "Tim Marshall",
+    "orientation": "landscape",
+    "luminance": 0.4391,
+    "saturation": 0.6276,
+    "sha256": "e3efd450533e0b706f6efaffb2d2aa51dbbc68af063726a3dc4ae1f4a71914e3"
+  },
+  "drone-geoblock-01": {
+    "file": "showcase/drone-geoblock-01.jpg",
+    "source": "picsum:904",
+    "author": "Matteo Paganelli",
+    "orientation": "landscape",
+    "luminance": 0.4185,
+    "saturation": 0.2455,
+    "sha256": "0c09992d7e4ef3a5af3bed8e7f2413ab16adf60c049624bfc8cef57036998b19"
+  },
+  "drone-skybar-01": {
+    "file": "showcase/drone-skybar-01.jpg",
+    "source": "picsum:961",
+    "author": "Sven Scheuermeier",
+    "orientation": "landscape",
+    "luminance": 0.438,
+    "saturation": 0.2107,
+    "sha256": "21be9ebc7c0beaac29c103f946ac1c15cde990378d18bd4308e9053707c87df2"
+  },
+  "drone-topline-01": {
+    "file": "showcase/drone-topline-01.jpg",
+    "source": "picsum:45",
+    "author": "Alan Haverty",
+    "orientation": "landscape",
+    "luminance": 0.474,
+    "saturation": 0.4414,
+    "sha256": "ce8c5eed56cd9de08f48fc384c1bb81549c3ae9c7ebf7da21556879b519cb945"
+  },
+  "effect-float-card-01": {
+    "file": "showcase/effect-float-card-01.jpg",
+    "source": "picsum:795",
+    "author": "Micah. H",
+    "orientation": "landscape",
+    "luminance": 0.253,
+    "saturation": 0.1664,
+    "sha256": "344877d2238523897f59a26db7b2f74aa8d1632759bc478c250e3b842ff93a54"
+  },
+  "effect-minimal-shadow-08": {
+    "file": "showcase/effect-minimal-shadow-08.jpg",
+    "source": "picsum:903",
+    "author": "Greg Rakozy",
+    "orientation": "landscape",
+    "luminance": 0.2089,
+    "saturation": 0.4178,
+    "sha256": "b01fe2779a073f35ef7717abdad6967cd2f64b5ee18e021c262e12b7c8a2a056"
+  },
+  "effect-mirror-pool-02": {
+    "file": "showcase/effect-mirror-pool-02.jpg",
+    "source": "picsum:571",
+    "author": "Ales Krivec",
+    "orientation": "landscape",
+    "luminance": 0.2752,
+    "saturation": 0.1629,
+    "sha256": "7b9dcbf1827693ace121ca8d596ca323dc55376e4eba69777b94340c7168822c"
+  },
+  "effect-paper-stack-05": {
+    "file": "showcase/effect-paper-stack-05.jpg",
+    "source": "picsum:564",
+    "author": "Sebastian Boguszewicz",
+    "orientation": "landscape",
+    "luminance": 0.2275,
+    "saturation": 0.7315,
+    "sha256": "f1903f24e4cfbe8b3a784309f643d139b4cb1fcf4200988bca41f3e43ce429c2"
+  },
+  "effect-polaroid-float-06": {
+    "file": "showcase/effect-polaroid-float-06.jpg",
+    "source": "picsum:1074",
+    "author": "Samuel Scrimshaw",
+    "orientation": "landscape",
+    "luminance": 0.2236,
+    "saturation": 0.1516,
+    "sha256": "0477461ca1be2f40b08fcfe8246760031933ff1a3b45c36046ac637a473b256a"
+  },
+  "effect-top-gradient-band-07": {
+    "file": "showcase/effect-top-gradient-band-07.jpg",
+    "source": "picsum:187",
+    "author": "Andre Koch",
+    "orientation": "landscape",
+    "luminance": 0.285,
+    "saturation": 0.1824,
+    "sha256": "ab74d39abac4501d2649e6cc9156dfbd2cdbbf235064c3ebfcaf87a601d1a0d2"
+  },
+  "effect-vignette-card-04": {
+    "file": "showcase/effect-vignette-card-04.jpg",
+    "source": "picsum:831",
+    "author": "Luke Pamer",
+    "orientation": "landscape",
+    "luminance": 0.0583,
+    "saturation": 0.8802,
+    "sha256": "903592424b1b4eeedae2e8734e4d71f8b2c1c9c5e2c3889d4101cb0f5870ad42"
+  },
+  "festival-dragon-boat-01": {
+    "file": "showcase/festival-dragon-boat-01.jpg",
+    "source": "picsum:896",
+    "author": "Jenna Beekhuis",
+    "orientation": "landscape",
+    "luminance": 0.3242,
+    "saturation": 0.6449,
+    "sha256": "089513b2565a9e6cf3de7a614f46496705b3f52175db622f0c23cfffe621cc96"
+  },
+  "festival-gold-frame-01": {
+    "file": "showcase/festival-gold-frame-01.jpg",
+    "source": "picsum:1039",
+    "author": "Andrew Coelho",
+    "orientation": "landscape",
+    "luminance": 0.3391,
+    "saturation": 0.4623,
+    "sha256": "90200a6603bc51a28a470b02ab92288c3bebbafd132891cb1cf0318b3c37cbe5"
+  },
+  "festival-lantern-night-01": {
+    "file": "showcase/festival-lantern-night-01.jpg",
+    "source": "picsum:900",
+    "author": "Todd DeSantis",
+    "orientation": "landscape",
+    "luminance": 0.3882,
+    "saturation": 0.6739,
+    "sha256": "b64a304782c5d3f8c958bbf135bac7ebca562fa5e567312b0a336b0949fc8e64"
+  },
+  "festival-lantern-warm-01": {
+    "file": "showcase/festival-lantern-warm-01.jpg",
+    "source": "picsum:845",
+    "author": "Rafael Leão",
+    "orientation": "landscape",
+    "luminance": 0.2731,
+    "saturation": 0.5456,
+    "sha256": "1f0cb5b24faf4357f44e6369515b889d526d8c823d3f49b65c4b4e9d2c09dccc"
+  },
+  "festival-moon-full-01": {
+    "file": "showcase/festival-moon-full-01.jpg",
+    "source": "picsum:848",
+    "author": "Stefanus Martanto Setyo Husodo",
+    "orientation": "landscape",
+    "luminance": 0.256,
+    "saturation": 0.9893,
+    "sha256": "1dbb264fda7c799bffb8f3f4c5f308b0285da57e9e8464c5a51194254432ba5e"
+  },
+  "festival-spring-gold-01": {
+    "file": "showcase/festival-spring-gold-01.jpg",
+    "source": "picsum:413",
+    "author": "Lukasz Szmigiel",
+    "orientation": "landscape",
+    "luminance": 0.3214,
+    "saturation": 0.786,
+    "sha256": "7490233008b0bfd998b8ccc381439a578d59bf50990a35bae8ce21278bf6ed52"
+  },
+  "film-darkroom-pillar-03": {
+    "file": "showcase/film-darkroom-pillar-03.jpg",
+    "source": "picsum:992",
+    "author": "Elliott Engelmann",
+    "orientation": "landscape",
+    "luminance": 0.1217,
+    "saturation": 0.3025,
+    "sha256": "ba0d8a97f31e0f118f5d48310b41934fd0c714a4f4675f1689617f6f15ef349c"
+  },
+  "film-diptych-hairline-07": {
+    "file": "showcase/film-diptych-hairline-07.jpg",
+    "source": "picsum:766",
+    "author": "Padurariu Alexandru",
+    "orientation": "landscape",
+    "luminance": 0.2291,
+    "saturation": 0.3667,
+    "sha256": "0ef6fe30967d357629a3e3921570d5070b842b70697cf1ecf5f9a7b015ca0015"
+  },
+  "film-led-datestamp-04": {
+    "file": "showcase/film-led-datestamp-04.jpg",
+    "source": "picsum:969",
+    "author": "Lee Miller",
+    "orientation": "landscape",
+    "luminance": 0.2841,
+    "saturation": 0.1006,
+    "sha256": "c8945af6f7f336a27c9c3464b269cb475bc6cf76b70b484035a87d51ea0bd7ab"
+  },
+  "film-mono-roll-06": {
+    "file": "showcase/film-mono-roll-06.jpg",
+    "source": "picsum:769",
+    "author": "Blake Richard Verdoorn",
+    "orientation": "landscape",
+    "luminance": 0.2313,
+    "saturation": 0.4457,
+    "sha256": "53b75418c3f7696eefa025ee868759e9fead660baa9b3bfb49afb3079320b23c"
+  },
+  "film-positive-print-08": {
+    "file": "showcase/film-positive-print-08.jpg",
+    "source": "picsum:560",
+    "author": "Ales Krivec",
+    "orientation": "landscape",
+    "luminance": 0.2394,
+    "saturation": 0.3939,
+    "sha256": "24bf516a6cb967cf214bb53cbe8912a8b416b7be714f1ca3b4f279256a9e674d"
+  },
+  "film-serif-stock-05": {
+    "file": "showcase/film-serif-stock-05.jpg",
+    "source": "picsum:999",
+    "author": "Annie Spratt",
+    "orientation": "landscape",
+    "luminance": 0.2153,
+    "saturation": 0.2791,
+    "sha256": "8da87e62270a22fa1ffdaa92043b95763a916750d75b85f753d00f03aedf67d6"
+  },
+  "film-sprocket-01": {
+    "file": "showcase/film-sprocket-01.jpg",
+    "source": "picsum:491",
+    "author": "Todd Quackenbush",
+    "orientation": "landscape",
+    "luminance": 0.2633,
+    "saturation": 0.453,
+    "sha256": "717106d63e1fbd27ca5c5ef1d029f8ca1a0d24930708bbe66ed99762021a1ea8"
+  },
+  "film-sprocket-02": {
+    "file": "showcase/film-sprocket-02.jpg",
+    "source": "picsum:208",
+    "author": "Martin Wessely",
+    "orientation": "landscape",
+    "luminance": 0.2436,
+    "saturation": 0.451,
+    "sha256": "8a5a1da2e9b6fb8e7b3596c772651a684aff18b9a179d1b1927733103aa9c73f"
+  },
+  "fuji-recipe-column-03": {
+    "file": "showcase/fuji-recipe-column-03.jpg",
+    "source": "picsum:1059",
+    "author": "Clark Street Mercantile",
+    "orientation": "landscape",
+    "luminance": 0.389,
+    "saturation": 0.2888,
+    "sha256": "5139c9a9f953a6e436e7bbfdec3783db1092fecf549a378c49d1f6177180b536"
+  },
+  "fuji-recipe-hero-04": {
+    "file": "showcase/fuji-recipe-hero-04.jpg",
+    "source": "picsum:406",
+    "author": "Roland Batke-Mutschler",
+    "orientation": "landscape",
+    "luminance": 0.5694,
+    "saturation": 0.1993,
+    "sha256": "33be13d788bc54055703791975e93798ce26697c70f694b023e740c6c045c791"
+  },
+  "fuji-recipe-panel-01": {
+    "file": "showcase/fuji-recipe-panel-01.jpg",
+    "source": "picsum:259",
+    "author": "Namphuong Van",
+    "orientation": "landscape",
+    "luminance": 0.5991,
+    "saturation": 0.175,
+    "sha256": "dabdf34bc473085a7f7a18f41e0c70cca17d81d7e66e94d2ca55400f429c098c"
+  },
+  "fuji-recipe-rails-05": {
+    "file": "showcase/fuji-recipe-rails-05.jpg",
+    "source": "picsum:946",
+    "author": "Padurariu Alexandru",
+    "orientation": "landscape",
+    "luminance": 0.5572,
+    "saturation": 0.3912,
+    "sha256": "5e97b05e6ddd9b2d287c06e9a00bfe656acc6c9cf7d41841f4a2eaedbe45a280"
+  },
+  "game-arknights-v1": {
+    "file": "showcase/game-arknights-v1.jpg",
+    "source": "picsum:204",
+    "author": "Tiago Gerken",
+    "orientation": "landscape",
+    "luminance": 0.4115,
+    "saturation": 0.3922,
+    "sha256": "295c9771657c169ec63191ba40550f4a6ca55c7960dd209a40dfa46e081d6992"
+  },
+  "game-arknights-v2": {
+    "file": "showcase/game-arknights-v2.jpg",
+    "source": "picsum:675",
+    "author": "Barn Images",
+    "orientation": "landscape",
+    "luminance": 0.3985,
+    "saturation": 0.1679,
+    "sha256": "78d0345e2ed355fcd90371638602bb36c1e5974cab90921f6867c0e74833698f"
+  },
+  "game-arknights-v3": {
+    "file": "showcase/game-arknights-v3.jpg",
+    "source": "picsum:705",
+    "author": "Breno Machado",
+    "orientation": "landscape",
+    "luminance": 0.5207,
+    "saturation": 0.4457,
+    "sha256": "aac53c92acd38021110472ab3096139695a57cb558d4af8410a7d4b1300c5b39"
+  },
+  "game-genshin-v1": {
+    "file": "showcase/game-genshin-v1.jpg",
+    "source": "picsum:206",
+    "author": "Philipp Reiner",
+    "orientation": "landscape",
+    "luminance": 0.5228,
+    "saturation": 0.481,
+    "sha256": "18b99c0bc5b15c98ce2a19e38577a8a9d4a6645612c6d189204e4e449bc4bc3c"
+  },
+  "game-genshin-v2": {
+    "file": "showcase/game-genshin-v2.jpg",
+    "source": "picsum:390",
+    "author": "Brooklyn Morgan",
+    "orientation": "landscape",
+    "luminance": 0.5381,
+    "saturation": 0.2004,
+    "sha256": "ac7c45364db176f3d380e0797cf655e2d7122496381c8960966a49e33ea73114"
+  },
+  "game-genshin-v3": {
+    "file": "showcase/game-genshin-v3.jpg",
+    "source": "picsum:743",
+    "author": "Anthony DELANOIX",
+    "orientation": "landscape",
+    "luminance": 0.5376,
+    "saturation": 0.2628,
+    "sha256": "01c53887531f0cd0b360347b9298866673236868b607293fc069633bc9eee9ba"
+  },
+  "game-honkai-v1": {
+    "file": "showcase/game-honkai-v1.jpg",
+    "source": "picsum:305",
+    "author": "Dominik Martin",
+    "orientation": "landscape",
+    "luminance": 0.6053,
+    "saturation": 0.1708,
+    "sha256": "a526f0622e1377175b8bda7b0da022b6d142546bb3eb2a704d2a7c84ed247bd0"
+  },
+  "game-honkai-v2": {
+    "file": "showcase/game-honkai-v2.jpg",
+    "source": "picsum:233",
+    "author": "Francisco Casero",
+    "orientation": "landscape",
+    "luminance": 0.4295,
+    "saturation": 0.2603,
+    "sha256": "76e7a8d1cc37f2eb85f4d0c0f334f1491497f4f4c5e6e1505abc5808ab98ea38"
+  },
+  "game-honkai-v3": {
+    "file": "showcase/game-honkai-v3.jpg",
+    "source": "picsum:586",
+    "author": "Marco Bonomo",
+    "orientation": "landscape",
+    "luminance": 0.4936,
+    "saturation": 0.3269,
+    "sha256": "3cc6706c4112a3a5d634e251019187b0d47e16680f2ed008ad99f3770453fbb6"
+  },
+  "game-wukong-v1": {
+    "file": "showcase/game-wukong-v1.jpg",
+    "source": "picsum:471",
+    "author": "Brownie",
+    "orientation": "landscape",
+    "luminance": 0.4298,
+    "saturation": 0.3461,
+    "sha256": "23c21da5dfaf6025b647ad10720d704a1666e03f54ab43e149f1af0b1424ac2c"
+  },
+  "game-wukong-v2": {
+    "file": "showcase/game-wukong-v2.jpg",
+    "source": "picsum:694",
+    "author": "Matthew Wiebe",
+    "orientation": "landscape",
+    "luminance": 0.3962,
+    "saturation": 0.2823,
+    "sha256": "d281575b9fb883820dd8f12b32017d19215f840986188a798bda7edfb755ffac"
+  },
+  "game-wukong-v3": {
+    "file": "showcase/game-wukong-v3.jpg",
+    "source": "picsum:807",
+    "author": "Tiago Aguiar",
+    "orientation": "landscape",
+    "luminance": 0.3988,
+    "saturation": 0.4127,
+    "sha256": "c3ecef2ffbe8f98f1e6c5eb777e37b8b8a414eb880942469a1367bc911a5c956"
+  },
+  "game-wwmeet-v1": {
+    "file": "showcase/game-wwmeet-v1.jpg",
+    "source": "picsum:235",
+    "author": "Paul E. Harrer",
+    "orientation": "landscape",
+    "luminance": 0.4867,
+    "saturation": 0.2004,
+    "sha256": "af62e2e4a1434350d14d90606d8a314219b0780332ed1eb457c3b8bc790ca65d"
+  },
+  "game-wwmeet-v2": {
+    "file": "showcase/game-wwmeet-v2.jpg",
+    "source": "picsum:614",
+    "author": "Josefa Holland-Merten",
+    "orientation": "landscape",
+    "luminance": 0.4846,
+    "saturation": 0.1348,
+    "sha256": "6b04ddb4ee449bad58b00419d6ccea6a84d391d62be6b4c96e1d0f0041b1d468"
+  },
+  "game-wwmeet-v3": {
+    "file": "showcase/game-wwmeet-v3.jpg",
+    "source": "picsum:70",
+    "author": "Dorothy Lin",
+    "orientation": "landscape",
+    "luminance": 0.4228,
+    "saturation": 0.1434,
+    "sha256": "391e09c17c63de644f77dfe5f9072200c5deb67618ca6f6fb6d23ac9c69f8ac5"
+  },
+  "game-zzz-v1": {
+    "file": "showcase/game-zzz-v1.jpg",
+    "source": "picsum:396",
+    "author": "Sam X",
+    "orientation": "landscape",
+    "luminance": 0.426,
+    "saturation": 0.439,
+    "sha256": "72ce624cbcce04c356845c170af1fa5764ea1e3b31bd6dcfcda625a6ed984ff0"
+  },
+  "game-zzz-v2": {
+    "file": "showcase/game-zzz-v2.jpg",
+    "source": "picsum:640",
+    "author": "Sarah Bürvenich",
+    "orientation": "landscape",
+    "luminance": 0.6003,
+    "saturation": 0.2692,
+    "sha256": "318ddaf4d5e6232b1fdb54aa735b286395a3394cc2bbc5f703daae0a50015fa7"
+  },
+  "game-zzz-v3": {
+    "file": "showcase/game-zzz-v3.jpg",
+    "source": "picsum:27",
+    "author": "Yoni Kaplan-Nadel",
+    "orientation": "landscape",
+    "luminance": 0.5726,
+    "saturation": 0.3804,
+    "sha256": "29003cb2ea0d7716443058caeaabbfa7390739ef08d73cb0bd3e3fde2757038c"
+  },
+  "magazine-double-rule-01": {
+    "file": "showcase/magazine-double-rule-01.jpg",
+    "source": "picsum:1029",
+    "author": "freddie marriage",
+    "orientation": "landscape",
+    "luminance": 0.5741,
+    "saturation": 0.1627,
+    "sha256": "200198b58e9a1aef1186224cd640fc5f10926a65c9dc44f9d8eadbe71d75a443"
+  },
+  "magazine-gallery-left-01": {
+    "file": "showcase/magazine-gallery-left-01.jpg",
+    "source": "picsum:639",
+    "author": "Ilya",
+    "orientation": "landscape",
+    "luminance": 0.5271,
+    "saturation": 0.5817,
+    "sha256": "55ce2a1c8b218869a4457a31bedfb285c2ef21fc7545ffcb10b8a4f7e4b38a8a"
+  },
+  "magazine-index-column-01": {
+    "file": "showcase/magazine-index-column-01.jpg",
+    "source": "picsum:442",
+    "author": "Sylwia Bartyzel",
+    "orientation": "landscape",
+    "luminance": 0.5701,
+    "saturation": 0.1579,
+    "sha256": "b6653ab8c954679135aa55b64ff09e3aaa93c81795ab8316b3cbb593630d220b"
+  },
+  "magazine-poster-manifesto-01": {
+    "file": "showcase/magazine-poster-manifesto-01.jpg",
+    "source": "picsum:702",
+    "author": "Dominik Schröder",
+    "orientation": "landscape",
+    "luminance": 0.5518,
+    "saturation": 0.3842,
+    "sha256": "c3afb1ef30e603216494e35f5ba7bb91d61672c896f847241126294cb18183f1"
+  },
+  "magazine-triptych-slices-01": {
+    "file": "showcase/magazine-triptych-slices-01.jpg",
+    "source": "picsum:236",
+    "author": "Chris Adams",
+    "orientation": "landscape",
+    "luminance": 0.4896,
+    "saturation": 0.0915,
+    "sha256": "547eb09914020a5bc7dcb18076f5ae0e46759b054cbd5a51878838cdafd1a0b1"
+  },
+  "master-cream-dot-01": {
+    "file": "showcase/master-cream-dot-01.jpg",
+    "source": "picsum:788",
+    "author": "Michael Baird",
+    "orientation": "landscape",
+    "luminance": 0.4015,
+    "saturation": 0.488,
+    "sha256": "b9a3bd62b98e6f10d39434ba9630d62fdd22c7f118e722da1a9ee35956aa2396"
+  },
+  "master-crown-wordmark-01": {
+    "file": "showcase/master-crown-wordmark-01.jpg",
+    "source": "picsum:912",
+    "author": "Clem Onojeghuo",
+    "orientation": "landscape",
+    "luminance": 0.4996,
+    "saturation": 0.5352,
+    "sha256": "4903aacea7a131e2769df1da73242c88440a8021601885448b790e7e62fdd6cd"
+  },
+  "master-ivory-plate-01": {
+    "file": "showcase/master-ivory-plate-01.jpg",
+    "source": "picsum:805",
+    "author": "Jens Lelie",
+    "orientation": "landscape",
+    "luminance": 0.5992,
+    "saturation": 0.0438,
+    "sha256": "dc37999b3f7996be4e010c0318322d5d447dafaeee39b090b5324499a76f49ea"
+  },
+  "master-noir-plate-01": {
+    "file": "showcase/master-noir-plate-01.jpg",
+    "source": "picsum:921",
+    "author": "Eutah Mizushima",
+    "orientation": "landscape",
+    "luminance": 0.5842,
+    "saturation": 0.2865,
+    "sha256": "cee9829e2d56a57e3f24fc022c0e9fc5865784bdb4aa3c4ab03be13469b8a28e"
+  },
+  "master-seal-frame-01": {
+    "file": "showcase/master-seal-frame-01.jpg",
+    "source": "picsum:908",
+    "author": "Pedro Gandra",
+    "orientation": "landscape",
+    "luminance": 0.5716,
+    "saturation": 0.4149,
+    "sha256": "aad25cb4390e8dc47c3210405908c3e0b53e8b0e9e4c80b247128a89ba4c81e3"
+  },
+  "master-three-column-01": {
+    "file": "showcase/master-three-column-01.jpg",
+    "source": "picsum:576",
+    "author": "Steven Lewis",
+    "orientation": "landscape",
+    "luminance": 0.5141,
+    "saturation": 0.2538,
+    "sha256": "495a1b749f7559e7653fbc2b1f978c6b6e4324a4bf6d0c894295b0bf9adbfb54"
+  },
+  "minimal-brand-right": {
+    "file": "showcase/minimal-brand-right.jpg",
+    "source": "picsum:288",
+    "author": "Stockholm",
+    "orientation": "landscape",
+    "luminance": 0.6611,
+    "saturation": 0.1186,
+    "sha256": "d80e8068a42a67cfa852f0c6d9f638feb27a97606b9fc19558d572a67e3da1d3"
+  },
+  "minimal-center-line": {
+    "file": "showcase/minimal-center-line.jpg",
+    "source": "picsum:669",
+    "author": "Luke Pamer",
+    "orientation": "landscape",
+    "luminance": 0.6778,
+    "saturation": 0.1831,
+    "sha256": "fe177f0cf3fea4ecfaedbece95a75d10b940c99d7a23485c023045bb9a5c6ac3"
+  },
+  "minimal-copyright": {
+    "file": "showcase/minimal-copyright.jpg",
+    "source": "picsum:59",
+    "author": "Art Wave",
+    "orientation": "landscape",
+    "luminance": 0.6733,
+    "saturation": 0.3479,
+    "sha256": "396374fc72880b62f2da270b3cd126fd17fade853777aa791419e6d67620396c"
+  },
+  "minimal-corner-mono": {
+    "file": "showcase/minimal-corner-mono.jpg",
+    "source": "picsum:50",
+    "author": "Tyler Wanlass",
+    "orientation": "landscape",
+    "luminance": 0.6887,
+    "saturation": 0.1974,
+    "sha256": "7ec4a4e52d6c20394734202560d52d45d34607934fa33efa65bc97079463b741"
+  },
+  "minimal-letterbox": {
+    "file": "showcase/minimal-letterbox.jpg",
+    "source": "picsum:730",
+    "author": "Ryan Pohanic",
+    "orientation": "landscape",
+    "luminance": 0.7104,
+    "saturation": 0.0714,
+    "sha256": "7c73cbcb5d431b82b55cb3280edca4472c9c5e02ad92687618072c5be955b969"
+  },
+  "minimal-model-stack": {
+    "file": "showcase/minimal-model-stack.jpg",
+    "source": "picsum:465",
+    "author": "Paula Vermeulen",
+    "orientation": "landscape",
+    "luminance": 0.8618,
+    "saturation": 0.0238,
+    "sha256": "bf6e93b0d498688c71b0b2771e93ce76b7356a724699149887043cd823171158"
+  },
+  "minimal-portrait-line": {
+    "file": "showcase/minimal-portrait-line.jpg",
+    "source": "picsum:380",
+    "author": "Michael Quinn",
+    "orientation": "landscape",
+    "luminance": 0.6925,
+    "saturation": 0.3653,
+    "sha256": "378325b5b81eb0fb2e2d51f475e1427970337fbef63901debff73e857e177fac"
+  },
+  "minimal-topright-date": {
+    "file": "showcase/minimal-topright-date.jpg",
+    "source": "picsum:357",
+    "author": "Sonja Langford",
+    "orientation": "landscape",
+    "luminance": 0.7623,
+    "saturation": 0.1115,
+    "sha256": "42e5e17f51b68c3d1e274ca4df6bee62365d7d1349a5ce258624e26b427e42da"
+  },
+  "personal-cn-inscription-01": {
+    "file": "showcase/personal-cn-inscription-01.jpg",
+    "source": "picsum:873",
+    "author": "Daniel Roe",
+    "orientation": "portrait",
+    "luminance": 0.6408,
+    "saturation": 0.2617,
+    "sha256": "bbaa209e7ae127aa5c1acdf39cc800b2a42b98ccaf40cd4616819be2392cf117"
+  },
+  "personal-credit-social-01": {
+    "file": "showcase/personal-credit-social-01.jpg",
+    "source": "picsum:981",
+    "author": "Anna Anikina",
+    "orientation": "portrait",
+    "luminance": 0.3199,
+    "saturation": 0.6387,
+    "sha256": "61c1362ab264c91ba730ddc086f409d899f6d69fd5179a2aaa8a97e80b732edd"
+  },
+  "personal-micro-copyright-01": {
+    "file": "showcase/personal-micro-copyright-01.jpg",
+    "source": "picsum:722",
+    "author": "Sebastian Kostrubala",
+    "orientation": "portrait",
+    "luminance": 0.4379,
+    "saturation": 0.3919,
+    "sha256": "553c66e00c1e54d48f14def7f18ec3530bdc35681c6237eee32aa541d387c557"
+  },
+  "personal-name-columns-01": {
+    "file": "showcase/personal-name-columns-01.jpg",
+    "source": "picsum:657",
+    "author": "Justin Leibow",
+    "orientation": "portrait",
+    "luminance": 0.4161,
+    "saturation": 0.4136,
+    "sha256": "b086dc4ddc4685541e87ef6ee74e13cb8d17117557e9a9fc9fea46aa4bd99fde"
+  },
+  "personal-polaroid-script-01": {
+    "file": "showcase/personal-polaroid-script-01.jpg",
+    "source": "picsum:758",
+    "author": "Eli DeFaria",
+    "orientation": "portrait",
+    "luminance": 0.346,
+    "saturation": 0.3138,
+    "sha256": "d12b21050ea481fdf6e0b2806c40a75c6572c54bcdb42a4d6e7ec8b2dfcc6176"
+  },
+  "personal-script-signature-01": {
+    "file": "showcase/personal-script-signature-01.jpg",
+    "source": "picsum:253",
+    "author": "Bartosz Bąk",
+    "orientation": "portrait",
+    "luminance": 0.3351,
+    "saturation": 0.2631,
+    "sha256": "4391fa7edeb7ff7be0ce51c5cde9b293257cb60de8859878db779d4e1bacfb55"
+  },
+  "personal-triptych-01": {
+    "file": "showcase/personal-triptych-01.jpg",
+    "source": "picsum:520",
+    "author": "Dorothee Hübner",
+    "orientation": "portrait",
+    "luminance": 0.428,
+    "saturation": 0.4968,
+    "sha256": "d777e9daf0b35494a2421158a424f85ff989467fe4046ff7188313a0d11b371e"
+  },
+  "phone-accent-dots-01": {
+    "file": "showcase/phone-accent-dots-01.jpg",
+    "source": "picsum:31",
+    "author": "How-Soon Ngu",
+    "orientation": "portrait",
+    "luminance": 0.566,
+    "saturation": 0,
+    "sha256": "926f0f045751e4a8f9ea18366517147ae5a956712f8a86f25e708149e1e28572"
+  },
+  "phone-camera-ui-01": {
+    "file": "showcase/phone-camera-ui-01.jpg",
+    "source": "picsum:829",
+    "author": "Drew Hays",
+    "orientation": "portrait",
+    "luminance": 0.4177,
+    "saturation": 0.6452,
+    "sha256": "99c9f940370f2f3d617341b79dcaf6dc94138052c843fedb7ddd9bcd99b5478f"
+  },
+  "phone-dual-optics-01": {
+    "file": "showcase/phone-dual-optics-01.jpg",
+    "source": "picsum:508",
+    "author": "Jeff Sheldon",
+    "orientation": "portrait",
+    "luminance": 0.4532,
+    "saturation": 0.367,
+    "sha256": "3dc6545e2a14631ecbeb64534acf9aa34a5ad29fe8607f1a575927a3ed67b7c2"
+  },
+  "phone-midnight-bar-01": {
+    "file": "showcase/phone-midnight-bar-01.jpg",
+    "source": "picsum:530",
+    "author": "Jeff Sheldon",
+    "orientation": "portrait",
+    "luminance": 0.5769,
+    "saturation": 0.3254,
+    "sha256": "b8ebe3ceb7dac57c9ab9e566fa12afbcc935915f391b65df0a12ebbc0f8eeca2"
+  },
+  "phone-minimal-line-01": {
+    "file": "showcase/phone-minimal-line-01.jpg",
+    "source": "picsum:740",
+    "author": "Sebastien Gabriel",
+    "orientation": "portrait",
+    "luminance": 0.4744,
+    "saturation": 0.2933,
+    "sha256": "f4243153a8359bf5638751d0a59a084729cfc1ab23f4b7b38f198bbf95b10b73"
+  },
+  "phone-paper-spec-01": {
+    "file": "showcase/phone-paper-spec-01.jpg",
+    "source": "picsum:870",
+    "author": "Joshua Hibbert",
+    "orientation": "portrait",
+    "luminance": 0.4004,
+    "saturation": 0.6151,
+    "sha256": "77234d39ccef569c6fc6ad7ed34099af49f2310e1fd5ab81c67a4d1ac37aa76e"
+  },
+  "phone-shot-on-01": {
+    "file": "showcase/phone-shot-on-01.jpg",
+    "source": "picsum:263",
+    "author": "Kristian Karlsson",
+    "orientation": "portrait",
+    "luminance": 0.4183,
+    "saturation": 0.1419,
+    "sha256": "c5fd09d60085787eb50e165b23aa4b2154695f9cbfd0c4671d9ba4f29a8929c5"
+  },
+  "phone-side-rail-01": {
+    "file": "showcase/phone-side-rail-01.jpg",
+    "source": "picsum:67",
+    "author": "Rula Sibai",
+    "orientation": "portrait",
+    "luminance": 0.4715,
+    "saturation": 0,
+    "sha256": "fd60d629f34740d1f37da2f8ca3c3c3b271ba6484cf256c11cfac9c5760a3cac"
+  },
+  "phone-studio-card-01": {
+    "file": "showcase/phone-studio-card-01.jpg",
+    "source": "picsum:997",
+    "author": "Mickey O'neil",
+    "orientation": "portrait",
+    "luminance": 0.4425,
+    "saturation": 0.371,
+    "sha256": "6e4af14109fab9f733b15dac1bfb2cb35663a88ab7e4b184888777d3075f1b0a"
+  },
+  "phone-vendor-bar-01": {
+    "file": "showcase/phone-vendor-bar-01.jpg",
+    "source": "picsum:638",
+    "author": "Kimberly Richards",
+    "orientation": "portrait",
+    "luminance": 0.5366,
+    "saturation": 0.3938,
+    "sha256": "57766e67938e4a61e69053f6d140827061d7debb2ad2e9622344f03363cc0a30"
+  },
+  "polaroid-classic-script-03": {
+    "file": "showcase/polaroid-classic-script-03.jpg",
+    "source": "picsum:78",
+    "author": "Paul Evans",
+    "orientation": "portrait",
+    "luminance": 0.4249,
+    "saturation": 0.2844,
+    "sha256": "8d29f6c95fe46312f28bfd649a53d83380b79e52d700c39de1fb7a68949b09c7"
+  },
+  "polaroid-duo-stamps-05": {
+    "file": "showcase/polaroid-duo-stamps-05.jpg",
+    "source": "picsum:537",
+    "author": "Juskteez Vu",
+    "orientation": "portrait",
+    "luminance": 0.272,
+    "saturation": 0.7206,
+    "sha256": "ffe44b695f61c52cffb886179bec41a12998949a031ced582eec3b925370bd19"
+  },
+  "polaroid-pastel-ring-04": {
+    "file": "showcase/polaroid-pastel-ring-04.jpg",
+    "source": "picsum:1038",
+    "author": "Marcelo Quinan",
+    "orientation": "portrait",
+    "luminance": 0.4388,
+    "saturation": 0.3538,
+    "sha256": "e1fe26218d9499d36633bb1ada01bf137c88ad530fa39f517edb5de44dd2b879"
+  },
+  "polaroid-stamp-postcard-01": {
+    "file": "showcase/polaroid-stamp-postcard-01.jpg",
+    "source": "picsum:776",
+    "author": "Autumn Mott",
+    "orientation": "portrait",
+    "luminance": 0.5379,
+    "saturation": 0.2678,
+    "sha256": "7c8dbe26a8610083585c53f8514f9e4155a0f751e616fd0009bde14bc6b3a1e6"
+  },
+  "polaroid-tilt-plate-02": {
+    "file": "showcase/polaroid-tilt-plate-02.jpg",
+    "source": "picsum:682",
+    "author": "Logan Troxell",
+    "orientation": "portrait",
+    "luminance": 0.6182,
+    "saturation": 0.1518,
+    "sha256": "793372c2038932d57bf73a538be178d2fd9c3830365b24a87d57568d59d13c9a"
+  },
+  "portfolio-credit-still-01": {
+    "file": "showcase/portfolio-credit-still-01.jpg",
+    "source": "picsum:768",
+    "author": "Mikael Kristenson",
+    "orientation": "landscape",
+    "luminance": 0.6952,
+    "saturation": 0.147,
+    "sha256": "a3fe2ebf4c5b0dcc70aae4f3bd34f6353e82666988693d3afee431edf51d6173"
+  },
+  "portfolio-double-rule-01": {
+    "file": "showcase/portfolio-double-rule-01.jpg",
+    "source": "picsum:309",
+    "author": "Ben Moore",
+    "orientation": "landscape",
+    "luminance": 0.7237,
+    "saturation": 0.3311,
+    "sha256": "c3002394cf55362de4b33cacab5b9c83362acb76ea186ea47dbb67077220ee6c"
+  },
+  "portfolio-marginalia-01": {
+    "file": "showcase/portfolio-marginalia-01.jpg",
+    "source": "picsum:430",
+    "author": "Carli Jean",
+    "orientation": "landscape",
+    "luminance": 0.7418,
+    "saturation": 0.1141,
+    "sha256": "0e6b99ca46256884c9d5fdfe186212d33d6a5caeb2cb0ff0f230caeddf2dea0e"
+  },
+  "portfolio-noir-matte-01": {
+    "file": "showcase/portfolio-noir-matte-01.jpg",
+    "source": "picsum:887",
+    "author": "Roman Kraft",
+    "orientation": "landscape",
+    "luminance": 0.8085,
+    "saturation": 0.0684,
+    "sha256": "40041292a0e115a82d005d38089297c1cb4e745be3b79bf3c44d36d294955907"
+  },
+  "portfolio-vertical-scroll-01": {
+    "file": "showcase/portfolio-vertical-scroll-01.jpg",
+    "source": "picsum:941",
+    "author": "Ivan Slade",
+    "orientation": "landscape",
+    "luminance": 0.8235,
+    "saturation": 0.1592,
+    "sha256": "71b413a1fd1a9bb7aeaf406af375a270878f7e8e68823c79eb95f1a5a43a597a"
+  },
+  "portfolio-wall-label-01": {
+    "file": "showcase/portfolio-wall-label-01.jpg",
+    "source": "picsum:623",
+    "author": "Michael Hirsch",
+    "orientation": "landscape",
+    "luminance": 0.7269,
+    "saturation": 0.1997,
+    "sha256": "b6ed37d2ce6924f4a417944dd7bf9eddf3e3a259c20941308114a6cb34edae11"
+  },
+  "sports-big-trail-01": {
+    "file": "showcase/sports-big-trail-01.jpg",
+    "source": "picsum:651",
+    "author": "James Pritchett",
+    "orientation": "landscape",
+    "luminance": 0.4213,
+    "saturation": 0.325,
+    "sha256": "32b813b39126a2303a28f10fab86591997304a69756b55b004e5e6baa6a289aa"
+  },
+  "sports-finish-line-01": {
+    "file": "showcase/sports-finish-line-01.jpg",
+    "source": "picsum:164",
+    "author": "Linh Nguyen",
+    "orientation": "landscape",
+    "luminance": 0.5543,
+    "saturation": 0.3072,
+    "sha256": "d1e738b576bafc2dc10ebafc1ebe35c8df1e03c63ca638e29e35f09b45cdd4b2"
+  },
+  "sports-ride-stats-01": {
+    "file": "showcase/sports-ride-stats-01.jpg",
+    "source": "picsum:693",
+    "author": "Rob Bye",
+    "orientation": "landscape",
+    "luminance": 0.5813,
+    "saturation": 0.1652,
+    "sha256": "ffe187dae3cf78d43f4a32ddc567b42faa3dfa2bbc75bcbbdad916fc63032e91"
+  },
+  "sports-side-rail-01": {
+    "file": "showcase/sports-side-rail-01.jpg",
+    "source": "picsum:851",
+    "author": "Tiago Aguiar",
+    "orientation": "landscape",
+    "luminance": 0.4419,
+    "saturation": 0.6612,
+    "sha256": "d17858ca0c99813d87650556ec6ee5a29feab0d6b04f807582f9edd31bee1391"
+  },
+  "ticket-boarding-pass-03": {
+    "file": "showcase/ticket-boarding-pass-03.jpg",
+    "source": "picsum:550",
+    "author": "Christopher Sardegna",
+    "orientation": "portrait",
+    "luminance": 0.4635,
+    "saturation": 0.3013,
+    "sha256": "b529aa03a594a19dafc4d790e714c3935f45f510c7d26ea5c0b05fdbeeb03a89"
+  },
+  "ticket-night-tilt-05": {
+    "file": "showcase/ticket-night-tilt-05.jpg",
+    "source": "picsum:156",
+    "author": "Christopher Sardegna",
+    "orientation": "portrait",
+    "luminance": 0.6286,
+    "saturation": 0.2075,
+    "sha256": "2c05523495cba964e8222f6f7ab385f79eb039ddb55e3dbf11b3935592c46aff"
+  },
+  "ticket-park-pass-04": {
+    "file": "showcase/ticket-park-pass-04.jpg",
+    "source": "picsum:260",
+    "author": "Sylwia Bartyzel",
+    "orientation": "portrait",
+    "luminance": 0.5707,
+    "saturation": 0.0557,
+    "sha256": "b4c06e9e2a789bd245efa1b5d60c064d0cb6b3dc00758a6ddebf2396148832c5"
+  },
+  "ticket-stub-horizontal-01": {
+    "file": "showcase/ticket-stub-horizontal-01.jpg",
+    "source": "picsum:898",
+    "author": "Anthony DELANOIX",
+    "orientation": "portrait",
+    "luminance": 0.3791,
+    "saturation": 0.1205,
+    "sha256": "93c72069802902f7882dd2c2871f176de57232fc5106ffc98381ad1c157c5dc6"
+  },
+  "ticket-vertical-rail-02": {
+    "file": "showcase/ticket-vertical-rail-02.jpg",
+    "source": "picsum:930",
+    "author": "Dominik Lange",
+    "orientation": "portrait",
+    "luminance": 0.5343,
+    "saturation": 0.3734,
+    "sha256": "fc475d88ad9d2adeedde4552e97e336fcfb85f991210c8d01fe47d611b38fe82"
+  },
+  "white-border-editorial-01": {
+    "file": "showcase/white-border-editorial-01.jpg",
+    "source": "picsum:798",
+    "author": "Aaron Burden",
+    "orientation": "landscape",
+    "luminance": 0.8751,
+    "saturation": 0.1052,
+    "sha256": "fb8f97ec4262c7823c5cff94e101de98f78b3bfdc47160046135eb627955501e"
+  },
+  "white-border-letterhead": {
+    "file": "showcase/white-border-letterhead.jpg",
+    "source": "picsum:201",
+    "author": "Craig Garner",
+    "orientation": "landscape",
+    "luminance": 0.6658,
+    "saturation": 0.3196,
+    "sha256": "e36b4a0058ee2df11e9084bca1739ef798d66ca74dca6c61b497f5e8ca9140c1"
+  },
+  "white-border-linen-dot": {
+    "file": "showcase/white-border-linen-dot.jpg",
+    "source": "picsum:821",
+    "author": "Eutah Mizushima",
+    "orientation": "landscape",
+    "luminance": 0.6905,
+    "saturation": 0.0058,
+    "sha256": "761c4da9cee8cec53f113226ca0e46e0a348ac93c5a75afbc43f67069a5bb2e8"
+  },
+  "white-border-passport-mono": {
+    "file": "showcase/white-border-passport-mono.jpg",
+    "source": "picsum:302",
+    "author": "Billy Lam",
+    "orientation": "landscape",
+    "luminance": 0.8207,
+    "saturation": 0.0226,
+    "sha256": "32b1e532dac17f650638b3b859c734c8e410db81403a8b8bb273f32b19059259"
+  },
+  "white-border-quiet-stack": {
+    "file": "showcase/white-border-quiet-stack.jpg",
+    "source": "picsum:1055",
+    "author": "Neil Thomas",
+    "orientation": "landscape",
+    "luminance": 0.6727,
+    "saturation": 0.2991,
+    "sha256": "2364e35534e041fa65297d42994aec346e46f1e107740a06d6fb4352752e85eb"
+  },
+  "white-border-ruled-band": {
+    "file": "showcase/white-border-ruled-band.jpg",
+    "source": "picsum:326",
+    "author": "Dominik Martin",
+    "orientation": "landscape",
+    "luminance": 0.7177,
+    "saturation": 0.093,
+    "sha256": "8713f8c5cdb6d7ee5805ed96023790dc1121cb69682a9313d49b093a0c0c0408"
+  },
+  "white-border-top-note": {
+    "file": "showcase/white-border-top-note.jpg",
+    "source": "picsum:732",
+    "author": "Dominik Schröder",
+    "orientation": "landscape",
+    "luminance": 0.7421,
+    "saturation": 0.1363,
+    "sha256": "248d4b2e90e04367ac773ecd71c4136f744141c21d9ab33fa7f8e60b4b465691"
+  },
+  "white-border-twin-columns": {
+    "file": "showcase/white-border-twin-columns.jpg",
+    "source": "picsum:312",
+    "author": "Sonja Langford",
+    "orientation": "landscape",
+    "luminance": 0.7679,
+    "saturation": 0.1993,
+    "sha256": "fed8979bc3d8541c13a7276c7c62a03fcee40a2c69a4865f7aa1c752e8e9b202"
+  },
+  "art-copperplate-etch": {
+    "file": "showcase/art-copperplate-etch.jpg",
+    "source": "picsum:667",
+    "author": "Joshua Sortino",
+    "orientation": "landscape",
+    "luminance": 0.3606,
+    "saturation": 0.3414,
+    "sha256": "c8a45c28d54bc5da48d9f1ee9b71be738bf8a705db2e3e73442cb89cfc3f0bb7"
+  },
+  "art-letterpress-relief": {
+    "file": "showcase/art-letterpress-relief.jpg",
+    "source": "picsum:863",
+    "author": "Elijah Hail",
+    "orientation": "landscape",
+    "luminance": 0.6454,
+    "saturation": 0.14,
+    "sha256": "08ed32ec09fee92748746dddf8a8204f957b9810d43095c86eb5b970f824f645"
+  },
+  "art-ukiyoe-cartouche": {
+    "file": "showcase/art-ukiyoe-cartouche.jpg",
+    "source": "picsum:932",
+    "author": "Vadim Sherbakov",
+    "orientation": "landscape",
+    "luminance": 0.3434,
+    "saturation": 0.2476,
+    "sha256": "c6d59a79458ef43147535e20c241acab61fa25de13f8a9a41d4d27ad3093d1f8"
+  },
+  "art-vermilion-seal": {
+    "file": "showcase/art-vermilion-seal.jpg",
+    "source": "picsum:212",
+    "author": "Sylwia Bartyzel",
+    "orientation": "landscape",
+    "luminance": 0.3782,
+    "saturation": 0.18,
+    "sha256": "f92c5bbf441dfdd948a9fb40ea757ac1f274c0a24be21a822216095973aff6f9"
+  },
+  "art-woodtype-press": {
+    "file": "showcase/art-woodtype-press.jpg",
+    "source": "picsum:166",
+    "author": "Romain Briaux",
+    "orientation": "landscape",
+    "luminance": 0.3836,
+    "saturation": 0.1203,
+    "sha256": "97f3f5a966e52c9653d1f7d800709209af7e194a540219ffed5482b7a25a2fb8"
+  },
+  "art-deco-double": {
+    "file": "showcase/art-deco-double.jpg",
+    "source": "existing:mist-1.jpg",
+    "orientation": null
+  },
+  "art-gilt-foil": {
+    "file": "showcase/art-gilt-foil.jpg",
+    "source": "existing:night-1.jpg",
+    "orientation": null
+  },
+  "art-republican-press": {
+    "file": "showcase/art-republican-press.jpg",
+    "source": "existing:people-1.jpg",
+    "orientation": null
+  },
+  "camera-baseplate-02": {
+    "file": "showcase/camera-baseplate-02.jpg",
+    "source": "existing:street-1.jpg",
+    "orientation": null
+  },
+  "colorful-chip-strip-01": {
+    "file": "showcase/colorful-chip-strip-01.jpg",
+    "source": "existing:square-1.jpg",
+    "orientation": null
+  },
+  "colorwalk-blur-stage-01": {
+    "file": "showcase/colorwalk-blur-stage-01.jpg",
+    "source": "existing:architecture-2.jpg",
+    "orientation": null
+  },
+  "drone-aerial-editorial-01": {
+    "file": "showcase/drone-aerial-editorial-01.jpg",
+    "source": "existing:landscape-1.jpg",
+    "orientation": null
+  },
+  "effect-duotone-wash-03": {
+    "file": "showcase/effect-duotone-wash-03.jpg",
+    "source": "picsum:924",
+    "author": "Jakub Sejkora",
+    "orientation": "landscape",
+    "luminance": 0.2935,
+    "saturation": 0.2902,
+    "sha256": "e10e4a542d0fdd86fef34729f03a923ddeecad9ce230f54e2f06ab7f4e552aff"
+  },
+  "fuji-recipe-band-02": {
+    "file": "showcase/fuji-recipe-band-02.jpg",
+    "source": "existing:landscape-2.jpg",
+    "orientation": null
+  },
+  "magazine-cover-banner-01": {
+    "file": "showcase/magazine-cover-banner-01.jpg",
+    "source": "picsum:499",
+    "author": "Gabriel Santiago",
+    "orientation": "landscape",
+    "luminance": 0.3031,
+    "saturation": 0.3523,
+    "sha256": "d6f7a1c6dd0ee1bc25b60d54fede35faa4e42663aeb71d91fafbcfe6c82932c3"
+  },
+  "personal-avatar-ring-01": {
+    "file": "showcase/personal-avatar-ring-01.jpg",
+    "source": "existing:portrait-1.jpg",
+    "orientation": null
+  },
+  "portfolio-atelier-plate-01": {
+    "file": "showcase/portfolio-atelier-plate-01.jpg",
+    "source": "picsum:175",
+    "author": "petradr",
+    "orientation": "landscape",
+    "luminance": 0.3261,
+    "saturation": 0,
+    "sha256": "41f6137582802b710682d49568e55c9cd87afcf53b6fff8f05b3a0de7bb9aaad"
+  },
+  "sports-alt-badge-01": {
+    "file": "showcase/sports-alt-badge-01.jpg",
+    "source": "existing:landscape-3.jpg",
+    "orientation": null
+  },
+  "white-border-centered-lockup": {
+    "file": "showcase/white-border-centered-lockup.jpg",
+    "source": "existing:architecture-1.jpg",
+    "orientation": null
+  }
+}

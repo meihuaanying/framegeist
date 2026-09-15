@@ -18,6 +18,9 @@ struct Args {
     /// Keep GPS coordinates in exported EXIF (PRD B3: off by default).
     #[arg(long = "keep-gps", global = true)]
     keep_gps: bool,
+    /// v0.5.0: use the legacy ab_glyph text renderer (regression/parity).
+    #[arg(long = "legacy-text-renderer", global = true)]
+    legacy_text_renderer: bool,
 }
 
 #[derive(clap::Subcommand, Debug)]
@@ -87,6 +90,8 @@ enum Cmd {
     },
     /// Print EXIF metadata of a photo as JSON.
     Probe { photo: PathBuf },
+    /// Print average luminance/saturation of a photo as JSON (showcase matcher).
+    PhotoStats { photo: PathBuf },
     /// List built-in templates.
     Templates,
     /// Compute sha256 of an output file (golden regression helper).
@@ -207,6 +212,7 @@ fn build_opts(args: &Args, format: OutputFormat, preview: bool) -> Result<Render
         keep_gps: args.keep_gps,
         assets_dir: Some(assets_dir.clone()),
         model_map: framegeist_core::load_model_map(&assets_dir)?,
+        legacy_text_renderer: args.legacy_text_renderer,
         ..RenderOptions::default()
     })
 }
@@ -421,6 +427,40 @@ fn run(args: &Args) -> Result<(), Error> {
             let bytes = std::fs::read(photo)?;
             let info = probe_exif(&bytes)?;
             println!("{}", serde_json::to_string_pretty(&info).map_err(|e| Error::Exif(e.to_string()))?);
+            Ok(())
+        }
+        Cmd::PhotoStats { photo } => {
+            let bytes = std::fs::read(photo)?;
+            let img = image::load_from_memory(&bytes)
+                .map_err(|e| Error::Image(e.to_string()))?
+                .to_rgb8();
+            let (w, h) = img.dimensions();
+            let step = (w.max(h) / 256).max(1);
+            let (mut sum_l, mut sum_s, mut n) = (0f64, 0f64, 0f64);
+            let mut y = 0;
+            while y < h {
+                let mut x = 0;
+                while x < w {
+                    let p = img.get_pixel(x, y).0;
+                    let (r, g, b) = (p[0] as f64 / 255.0, p[1] as f64 / 255.0, p[2] as f64 / 255.0);
+                    let max = r.max(g).max(b);
+                    let min = r.min(g).min(b);
+                    sum_l += 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                    sum_s += if max <= 0.0 { 0.0 } else { (max - min) / max };
+                    n += 1.0;
+                    x += step;
+                }
+                y += step;
+            }
+            println!(
+                "{}",
+                serde_json::json!({
+                    "width": w,
+                    "height": h,
+                    "luminance": sum_l / n.max(1.0),
+                    "saturation": sum_s / n.max(1.0),
+                })
+            );
             Ok(())
         }
         Cmd::Templates => {

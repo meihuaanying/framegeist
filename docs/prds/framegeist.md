@@ -331,7 +331,26 @@ framegeist/
   - **真实摄影**：`templates/assets/photos/` 换 11 张 Picsum 真实摄影（风光×3/建筑×2/街景/雾气/黄昏城市/人像/人物/方形草莓），CREDITS-DEMO 更新；samples 900 / previews 640 / thumbs 240 共 552 张全部重渲染并镜像。
   - **UI**：首屏**模板墙**（全屏、27 tabs、搜索、响应式 2–4 列、懒加载、hover「使用/放大镜」、导入照片）→ 选中进入**编辑器**（右侧手风琴、返回按钮、无照片时显示真实模板占位预览）；i18n 25 分类 + wall keys；`withViewTransition` 捕获 AbortError；`fitStage` 零尺寸防护。
   - **坑与修复**：PowerShell 管道输出单元素时退化为标量，`$photo[0]` 对字符串取首字符 → 98 套模板渲染路径变成 "t" 全部失败（改显式数组字面量）；Edge headless `--virtual-time-budget` 截图不可靠 → 自建 CDP 等待 `__bootMs` 再截图；`gen-samples` 样例目录先清空保证无旧残留。
-  - **门禁**：`cargo test --release --workspace` 全绿（golden 1 组、engine_v040 10 项、templates_all_valid 配额改 ≥180/25 分类）、clippy `-D warnings`、WASM↔CLI 帧字节一致（拼图 ≤0.001）、**E2E 57/57**（新增模板墙布局/编辑器右栏/manifest 184+双语+分类枚举/预览存在性/字距-旋转-色卡像素断言）；性能 24MP 预览 231ms、24MP 导出 0.69s、60MP 导出 1.27s。报告 `docs/reports/v0.4.0/`。**发布（push/tag/Release/Pages）待执行。**
+  - **门禁**：`cargo test --release --workspace` 全绿（golden 1 组、engine_v040 10 项、templates_all_valid 配额改 ≥180/25 分类）、clippy `-D warnings`、WASM↔CLI 帧字节一致（拼图 ≤0.001）、**E2E 57/57**（新增模板墙布局/编辑器右栏/manifest 184+双语+分类枚举/预览存在性/字距-旋转-色卡像素断言）；性能 24MP 预览 231ms、24MP 导出 0.69s、60MP 导出 1.27s。报告 `docs/reports/v0.4.0/`。**发布已执行**：commit `1896f0d` → tag `v0.4.0` → Release 六资产（CLI/桌面/.fgpkg/NSIS/SHA256SUMS/update.json，`templates.count=184`）+ CI 全绿 + Pages 在线验证通过。
+- **2026-09-13 ｜ v0.4.0 发布后审查补丁（自查软件与官网） ｜** 逐项复检应用、PWA 与官网后修复：
+  1. **Service Worker 从未注册**（G4 离线实际未生效）→ `app.js` 仅在 Web 源注册（Tauri 跳过）；缓存策略修正：壳层（html/js/css/json）network-first、模板/布局 stale-while-revalidate、字体/wasm cache-first，cache 版本升 `framegeist-0.4.0`（旧 cache-first 会让老用户一直拿不到新构建）。
+  2. 模板墙排序改为分类导航序（white-border→…→game），不再按字母序从黑框开场；`gen-templates.mjs` 增加 `CATEGORY_ORDER`。
+  3. 无预览图的模板（用户导入）进编辑器不再空白：占位预览 `onerror` 回退显示模板名。
+  4. 官网模板墙：分类 tabs 与卡片名称/分类双语化 + 数量显示；首屏文案 "60+" 更正为 184 套/25 分类；样张说明改为真实演示摄影（Unsplash License）。
+  5. 官网下载页 <1MB 文件按 KB 显示（原先 SHA256SUMS/update.json 显示 0.0 MB）。
+  6. `manifest.webmanifest`：主题色 `#1772f6`、背景 `#f8f8fa`、补 SVG 图标与描述。
+  7. E2E 修一个真实竞态：`stageLabel` 早于 `<img>` 解码完成 → 先等待自然尺寸再测覆盖率（此前偶发 coverage=0 假红）。
+  8. 编辑器 ≤920px 单列回退；卡片网格补 `:focus-visible` 键盘可见性。
+   ｜ 桌面重建后 E2E 57/57 复跑通过；修复仅入 main，不重发 v0.4.0 资产。
+
+- **2026-09-16 ｜ v0.5.0 发布（cosmic-text + 字效矩阵 + 全编辑器 + 192 唯一照片） ｜** 按 `docs/V0.5.0-CONSTRAINTS.md` 一口气执行到发布。发现与决策：
+  1. **PARITY 高估 → 缺口补齐**：M4/M5 声称「功能对齐」但 `PARITY.md` 从未建立；逐项核对 §3.1 后发现 2 ✅/10 🟡/2 🔴（UI 未暴露引擎既有能力 + 真缺口）。按契约 §4「宁可延长工期，不缩水」关闭全部缺口（tint/margin/card 内外阴影/相框旋转/纹理背景/日历周视图与装订线/Fuji NR·clarity；Web 侧最近使用/重命名/取消编组/对齐分布/双击裁切/内置相框库/拼图交换与单图裁切/水印面板/插入图片/EXIF Fuji 分组/日历预设），最终 14/14 ✅。
+  2. **Fuji LUT1/2 无数据来源**：Fujifilm MakerNote 无 LUT 标签（ExifTool/Exiv2 表亦无；LUT 属 Panasonic/Sony），保持隐藏不造假并写入 TEMPLATE-SPEC/PARITY。
+  3. **CLI 拒绝覆盖输出**：`gen-samples.mjs --only` 需先删旧产物，否则全量失败（已修）。
+  4. **E2E 成为硬门禁**：新增「runtime: no page exceptions/console errors」，页面任何未捕获错误直接失败；断言 79 → 158。
+  5. **相邻同类模板像素差**：契约要求 >3% 自动断言；实测 167 对 min 38.90%（v0.4 手工测量仅 0.4–0.7%），以页面内 160×160 归一化 + 通道阈值 8 落地为 E2E §40。
+  6. **WASM 重建铁律**：引擎每次改动后 wasm-bindgen 重建 + `wasm-smoke` 必须复跑（帧字节一致 / 拼图 ≤0.1%）；性能终测 24MP 预览 168ms、导出 1032ms；60MP 预览 638ms、导出 2696ms，全部过 §4 门禁。
+  7. 版本统一 0.5.0（Cargo workspace + tauri.conf + web APP_VERSION；sw.js 缓存名已是 framegeist-0.5.0）。
 
 
 ---

@@ -3,8 +3,8 @@
     "id": "calendar-split-columns-01",
     "name": "Split Calendar",
     "nameI18n": { "zh": "双栏日历", "en": "Split Calendar" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -22,7 +22,8 @@
       "offset": { "x": 0.045, "y": -0.20 },
       "shape": "line",
       "size": { "width": 1.0, "height": 0.0015 },
-      "color": "#E4E6EA"
+      "color": "#E4E6EA",
+      "autoHide": true
     },
     {
       "type": "shape",
@@ -34,34 +35,18 @@
       "color": "#E0E0E0"
     },
     {
-      "type": "text",
-      "id": "month",
+      "type": "calendar",
+      "id": "daycard",
       "anchor": "bottom-center",
-      "offset": { "x": -0.25, "y": -0.185 },
-      "font": { "family": ["Inter"], "size": 0.012, "color": "#6B7280" },
-      "letterSpacing": 0.2,
-      "align": "center",
-      "content": [{ "expr": "date('MMM', exif.datetime)", "fallback": null }]
-    },
-    {
-      "type": "text",
-      "id": "bigday",
-      "anchor": "bottom-center",
-      "offset": { "x": -0.25, "y": -0.09 },
-      "font": { "family": ["Bebas Neue"], "size": 0.15, "color": "#1A1A1A" },
-      "letterSpacing": 0.01,
-      "align": "center",
-      "content": [{ "expr": "date('DD', exif.datetime)", "fallback": null }]
-    },
-    {
-      "type": "text",
-      "id": "year",
-      "anchor": "bottom-center",
-      "offset": { "x": -0.25, "y": -0.045 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9AA0A6" },
-      "letterSpacing": 0.15,
-      "align": "center",
-      "content": [{ "expr": "date('YYYY', exif.datetime)", "fallback": null }]
+      "offset": { "x": -0.25, "y": -0.015 },
+      "size": 0.19,
+      "dateSource": "exif",
+      "year": 2026,
+      "month": 9,
+      "view": "day",
+      "color": "#6B7280",
+      "accent": "#1A1A1A",
+      "fontFamily": ["Inter"]
     },
     {
       "type": "text",

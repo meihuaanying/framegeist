@@ -82,10 +82,61 @@
     <details class="card hidden" id="layoutCard">
       <summary data-i18n="panel.layout">布局</summary>
       <div class="body">
-        <div class="search-wrap">
-          <input type="search" id="layoutSearch" data-i18n-placeholder="search.layouts" placeholder="搜索布局…">
+        <label class="row"><input type="checkbox" id="freeMode"><span data-i18n="free.title">自由拼图</span></label>
+        <div id="freePanel" class="hidden">
+          <div class="field">
+            <label><span data-i18n="free.canvas">画布比例</span></label>
+            <select id="freeAspect">
+              <option value="4:3">4:3</option>
+              <option value="3:2">3:2</option>
+              <option value="1:1">1:1</option>
+              <option value="16:9">16:9</option>
+              <option value="9:16">9:16</option>
+            </select>
+          </div>
+          <div class="field">
+            <label><span data-i18n="free.background">背景</span></label>
+            <input type="color" id="freeBg" value="#FFFFFF">
+          </div>
+          <div class="layer-list" id="freeList"></div>
+          <div class="btn-row" style="margin-top:6px">
+            <button class="btn small" id="freeAdd" data-i18n="free.add">加照片</button>
+            <button class="btn small" id="freeSwap" data-i18n="free.swap" data-i18n-title="free.swapHint" title="交换">交换</button>
+            <button class="btn small" id="freeFront" data-i18n-title="layers.top" title="置顶">⤒</button>
+            <button class="btn small" id="freeBack" data-i18n-title="layers.bottom" title="置底">⤓</button>
+          </div>
+          <div class="btn-row" style="margin-top:6px">
+            <button class="btn small" id="freeDel" data-i18n-title="layers.delete" title="删除">✕</button>
+            <button class="btn small" id="freeRelayout" data-i18n="free.relayout" data-i18n-title="free.relayoutHint" title="重排">重排</button>
+          </div>
+          <div class="field" style="margin-top:8px">
+            <label><span data-i18n="free.radius">圆角</span><b id="freeRadiusVal">0%</b></label>
+            <input type="range" id="freeRadius" min="0" max="0.5" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label><span data-i18n="free.stroke">描边宽度</span><b id="freeStrokeVal">0px</b></label>
+            <input type="range" id="freeStrokeW" min="0" max="64" step="1" value="0">
+          </div>
+          <div class="color-row">
+            <span class="muted" data-i18n="free.strokeColor">描边颜色</span>
+            <input type="color" id="freeStrokeColor" value="#FFFFFF">
+          </div>
+          <div class="field" style="margin-top:8px">
+            <label><span data-i18n="free.gap">间隔</span><b id="freeGapVal">2%</b></label>
+            <input type="range" id="freeGap" min="0" max="0.2" step="0.005" value="0.02">
+          </div>
+          <div class="field">
+            <label><span data-i18n="free.margin">边距</span><b id="freeMarginVal">2%</b></label>
+            <input type="range" id="freeMargin" min="0" max="0.2" step="0.005" value="0.02">
+          </div>
+          <div class="muted" id="freeHint" data-i18n="free.hint">画布上拖动移动，角点缩放，顶部圆点旋转</div>
         </div>
-        <div class="layout-grid" id="layoutGrid"></div>
+        <div id="layoutPicker">
+          <div class="search-wrap">
+            <input type="search" id="layoutSearch" data-i18n-placeholder="search.layouts" placeholder="搜索布局…">
+          </div>
+          <div class="layout-grid" id="layoutGrid"></div>
+        </div>
       </div>
     </details>
 
@@ -102,22 +153,206 @@
         <select id="bgSelect">
           <option value="default" data-i18n="canvas.bgDefault">模板默认</option>
           <option value="blur" data-i18n="canvas.bgBlur">模糊</option>
+          <option value="tint" data-i18n="canvas.bgTint">自动取色</option>
           <option value="solid" data-i18n="canvas.bgSolid">纯色</option>
           <option value="image" data-i18n="canvas.bgImage">图片</option>
           <option value="none" data-i18n="canvas.bgNone">无</option>
         </select>
-        <div class="color-row" style="margin-top:8px">
+        <div class="swatches" id="bgSwatches"></div>
+        <div class="color-row" style="margin-top:4px">
           <span class="muted" data-i18n="canvas.bgColor">背景色</span>
           <input type="color" id="bgColor" value="#FFFFFF">
+          <button class="icon-btn" id="bgEyedropper" data-i18n-title="canvas.eyedropper" title="画布取色">💧</button>
           <span class="spacer" style="flex:1"></span>
           <button class="btn small ghost" id="uploadBg" style="width:auto;padding:0 10px" data-i18n="canvas.uploadBg">上传背景图</button>
         </div>
+        <p class="muted hidden" id="eyedropperHint" data-i18n="canvas.eyedropperHint">点击画布取样颜色</p>
         <input type="file" id="bgFile" accept="image/*" hidden>
+        <div class="field" style="margin-top:8px">
+          <label><span data-i18n="canvas.margin">边距</span><b id="marginVal">0%</b></label>
+          <input type="range" id="marginRange" min="0" max="0.5" step="0.005" value="0">
+        </div>
         <div class="btn-row" style="margin-top:10px">
           <button class="btn small" id="flipH" data-i18n="canvas.flipH">水平翻转</button>
           <button class="btn small" id="flipV" data-i18n="canvas.flipV">垂直翻转</button>
         </div>
         <button class="btn small ghost" id="resetCanvas" style="margin-top:8px" data-i18n="canvas.reset">重置画布</button>
+      </div>
+    </details>
+
+    <details class="card hidden advanced-only" id="cardFxCard">
+      <summary data-i18n="panel.cardFx">卡片特效</summary>
+      <div class="body">
+        <label class="row"><input type="checkbox" id="cardOn"><span data-i18n="card.enable">启用卡片特效</span></label>
+        <p class="muted card-hint" data-i18n="card.lowSpecHint">低配设备建议关闭阴影</p>
+        <div class="field">
+          <label><span data-i18n="card.radius">圆角</span><b id="cardRadiusVal">6%</b></label>
+          <input type="range" id="cardRadius" min="0" max="0.25" step="0.005" value="0.06">
+        </div>
+        <label class="row"><input type="checkbox" id="cardShadowOn" checked><span data-i18n="card.shadow">外阴影</span></label>
+        <div class="field">
+          <label><span data-i18n="card.shadowBlur">阴影模糊</span><b id="cardBlurVal">12%</b></label>
+          <input type="range" id="cardBlur" min="0" max="0.5" step="0.005" value="0.12">
+        </div>
+        <div class="field">
+          <label><span data-i18n="card.shadowOpacity">阴影不透明度</span><b id="cardOpacityVal">35%</b></label>
+          <input type="range" id="cardOpacity" min="0" max="1" step="0.01" value="0.35">
+        </div>
+        <div class="field">
+          <label><span data-i18n="card.offsetX">阴影水平偏移</span><b id="cardDxVal">1%</b></label>
+          <input type="range" id="cardDx" min="-0.5" max="0.5" step="0.005" value="0.01">
+        </div>
+        <div class="field">
+          <label><span data-i18n="card.offsetY">阴影垂直偏移</span><b id="cardDyVal">2%</b></label>
+          <input type="range" id="cardDy" min="-0.5" max="0.5" step="0.005" value="0.02">
+        </div>
+        <div class="field">
+          <label><span data-i18n="card.border">边框宽度</span><b id="cardBorderVal">0%</b></label>
+          <input type="range" id="cardBorder" min="0" max="0.05" step="0.001" value="0">
+        </div>
+        <div class="color-row">
+          <span class="muted" data-i18n="card.borderColor">边框颜色</span>
+          <input type="color" id="cardBorderColor" value="#FFFFFF">
+        </div>
+        <label class="row"><input type="checkbox" id="cardInnerOn"><span data-i18n="card.innerShadow">内阴影</span></label>
+        <div class="field">
+          <label><span data-i18n="card.innerBlur">内阴影模糊</span><b id="cardInnerBlurVal">10%</b></label>
+          <input type="range" id="cardInnerBlur" min="0" max="0.5" step="0.005" value="0.1">
+        </div>
+        <div class="field">
+          <label><span data-i18n="card.innerOpacity">内阴影不透明度</span><b id="cardInnerOpacityVal">30%</b></label>
+          <input type="range" id="cardInnerOpacity" min="0" max="1" step="0.01" value="0.3">
+        </div>
+      </div>
+    </details>
+
+    <details class="card hidden" id="layersCard">
+      <summary data-i18n="layers.title">图层</summary>
+      <div class="body">
+        <div class="btn-row" style="margin-bottom:6px">
+          <button class="btn small" id="editUndo" data-i18n-title="layers.undo" title="撤销">↶</button>
+          <button class="btn small" id="editRedo" data-i18n-title="layers.redo" title="重做">↷</button>
+          <span class="spacer" style="flex:1"></span>
+          <button class="btn small" id="tierToggle" data-i18n="layers.tier">高级</button>
+        </div>
+        <div class="layer-list" id="layerList"></div>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn small" id="layerUp" data-i18n-title="layers.up" title="上移">↑</button>
+          <button class="btn small" id="layerDown" data-i18n-title="layers.down" title="下移">↓</button>
+          <button class="btn small" id="layerTop" data-i18n-title="layers.top" title="置顶">⤒</button>
+          <button class="btn small" id="layerBottom" data-i18n-title="layers.bottom" title="置底">⤓</button>
+          <button class="btn small" id="layerDup" data-i18n-title="layers.duplicate" title="复制">⧉</button>
+          <button class="btn small" id="layerGroup" data-i18n-title="layers.group" title="编组">▣</button>
+          <button class="btn small" id="layerUngroup" data-i18n-title="layers.ungroup" title="取消编组" disabled>▢</button>
+          <button class="btn small" id="layerDel" data-i18n-title="layers.delete" title="删除">✕</button>
+        </div>
+        <div class="btn-row align-row" style="margin-top:6px">
+          <button class="btn small" id="alignLeft" data-i18n-title="layers.alignLeft" title="左对齐">⇤</button>
+          <button class="btn small" id="alignCenterH" data-i18n-title="layers.alignCenterH" title="水平居中">↔</button>
+          <button class="btn small" id="alignRight" data-i18n-title="layers.alignRight" title="右对齐">⇥</button>
+          <button class="btn small" id="alignTop" data-i18n-title="layers.alignTop" title="顶对齐">⇡</button>
+          <button class="btn small" id="alignMiddleV" data-i18n-title="layers.alignMiddleV" title="垂直居中">↕</button>
+          <button class="btn small" id="alignBottom" data-i18n-title="layers.alignBottom" title="底对齐">⇣</button>
+          <button class="btn small" id="distributeH" data-i18n-title="layers.distributeH" title="水平分布">⋯</button>
+          <button class="btn small" id="distributeV" data-i18n-title="layers.distributeV" title="垂直分布">⋮</button>
+        </div>
+      </div>
+    </details>
+
+    <details class="card hidden advanced-only" id="insertCard">
+      <summary data-i18n="insert.title">添加元素</summary>
+      <div class="body">
+        <div class="field">
+          <label><span data-i18n="insert.preset">文字样式预设</span></label>
+          <select id="presetSelect">
+            <option value="" data-i18n="insert.presetNone">选择预设并应用</option>
+            <option value="copperplate">铜版雕刻</option>
+            <option value="gilt">烫金箔</option>
+            <option value="letterpress">压印浮雕</option>
+            <option value="woodtype">木刻活字</option>
+            <option value="ukiyoe">浮世绘题签</option>
+            <option value="deco">Art Deco 双线</option>
+            <option value="republican">民国杂志铅字</option>
+            <option value="seal">朱文印章</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="btn small" id="addText" data-i18n="insert.text">文字</button>
+          <button class="btn small" id="addImage" data-i18n="insert.image">图片</button>
+          <button class="btn small" id="addCalendar" data-i18n="insert.calendar">日历</button>
+          <button class="btn small" id="addDivider" data-i18n="insert.divider">分割线</button>
+          <button class="btn small" id="addShape" data-i18n="insert.shape">线框</button>
+          <button class="btn small" id="addPalette" data-i18n="insert.palette">色卡</button>
+        </div>
+        <input type="file" id="imgInsertFile" accept="image/*" hidden>
+      </div>
+    </details>
+
+    <details class="card hidden advanced-only" id="propsCard">
+      <summary data-i18n="props.title">元素属性</summary>
+      <div class="body" id="propsBody">
+        <div class="muted" data-i18n="props.none">在画布或图层列表中选择元素</div>
+      </div>
+    </details>
+
+    <details class="card hidden advanced-only" id="frameCard">
+      <summary data-i18n="frame.title">相框</summary>
+      <div class="body">
+        <label class="row"><input type="checkbox" id="frameOn"><span data-i18n="frame.enable">启用相框</span></label>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn small" id="uploadFrame" data-i18n="frame.upload">上传相框 PNG</button>
+          <button class="btn small ghost" id="clearFrame" data-i18n="canvas.clearBg">清除</button>
+        </div>
+        <label class="row" style="margin-top:6px"><input type="checkbox" id="frameAuto" checked><span data-i18n="frame.auto">自动检测透明窗口</span></label>
+        <label class="row" style="margin-top:8px"><span data-i18n="frame.builtin">内置相框</span></label>
+        <div class="frame-grid" id="frameGrid"></div>
+        <div class="field">
+          <label><span data-i18n="frame.scale">相框缩放</span><b id="frameScaleVal">100%</b></label>
+          <input type="range" id="frameScale" min="0.5" max="1.5" step="0.01" value="1">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.inset">窗口内缩</span><b id="frameInsetVal">0%</b></label>
+          <input type="range" id="frameInset" min="0" max="0.2" step="0.005" value="0">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.offsetX">水平偏移</span><b id="frameOffsetXVal">0%</b></label>
+          <input type="range" id="frameOffsetX" min="-1" max="1" step="0.01" value="0">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.offsetY">垂直偏移</span><b id="frameOffsetYVal">0%</b></label>
+          <input type="range" id="frameOffsetY" min="-1" max="1" step="0.01" value="0">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.rotation">旋转</span><b id="frameRotationVal">0°</b></label>
+          <input type="range" id="frameRotation" min="-180" max="180" step="1" value="0">
+        </div>
+        <input type="file" id="frameFile" accept="image/png" hidden>
+      </div>
+    </details>
+
+    <details class="card hidden advanced-only" id="cropCard">
+      <summary data-i18n="crop.title">裁切</summary>
+      <div class="body">
+        <div class="btn-row">
+          <button class="btn small" id="cropToggle" data-i18n="crop.enter">进入裁切</button>
+          <button class="btn small ghost" id="cropReset" data-i18n="crop.reset">重置裁切</button>
+        </div>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn small" id="cropFillW" data-i18n="crop.fillW">填满宽度</button>
+          <button class="btn small" id="cropFillH" data-i18n="crop.fillH">填满高度</button>
+        </div>
+        <div class="field" style="margin-top:6px">
+          <label><span data-i18n="crop.aspect">比例锁定</span></label>
+          <select id="cropAspect">
+            <option value="free" data-i18n="crop.free">自由</option>
+            <option value="1:1">1:1</option>
+            <option value="4:3">4:3</option>
+            <option value="3:2">3:2</option>
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+          </select>
+        </div>
+        <div class="muted" id="cropInfo"></div>
       </div>
     </details>
 
@@ -147,6 +382,26 @@
           <input type="file" id="fontFile" accept=".ttf,.otf" hidden>
         </div>
         <button class="btn small ghost" id="resetTweaks" style="margin-top:8px" data-i18n="tweak.reset">重置微调</button>
+      </div>
+    </details>
+
+    <details class="card hidden" id="watermarkCard">
+      <summary data-i18n="panel.watermark">水印调整</summary>
+      <div class="body">
+        <div class="field">
+          <label><span data-i18n="wm.height">高度</span><b id="wmSizeVal">100%</b></label>
+          <input type="range" id="wmSize" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field">
+          <label><span data-i18n="wm.padding">边距</span><b id="wmPadVal">100%</b></label>
+          <input type="range" id="wmPad" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field">
+          <label><span data-i18n="wm.spacing">间隔</span><b id="wmSpacingVal">0.00</b></label>
+          <input type="range" id="wmSpacing" min="-0.02" max="0.1" step="0.005" value="0">
+        </div>
+        <p class="muted" data-i18n="wm.perElementHint">选中元素后可在元素属性中单独调整</p>
+        <button class="btn small" id="wmSelectFirst" data-i18n="wm.selectFirst">选择第一个文字元素</button>
       </div>
     </details>
 
@@ -196,6 +451,10 @@
       <div class="body">
         <div class="muted" id="exifEmpty" data-i18n="exif.none">拖入照片后显示</div>
         <dl class="kv hidden" id="exifList"></dl>
+        <div class="hidden" id="fujiGroup">
+          <div class="fuji-title" data-i18n="exif.fuji.title">Fuji 配方</div>
+          <dl class="kv" id="fujiList"></dl>
+        </div>
       </div>
     </details>
 
@@ -207,6 +466,7 @@
           <option value="6144">6K · 6144</option>
           <option value="3840">4K · 3840</option>
           <option value="2048">2K · 2048</option>
+          <option value="1280">720P · 1280</option>
           <option value="custom" data-i18n="export.custom">自定义长边</option>
         </select>
       </label>
@@ -228,6 +488,7 @@
         <button class="icon-btn" id="backToWall" data-i18n-title="editor.back" title="返回模板墙">←</button>
         <span id="stageLabel" data-i18n="stage.placeholder">拖入一张照片开始</span>
         <span class="spacer"></span>
+        <button class="icon-btn" id="panelTierBtn" data-i18n-title="layers.tier" title="高级/简洁">⊞</button>
         <button class="icon-btn" id="zoomOut" data-i18n-title="stage.zoomOut">−</button>
         <span class="zoom-label" id="zoomLabel">100%</span>
         <button class="icon-btn" id="zoomIn" data-i18n-title="stage.zoomIn">＋</button>
@@ -292,6 +553,7 @@
           <select id="setExportSize" style="width:auto">
             <option value="0" data-i18n="export.original"></option>
             <option value="6144">6K</option><option value="3840">4K</option><option value="2048">2K</option>
+            <option value="1280">720P</option>
             <option value="custom" data-i18n="export.custom"></option>
           </select>
         </label>
@@ -310,6 +572,7 @@
       <section>
         <h3 data-i18n="settings.privacy"></h3>
         <label class="row"><input type="checkbox" id="setKeepGps"><span data-i18n="settings.keepGps"></span></label>
+        <label class="row"><input type="checkbox" id="setKeepMetadata" checked><span data-i18n="settings.keepMetadata">保留拍摄元数据（EXIF）</span></label>
         <p class="muted" data-i18n="settings.privacyNote"></p>
       </section>
       <section>

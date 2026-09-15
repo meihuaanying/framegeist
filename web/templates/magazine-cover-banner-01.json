@@ -3,8 +3,8 @@
     "id": "magazine-cover-banner-01",
     "name": "Midnight Cover",
     "nameI18n": { "zh": "午夜封面", "en": "Midnight Cover" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -22,6 +22,9 @@
       "offset": { "x": 0.045, "y": 0.028 },
       "font": { "family": ["Playfair Display"], "size": 0.055, "color": "#FFFFFF" },
       "letterSpacing": 0.06,
+      "effects": {
+        "shadow": { "offsetX": 0.015, "offsetY": 0.025, "blur": 0.03, "color": "#000000", "opacity": 0.45 }
+      },
       "content": [{ "expr": "'LIGHT JOURNAL'", "fallback": null }]
     },
     {

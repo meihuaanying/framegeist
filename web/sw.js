@@ -1,6 +1,9 @@
 // FrameGeist offline cache (PRD G4): engine + fonts + manifests + page shell.
-// Template/layout JSONs are cached at runtime (cache-first, refreshed in bg).
-const VERSION = "framegeist-v1";
+// Strategy:
+//   - fonts / wasm / favicon  → cache-first (immutable)
+//   - templates / layouts     → stale-while-revalidate
+//   - page shell (html/js/css/manifest/json) → network-first (fall back to cache offline)
+const VERSION = "framegeist-0.5.0";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -22,6 +25,8 @@ const PRECACHE = [
 // Tauri custom-protocol origin: never cache there (and self-destruct if an
 // older build registered us on it).
 const IS_TAURI = self.location.hostname === "tauri.localhost" || self.location.hostname.endsWith(".tauri.localhost");
+
+const SHELL_RE = /\.(?:html|js|css|json|webmanifest|svg)$/;
 
 self.addEventListener("install", (e) => {
   if (IS_TAURI) { self.skipWaiting(); return; }
@@ -49,19 +54,33 @@ self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET" || url.origin !== self.location.origin) return;
   if (url.pathname.includes("/api.github.com")) return;
 
-  const isTemplateOrLayout =
-    url.pathname.includes("/templates/") || url.pathname.includes("/layouts/");
+  const isTemplateOrLayout = url.pathname.includes("/templates/") || url.pathname.includes("/layouts/");
+  const isShell = e.request.mode === "navigate" || SHELL_RE.test(url.pathname);
 
   e.respondWith(
     caches.open(VERSION).then(async (cache) => {
-      const cached = await cache.match(e.request);
-      if (cached) {
-        if (isTemplateOrLayout) {
-          // stale-while-revalidate for template/layout JSONs
-          fetch(e.request).then((r) => r.ok && cache.put(e.request, r.clone())).catch(() => {});
-        }
-        return cached;
+      if (isTemplateOrLayout) {
+        // stale-while-revalidate
+        const cached = await cache.match(e.request);
+        const refresh = fetch(e.request).then((r) => r.ok && cache.put(e.request, r.clone())).catch(() => {});
+        if (cached) { e.waitUntil(refresh); return cached; }
+        const res = await refresh;
+        return res || fetch(e.request);
       }
+      if (isShell) {
+        // network-first: always pick up new builds when online
+        try {
+          const res = await fetch(e.request);
+          if (res.ok) cache.put(e.request, res.clone());
+          return res;
+        } catch {
+          const cached = await cache.match(e.request);
+          if (cached) return cached;
+          return fetch(e.request);
+        }
+      }
+      const cached = await cache.match(e.request);
+      if (cached) return cached;
       const res = await fetch(e.request);
       if (res.ok) cache.put(e.request, res.clone());
       return res;

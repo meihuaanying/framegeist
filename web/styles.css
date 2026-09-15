@@ -604,3 +604,110 @@ html[data-theme="dark"] .brand-cell img { filter: invert(1); }
 .wall-card .wall-actions button:hover { background: rgba(0, 0, 0, .8); }
 .wall-card .wall-actions button.icon { padding: 0 9px; font-size: 13px; }
 .wall-empty { grid-column: 1 / -1; text-align: center; color: var(--text-faint); padding: 70px 0; }
+
+/* keyboard focus visibility for the card grids */
+.wall-card:focus-visible,
+.thumb:focus-visible {
+  outline: 2px solid var(--accent-a);
+  outline-offset: 2px;
+}
+
+/* ---------- editor on narrow screens: preview above the controls ---------- */
+@media (max-width: 920px) {
+  .shell { grid-template-columns: 1fr; height: auto; min-height: calc(100vh - 56px); }
+  .workspace { order: 1; min-height: 62vh; }
+  .sidebar { order: 2; }
+}
+
+/* ---------- v0.5.0 editor: layers, properties, canvas handles, crop ---------- */
+.edit-overlay {
+  position: absolute; inset: 0; pointer-events: none; z-index: 5;
+}
+.edit-overlay .box {
+  position: absolute; border: 1.5px solid var(--accent-a);
+  border-radius: 3px; pointer-events: none;
+}
+.edit-overlay .box.dim { border-color: color-mix(in srgb, var(--accent-a) 40%, transparent); }
+.edit-overlay .handle {
+  position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px;
+  border: 1.5px solid #fff; border-radius: 3px; background: var(--accent-a);
+  pointer-events: auto; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.edit-overlay .handle.rot { border-radius: 50%; cursor: grab; }
+.edit-overlay .guide {
+  position: absolute; background: #ff3b7b; pointer-events: none;
+  box-shadow: 0 0 4px rgba(255,59,123,.6);
+}
+.edit-overlay .guide.v { width: 1px; top: 0; bottom: 0; }
+.edit-overlay .guide.h { height: 1px; left: 0; right: 0; }
+.edit-overlay .crop-rect {
+  position: absolute; border: 1.5px dashed #fff; box-shadow: 0 0 0 9999px rgba(0,0,0,.45);
+  pointer-events: auto; cursor: move;
+}
+.edit-overlay .crop-rect::after {
+  content: ""; position: absolute; right: -6px; bottom: -6px; width: 14px; height: 14px;
+  border: 1.5px solid #fff; background: var(--accent-a); border-radius: 3px; cursor: nwse-resize;
+}
+.edit-overlay.editing { pointer-events: auto; }
+
+.layer-list { display: flex; flex-direction: column; gap: 3px; max-height: 260px; overflow: auto; }
+.layer-row {
+  display: flex; align-items: center; gap: 6px; padding: 5px 7px;
+  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+  font-size: 12px; background: var(--bg-soft);
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.layer-row.on { border-color: var(--accent-a); background: color-mix(in srgb, var(--accent-a) 10%, var(--bg-soft)); }
+.layer-row .lname { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.layer-row .lname-input { flex: 1; min-width: 0; height: 22px; padding: 0 6px; font-size: 12px; }
+.layer-row .ltag { color: var(--text-faint); font-size: 10px; }
+.layer-row button {
+  width: 22px; height: 22px; border: 0; border-radius: 6px; cursor: pointer;
+  background: transparent; color: var(--text-muted); font-size: 12px;
+}
+.layer-row button:hover { background: var(--chip); color: var(--text); }
+.layer-row.hidden-layer .lname { text-decoration: line-through; opacity: .5; }
+.layer-row .indent { width: 12px; }
+.props-grid { display: flex; flex-direction: column; gap: 8px; }
+.props-grid .field { margin: 0; }
+.align-row { grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.dual { display: flex; align-items: center; gap: 6px; }
+.dual input[type="range"] { flex: 1; }
+.dual input[type="number"] { width: 62px; }
+.preset-note { color: var(--text-faint); font-size: 11px; margin-top: 4px; }
+
+/* v0.5.0 panel tiers */
+body[data-tier="simple"] .advanced-only { display: none !important; }
+.icon-btn.on { background: var(--chip-on); color: var(--chip-on-text); }
+
+/* v0.5.0 M6: background swatches, eyedropper, card + built-in frame grids */
+.swatches { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
+.swatch {
+  width: 22px; height: 22px; padding: 0; border-radius: 6px;
+  border: 1px solid var(--border-strong); cursor: pointer;
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.swatch:hover { transform: translateY(-1px); }
+.swatch.on { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 55%, transparent); }
+#bgEyedropper { padding: 0 8px; font-size: 14px; }
+.viewport.eyedropper { cursor: crosshair; }
+.viewport.eyedropper img { cursor: crosshair; }
+.card-hint { margin: 2px 0 8px; font-size: 11px; }
+.frame-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  max-height: 190px; overflow-y: auto; margin-top: 4px;
+  padding-right: 2px; scrollbar-width: thin; scrollbar-color: var(--scroll) transparent;
+}
+.frame-cell {
+  border: 1px solid var(--border); border-radius: 8px; background: var(--bg-soft);
+  padding: 4px; cursor: pointer; display: grid; place-items: center;
+  aspect-ratio: 1; transition: all var(--t-base) var(--ease);
+}
+.frame-cell:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+.frame-cell.on { border-color: var(--accent-a); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 30%, transparent); }
+.frame-cell img { width: 100%; height: 100%; object-fit: contain; }
+
+/* v0.5.0 M6: Fuji EXIF group, calendar presets, watermark card */
+.fuji-title { font-weight: 600; font-size: 12px; color: var(--text); margin: 10px 0 4px; }
+.cal-presets { grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.cal-accents { margin: 2px 0 0; }

@@ -3,8 +3,8 @@
     "id": "portfolio-atelier-plate-01",
     "name": "Atelier Plate",
     "nameI18n": { "zh": "展签·标题", "en": "Atelier Plate" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
@@ -41,7 +41,8 @@
       "offset": { "x": 0.045, "y": -0.205 },
       "shape": "line",
       "size": { "width": 0.9, "height": 0.0016 },
-      "color": "#E4E6EA"
+      "color": "#E4E6EA",
+      "autoHide": true
     },
     {
       "type": "text",

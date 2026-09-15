@@ -6,8 +6,8 @@
       "zh": "格线信息带",
       "en": "Ruled Band"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "white-border"
@@ -39,7 +39,8 @@
         "width": 1,
         "height": 0.0016
       },
-      "color": "#E4E6EA"
+      "color": "#E4E6EA",
+      "autoHide": true
     },
     {
       "type": "shape",
@@ -54,7 +55,8 @@
         "width": 1,
         "height": 0.0016
       },
-      "color": "#E4E6EA"
+      "color": "#E4E6EA",
+      "autoHide": true
     },
     {
       "type": "image",

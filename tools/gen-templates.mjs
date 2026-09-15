@@ -27,7 +27,17 @@ for (const f of readdirSync(OUT)) {
     category: raw.meta.category,
   });
 }
-manifest.sort((a, b) => a.category.localeCompare(b.category) || a.name.localeCompare(b.name));
+const CATEGORY_ORDER = [
+  "white-border", "camera", "phone", "drone", "fuji", "film", "colorwalk", "colorful",
+  "classic-watermark", "portfolio", "black-frame", "sports", "calendar", "magazine",
+  "minimal", "borderless", "master", "personal", "polaroid", "festival", "effect",
+  "colorcard", "blur-bg", "ticket", "game",
+];
+const catIndex = (c) => {
+  const i = CATEGORY_ORDER.indexOf(c);
+  return i < 0 ? CATEGORY_ORDER.length : i;
+};
+manifest.sort((a, b) => catIndex(a.category) - catIndex(b.category) || a.name.localeCompare(b.name));
 
 mkdirSync(WEB, { recursive: true });
 writeFileSync(join(WEB, "templates.json"), JSON.stringify(manifest, null, 2) + "\n");

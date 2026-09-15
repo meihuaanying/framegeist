@@ -1,5 +1,795 @@
 [
   {
+    "id": "white-border-centered-lockup",
+    "name": "Centered Lockup",
+    "names": {
+      "zh": "中轴锁排",
+      "en": "Centered Lockup"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-editorial-01",
+    "name": "Editorial White",
+    "names": {
+      "zh": "杂志白边",
+      "en": "Editorial White"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-letterhead",
+    "name": "Letterhead",
+    "names": {
+      "zh": "信笺头",
+      "en": "Letterhead"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-linen-dot",
+    "name": "Linen Dot",
+    "names": {
+      "zh": "亚麻朱点",
+      "en": "Linen Dot"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-passport-mono",
+    "name": "Passport Mono",
+    "names": {
+      "zh": "档案打字机",
+      "en": "Passport Mono"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-quiet-stack",
+    "name": "Quiet Stack",
+    "names": {
+      "zh": "三行静置",
+      "en": "Quiet Stack"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-ruled-band",
+    "name": "Ruled Band",
+    "names": {
+      "zh": "格线信息带",
+      "en": "Ruled Band"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-top-note",
+    "name": "Top Note",
+    "names": {
+      "zh": "顶部微注",
+      "en": "Top Note"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "white-border-twin-columns",
+    "name": "Twin Columns",
+    "names": {
+      "zh": "双栏档案",
+      "en": "Twin Columns"
+    },
+    "notice": null,
+    "category": "white-border"
+  },
+  {
+    "id": "camera-baseplate-02",
+    "name": "Base Plate",
+    "names": {
+      "zh": "底盖机身",
+      "en": "Base Plate"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-corner-body-03",
+    "name": "Corner Body",
+    "names": {
+      "zh": "右上机身",
+      "en": "Corner Body"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-lens-dial-06",
+    "name": "Lens Dial",
+    "names": {
+      "zh": "镜头圈刻度",
+      "en": "Lens Dial"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-retro-sidecar-04",
+    "name": "Retro Sidecar",
+    "names": {
+      "zh": "复古侧挂机身",
+      "en": "Retro Sidecar"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-series-emblem-07",
+    "name": "Series Emblem",
+    "names": {
+      "zh": "机身系列徽章",
+      "en": "Series Emblem"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-ricoh-slimline-08",
+    "name": "Slimline Bar",
+    "names": {
+      "zh": "顶置细条参数",
+      "en": "Slimline Bar"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-stencil-mono-05",
+    "name": "Stencil Mono",
+    "names": {
+      "zh": "丝印极简机身",
+      "en": "Stencil Mono"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "camera-topdeck-bar-01",
+    "name": "Top Deck Plate",
+    "names": {
+      "zh": "顶盖机身条",
+      "en": "Top Deck Plate"
+    },
+    "notice": null,
+    "category": "camera"
+  },
+  {
+    "id": "phone-accent-dots-01",
+    "name": "Accent Dots",
+    "names": {
+      "zh": "点睛彩条",
+      "en": "Accent Dots"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-camera-ui-01",
+    "name": "Camera UI",
+    "names": {
+      "zh": "相机界面卡",
+      "en": "Camera UI"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-dual-optics-01",
+    "name": "Dual Optics",
+    "names": {
+      "zh": "双镜对照",
+      "en": "Dual Optics"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-midnight-bar-01",
+    "name": "Midnight Bar",
+    "names": {
+      "zh": "午夜黑条",
+      "en": "Midnight Bar"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-minimal-line-01",
+    "name": "Minimal Line",
+    "names": {
+      "zh": "极简单行",
+      "en": "Minimal Line"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-paper-spec-01",
+    "name": "Paper Spec",
+    "names": {
+      "zh": "纸感规格",
+      "en": "Paper Spec"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-shot-on-01",
+    "name": "Shot On Center",
+    "names": {
+      "zh": "居中出品",
+      "en": "Shot On Center"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-side-rail-01",
+    "name": "Side Rail",
+    "names": {
+      "zh": "侧栏竖标",
+      "en": "Side Rail"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-studio-card-01",
+    "name": "Studio Card",
+    "names": {
+      "zh": "影棚白卡",
+      "en": "Studio Card"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "phone-vendor-bar-01",
+    "name": "Vendor Dot Bar",
+    "names": {
+      "zh": "厂商圆点白条",
+      "en": "Vendor Dot Bar"
+    },
+    "notice": null,
+    "category": "phone"
+  },
+  {
+    "id": "drone-aerial-editorial-01",
+    "name": "Aerial Editorial",
+    "names": {
+      "zh": "航拍编辑",
+      "en": "Aerial Editorial"
+    },
+    "notice": null,
+    "category": "drone"
+  },
+  {
+    "id": "drone-altitude-hero-01",
+    "name": "Altitude Hero",
+    "names": {
+      "zh": "高度主角",
+      "en": "Altitude Hero"
+    },
+    "notice": null,
+    "category": "drone"
+  },
+  {
+    "id": "drone-geoblock-01",
+    "name": "Drone Geo Block",
+    "names": {
+      "zh": "坐标块",
+      "en": "Drone Geo Block"
+    },
+    "notice": null,
+    "category": "drone"
+  },
+  {
+    "id": "drone-skybar-01",
+    "name": "Drone Sky Bar",
+    "names": {
+      "zh": "航拍白条",
+      "en": "Drone Sky Bar"
+    },
+    "notice": null,
+    "category": "drone"
+  },
+  {
+    "id": "drone-topline-01",
+    "name": "Drone Topline",
+    "names": {
+      "zh": "顶部航标",
+      "en": "Drone Topline"
+    },
+    "notice": null,
+    "category": "drone"
+  },
+  {
+    "id": "fuji-recipe-band-02",
+    "name": "Recipe Band",
+    "names": {
+      "zh": "奶白配方格",
+      "en": "Recipe Band"
+    },
+    "notice": null,
+    "category": "fuji"
+  },
+  {
+    "id": "fuji-recipe-column-03",
+    "name": "Recipe Column",
+    "names": {
+      "zh": "左侧配方栏",
+      "en": "Recipe Column"
+    },
+    "notice": null,
+    "category": "fuji"
+  },
+  {
+    "id": "fuji-recipe-hero-04",
+    "name": "Recipe Hero",
+    "names": {
+      "zh": "奶白配方卡",
+      "en": "Recipe Hero"
+    },
+    "notice": null,
+    "category": "fuji"
+  },
+  {
+    "id": "fuji-recipe-panel-01",
+    "name": "Recipe Panel",
+    "names": {
+      "zh": "配方暗板",
+      "en": "Recipe Panel"
+    },
+    "notice": null,
+    "category": "fuji"
+  },
+  {
+    "id": "fuji-recipe-rails-05",
+    "name": "Recipe Rails",
+    "names": {
+      "zh": "右侧配方栏",
+      "en": "Recipe Rails"
+    },
+    "notice": null,
+    "category": "fuji"
+  },
+  {
+    "id": "film-darkroom-pillar-03",
+    "name": "Darkroom Pillar",
+    "names": {
+      "zh": "暗房立柱",
+      "en": "Darkroom Pillar"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-diptych-hairline-07",
+    "name": "Diptych Hairline",
+    "names": {
+      "zh": "双联细线",
+      "en": "Diptych Hairline"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-led-datestamp-04",
+    "name": "LED Datestamp",
+    "names": {
+      "zh": "橙红日期章",
+      "en": "LED Datestamp"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-mono-roll-06",
+    "name": "Mono Roll",
+    "names": {
+      "zh": "机型卷轴",
+      "en": "Mono Roll"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-positive-print-08",
+    "name": "Positive Print",
+    "names": {
+      "zh": "黑白正片",
+      "en": "Positive Print"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-serif-stock-05",
+    "name": "Serif Silvergrain",
+    "names": {
+      "zh": "衬线卷名",
+      "en": "Serif Silvergrain"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-sprocket-01",
+    "name": "Sprocket Classic",
+    "names": {
+      "zh": "齿孔边码",
+      "en": "Sprocket Classic"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "film-sprocket-02",
+    "name": "Vertical Perfs",
+    "names": {
+      "zh": "竖齿孔",
+      "en": "Vertical Perfs"
+    },
+    "notice": null,
+    "category": "film"
+  },
+  {
+    "id": "colorwalk-blur-stage-01",
+    "name": "Blur Stage",
+    "names": {
+      "zh": "模糊舞台",
+      "en": "Blur Stage"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-ribbon-01",
+    "name": "Ink Ribbon",
+    "names": {
+      "zh": "墨色横带",
+      "en": "Ink Ribbon"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-verse-01",
+    "name": "Light Verse",
+    "names": {
+      "zh": "光影诗行",
+      "en": "Light Verse"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-single-line-01",
+    "name": "One Line Walk",
+    "names": {
+      "zh": "单行漫步",
+      "en": "One Line Walk"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-round-card-01",
+    "name": "Round Card",
+    "names": {
+      "zh": "圆角卡片",
+      "en": "Round Card"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-tint-seam-01",
+    "name": "Seamless Walk",
+    "names": {
+      "zh": "无缝色延",
+      "en": "Seamless Walk"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-vbar-01",
+    "name": "Side Column",
+    "names": {
+      "zh": "左侧色柱",
+      "en": "Side Column"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorwalk-top-field-01",
+    "name": "Top Field",
+    "names": {
+      "zh": "顶部色域",
+      "en": "Top Field"
+    },
+    "notice": null,
+    "category": "colorwalk"
+  },
+  {
+    "id": "colorful-chip-strip-01",
+    "name": "Chip Strip",
+    "names": {
+      "zh": "色卡条",
+      "en": "Chip Strip"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-corner-blocks-01",
+    "name": "Corner Blocks",
+    "names": {
+      "zh": "四角色块",
+      "en": "Corner Blocks"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-dot-cluster-01",
+    "name": "Dot Cluster",
+    "names": {
+      "zh": "圆点群落",
+      "en": "Dot Cluster"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-split-duo-01",
+    "name": "Duo Split",
+    "names": {
+      "zh": "双色分割",
+      "en": "Duo Split"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-pastel-card-01",
+    "name": "Pastel Card",
+    "names": {
+      "zh": "粉彩卡",
+      "en": "Pastel Card"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-frame-quad-01",
+    "name": "Quad Frame",
+    "names": {
+      "zh": "彩框四边",
+      "en": "Quad Frame"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-rainbow-lines-01",
+    "name": "Spectrum Rules",
+    "names": {
+      "zh": "彩虹刻度",
+      "en": "Spectrum Rules"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "colorful-sticker-date-01",
+    "name": "Sticker Date",
+    "names": {
+      "zh": "贴纸日期",
+      "en": "Sticker Date"
+    },
+    "notice": null,
+    "category": "colorful"
+  },
+  {
+    "id": "classic-watermark-black-bar",
+    "name": "Black Bar White Type",
+    "names": {
+      "zh": "黑条白字",
+      "en": "Black Bar White Type"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-double-row",
+    "name": "Classic Double Row",
+    "names": {
+      "zh": "经典双行水印",
+      "en": "Classic Double Row"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-single-row",
+    "name": "Classic Single Row",
+    "names": {
+      "zh": "经典单行水印",
+      "en": "Classic Single Row"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "art-copperplate-etch",
+    "name": "Copperplate Etch",
+    "names": {
+      "zh": "铜版雕刻",
+      "en": "Copperplate Etch"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-brand-center",
+    "name": "Cream Brand Center",
+    "names": {
+      "zh": "奶油居中字标",
+      "en": "Cream Brand Center"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-date-right",
+    "name": "Date Right",
+    "names": {
+      "zh": "日期右置",
+      "en": "Date Right"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-mono-stack",
+    "name": "Grey Mono Stack",
+    "names": {
+      "zh": "暖灰参数堆叠",
+      "en": "Grey Mono Stack"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-hairline-thin",
+    "name": "Thin Bar Hairline",
+    "names": {
+      "zh": "细条上悬线",
+      "en": "Thin Bar Hairline"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "classic-watermark-red-dot",
+    "name": "Vermilion Dot Bar",
+    "names": {
+      "zh": "朱点白条",
+      "en": "Vermilion Dot Bar"
+    },
+    "notice": null,
+    "category": "classic-watermark"
+  },
+  {
+    "id": "portfolio-atelier-plate-01",
+    "name": "Atelier Plate",
+    "names": {
+      "zh": "展签·标题",
+      "en": "Atelier Plate"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "art-deco-double",
+    "name": "Deco Double Line",
+    "names": {
+      "zh": "Art Deco 双线",
+      "en": "Deco Double Line"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "portfolio-double-rule-01",
+    "name": "Double Rule",
+    "names": {
+      "zh": "双线题签",
+      "en": "Double Rule"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "portfolio-marginalia-01",
+    "name": "Marginal Notes",
+    "names": {
+      "zh": "左右侧注",
+      "en": "Marginal Notes"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "portfolio-noir-matte-01",
+    "name": "Noir Matte",
+    "names": {
+      "zh": "黑白展陈",
+      "en": "Noir Matte"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "portfolio-credit-still-01",
+    "name": "Still Credits",
+    "names": {
+      "zh": "片尾小字",
+      "en": "Still Credits"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "art-ukiyoe-cartouche",
+    "name": "Ukiyo-e Cartouche",
+    "names": {
+      "zh": "浮世绘题签",
+      "en": "Ukiyo-e Cartouche"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "portfolio-vertical-scroll-01",
+    "name": "Vertical Scroll",
+    "names": {
+      "zh": "竖排题名",
+      "en": "Vertical Scroll"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
+    "id": "portfolio-wall-label-01",
+    "name": "Wall Label",
+    "names": {
+      "zh": "展览标签",
+      "en": "Wall Label"
+    },
+    "notice": null,
+    "category": "portfolio"
+  },
+  {
     "id": "black-frame-charcoal-split-01",
     "name": "Charcoal Split",
     "names": {
@@ -60,44 +850,284 @@
     "category": "black-frame"
   },
   {
-    "id": "blur-bg-brandbar-02",
-    "name": "Brand Bar",
+    "id": "sports-alt-badge-01",
+    "name": "Altitude Badge",
     "names": {
-      "zh": "品牌底栏",
-      "en": "Brand Bar"
+      "zh": "海拔徽章",
+      "en": "Altitude Badge"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "sports"
   },
   {
-    "id": "blur-bg-center-01",
-    "name": "Center Bloom",
+    "id": "sports-big-trail-01",
+    "name": "Big Trail",
     "names": {
-      "zh": "居中晕影",
-      "en": "Center Bloom"
+      "zh": "大标题山径",
+      "en": "Big Trail"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "sports"
   },
   {
-    "id": "blur-bg-card-03",
-    "name": "Soft Card",
+    "id": "sports-finish-line-01",
+    "name": "Finish Line",
     "names": {
-      "zh": "柔焦卡片",
-      "en": "Soft Card"
+      "zh": "终点线",
+      "en": "Finish Line"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "sports"
   },
   {
-    "id": "blur-bg-topcap-04",
-    "name": "Top Cap",
+    "id": "sports-ride-stats-01",
+    "name": "Ride Stats",
     "names": {
-      "zh": "顶部题头",
-      "en": "Top Cap"
+      "zh": "骑行数据行",
+      "en": "Ride Stats"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "sports"
+  },
+  {
+    "id": "sports-side-rail-01",
+    "name": "Trail Rail",
+    "names": {
+      "zh": "侧栏竖排",
+      "en": "Trail Rail"
+    },
+    "notice": null,
+    "category": "sports"
+  },
+  {
+    "id": "calendar-strip-date-01",
+    "name": "Bottom Strip Date",
+    "names": {
+      "zh": "底栏日历",
+      "en": "Bottom Strip Date"
+    },
+    "notice": null,
+    "category": "calendar"
+  },
+  {
+    "id": "calendar-center-rule-01",
+    "name": "Center Day Rules",
+    "names": {
+      "zh": "居中日历",
+      "en": "Center Day Rules"
+    },
+    "notice": null,
+    "category": "calendar"
+  },
+  {
+    "id": "calendar-corner-day-01",
+    "name": "Corner Day",
+    "names": {
+      "zh": "角标日历",
+      "en": "Corner Day"
+    },
+    "notice": null,
+    "category": "calendar"
+  },
+  {
+    "id": "calendar-portrait-stack-01",
+    "name": "Portrait Stack",
+    "names": {
+      "zh": "竖幅日历",
+      "en": "Portrait Stack"
+    },
+    "notice": null,
+    "category": "calendar"
+  },
+  {
+    "id": "calendar-rail-date-01",
+    "name": "Side Rail Date",
+    "names": {
+      "zh": "右栏日历",
+      "en": "Side Rail Date"
+    },
+    "notice": null,
+    "category": "calendar"
+  },
+  {
+    "id": "calendar-split-columns-01",
+    "name": "Split Calendar",
+    "names": {
+      "zh": "双栏日历",
+      "en": "Split Calendar"
+    },
+    "notice": null,
+    "category": "calendar"
+  },
+  {
+    "id": "magazine-double-rule-01",
+    "name": "Double Rule",
+    "names": {
+      "zh": "双线刊头",
+      "en": "Double Rule"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-gallery-left-01",
+    "name": "Gallery Column",
+    "names": {
+      "zh": "左文画廊",
+      "en": "Gallery Column"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-index-column-01",
+    "name": "Lumen Index",
+    "names": {
+      "zh": "索引栏目",
+      "en": "Lumen Index"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-cover-banner-01",
+    "name": "Midnight Cover",
+    "names": {
+      "zh": "午夜封面",
+      "en": "Midnight Cover"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-poster-manifesto-01",
+    "name": "Quiet Manifesto",
+    "names": {
+      "zh": "静默宣言",
+      "en": "Quiet Manifesto"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "art-republican-press",
+    "name": "Republican Letterpress",
+    "names": {
+      "zh": "民国杂志铅字",
+      "en": "Republican Letterpress"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "magazine-triptych-slices-01",
+    "name": "Triptych Slices",
+    "names": {
+      "zh": "三联切片",
+      "en": "Triptych Slices"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "art-woodtype-press",
+    "name": "Woodtype Press",
+    "names": {
+      "zh": "木刻活字",
+      "en": "Woodtype Press"
+    },
+    "notice": null,
+    "category": "magazine"
+  },
+  {
+    "id": "minimal-brand-right",
+    "name": "Brand Right",
+    "names": {
+      "zh": "右下品牌",
+      "en": "Brand Right"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-center-line",
+    "name": "Center Line",
+    "names": {
+      "zh": "中轴参数行",
+      "en": "Center Line"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-corner-mono",
+    "name": "Corner Mono",
+    "names": {
+      "zh": "角落打字机",
+      "en": "Corner Mono"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-letterbox",
+    "name": "Letterbox",
+    "names": {
+      "zh": "上下细带",
+      "en": "Letterbox"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "art-letterpress-relief",
+    "name": "Letterpress Relief",
+    "names": {
+      "zh": "压印浮雕",
+      "en": "Letterpress Relief"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-model-stack",
+    "name": "Model Stack",
+    "names": {
+      "zh": "机型两行",
+      "en": "Model Stack"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-portrait-line",
+    "name": "Portrait Line",
+    "names": {
+      "zh": "竖构图单行",
+      "en": "Portrait Line"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-copyright",
+    "name": "Quiet Copyright",
+    "names": {
+      "zh": "仅版权微字",
+      "en": "Quiet Copyright"
+    },
+    "notice": null,
+    "category": "minimal"
+  },
+  {
+    "id": "minimal-topright-date",
+    "name": "Top Right Date",
+    "names": {
+      "zh": "右上日期",
+      "en": "Top Right Date"
+    },
+    "notice": null,
+    "category": "minimal"
   },
   {
     "id": "borderless-center-caption-01",
@@ -210,494 +1240,264 @@
     "category": "borderless"
   },
   {
-    "id": "calendar-strip-date-01",
-    "name": "Bottom Strip Date",
+    "id": "master-cream-dot-01",
+    "name": "Cream Dot",
     "names": {
-      "zh": "底栏日历",
-      "en": "Bottom Strip Date"
+      "zh": "奶油朱点",
+      "en": "Cream Dot"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "master"
   },
   {
-    "id": "calendar-center-rule-01",
-    "name": "Center Day Rules",
+    "id": "master-crown-wordmark-01",
+    "name": "Crown Wordmark",
     "names": {
-      "zh": "居中日历",
-      "en": "Center Day Rules"
+      "zh": "顶冠底铭",
+      "en": "Crown Wordmark"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "master"
   },
   {
-    "id": "calendar-corner-day-01",
-    "name": "Corner Day",
+    "id": "master-ivory-plate-01",
+    "name": "Ivory Plate",
     "names": {
-      "zh": "角标日历",
-      "en": "Corner Day"
+      "zh": "象牙衬板",
+      "en": "Ivory Plate"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "master"
   },
   {
-    "id": "calendar-portrait-stack-01",
-    "name": "Portrait Stack",
+    "id": "master-noir-plate-01",
+    "name": "Noir Plate",
     "names": {
-      "zh": "竖幅日历",
-      "en": "Portrait Stack"
+      "zh": "夜墨衬板",
+      "en": "Noir Plate"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "master"
   },
   {
-    "id": "calendar-rail-date-01",
-    "name": "Side Rail Date",
+    "id": "master-seal-frame-01",
+    "name": "Seal Frame",
     "names": {
-      "zh": "右栏日历",
-      "en": "Side Rail Date"
+      "zh": "印线双框",
+      "en": "Seal Frame"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "master"
   },
   {
-    "id": "calendar-split-columns-01",
-    "name": "Split Calendar",
+    "id": "master-three-column-01",
+    "name": "Three Columns",
     "names": {
-      "zh": "双栏日历",
-      "en": "Split Calendar"
+      "zh": "三列数值格",
+      "en": "Three Columns"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "master"
   },
   {
-    "id": "camera-baseplate-02",
-    "name": "Base Plate",
+    "id": "art-vermilion-seal",
+    "name": "Vermilion Seal",
     "names": {
-      "zh": "底盖机身",
-      "en": "Base Plate"
+      "zh": "朱文印章",
+      "en": "Vermilion Seal"
     },
     "notice": null,
-    "category": "camera"
+    "category": "master"
   },
   {
-    "id": "camera-corner-body-03",
-    "name": "Corner Body",
+    "id": "personal-avatar-ring-01",
+    "name": "Avatar Ring",
     "names": {
-      "zh": "右上机身",
-      "en": "Corner Body"
+      "zh": "头像圆环",
+      "en": "Avatar Ring"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "camera-lens-dial-06",
-    "name": "Lens Dial",
+    "id": "personal-credit-social-01",
+    "name": "Credit Social",
     "names": {
-      "zh": "镜头圈刻度",
-      "en": "Lens Dial"
+      "zh": "署名社交",
+      "en": "Credit Social"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "camera-retro-sidecar-04",
-    "name": "Retro Sidecar",
+    "id": "personal-cn-inscription-01",
+    "name": "Ink Inscription",
     "names": {
-      "zh": "复古侧挂机身",
-      "en": "Retro Sidecar"
+      "zh": "墨色题记",
+      "en": "Ink Inscription"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "camera-series-emblem-07",
-    "name": "Series Emblem",
+    "id": "personal-micro-copyright-01",
+    "name": "Micro Copyright",
     "names": {
-      "zh": "机身系列徽章",
-      "en": "Series Emblem"
+      "zh": "版权微字",
+      "en": "Micro Copyright"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "camera-ricoh-slimline-08",
-    "name": "Slimline Bar",
+    "id": "personal-name-columns-01",
+    "name": "Name Columns",
     "names": {
-      "zh": "顶置细条参数",
-      "en": "Slimline Bar"
+      "zh": "三栏名录",
+      "en": "Name Columns"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "camera-stencil-mono-05",
-    "name": "Stencil Mono",
+    "id": "personal-polaroid-script-01",
+    "name": "Polaroid Script",
     "names": {
-      "zh": "丝印极简机身",
-      "en": "Stencil Mono"
+      "zh": "拍立得题字",
+      "en": "Polaroid Script"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "camera-topdeck-bar-01",
-    "name": "Top Deck Plate",
+    "id": "personal-script-signature-01",
+    "name": "Script Signature",
     "names": {
-      "zh": "顶盖机身条",
-      "en": "Top Deck Plate"
+      "zh": "手写签名",
+      "en": "Script Signature"
     },
     "notice": null,
-    "category": "camera"
+    "category": "personal"
   },
   {
-    "id": "classic-watermark-black-bar",
-    "name": "Black Bar White Type",
+    "id": "personal-triptych-01",
+    "name": "Triptych Card",
     "names": {
-      "zh": "黑条白字",
-      "en": "Black Bar White Type"
+      "zh": "三联卡",
+      "en": "Triptych Card"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "personal"
   },
   {
-    "id": "classic-watermark-double-row",
-    "name": "Classic Double Row",
+    "id": "polaroid-classic-script-03",
+    "name": "Classic Script",
     "names": {
-      "zh": "经典双行水印",
-      "en": "Classic Double Row"
+      "zh": "经典手写白框",
+      "en": "Classic Script"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "polaroid"
   },
   {
-    "id": "classic-watermark-single-row",
-    "name": "Classic Single Row",
+    "id": "polaroid-duo-stamps-05",
+    "name": "Duo Stamps",
     "names": {
-      "zh": "经典单行水印",
-      "en": "Classic Single Row"
+      "zh": "双邮票",
+      "en": "Duo Stamps"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "polaroid"
   },
   {
-    "id": "classic-watermark-brand-center",
-    "name": "Cream Brand Center",
+    "id": "polaroid-pastel-ring-04",
+    "name": "Pastel Ring",
     "names": {
-      "zh": "奶油居中字标",
-      "en": "Cream Brand Center"
+      "zh": "粉彩圆环",
+      "en": "Pastel Ring"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "polaroid"
   },
   {
-    "id": "classic-watermark-date-right",
-    "name": "Date Right",
+    "id": "polaroid-stamp-postcard-01",
+    "name": "Stamp Postcard",
     "names": {
-      "zh": "日期右置",
-      "en": "Date Right"
+      "zh": "邮票明信片",
+      "en": "Stamp Postcard"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "polaroid"
   },
   {
-    "id": "classic-watermark-mono-stack",
-    "name": "Grey Mono Stack",
+    "id": "polaroid-tilt-plate-02",
+    "name": "Tilt Plate",
     "names": {
-      "zh": "暖灰参数堆叠",
-      "en": "Grey Mono Stack"
+      "zh": "斜置日期卡",
+      "en": "Tilt Plate"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "polaroid"
   },
   {
-    "id": "classic-watermark-hairline-thin",
-    "name": "Thin Bar Hairline",
+    "id": "festival-dragon-boat-01",
+    "name": "Dragon Boat Seal",
     "names": {
-      "zh": "细条上悬线",
-      "en": "Thin Bar Hairline"
+      "zh": "端午印记",
+      "en": "Dragon Boat Seal"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "festival"
   },
   {
-    "id": "classic-watermark-red-dot",
-    "name": "Vermilion Dot Bar",
+    "id": "festival-moon-full-01",
+    "name": "Full Moon",
     "names": {
-      "zh": "朱点白条",
-      "en": "Vermilion Dot Bar"
+      "zh": "中秋月满",
+      "en": "Full Moon"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "festival"
   },
   {
-    "id": "colorcard-tint-chips-01",
-    "name": "Chromatic Edge",
+    "id": "festival-gold-frame-01",
+    "name": "Gold Frame",
     "names": {
-      "zh": "主色卡片",
-      "en": "Chromatic Edge"
+      "zh": "庆典金框",
+      "en": "Gold Frame"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "festival"
   },
   {
-    "id": "colorcard-cream-date-04",
-    "name": "Cream Date",
+    "id": "festival-lantern-warm-01",
+    "name": "Lantern Warmth",
     "names": {
-      "zh": "奶油大日期",
-      "en": "Cream Date"
+      "zh": "元宵灯火",
+      "en": "Lantern Warmth"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "festival"
   },
   {
-    "id": "colorcard-diamonds-03",
-    "name": "Diamond Row",
+    "id": "festival-lantern-night-01",
+    "name": "Night Lanterns",
     "names": {
-      "zh": "菱形色列",
-      "en": "Diamond Row"
+      "zh": "灯会之夜",
+      "en": "Night Lanterns"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "festival"
   },
   {
-    "id": "colorcard-index-05",
-    "name": "Index Row",
+    "id": "festival-spring-gold-01",
+    "name": "Spring Gold",
     "names": {
-      "zh": "索引色带",
-      "en": "Index Row"
+      "zh": "新春金岁",
+      "en": "Spring Gold"
     },
     "notice": null,
-    "category": "colorcard"
-  },
-  {
-    "id": "colorcard-column-02",
-    "name": "Night Column",
-    "names": {
-      "zh": "夜幕色柱",
-      "en": "Night Column"
-    },
-    "notice": null,
-    "category": "colorcard"
-  },
-  {
-    "id": "colorcard-sunrise-chips-01",
-    "name": "Sunrise Chips",
-    "names": {
-      "zh": "暖阳色卡",
-      "en": "Sunrise Chips"
-    },
-    "notice": null,
-    "category": "colorcard"
-  },
-  {
-    "id": "colorful-chip-strip-01",
-    "name": "Chip Strip",
-    "names": {
-      "zh": "色卡条",
-      "en": "Chip Strip"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-corner-blocks-01",
-    "name": "Corner Blocks",
-    "names": {
-      "zh": "四角色块",
-      "en": "Corner Blocks"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-dot-cluster-01",
-    "name": "Dot Cluster",
-    "names": {
-      "zh": "圆点群落",
-      "en": "Dot Cluster"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-split-duo-01",
-    "name": "Duo Split",
-    "names": {
-      "zh": "双色分割",
-      "en": "Duo Split"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-pastel-card-01",
-    "name": "Pastel Card",
-    "names": {
-      "zh": "粉彩卡",
-      "en": "Pastel Card"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-frame-quad-01",
-    "name": "Quad Frame",
-    "names": {
-      "zh": "彩框四边",
-      "en": "Quad Frame"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-rainbow-lines-01",
-    "name": "Spectrum Rules",
-    "names": {
-      "zh": "彩虹刻度",
-      "en": "Spectrum Rules"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorful-sticker-date-01",
-    "name": "Sticker Date",
-    "names": {
-      "zh": "贴纸日期",
-      "en": "Sticker Date"
-    },
-    "notice": null,
-    "category": "colorful"
-  },
-  {
-    "id": "colorwalk-blur-stage-01",
-    "name": "Blur Stage",
-    "names": {
-      "zh": "模糊舞台",
-      "en": "Blur Stage"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-ribbon-01",
-    "name": "Ink Ribbon",
-    "names": {
-      "zh": "墨色横带",
-      "en": "Ink Ribbon"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-verse-01",
-    "name": "Light Verse",
-    "names": {
-      "zh": "光影诗行",
-      "en": "Light Verse"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-single-line-01",
-    "name": "One Line Walk",
-    "names": {
-      "zh": "单行漫步",
-      "en": "One Line Walk"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-round-card-01",
-    "name": "Round Card",
-    "names": {
-      "zh": "圆角卡片",
-      "en": "Round Card"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-tint-seam-01",
-    "name": "Seamless Walk",
-    "names": {
-      "zh": "无缝色延",
-      "en": "Seamless Walk"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-vbar-01",
-    "name": "Side Column",
-    "names": {
-      "zh": "左侧色柱",
-      "en": "Side Column"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "colorwalk-top-field-01",
-    "name": "Top Field",
-    "names": {
-      "zh": "顶部色域",
-      "en": "Top Field"
-    },
-    "notice": null,
-    "category": "colorwalk"
-  },
-  {
-    "id": "drone-aerial-editorial-01",
-    "name": "Aerial Editorial",
-    "names": {
-      "zh": "航拍编辑",
-      "en": "Aerial Editorial"
-    },
-    "notice": null,
-    "category": "drone"
-  },
-  {
-    "id": "drone-altitude-hero-01",
-    "name": "Altitude Hero",
-    "names": {
-      "zh": "高度主角",
-      "en": "Altitude Hero"
-    },
-    "notice": null,
-    "category": "drone"
-  },
-  {
-    "id": "drone-geoblock-01",
-    "name": "Drone Geo Block",
-    "names": {
-      "zh": "坐标块",
-      "en": "Drone Geo Block"
-    },
-    "notice": null,
-    "category": "drone"
-  },
-  {
-    "id": "drone-skybar-01",
-    "name": "Drone Sky Bar",
-    "names": {
-      "zh": "航拍白条",
-      "en": "Drone Sky Bar"
-    },
-    "notice": null,
-    "category": "drone"
-  },
-  {
-    "id": "drone-topline-01",
-    "name": "Drone Topline",
-    "names": {
-      "zh": "顶部航标",
-      "en": "Drone Topline"
-    },
-    "notice": null,
-    "category": "drone"
+    "category": "festival"
   },
   {
     "id": "effect-duotone-wash-03",
@@ -715,6 +1515,16 @@
     "names": {
       "zh": "悬浮卡片",
       "en": "Float Card"
+    },
+    "notice": null,
+    "category": "effect"
+  },
+  {
+    "id": "art-gilt-foil",
+    "name": "Gilt Foil",
+    "names": {
+      "zh": "烫金箔",
+      "en": "Gilt Foil"
     },
     "notice": null,
     "category": "effect"
@@ -780,194 +1590,154 @@
     "category": "effect"
   },
   {
-    "id": "festival-dragon-boat-01",
-    "name": "Dragon Boat Seal",
+    "id": "colorcard-tint-chips-01",
+    "name": "Chromatic Edge",
     "names": {
-      "zh": "端午印记",
-      "en": "Dragon Boat Seal"
+      "zh": "主色卡片",
+      "en": "Chromatic Edge"
     },
     "notice": null,
-    "category": "festival"
+    "category": "colorcard"
   },
   {
-    "id": "festival-moon-full-01",
-    "name": "Full Moon",
+    "id": "colorcard-cream-date-04",
+    "name": "Cream Date",
     "names": {
-      "zh": "中秋月满",
-      "en": "Full Moon"
+      "zh": "奶油大日期",
+      "en": "Cream Date"
     },
     "notice": null,
-    "category": "festival"
+    "category": "colorcard"
   },
   {
-    "id": "festival-gold-frame-01",
-    "name": "Gold Frame",
+    "id": "colorcard-diamonds-03",
+    "name": "Diamond Row",
     "names": {
-      "zh": "庆典金框",
-      "en": "Gold Frame"
+      "zh": "菱形色列",
+      "en": "Diamond Row"
     },
     "notice": null,
-    "category": "festival"
+    "category": "colorcard"
   },
   {
-    "id": "festival-lantern-warm-01",
-    "name": "Lantern Warmth",
+    "id": "colorcard-index-05",
+    "name": "Index Row",
     "names": {
-      "zh": "元宵灯火",
-      "en": "Lantern Warmth"
+      "zh": "索引色带",
+      "en": "Index Row"
     },
     "notice": null,
-    "category": "festival"
+    "category": "colorcard"
   },
   {
-    "id": "festival-lantern-night-01",
-    "name": "Night Lanterns",
+    "id": "colorcard-column-02",
+    "name": "Night Column",
     "names": {
-      "zh": "灯会之夜",
-      "en": "Night Lanterns"
+      "zh": "夜幕色柱",
+      "en": "Night Column"
     },
     "notice": null,
-    "category": "festival"
+    "category": "colorcard"
   },
   {
-    "id": "festival-spring-gold-01",
-    "name": "Spring Gold",
+    "id": "colorcard-sunrise-chips-01",
+    "name": "Sunrise Chips",
     "names": {
-      "zh": "新春金岁",
-      "en": "Spring Gold"
+      "zh": "暖阳色卡",
+      "en": "Sunrise Chips"
     },
     "notice": null,
-    "category": "festival"
+    "category": "colorcard"
   },
   {
-    "id": "film-darkroom-pillar-03",
-    "name": "Darkroom Pillar",
+    "id": "blur-bg-brandbar-02",
+    "name": "Brand Bar",
     "names": {
-      "zh": "暗房立柱",
-      "en": "Darkroom Pillar"
+      "zh": "品牌底栏",
+      "en": "Brand Bar"
     },
     "notice": null,
-    "category": "film"
+    "category": "blur-bg"
   },
   {
-    "id": "film-diptych-hairline-07",
-    "name": "Diptych Hairline",
+    "id": "blur-bg-center-01",
+    "name": "Center Bloom",
     "names": {
-      "zh": "双联细线",
-      "en": "Diptych Hairline"
+      "zh": "居中晕影",
+      "en": "Center Bloom"
     },
     "notice": null,
-    "category": "film"
+    "category": "blur-bg"
   },
   {
-    "id": "film-led-datestamp-04",
-    "name": "LED Datestamp",
+    "id": "blur-bg-card-03",
+    "name": "Soft Card",
     "names": {
-      "zh": "橙红日期章",
-      "en": "LED Datestamp"
+      "zh": "柔焦卡片",
+      "en": "Soft Card"
     },
     "notice": null,
-    "category": "film"
+    "category": "blur-bg"
   },
   {
-    "id": "film-mono-roll-06",
-    "name": "Mono Roll",
+    "id": "blur-bg-topcap-04",
+    "name": "Top Cap",
     "names": {
-      "zh": "机型卷轴",
-      "en": "Mono Roll"
+      "zh": "顶部题头",
+      "en": "Top Cap"
     },
     "notice": null,
-    "category": "film"
+    "category": "blur-bg"
   },
   {
-    "id": "film-positive-print-08",
-    "name": "Positive Print",
+    "id": "ticket-boarding-pass-03",
+    "name": "Boarding Pass",
     "names": {
-      "zh": "黑白正片",
-      "en": "Positive Print"
+      "zh": "登机牌·双站",
+      "en": "Boarding Pass"
     },
     "notice": null,
-    "category": "film"
+    "category": "ticket"
   },
   {
-    "id": "film-serif-stock-05",
-    "name": "Serif Silvergrain",
+    "id": "ticket-stub-horizontal-01",
+    "name": "Horizontal Stub",
     "names": {
-      "zh": "衬线卷名",
-      "en": "Serif Silvergrain"
+      "zh": "票根·横版存根",
+      "en": "Horizontal Stub"
     },
     "notice": null,
-    "category": "film"
+    "category": "ticket"
   },
   {
-    "id": "film-sprocket-01",
-    "name": "Sprocket Classic",
+    "id": "ticket-night-tilt-05",
+    "name": "Night Tilt",
     "names": {
-      "zh": "齿孔边码",
-      "en": "Sprocket Classic"
+      "zh": "夜行票·斜卡",
+      "en": "Night Tilt"
     },
     "notice": null,
-    "category": "film"
+    "category": "ticket"
   },
   {
-    "id": "film-sprocket-02",
-    "name": "Vertical Perfs",
+    "id": "ticket-park-pass-04",
+    "name": "Park Pass",
     "names": {
-      "zh": "竖齿孔",
-      "en": "Vertical Perfs"
+      "zh": "公园通行证",
+      "en": "Park Pass"
     },
     "notice": null,
-    "category": "film"
+    "category": "ticket"
   },
   {
-    "id": "fuji-recipe-band-02",
-    "name": "Recipe Band",
+    "id": "ticket-vertical-rail-02",
+    "name": "Vertical Rail",
     "names": {
-      "zh": "奶白配方格",
-      "en": "Recipe Band"
+      "zh": "票根·右侧竖卡",
+      "en": "Vertical Rail"
     },
     "notice": null,
-    "category": "fuji"
-  },
-  {
-    "id": "fuji-recipe-column-03",
-    "name": "Recipe Column",
-    "names": {
-      "zh": "左侧配方栏",
-      "en": "Recipe Column"
-    },
-    "notice": null,
-    "category": "fuji"
-  },
-  {
-    "id": "fuji-recipe-hero-04",
-    "name": "Recipe Hero",
-    "names": {
-      "zh": "奶白配方卡",
-      "en": "Recipe Hero"
-    },
-    "notice": null,
-    "category": "fuji"
-  },
-  {
-    "id": "fuji-recipe-panel-01",
-    "name": "Recipe Panel",
-    "names": {
-      "zh": "配方暗板",
-      "en": "Recipe Panel"
-    },
-    "notice": null,
-    "category": "fuji"
-  },
-  {
-    "id": "fuji-recipe-rails-05",
-    "name": "Recipe Rails",
-    "names": {
-      "zh": "右侧配方栏",
-      "en": "Recipe Rails"
-    },
-    "notice": null,
-    "category": "fuji"
+    "category": "ticket"
   },
   {
     "id": "game-arknights-v2",
@@ -1148,695 +1918,5 @@
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
     "category": "game"
-  },
-  {
-    "id": "magazine-double-rule-01",
-    "name": "Double Rule",
-    "names": {
-      "zh": "双线刊头",
-      "en": "Double Rule"
-    },
-    "notice": null,
-    "category": "magazine"
-  },
-  {
-    "id": "magazine-gallery-left-01",
-    "name": "Gallery Column",
-    "names": {
-      "zh": "左文画廊",
-      "en": "Gallery Column"
-    },
-    "notice": null,
-    "category": "magazine"
-  },
-  {
-    "id": "magazine-index-column-01",
-    "name": "Lumen Index",
-    "names": {
-      "zh": "索引栏目",
-      "en": "Lumen Index"
-    },
-    "notice": null,
-    "category": "magazine"
-  },
-  {
-    "id": "magazine-cover-banner-01",
-    "name": "Midnight Cover",
-    "names": {
-      "zh": "午夜封面",
-      "en": "Midnight Cover"
-    },
-    "notice": null,
-    "category": "magazine"
-  },
-  {
-    "id": "magazine-poster-manifesto-01",
-    "name": "Quiet Manifesto",
-    "names": {
-      "zh": "静默宣言",
-      "en": "Quiet Manifesto"
-    },
-    "notice": null,
-    "category": "magazine"
-  },
-  {
-    "id": "magazine-triptych-slices-01",
-    "name": "Triptych Slices",
-    "names": {
-      "zh": "三联切片",
-      "en": "Triptych Slices"
-    },
-    "notice": null,
-    "category": "magazine"
-  },
-  {
-    "id": "master-cream-dot-01",
-    "name": "Cream Dot",
-    "names": {
-      "zh": "奶油朱点",
-      "en": "Cream Dot"
-    },
-    "notice": null,
-    "category": "master"
-  },
-  {
-    "id": "master-crown-wordmark-01",
-    "name": "Crown Wordmark",
-    "names": {
-      "zh": "顶冠底铭",
-      "en": "Crown Wordmark"
-    },
-    "notice": null,
-    "category": "master"
-  },
-  {
-    "id": "master-ivory-plate-01",
-    "name": "Ivory Plate",
-    "names": {
-      "zh": "象牙衬板",
-      "en": "Ivory Plate"
-    },
-    "notice": null,
-    "category": "master"
-  },
-  {
-    "id": "master-noir-plate-01",
-    "name": "Noir Plate",
-    "names": {
-      "zh": "夜墨衬板",
-      "en": "Noir Plate"
-    },
-    "notice": null,
-    "category": "master"
-  },
-  {
-    "id": "master-seal-frame-01",
-    "name": "Seal Frame",
-    "names": {
-      "zh": "印线双框",
-      "en": "Seal Frame"
-    },
-    "notice": null,
-    "category": "master"
-  },
-  {
-    "id": "master-three-column-01",
-    "name": "Three Columns",
-    "names": {
-      "zh": "三列数值格",
-      "en": "Three Columns"
-    },
-    "notice": null,
-    "category": "master"
-  },
-  {
-    "id": "minimal-brand-right",
-    "name": "Brand Right",
-    "names": {
-      "zh": "右下品牌",
-      "en": "Brand Right"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-center-line",
-    "name": "Center Line",
-    "names": {
-      "zh": "中轴参数行",
-      "en": "Center Line"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-corner-mono",
-    "name": "Corner Mono",
-    "names": {
-      "zh": "角落打字机",
-      "en": "Corner Mono"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-letterbox",
-    "name": "Letterbox",
-    "names": {
-      "zh": "上下细带",
-      "en": "Letterbox"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-model-stack",
-    "name": "Model Stack",
-    "names": {
-      "zh": "机型两行",
-      "en": "Model Stack"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-portrait-line",
-    "name": "Portrait Line",
-    "names": {
-      "zh": "竖构图单行",
-      "en": "Portrait Line"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-copyright",
-    "name": "Quiet Copyright",
-    "names": {
-      "zh": "仅版权微字",
-      "en": "Quiet Copyright"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "minimal-topright-date",
-    "name": "Top Right Date",
-    "names": {
-      "zh": "右上日期",
-      "en": "Top Right Date"
-    },
-    "notice": null,
-    "category": "minimal"
-  },
-  {
-    "id": "personal-avatar-ring-01",
-    "name": "Avatar Ring",
-    "names": {
-      "zh": "头像圆环",
-      "en": "Avatar Ring"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-credit-social-01",
-    "name": "Credit Social",
-    "names": {
-      "zh": "署名社交",
-      "en": "Credit Social"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-cn-inscription-01",
-    "name": "Ink Inscription",
-    "names": {
-      "zh": "墨色题记",
-      "en": "Ink Inscription"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-micro-copyright-01",
-    "name": "Micro Copyright",
-    "names": {
-      "zh": "版权微字",
-      "en": "Micro Copyright"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-name-columns-01",
-    "name": "Name Columns",
-    "names": {
-      "zh": "三栏名录",
-      "en": "Name Columns"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-polaroid-script-01",
-    "name": "Polaroid Script",
-    "names": {
-      "zh": "拍立得题字",
-      "en": "Polaroid Script"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-script-signature-01",
-    "name": "Script Signature",
-    "names": {
-      "zh": "手写签名",
-      "en": "Script Signature"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "personal-triptych-01",
-    "name": "Triptych Card",
-    "names": {
-      "zh": "三联卡",
-      "en": "Triptych Card"
-    },
-    "notice": null,
-    "category": "personal"
-  },
-  {
-    "id": "phone-accent-dots-01",
-    "name": "Accent Dots",
-    "names": {
-      "zh": "点睛彩条",
-      "en": "Accent Dots"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-camera-ui-01",
-    "name": "Camera UI",
-    "names": {
-      "zh": "相机界面卡",
-      "en": "Camera UI"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-dual-optics-01",
-    "name": "Dual Optics",
-    "names": {
-      "zh": "双镜对照",
-      "en": "Dual Optics"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-midnight-bar-01",
-    "name": "Midnight Bar",
-    "names": {
-      "zh": "午夜黑条",
-      "en": "Midnight Bar"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-minimal-line-01",
-    "name": "Minimal Line",
-    "names": {
-      "zh": "极简单行",
-      "en": "Minimal Line"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-paper-spec-01",
-    "name": "Paper Spec",
-    "names": {
-      "zh": "纸感规格",
-      "en": "Paper Spec"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-shot-on-01",
-    "name": "Shot On Center",
-    "names": {
-      "zh": "居中出品",
-      "en": "Shot On Center"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-side-rail-01",
-    "name": "Side Rail",
-    "names": {
-      "zh": "侧栏竖标",
-      "en": "Side Rail"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-studio-card-01",
-    "name": "Studio Card",
-    "names": {
-      "zh": "影棚白卡",
-      "en": "Studio Card"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "phone-vendor-bar-01",
-    "name": "Vendor Dot Bar",
-    "names": {
-      "zh": "厂商圆点白条",
-      "en": "Vendor Dot Bar"
-    },
-    "notice": null,
-    "category": "phone"
-  },
-  {
-    "id": "polaroid-classic-script-03",
-    "name": "Classic Script",
-    "names": {
-      "zh": "经典手写白框",
-      "en": "Classic Script"
-    },
-    "notice": null,
-    "category": "polaroid"
-  },
-  {
-    "id": "polaroid-duo-stamps-05",
-    "name": "Duo Stamps",
-    "names": {
-      "zh": "双邮票",
-      "en": "Duo Stamps"
-    },
-    "notice": null,
-    "category": "polaroid"
-  },
-  {
-    "id": "polaroid-pastel-ring-04",
-    "name": "Pastel Ring",
-    "names": {
-      "zh": "粉彩圆环",
-      "en": "Pastel Ring"
-    },
-    "notice": null,
-    "category": "polaroid"
-  },
-  {
-    "id": "polaroid-stamp-postcard-01",
-    "name": "Stamp Postcard",
-    "names": {
-      "zh": "邮票明信片",
-      "en": "Stamp Postcard"
-    },
-    "notice": null,
-    "category": "polaroid"
-  },
-  {
-    "id": "polaroid-tilt-plate-02",
-    "name": "Tilt Plate",
-    "names": {
-      "zh": "斜置日期卡",
-      "en": "Tilt Plate"
-    },
-    "notice": null,
-    "category": "polaroid"
-  },
-  {
-    "id": "portfolio-atelier-plate-01",
-    "name": "Atelier Plate",
-    "names": {
-      "zh": "展签·标题",
-      "en": "Atelier Plate"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "portfolio-double-rule-01",
-    "name": "Double Rule",
-    "names": {
-      "zh": "双线题签",
-      "en": "Double Rule"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "portfolio-marginalia-01",
-    "name": "Marginal Notes",
-    "names": {
-      "zh": "左右侧注",
-      "en": "Marginal Notes"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "portfolio-noir-matte-01",
-    "name": "Noir Matte",
-    "names": {
-      "zh": "黑白展陈",
-      "en": "Noir Matte"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "portfolio-credit-still-01",
-    "name": "Still Credits",
-    "names": {
-      "zh": "片尾小字",
-      "en": "Still Credits"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "portfolio-vertical-scroll-01",
-    "name": "Vertical Scroll",
-    "names": {
-      "zh": "竖排题名",
-      "en": "Vertical Scroll"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "portfolio-wall-label-01",
-    "name": "Wall Label",
-    "names": {
-      "zh": "展览标签",
-      "en": "Wall Label"
-    },
-    "notice": null,
-    "category": "portfolio"
-  },
-  {
-    "id": "sports-alt-badge-01",
-    "name": "Altitude Badge",
-    "names": {
-      "zh": "海拔徽章",
-      "en": "Altitude Badge"
-    },
-    "notice": null,
-    "category": "sports"
-  },
-  {
-    "id": "sports-big-trail-01",
-    "name": "Big Trail",
-    "names": {
-      "zh": "大标题山径",
-      "en": "Big Trail"
-    },
-    "notice": null,
-    "category": "sports"
-  },
-  {
-    "id": "sports-finish-line-01",
-    "name": "Finish Line",
-    "names": {
-      "zh": "终点线",
-      "en": "Finish Line"
-    },
-    "notice": null,
-    "category": "sports"
-  },
-  {
-    "id": "sports-ride-stats-01",
-    "name": "Ride Stats",
-    "names": {
-      "zh": "骑行数据行",
-      "en": "Ride Stats"
-    },
-    "notice": null,
-    "category": "sports"
-  },
-  {
-    "id": "sports-side-rail-01",
-    "name": "Trail Rail",
-    "names": {
-      "zh": "侧栏竖排",
-      "en": "Trail Rail"
-    },
-    "notice": null,
-    "category": "sports"
-  },
-  {
-    "id": "ticket-boarding-pass-03",
-    "name": "Boarding Pass",
-    "names": {
-      "zh": "登机牌·双站",
-      "en": "Boarding Pass"
-    },
-    "notice": null,
-    "category": "ticket"
-  },
-  {
-    "id": "ticket-stub-horizontal-01",
-    "name": "Horizontal Stub",
-    "names": {
-      "zh": "票根·横版存根",
-      "en": "Horizontal Stub"
-    },
-    "notice": null,
-    "category": "ticket"
-  },
-  {
-    "id": "ticket-night-tilt-05",
-    "name": "Night Tilt",
-    "names": {
-      "zh": "夜行票·斜卡",
-      "en": "Night Tilt"
-    },
-    "notice": null,
-    "category": "ticket"
-  },
-  {
-    "id": "ticket-park-pass-04",
-    "name": "Park Pass",
-    "names": {
-      "zh": "公园通行证",
-      "en": "Park Pass"
-    },
-    "notice": null,
-    "category": "ticket"
-  },
-  {
-    "id": "ticket-vertical-rail-02",
-    "name": "Vertical Rail",
-    "names": {
-      "zh": "票根·右侧竖卡",
-      "en": "Vertical Rail"
-    },
-    "notice": null,
-    "category": "ticket"
-  },
-  {
-    "id": "white-border-centered-lockup",
-    "name": "Centered Lockup",
-    "names": {
-      "zh": "中轴锁排",
-      "en": "Centered Lockup"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-editorial-01",
-    "name": "Editorial White",
-    "names": {
-      "zh": "杂志白边",
-      "en": "Editorial White"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-letterhead",
-    "name": "Letterhead",
-    "names": {
-      "zh": "信笺头",
-      "en": "Letterhead"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-linen-dot",
-    "name": "Linen Dot",
-    "names": {
-      "zh": "亚麻朱点",
-      "en": "Linen Dot"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-passport-mono",
-    "name": "Passport Mono",
-    "names": {
-      "zh": "档案打字机",
-      "en": "Passport Mono"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-quiet-stack",
-    "name": "Quiet Stack",
-    "names": {
-      "zh": "三行静置",
-      "en": "Quiet Stack"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-ruled-band",
-    "name": "Ruled Band",
-    "names": {
-      "zh": "格线信息带",
-      "en": "Ruled Band"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-top-note",
-    "name": "Top Note",
-    "names": {
-      "zh": "顶部微注",
-      "en": "Top Note"
-    },
-    "notice": null,
-    "category": "white-border"
-  },
-  {
-    "id": "white-border-twin-columns",
-    "name": "Twin Columns",
-    "names": {
-      "zh": "双栏档案",
-      "en": "Twin Columns"
-    },
-    "notice": null,
-    "category": "white-border"
   }
 ]

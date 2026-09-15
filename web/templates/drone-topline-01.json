@@ -3,8 +3,8 @@
     "id": "drone-topline-01",
     "name": "Drone Topline",
     "nameI18n": { "zh": "顶部航标", "en": "Drone Topline" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "drone"
@@ -76,7 +76,8 @@
       "offset": { "x": 0.0652, "y": 0.1093 },
       "shape": "line",
       "size": { "width": 1.0, "height": 0.0015 },
-      "color": "#E4E6EA"
+      "color": "#E4E6EA",
+      "autoHide": true
     },
     {
       "type": "text",

@@ -3,8 +3,8 @@
     "id": "calendar-center-rule-01",
     "name": "Center Day Rules",
     "nameI18n": { "zh": "居中日历", "en": "Center Day Rules" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -25,21 +25,20 @@
       "content": [{ "expr": "'CALENDAR · FRAMEGEIST'", "fallback": null }]
     },
     {
-      "type": "text",
-      "id": "lattice",
+      "type": "calendar",
+      "id": "monthgrid",
       "anchor": "bottom-left",
-      "offset": { "x": 0.05, "y": -0.04 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.0095, "color": "#1A1A1A" },
-      "letterSpacing": 0.18,
-      "lineHeight": 1.45,
-      "opacity": 0.10,
-      "content": [
-        { "expr": "'1 2 3 4 5 6 7'", "fallback": null },
-        { "expr": "'8 9 10 11 12 13 14'", "fallback": null },
-        { "expr": "'15 16 17 18 19 20 21'", "fallback": null },
-        { "expr": "'22 23 24 25 26 27 28'", "fallback": null },
-        { "expr": "'29 30 31'", "fallback": null }
-      ]
+      "offset": { "x": 0.05, "y": -0.03 },
+      "size": 0.16,
+      "dateSource": "exif",
+      "year": 2026,
+      "month": 9,
+      "showLunar": true,
+      "showWeekdays": true,
+      "view": "month",
+      "color": "#A39C8D",
+      "accent": "#C8552B",
+      "fontFamily": ["Inter"]
     },
     {
       "type": "shape",

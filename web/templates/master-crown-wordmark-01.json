@@ -3,8 +3,8 @@
     "id": "master-crown-wordmark-01",
     "name": "Crown Wordmark",
     "nameI18n": { "zh": "顶冠底铭", "en": "Crown Wordmark" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.5.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -60,6 +60,10 @@
       "font": { "family": ["Space Grotesk"], "size": 0.024, "color": "#1A1A1A" },
       "letterSpacing": 0.22,
       "align": "center",
+      "effects": {
+        "fill": { "mode": "foil", "colors": ["#8A6A1F", "#F6E27A", "#D4A017", "#FBF0B0"], "angle": 100, "intensity": 0.9 },
+        "relief": { "mode": "emboss", "depth": 0.04, "highlight": "#FFF7D6", "shadow": "#4A3200", "opacity": 0.5 }
+      },
       "content": [{ "expr": "'PHOTOGRAPHIC WORKS'" }]
     },
     {

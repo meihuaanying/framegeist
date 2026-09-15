@@ -101,6 +101,34 @@ pub struct Canvas {
     pub radius: Option<f64>,
     #[serde(default)]
     pub shadow: Option<Shadow>,
+    /// v0.5.0: uploaded/builtin frame PNG overlay with blank-window detection.
+    #[serde(default)]
+    pub frame: Option<CanvasFrame>,
+}
+
+/// v0.5.0 frame maker: a PNG whose transparent window receives the photo.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct CanvasFrame {
+    pub asset: String,
+    /// Photo inset relative to the frame window (0–0.3); only used when
+    /// `autoDetect` is off.
+    #[serde(default)]
+    pub inset: Option<f64>,
+    /// Detect the largest transparent window in the frame PNG (default true).
+    #[serde(rename = "autoDetect", default = "default_true")]
+    pub auto_detect: bool,
+    /// Scale of the frame relative to the canvas (0.2–1.5, default 1).
+    #[serde(default)]
+    pub scale: Option<f64>,
+    /// Frame translation, relative to canvas size.
+    #[serde(default)]
+    pub offset: Option<Offset>,
+    /// v0.5.0: rotation of the frame overlay around the canvas center,
+    /// degrees ([-360, 360], default 0). The detected photo window rotates
+    /// with the frame.
+    #[serde(default)]
+    pub rotation: f64,
 }
 
 impl std::fmt::Display for Category {
@@ -197,13 +225,18 @@ pub enum BgKind {
     Image,
     /// v0.4.0: average color of the photo fills the canvas (seamless extension).
     Tint,
+    /// v0.5.0: paper/noise texture. `background.asset` may point at a package
+    /// texture; when absent a deterministic procedural grain is generated.
+    Texture,
     #[serde(rename = "none")]
     None,
 }
 
-#[derive(Debug, Clone, Copy, Deserialize)]
+#[derive(Debug, Clone, Copy, Deserialize, serde::Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Shadow {
+    /// Present = enabled unless explicitly `false` (card overrides omit it).
+    #[serde(default = "default_true")]
     pub enabled: bool,
     #[serde(default)]
     pub blur: f64,
@@ -217,11 +250,16 @@ pub struct Shadow {
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "type", rename_all = "lowercase")]
+#[allow(clippy::large_enum_variant)]
 pub enum Layer {
     Text(TextLayer),
     Image(ImageLayer),
     Shape(ShapeLayer),
     Palette(PaletteLayer),
+    /// v0.5.0: container with relative children (grouping/hierarchy).
+    Group(GroupLayer),
+    /// v0.5.0: month calendar grid (with best-effort lunar day labels).
+    Calendar(CalendarLayer),
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -248,6 +286,119 @@ pub struct TextLayer {
     /// defaults to the anchor column.
     #[serde(default)]
     pub align: Option<String>,
+    /// v0.5.0: text art effects (stroke/relief/fill/shadow/case/flip/stretch).
+    #[serde(default)]
+    pub effects: Option<TextEffects>,
+    /// v0.5.0: fixed wrap width, relative canvas width (0–1).
+    #[serde(default)]
+    pub width: Option<f64>,
+    /// v0.5.0: target block height, relative canvas height (0–1); font size
+    /// is scaled so the shaped block matches.
+    #[serde(default)]
+    pub height: Option<f64>,
+    /// v0.5.0: stretch glyphs to fill the space between the anchor column and
+    /// the opposite edge.
+    #[serde(rename = "stretchWidth", default)]
+    pub stretch_width: bool,
+    /// v0.5.0: scale the font so the block fills the space between the anchor
+    /// row and the opposite edge.
+    #[serde(rename = "stretchHeight", default)]
+    pub stretch_height: bool,
+    /// v0.5.0: scale to fill the whole page interior (both axes).
+    #[serde(rename = "fillPage", default)]
+    pub fill_page: bool,
+    /// v0.5.0: explicit stacking order (lower paints first); ties keep array order.
+    #[serde(default)]
+    pub z: Option<i32>,
+}
+
+/// v0.5.0 text art presets and primitives (frameelf feature parity, visual
+/// language 100% FrameGeist-original).
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct TextEffects {
+    #[serde(default)]
+    pub stroke: Option<TextStroke>,
+    #[serde(default)]
+    pub relief: Option<TextRelief>,
+    #[serde(default)]
+    pub fill: Option<TextFill>,
+    #[serde(default)]
+    pub shadow: Option<TextShadow>,
+    /// "upper" | "lower" | "title".
+    #[serde(default)]
+    pub case: Option<String>,
+    #[serde(rename = "flipX", default)]
+    pub flip_x: bool,
+    #[serde(rename = "flipY", default)]
+    pub flip_y: bool,
+    /// Horizontal glyph stretch (0.5–2.0, default 1).
+    #[serde(rename = "scaleX", default)]
+    pub scale_x: Option<f64>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct TextStroke {
+    /// Stroke width relative to font size (0.005–0.5).
+    pub width: f64,
+    pub color: String,
+    /// Double line: an outer ring plus a thin inner ring separated by `gap`.
+    #[serde(default)]
+    pub double: bool,
+    /// Gap between the two rings, relative to font size (default = width).
+    #[serde(default)]
+    pub gap: Option<f64>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct TextRelief {
+    /// "emboss" | "engrave" | "letterpress" | "inner-shadow".
+    pub mode: String,
+    /// Depth relative to font size (0.01–0.3, default 0.06).
+    #[serde(default)]
+    pub depth: Option<f64>,
+    #[serde(default)]
+    pub highlight: Option<String>,
+    #[serde(default)]
+    pub shadow: Option<String>,
+    #[serde(default = "default_opacity")]
+    pub opacity: f64,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct TextFill {
+    /// "gradient" | "foil" | "texture".
+    pub mode: String,
+    /// Two or more #RRGGBB[A] stops (gradient/foil).
+    #[serde(default)]
+    pub colors: Vec<String>,
+    /// Gradient angle in degrees (default 90 = top→bottom).
+    #[serde(default)]
+    pub angle: Option<f64>,
+    /// Template-package texture asset (texture mode), e.g. `assets/paper.png`.
+    #[serde(default)]
+    pub texture: Option<String>,
+    /// Effect strength 0–1 (default 1).
+    #[serde(default)]
+    pub intensity: Option<f64>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct TextShadow {
+    #[serde(rename = "offsetX", default)]
+    pub offset_x: f64,
+    #[serde(rename = "offsetY", default)]
+    pub offset_y: f64,
+    /// Blur radius relative to font size (0–0.5).
+    #[serde(default)]
+    pub blur: f64,
+    pub color: String,
+    #[serde(default = "default_opacity")]
+    pub opacity: f64,
 }
 
 fn default_line_height() -> f64 {
@@ -277,6 +428,9 @@ pub struct ImageLayer {
     /// default) | "light" | "dark".
     #[serde(default)]
     pub tint: Option<String>,
+    /// v0.5.0: explicit stacking order (lower paints first).
+    #[serde(default)]
+    pub z: Option<i32>,
 }
 
 fn default_opacity() -> f64 {
@@ -306,6 +460,28 @@ pub struct ShapeLayer {
     /// Degrees, rotation around the shape center ([-360, 360]).
     #[serde(default)]
     pub rotation: f64,
+    /// v0.5.0: draw two parallel lines separated by `gap`.
+    #[serde(default)]
+    pub double: bool,
+    /// v0.5.0: double-line gap, relative to photo height (0–0.2).
+    #[serde(default)]
+    pub gap: Option<f64>,
+    /// v0.5.0: layout frame roles: `outer` (border around the photo),
+    /// `opposite-h` (top+bottom edges), `opposite-v` (left+right edges).
+    #[serde(default)]
+    pub frame: Option<String>,
+    /// v0.5.0: frame inset, relative to photo size (0–0.5).
+    #[serde(default)]
+    pub margin: Option<f64>,
+    /// v0.5.0: hide when fewer than two text layers exist (auto divider).
+    #[serde(rename = "autoHide", default)]
+    pub auto_hide: bool,
+    /// v0.5.0: `auto` lets a line span the width between its insets.
+    #[serde(default)]
+    pub span: Option<String>,
+    /// v0.5.0: explicit stacking order (lower paints first).
+    #[serde(default)]
+    pub z: Option<i32>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
@@ -363,6 +539,9 @@ pub struct PaletteLayer {
     pub show_hex: bool,
     #[serde(default)]
     pub label: Option<PaletteLabel>,
+    /// v0.5.0: explicit stacking order (lower paints first).
+    #[serde(default)]
+    pub z: Option<i32>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
@@ -383,6 +562,77 @@ pub struct PaletteLabel {
     pub color: String,
     #[serde(default)]
     pub family: Vec<String>,
+}
+
+/// v0.5.0 grouping/hierarchy: children are laid out inside the group box.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GroupLayer {
+    pub id: String,
+    pub anchor: Anchor,
+    #[serde(default)]
+    pub offset: Offset,
+    /// Group box size, relative to canvas (defaults to the children union).
+    #[serde(default)]
+    pub width: Option<f64>,
+    #[serde(default)]
+    pub height: Option<f64>,
+    #[serde(default = "default_opacity")]
+    pub opacity: f64,
+    /// Children (1–32), drawn relative to the group box.
+    pub children: Vec<Layer>,
+    /// v0.5.0: explicit stacking order (lower paints first).
+    #[serde(default)]
+    pub z: Option<i32>,
+}
+
+/// v0.5.0: month calendar layer (best-effort lunar day labels, never invented).
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct CalendarLayer {
+    pub id: String,
+    pub anchor: Anchor,
+    #[serde(default)]
+    pub offset: Offset,
+    /// Calendar width, relative to canvas width (default 0.3).
+    #[serde(default = "default_calendar_size")]
+    pub size: f64,
+    /// `exif` (default) takes the photo date; `fixed` uses year/month below.
+    #[serde(rename = "dateSource", default)]
+    pub date_source: Option<String>,
+    #[serde(default)]
+    pub year: Option<i32>,
+    #[serde(default)]
+    pub month: Option<u32>,
+    /// Show lunar day numbers under the solar day (default true).
+    #[serde(rename = "showLunar", default = "default_true")]
+    pub show_lunar: bool,
+    /// Show weekday headers (default true).
+    #[serde(rename = "showWeekdays", default = "default_true")]
+    pub show_weekdays: bool,
+    /// Possible values: "month" (default) | "day" | "strip" | "week".
+    #[serde(default)]
+    pub view: Option<String>,
+    /// v0.5.0: binding-edge decoration for the month view (dashed center
+    /// crease + evenly spaced top-edge notches), drawn in `color` at low
+    /// opacity and kept clear of day glyphs. Default off.
+    #[serde(default)]
+    pub binding: Option<bool>,
+    pub color: Option<String>,
+    pub accent: Option<String>,
+    #[serde(rename = "fontFamily", default)]
+    pub font_family: Vec<String>,
+    /// v0.5.0: explicit stacking order (lower paints first).
+    #[serde(default)]
+    pub z: Option<i32>,
+}
+
+fn default_calendar_size() -> f64 {
+    0.3
+}
+
+fn default_true() -> bool {
+    true
 }
 
 #[derive(Debug, Clone, Copy, Default, Deserialize)]
@@ -459,11 +709,15 @@ pub struct TemplateOverrides {
     /// "1:1" | "4:3" | "3:2" | "16:9" | "9:16" | "original"
     #[serde(default)]
     pub aspect: Option<String>,
-    /// "blur" | "solid" | "image" | "none"
+    /// "blur" | "solid" | "image" | "tint" | "texture" | "none"
     #[serde(default)]
     pub background: Option<String>,
     #[serde(default)]
     pub background_color: Option<String>,
+    /// v0.5.0: texture-asset override for `background:"texture"`; resolved like
+    /// other asset paths, missing/failed assets fall back to procedural grain.
+    #[serde(default)]
+    pub texture_asset: Option<String>,
     #[serde(default)]
     pub flip_horizontal: Option<bool>,
     #[serde(default)]
@@ -472,6 +726,88 @@ pub struct TemplateOverrides {
     pub font_family: Option<String>,
     #[serde(default)]
     pub show_logo: Option<bool>,
+    /// v0.5.0: keep output EXIF metadata (default true; GPS still needs
+    /// `keepGps`).
+    #[serde(default)]
+    pub metadata: Option<bool>,
+    /// v0.5.0: normalized crop rectangle applied to the photo before layout.
+    #[serde(default)]
+    pub crop: Option<CropRect>,
+    /// v0.5.0: uniform extra canvas margin (0–0.5), additive to
+    /// `canvas.padding` in `extend` mode.
+    #[serde(default)]
+    pub margin: Option<f64>,
+    /// v0.5.0: card effect (rounded corners / outer shadow / edge border).
+    #[serde(default)]
+    pub card: Option<CardOverrides>,
+}
+
+/// v0.5.0 card effect overrides: rounded corners, outer shadow, edge border and
+/// inner shadow applied to the photo card. When `enabled` is `false` the card
+/// decoration is removed entirely (template `canvas.radius`/`shadow` are not
+/// drawn either).
+#[derive(Debug, Clone, Default, Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct CardOverrides {
+    #[serde(default)]
+    pub enabled: Option<bool>,
+    /// Corner radius relative to min(photo width, height), 0–0.25.
+    #[serde(default)]
+    pub radius: Option<f64>,
+    /// Same shape as `canvas.shadow`; `enabled` defaults to true.
+    #[serde(default)]
+    pub shadow: Option<Shadow>,
+    #[serde(default)]
+    pub border: Option<CardBorder>,
+    /// v0.5.0: inner shadow along the inside of the rounded card edge.
+    #[serde(default)]
+    pub inner_shadow: Option<InnerShadow>,
+}
+
+/// v0.5.0 card inner shadow. `blur` and `offsetX`/`offsetY` are relative to
+/// min(photo width, height); the shadow darkens the card interior near the
+/// edges, matching the classic inner-shadow look.
+#[derive(Debug, Clone, Copy, Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct InnerShadow {
+    #[serde(default = "default_true")]
+    pub enabled: bool,
+    /// Blur radius relative to min(photo width, height), 0–0.5.
+    #[serde(default)]
+    pub blur: f64,
+    #[serde(default)]
+    pub opacity: f64,
+    #[serde(rename = "offsetX", default)]
+    pub offset_x: f64,
+    #[serde(rename = "offsetY", default)]
+    pub offset_y: f64,
+}
+
+/// v0.5.0 card edge border stroke.
+#[derive(Debug, Clone, Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct CardBorder {
+    /// Stroke width relative to min(photo width, height), 0–0.05.
+    pub width: f64,
+    pub color: String,
+}
+
+/// Normalized photo crop (0–1, origin top-left). `w`/`h` must be > 0.
+#[derive(Debug, Clone, Copy, Deserialize, serde::Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct CropRect {
+    #[serde(default)]
+    pub x: f64,
+    #[serde(default)]
+    pub y: f64,
+    #[serde(default = "default_crop_size")]
+    pub w: f64,
+    #[serde(default = "default_crop_size")]
+    pub h: f64,
+}
+
+fn default_crop_size() -> f64 {
+    1.0
 }
 
 /// Aspect-ratio preset name -> (w, h) multiplier. None = no change.
@@ -523,20 +859,70 @@ impl TemplateOverrides {
             }
         }
         if let Some(b) = &self.background {
-            if !matches!(b.as_str(), "blur" | "solid" | "image" | "none") {
+            if !matches!(b.as_str(), "blur" | "solid" | "image" | "tint" | "texture" | "none") {
                 return Err(Error::SchemaViolation(format!(
-                    "overrides.background {b:?} must be blur|solid|image|none"
+                    "overrides.background {b:?} must be blur|solid|image|tint|texture|none"
                 )));
             }
         }
         if let Some(c) = &self.background_color {
             parse_hex_color(c)?;
         }
+        if let Some(asset) = &self.texture_asset {
+            if !is_asset_path(asset) {
+                return Err(Error::SchemaViolation(format!(
+                    "overrides.textureAsset {asset:?} must be @builtin/... or @user/... or assets/..."
+                )));
+            }
+        }
         if let Some(f) = &self.font_family {
             if f.is_empty() || f.chars().count() > 64 {
                 return Err(Error::SchemaViolation(
                     "overrides.fontFamily must be 1-64 characters".into(),
                 ));
+            }
+        }
+        if let Some(m) = self.margin {
+            if !m.is_finite() || !(0.0..=0.5).contains(&m) {
+                return Err(Error::SchemaViolation(
+                    "overrides.margin must be within [0.0, 0.5]".into(),
+                ));
+            }
+        }
+        if let Some(card) = &self.card {
+            if let Some(r) = card.radius {
+                range_check("overrides.card.radius", r, 0.0, 0.25)?;
+            }
+            if let Some(shadow) = &card.shadow {
+                range_check("overrides.card.shadow.blur", shadow.blur, 0.0, 0.5)?;
+                range_check("overrides.card.shadow.opacity", shadow.opacity, 0.0, 1.0)?;
+                range_check("overrides.card.shadow.offsetX", shadow.offset_x, -0.5, 0.5)?;
+                range_check("overrides.card.shadow.offsetY", shadow.offset_y, -0.5, 0.5)?;
+            }
+            if let Some(border) = &card.border {
+                range_check("overrides.card.border.width", border.width, 0.0, 0.05)?;
+                parse_hex_color(&border.color)?;
+            }
+            if let Some(inner) = &card.inner_shadow {
+                range_check("overrides.card.innerShadow.blur", inner.blur, 0.0, 0.5)?;
+                range_check(
+                    "overrides.card.innerShadow.opacity",
+                    inner.opacity,
+                    0.0,
+                    1.0,
+                )?;
+                range_check(
+                    "overrides.card.innerShadow.offsetX",
+                    inner.offset_x,
+                    -0.5,
+                    0.5,
+                )?;
+                range_check(
+                    "overrides.card.innerShadow.offsetY",
+                    inner.offset_y,
+                    -0.5,
+                    0.5,
+                )?;
             }
         }
         Ok(())
@@ -677,6 +1063,13 @@ fn validate_semantics(t: &Template) -> Result<()> {
     if let Some(color) = &bg.color {
         parse_hex_color(color)?;
     }
+    if let Some(asset) = &bg.asset {
+        if !is_asset_path(asset) {
+            return Err(Error::SchemaViolation(format!(
+                "canvas.background.asset {asset:?} must be @builtin/... or @user/... or assets/..."
+            )));
+        }
+    }
     if let Some(blur) = bg.blur {
         range_check("canvas.background.blur", blur, 0.0, 200.0)?;
     }
@@ -687,6 +1080,25 @@ fn validate_semantics(t: &Template) -> Result<()> {
         // v0.4.0: fraction of min(photo_w, photo_h) so previews and exports match.
         range_check("canvas.radius", radius, 0.0, 0.25)?;
     }
+    if let Some(frame) = &t.canvas.frame {
+        if !is_asset_path(&frame.asset) {
+            return Err(Error::SchemaViolation(format!(
+                "canvas.frame.asset {:?} must be @builtin/... or assets/... within the template package",
+                frame.asset
+            )));
+        }
+        if let Some(inset) = frame.inset {
+            range_check("canvas.frame.inset", inset, 0.0, 0.3)?;
+        }
+        if let Some(scale) = frame.scale {
+            range_check("canvas.frame.scale", scale, 0.2, 1.5)?;
+        }
+        if let Some(offset) = &frame.offset {
+            range_check("canvas.frame.offset.x", offset.x, -1.0, 1.0)?;
+            range_check("canvas.frame.offset.y", offset.y, -1.0, 1.0)?;
+        }
+        range_check("canvas.frame.rotation", frame.rotation, -360.0, 360.0)?;
+    }
     if let Some(shadow) = &t.canvas.shadow {
         // v0.4.0: blur/offsets are fractions of photo height; opacity 0–1.
         range_check("canvas.shadow.blur", shadow.blur, 0.0, 0.5)?;
@@ -696,21 +1108,43 @@ fn validate_semantics(t: &Template) -> Result<()> {
     }
 
     for (i, layer) in t.layers.iter().enumerate() {
-        let (id, offset) = match layer {
-            Layer::Text(text) => (&text.id, text.offset),
-            Layer::Image(image) => (&image.id, image.offset),
-            Layer::Shape(shape) => (&shape.id, shape.offset),
-            Layer::Palette(palette) => (&palette.id, palette.offset),
-        };
-        if !is_layer_id(id) {
-            return Err(Error::SchemaViolation(format!(
-                "layers[{i}].id {id:?} must be 1-64 chars of [a-zA-Z0-9-]"
-            )));
-        }
-        range_check(&format!("layers[{i}].offset.x"), offset.x, -1.0, 1.0)?;
-        range_check(&format!("layers[{i}].offset.y"), offset.y, -1.0, 1.0)?;
+        validate_layer(layer, i)?;
+    }
+    let mut text_ids: std::collections::HashSet<&str> = std::collections::HashSet::new();
+    collect_text_ids(&t.layers, &mut text_ids);
+    validate_attach_all(&t.layers, &text_ids)?;
+    Ok(())
+}
+
+fn validate_attach_all(layers: &[Layer], text_ids: &std::collections::HashSet<&str>) -> Result<()> {
+    for layer in layers {
         match layer {
-            Layer::Text(text) => {
+            Layer::Image(image) => validate_image_attach(image, text_ids)?,
+            Layer::Group(group) => validate_attach_all(&group.children, text_ids)?,
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+fn validate_layer(layer: &Layer, i: usize) -> Result<()> {
+    let (id, offset) = match layer {
+        Layer::Text(text) => (&text.id, text.offset),
+        Layer::Image(image) => (&image.id, image.offset),
+        Layer::Shape(shape) => (&shape.id, shape.offset),
+        Layer::Palette(palette) => (&palette.id, palette.offset),
+        Layer::Group(group) => (&group.id, group.offset),
+        Layer::Calendar(cal) => (&cal.id, cal.offset),
+    };
+    if !is_layer_id(id) {
+        return Err(Error::SchemaViolation(format!(
+            "layers[{i}].id {id:?} must be 1-64 chars of [a-zA-Z0-9-]"
+        )));
+    }
+    range_check(&format!("layers[{i}].offset.x"), offset.x, -1.0, 1.0)?;
+    range_check(&format!("layers[{i}].offset.y"), offset.y, -1.0, 1.0)?;
+    match layer {
+        Layer::Text(text) => {
                 if text.content.is_empty() || text.content.len() > 64 {
                     return Err(Error::SchemaViolation(format!(
                         "layers[{i}].content must contain 1-64 items"
@@ -785,6 +1219,26 @@ fn validate_semantics(t: &Template) -> Result<()> {
                         }
                     }
                 }
+                if let Some(w) = text.width {
+                    range_check(&format!("layers[{i}].width"), w, 0.0, 1.0)?;
+                    if w <= 0.0 {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].width must be > 0"
+                        )));
+                    }
+                }
+                if let Some(h) = text.height {
+                    range_check(&format!("layers[{i}].height"), h, 0.0, 1.0)?;
+                    if h <= 0.0 {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].height must be > 0"
+                        )));
+                    }
+                }
+                if let Some(z) = text.z {
+                    range_check(&format!("layers[{i}].z"), z as f64, -1000.0, 1000.0)?;
+                }
+                validate_effects(text.effects.as_ref(), i)?;
             }
             Layer::Image(image) => {
                 if !is_asset_path(&image.asset) {
@@ -832,6 +1286,29 @@ fn validate_semantics(t: &Template) -> Result<()> {
                 if let Some(sw) = shape.stroke_width {
                     range_check(&format!("layers[{i}].strokeWidth"), sw, 0.0, 0.2)?;
                 }
+                if let Some(gap) = shape.gap {
+                    range_check(&format!("layers[{i}].gap"), gap, 0.0, 0.2)?;
+                }
+                if let Some(frame) = &shape.frame {
+                    if !matches!(frame.as_str(), "outer" | "opposite-h" | "opposite-v") {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].frame must be outer|opposite-h|opposite-v"
+                        )));
+                    }
+                }
+                if let Some(margin) = shape.margin {
+                    range_check(&format!("layers[{i}].margin"), margin, 0.0, 0.5)?;
+                }
+                if let Some(span) = &shape.span {
+                    if span != "auto" {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].span must be \"auto\""
+                        )));
+                    }
+                }
+                if let Some(z) = shape.z {
+                    range_check(&format!("layers[{i}].z"), z as f64, -1000.0, 1000.0)?;
+                }
             }
             Layer::Palette(palette) => {
                 if !(2..=8).contains(&palette.count) {
@@ -862,43 +1339,211 @@ fn validate_semantics(t: &Template) -> Result<()> {
                     }
                 }
             }
+            Layer::Group(group) => validate_group(group, i)?,
+            Layer::Calendar(cal) => validate_calendar(cal, i)?,
+        }
+    Ok(())
+}
+
+fn validate_group(group: &GroupLayer, i: usize) -> Result<()> {
+    if group.children.is_empty() || group.children.len() > 32 {
+        return Err(Error::SchemaViolation(format!(
+            "layers[{i}].children must contain 1-32 items"
+        )));
+    }
+    for child in &group.children {
+        validate_layer(child, i)?;
+    }
+    if let Some(w) = group.width {
+        range_check(&format!("layers[{i}].width"), w, 0.0, 1.0)?;
+    }
+    if let Some(h) = group.height {
+        range_check(&format!("layers[{i}].height"), h, 0.0, 1.0)?;
+    }
+    range_check(&format!("layers[{i}].opacity"), group.opacity, 0.0, 1.0)?;
+    Ok(())
+}
+
+fn validate_calendar(cal: &CalendarLayer, i: usize) -> Result<()> {
+    range_check(&format!("layers[{i}].size"), cal.size, 0.05, 0.6)?;
+    if let Some(source) = &cal.date_source {
+        if !matches!(source.as_str(), "exif" | "fixed") {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].dateSource must be exif|fixed"
+            )));
         }
     }
-    let text_ids: std::collections::HashSet<&str> = t
-        .layers
-        .iter()
-        .filter_map(|l| match l {
-            Layer::Text(text) => Some(text.id.as_str()),
-            _ => None,
-        })
-        .collect();
-    for layer in &t.layers {
-        if let Layer::Image(image) = layer {
-            if let Some(target) = &image.attach_to {
-                if !text_ids.contains(target.as_str()) {
-                    return Err(Error::SchemaViolation(format!(
-                        "layers[{}].attachTo references unknown text layer {target:?}",
-                        image.id
-                    )));
-                }
-                if let Some(gap) = image.attach_gap {
-                    if !gap.is_finite() || !(0.0..=0.2).contains(&gap) {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{}].attachGap must be within [0, 0.2]",
-                            image.id
-                        )));
-                    }
-                }
-            }
-            if let Some(tint) = &image.tint {
-                if !matches!(tint.as_str(), "auto" | "light" | "dark") {
-                    return Err(Error::SchemaViolation(format!(
-                        "layers[{}].tint must be auto|light|dark",
-                        image.id
-                    )));
-                }
+    if let Some(year) = cal.year {
+        if !(1900..=2100).contains(&year) {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].year must be within [1900, 2100]"
+            )));
+        }
+    }
+    if let Some(month) = cal.month {
+        if !(1..=12).contains(&month) {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].month must be within [1, 12]"
+            )));
+        }
+    }
+    if let Some(view) = &cal.view {
+        if !matches!(view.as_str(), "month" | "day" | "strip" | "week") {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].view must be month|day|strip|week"
+            )));
+        }
+    }
+    if let Some(color) = &cal.color {
+        parse_hex_color(color)?;
+    }
+    if let Some(accent) = &cal.accent {
+        parse_hex_color(accent)?;
+    }
+    if cal.font_family.len() > 2 {
+        return Err(Error::SchemaViolation(format!(
+            "layers[{i}].fontFamily must contain at most 2 families"
+        )));
+    }
+    Ok(())
+}
+
+fn validate_image_attach(
+    image: &ImageLayer,
+    text_ids: &std::collections::HashSet<&str>,
+) -> Result<()> {
+    if let Some(target) = &image.attach_to {
+        if !text_ids.contains(target.as_str()) {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{}].attachTo references unknown text layer {target:?}",
+                image.id
+            )));
+        }
+        if let Some(gap) = image.attach_gap {
+            if !gap.is_finite() || !(0.0..=0.2).contains(&gap) {
+                return Err(Error::SchemaViolation(format!(
+                    "layers[{}].attachGap must be within [0, 0.2]",
+                    image.id
+                )));
             }
         }
+    }
+    if let Some(tint) = &image.tint {
+        if !matches!(tint.as_str(), "auto" | "light" | "dark") {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{}].tint must be auto|light|dark",
+                image.id
+            )));
+        }
+    }
+    Ok(())
+}
+
+fn collect_text_ids<'a>(layers: &'a [Layer], out: &mut std::collections::HashSet<&'a str>) {
+    for layer in layers {
+        match layer {
+            Layer::Text(text) => {
+                out.insert(text.id.as_str());
+            }
+            Layer::Group(group) => collect_text_ids(&group.children, out),
+            _ => {}
+        }
+    }
+}
+
+fn validate_exprs(layers: &[Layer]) -> Result<()> {
+    for layer in layers {
+        match layer {
+            Layer::Text(text) => {
+                for item in &text.content {
+                    sandbox::validate_expr(&item.expr)?;
+                }
+            }
+            Layer::Group(group) => validate_exprs(&group.children)?,
+            _ => {}
+        }
+    }
+    Ok(())
+}
+
+fn validate_effects(effects: Option<&TextEffects>, i: usize) -> Result<()> {
+    let Some(effects) = effects else { return Ok(()) };
+    if let Some(stroke) = &effects.stroke {
+        range_check(&format!("layers[{i}].effects.stroke.width"), stroke.width, 0.005, 0.5)?;
+        parse_hex_color(&stroke.color)?;
+        if let Some(gap) = stroke.gap {
+            range_check(&format!("layers[{i}].effects.stroke.gap"), gap, 0.0, 0.5)?;
+        }
+    }
+    if let Some(relief) = &effects.relief {
+        if !matches!(
+            relief.mode.as_str(),
+            "emboss" | "engrave" | "letterpress" | "inner-shadow"
+        ) {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].effects.relief.mode must be emboss|engrave|letterpress|inner-shadow"
+            )));
+        }
+        if let Some(depth) = relief.depth {
+            range_check(&format!("layers[{i}].effects.relief.depth"), depth, 0.01, 0.3)?;
+        }
+        if let Some(color) = &relief.highlight {
+            parse_hex_color(color)?;
+        }
+        if let Some(color) = &relief.shadow {
+            parse_hex_color(color)?;
+        }
+        range_check(&format!("layers[{i}].effects.relief.opacity"), relief.opacity, 0.0, 1.0)?;
+    }
+    if let Some(fill) = &effects.fill {
+        if !matches!(fill.mode.as_str(), "gradient" | "foil" | "texture") {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].effects.fill.mode must be gradient|foil|texture"
+            )));
+        }
+        if fill.colors.len() > 8 {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].effects.fill.colors must contain at most 8 stops"
+            )));
+        }
+        for color in &fill.colors {
+            parse_hex_color(color)?;
+        }
+        if fill.mode != "texture" && fill.colors.len() < 2 {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].effects.fill.colors needs at least 2 stops for gradient/foil"
+            )));
+        }
+        if let Some(texture) = &fill.texture {
+            if !is_asset_path(texture) {
+                return Err(Error::SchemaViolation(format!(
+                    "layers[{i}].effects.fill.texture must be @builtin/... or assets/..."
+                )));
+            }
+        }
+        if let Some(angle) = fill.angle {
+            range_check(&format!("layers[{i}].effects.fill.angle"), angle, -360.0, 360.0)?;
+        }
+        if let Some(intensity) = fill.intensity {
+            range_check(&format!("layers[{i}].effects.fill.intensity"), intensity, 0.0, 1.0)?;
+        }
+    }
+    if let Some(shadow) = &effects.shadow {
+        range_check(&format!("layers[{i}].effects.shadow.offsetX"), shadow.offset_x, -0.5, 0.5)?;
+        range_check(&format!("layers[{i}].effects.shadow.offsetY"), shadow.offset_y, -0.5, 0.5)?;
+        range_check(&format!("layers[{i}].effects.shadow.blur"), shadow.blur, 0.0, 0.5)?;
+        parse_hex_color(&shadow.color)?;
+        range_check(&format!("layers[{i}].effects.shadow.opacity"), shadow.opacity, 0.0, 1.0)?;
+    }
+    if let Some(case) = &effects.case {
+        if !matches!(case.as_str(), "upper" | "lower" | "title") {
+            return Err(Error::SchemaViolation(format!(
+                "layers[{i}].effects.case must be upper|lower|title"
+            )));
+        }
+    }
+    if let Some(scale) = effects.scale_x {
+        range_check(&format!("layers[{i}].effects.scaleX"), scale, 0.5, 2.0)?;
     }
     Ok(())
 }
@@ -915,13 +1560,7 @@ pub fn load_template_from_str(json: &str) -> Result<Template> {
     let template: Template = serde_json::from_value(value)
         .map_err(|e| Error::SchemaViolation(format!("template structure rejected: {e}")))?;
     validate_semantics(&template)?;
-    for layer in &template.layers {
-        if let Layer::Text(text) = layer {
-            for item in &text.content {
-                sandbox::validate_expr(&item.expr)?;
-            }
-        }
-    }
+    validate_exprs(&template.layers)?;
     Ok(template)
 }
 

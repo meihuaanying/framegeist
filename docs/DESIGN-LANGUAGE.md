@@ -152,6 +152,35 @@
 2. 无意外重叠；信息带同一基线；留白在 5–15%。
 3. 浅底/深底两张照片下 `auto` 对比度均通过。
 4. 表达式全部过白名单；`validate` 无错。
-5. id 唯一、name/nameI18n 双语、category 正确、author="FrameGeist"、license="CC0-1.0"、version="1.0.0"、minEngineVersion="0.4.0"。
+5. id 唯一、name/nameI18n 双语、category 正确、author="FrameGeist"、license="CC0-1.0"、version="1.0.0"、minEngineVersion="0.5.0"（用到 v0.5 能力必须；纯 v0.4 能力可 0.4.0）。
 6. 与同分类相邻模板至少 2 处显著差异（自动缩略图差异断言 >3%）。
 7. 无 frameelf 文案/资产复刻；无第三方商标图形描摹（品牌字标走 Simple Icons 既有管线）。
+
+## 附录 v0.5 字效与艺术风格
+
+> v0.5 起文本效果（`effects`）与日历/群组/自适应尺寸落地（字段语义见 `TEMPLATE-SPEC.md` §4.5e–§4.5k）。
+> 以下 8 款**自创艺术风格**是功能对齐的「效果配方库」：每款至少落一套模板、并在编辑器内作为「文字样式预设」可复用。
+> 所有配方只允许使用 `effects` 与既有 shape/资产字段，相对尺寸按 `mask_unit`（首行基线 = em 代理值）换算。
+
+| 风格 | 设计意图 | 建议字效配方（可调） | QA 门禁（除 §7 通用项） |
+|---|---|---|---|
+| 铜版雕刻 Copperplate Etch | 排线阴刻 + 双线框 + 小号大写间距字 | `case:"upper"`、`letterSpacing:0.14–0.20`、`stroke:{width:0.02,color:"#1A1A1A",double:true,gap:0.02}`、`relief:{mode:"engrave",depth:0.04,opacity:0.7}`；shape `{frame:"outer",double:true,strokeWidth:0.002}` | 双层描边清晰可辨；双线框四边等距（margin 偏差 ≤1px）；900px 样张最小字 ≥8px |
+| 烫金箔 Gilt Foil | 暖金渐变 + 高光扫过 + 深底 | `fill:{mode:"foil",colors:["#8A6A1F","#F6E27A","#D4A017","#FBF0B0"],angle:100,intensity:0.9}`、`relief:{mode:"emboss",depth:0.06,highlight:"#FFF7D6",shadow:"#4A3200",opacity:0.7}`；深底/黑底 | 高光条位置像素断言；浅底照片自动对比仍可读；金色不泛绿/泛紫 |
+| 压印浮雕 Letterpress Relief | 同色系压印 + 微高光 + 厚衬线 | `fill` 用底色；`relief:{mode:"letterpress",depth:0.05,highlight:<底色+10% 亮度>,shadow:<底色-25% 亮度>,opacity:0.6}`；衬线字体 | 压印方向一致（左上暗/右下亮）；无纯黑/纯白硬边；深底版本可辨 |
+| 木刻活字 Woodtype | 粗黑体 + 抖动边缘 + 木纹底 | `weight:700–900`、`stroke:{width:0.03,color:"#241A12"}`、`relief:{mode:"emboss",depth:0.04}`、`fill:{mode:"texture",texture:"assets/<木纹>"}`；`letterSpacing:0` | 纹理缺失时回退纸纹/底色不空白；粗体字面真实命中（像素覆盖率断言）；边缘无彩边 |
+| 浮世绘题签 Ukiyo-e Cartouche | 竖排题签 + 朱印 + 云纹边 | 逐字多行 `content` + `lineHeight:1.0–1.15`；`fill:{mode:"gradient",colors:["#2B2118","#5B4A32"],angle:90}`、`stroke:{width:0.01,color:"#EFE6D2"}`；`@builtin/frame/seal-red` + 线框/图标 shape | 竖排逐字断行正确；朱印不压字；主色 ≤3 种、低饱和（和纸感） |
+| Art Deco 双线 | 几何双线 + 对称 + 大写字距 | `case:"upper"`、`letterSpacing:0.22–0.34`、`stroke:{width:0.012,color:"#C9A227",double:true,gap:0.05}`；shape `{frame:"outer",double:true,margin:0.03}`；对称布局 | 左右/上下对称误差 ≤1px；大写字距下文字不撞边；金线不脏 |
+| 民国杂志铅字 Republican Letterpress | 中英混排 + 栏线 + 竖排刊头 | 中文 `Noto Serif SC` + 英文 `JetBrains Mono`；`relief:{mode:"inner-shadow",depth:0.03,opacity:0.6}`；shape `{span:"auto",autoHide:true}` 栏线；`letterSpacing:0.08–0.16`；墨色 `#1A1A1A/#6B7280` | 文本层 <2 时栏线自动隐藏；中英混排基线对齐；无现代高饱和色 |
+| 朱文印章 Vermilion Seal | 朱红印章块 + 阴刻/阳刻切换 | `@builtin/frame/seal-red`（自创纹样）或 shape rect `#C8102E`；文字反白用 `fill` 纸色/白；`case:"upper"`、`stroke:{double:true}`；`Ma Shan Zheng`/`Noto Serif SC` | 印章边缘无锯齿；阴刻（红底白字）/阳刻（白底线字）两版对比度均达标；不描摹真实印章/商标 |
+
+**风格总门禁**
+
+1. 每款真实渲染 900px 样张（浅底 + 深底两张照片）人工审阅；效果组合后不糊字，最小文字 ≥8px。
+2. 像素断言覆盖：描边宽度、烫金高光位置、纹理统计、压印方向（V0.5.0-CONSTRAINTS §2.3 门禁）。
+3. 纹理/资产缺失必须走回退路径（模板仍完整可交付）。
+4. `effects` 组合顺序固定（阴影→描边→凹刻→填充→凸印），不得依赖声明顺序改变结果。
+
+**原创红线（与 §7 第 7 条同源）**
+
+- 8 款风格只做**能力对齐**，视觉语言必须 100% FrameGeist 原创：**禁止 1:1 复刻 frameelf 的版式参数、命名、文案与资产**，禁止照抄其截图/样例作为配方来源；研究语料不入仓、不二次分发。
+- 配方是「字段组合」而非「版式复刻」：同一风格的不同模板允许共用效果配方，但不得与该风格的 frameelf 原版一一对应；模板名/文案必须自创。

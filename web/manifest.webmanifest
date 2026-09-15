@@ -3,8 +3,15 @@
   "short_name": "FrameGeist",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f4f4f2",
-  "theme_color": "#1a1a1a",
-  "description": "照片边框水印拼图，全本地处理（G1/G4）",
-  "icons": []
+  "background_color": "#f8f8fa",
+  "theme_color": "#1772f6",
+  "description": "照片边框水印拼图 · 184 套模板 · 全本地处理，零上传（G1/G4）",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }

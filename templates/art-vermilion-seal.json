@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "id": "art-vermilion-seal",
+    "name": "Vermilion Seal",
+    "nameI18n": { "zh": "朱文印章", "en": "Vermilion Seal" },
+    "version": "1.0.0",
+    "minEngineVersion": "0.5.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "master"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": { "top": 0.09, "right": 0.05, "bottom": 0.26, "left": 0.05 },
+    "background": { "type": "solid", "color": "#F7F3EA" }
+  },
+  "layers": [
+    {
+      "type": "shape",
+      "id": "seal-rule",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.82 },
+      "shape": "line",
+      "size": { "width": 0.16, "height": 0.002 },
+      "color": "#C8102E",
+      "opacity": 0.9
+    },
+    {
+      "type": "shape",
+      "id": "seal-block",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.3914 },
+      "shape": "rect",
+      "size": { "width": 0.52, "height": 0.19 },
+      "color": "#C8102E",
+      "opacity": 1.0
+    },
+    {
+      "type": "shape",
+      "id": "seal-block-inner",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.3914 },
+      "shape": "rect",
+      "size": { "width": 0.5, "height": 0.176 },
+      "color": "#FFE9E0",
+      "opacity": 0.7,
+      "strokeWidth": 0.0009
+    },
+    {
+      "type": "text",
+      "id": "seal-title",
+      "anchor": "middle-center",
+      "offset": { "x": 0, "y": 0.3914 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.055, "color": "#FFF7F0" },
+      "letterSpacing": 0.1,
+      "align": "center",
+      "effects": {
+        "stroke": { "width": 0.035, "color": "#FFF7F0" },
+        "relief": { "mode": "emboss", "depth": 0.05, "highlight": "#FFD9DE", "shadow": "#7A0A1C", "opacity": 0.9 }
+      },
+      "content": [{ "expr": "'朱文印章'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "seal-heading-zh",
+      "anchor": "top-left",
+      "offset": { "x": 0.05, "y": 0.018 },
+      "font": { "family": ["Ma Shan Zheng"], "size": 0.048, "color": "#23201B" },
+      "letterSpacing": 0.12,
+      "content": [{ "expr": "'朱痕记'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "seal-heading-en",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.026 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "#6B5F52" },
+      "letterSpacing": 0.28,
+      "align": "right",
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "'Vermilion Impression · Studio Proof'", "fallback": null }]
+    },
+    {
+      "type": "text",
+      "id": "seal-model",
+      "anchor": "top-right",
+      "offset": { "x": -0.05, "y": 0.055 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "#6B5F52" },
+      "letterSpacing": 0.28,
+      "align": "right",
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "if_empty(exif.model_pretty, 'House Imprint')", "fallback": "House Imprint" }]
+    },
+    {
+      "type": "text",
+      "id": "seal-date",
+      "anchor": "bottom-left",
+      "offset": { "x": 0.05, "y": -0.018 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B5F52" },
+      "letterSpacing": 0.24,
+      "effects": { "case": "upper" },
+      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "Sealed Edition" }]
+    },
+    {
+      "type": "text",
+      "id": "seal-params",
+      "anchor": "bottom-right",
+      "offset": { "x": -0.05, "y": -0.018 },
+      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B5F52" },
+      "letterSpacing": 0.24,
+      "align": "right",
+      "effects": { "case": "upper" },
+      "content": [
+        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Imprint · Hand-Finished" }
+      ]
+    }
+  ]
+}

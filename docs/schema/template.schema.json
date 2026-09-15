@@ -54,7 +54,7 @@
           "additionalProperties": false,
           "required": ["type"],
           "properties": {
-            "type": { "enum": ["blur", "solid", "image", "tint", "none"] },
+            "type": { "enum": ["blur", "solid", "image", "tint", "texture", "none"] },
             "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$" },
             "blur": { "type": "number", "minimum": 0, "maximum": 200 },
             "scale": { "type": "number", "minimum": 1, "maximum": 4 },
@@ -84,10 +84,12 @@
           { "title": "text", "properties": { "type": { "const": "text" } } },
           { "title": "image", "properties": { "type": { "const": "image" } } },
           { "title": "shape", "properties": { "type": { "const": "shape" } } },
-          { "title": "palette", "properties": { "type": { "const": "palette" } } }
+          { "title": "palette", "properties": { "type": { "const": "palette" } } },
+          { "title": "group", "properties": { "type": { "const": "group" } } },
+          { "title": "calendar", "properties": { "type": { "const": "calendar" } } }
         ],
         "properties": {
-          "type": { "enum": ["text", "image", "shape", "palette"] },
+          "type": { "enum": ["text", "image", "shape", "palette", "group", "calendar"] },
           "id": { "type": "string", "pattern": "^[a-zA-Z0-9-]{1,64}$" },
           "anchor": { "enum": ["top-left", "top-center", "top-right", "middle-left", "middle-center", "middle-right", "bottom-left", "bottom-center", "bottom-right"] },
           "offset": {
@@ -98,6 +100,7 @@
               "y": { "type": "number", "minimum": -1, "maximum": 1 }
             }
           },
+          "z": { "type": "integer", "minimum": -1000, "maximum": 1000 },
           "font": {
             "type": "object",
             "additionalProperties": false,
@@ -113,6 +116,74 @@
           "letterSpacing": { "type": "number", "minimum": -0.05, "maximum": 0.5 },
           "rotation": { "type": "number", "minimum": -360, "maximum": 360 },
           "align": { "enum": ["left", "center", "right"] },
+          "effects": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "stroke": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["width", "color"],
+                "properties": {
+                  "width": { "type": "number", "minimum": 0.005, "maximum": 0.5 },
+                  "color": { "$ref": "#/definitions/HexColor" },
+                  "double": { "type": "boolean" },
+                  "gap": { "type": "number", "minimum": 0, "maximum": 0.5 }
+                }
+              },
+              "relief": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["mode"],
+                "properties": {
+                  "mode": { "enum": ["emboss", "engrave", "letterpress", "inner-shadow"] },
+                  "depth": { "type": "number", "minimum": 0.01, "maximum": 0.3 },
+                  "highlight": { "$ref": "#/definitions/HexColor" },
+                  "shadow": { "$ref": "#/definitions/HexColor" },
+                  "opacity": { "type": "number", "minimum": 0, "maximum": 1 }
+                }
+              },
+              "fill": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["mode"],
+                "properties": {
+                  "mode": { "enum": ["gradient", "foil", "texture"] },
+                  "colors": { "type": "array", "items": { "$ref": "#/definitions/HexColor" }, "maxItems": 8 },
+                  "angle": { "type": "number", "minimum": -360, "maximum": 360 },
+                  "texture": { "type": "string", "pattern": "^(@builtin/|@user/|assets/)[a-zA-Z0-9/._{}-]{1,200}$" },
+                  "intensity": { "type": "number", "minimum": 0, "maximum": 1 }
+                },
+                "allOf": [
+                  {
+                    "if": { "properties": { "mode": { "enum": ["gradient", "foil"] } }, "required": ["mode"] },
+                    "then": { "properties": { "colors": { "minItems": 2 } } }
+                  }
+                ]
+              },
+              "shadow": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["color"],
+                "properties": {
+                  "offsetX": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
+                  "offsetY": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
+                  "blur": { "type": "number", "minimum": 0, "maximum": 0.5 },
+                  "color": { "$ref": "#/definitions/HexColor" },
+                  "opacity": { "type": "number", "minimum": 0, "maximum": 1 }
+                }
+              },
+              "case": { "enum": ["upper", "lower", "title"] },
+              "flipX": { "type": "boolean" },
+              "flipY": { "type": "boolean" },
+              "scaleX": { "type": "number", "minimum": 0.5, "maximum": 2 }
+            }
+          },
+          "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+          "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+          "stretchWidth": { "type": "boolean" },
+          "stretchHeight": { "type": "boolean" },
+          "fillPage": { "type": "boolean" },
           "content": {
             "type": "array",
             "maxItems": 64,
@@ -128,12 +199,17 @@
           },
           "asset": { "type": "string", "pattern": "^(@builtin/|assets/)[a-zA-Z0-9/._{}-]{1,200}$" },
           "size": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
-              "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
-            }
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "height": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+                  "width": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+                }
+              },
+              { "type": "number", "minimum": 0.005, "maximum": 0.6 }
+            ]
           },
           "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
           "attachTo": { "type": "string", "pattern": "^[a-zA-Z0-9-]{1,64}$" },
@@ -143,10 +219,15 @@
           "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$" },
           "radius": { "type": "number", "minimum": 0, "maximum": 0.5 },
           "strokeWidth": { "type": "number", "minimum": 0, "maximum": 0.2 },
+          "double": { "type": "boolean" },
+          "gap": { "type": "number", "minimum": 0, "maximum": 0.3 },
+          "frame": { "enum": ["outer", "opposite-h", "opposite-v"] },
+          "margin": { "type": "number", "minimum": 0, "maximum": 0.5 },
+          "autoHide": { "type": "boolean" },
+          "span": { "enum": ["auto"] },
           "count": { "type": "integer", "minimum": 2, "maximum": 8 },
           "direction": { "enum": ["horizontal", "vertical"] },
           "showHex": { "type": "boolean" },
-          "gap": { "type": "number", "minimum": 0, "maximum": 0.3 },
           "label": {
             "type": "object",
             "additionalProperties": false,
@@ -156,13 +237,30 @@
               "color": { "type": "string" },
               "family": { "type": "array", "items": { "type": "string" }, "maxItems": 2 }
             }
-          }
+          },
+          "children": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 32,
+            "items": { "$ref": "#/properties/layers/items" }
+          },
+          "dateSource": { "enum": ["exif", "fixed"] },
+          "year": { "type": "integer", "minimum": 1900, "maximum": 2100 },
+          "month": { "type": "integer", "minimum": 1, "maximum": 12 },
+          "showLunar": { "type": "boolean" },
+          "showWeekdays": { "type": "boolean" },
+          "view": { "enum": ["month", "week", "day", "strip"] },
+          "binding": { "type": "boolean" },
+          "accent": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$" },
+          "fontFamily": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 64 }, "maxItems": 2 }
         },
         "allOf": [
           { "if": { "properties": { "type": { "const": "text" } } }, "then": { "required": ["type", "id", "anchor", "font", "content"] } },
           { "if": { "properties": { "type": { "const": "image" } } }, "then": { "required": ["type", "id", "anchor", "asset"] } },
-          { "if": { "properties": { "type": { "const": "shape" } } }, "then": { "required": ["type", "id", "anchor", "shape", "color"] } },
-          { "if": { "properties": { "type": { "const": "palette" } } }, "then": { "required": ["type", "id", "anchor"] } }
+          { "if": { "properties": { "type": { "const": "shape" } } }, "then": { "required": ["type", "id", "anchor", "shape", "color"], "properties": { "gap": { "maximum": 0.2 } } } },
+          { "if": { "properties": { "type": { "const": "palette" } } }, "then": { "required": ["type", "id", "anchor"], "properties": { "size": { "type": "number", "minimum": 0.005, "maximum": 0.3 } } } },
+          { "if": { "properties": { "type": { "const": "group" } } }, "then": { "required": ["type", "id", "anchor", "children"] } },
+          { "if": { "properties": { "type": { "const": "calendar" } } }, "then": { "required": ["type", "id", "anchor"], "properties": { "size": { "type": "number", "minimum": 0.05, "maximum": 0.6 } } } }
         ]
       }
     },
@@ -177,6 +275,94 @@
           "source": { "enum": ["exif", "constant"] },
           "transform": { "enum": ["model_pretty", "brand_slug", "identity"] }
         }
+      }
+    },
+    "overrides": { "$ref": "#/definitions/TemplateOverrides" }
+  },
+  "definitions": {
+    "HexColor": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$"
+    },
+    "CropRect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number", "minimum": 0, "maximum": 1 },
+        "y": { "type": "number", "minimum": 0, "maximum": 1 },
+        "w": { "type": "number", "minimum": 0.01, "maximum": 1 },
+        "h": { "type": "number", "minimum": 0.01, "maximum": 1 }
+      }
+    },
+    "Shadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "外阴影；canvas.shadow 的 blur/offset 相对照片高，TemplateOverrides.card.shadow 相对 min(照片宽,高)。enabled 缺省 true。",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "blur": { "type": "number", "minimum": 0, "maximum": 0.5 },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "offsetX": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
+        "offsetY": { "type": "number", "minimum": -0.5, "maximum": 0.5 }
+      }
+    },
+    "InnerShadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "卡片内阴影（v0.5）：沿圆角卡片内缘压暗；blur/offset 相对 min(照片宽,高)。enabled 缺省 true。",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "blur": { "type": "number", "minimum": 0, "maximum": 0.5 },
+        "opacity": { "type": "number", "minimum": 0, "maximum": 1 },
+        "offsetX": { "type": "number", "minimum": -0.5, "maximum": 0.5 },
+        "offsetY": { "type": "number", "minimum": -0.5, "maximum": 0.5 }
+      }
+    },
+    "CardOverrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "卡片特效覆盖（TemplateOverrides.card，v0.5）。enabled:false 关闭全部卡片装饰（含模板 canvas.radius/shadow）。",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "radius": { "type": "number", "minimum": 0, "maximum": 0.25 },
+        "shadow": { "$ref": "#/definitions/Shadow" },
+        "border": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["width", "color"],
+          "properties": {
+            "width": { "type": "number", "minimum": 0, "maximum": 0.05 },
+            "color": { "$ref": "#/definitions/HexColor" }
+          }
+        },
+        "innerShadow": { "$ref": "#/definitions/InnerShadow" }
+      }
+    },
+    "TemplateOverrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "渲染覆盖对象（TemplateOverrides，camelCase；由 UI/CLI/WASM 作为独立参数传入，不是模板文件字段）。",
+      "properties": {
+        "fontSizeScale": { "type": "number", "minimum": 0.5, "maximum": 2 },
+        "paddingScale": { "type": "number", "minimum": 0.5, "maximum": 2 },
+        "textColor": { "$ref": "#/definitions/HexColor" },
+        "fontFamily": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "aspect": { "enum": ["1:1", "4:3", "3:2", "16:9", "9:16", "original"] },
+        "background": { "enum": ["blur", "solid", "image", "tint", "texture", "none"] },
+        "backgroundColor": { "$ref": "#/definitions/HexColor" },
+        "textureAsset": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "background:\"texture\" 的纹理图；缺失时回退确定性程序纸纹。",
+          "pattern": "^(@builtin/|@user/|assets/)[a-zA-Z0-9/._{}-]{1,200}$"
+        },
+        "margin": { "type": "number", "minimum": 0, "maximum": 0.5 },
+        "card": { "$ref": "#/definitions/CardOverrides" },
+        "flipHorizontal": { "type": "boolean" },
+        "flipVertical": { "type": "boolean" },
+        "showLogo": { "type": "boolean" },
+        "metadata": { "type": "boolean", "description": "保留输出 EXIF 元数据（默认 true；GPS 仍受 keep_gps 独立控制）。" },
+        "crop": { "$ref": "#/definitions/CropRect" }
       }
     }
   }

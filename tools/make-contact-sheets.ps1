@@ -13,7 +13,7 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 New-Item -ItemType Directory -Force $Out | Out-Null
-$files = Get-ChildItem $Src -Filter *.png | Where-Object { $_.BaseName -like $Pattern } | Sort-Object Name
+$files = Get-ChildItem $Src -File | Where-Object { $_.Extension -match '^\.(png|jpe?g)$' -and $_.BaseName -like $Pattern } | Sort-Object Name
 if ($files.Count -eq 0) { Write-Error "no files match $Pattern in $Src"; exit 1 }
 
 $labelH = 26

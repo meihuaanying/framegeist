@@ -3,9 +3,59 @@
 // Usage: node tools/e2e-audit.mjs [screenshotDir]
 import { writeFileSync, mkdirSync, existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { deflateSync } from "node:zlib";
 
 const SHOTS = process.argv[2] ?? "docs/reports/v0.4.0";
 mkdirSync(SHOTS, { recursive: true });
+
+/** Minimal PNG writer (v0.5 frame fixture): opaque border + transparent window. */
+function writeFramePng(path, w = 480, h = 640) {
+  const table = (() => {
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  const crc = (buf) => {
+    let c = 0xffffffff;
+    for (const b of buf) c = table[(c ^ b) & 0xff] ^ (c >>> 8);
+    return (c ^ 0xffffffff) >>> 0;
+  };
+  const chunk = (type, data) => {
+    const len = Buffer.alloc(4);
+    len.writeUInt32BE(data.length);
+    const body = Buffer.concat([Buffer.from(type), data]);
+    const c = Buffer.alloc(4);
+    c.writeUInt32BE(crc(body));
+    return Buffer.concat([len, body, c]);
+  };
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(w, 0);
+  ihdr.writeUInt32BE(h, 4);
+  ihdr[8] = 8; ihdr[9] = 6; // 8-bit RGBA
+  const raw = Buffer.alloc((w * 4 + 1) * h);
+  let o = 0;
+  for (let y = 0; y < h; y++) {
+    raw[o++] = 0;
+    for (let x = 0; x < w; x++) {
+      const inWindow = x > w * 0.18 && x < w * 0.82 && y > h * 0.15 && y < h * 0.85;
+      raw[o++] = 245; raw[o++] = 245; raw[o++] = 240;
+      raw[o++] = inWindow ? 0 : 255;
+    }
+  }
+  const png = Buffer.concat([
+    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+    chunk("IHDR", ihdr),
+    chunk("IDAT", deflateSync(raw)),
+    chunk("IEND", Buffer.alloc(0)),
+  ]);
+  writeFileSync(path, png);
+  return path;
+}
+const FRAME_PNG = writeFramePng(pathResolve(join(SHOTS, "fixture-frame.png")));
 
 import { resolve as pathResolve } from "node:path";
 const ABS = (p) => pathResolve(p).split("\\").join("/");
@@ -15,15 +65,25 @@ const PHOTO_B = ABS("templates/assets/test-photos/sample-portrait.jpg");
 const PHOTO_C = ABS("templates/assets/test-photos/sample-square.jpg");
 const PHOTO_D = ABS("templates/assets/test-photos/sample-noexif.png");
 
+const WATCHDOG = setTimeout(() => {
+  console.log("WATCHDOG: audit exceeded 8 minutes; results so far:");
+  console.log(results.map((r) => `${r.ok ? "PASS" : "FAIL"} ${r.name}`).join("\n"));
+  process.exit(3);
+}, 8 * 60 * 1000);
 const results = [];
+const pageErrors = [];
 const check = (name, ok, detail = "") => {
   results.push({ name, ok, detail });
   console.log(`${ok ? "PASS" : "FAIL"} ${name}${detail ? ` — ${detail}` : ""}`);
 };
 
-const list = await fetch("http://127.0.0.1:9223/json/list").then((r) => r.json());
-const page = list.find((t) => t.type === "page");
-if (!page) { console.error("no page target on 9223"); process.exit(2); }
+const CDP_PORT = process.env.FG_CDP_PORT ?? "9223";
+const list = await fetch(`http://127.0.0.1:${CDP_PORT}/json/list`).then((r) => r.json());
+// Prefer the app page (Tauri or the local dev server); ignore Edge dialogs.
+const page =
+  list.find((t) => t.type === "page" && /framegeist|localhost|tauri\.localhost/i.test(t.url)) ??
+  list.find((t) => t.type === "page");
+if (!page) { console.error(`no page target on ${CDP_PORT}`); process.exit(2); }
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 let id = 0;
 const pending = new Map();
@@ -37,16 +97,31 @@ ws.onmessage = (ev) => {
   const m = JSON.parse(ev.data);
   if (m.id && pending.has(m.id)) { pending.get(m.id)(m.result); pending.delete(m.id); }
   if (m.method === "Runtime.exceptionThrown") {
-    console.log("PAGE-EXC:", JSON.stringify(m.params.exceptionDetails).slice(0, 220));
+    const text = JSON.stringify(m.params.exceptionDetails).slice(0, 500);
+    pageErrors.push(`EXC ${text}`);
+    console.log("PAGE-EXC:", text);
+  }
+  if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") {
+    const text = m.params.args.map((a) => a.value ?? a.description).join(" ").slice(0, 300);
+    pageErrors.push(`CONSOLE ${text}`);
+    console.log("CONSOLE-ERR:", text);
   }
 };
 await new Promise((res) => { ws.onopen = res; });
 await send("Runtime.enable");
+await send("Network.enable").catch(() => {});
+await send("Network.setCacheDisabled", { cacheDisabled: true }).catch(() => {});
+await send("Page.setBypassServiceWorker", { bypass: true }).catch(() => {});
+await send("Network.setBypassServiceWorker", { bypass: true }).catch(() => {});
 await send("Page.enable");
 await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
 
-const ev = async (expr) =>
-  (await send("Runtime.evaluate", { expression: expr, returnByValue: true, awaitPromise: true })).result?.value;
+const ev = async (expr) => {
+  const timeout = new Promise((resolve) => setTimeout(() => resolve({ result: { value: undefined } }), 30000));
+  const call = send("Runtime.evaluate", { expression: expr, returnByValue: true, awaitPromise: true });
+  const r = await Promise.race([call, timeout]);
+  return r.result?.value;
+};
 const shot = async (name) => {
   const r = await send("Page.captureScreenshot", { format: "png" });
   writeFileSync(join(SHOTS, `${name}.png`), Buffer.from(r.data, "base64"));
@@ -71,6 +146,24 @@ const waitLabel = async (timeoutMs = 60000) => {
 };
 
 /* ---- 0. boot ---- */
+// Warm reload on the clean network path (no stale service worker cache;
+// Tauri has no SW either). Measures a warm-cache start.
+await send("Runtime.evaluate", {
+  expression: `(async () => {
+    try {
+      const ks = await caches.keys();
+      await Promise.all(ks.map((k) => caches.delete(k)));
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((r) => r.unregister()));
+    } catch {}
+    localStorage.clear();
+    return "cleared";
+  })()`,
+  awaitPromise: true,
+  returnByValue: true,
+});
+await send("Page.reload", { ignoreCache: true });
+await new Promise((r) => setTimeout(r, 4500));
 const boot = await ev(`document.getElementById("statusText").textContent`);
 check("boot: ready", boot === "就绪", `status=${boot}`);
 check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__bootMs")) < 2000, `${await ev("window.__bootMs")}ms`);
@@ -85,7 +178,7 @@ check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__boo
     tabs: document.querySelectorAll("#wallCats button").length,
   }))()`);
   check("wall: opens as first view", wall.view === "wall" && !wall.wallHidden && wall.editorHidden, JSON.stringify(wall));
-  check("wall: 184 templates counted", /184/.test(wall.count), wall.count);
+  check("wall: 192 templates counted", /192/.test(wall.count), wall.count);
   check("wall: 27 category tabs (all+mine+25)", wall.tabs === 27, String(wall.tabs));
 
   const cards = await ev(`
@@ -103,7 +196,7 @@ check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__boo
 
   const manifest = JSON.parse(readFileSync("web/templates.json", "utf8"));
   const ENUM = new Set(["white-border", "camera", "phone", "drone", "fuji", "film", "colorwalk", "colorful", "classic-watermark", "portfolio", "black-frame", "sports", "calendar", "magazine", "minimal", "borderless", "master", "personal", "polaroid", "festival", "effect", "colorcard", "blur-bg", "ticket", "game"]);
-  check("library: 184 templates in manifest", manifest.length === 184, String(manifest.length));
+  check("library: 192 templates in manifest", manifest.length === 192, String(manifest.length));
   check("library: categories within v0.4 enum", manifest.every((t) => ENUM.has(t.category)), manifest.filter((t) => !ENUM.has(t.category)).map((t) => t.category).join(",") || "ok");
   check("library: bilingual names complete", manifest.every((t) => t.names?.zh && t.names?.en));
   const previews = readdirSync("web/previews").filter((f) => f.endsWith(".jpg")).length;
@@ -176,6 +269,17 @@ await inject([PHOTO_24MP]);
 const t0 = Date.now();
 const label = await waitLabel(30000);
 check("render: preview succeeds", label.includes("ms"), label);
+// the label flips before the <img> finishes decoding; wait for real pixels
+await ev(`
+  (async () => {
+    for (let i = 0; i < 80; i++) {
+      const img = document.querySelector("#canvasWrap img");
+      if (img && img.complete && img.naturalWidth > 0) return true;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    return false;
+  })()
+`);
 const stage = await ev(`
   (() => {
     const vp = document.getElementById("viewport").getBoundingClientRect();
@@ -383,7 +487,7 @@ function makeFgt(jsonBuf) {
 /* 18. library: 130 templates incl. game category + notice */
 {
   const count = await ev(`window.__fg.state.templates.length`);
-  check("library: 184 templates", count === 184, String(count));
+  check("library: 192 templates", count === 192, String(count));
   const hasGame = await ev(`window.__fg.state.templates.some(t => t.category === "game")`);
   check("library: game category present", hasGame === true);
   const chip = await ev(`[...document.querySelectorAll("#catChips button")].some(b => b.textContent.includes("游戏"))`);
@@ -544,6 +648,1218 @@ function makeFgt(jsonBuf) {
   check("engine: palette chips paint >=3 distinct saturated colors", bins >= 3, String(bins));
 }
 
+/* 25-pre: the reload test leaves the app on the wall with no photo; restage. */
+await inject([PHOTO_A]);
+await ev(`(async () => {
+  document.getElementById("modeFrame")?.click();
+  window.__fg.showEditor();
+  await window.__fg.useTemplate("classic-watermark-single-row");
+  await new Promise((r) => setTimeout(r, 900));
+})()`);
+
+/* 25. v0.5 editor: panel tiers */
+{
+  const before = await ev(`({
+    tier: document.body.dataset.tier,
+    insertHidden: getComputedStyle(document.getElementById("insertCard")).display === "none",
+  })`);
+  check("editor: simple tier hides advanced cards", before.tier === "simple" && before.insertHidden, JSON.stringify(before));
+  const after = await ev(`(async () => {
+    document.getElementById("tierToggle").click();
+    await new Promise((r) => setTimeout(r, 60));
+    return { tier: document.body.dataset.tier, visible: getComputedStyle(document.getElementById("insertCard")).display !== "none" };
+  })()`);
+  check("editor: advanced tier shows insert card", after.tier === "advanced" && after.visible, JSON.stringify(after));
+}
+
+/* 26. v0.5 editor: layer rows + selection */
+{
+  const rows = await ev(`document.querySelectorAll("#layerList .layer-row").length`);
+  check("editor: layer rows rendered", rows >= 2, String(rows));
+  const sel = await ev(`(() => {
+    const rowsBefore = [...document.querySelectorAll("#layerList .layer-row")].map((r) => r.dataset.id);
+    document.querySelector("#layerList .layer-row").click();
+    return {
+      rowsBefore,
+      edits: Object.keys(JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")),
+      on: document.querySelectorAll("#layerList .layer-row.on").length,
+      props: !!document.querySelector("#propsBody .props-grid"),
+      rows: [...document.querySelectorAll("#layerList .layer-row")].map((r) => r.dataset.id),
+      cacheLayers: (window.__fg.currentTemplateObject()?.layers ?? []).map((l) => l.id),
+      users: window.__fg.state.userTemplates.map((u) => u.id),
+      tid: window.__fg.state.templateId,
+    };
+  })()`);
+  check("editor: clicking a layer row selects it", !!sel && (sel.on >= 1 || sel.props), JSON.stringify(sel));
+}
+
+/* 27. v0.5 editor: arrow nudge + undo/redo */
+{
+  const r = await ev(`(async () => {
+    const st = window.__fg.state;
+    const read = () => JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[st.templateId] ?? "";
+    const off = (json) => {
+      try { const L = JSON.parse(json).layers.find((l) => l.id === st.__selId); return L?.offset?.x ?? 0; } catch { return 0; }
+    };
+    const row = document.querySelector("#layerList .layer-row.on") || document.querySelector("#layerList .layer-row");
+    row.click();
+    st.__selId = row.dataset.id;
+    const x0 = off(read());
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+    await new Promise((r) => setTimeout(r, 350));
+    const x1 = off(read());
+    document.getElementById("editUndo").click();
+    await new Promise((r) => setTimeout(r, 250));
+    const x2 = off(read());
+    document.getElementById("editRedo").click();
+    await new Promise((r) => setTimeout(r, 250));
+    const x3 = off(read());
+    return { x0, x1, x2, x3, hist: window.__fgEditor.debug().history, undoDisabled: document.getElementById("editUndo").disabled, trace: window.__fgEditor.debug().trace.slice(-10) };
+  })()`);
+  check("editor: arrow nudge moves layer", r.x1 > r.x0 + 0.0004, JSON.stringify(r));
+  check("editor: undo restores offset", Math.abs(r.x2 - r.x0) < 0.0005, JSON.stringify(r));
+  check("editor: redo re-applies nudge", Math.abs(r.x3 - r.x1) < 0.0005, JSON.stringify(r));
+}
+
+/* 28. v0.5 editor: drag with snapping + commit */
+{
+  const r = await ev(`(async () => {
+    const img = document.querySelector("#canvasWrap img");
+    const ov = document.querySelector(".edit-overlay");
+    const st = window.__fg.state;
+    if (!img || !ov) return { error: "no stage" };
+    const ready = async (ms) => {
+      const t0 = Date.now();
+      while (Date.now() - t0 < ms) {
+        if (img.complete && img.naturalWidth > 0 && ov.getBoundingClientRect().width > 10) return true;
+        await new Promise((r) => setTimeout(r, 100));
+      }
+      return false;
+    };
+    if (!(await ready(4000))) return { error: "stage not ready" };
+    const row = document.querySelector("#layerList .layer-row.on") || document.querySelector("#layerList .layer-row");
+    row.click();
+    const id = row.dataset.id;
+    const rect = ov.getBoundingClientRect();
+    const boxes = JSON.parse(window.__fg.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const b = boxes.find((x) => x.id === id);
+    if (!b) return { error: "no box" };
+    const sx = rect.left + ((b.x + b.w / 2) / img.naturalWidth) * rect.width;
+    const sy = rect.top + ((b.y + b.h / 2) / img.naturalHeight) * rect.height;
+    const tx = rect.left + rect.width / 2;
+    const ty = rect.top + rect.height / 2;
+    const viewport = document.getElementById("viewport");
+    viewport.dispatchEvent(new PointerEvent("pointerdown", { clientX: sx, clientY: sy, bubbles: true, button: 0, buttons: 1, cancelable: true }));
+    window.dispatchEvent(new PointerEvent("pointermove", { clientX: tx, clientY: ty, bubbles: true, buttons: 1 }));
+    window.dispatchEvent(new PointerEvent("pointerup", { clientX: tx, clientY: ty, bubbles: true }));
+    await new Promise((r) => setTimeout(r, 700));
+    const boxes2 = JSON.parse(window.__fg.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const b2 = boxes2.find((x) => x.id === id);
+    return { cx: b2.x + b2.w / 2, cy: b2.y + b2.h / 2, W: img.naturalWidth, H: img.naturalHeight };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check(
+    "editor: drag snaps layer to canvas center",
+    !!r && !r.error && Math.abs(r.cx - r.W / 2) < 5 && Math.abs(r.cy - r.H / 2) < 5,
+    JSON.stringify(r),
+  );
+}
+
+/* 29. v0.5 editor: text style preset changes pixels */
+{
+  const r = await ev(`(async () => {
+    const st = window.__fg.state;
+    const fnv = (bytes) => { let h = 0x811c9dc5; for (let i = 0; i < bytes.length; i += 7) { h ^= bytes[i]; h = Math.imul(h, 0x01000193) >>> 0; } return h; };
+    const tpl0 = window.__fg.effectiveTemplateJson();
+    const ov0 = window.__fg.buildOverridesJson();
+    const before = fnv(st.engine.render_with_overrides(st.photos[0].bytes, tpl0, "jpeg", true, ov0, 640, false));
+    const textRow = [...document.querySelectorAll("#layerList .layer-row")].find((r) => r.querySelector(".ltag")?.textContent === "text");
+    if (!textRow) return { error: "no text layer" };
+    textRow.click();
+    const sel = document.getElementById("presetSelect");
+    sel.value = "gilt";
+    sel.dispatchEvent(new Event("change"));
+    await new Promise((r) => setTimeout(r, 400));
+    const after = fnv(st.engine.render_with_overrides(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), "jpeg", true, window.__fg.buildOverridesJson(), 640, false));
+    const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[st.templateId] ?? "";
+    return { changed: before !== after, hasFoil: stored.includes("foil") };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("editor: preset applies foil fill", !!r && r.hasFoil === true, JSON.stringify(r));
+  check("editor: preset changes rendered pixels", !!r && r.changed === true, JSON.stringify(r));
+}
+
+/* 30. v0.5 editor: insert calendar layer */
+{
+  const r = await ev(`(async () => {
+    const before = document.querySelectorAll("#layerList .layer-row").length;
+    document.getElementById("addCalendar").click();
+    await new Promise((r) => setTimeout(r, 300));
+    const after = document.querySelectorAll("#layerList .layer-row").length;
+    const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId] ?? "";
+    return { before, after, hasCalendar: stored.includes('"calendar"') };
+  })()`);
+  check("editor: calendar element inserted", r.after === r.before + 1 && r.hasCalendar, JSON.stringify(r));
+}
+
+/* 31. v0.5 editor: crop mode overlay */
+{
+  const r = await ev(`(async () => {
+    document.getElementById("cropToggle").click();
+    await new Promise((r) => setTimeout(r, 120));
+    const hasRect = !!document.querySelector(".edit-overlay .crop-rect");
+    document.getElementById("cropReset").click();
+    await new Promise((r) => setTimeout(r, 120));
+    document.getElementById("cropToggle").click();
+    await new Promise((r) => setTimeout(r, 120));
+    return { hasRect, info: document.getElementById("cropInfo")?.textContent ?? "" };
+  })()`);
+  check("editor: crop mode shows crop rect", r.hasRect === true, JSON.stringify(r));
+}
+
+/* 32. v0.5 editor: frame upload registers @user/frame */
+{
+  await inject([FRAME_PNG], "#frameFile");
+  const r = await ev(`(async () => {
+    await new Promise((r) => setTimeout(r, 500));
+    const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId] ?? "";
+    const ov = JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId] ?? {};
+    return { hasFrame: stored.includes("@user/frame"), auto: !!ov.frame?.on };
+  })()`);
+  check("editor: frame upload writes canvas.frame", r.hasFrame === true, JSON.stringify(r));
+}
+
+/* 33. v0.5 export options: 720P + metadata switch */
+{
+  const opt = await ev(`[...document.getElementById("exportSize").options].some((o) => o.value === "1280")`);
+  check("export: 720P preset available", opt === true, String(opt));
+  await ev(`(async () => {
+    document.getElementById("settingsBtn").click();
+    await new Promise((r) => setTimeout(r, 100));
+    const cb = document.getElementById("setKeepMetadata");
+    cb.checked = false;
+    cb.dispatchEvent(new Event("change"));
+    await new Promise((r) => setTimeout(r, 80));
+    document.getElementById("settingsClose").click();
+  })()`);
+  const meta = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1") || "{}").keepMetadata`);
+  check("settings: metadata switch persists", meta === false, String(meta));
+  const ov = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").metadata`);
+  check("settings: metadata override reaches engine", ov === false, String(ov));
+  await ev(`(async () => {
+    document.getElementById("settingsBtn").click();
+    await new Promise((r) => setTimeout(r, 100));
+    const cb = document.getElementById("setKeepMetadata");
+    cb.checked = true;
+    cb.dispatchEvent(new Event("change"));
+    document.getElementById("settingsClose").click();
+  })()`);
+}
+
+/* 34. v0.5 wasm API: layer_boxes */
+{
+  const n = await ev(`(async () => {
+    try {
+      const st = window.__fg.state;
+      const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+      return boxes.length;
+    } catch (e) { return "ERR " + (e && (e.message || e.toString())); }
+  })()`);
+  check("wasm: layer_boxes returns boxes", typeof n === "number" && n >= 2, String(n));
+}
+
+/* 35. v0.5 engine: stroke paints a ring (pixel assertion) */
+{
+  const res = await ev(`
+    (async () => {
+     try {
+      const mk = (fx) => JSON.stringify({
+        meta: { id: "v5-p", name: "v5", version: "1.0.0", minEngineVersion: "0.5.0", author: "FrameGeist", license: "CC0-1.0", category: "minimal" },
+        canvas: { mode: "overlay" },
+        layers: [{ type: "text", id: "t1", anchor: "middle-center", offset: { x: 0, y: 0 },
+          font: { family: ["Inter"], size: 0.3, color: "#111111" }, content: [{ expr: "'AB'" }], effects: fx }],
+      });
+      const tpl0 = mk({});
+      const tpl1 = mk({ stroke: { width: 0.12, color: "#FF0000" } });
+      const pc = new OffscreenCanvas(1200, 900);
+      const pg = pc.getContext("2d");
+      pg.fillStyle = "#3080C0";
+      pg.fillRect(0, 0, 1200, 900);
+      const bytes = new Uint8Array(await (await pc.convertToBlob({ type: "image/jpeg", quality: 0.92 })).arrayBuffer());
+      const count = async (json) => {
+        const out = window.__fg.engine.render_with_overrides(bytes, json, "jpeg", false, "", 640, false);
+        const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
+        const c = new OffscreenCanvas(bmp.width, bmp.height);
+        const g = c.getContext("2d");
+        g.drawImage(bmp, 0, 0);
+        const d = g.getImageData(0, 0, bmp.width, bmp.height).data;
+        let n = 0;
+        for (let i = 0; i < d.length; i += 4) if (d[i] > 170 && d[i + 1] < 90 && d[i + 2] < 90) n++;
+        return n;
+      };
+      return { plain: await count(tpl0), stroked: await count(tpl1) };
+     } catch (e) { return { error: String((e && e.message) || e) }; }
+    })()
+  `);
+  check(
+    "engine: stroke paints outside glyphs",
+    !!res && !res.error && res.plain === 0 && res.stroked > 200,
+    JSON.stringify(res),
+  );
+}
+
+/* 36. v0.5 engine: calendar layer renders */
+{
+  const ink = await ev(`
+    (async () => {
+     try {
+      const tpl = JSON.stringify({
+        meta: { id: "v5-cal", name: "v5cal", version: "1.0.0", minEngineVersion: "0.5.0", author: "FrameGeist", license: "CC0-1.0", category: "calendar" },
+        canvas: { mode: "overlay" },
+        layers: [{ type: "calendar", id: "c1", anchor: "middle-center", offset: { x: 0, y: 0 }, size: 0.6,
+          dateSource: "fixed", year: 2026, month: 9, showLunar: true, showWeekdays: true, color: "#111111", accent: "#E10600", fontFamily: ["Inter"] }],
+      });
+      const st = window.__fg.state;
+      const out = st.engine.render_with_overrides(st.photos[0].bytes, tpl, "jpeg", false, "", 640, false);
+      const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
+      const c = new OffscreenCanvas(bmp.width, bmp.height);
+      const g = c.getContext("2d");
+      g.drawImage(bmp, 0, 0);
+      const d = g.getImageData(0, 0, bmp.width, bmp.height).data;
+      let n = 0;
+      for (let i = 0; i < d.length; i += 4) if (d[i] < 120 && d[i + 1] < 120 && d[i + 2] < 120) n++;
+      return n;
+     } catch (e) { return "ERR " + (e && (e.message || e.toString())); }
+    })()
+  `);
+  check("engine: calendar grid renders", typeof ink === "number" && ink > 400, String(ink));
+}
+
+/* 37. v0.5 engine: crop override halves the canvas */
+{
+  const dims = await ev(`
+    (async () => {
+     try {
+      const tpl = await (await fetch("./templates/minimal-corner-mono.json")).text();
+      const st = window.__fg.state;
+      const out = st.engine.render_with_overrides(st.photos[0].bytes, tpl, "jpeg", false, JSON.stringify({ crop: { x: 0, y: 0, w: 0.5, h: 0.5 } }), 0, false);
+      const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
+      return [bmp.width, bmp.height];
+     } catch (e) { return ["ERR", String((e && e.message) || e)]; }
+    })()
+  `);
+  const full = await ev(`(async () => {
+    const tpl = await (await fetch("./templates/minimal-corner-mono.json")).text();
+    const st = window.__fg.state;
+    const out = st.engine.render_with_overrides(st.photos[0].bytes, tpl, "jpeg", false, "", 0, false);
+    const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
+    return [bmp.width, bmp.height];
+  })()`);
+  check(
+    "engine: crop override scales output",
+    dims[0] < full[0] * 0.6 && dims[1] < full[1] * 0.6,
+    `${dims.join("x")} vs ${full.join("x")}`,
+  );
+}
+
+/* 38. v0.5 editor: duplicate + delete layer */
+{
+  const r = await ev(`(async () => {
+    const count = () => document.querySelectorAll("#layerList .layer-row").length;
+    const row = document.querySelector("#layerList .layer-row");
+    row.click();
+    const before = count();
+    document.getElementById("layerDup").click();
+    await new Promise((r) => setTimeout(r, 250));
+    const dup = count();
+    document.getElementById("layerDel").click();
+    await new Promise((r) => setTimeout(r, 250));
+    const del = count();
+    return { before, dup, del };
+  })()`);
+  check("editor: duplicate adds a layer row", r.dup === r.before + 1, JSON.stringify(r));
+  check("editor: delete removes the layer row", r.del === r.before, JSON.stringify(r));
+}
+
+/* 39. v0.5 free collage (M5): render / overlay aspect / drag / add-delete */
+{
+  await ev(`document.getElementById("modeCollage").click()`);
+  await new Promise((r) => setTimeout(r, 300));
+  await inject([PHOTO_A, PHOTO_B, PHOTO_C]);
+  const staged = await waitLabel(30000);
+  check("free collage: photos staged in collage mode", staged.includes("ms"), staged);
+
+  await ev(`(() => { const cb = document.getElementById("freeMode"); cb.checked = true; cb.dispatchEvent(new Event("change")); })()`);
+  await new Promise((r) => setTimeout(r, 1200));
+  const spec = await ev(`(() => {
+    const s = window.__fg.freeSpec();
+    const img = document.querySelector("#canvasWrap img");
+    return { n: s.items.length, w: s.width, h: s.height, iw: img?.naturalWidth ?? 0, ih: img?.naturalHeight ?? 0 };
+  })()`);
+  check(
+    "free collage: renders 3 items on 4:3 canvas",
+    spec.n === 3 && spec.w === 1600 && spec.h === 1200 && spec.iw === 1600 && spec.ih === 1200,
+    JSON.stringify(spec),
+  );
+
+  const boxes = await ev(`[...document.querySelectorAll(".edit-overlay .box")].map((b) => { const r = b.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; })`);
+  check(
+    "free collage: overlay boxes follow photo aspect",
+    boxes.length === 3 && boxes[1][1] / boxes[1][0] > (boxes[0][1] / boxes[0][0]) * 1.5,
+    JSON.stringify(boxes),
+  );
+
+  const drag = await ev(`(async () => {
+    const s = window.__fg.freeSpec();
+    const box = document.querySelector(".edit-overlay .box");
+    const br = box.getBoundingClientRect();
+    const cx = br.left + br.width / 2;
+    const cy = br.top + br.height / 2;
+    const wrap = document.getElementById("canvasWrap");
+    const wr = wrap.getBoundingClientRect();
+    const scale = wr.width / wrap.offsetWidth;
+    const x0 = s.items[0].x, y0 = s.items[0].y;
+    document.getElementById("viewport").dispatchEvent(new PointerEvent("pointerdown", { clientX: cx, clientY: cy, bubbles: true, cancelable: true, pointerId: 1 }));
+    window.dispatchEvent(new PointerEvent("pointermove", { clientX: cx + 64 * scale, clientY: cy + 32 * scale, bubbles: true, cancelable: true, pointerId: 1 }));
+    window.dispatchEvent(new PointerEvent("pointerup", { clientX: cx + 64 * scale, clientY: cy + 32 * scale, bubbles: true, pointerId: 1 }));
+    await new Promise((r) => setTimeout(r, 400));
+    const nx = window.__fg.freeSpec().items[0].x, ny = window.__fg.freeSpec().items[0].y;
+    return { dx: +(nx - x0).toFixed(4), dy: +(ny - y0).toFixed(4) };
+  })()`);
+  check(
+    "free collage: drag moves item (64/32 canvas px)",
+    Math.abs(drag.dx - 0.04) < 0.005 && Math.abs(drag.dy - 0.027) < 0.006,
+    JSON.stringify(drag),
+  );
+
+  const addDel = await ev(`(async () => {
+    const n0 = window.__fg.freeSpec().items.length;
+    document.getElementById("freeAdd").click();
+    await new Promise((r) => setTimeout(r, 600));
+    const n1 = window.__fg.freeSpec().items.length;
+    const rows = document.querySelectorAll("#freeList .layer-row").length;
+    document.getElementById("freeDel").click();
+    await new Promise((r) => setTimeout(r, 600));
+    const n2 = window.__fg.freeSpec().items.length;
+    return { n0, n1, n2, rows };
+  })()`);
+  check(
+    "free collage: add/delete item updates spec + list",
+    addDel.n1 === addDel.n0 + 1 && addDel.n2 === addDel.n0 && addDel.rows === addDel.n1,
+    JSON.stringify(addDel),
+  );
+  await shot("07-free-collage");
+}
+
+/* 40. v0.5 library: adjacent same-category thumbnails differ > 3%
+   (DESIGN-LANGUAGE.md rule 6; v0.4 audit measured 0.4-0.7% on near-dupes) */
+{
+  const manifest = JSON.parse(readFileSync("web/templates.json", "utf8"));
+  const byCat = new Map();
+  for (const t of manifest) {
+    if (!byCat.has(t.category)) byCat.set(t.category, []);
+    byCat.get(t.category).push(t.id);
+  }
+  const pairs = [];
+  for (const ids of byCat.values()) for (let i = 0; i < ids.length - 1; i++) pairs.push([ids[i], ids[i + 1]]);
+  const ratios = await ev(`(async () => {
+    const S = 160;
+    const norm = (id) => new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = S; c.height = S;
+        const g = c.getContext("2d", { willReadFrequently: true });
+        g.fillStyle = "#fff"; g.fillRect(0, 0, S, S);
+        const s = Math.min(S / img.naturalWidth, S / img.naturalHeight);
+        const w = Math.max(1, Math.round(img.naturalWidth * s));
+        const h = Math.max(1, Math.round(img.naturalHeight * s));
+        g.drawImage(img, (S - w) >> 1, (S - h) >> 1, w, h);
+        res(g.getImageData(0, 0, S, S).data);
+      };
+      img.onerror = () => rej(new Error("load " + id));
+      img.src = "thumbs/" + id + ".jpg";
+    });
+    const out = [];
+    for (const [a, b] of ${JSON.stringify(pairs)}) {
+      const da = await norm(a);
+      const db = await norm(b);
+      let diff = 0;
+      for (let p = 0; p < da.length; p += 4) {
+        if (Math.abs(da[p] - db[p]) > 8 || Math.abs(da[p + 1] - db[p + 1]) > 8 || Math.abs(da[p + 2] - db[p + 2]) > 8) diff++;
+      }
+      out.push([a, b, diff / (S * S)]);
+    }
+    return out;
+  })()`);
+  const fails = ratios.filter(([, , r]) => !(r > 0.03)).sort((x, y) => x[2] - y[2]);
+  const min = ratios.reduce((m, p) => (p[2] < m[2] ? p : m), ratios[0]);
+  check(
+    `library: ${ratios.length} adjacent same-category thumbnails differ > 3%`,
+    fails.length === 0,
+    fails.length
+      ? fails.slice(0, 6).map(([a, b, r]) => `${(r * 100).toFixed(2)}% ${a}↔${b}`).join("; ") + ` (fails=${fails.length}, min=${(min[2] * 100).toFixed(2)}%)`
+      : `min ${(min[2] * 100).toFixed(2)}% (${min[0]} ↔ ${min[1]})`,
+  );
+}
+
+/* ================= v0.5.0 M6 parity UI ================= */
+
+/* 41. template "recent used" ring buffer + chips */
+{
+  await ev(`(async () => {
+    document.getElementById("modeFrame")?.click();
+    const fm = document.getElementById("freeMode");
+    if (fm && fm.checked) { fm.checked = false; fm.dispatchEvent(new Event("change")); }
+    await new Promise((r) => setTimeout(r, 250));
+  })()`);
+  await ev(`localStorage.removeItem("fg-recent-v1"); window.__fg.buildWall()`);
+  const hidden = await ev(`![...document.querySelectorAll("#wallCats button")].some((b) => b.dataset.cat === "recent")`);
+  check("recent: chip hidden while buffer empty", hidden === true);
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); })()`);
+  await new Promise((r) => setTimeout(r, 800));
+  const stored = await ev(`JSON.parse(localStorage.getItem("fg-recent-v1") || "[]")`);
+  check("recent: applied template recorded in ring buffer", Array.isArray(stored) && stored[0] === "classic-watermark-single-row", JSON.stringify(stored?.slice(0, 3)));
+  await ev(`window.__fg.buildWall()`);
+  const chipLabel = await ev(`window.__fg.t("chip.recent")`);
+  const chip = await ev(`(() => { const b = [...document.querySelectorAll("#wallCats button")].find((x) => x.dataset.cat === "recent"); return b ? b.textContent : ""; })()`);
+  check("recent: wall chip appears after use", chip === chipLabel && chip.length > 0, chip);
+  const pickerChip = await ev(`!!document.querySelector('#catChips [data-cat="recent"]')`);
+  check("recent: picker chip present", pickerChip === true);
+  await ev(`document.querySelector('#wallCats [data-cat="recent"]').click()`);
+  await new Promise((r) => setTimeout(r, 300));
+  const filtered = await ev(`(() => ({
+    cards: document.querySelectorAll(".wall-card").length,
+    recent: JSON.parse(localStorage.getItem("fg-recent-v1") || "[]").length,
+    count: document.getElementById("wallCount").textContent,
+  }))()`);
+  check("recent: chip filters to the recency list", filtered.cards === Math.min(12, filtered.recent) && filtered.cards >= 1, JSON.stringify(filtered));
+  await ev(`document.querySelector('#wallCats [data-cat="all"]').click()`);
+  await new Promise((r) => setTimeout(r, 250));
+}
+
+/* 42. layer rename: inline input, survives rerender, id stays stable */
+{
+  await inject([PHOTO_A]);
+  await waitLabel(30000);
+  const r = await ev(`(async () => {
+    const rows = [...document.querySelectorAll("#layerList .layer-row")];
+    const row = rows.find((x) => x.querySelector(".ltag")?.textContent === "text");
+    if (!row) return { error: "no text row" };
+    row.click();
+    await new Promise((r) => setTimeout(r, 120));
+    const id = row.dataset.id;
+    const name = row.querySelector(".lname");
+    name.dispatchEvent(new MouseEvent("dblclick", { bubbles: true, cancelable: true }));
+    await new Promise((r) => setTimeout(r, 80));
+    const input = row.querySelector("input");
+    if (!input) return { error: "no rename input" };
+    input.value = "RENAMED-E2E";
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await new Promise((r) => setTimeout(r, 200));
+    const label1 = document.querySelector('#layerList .layer-row[data-id="' + id + '"] .lname')?.textContent ?? "";
+    const other = [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id !== id);
+    other?.click();
+    await new Promise((r) => setTimeout(r, 150));
+    const label2 = document.querySelector('#layerList .layer-row[data-id="' + id + '"] .lname')?.textContent ?? "";
+    const labels = JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId]?.labels ?? {};
+    const editRaw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
+    const ids = editRaw ? (JSON.parse(editRaw).layers ?? []).map((l) => l.id) : (window.__fg.currentTemplateObject()?.layers ?? []).map((l) => l.id);
+    return { id, label1, label2, stored: labels[id] ?? "", idStable: ids.includes(id) };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("editor: dblclick renames a layer inline", r?.label1 === "RENAMED-E2E", JSON.stringify(r).slice(0, 200));
+  check("editor: rename survives a panel rerender", r?.label2 === "RENAMED-E2E", JSON.stringify(r).slice(0, 200));
+  check("editor: rename keeps the original layer id", r?.idStable === true && r?.stored === "RENAMED-E2E", JSON.stringify(r).slice(0, 220));
+}
+
+/* 43. ungroup: children return to top level with absolute positions */
+{
+  const r = await ev(`(async () => {
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await new Promise((r) => setTimeout(r, 120));
+    const boxOf = (list, id) => {
+      for (const b of list) { if (b.id === id) return b; for (const c of b.children ?? []) if (c.id === id) return c; }
+      return null;
+    };
+    const getBoxes = () => JSON.parse(window.__fg.engine.layer_boxes(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const rows = [...document.querySelectorAll("#layerList .layer-row")];
+    const top = rows.filter((x) => !x.querySelector(".indent"));
+    if (top.length < 2) return { error: "need 2 top-level layers" };
+    const idA = top[0].dataset.id, idB = top[1].dataset.id;
+    top[0].click();
+    top[1].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    await new Promise((r) => setTimeout(r, 120));
+    const before = { n: rows.length, a: boxOf(getBoxes(), idA), b: boxOf(getBoxes(), idB) };
+    document.getElementById("layerGroup").click();
+    await new Promise((r) => setTimeout(r, 300));
+    const grouped = {
+      n: document.querySelectorAll("#layerList .layer-row").length,
+      enabled: !document.getElementById("layerUngroup").disabled,
+    };
+    document.getElementById("layerUngroup").click();
+    await new Promise((r) => setTimeout(r, 300));
+    const after = { n: document.querySelectorAll("#layerList .layer-row").length, a: boxOf(getBoxes(), idA), b: boxOf(getBoxes(), idB) };
+    const groupGone = ![...document.querySelectorAll("#layerList .layer-row")].some((x) => x.querySelector(".ltag")?.textContent === "group");
+    const drift = (p, q) => (p && q) ? Math.max(Math.abs(p.x - q.x), Math.abs(p.y - q.y)) : 999;
+    return { beforeN: before.n, groupedN: grouped.n, afterN: after.n, enabled: grouped.enabled, groupGone, driftA: drift(before.a, after.a), driftB: drift(before.b, after.b) };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("editor: group enables the ungroup button", r?.enabled === true && r?.groupedN === r?.beforeN + 1, JSON.stringify(r));
+  check("editor: ungroup restores the child count", r?.afterN === r?.beforeN && r?.groupGone === true, JSON.stringify(r));
+  check("editor: ungroup preserves absolute positions", !!r && r.driftA < 1.5 && r.driftB < 1.5, JSON.stringify(r));
+}
+
+/* 44. align + distribute selected layer boxes */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const boxes = () => JSON.parse(window.__fg.engine.layer_boxes(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const boxOf = (list, id) => list.find((b) => b.id === id) ?? null;
+    document.getElementById("addText").click();
+    await sleep(150);
+    for (let i = 0; i < 3; i++) document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", shiftKey: true, bubbles: true }));
+    await sleep(200);
+    document.getElementById("addText").click();
+    await sleep(200);
+    const textRows = [...document.querySelectorAll("#layerList .layer-row")].filter((x) => x.querySelector(".ltag")?.textContent === "text");
+    const pair = textRows.slice(-2);
+    if (pair.length < 2) return { error: "no pair" };
+    const idA = pair[0].dataset.id, idB = pair[1].dataset.id;
+    pair[0].click();
+    pair[1].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    await sleep(120);
+    const spread0 = Math.abs(boxOf(boxes(), idA).x - boxOf(boxes(), idB).x);
+    const enabled = !document.getElementById("alignLeft").disabled;
+    document.getElementById("alignLeft").click();
+    await sleep(450);
+    const aligned = Math.abs(boxOf(boxes(), idA).x - boxOf(boxes(), idB).x);
+    document.getElementById("addText").click();
+    await sleep(200);
+    for (let i = 0; i < 4; i++) document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", shiftKey: true, bubbles: true }));
+    await sleep(200);
+    const tri = [...document.querySelectorAll("#layerList .layer-row")].filter((x) => x.querySelector(".ltag")?.textContent === "text").slice(-3);
+    tri[0].click();
+    tri[1].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    tri[2].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    await sleep(120);
+    document.getElementById("distributeH").click();
+    await sleep(450);
+    const sorted = tri.map((x) => boxOf(boxes(), x.dataset.id)).filter(Boolean).sort((a, b) => a.x - b.x);
+    const gaps = sorted.length === 3
+      ? [sorted[1].x - (sorted[0].x + sorted[0].w), sorted[2].x - (sorted[1].x + sorted[1].w)]
+      : [];
+    return { spread0, aligned, enabled, gaps };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("editor: align puts selected layers into line", !!r && r.enabled === true && r.spread0 > 2 && r.aligned < 1.5, JSON.stringify(r));
+  check("editor: distribute equalizes gaps", !!r && r.gaps?.length === 2 && Math.abs(r.gaps[0] - r.gaps[1]) < 1.5, JSON.stringify(r));
+}
+
+/* 45. crop: double-click enters, fill width/height set the override */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(120); }
+    document.getElementById("cropReset").click();
+    await sleep(300);
+    const img = document.querySelector("#canvasWrap img");
+    if (!img) return { error: "no stage img" };
+    const rect = img.getBoundingClientRect();
+    document.getElementById("viewport").dispatchEvent(new MouseEvent("dblclick", {
+      clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2, bubbles: true, cancelable: true,
+    }));
+    await sleep(150);
+    const entered = window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect");
+    document.getElementById("cropToggle").click();
+    await sleep(120);
+    const ui = () => JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId] ?? {};
+    document.getElementById("cropFillW").click();
+    await sleep(250);
+    const cropW = ui().crop ?? null;
+    const ovW = JSON.parse(window.__fg.buildOverridesJson() || "{}").crop ?? null;
+    document.getElementById("cropFillH").click();
+    await sleep(250);
+    const cropH = ui().crop ?? null;
+    document.getElementById("cropReset").click();
+    return { entered, cropW, cropH, ovW };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("editor: double-click on the photo enters crop", r?.entered === true, JSON.stringify(r).slice(0, 160));
+  check("editor: crop fill-width sets w=1 (override + ui)", !!r?.cropW && Math.abs(r.cropW.w - 1) < 0.001 && Math.abs(r.cropW.x) < 0.001 && Math.abs(r.ovW?.w - 1) < 0.001, JSON.stringify(r?.cropW));
+  check("editor: crop fill-height sets h=1", !!r?.cropH && Math.abs(r.cropH.h - 1) < 0.001 && Math.abs(r.cropH.y) < 0.001, JSON.stringify(r?.cropH));
+}
+
+/* 46. settings: 720P export-size option */
+{
+  const exists = await ev(`[...document.getElementById("setExportSize").options].some((o) => o.value === "1280")`);
+  check("settings: export size select has 720P", exists === true);
+  const r = await ev(`(async () => {
+    document.getElementById("settingsBtn").click();
+    await new Promise((r) => setTimeout(r, 200));
+    const sel = document.getElementById("setExportSize");
+    const old = sel.value;
+    sel.value = "1280";
+    sel.dispatchEvent(new Event("change"));
+    await new Promise((r) => setTimeout(r, 150));
+    const stored = JSON.parse(localStorage.getItem("fg-settings-v1") || "{}").exportSize;
+    const bar = document.getElementById("exportSize").value;
+    sel.value = old;
+    sel.dispatchEvent(new Event("change"));
+    document.getElementById("settingsClose").click();
+    return { stored, bar, old };
+  })()`);
+  check("settings: 720P persists and mirrors to the actionbar", r?.stored === "1280" && r?.bar === "1280", JSON.stringify(r));
+}
+
+/* ================= v0.5.0 M6 parity UI: bg / card / frame ================= */
+
+// Shared pixel sampler: read normalized points from the rendered stage image.
+const SAMPLE_PX = (fx, fy) => `(async () => {
+  const img = document.querySelector("#canvasWrap img");
+  for (let i = 0; i < 80 && !(img && img.complete && img.naturalWidth); i++) await new Promise((r) => setTimeout(r, 100));
+  if (!img || !img.complete || !img.naturalWidth) return null;
+  const c = document.createElement("canvas");
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const g = c.getContext("2d", { willReadFrequently: true });
+  g.drawImage(img, 0, 0);
+  const x = Math.min(img.naturalWidth - 1, Math.max(0, Math.round(img.naturalWidth * ${fx})));
+  const y = Math.min(img.naturalHeight - 1, Math.max(0, Math.round(img.naturalHeight * ${fy})));
+  const d = g.getImageData(x, y, 1, 1).data;
+  return [d[0], d[1], d[2]];
+})()`;
+const CORNERS_PX = `(async () => {
+  const img = document.querySelector("#canvasWrap img");
+  for (let i = 0; i < 80 && !(img && img.complete && img.naturalWidth); i++) await new Promise((r) => setTimeout(r, 100));
+  if (!img || !img.complete || !img.naturalWidth) return null;
+  const c = document.createElement("canvas");
+  c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const g = c.getContext("2d", { willReadFrequently: true });
+  g.drawImage(img, 0, 0);
+  return [[0.004, 0.004], [0.996, 0.004], [0.004, 0.996], [0.996, 0.996]].map(([fx, fy]) => {
+    const x = Math.min(img.naturalWidth - 1, Math.max(0, Math.round(img.naturalWidth * fx)));
+    const y = Math.min(img.naturalHeight - 1, Math.max(0, Math.round(img.naturalHeight * fy)));
+    const d = g.getImageData(x, y, 1, 1).data;
+    return [d[0], d[1], d[2]];
+  });
+})()`;
+const RENDER_HASH = `(() => {
+  const b = window.__fg.state.lastRender;
+  if (!b) return 0;
+  let h = 0x811c9dc5;
+  for (let i = 0; i < b.length; i += 13) { h ^= b[i]; h = Math.imul(h, 0x01000193) >>> 0; }
+  return h;
+})()`;
+const dist = (a, b) => (a && b ? Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]) : -1);
+const maxDist = (a, b) => (a && b ? Math.max(...a.map((p, i) => dist(p, b[i]))) : -1);
+const hexRgb = (h) => {
+  const m = /^#([0-9a-f]{6})$/i.exec(h ?? "");
+  return m ? [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16)) : null;
+};
+
+/* 47. background: auto-tint option + pixel change */
+{
+  // Drop the frame uploaded in assertion 32 so the margin area is clean.
+  await ev(`document.getElementById("clearFrame").click()`);
+  await waitLabel(30000);
+  const hasTint = await ev(`[...document.getElementById("bgSelect").options].some((o) => o.value === "tint")`);
+  check("bg: auto tint option available", hasTint === true);
+  await ev(`(() => {
+    const bs = document.getElementById("bgSelect");
+    bs.value = "solid"; bs.dispatchEvent(new Event("change"));
+    const bc = document.getElementById("bgColor");
+    bc.value = "#FF0000"; bc.dispatchEvent(new Event("input"));
+  })()`);
+  await waitLabel(30000);
+  const red = await ev(SAMPLE_PX(0.5, 0.995));
+  await ev(`(() => { const bs = document.getElementById("bgSelect"); bs.value = "tint"; bs.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const tint = await ev(SAMPLE_PX(0.5, 0.995));
+  check("bg: solid red paints the margin", red && red[0] > 200 && red[1] < 70 && red[2] < 70, JSON.stringify(red));
+  check("bg: auto tint repaints the background", dist(red, tint) > 60, `${JSON.stringify(red)} vs ${JSON.stringify(tint)}`);
+}
+
+/* 48. background preset swatches */
+{
+  const sw = await ev(`(() => {
+    const b = document.querySelector('#bgSwatches button[data-color="#D9C7A7"]');
+    if (!b) return { error: "no swatch" };
+    b.click();
+    const s = JSON.parse(localStorage.getItem("fg-settings-v1") || "{}");
+    return { bg: s.bgColor, mode: s.background, input: document.getElementById("bgColor").value.toUpperCase(), count: document.querySelectorAll("#bgSwatches .swatch").length };
+  })()`);
+  check("bg: preset swatch board rendered", !sw.error && sw.count >= 9, JSON.stringify(sw));
+  check("bg: swatch sets bgColor + solid mode", sw.bg === "#D9C7A7" && sw.mode === "solid" && sw.input === "#D9C7A7", JSON.stringify(sw));
+  await waitLabel(30000);
+  const px = await ev(SAMPLE_PX(0.5, 0.995));
+  check("bg: swatch color paints the background", dist(px, [0xd9, 0xc7, 0xa7]) < 24, JSON.stringify(px));
+}
+
+/* 49. background eyedropper (canvas -> solid color) */
+{
+  const r = await ev(`(async () => {
+    const btn = document.getElementById("bgEyedropper");
+    btn.click();
+    const active = btn.classList.contains("on") && document.getElementById("viewport").classList.contains("eyedropper");
+    const hint = !document.getElementById("eyedropperHint").classList.contains("hidden");
+    const img = document.querySelector("#canvasWrap img");
+    const rect = img.getBoundingClientRect();
+    document.getElementById("viewport").dispatchEvent(new MouseEvent("click", {
+      clientX: rect.left + rect.width * 0.5, clientY: rect.top + rect.height * 0.995, bubbles: true, cancelable: true,
+    }));
+    await new Promise((x) => setTimeout(x, 500));
+    const s = JSON.parse(localStorage.getItem("fg-settings-v1") || "{}");
+    return { active, hint, bg: s.bgColor, off: !btn.classList.contains("on") };
+  })()`);
+  check("bg: eyedropper toggles on with hint", r?.active === true && r?.hint === true, JSON.stringify(r));
+  check("bg: eyedropper samples the rendered pixel", r?.off === true && dist(hexRgb(r?.bg), [0xd9, 0xc7, 0xa7]) < 40, JSON.stringify(r));
+  const esc = await ev(`(() => {
+    const btn = document.getElementById("bgEyedropper");
+    btn.click();
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    return !btn.classList.contains("on") && !document.getElementById("viewport").classList.contains("eyedropper");
+  })()`);
+  check("bg: Esc cancels the eyedropper", esc === true);
+}
+
+/* 50. canvas margin override */
+{
+  const before = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return { w: i.naturalWidth, h: i.naturalHeight }; })()`);
+  await ev(`(() => { const r = document.getElementById("marginRange"); r.value = "0.15"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const ov = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").margin`);
+  const after = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return { w: i.naturalWidth, h: i.naturalHeight }; })()`);
+  const bg = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1") || "{}").bgColor`);
+  const corner = await ev(SAMPLE_PX(0.004, 0.004));
+  check("margin: slider reaches overrides (0.15)", ov === 0.15, String(ov));
+  check("margin: output grows vs margin 0", after.w > before.w && after.h > before.h, `${before.w}x${before.h} -> ${after.w}x${after.h}`);
+  check("margin: new margin area samples the background", dist(corner, hexRgb(bg)) < 24, `${JSON.stringify(corner)} vs ${bg}`);
+  await ev(`(() => { const r = document.getElementById("marginRange"); r.value = "0"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const restored = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return { w: i.naturalWidth, h: i.naturalHeight }; })()`);
+  check("margin: reset restores margin 0 dimensions", restored.w === before.w && restored.h === before.h, `${restored.w}x${restored.h}`);
+}
+
+/* 51. card effects: toggle / radius / persistence */
+{
+  const before = await ev(CORNERS_PX);
+  await ev(`(() => { const cb = document.getElementById("cardOn"); cb.checked = true; cb.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const ov1 = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").card`);
+  await ev(`(() => { const r = document.getElementById("cardRadius"); r.value = "0.2"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const ov2 = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").card`);
+  const after = await ev(CORNERS_PX);
+  check("card: toggle reaches overrides with defaults", ov1?.enabled === true && ov1?.radius > 0 && ov1?.shadow?.enabled === true, JSON.stringify(ov1));
+  check("card: radius slider reaches overrides (0.2)", ov2?.radius === 0.2, JSON.stringify(ov2));
+  check("card: radius changes corner pixels", maxDist(before, after) > 40, `${JSON.stringify(before)} -> ${JSON.stringify(after)}`);
+  await ev(`(() => { const cb = document.getElementById("cardOn"); cb.checked = false; cb.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const hasCard = await ev(`Object.prototype.hasOwnProperty.call(JSON.parse(window.__fg.buildOverridesJson() || "{}"), "card")`);
+  const stored = await ev(`JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId]?.card?.on`);
+  check("card: toggle persists + clears override when off", hasCard === false && stored === false, `card=${hasCard} stored=${stored}`);
+}
+
+/* 52. built-in frame picker applies a frame */
+{
+  const cells = await ev(`document.querySelectorAll("#frameGrid .frame-cell").length`);
+  check("frame: built-in picker lists 15 slugs", cells === 15, String(cells));
+  const before = await ev(RENDER_HASH);
+  await ev(`document.querySelector('#frameGrid .frame-cell[data-slug="camera-body"]').click()`);
+  await waitLabel(30000);
+  const frame = await ev(`(() => {
+    const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
+    return raw ? JSON.parse(raw).canvas?.frame ?? null : null;
+  })()`);
+  const after = await ev(RENDER_HASH);
+  check("frame: picker writes @builtin asset + enables", frame?.asset === "@builtin/frame/camera-body" && frame?.autoDetect === true, JSON.stringify(frame));
+  check("frame: built-in frame changes canvas pixels", before !== after && after !== 0, `${before} -> ${after}`);
+}
+
+/* 53. frame offset + rotation sliders */
+{
+  const before = await ev(RENDER_HASH);
+  await ev(`(() => { const r = document.getElementById("frameOffsetX"); r.value = "0.25"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const offset = await ev(`(() => {
+    const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
+    return raw ? JSON.parse(raw).canvas?.frame?.offset ?? null : null;
+  })()`);
+  const afterOffset = await ev(RENDER_HASH);
+  check("frame: offset slider reaches template edits", Math.abs((offset?.x ?? 0) - 0.25) < 1e-6, JSON.stringify(offset));
+  check("frame: offset changes canvas pixels", before !== afterOffset, `${before} -> ${afterOffset}`);
+  await ev(`(() => { const r = document.getElementById("frameRotation"); r.value = "35"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const rot = await ev(`(() => {
+    const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
+    return raw ? JSON.parse(raw).canvas?.frame?.rotation ?? null : null;
+  })()`);
+  const afterRot = await ev(RENDER_HASH);
+  check("frame: rotation slider reaches template edits", rot === 35, String(rot));
+  check("frame: rotation changes canvas pixels", afterOffset !== afterRot, `${afterOffset} -> ${afterRot}`);
+}
+
+/* ================= v0.5.0 M6 parity UI: free collage extras ================= */
+
+/* 54. free collage: radius + stroke controls on the selected item */
+{
+  await ev(`(async () => {
+    document.getElementById("modeCollage").click();
+    await new Promise((r) => setTimeout(r, 250));
+  })()`);
+  await inject([PHOTO_A, PHOTO_B, PHOTO_C]);
+  await waitLabel(30000);
+  await ev(`(() => { const cb = document.getElementById("freeMode"); if (!cb.checked) { cb.checked = true; cb.dispatchEvent(new Event("change")); } })()`);
+  await new Promise((r) => setTimeout(r, 1200));
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    document.querySelector("#freeList .layer-row").click();
+    await sleep(150);
+    const before = ${RENDER_HASH};
+    const rad = document.getElementById("freeRadius");
+    rad.value = "0.25"; rad.dispatchEvent(new Event("input"));
+    const st = document.getElementById("freeStrokeW");
+    st.value = "10"; st.dispatchEvent(new Event("input"));
+    const sc = document.getElementById("freeStrokeColor");
+    sc.value = "#ff0000"; sc.dispatchEvent(new Event("input"));
+    await sleep(900);
+    const item = window.__fg.freeSpec().items[0];
+    const after = ${RENDER_HASH};
+    return { radius: item.radius, border: item.border, changed: before !== after, before, after,
+      labels: [document.getElementById("freeRadiusVal").textContent, document.getElementById("freeStrokeVal").textContent] };
+  })()`);
+  check("free collage: radius slider reaches the item spec", r?.radius === 0.25, JSON.stringify(r?.radius));
+  check("free collage: stroke width + color reach the item border", r?.border?.width === 10 && /ff0000/i.test(r?.border?.color ?? ""), JSON.stringify(r?.border));
+  check("free collage: radius + stroke repaint the collage", r?.changed === true && r?.radius === 0.25, `${r?.before} -> ${r?.after}`);
+}
+
+/* 55. free collage: swap two selected items */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const rows = [...document.querySelectorAll("#freeList .layer-row")];
+    if (rows.length < 2) return { error: "need 2 items" };
+    rows[0].click();
+    rows[1].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    await sleep(150);
+    const sel = window.__fgEditor.freeSelection();
+    const geom = () => window.__fg.freeSpec().items.map((it) => ({ x: it.x, y: it.y, w: it.w, rotation: it.rotation ?? 0 }));
+    const before = geom();
+    document.getElementById("freeSwap").click();
+    await sleep(700);
+    const after = geom();
+    return { sel, before, after };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("free collage: shift-click selects a second item", r?.sel?.a === 0 && r?.sel?.b === 1, JSON.stringify(r?.sel));
+  check(
+    "free collage: swap exchanges x/y/size/rotation",
+    !!r?.after && r.after[0].x === r.before[1].x && r.after[0].y === r.before[1].y &&
+      r.after[0].rotation === r.before[1].rotation && r.after[1].x === r.before[0].x && r.after[1].w === r.before[0].w,
+    JSON.stringify(r).slice(0, 260),
+  );
+}
+
+/* 56. free collage: gap + margin relayout */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const spec0 = window.__fg.freeSpec();
+    const before = spec0.items.map((it) => ({ x: it.x, y: it.y, w: it.w }));
+    const gap = document.getElementById("freeGap");
+    gap.value = "0.06"; gap.dispatchEvent(new Event("input"));
+    const margin = document.getElementById("freeMargin");
+    margin.value = "0.1"; margin.dispatchEvent(new Event("input"));
+    document.getElementById("freeRelayout").click();
+    await sleep(900);
+    const spec = window.__fg.freeSpec();
+    const mpx = 0.1 * Math.min(spec.width, spec.height);
+    const W = spec.width, H = spec.height;
+    let minL = Infinity, minT = Infinity, maxR = -Infinity, maxB = -Infinity;
+    for (const it of spec.items) {
+      const photoAr = window.__fg.state.photos[it.photo]?.ar ?? 0.75;
+      const wPx = it.w * W;
+      const hPx = it.h != null ? it.h * H : wPx * photoAr;
+      minL = Math.min(minL, it.x * W - wPx / 2);
+      minT = Math.min(minT, it.y * H - hPx / 2);
+      maxR = Math.max(maxR, it.x * W + wPx / 2);
+      maxB = Math.max(maxB, it.y * H + hPx / 2);
+    }
+    const after = spec.items.map((it) => ({ x: it.x, y: it.y, w: it.w }));
+    const moved = after.some((a, i) => Math.abs(a.x - before[i].x) > 1e-6 || Math.abs(a.y - before[i].y) > 1e-6);
+    return { moved, mpx, minL, minT, maxR, maxB, W, H, rows: document.querySelectorAll("#freeList .layer-row").length };
+  })()`);
+  check("free collage: relayout recomputes every item position", r?.moved === true, JSON.stringify({ moved: r?.moved }));
+  check(
+    "free collage: relayout respects the margin on all sides",
+    !!r && r.minL >= r.mpx - 1 && r.minT >= r.mpx - 1 && r.maxR <= r.W - r.mpx + 1 && r.maxB <= r.H - r.mpx + 1,
+    JSON.stringify({ minL: r?.minL?.toFixed(1), minT: r?.minT?.toFixed(1), maxR: r?.maxR?.toFixed(1), maxB: r?.maxB?.toFixed(1), mpx: r?.mpx?.toFixed(1) }),
+  );
+}
+
+/* 57. free collage: per-image crop targets the selected item */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    document.querySelector("#freeList .layer-row").click();
+    await sleep(150);
+    const cardVisible = !document.getElementById("cropCard").classList.contains("hidden");
+    const before = ${RENDER_HASH};
+    document.getElementById("cropToggle").click();
+    await sleep(200);
+    const rectEl = document.querySelector(".edit-overlay .crop-rect");
+    const rectDrawn = !!rectEl;
+    if (rectEl) {
+      const br = rectEl.getBoundingClientRect();
+      const cx = br.left + br.width / 2, cy = br.top + br.height / 2;
+      rectEl.dispatchEvent(new PointerEvent("pointerdown", { clientX: cx, clientY: cy, bubbles: true, cancelable: true, pointerId: 11 }));
+      window.dispatchEvent(new PointerEvent("pointermove", { clientX: cx + 40, clientY: cy + 30, bubbles: true, pointerId: 11 }));
+      window.dispatchEvent(new PointerEvent("pointerup", { clientX: cx + 40, clientY: cy + 30, bubbles: true, pointerId: 11 }));
+    }
+    await sleep(900);
+    const crop = window.__fg.freeSpec().items[0].crop ?? null;
+    const after = ${RENDER_HASH};
+    document.getElementById("cropReset").click();
+    await sleep(600);
+    const cleared = window.__fg.freeSpec().items[0].crop ?? null;
+    if (window.__fgEditor.debug().cropMode) document.getElementById("cropToggle").click();
+    await sleep(150);
+    return { cardVisible, rectDrawn, crop, changed: before !== after, before, after, cleared };
+  })()`);
+  check("free collage: crop card available + overlay targets the item", r?.cardVisible === true && r?.rectDrawn === true, JSON.stringify(r).slice(0, 160));
+  check(
+    "free collage: crop overlay drag writes a partial item crop",
+    !!r?.crop && r.crop.x > 0.09 && r.crop.y > 0.09 && r.crop.w < 0.999 && r.crop.h < 0.999,
+    JSON.stringify(r?.crop),
+  );
+  check("free collage: item crop changes rendered pixels", r?.changed === true, `${r?.before} -> ${r?.after}`);
+  check("free collage: crop reset clears the item crop", r?.cleared == null, JSON.stringify(r?.cleared));
+}
+
+/* ================= v0.5.0 M6 parity UI: watermark / insert / fuji / calendar ================= */
+
+/* 58. watermark adjust panel (classic-watermark templates) */
+{
+  await ev(`(async () => {
+    document.getElementById("modeFrame").click();
+    await new Promise((r) => setTimeout(r, 250));
+    await window.__fg.useTemplate("classic-watermark-single-row");
+  })()`);
+  await waitLabel(30000);
+  const vis = await ev(`({ hidden: document.getElementById("watermarkCard").classList.contains("hidden"), category: window.__fg.templateCategory() })`);
+  check("watermark: card visible for classic-watermark", vis.hidden === false && vis.category === "classic-watermark", JSON.stringify(vis));
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const size = document.getElementById("wmSize");
+    size.value = "1.5"; size.dispatchEvent(new Event("input")); size.dispatchEvent(new Event("change"));
+    const pad = document.getElementById("wmPad");
+    pad.value = "1.4"; pad.dispatchEvent(new Event("input")); pad.dispatchEvent(new Event("change"));
+    await sleep(400);
+    const ov = JSON.parse(window.__fg.buildOverridesJson() || "{}");
+    const sp = document.getElementById("wmSpacing");
+    sp.value = "0.05"; sp.dispatchEvent(new Event("input"));
+    await sleep(500);
+    const flat = (list, out = []) => { for (const l of list ?? []) { out.push(l); if (l.type === "group") flat(l.children, out); } return out; };
+    const base = new Map(flat(window.__fg.currentTemplateObject().layers).filter((l) => l.type === "text").map((l) => [l.id, l.letterSpacing ?? 0]));
+    const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId] ?? "";
+    const text = flat(JSON.parse(stored).layers).filter((l) => l.type === "text").map((l) => ({ id: l.id, ls: l.letterSpacing ?? 0, base: base.get(l.id) ?? 0 }));
+    document.getElementById("wmSelectFirst").click();
+    await sleep(200);
+    const onRow = document.querySelector("#layerList .layer-row.on");
+    return { size: ov.fontSizeScale, pad: ov.paddingScale, text, selectedType: onRow?.querySelector(".ltag")?.textContent ?? null };
+  })()`);
+  check("watermark: height + padding sliders reach overrides", r?.size === 1.5 && r?.pad === 1.4, JSON.stringify({ size: r?.size, pad: r?.pad }));
+  check(
+    "watermark: spacing delta applies to every text layer",
+    Array.isArray(r?.text) && r.text.length > 0 && r.text.every((t) => Math.abs(t.ls - (t.base + 0.05)) < 1e-6),
+    JSON.stringify(r?.text),
+  );
+  check("watermark: per-element button selects a text layer", r?.selectedType === "text", String(r?.selectedType));
+  await ev(`document.getElementById("resetTweaks").click()`);
+  await waitLabel(30000);
+  const hidden = await ev(`(async () => { await window.__fg.useTemplate("minimal-corner-mono"); await new Promise((r) => setTimeout(r, 400)); return document.getElementById("watermarkCard").classList.contains("hidden"); })()`);
+  check("watermark: card hidden for non-watermark templates", hidden === true);
+}
+
+/* 59. insert image element */
+{
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); await new Promise((r) => setTimeout(r, 400)); })()`);
+  await waitLabel(30000);
+  const before = await ev(RENDER_HASH);
+  await inject([FRAME_PNG], "#imgInsertFile");
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    let row = null;
+    for (let i = 0; i < 50; i++) {
+      row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.querySelector(".ltag")?.textContent === "image");
+      if (row) break;
+      await sleep(100);
+    }
+    if (row) { row.click(); await sleep(150); }
+    const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId] ?? "";
+    const boxes = JSON.parse(window.__fg.state.engine.layer_boxes(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const box = row ? boxes.find((b) => b.id === row.dataset.id) ?? null : null;
+    return { id: row?.dataset.id ?? null, hasAsset: stored.includes("@user/insert"), box, props: !!document.querySelector("#propsBody .props-grid") };
+  })()`);
+  await waitLabel(30000);
+  const after = await ev(RENDER_HASH);
+  check("insert: image layer added with a @user asset", r?.id != null && r?.hasAsset === true, JSON.stringify(r).slice(0, 160));
+  check("insert: image layer renders + is selectable", r?.box != null && r?.props === true, JSON.stringify(r?.box));
+  check("insert: inserted image changes pixels", before !== after, `${before} -> ${after}`);
+  const drag = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const st = window.__fg.state;
+    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.querySelector(".ltag")?.textContent === "image");
+    if (!row) return { error: "no image row" };
+    row.click();
+    const id = row.dataset.id;
+    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const b = boxes.find((x) => x.id === id);
+    const img = document.querySelector("#canvasWrap img");
+    const ov = document.querySelector(".edit-overlay");
+    if (!b || !img || !ov) return { error: "no box/stage" };
+    const rect = ov.getBoundingClientRect();
+    // The inserted image overlaps watermark text boxes; find a point owned only
+    // by the image so the hit test picks it.
+    const others = boxes.filter((x) => x.id !== id && x.type !== "group");
+    const inside = (o, px, py) => px >= o.x && px <= o.x + o.w && py >= o.y && py <= o.y + o.h;
+    let pt = null;
+    for (let gy = 0; gy <= 12 && !pt; gy++) {
+      for (let gx = 1; gx < 20 && !pt; gx++) {
+        const px = b.x + (b.w * gx) / 20;
+        const py = b.y + (b.h * gy) / 12;
+        if (!others.some((o) => inside(o, px, py))) pt = { x: px, y: py };
+      }
+    }
+    if (!pt) pt = { x: b.x + 4, y: b.y + 4 };
+    const sx = rect.left + (pt.x / img.naturalWidth) * rect.width;
+    const sy = rect.top + (pt.y / img.naturalHeight) * rect.height;
+    document.getElementById("viewport").dispatchEvent(new PointerEvent("pointerdown", { clientX: sx, clientY: sy, bubbles: true, cancelable: true, button: 0, buttons: 1 }));
+    window.dispatchEvent(new PointerEvent("pointermove", { clientX: sx + 40, clientY: sy + 20, bubbles: true, buttons: 1 }));
+    window.dispatchEvent(new PointerEvent("pointerup", { clientX: sx + 40, clientY: sy + 20, bubbles: true }));
+    await sleep(500);
+    const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[st.templateId] ?? "{}";
+    const layer = (JSON.parse(raw).layers ?? []).find((l) => l.id === id);
+    return { ox: layer?.offset?.x ?? 0, oy: layer?.offset?.y ?? 0 };
+  })()`);
+  if (drag?.error) console.log("PROBE-WARN:", drag.error);
+  check("insert: inserted image drags on the stage", !!drag && !drag.error && (Math.abs(drag.ox) > 0.005 || Math.abs(drag.oy) > 0.005), JSON.stringify(drag));
+}
+
+/* 60. EXIF: Fuji recipe group only shows present keys */
+{
+  const r = await ev(`(() => {
+    const empty = window.__fg.fujiRows({});
+    const partial = window.__fg.fujiRows({ film_mode: "Classic Chrome", grain: "Strong", wb_shift_r: "+2", wb_shift_b: "-1", fuji_lut1: null });
+    const group = document.getElementById("fujiGroup");
+    return {
+      empty: empty.length,
+      partial: partial.length,
+      labels: partial.map((x) => x[0]),
+      hidden: group.classList.contains("hidden"),
+      rows: document.querySelectorAll("#fujiList dt").length,
+      title: document.getElementById("fujiGroup").querySelector(".fuji-title")?.textContent ?? "",
+    };
+  })()`);
+  check("exif: fuji builder hides empty groups", r?.empty === 0, String(r?.empty));
+  check(
+    "exif: fuji builder keeps only present keys",
+    r?.partial === 3 && r.labels.every((l) => l && !/undefined|null/.test(l)),
+    JSON.stringify(r?.labels),
+  );
+  check("exif: fuji group hidden for the sample photo", r?.hidden === true && r?.rows === 0, JSON.stringify({ hidden: r?.hidden, rows: r?.rows }));
+}
+
+/* 61. calendar layout presets */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    document.getElementById("addCalendar").click();
+    await sleep(350);
+    const readCal = (json) => {
+      const flat = (list, out = []) => { for (const l of list ?? []) { out.push(l); if (l.type === "group") flat(l.children, out); } return out; };
+      return flat(JSON.parse(json).layers).filter((l) => l.type === "calendar").pop();
+    };
+    const storedOf = () => localStorage.getItem("fg-tpl-edits-v1") || "{}";
+    const stored0 = JSON.parse(storedOf())[window.__fg.state.templateId] ?? "{}";
+    const cal0 = readCal(stored0);
+    const before = ${RENDER_HASH};
+    const btns = [...document.querySelectorAll("#propsBody .cal-preset")];
+    const hasWeek = btns.some((b) => b.dataset.view === "week");
+    btns.find((b) => b.dataset.view === "week").click();
+    await sleep(900);
+    const cal1 = readCal(JSON.parse(storedOf())[window.__fg.state.templateId]);
+    const after = ${RENDER_HASH};
+    const swatch = document.querySelector('#propsBody .cal-accents .swatch[data-color="#1772F6"]');
+    if (!swatch) return { error: "no accent swatch" };
+    swatch.click();
+    await sleep(600);
+    const cal2 = readCal(JSON.parse(storedOf())[window.__fg.state.templateId]);
+    return {
+      hasWeek,
+      view0: cal0?.view ?? "month",
+      lunar0: cal0?.showLunar !== false,
+      weekdays0: cal0?.showWeekdays !== false,
+      view1: cal1?.view,
+      changed: before !== after,
+      before,
+      after,
+      accent: cal2?.accent,
+      shown: swatch.dataset.color,
+    };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("calendar: preset buttons render incl. week view", r?.hasWeek === true, JSON.stringify(r).slice(0, 120));
+  check("calendar: week preset sets the layer view", r?.view1 === "week", String(r?.view1));
+  check("calendar: week preset changes rendered pixels", r?.changed === true, `${r?.before} -> ${r?.after}`);
+  check("calendar: accent swatch sets the layer accent", r?.accent?.toLowerCase() === r?.shown?.toLowerCase() && r?.accent?.toLowerCase() === "#1772f6", JSON.stringify({ accent: r?.accent, shown: r?.shown }));
+  check("calendar: inserted calendar keeps defaults", r?.view0 === "month" && r?.lunar0 === true && r?.weekdays0 === true, JSON.stringify({ view0: r?.view0, lunar0: r?.lunar0, weekdays0: r?.weekdays0 }));
+}
+
+/* 62. card inner shadow */
+{
+  await ev(`(() => { const cb = document.getElementById("cardOn"); cb.checked = true; cb.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  await ev(`(() => { const cb = document.getElementById("cardInnerOn"); cb.checked = false; cb.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const before = await ev(RENDER_HASH);
+  await ev(`(() => { const cb = document.getElementById("cardInnerOn"); cb.checked = true; cb.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+  const ov = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").card?.innerShadow`);
+  const after = await ev(RENDER_HASH);
+  check("card: inner shadow toggle reaches overrides", ov?.enabled === true && ov?.blur > 0 && ov?.opacity > 0, JSON.stringify(ov));
+  check("card: inner shadow changes rendered pixels", before !== after && after !== 0, `${before} -> ${after}`);
+  await ev(`(() => { const cb = document.getElementById("cardOn"); cb.checked = false; cb.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(30000);
+}
+
+/* 63. report screenshots: parity panels */
+{
+  await ev(`(async () => {
+    document.body.dataset.tier = "advanced";
+    const d = document.getElementById("cardFxCard");
+    if (d) { d.open = true; d.scrollIntoView({ block: "center" }); }
+    await new Promise((r) => setTimeout(r, 600));
+  })()`);
+  await shot("08-card-fx");
+  await ev(`(async () => {
+    await window.__fg.useTemplate("classic-watermark-single-row");
+    await new Promise((r) => setTimeout(r, 900));
+    const wm = document.getElementById("watermarkCard");
+    if (wm) { wm.open = true; wm.scrollIntoView({ block: "center" }); }
+    await new Promise((r) => setTimeout(r, 400));
+  })()`);
+  await shot("09-watermark");
+  await ev(`(async () => {
+    const d = document.getElementById("canvasCard");
+    if (d) { d.open = true; d.scrollIntoView({ block: "center" }); }
+    await new Promise((r) => setTimeout(r, 400));
+  })()`);
+  await shot("10-background");
+}
+
+clearTimeout(WATCHDOG);
+check("runtime: no page exceptions/console errors", pageErrors.length === 0, pageErrors.slice(0, 2).join(" | "));
 ws.close();
 const failed = results.filter((r) => !r.ok);
 console.log(`\n=== E2E audit: ${results.length - failed.length}/${results.length} passed ===`);

@@ -217,3 +217,111 @@ fn jpeg_q100_444_roundtrip_is_high_fidelity() {
         "unexpected pixel drift: {diff}/{total}"
     );
 }
+
+// --- v0.5.0 Fujifilm MakerNote: synthesized fixture (same layout as the
+// hand-built TIFF in the CLI engine_v050 suite, extended with the newer
+// NoiseReduction/Clarity tags). No real camera capture ships in the repo.
+
+fn fuji_makernote(entries: &[(u16, u16, u32, [u8; 4])]) -> Vec<u8> {
+    let mut mn: Vec<u8> = b"FUJIFILM".to_vec();
+    mn.extend_from_slice(&12u32.to_le_bytes());
+    mn.extend_from_slice(&(entries.len() as u16).to_le_bytes());
+    for (tag, typ, count, value) in entries {
+        mn.extend_from_slice(&tag.to_le_bytes());
+        mn.extend_from_slice(&typ.to_le_bytes());
+        mn.extend_from_slice(&count.to_le_bytes());
+        mn.extend_from_slice(value);
+    }
+    mn
+}
+
+fn short_entry(v: u16) -> [u8; 4] {
+    let mut b = [0u8; 4];
+    b[..2].copy_from_slice(&v.to_le_bytes());
+    b
+}
+
+/// Minimal hand-built TIFF: IFD0(Make + ExifIFD pointer) -> Exif IFD(MakerNote).
+fn build_tiff_with_makernote(makernote: &[u8]) -> Vec<u8> {
+    let ifd0_off = 8usize;
+    let ifd0_len = 2 + 2 * 12 + 4;
+    let exif_ifd_off = ifd0_off + ifd0_len;
+    let exif_ifd_len = 2 + 12 + 4;
+    let make_off = exif_ifd_off + exif_ifd_len;
+    let make = b"FUJIFILM\0";
+    let mn_off = make_off + make.len();
+
+    let mut out = Vec::new();
+    out.extend_from_slice(b"II");
+    out.extend_from_slice(&42u16.to_le_bytes());
+    out.extend_from_slice(&(ifd0_off as u32).to_le_bytes());
+    out.extend_from_slice(&2u16.to_le_bytes());
+    let e = |tag: u16, typ: u16, count: u32, value: u32, out: &mut Vec<u8>| {
+        out.extend_from_slice(&tag.to_le_bytes());
+        out.extend_from_slice(&typ.to_le_bytes());
+        out.extend_from_slice(&count.to_le_bytes());
+        out.extend_from_slice(&value.to_le_bytes());
+    };
+    e(0x010F, 2, make.len() as u32, make_off as u32, &mut out);
+    e(0x8769, 4, 1, exif_ifd_off as u32, &mut out);
+    out.extend_from_slice(&0u32.to_le_bytes());
+    out.extend_from_slice(&1u16.to_le_bytes());
+    e(0x927C, 7, makernote.len() as u32, mn_off as u32, &mut out);
+    out.extend_from_slice(&0u32.to_le_bytes());
+    out.extend_from_slice(make);
+    out.extend_from_slice(makernote);
+    out
+}
+
+fn jpeg_with_makernote(makernote: &[u8]) -> Vec<u8> {
+    let tiff = build_tiff_with_makernote(makernote);
+    let img = image::RgbaImage::from_pixel(320, 240, image::Rgba([120, 130, 140, 255]));
+    let mut jpeg = encode_jpeg_quality100(&img).expect("jpeg");
+    splice_exif_app1(&mut jpeg, &tiff).expect("splice");
+    jpeg
+}
+
+#[test]
+fn fuji_makernote_parses_noise_reduction_and_clarity() {
+    let mn = fuji_makernote(&[
+        (0x1401, 3, 1, short_entry(0x0800)),        // film mode: Classic Negative
+        (0x1402, 3, 1, short_entry(0x0200)),        // dynamic range: DR200
+        (0x100e, 3, 1, short_entry(0x100)),         // noise reduction: +2 (strong)
+        (0x100f, 9, 1, 2000i32.to_le_bytes()),      // clarity: +2
+    ]);
+    let info = probe_exif(&jpeg_with_makernote(&mn)).expect("probe");
+    assert_eq!(info.film_mode.as_deref(), Some("Classic Negative"));
+    assert_eq!(info.dynamic_range.as_deref(), Some("DR200"));
+    assert_eq!(info.fuji_noise_reduction.as_deref(), Some("+2 (strong)"));
+    assert_eq!(info.fuji_clarity.as_deref(), Some("+2"));
+    assert_eq!(info.get("fuji_nr").as_deref(), Some("+2 (strong)"));
+    assert_eq!(info.get("fuji_clarity").as_deref(), Some("+2"));
+    // LUT1/2 (+ transparency) have no Fujifilm MakerNote tag: ExifTool's
+    // FujiFilm table defines none (LUT metadata is a Panasonic/Sony feature)
+    // and this fixture carries none, so the keys stay hidden.
+    assert!(info.get("fuji_lut1").is_none());
+    assert!(info.get("fuji_lut2").is_none());
+    assert!(info.fuji_lut1.is_none());
+    assert!(info.fuji_lut2.is_none());
+}
+
+#[test]
+fn fuji_makernote_prefers_new_noise_tag_and_hides_odd_clarity() {
+    // 0x100b is the legacy NR tag; 0x100f here carries a non-thousandth value
+    // that must not be coerced.
+    let mn = fuji_makernote(&[
+        (0x100b, 3, 1, short_entry(0x80)),          // legacy NR: Normal
+        (0x100f, 9, 1, 1234i32.to_le_bytes()),      // unknown clarity
+    ]);
+    let info = probe_exif(&jpeg_with_makernote(&mn)).expect("probe");
+    assert_eq!(info.fuji_noise_reduction.as_deref(), Some("Normal"));
+    assert!(info.fuji_clarity.is_none(), "unknown clarity values stay hidden");
+
+    // 0x100e wins over 0x100b when both are present.
+    let mn = fuji_makernote(&[
+        (0x100b, 3, 1, short_entry(0x80)),
+        (0x100e, 3, 1, short_entry(0x2e0)),         // -4 (weakest)
+    ]);
+    let info = probe_exif(&jpeg_with_makernote(&mn)).expect("probe");
+    assert_eq!(info.fuji_noise_reduction.as_deref(), Some("-4 (weakest)"));
+}
