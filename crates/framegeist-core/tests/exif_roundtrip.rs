@@ -65,10 +65,18 @@ fn full_photo() -> Result<Vec<u8>> {
         &[
             (exif::Tag::Make, exif::In::PRIMARY, ascii("Fujifilm")),
             (exif::Tag::Model, exif::In::PRIMARY, ascii("X-T5")),
-            (exif::Tag::LensModel, exif::In::PRIMARY, ascii("XF23mmF1.4 R LM WR")),
+            (
+                exif::Tag::LensModel,
+                exif::In::PRIMARY,
+                ascii("XF23mmF1.4 R LM WR"),
+            ),
             (exif::Tag::FNumber, exif::In::PRIMARY, rational(14, 10)),
             (exif::Tag::ExposureTime, exif::In::PRIMARY, rational(1, 500)),
-            (exif::Tag::PhotographicSensitivity, exif::In::PRIMARY, short(400)),
+            (
+                exif::Tag::PhotographicSensitivity,
+                exif::In::PRIMARY,
+                short(400),
+            ),
             (exif::Tag::FocalLength, exif::In::PRIMARY, rational(23, 1)),
             (exif::Tag::Orientation, exif::In::PRIMARY, short(1)),
             (
@@ -100,14 +108,9 @@ fn photo_without_exif_probes_clean() {
     let img = image::DynamicImage::new_rgb8(16, 16).to_rgb8();
     let mut jpeg = Vec::new();
     let enc = jpeg_encoder::Encoder::new(&mut jpeg, 90);
-    enc.encode(
-        img.as_raw(),
-        16,
-        16,
-        jpeg_encoder::ColorType::Rgb,
-    )
-    .map_err(|e| Error::Encode(e.to_string()))
-    .expect("encode");
+    enc.encode(img.as_raw(), 16, 16, jpeg_encoder::ColorType::Rgb)
+        .map_err(|e| Error::Encode(e.to_string()))
+        .expect("encode");
     let info = probe_exif(&jpeg).expect("probe");
     assert!(info.model.is_none());
 }
@@ -132,8 +135,14 @@ fn cleaned_exif_drops_gps_keeps_camera_fields() {
     assert!(codes.contains(&0x9003), "DateTimeOriginal must survive");
     // GPS tags live at 0x0000-0x001F and the GPS IFD pointer is 0x8825;
     // none of them may survive the whitelist.
-    assert!(!codes.iter().any(|c| *c <= 0x001F), "no GPS entry may survive");
-    assert!(!codes.contains(&0x8825), "GPSInfoIFDPointer must not survive");
+    assert!(
+        !codes.iter().any(|c| *c <= 0x001F),
+        "no GPS entry may survive"
+    );
+    assert!(
+        !codes.contains(&0x8825),
+        "GPSInfoIFDPointer must not survive"
+    );
 }
 
 #[test]
@@ -284,10 +293,10 @@ fn jpeg_with_makernote(makernote: &[u8]) -> Vec<u8> {
 #[test]
 fn fuji_makernote_parses_noise_reduction_and_clarity() {
     let mn = fuji_makernote(&[
-        (0x1401, 3, 1, short_entry(0x0800)),        // film mode: Classic Negative
-        (0x1402, 3, 1, short_entry(0x0200)),        // dynamic range: DR200
-        (0x100e, 3, 1, short_entry(0x100)),         // noise reduction: +2 (strong)
-        (0x100f, 9, 1, 2000i32.to_le_bytes()),      // clarity: +2
+        (0x1401, 3, 1, short_entry(0x0800)), // film mode: Classic Negative
+        (0x1402, 3, 1, short_entry(0x0200)), // dynamic range: DR200
+        (0x100e, 3, 1, short_entry(0x100)),  // noise reduction: +2 (strong)
+        (0x100f, 9, 1, 2000i32.to_le_bytes()), // clarity: +2
     ]);
     let info = probe_exif(&jpeg_with_makernote(&mn)).expect("probe");
     assert_eq!(info.film_mode.as_deref(), Some("Classic Negative"));
@@ -310,17 +319,20 @@ fn fuji_makernote_prefers_new_noise_tag_and_hides_odd_clarity() {
     // 0x100b is the legacy NR tag; 0x100f here carries a non-thousandth value
     // that must not be coerced.
     let mn = fuji_makernote(&[
-        (0x100b, 3, 1, short_entry(0x80)),          // legacy NR: Normal
-        (0x100f, 9, 1, 1234i32.to_le_bytes()),      // unknown clarity
+        (0x100b, 3, 1, short_entry(0x80)),     // legacy NR: Normal
+        (0x100f, 9, 1, 1234i32.to_le_bytes()), // unknown clarity
     ]);
     let info = probe_exif(&jpeg_with_makernote(&mn)).expect("probe");
     assert_eq!(info.fuji_noise_reduction.as_deref(), Some("Normal"));
-    assert!(info.fuji_clarity.is_none(), "unknown clarity values stay hidden");
+    assert!(
+        info.fuji_clarity.is_none(),
+        "unknown clarity values stay hidden"
+    );
 
     // 0x100e wins over 0x100b when both are present.
     let mn = fuji_makernote(&[
         (0x100b, 3, 1, short_entry(0x80)),
-        (0x100e, 3, 1, short_entry(0x2e0)),         // -4 (weakest)
+        (0x100e, 3, 1, short_entry(0x2e0)), // -4 (weakest)
     ]);
     let info = probe_exif(&jpeg_with_makernote(&mn)).expect("probe");
     assert_eq!(info.fuji_noise_reduction.as_deref(), Some("-4 (weakest)"));

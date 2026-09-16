@@ -29,6 +29,7 @@ const FONTS = [
 
 const manifest = { fonts: FONTS.map((f) => ({ family: f.family, file: f.file, license: f.license })) };
 writeFileSync(join(OUT, "fonts.json"), JSON.stringify(manifest, null, 2) + "\n");
+writeFileSync(join(WEB, "fonts.json"), JSON.stringify(manifest, null, 2) + "\n");
 
 const MIN = 50_000;
 for (const f of FONTS) {

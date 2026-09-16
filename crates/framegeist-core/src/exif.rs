@@ -1,4 +1,4 @@
-﻿use std::io::Cursor;
+use std::io::Cursor;
 
 use crate::{Error, Result};
 
@@ -77,7 +77,17 @@ pub(crate) fn weekday_en(datetime: &str) -> Option<&'static str> {
     let j = y2 / 100;
     let h = (day + (13 * (m2 + 1)) / 5 + k + k / 4 + j / 4 + 5 * j) % 7;
     let idx = ((h + 5) % 7) as usize; // Monday=0 … Sunday=6
-    Some(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][idx])
+    Some(
+        [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ][idx],
+    )
 }
 
 fn weekday_cn(datetime: &str) -> Option<&'static str> {
@@ -120,8 +130,16 @@ impl ExifInfo {
                 _ => None,
             },
             "gps_alt" => self.gps_alt.map(|v| format!("{}m", v.round() as i64)),
-            "weekday" => self.datetime.as_deref().and_then(weekday_en).map(String::from),
-            "weekday_cn" => self.datetime.as_deref().and_then(weekday_cn).map(String::from),
+            "weekday" => self
+                .datetime
+                .as_deref()
+                .and_then(weekday_en)
+                .map(String::from),
+            "weekday_cn" => self
+                .datetime
+                .as_deref()
+                .and_then(weekday_cn)
+                .map(String::from),
             // v0.5.0 Fujifilm recipe (best effort; None hides the line).
             "film_mode" => self.film_mode.clone(),
             "wb_mode" => self.wb_mode.clone(),
@@ -223,8 +241,14 @@ fn ascii_value(field: &exif::Field) -> Option<String> {
     match &field.value {
         exif::Value::Ascii(parts) => {
             let bytes: Vec<u8> = parts.concat();
-            let s = String::from_utf8_lossy(&bytes).trim_matches('\0').to_string();
-            if s.is_empty() { None } else { Some(s) }
+            let s = String::from_utf8_lossy(&bytes)
+                .trim_matches('\0')
+                .to_string();
+            if s.is_empty() {
+                None
+            } else {
+                Some(s)
+            }
         }
         _ => None,
     }
@@ -371,41 +395,45 @@ fn parse_fuji(container: &exif::Exif, info: &mut ExifInfo) {
     };
 
     info.film_mode = short_of(0x1401).and_then(|v| {
-        Some(match v {
-            0x000 => "Provia / Standard",
-            0x100 => "Studio Portrait",
-            0x110 => "Studio Portrait Enhanced",
-            0x120 => "Studio Portrait Smooth Skin",
-            0x130 => "Studio Portrait Sharp",
-            0x200 => "Velvia / Vivid",
-            0x300 => "Studio Portrait Ex",
-            0x400 => "Velvia",
-            0x500 => "Pro Neg. Std",
-            0x501 => "Pro Neg. Hi",
-            0x600 => "Classic Chrome",
-            0x700 => "Eterna",
-            0x800 => "Classic Negative",
-            0x900 => "Bleach Bypass",
-            0xa00 => "Nostalgic Neg",
-            0xb00 => "Reala ACE",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                0x000 => "Provia / Standard",
+                0x100 => "Studio Portrait",
+                0x110 => "Studio Portrait Enhanced",
+                0x120 => "Studio Portrait Smooth Skin",
+                0x130 => "Studio Portrait Sharp",
+                0x200 => "Velvia / Vivid",
+                0x300 => "Studio Portrait Ex",
+                0x400 => "Velvia",
+                0x500 => "Pro Neg. Std",
+                0x501 => "Pro Neg. Hi",
+                0x600 => "Classic Chrome",
+                0x700 => "Eterna",
+                0x800 => "Classic Negative",
+                0x900 => "Bleach Bypass",
+                0xa00 => "Nostalgic Neg",
+                0xb00 => "Reala ACE",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     info.wb_mode = short_of(0x1002).and_then(|v| {
-        Some(match v {
-            0x000 => "Auto",
-            0x100 => "Daylight",
-            0x200 => "Cloudy",
-            0x300 => "Daylight Fluorescent",
-            0x400 => "Day White Fluorescent",
-            0x500 => "White Fluorescent",
-            0x600 => "Incandescent",
-            0xf00 => "Custom",
-            0x1000 => "Kelvin",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                0x000 => "Auto",
+                0x100 => "Daylight",
+                0x200 => "Cloudy",
+                0x300 => "Daylight Fluorescent",
+                0x400 => "Day White Fluorescent",
+                0x500 => "White Fluorescent",
+                0x600 => "Incandescent",
+                0xf00 => "Custom",
+                0x1000 => "Kelvin",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     if let Some((r, b)) = shorts_of(0x100a) {
         if r != 0 {
@@ -416,27 +444,31 @@ fn parse_fuji(container: &exif::Exif, info: &mut ExifInfo) {
         }
     }
     info.fuji_sharpness = short_of(0x1001).and_then(|v| {
-        Some(match v {
-            1 => "-2 (Softest)",
-            2 => "-1 (Soft)",
-            3 => "0 (Normal)",
-            4 => "+1 (Hard)",
-            5 => "+2 (Hardest)",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                1 => "-2 (Softest)",
+                2 => "-1 (Soft)",
+                3 => "0 (Normal)",
+                4 => "+1 (Hard)",
+                5 => "+2 (Hardest)",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     info.fuji_saturation = short_of(0x1003).and_then(|v| {
-        Some(match v {
-            0 => "Normal",
-            0x80 => "Medium High",
-            0x100 => "High",
-            0x180 => "Medium Low",
-            0x200 => "Low",
-            0x300 => "B&W",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                0 => "Normal",
+                0x80 => "Medium High",
+                0x100 => "High",
+                0x180 => "Medium Low",
+                0x200 => "Low",
+                0x300 => "B&W",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     info.dynamic_range = short_of(0x1402)
         .and_then(|v| {
@@ -464,31 +496,37 @@ fn parse_fuji(container: &exif::Exif, info: &mut ExifInfo) {
     info.shadow_tone = short_of(0x1040).and_then(tone);
     info.highlight_tone = short_of(0x1041).and_then(tone);
     info.grain = short_of(0x1047).and_then(|v| {
-        Some(match v {
-            0 => "Off",
-            1 => "Weak",
-            2 => "Strong",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                0 => "Off",
+                1 => "Weak",
+                2 => "Strong",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     info.color_chrome = short_of(0x1048).and_then(|v| {
-        Some(match v {
-            0 => "Off",
-            1 => "Weak",
-            2 => "Strong",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                0 => "Off",
+                1 => "Weak",
+                2 => "Strong",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     info.chrome_fx_blue = short_of(0x1049).and_then(|v| {
-        Some(match v {
-            0 => "Off",
-            1 => "Weak",
-            2 => "Strong",
-            _ => return None,
-        }
-        .to_string())
+        Some(
+            match v {
+                0 => "Off",
+                1 => "Weak",
+                2 => "Strong",
+                _ => return None,
+            }
+            .to_string(),
+        )
     });
     // NoiseReduction: newer bodies carry 0x100e, older ones 0x100b. Values
     // follow the ExifTool FujiFilm table; 0x100b's 0x100 ("n/a") stays hidden.
@@ -544,9 +582,8 @@ pub fn probe_exif(photo: &[u8]) -> Result<ExifInfo> {
         Ok(e) => e,
         Err(_) => return Ok(ExifInfo::default()),
     };
-    let get = |tag: exif::Tag, ctx: exif::In| -> Option<&exif::Field> {
-        container.get_field(tag, ctx)
-    };
+    let get =
+        |tag: exif::Tag, ctx: exif::In| -> Option<&exif::Field> { container.get_field(tag, ctx) };
     let mut info = ExifInfo::default();
     info.make = get(exif::Tag::Make, exif::In::PRIMARY).and_then(ascii_value);
     info.model = get(exif::Tag::Model, exif::In::PRIMARY).and_then(ascii_value);
@@ -624,13 +661,20 @@ pub fn cleaned_exif_tiff_full(
         Ok(e) => e,
         Err(_) => return Ok(None),
     };
-    let mut report = MetadataReport { keep_gps, ..MetadataReport::default() };
+    let mut report = MetadataReport {
+        keep_gps,
+        ..MetadataReport::default()
+    };
     let mut kept: Vec<exif::Field> = Vec::new();
     for f in source.fields() {
         let code = f.tag.number();
         let is_gps = f.tag.context() == exif::Context::Gps;
-        if is_gps { report.gps_stripped += 1; }
-        if SERIAL_TAGS.contains(&code) { report.serial_stripped += 1; }
+        if is_gps {
+            report.gps_stripped += 1;
+        }
+        if SERIAL_TAGS.contains(&code) {
+            report.serial_stripped += 1;
+        }
         if WHITELIST.contains(&code) || (keep_gps && is_gps) {
             kept.push(exif::Field {
                 tag: f.tag,

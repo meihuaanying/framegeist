@@ -145,7 +145,9 @@ fn missing_brand_asset_leaves_blank_not_fake() {
 #[test]
 fn builtin_brand_badge_renders_from_assets_dir() {
     let photo = jpeg_with_exif("ILCE-7CM2");
-    let tpl = load_template(&std::fs::read(repo_root().join("templates/film-sprocket-01.json")).unwrap()).unwrap();
+    let tpl =
+        load_template(&std::fs::read(repo_root().join("templates/film-sprocket-01.json")).unwrap())
+            .unwrap();
     let with_logo = render(&photo, &tpl, &opts()).unwrap();
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {
@@ -156,15 +158,29 @@ fn builtin_brand_badge_renders_from_assets_dir() {
     };
     let without = render(&photo, &tpl, &o).unwrap();
     // outputs must differ: the badge is present on disk (svg->png assets)
-    assert_ne!(with_logo, without, "brand badge must render from assets_dir");
+    assert_ne!(
+        with_logo, without,
+        "brand badge must render from assets_dir"
+    );
     let brand_file = repo_root().join("templates/assets/brand/sony-light.png");
-    assert!(brand_file.is_file(), "brand asset missing: {}", brand_file.display());
+    assert!(
+        brand_file.is_file(),
+        "brand asset missing: {}",
+        brand_file.display()
+    );
 }
 
 #[test]
 fn aspect_override_changes_dimensions() {
     let photo = gradient_jpeg(1600, 1200);
-    let tpl = load_template(&std::fs::read(repo_root().join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json")).unwrap()).unwrap();
+    let tpl = load_template(
+        &std::fs::read(
+            repo_root()
+                .join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json"),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     for (name, w, h) in [("1:1", 1u32, 1u32), ("16:9", 16, 9), ("3:2", 3, 2)] {
         let o = RenderOptions {
             overrides: Some(TemplateOverrides {
@@ -187,7 +203,14 @@ fn aspect_override_changes_dimensions() {
 #[test]
 fn background_override_solid_color() {
     let photo = gradient_jpeg(800, 600);
-    let tpl = load_template(&std::fs::read(repo_root().join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json")).unwrap()).unwrap();
+    let tpl = load_template(
+        &std::fs::read(
+            repo_root()
+                .join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json"),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {
             background: Some("solid".into()),
@@ -198,13 +221,23 @@ fn background_override_solid_color() {
     };
     let img = render_rgba(&photo, &tpl, &o).unwrap();
     let p = img.get_pixel(2, 2).0;
-    assert!(p[1] > 240 && p[0] < 20 && p[2] < 20, "corner must be green, got {p:?}");
+    assert!(
+        p[1] > 240 && p[0] < 20 && p[2] < 20,
+        "corner must be green, got {p:?}"
+    );
 }
 
 #[test]
 fn flip_override_changes_pixels() {
     let photo = gradient_jpeg(800, 600);
-    let tpl = load_template(&std::fs::read(repo_root().join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json")).unwrap()).unwrap();
+    let tpl = load_template(
+        &std::fs::read(
+            repo_root()
+                .join("crates/framegeist-cli/tests/fixtures/classic-white-bottom-param.json"),
+        )
+        .unwrap(),
+    )
+    .unwrap();
     let normal = render_rgba(&photo, &tpl, &opts()).unwrap();
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {
@@ -230,7 +263,10 @@ fn font_override_changes_rendering() {
         ..o
     };
     let other = render(&photo, &badge_template(), &o2).unwrap();
-    assert_ne!(base, other, "fontFamily override must change text rendering");
+    assert_ne!(
+        base, other,
+        "fontFamily override must change text rendering"
+    );
 }
 
 #[test]
@@ -250,8 +286,14 @@ fn overrides_camel_case_json_parses() {
 fn error_codes_are_stable() {
     use framegeist_core::Error;
     assert_eq!(Error::Image("x".into()).code(), "image");
-    assert_eq!(Error::UnsupportedFormat("x".into()).code(), "unsupported_format");
-    assert_eq!(Error::TemplateTooLarge { size: 1, max: 2 }.code(), "template_too_large");
+    assert_eq!(
+        Error::UnsupportedFormat("x".into()).code(),
+        "unsupported_format"
+    );
+    assert_eq!(
+        Error::TemplateTooLarge { size: 1, max: 2 }.code(),
+        "template_too_large"
+    );
     let err = load_template(b"{").unwrap_err();
     assert!(matches!(err.code(), "template_json" | "template_schema"));
 }
@@ -292,7 +334,10 @@ fn auto_contrast_darkens_low_contrast_text_on_light_bg() {
     let tpl = load_template(AUTO_CONTRAST_TEMPLATE.as_bytes()).unwrap();
     let img = render_rgba(&photo, &tpl, &opts()).unwrap();
     // light-gray #EEE text on white would be ~invisible; engine must darken it
-    assert!(dark_text_pixels(&img) > 200, "auto-contrast must darken text on light bg");
+    assert!(
+        dark_text_pixels(&img) > 200,
+        "auto-contrast must darken text on light bg"
+    );
     // manual override is respected even when low contrast
     let o = RenderOptions {
         overrides: Some(TemplateOverrides {
@@ -302,7 +347,10 @@ fn auto_contrast_darkens_low_contrast_text_on_light_bg() {
         ..opts()
     };
     let manual = render_rgba(&photo, &tpl, &o).unwrap();
-    assert!(dark_text_pixels(&manual) < 50, "manual color must not be auto-changed");
+    assert!(
+        dark_text_pixels(&manual) < 50,
+        "manual color must not be auto-changed"
+    );
 }
 
 #[test]
@@ -314,8 +362,14 @@ fn auto_color_picks_by_background() {
     let tpl_d = load_template(dark.as_bytes()).unwrap();
     let img_w = render_rgba(&photo, &tpl_w, &opts()).unwrap();
     let img_d = render_rgba(&photo, &tpl_d, &opts()).unwrap();
-    assert!(dark_text_pixels(&img_w) > 200, "'auto' must choose dark on white");
-    assert!(light_text_pixels(&img_d) > 200, "'auto' must choose light on dark");
+    assert!(
+        dark_text_pixels(&img_w) > 200,
+        "'auto' must choose dark on white"
+    );
+    assert!(
+        light_text_pixels(&img_d) > 200,
+        "'auto' must choose light on dark"
+    );
 }
 
 const TINT_TEMPLATE: &str = r##"{
@@ -347,19 +401,48 @@ fn solid_png(rgb: [u8; 3], size: u32) -> Vec<u8> {
 fn badge_autotint_picks_light_variant_on_dark_bg() {
     let photo = gradient_jpeg(800, 600);
     let mut assets = HashMap::new();
-    assets.insert("@builtin/brand/test".to_string(), solid_png([255, 0, 0], 64)); // dark-variant red
-    assets.insert("@builtin/brand/test-light".to_string(), solid_png([0, 0, 255], 64)); // light-variant blue
-    let count = |img: &image::RgbaImage, c: [u8; 4]| img.pixels().filter(|p| p.0 == c).count() as u32;
+    assets.insert(
+        "@builtin/brand/test".to_string(),
+        solid_png([255, 0, 0], 64),
+    ); // dark-variant red
+    assets.insert(
+        "@builtin/brand/test-light".to_string(),
+        solid_png([0, 0, 255], 64),
+    ); // light-variant blue
+    let count =
+        |img: &image::RgbaImage, c: [u8; 4]| img.pixels().filter(|p| p.0 == c).count() as u32;
 
-    let on_light = RenderOptions { assets: Some(assets.clone()), ..opts() };
-    let img = render_rgba(&photo, &load_template(TINT_TEMPLATE.as_bytes()).unwrap(), &on_light).unwrap();
-    assert!(count(&img, [255, 0, 0, 255]) > 100, "light bg must use dark (red) badge");
+    let on_light = RenderOptions {
+        assets: Some(assets.clone()),
+        ..opts()
+    };
+    let img = render_rgba(
+        &photo,
+        &load_template(TINT_TEMPLATE.as_bytes()).unwrap(),
+        &on_light,
+    )
+    .unwrap();
+    assert!(
+        count(&img, [255, 0, 0, 255]) > 100,
+        "light bg must use dark (red) badge"
+    );
     assert_eq!(count(&img, [0, 0, 255, 255]), 0);
 
     let dark_src = TINT_TEMPLATE.replace("#FFFFFF", "#0B0B0B");
-    let on_dark = RenderOptions { assets: Some(assets), ..opts() };
-    let img2 = render_rgba(&photo, &load_template(dark_src.as_bytes()).unwrap(), &on_dark).unwrap();
-    assert!(count(&img2, [0, 0, 255, 255]) > 100, "dark bg must auto-pick light (blue) badge");
+    let on_dark = RenderOptions {
+        assets: Some(assets),
+        ..opts()
+    };
+    let img2 = render_rgba(
+        &photo,
+        &load_template(dark_src.as_bytes()).unwrap(),
+        &on_dark,
+    )
+    .unwrap();
+    assert!(
+        count(&img2, [0, 0, 255, 255]) > 100,
+        "dark bg must auto-pick light (blue) badge"
+    );
     assert_eq!(count(&img2, [255, 0, 0, 255]), 0);
 }
 

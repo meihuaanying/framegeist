@@ -12,14 +12,10 @@ pub struct FreeSpec {
     /// Output canvas size in pixels (64–8192).
     pub width: u32,
     pub height: u32,
-    #[serde(default = "default_background")]
+    #[serde(default = "crate::template::default_background")]
     pub background: String,
     #[serde(default)]
     pub items: Vec<FreeItem>,
-}
-
-fn default_background() -> String {
-    "#FFFFFF".to_string()
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -49,16 +45,12 @@ pub struct FreeItem {
     pub border: Option<FreeBorder>,
     #[serde(default)]
     pub crop: Option<CropRect>,
-    #[serde(default = "default_opacity")]
+    #[serde(default = "crate::template::default_opacity")]
     pub opacity: f64,
 }
 
 fn default_item_w() -> f64 {
     0.5
-}
-
-fn default_opacity() -> f64 {
-    1.0
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -192,7 +184,10 @@ pub fn render_free_collage(
         };
         let fitted = image::imageops::resize(&img, tw, th, filt);
         // Optional border is a filled backing plate; radius rounds both.
-        let radius_px = item.radius.map(|r| r as f32 * tw.min(th) as f32).unwrap_or(0.0);
+        let radius_px = item
+            .radius
+            .map(|r| r as f32 * tw.min(th) as f32)
+            .unwrap_or(0.0);
         let (plate_w, plate_h) = match &item.border {
             Some(b) => {
                 let bw = b.width.round().max(0.0) as u32 * 2;
@@ -225,7 +220,13 @@ pub fn render_free_collage(
         let cy = (item.y * spec.height as f64).round() as i64;
         let x = cx - rw as i64 / 2;
         let y = cy - rh as i64 / 2;
-        crate::render::composite_over(&mut canvas, &rotated, x as i32, y as i32, item.opacity.clamp(0.0, 1.0) as f32);
+        crate::render::composite_over(
+            &mut canvas,
+            &rotated,
+            x as i32,
+            y as i32,
+            item.opacity.clamp(0.0, 1.0) as f32,
+        );
         used += 1;
     }
     if used == 0 {
@@ -259,8 +260,16 @@ fn rounded_alpha(img: &image::RgbaImage, radius_px: f32) -> image::RgbaImage {
         let y1 = (cy + r + 1.0).min(h as f32) as u32;
         for py in y0..y1 {
             for px in x0..x1 {
-                let inside_x = if inside_x_positive { px as f32 + 0.5 > cx } else { px as f32 + 0.5 < cx };
-                let inside_y = if inside_y_positive { py as f32 + 0.5 > cy } else { py as f32 + 0.5 < cy };
+                let inside_x = if inside_x_positive {
+                    px as f32 + 0.5 > cx
+                } else {
+                    px as f32 + 0.5 < cx
+                };
+                let inside_y = if inside_y_positive {
+                    py as f32 + 0.5 > cy
+                } else {
+                    py as f32 + 0.5 < cy
+                };
                 if !(inside_x && inside_y) {
                     continue;
                 }

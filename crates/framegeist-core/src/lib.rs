@@ -31,11 +31,7 @@ pub use template::{
     load_template, load_template_from_str, Category, License, Template, TemplateOverrides,
 };
 
-pub fn render_collage(
-    photos: &[&[u8]],
-    layout: &Layout,
-    opts: &RenderOptions,
-) -> Result<Vec<u8>> {
+pub fn render_collage(photos: &[&[u8]], layout: &Layout, opts: &RenderOptions) -> Result<Vec<u8>> {
     collage::render_collage(photos, layout, opts)
 }
 

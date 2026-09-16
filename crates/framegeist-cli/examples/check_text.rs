@@ -11,9 +11,17 @@ fn main() {
         if path.extension().and_then(|e| e.to_str()) != Some("json") {
             continue;
         }
-        let Ok(bytes) = std::fs::read(&path) else { continue };
-        let Ok(tpl) = load_template(&bytes) else { continue };
-        if !tpl.layers.iter().any(|l| matches!(l, framegeist_core::template::Layer::Text(_))) {
+        let Ok(bytes) = std::fs::read(&path) else {
+            continue;
+        };
+        let Ok(tpl) = load_template(&bytes) else {
+            continue;
+        };
+        if !tpl
+            .layers
+            .iter()
+            .any(|l| matches!(l, framegeist_core::template::Layer::Text(_)))
+        {
             continue;
         }
         let opts = RenderOptions {

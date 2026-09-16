@@ -9,15 +9,8 @@ use crate::{Error, Result};
 
 /// Cover-fit `photo` into a `w x h` box with the configured sampling filter.
 fn cover_fit(photo: &RgbaImage, w: u32, h: u32, filt: image::imageops::FilterType) -> RgbaImage {
-    let (pw, ph) = photo.dimensions();
-    let scale = (w as f64 / pw as f64).max(h as f64 / ph as f64);
-    let nw = ((pw as f64) * scale).ceil().max(1.0) as u32;
-    let nh = ((ph as f64) * scale).ceil().max(1.0) as u32;
-    let scaled = image::imageops::resize(photo, nw, nh, filt);
-    let x = scaled.width().saturating_sub(w) / 2;
-    let y = scaled.height().saturating_sub(h) / 2;
-    image::imageops::crop_imm(&scaled, x, y, w.min(scaled.width()), h.min(scaled.height()))
-        .to_image()
+    let scaled = crate::render::resize_to_cover(photo, w, h, filt);
+    crate::render::center_crop(&scaled, w, h)
 }
 
 fn draw_info_line(

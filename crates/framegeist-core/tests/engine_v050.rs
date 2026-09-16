@@ -25,9 +25,7 @@ fn template(canvas: &str, layers: &str) -> Template {
 
 fn render(photo: &[u8], tpl: &Template, overrides_json: &str) -> RgbaImage {
     let opts = RenderOptions {
-        overrides: Some(
-            TemplateOverrides::from_json(overrides_json).expect("overrides valid"),
-        ),
+        overrides: Some(TemplateOverrides::from_json(overrides_json).expect("overrides valid")),
         ..RenderOptions::default()
     };
     render_rgba(photo, tpl, &opts).expect("render")
@@ -394,16 +392,18 @@ fn background_texture_override_changes_pixels() {
         px[0] > 220 && px[0] < 255,
         "texture stays subtle over the base color, got {px:?}"
     );
-    assert_ne!(solid.as_raw(), texture.as_raw(), "texture background must change pixels");
+    assert_ne!(
+        solid.as_raw(),
+        texture.as_raw(),
+        "texture background must change pixels"
+    );
     // Asset texture resolved from the in-memory map, still blended subtly.
     let mut swatch = RgbaImage::new(4, 4);
     for (_, _, s) in swatch.enumerate_pixels_mut() {
         *s = image::Rgba([0, 0, 255, 255]);
     }
-    let assets = std::collections::HashMap::from([(
-        "@user/texture".to_string(),
-        png_bytes(&swatch),
-    )]);
+    let assets =
+        std::collections::HashMap::from([("@user/texture".to_string(), png_bytes(&swatch))]);
     let opts = RenderOptions {
         overrides: Some(
             TemplateOverrides::from_json(
@@ -431,10 +431,7 @@ fn background_texture_template_asset_is_validated() {
     );
     let bad = r##"{"meta":{"id":"v5-tex","name":"Tex","version":"1.0.0","minEngineVersion":"0.4.0","author":"t","license":"CC0-1.0","category":"minimal"},"canvas":{"mode":"extend","background":{"type":"texture","asset":"paper.png"}},"layers":[]}"##;
     assert!(
-        matches!(
-            load_template_from_str(bad),
-            Err(Error::SchemaViolation(_))
-        ),
+        matches!(load_template_from_str(bad), Err(Error::SchemaViolation(_))),
         "background.asset outside @builtin/@user/assets must be rejected"
     );
 }
@@ -449,8 +446,14 @@ fn calendar_week_view_paints_seven_day_cells() {
         )
     };
     let p = photo(800, 600, [210, 210, 210]);
-    let full = render_with_fonts(&p, &template(r##"{"mode":"overlay"}"##, &cal("week", true, true)));
-    let bare = render_with_fonts(&p, &template(r##"{"mode":"overlay"}"##, &cal("week", false, false)));
+    let full = render_with_fonts(
+        &p,
+        &template(r##"{"mode":"overlay"}"##, &cal("week", true, true)),
+    );
+    let bare = render_with_fonts(
+        &p,
+        &template(r##"{"mode":"overlay"}"##, &cal("week", false, false)),
+    );
     let full_ink = count(&full, ink());
     let bare_ink = count(&bare, ink());
     assert!(
@@ -481,13 +484,20 @@ fn calendar_binding_guides_add_small_decoration() {
     let p = photo(800, 600, [210, 210, 210]);
     let plain = render_with_fonts(&p, &template(r##"{"mode":"overlay"}"##, &cal(false)));
     let bound = render_with_fonts(&p, &template(r##"{"mode":"overlay"}"##, &cal(true)));
-    assert_ne!(plain.as_raw(), bound.as_raw(), "binding:true must change pixels");
+    assert_ne!(
+        plain.as_raw(),
+        bound.as_raw(),
+        "binding:true must change pixels"
+    );
     let changed = plain
         .pixels()
         .zip(bound.pixels())
         .filter(|(a, b)| a.0 != b.0)
         .count();
-    assert!(changed > 20, "binding guides must be visible, changed {changed} px");
+    assert!(
+        changed > 20,
+        "binding guides must be visible, changed {changed} px"
+    );
     assert!(
         changed < 4000,
         "binding is a decoration, not a fill (changed {changed} px)"

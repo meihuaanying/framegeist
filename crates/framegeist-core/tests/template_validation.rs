@@ -77,8 +77,7 @@ fn uppercase_exif_key_rejected() {
 #[test]
 fn oversized_template_rejected() {
     let big = format!("{}{}", "// pad\n".repeat(0), VALID);
-    let huge: String = big
-        .replace("\"Test\"", &format!("\"{}\"", "x".repeat(300 * 1024)));
+    let huge: String = big.replace("\"Test\"", &format!("\"{}\"", "x".repeat(300 * 1024)));
     assert!(matches!(
         load_template_from_str(&huge),
         Err(Error::TemplateTooLarge { .. })

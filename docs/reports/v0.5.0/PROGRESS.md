@@ -167,5 +167,31 @@ PASS  showcase: sample mirrors complete and unique — samples/previews/thumbs
   - GitHub Release `v0.5.0` 六资产：`framegeist-cli-v0.5.0-win-x64.zip`、`framegeist-desktop-v0.5.0-win-x64.zip`、`framegeist-templates-v0.5.0.fgpkg`、`FrameGeist-v0.5.0-win-x64-setup.exe`、`SHA256SUMS.txt`、`update.json`；
   - Pages 验证：`https://meihuaanying.github.io/framegeist/` 200、`/download.html` 200。
 
+## 发布后严格审计与整理 ✅ (2026-09-16)
+
+**代码修复（最严苛标准审查：Rust fmt/clippy pedantic 扫描 + Web 语法/XSS/i18n/SW/DOM 审计 + 全仓引用盘点）**
+
+- **发现并修复功能缺陷**：`web/fonts/engine/fonts.json` 缺 `Great Vibes` / `Ma Shan Zheng`（文件与模板都在用），Web 端 6+ 套艺术/节日模板一直静默回退字体 → 现与 `templates/assets/fonts/fonts.json` 同步（11 families），`tools/fetch-fonts.mjs` 补齐 web 清单写入；E2E 新增 2 条断言（清单完整性 + Ma Shan Zheng 实渲染）。
+- **安全**：`web/app.js` 模板名/墙卡片/更新检查 4 处 `innerHTML` 插值、`editor.js` 图层类型标签改为 `escapeHtml`（导入 .fgt 恶意名称的存储型 XSS 向量）。
+- **离线**：`sw.js` PRECACHE 补 `./editor.js`（此前首访即离线下编辑器模块缺失）。
+- **调试面**：`editor.js` 的 TRACE 环形缓冲改为仅 `?debug` 启用（E2E 依赖的 `__fgEditor.debug()` 保留）。
+- **Rust**：`cargo fmt --all`（此前 30 文件未格式化）；删除未用 dev-dep `jpeg-encoder` 与冗余 `image` dev-dep；去重 `is_semver`/`default_background`/`default_opacity`/`cover_fit`（委托 `render::resize_to_cover`+`center_crop`）；字体库锁改毒化容忍（去除渲染路径 panic 点）；`render.rs` 非空数组 `unwrap` 改 `let-else`；`text_art.rs` 模块级 allow 附 reason。
+- **i18n**：删除 10 个无引用键（zh/en 各 10）；键集合 zh=303/en=303 完全对称。
+- **a11y**：弹窗补 `role="dialog"`/`aria-modal`/`aria-labelledby`，状态与 toast 补 `aria-live`，图标按钮补可访问名，模板缩略图补 `alt`。
+- **清理**：删除 52 个无引用品牌 PNG（`web/brand`、`templates/assets/brand` 中的游戏/镜头系列副本，动态引用核查后确认 series/game 走独立目录）、`tools/fetch-pd-photos.mjs`（v0.2 遗留）、旧版审计夹具（v0.4.0）、过期交接文档 `HANDOFF-NEXT-SESSION.md`；`gen-samples.ps1` 薄包装删除，CI（ci.yml/pages.yml）改直调 `node tools/gen-samples.mjs`。
+- 误删回滚记录：`web/layout-thumbs/*-info.svg` 为动态 id（`grid-1x1-info` 等 40 个布局），引用方式为模板字符串，静态 grep 会误判；已 `git checkout` 恢复——已核实全部 106 缩略图在位。
+
+**审计基线（修复后全绿）**
+
+| 项 | 结果 |
+|---|---|
+| `cargo fmt --all --check` | CLEAN（此前 199 处 diff / 30 文件） |
+| `cargo test --release --workspace` / clippy `-D warnings` | 全绿 / exit 0 |
+| wasm 重建 + `wasm-smoke` | 帧字节一致 / 拼图 0.000013 |
+| E2E | **160/160**（新增字体 2 条） |
+| `gen-templates.mjs` 幂等、`check-photo-uniqueness`、@builtin 资源断链扫描 | 无 diff / 全绿 / 0 缺失 |
+
+**已知未修（记录待办，非阻塞）**：pedantic 数值 cast 告警（423 truncation 等）集中在像素几何数学，无实锤错误，改动风险大于收益；41 个滑杆/取色输入缺程序化 label；3 个惰性 DOM id（`pinned`/`freeHint`/`exifCard`）；无 CSP meta（XSS sink 已转义，桌面端 CSP 由 tauri.conf 管控）。
+
 
 

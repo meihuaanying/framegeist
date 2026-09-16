@@ -27,8 +27,11 @@ const S = {
 
 const fg = () => window.__fg;
 const t = (k, v) => (fg()?.t ? fg().t(k, v) : k);
+/** Diagnostics ring buffer: only records with `?debug` in the URL (E2E/troubleshooting). */
+const TRACE_ON = /[?&]debug\b/.test(location.search);
 const TRACE = [];
 function trace(...args) {
+  if (!TRACE_ON) return;
   TRACE.push(args.join(" "));
   if (TRACE.length > 200) TRACE.shift();
 }
@@ -244,7 +247,7 @@ function buildLayersPanel() {
     row.className = "layer-row" + (S.selected.has(layer.id) ? " on" : "") + (u.hidden.includes(layer.id) ? " hidden-layer" : "");
     row.dataset.id = layer.id;
     const indent = depth ? `<span class="indent" style="margin-left:${depth * 10}px"></span>` : "";
-    row.innerHTML = `${indent}<span class="lname">${escapeHtml(layerLabel(layer))}</span><span class="ltag">${layer.type}</span>
+    row.innerHTML = `${indent}<span class="lname">${escapeHtml(layerLabel(layer))}</span><span class="ltag">${escapeHtml(layer.type)}</span>
       <button data-act="eye" title="显示/隐藏">${u.hidden.includes(layer.id) ? "◌" : "◉"}</button>
       <button data-act="lock" title="锁定">${u.locked.includes(layer.id) ? "🔒" : "🔓"}</button>`;
     row.onclick = (e) => {

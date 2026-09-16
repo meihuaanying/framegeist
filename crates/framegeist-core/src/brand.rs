@@ -109,32 +109,74 @@ mod tests {
 
     #[test]
     fn brands_resolve() {
-        assert_eq!(brand_slug(Some("SONY"), Some("ILCE-7CM2")).as_deref(), Some("sony"));
-        assert_eq!(brand_slug(Some("NIKON CORPORATION"), None).as_deref(), Some("nikon"));
-        assert_eq!(brand_slug(None, Some("Canon EOS R6")).as_deref(), Some("canon"));
-        assert_eq!(brand_slug(Some("FUJIFILM"), None).as_deref(), Some("fujifilm"));
-        assert_eq!(brand_slug(Some("LEICA CAMERA AG"), None).as_deref(), Some("leica"));
+        assert_eq!(
+            brand_slug(Some("SONY"), Some("ILCE-7CM2")).as_deref(),
+            Some("sony")
+        );
+        assert_eq!(
+            brand_slug(Some("NIKON CORPORATION"), None).as_deref(),
+            Some("nikon")
+        );
+        assert_eq!(
+            brand_slug(None, Some("Canon EOS R6")).as_deref(),
+            Some("canon")
+        );
+        assert_eq!(
+            brand_slug(Some("FUJIFILM"), None).as_deref(),
+            Some("fujifilm")
+        );
+        assert_eq!(
+            brand_slug(Some("LEICA CAMERA AG"), None).as_deref(),
+            Some("leica")
+        );
         assert_eq!(brand_slug(Some("Unknown"), Some("X100")).as_deref(), None);
     }
 
     #[test]
     fn lenses_resolve() {
         assert_eq!(lens_slug(Some("FE 35mm F1.4 GM")).as_deref(), Some("sony"));
-        assert_eq!(lens_slug(Some("XF23mmF1.4 R LM WR")).as_deref(), Some("fujifilm"));
-        assert_eq!(lens_slug(Some("RF24-70mm F2.8 L IS USM")).as_deref(), Some("canon"));
-        assert_eq!(lens_slug(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(), Some("nikon"));
+        assert_eq!(
+            lens_slug(Some("XF23mmF1.4 R LM WR")).as_deref(),
+            Some("fujifilm")
+        );
+        assert_eq!(
+            lens_slug(Some("RF24-70mm F2.8 L IS USM")).as_deref(),
+            Some("canon")
+        );
+        assert_eq!(
+            lens_slug(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(),
+            Some("nikon")
+        );
         assert_eq!(lens_slug(Some("DG DN 35mm F1.4")).as_deref(), Some("sigma"));
         assert_eq!(lens_slug(Some("Noctilux-M 50mm")).as_deref(), Some("leica"));
     }
 
     #[test]
     fn lens_series_resolves() {
-        assert_eq!(lens_series(Some("FE 35mm F1.4 GM")).as_deref(), Some("sony-gm"));
-        assert_eq!(lens_series(Some("RF24-70mm F2.8 L IS USM")).as_deref(), Some("canon-l"));
-        assert_eq!(lens_series(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(), Some("nikon-s"));
-        assert_eq!(lens_series(Some("35mm F1.4 DG DN")).as_deref(), Some("sigma-dgdn"));
-        assert_eq!(lens_series(Some("XF23mmF1.4 R LM WR")).as_deref(), Some("fujifilm-xf"));
-        assert_eq!(lens_series(Some("XCD 45mm F3.5")).as_deref(), Some("hasselblad-xcd"));
+        assert_eq!(
+            lens_series(Some("FE 35mm F1.4 GM")).as_deref(),
+            Some("sony-gm")
+        );
+        assert_eq!(
+            lens_series(Some("RF24-70mm F2.8 L IS USM")).as_deref(),
+            Some("canon-l")
+        );
+        assert_eq!(
+            lens_series(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(),
+            Some("nikon-s")
+        );
+        assert_eq!(
+            lens_series(Some("35mm F1.4 DG DN")).as_deref(),
+            Some("sigma-dgdn")
+        );
+        assert_eq!(
+            lens_series(Some("XF23mmF1.4 R LM WR")).as_deref(),
+            Some("fujifilm-xf")
+        );
+        assert_eq!(
+            lens_series(Some("XCD 45mm F3.5")).as_deref(),
+            Some("hasselblad-xcd")
+        );
         assert_eq!(lens_series(Some("Plain 50mm")).as_deref(), None);
     }
 }

@@ -54,9 +54,17 @@ fn library_meets_c5_quota() {
     );
     let mut ids = std::collections::HashSet::new();
     for l in &layouts {
-        assert!(ids.insert(l.meta.id.clone()), "duplicate layout id {}", l.meta.id);
+        assert!(
+            ids.insert(l.meta.id.clone()),
+            "duplicate layout id {}",
+            l.meta.id
+        );
         assert!(!l.cells.is_empty(), "layout {} has no cells", l.meta.id);
-        assert!(l.meta.slots.unwrap_or(0) == l.cells.len() as u32, "slots mismatch in {}", l.meta.id);
+        assert!(
+            l.meta.slots.unwrap_or(0) == l.cells.len() as u32,
+            "slots mismatch in {}",
+            l.meta.id
+        );
     }
 }
 
@@ -103,8 +111,10 @@ fn collage_renders_deterministically_with_exif() {
         assets_dir: Some(repo_root().join("templates/assets")),
         ..RenderOptions::default()
     };
-    let layout = load_layout(&std::fs::read(repo_root().join("templates/layouts/grid-2x2-info.json")).expect("layout"))
-        .expect("valid layout");
+    let layout = load_layout(
+        &std::fs::read(repo_root().join("templates/layouts/grid-2x2-info.json")).expect("layout"),
+    )
+    .expect("valid layout");
     let first = render_collage(&refs, &layout, &opts).expect("render");
     let second = render_collage(&refs, &layout, &opts).expect("render");
     assert_eq!(first, second, "collage render must be deterministic");
@@ -119,8 +129,10 @@ fn collage_handles_more_photos_than_cells_and_fewer() {
         .map(|i| jpeg(&gradient(800, 600, i as u8 + 3)))
         .collect();
     let opts = RenderOptions::default();
-    let layout = load_layout(&std::fs::read(repo_root().join("templates/layouts/hero-1-4.json")).expect("layout"))
-        .expect("valid layout");
+    let layout = load_layout(
+        &std::fs::read(repo_root().join("templates/layouts/hero-1-4.json")).expect("layout"),
+    )
+    .expect("valid layout");
     let many: Vec<&[u8]> = photos.iter().map(|p| p.as_slice()).collect();
     let few: Vec<&[u8]> = photos.iter().take(2).map(|p| p.as_slice()).collect();
     let out_many = render_collage(&many, &layout, &opts).expect("render with extras");
@@ -134,22 +146,37 @@ fn invalid_layouts_rejected() {
         "meta": { "id": "bad-layout", "name": "B", "version": "0.1.0", "author": "t", "license": "CC0-1.0" },
         "cells": [%CELLS%]
     }"#;
-    let oversized = base.replace("%CELLS%", &format!(
-        "[{}]",
-        (0..20)
-            .map(|i| format!("{{ \"x\": {i}, \"y\": 0, \"w\": 0.1, \"h\": 0.1 }}"))
-            .collect::<Vec<_>>()
-            .join(",")
-    ));
-    assert!(load_layout(oversized.as_bytes()).is_err(), "20 cells must exceed the 16-cell cap");
+    let oversized = base.replace(
+        "%CELLS%",
+        &format!(
+            "[{}]",
+            (0..20)
+                .map(|i| format!("{{ \"x\": {i}, \"y\": 0, \"w\": 0.1, \"h\": 0.1 }}"))
+                .collect::<Vec<_>>()
+                .join(",")
+        ),
+    );
+    assert!(
+        load_layout(oversized.as_bytes()).is_err(),
+        "20 cells must exceed the 16-cell cap"
+    );
     let traversal = base
         .replace("%CELLS%", r#"[{ "x": 0, "y": 0, "w": 0.5, "h": 0.5 }]"#)
         .replace("\"B\"", "\"../etc/passwd\"");
-    assert!(load_layout(traversal.as_bytes()).is_err(), "path traversal must be rejected");
+    assert!(
+        load_layout(traversal.as_bytes()).is_err(),
+        "path traversal must be rejected"
+    );
     let out_of_bounds = base.replace("%CELLS%", r#"[{ "x": 0.5, "y": 0.5, "w": 0.6, "h": 0.6 }]"#);
-    assert!(load_layout(out_of_bounds.as_bytes()).is_err(), "cell beyond canvas must be rejected");
+    assert!(
+        load_layout(out_of_bounds.as_bytes()).is_err(),
+        "cell beyond canvas must be rejected"
+    );
     let zero_size = base.replace("%CELLS%", r#"[{ "x": 0, "y": 0, "w": 0, "h": 1 }]"#);
-    assert!(load_layout(zero_size.as_bytes()).is_err(), "zero width must be rejected");
+    assert!(
+        load_layout(zero_size.as_bytes()).is_err(),
+        "zero width must be rejected"
+    );
 }
 
 #[test]
@@ -159,6 +186,8 @@ fn layout_sizes_match_library_distribution() {
     for l in &layouts {
         *by_slot.entry(l.cells.len()).or_default() += 1;
     }
-    assert!(by_slot.contains_key(&2) && by_slot.contains_key(&4) && by_slot.contains_key(&6),
-        "library must cover 2/4/6-slot collages: {by_slot:?}");
+    assert!(
+        by_slot.contains_key(&2) && by_slot.contains_key(&4) && by_slot.contains_key(&6),
+        "library must cover 2/4/6-slot collages: {by_slot:?}"
+    );
 }

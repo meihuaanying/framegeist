@@ -433,8 +433,12 @@ pub struct ImageLayer {
     pub z: Option<i32>,
 }
 
-fn default_opacity() -> f64 {
+pub(crate) fn default_opacity() -> f64 {
     1.0
+}
+
+pub(crate) fn default_background() -> String {
+    "#FFFFFF".to_string()
 }
 
 /// v0.4.0: primitive shapes for rules, borders, dots and chips.
@@ -859,7 +863,10 @@ impl TemplateOverrides {
             }
         }
         if let Some(b) = &self.background {
-            if !matches!(b.as_str(), "blur" | "solid" | "image" | "tint" | "texture" | "none") {
+            if !matches!(
+                b.as_str(),
+                "blur" | "solid" | "image" | "tint" | "texture" | "none"
+            ) {
                 return Err(Error::SchemaViolation(format!(
                     "overrides.background {b:?} must be blur|solid|image|tint|texture|none"
                 )));
@@ -962,23 +969,26 @@ pub fn parse_hex_color(hex: &str) -> Result<[u8; 4]> {
     }
 }
 
-fn is_semver(s: &str) -> bool {
+pub(crate) fn is_semver(s: &str) -> bool {
     let parts: Vec<&str> = s.split('.').collect();
-    parts.len() == 3 && parts.iter().all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
+    parts.len() == 3
+        && parts
+            .iter()
+            .all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
 }
 
 fn is_template_id(s: &str) -> bool {
     s.len() >= 3
         && s.len() <= 64
-        && s.chars().next().is_some_and(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
+        && s.chars()
+            .next()
+            .is_some_and(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
         && s.chars()
             .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
 }
 
 fn is_layer_id(s: &str) -> bool {
-    !s.is_empty()
-        && s.len() <= 64
-        && s.chars().all(|c| c.is_ascii_alphanumeric() || c == '-')
+    !s.is_empty() && s.len() <= 64 && s.chars().all(|c| c.is_ascii_alphanumeric() || c == '-')
 }
 
 fn is_asset_path(s: &str) -> bool {
@@ -1145,203 +1155,203 @@ fn validate_layer(layer: &Layer, i: usize) -> Result<()> {
     range_check(&format!("layers[{i}].offset.y"), offset.y, -1.0, 1.0)?;
     match layer {
         Layer::Text(text) => {
-                if text.content.is_empty() || text.content.len() > 64 {
-                    return Err(Error::SchemaViolation(format!(
-                        "layers[{i}].content must contain 1-64 items"
-                    )));
-                }
-                if text.font.family.is_empty() || text.font.family.len() > 8 {
-                    return Err(Error::SchemaViolation(format!(
-                        "layers[{i}].font.family must contain 1-8 families"
-                    )));
-                }
-                for family in &text.font.family {
-                    if family.is_empty() || family.chars().count() > 64 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].font.family item must be 1-64 characters"
-                        )));
-                    }
-                }
-                if let Some(weight) = text.font.weight {
-                    range_check(
-                        &format!("layers[{i}].font.weight"),
-                        weight as f64,
-                        100.0,
-                        900.0,
-                    )?;
-                }
-                range_check(
-                    &format!("layers[{i}].font.size"),
-                    text.font.size,
-                    0.0,
-                    0.5,
-                )?;
-                if text.font.size <= 0.0 {
-                    return Err(Error::SchemaViolation(format!(
-                        "layers[{i}].font.size must be > 0"
-                    )));
-                }
-                if !text.font.color.eq_ignore_ascii_case("auto") {
-                    parse_hex_color(&text.font.color)?;
-                }
-                range_check(
-                    &format!("layers[{i}].lineHeight"),
-                    text.line_height,
-                    0.5,
-                    4.0,
-                )?;
-                range_check(
-                    &format!("layers[{i}].letterSpacing"),
-                    text.letter_spacing,
-                    -0.05,
-                    0.5,
-                )?;
-                range_check(&format!("layers[{i}].rotation"), text.rotation, -360.0, 360.0)?;
-                range_check(&format!("layers[{i}].opacity"), text.opacity, 0.0, 1.0)?;
-                if let Some(align) = &text.align {
-                    if !matches!(align.as_str(), "left" | "center" | "right") {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].align must be left|center|right"
-                        )));
-                    }
-                }
-                for item in &text.content {
-                    if item.expr.is_empty() || item.expr.chars().count() > 512 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].content[].expr must be 1-512 characters"
-                        )));
-                    }
-                    if let Some(fallback) = &item.fallback {
-                        if fallback.chars().count() > 256 {
-                            return Err(Error::SchemaViolation(format!(
-                                "layers[{i}].content[].fallback must be at most 256 characters"
-                            )));
-                        }
-                    }
-                }
-                if let Some(w) = text.width {
-                    range_check(&format!("layers[{i}].width"), w, 0.0, 1.0)?;
-                    if w <= 0.0 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].width must be > 0"
-                        )));
-                    }
-                }
-                if let Some(h) = text.height {
-                    range_check(&format!("layers[{i}].height"), h, 0.0, 1.0)?;
-                    if h <= 0.0 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].height must be > 0"
-                        )));
-                    }
-                }
-                if let Some(z) = text.z {
-                    range_check(&format!("layers[{i}].z"), z as f64, -1000.0, 1000.0)?;
-                }
-                validate_effects(text.effects.as_ref(), i)?;
+            if text.content.is_empty() || text.content.len() > 64 {
+                return Err(Error::SchemaViolation(format!(
+                    "layers[{i}].content must contain 1-64 items"
+                )));
             }
-            Layer::Image(image) => {
-                if !is_asset_path(&image.asset) {
+            if text.font.family.is_empty() || text.font.family.len() > 8 {
+                return Err(Error::SchemaViolation(format!(
+                    "layers[{i}].font.family must contain 1-8 families"
+                )));
+            }
+            for family in &text.font.family {
+                if family.is_empty() || family.chars().count() > 64 {
                     return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].font.family item must be 1-64 characters"
+                    )));
+                }
+            }
+            if let Some(weight) = text.font.weight {
+                range_check(
+                    &format!("layers[{i}].font.weight"),
+                    weight as f64,
+                    100.0,
+                    900.0,
+                )?;
+            }
+            range_check(&format!("layers[{i}].font.size"), text.font.size, 0.0, 0.5)?;
+            if text.font.size <= 0.0 {
+                return Err(Error::SchemaViolation(format!(
+                    "layers[{i}].font.size must be > 0"
+                )));
+            }
+            if !text.font.color.eq_ignore_ascii_case("auto") {
+                parse_hex_color(&text.font.color)?;
+            }
+            range_check(
+                &format!("layers[{i}].lineHeight"),
+                text.line_height,
+                0.5,
+                4.0,
+            )?;
+            range_check(
+                &format!("layers[{i}].letterSpacing"),
+                text.letter_spacing,
+                -0.05,
+                0.5,
+            )?;
+            range_check(
+                &format!("layers[{i}].rotation"),
+                text.rotation,
+                -360.0,
+                360.0,
+            )?;
+            range_check(&format!("layers[{i}].opacity"), text.opacity, 0.0, 1.0)?;
+            if let Some(align) = &text.align {
+                if !matches!(align.as_str(), "left" | "center" | "right") {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].align must be left|center|right"
+                    )));
+                }
+            }
+            for item in &text.content {
+                if item.expr.is_empty() || item.expr.chars().count() > 512 {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].content[].expr must be 1-512 characters"
+                    )));
+                }
+                if let Some(fallback) = &item.fallback {
+                    if fallback.chars().count() > 256 {
+                        return Err(Error::SchemaViolation(format!(
+                            "layers[{i}].content[].fallback must be at most 256 characters"
+                        )));
+                    }
+                }
+            }
+            if let Some(w) = text.width {
+                range_check(&format!("layers[{i}].width"), w, 0.0, 1.0)?;
+                if w <= 0.0 {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].width must be > 0"
+                    )));
+                }
+            }
+            if let Some(h) = text.height {
+                range_check(&format!("layers[{i}].height"), h, 0.0, 1.0)?;
+                if h <= 0.0 {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].height must be > 0"
+                    )));
+                }
+            }
+            if let Some(z) = text.z {
+                range_check(&format!("layers[{i}].z"), z as f64, -1000.0, 1000.0)?;
+            }
+            validate_effects(text.effects.as_ref(), i)?;
+        }
+        Layer::Image(image) => {
+            if !is_asset_path(&image.asset) {
+                return Err(Error::SchemaViolation(format!(
                         "layers[{i}].asset {:?} must be @builtin/... or assets/... within the template package",
                         image.asset
                     )));
-                }
-                if let Some(h) = image.size.height {
-                    range_check(&format!("layers[{i}].size.height"), h, 0.0, 1.0)?;
-                    if h <= 0.0 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].size.height must be > 0"
-                        )));
-                    }
-                }
-                if let Some(w) = image.size.width {
-                    range_check(&format!("layers[{i}].size.width"), w, 0.0, 1.0)?;
-                    if w <= 0.0 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].size.width must be > 0"
-                        )));
-                    }
-                }
-                range_check(
-                    &format!("layers[{i}].opacity"),
-                    image.opacity,
-                    0.0,
-                    1.0,
-                )?;
             }
-            Layer::Shape(shape) => {
-                parse_hex_color(&shape.color)?;
-                range_check(&format!("layers[{i}].opacity"), shape.opacity, 0.0, 1.0)?;
-                range_check(&format!("layers[{i}].rotation"), shape.rotation, -360.0, 360.0)?;
-                if let Some(w) = shape.size.width {
-                    range_check(&format!("layers[{i}].size.width"), w, 0.0, 1.0)?;
-                }
-                if let Some(h) = shape.size.height {
-                    range_check(&format!("layers[{i}].size.height"), h, 0.0, 1.0)?;
-                }
-                if let Some(r) = shape.radius {
-                    range_check(&format!("layers[{i}].radius"), r, 0.0, 0.5)?;
-                }
-                if let Some(sw) = shape.stroke_width {
-                    range_check(&format!("layers[{i}].strokeWidth"), sw, 0.0, 0.2)?;
-                }
-                if let Some(gap) = shape.gap {
-                    range_check(&format!("layers[{i}].gap"), gap, 0.0, 0.2)?;
-                }
-                if let Some(frame) = &shape.frame {
-                    if !matches!(frame.as_str(), "outer" | "opposite-h" | "opposite-v") {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].frame must be outer|opposite-h|opposite-v"
-                        )));
-                    }
-                }
-                if let Some(margin) = shape.margin {
-                    range_check(&format!("layers[{i}].margin"), margin, 0.0, 0.5)?;
-                }
-                if let Some(span) = &shape.span {
-                    if span != "auto" {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].span must be \"auto\""
-                        )));
-                    }
-                }
-                if let Some(z) = shape.z {
-                    range_check(&format!("layers[{i}].z"), z as f64, -1000.0, 1000.0)?;
-                }
-            }
-            Layer::Palette(palette) => {
-                if !(2..=8).contains(&palette.count) {
+            if let Some(h) = image.size.height {
+                range_check(&format!("layers[{i}].size.height"), h, 0.0, 1.0)?;
+                if h <= 0.0 {
                     return Err(Error::SchemaViolation(format!(
-                        "layers[{i}].count must be within [2, 8]"
+                        "layers[{i}].size.height must be > 0"
                     )));
                 }
-                if let Some(direction) = &palette.direction {
-                    if !matches!(direction.as_str(), "horizontal" | "vertical") {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].direction must be horizontal|vertical"
-                        )));
-                    }
-                }
-                if let Some(size) = palette.size {
-                    range_check(&format!("layers[{i}].size"), size, 0.005, 0.3)?;
-                }
-                if let Some(gap) = palette.gap {
-                    range_check(&format!("layers[{i}].gap"), gap, 0.0, 0.3)?;
-                }
-                if let Some(label) = &palette.label {
-                    range_check(&format!("layers[{i}].label.size"), label.size, 0.005, 0.05)?;
-                    parse_hex_color(&label.color)?;
-                    if label.family.len() > 2 {
-                        return Err(Error::SchemaViolation(format!(
-                            "layers[{i}].label.family must contain at most 2 families"
-                        )));
-                    }
+            }
+            if let Some(w) = image.size.width {
+                range_check(&format!("layers[{i}].size.width"), w, 0.0, 1.0)?;
+                if w <= 0.0 {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].size.width must be > 0"
+                    )));
                 }
             }
-            Layer::Group(group) => validate_group(group, i)?,
-            Layer::Calendar(cal) => validate_calendar(cal, i)?,
+            range_check(&format!("layers[{i}].opacity"), image.opacity, 0.0, 1.0)?;
         }
+        Layer::Shape(shape) => {
+            parse_hex_color(&shape.color)?;
+            range_check(&format!("layers[{i}].opacity"), shape.opacity, 0.0, 1.0)?;
+            range_check(
+                &format!("layers[{i}].rotation"),
+                shape.rotation,
+                -360.0,
+                360.0,
+            )?;
+            if let Some(w) = shape.size.width {
+                range_check(&format!("layers[{i}].size.width"), w, 0.0, 1.0)?;
+            }
+            if let Some(h) = shape.size.height {
+                range_check(&format!("layers[{i}].size.height"), h, 0.0, 1.0)?;
+            }
+            if let Some(r) = shape.radius {
+                range_check(&format!("layers[{i}].radius"), r, 0.0, 0.5)?;
+            }
+            if let Some(sw) = shape.stroke_width {
+                range_check(&format!("layers[{i}].strokeWidth"), sw, 0.0, 0.2)?;
+            }
+            if let Some(gap) = shape.gap {
+                range_check(&format!("layers[{i}].gap"), gap, 0.0, 0.2)?;
+            }
+            if let Some(frame) = &shape.frame {
+                if !matches!(frame.as_str(), "outer" | "opposite-h" | "opposite-v") {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].frame must be outer|opposite-h|opposite-v"
+                    )));
+                }
+            }
+            if let Some(margin) = shape.margin {
+                range_check(&format!("layers[{i}].margin"), margin, 0.0, 0.5)?;
+            }
+            if let Some(span) = &shape.span {
+                if span != "auto" {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].span must be \"auto\""
+                    )));
+                }
+            }
+            if let Some(z) = shape.z {
+                range_check(&format!("layers[{i}].z"), z as f64, -1000.0, 1000.0)?;
+            }
+        }
+        Layer::Palette(palette) => {
+            if !(2..=8).contains(&palette.count) {
+                return Err(Error::SchemaViolation(format!(
+                    "layers[{i}].count must be within [2, 8]"
+                )));
+            }
+            if let Some(direction) = &palette.direction {
+                if !matches!(direction.as_str(), "horizontal" | "vertical") {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].direction must be horizontal|vertical"
+                    )));
+                }
+            }
+            if let Some(size) = palette.size {
+                range_check(&format!("layers[{i}].size"), size, 0.005, 0.3)?;
+            }
+            if let Some(gap) = palette.gap {
+                range_check(&format!("layers[{i}].gap"), gap, 0.0, 0.3)?;
+            }
+            if let Some(label) = &palette.label {
+                range_check(&format!("layers[{i}].label.size"), label.size, 0.005, 0.05)?;
+                parse_hex_color(&label.color)?;
+                if label.family.len() > 2 {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].label.family must contain at most 2 families"
+                    )));
+                }
+            }
+        }
+        Layer::Group(group) => validate_group(group, i)?,
+        Layer::Calendar(cal) => validate_calendar(cal, i)?,
+    }
     Ok(())
 }
 
@@ -1467,9 +1477,16 @@ fn validate_exprs(layers: &[Layer]) -> Result<()> {
 }
 
 fn validate_effects(effects: Option<&TextEffects>, i: usize) -> Result<()> {
-    let Some(effects) = effects else { return Ok(()) };
+    let Some(effects) = effects else {
+        return Ok(());
+    };
     if let Some(stroke) = &effects.stroke {
-        range_check(&format!("layers[{i}].effects.stroke.width"), stroke.width, 0.005, 0.5)?;
+        range_check(
+            &format!("layers[{i}].effects.stroke.width"),
+            stroke.width,
+            0.005,
+            0.5,
+        )?;
         parse_hex_color(&stroke.color)?;
         if let Some(gap) = stroke.gap {
             range_check(&format!("layers[{i}].effects.stroke.gap"), gap, 0.0, 0.5)?;
@@ -1485,7 +1502,12 @@ fn validate_effects(effects: Option<&TextEffects>, i: usize) -> Result<()> {
             )));
         }
         if let Some(depth) = relief.depth {
-            range_check(&format!("layers[{i}].effects.relief.depth"), depth, 0.01, 0.3)?;
+            range_check(
+                &format!("layers[{i}].effects.relief.depth"),
+                depth,
+                0.01,
+                0.3,
+            )?;
         }
         if let Some(color) = &relief.highlight {
             parse_hex_color(color)?;
@@ -1493,7 +1515,12 @@ fn validate_effects(effects: Option<&TextEffects>, i: usize) -> Result<()> {
         if let Some(color) = &relief.shadow {
             parse_hex_color(color)?;
         }
-        range_check(&format!("layers[{i}].effects.relief.opacity"), relief.opacity, 0.0, 1.0)?;
+        range_check(
+            &format!("layers[{i}].effects.relief.opacity"),
+            relief.opacity,
+            0.0,
+            1.0,
+        )?;
     }
     if let Some(fill) = &effects.fill {
         if !matches!(fill.mode.as_str(), "gradient" | "foil" | "texture") {
@@ -1522,18 +1549,48 @@ fn validate_effects(effects: Option<&TextEffects>, i: usize) -> Result<()> {
             }
         }
         if let Some(angle) = fill.angle {
-            range_check(&format!("layers[{i}].effects.fill.angle"), angle, -360.0, 360.0)?;
+            range_check(
+                &format!("layers[{i}].effects.fill.angle"),
+                angle,
+                -360.0,
+                360.0,
+            )?;
         }
         if let Some(intensity) = fill.intensity {
-            range_check(&format!("layers[{i}].effects.fill.intensity"), intensity, 0.0, 1.0)?;
+            range_check(
+                &format!("layers[{i}].effects.fill.intensity"),
+                intensity,
+                0.0,
+                1.0,
+            )?;
         }
     }
     if let Some(shadow) = &effects.shadow {
-        range_check(&format!("layers[{i}].effects.shadow.offsetX"), shadow.offset_x, -0.5, 0.5)?;
-        range_check(&format!("layers[{i}].effects.shadow.offsetY"), shadow.offset_y, -0.5, 0.5)?;
-        range_check(&format!("layers[{i}].effects.shadow.blur"), shadow.blur, 0.0, 0.5)?;
+        range_check(
+            &format!("layers[{i}].effects.shadow.offsetX"),
+            shadow.offset_x,
+            -0.5,
+            0.5,
+        )?;
+        range_check(
+            &format!("layers[{i}].effects.shadow.offsetY"),
+            shadow.offset_y,
+            -0.5,
+            0.5,
+        )?;
+        range_check(
+            &format!("layers[{i}].effects.shadow.blur"),
+            shadow.blur,
+            0.0,
+            0.5,
+        )?;
         parse_hex_color(&shadow.color)?;
-        range_check(&format!("layers[{i}].effects.shadow.opacity"), shadow.opacity, 0.0, 1.0)?;
+        range_check(
+            &format!("layers[{i}].effects.shadow.opacity"),
+            shadow.opacity,
+            0.0,
+            1.0,
+        )?;
     }
     if let Some(case) = &effects.case {
         if !matches!(case.as_str(), "upper" | "lower" | "title") {

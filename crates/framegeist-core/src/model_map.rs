@@ -20,9 +20,9 @@ impl ModelMap {
             .ok_or_else(|| Error::SchemaViolation("model-map.json must be a JSON object".into()))?;
         let mut map = HashMap::new();
         for (k, v) in obj {
-            let name = v
-                .as_str()
-                .ok_or_else(|| Error::SchemaViolation(format!("model-map[{k}] must be a string")))?;
+            let name = v.as_str().ok_or_else(|| {
+                Error::SchemaViolation(format!("model-map[{k}] must be a string"))
+            })?;
             map.insert(k.to_ascii_uppercase(), name.to_string());
         }
         Ok(ModelMap { map })
@@ -57,7 +57,10 @@ mod tests {
     #[test]
     fn override_and_fallback() {
         let map = ModelMap::from_json(br#"{ "CUSTOM-1": "Custom Camera One" }"#).expect("map");
-        assert_eq!(map.resolve("custom-1").as_deref(), Some("Custom Camera One"));
+        assert_eq!(
+            map.resolve("custom-1").as_deref(),
+            Some("Custom Camera One")
+        );
         assert_eq!(map.resolve("X-T5").as_deref(), Some("Fujifilm X-T5"));
         assert_eq!(map.resolve("UNKNOWN"), None);
     }

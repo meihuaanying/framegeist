@@ -1096,7 +1096,6 @@ dependencies = [
  "framegeist-core",
  "hex",
  "image",
- "jpeg-encoder",
  "kamadak-exif",
  "serde_json",
  "sha2",

@@ -1,5 +1,5 @@
-use std::path::{Path, PathBuf};
 use std::io::Write as _;
+use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 use clap::Parser;
@@ -147,7 +147,9 @@ fn parse_format(s: &str) -> Result<OutputFormat, Error> {
     match s {
         "jpeg" | "jpg" => Ok(OutputFormat::Jpeg),
         "png" => Ok(OutputFormat::Png),
-        other => Err(Error::Encode(format!("unsupported output format {other:?}"))),
+        other => Err(Error::Encode(format!(
+            "unsupported output format {other:?}"
+        ))),
     }
 }
 
@@ -207,7 +209,11 @@ fn build_opts(args: &Args, format: OutputFormat, preview: bool) -> Result<Render
     let assets_dir = args.assets_dir.clone();
     Ok(RenderOptions {
         format,
-        sampling: if preview { Sampling::Preview } else { Sampling::Full },
+        sampling: if preview {
+            Sampling::Preview
+        } else {
+            Sampling::Full
+        },
         max_edge: if preview { Some(1600) } else { None },
         keep_gps: args.keep_gps,
         assets_dir: Some(assets_dir.clone()),
@@ -237,7 +243,9 @@ fn run(args: &Args) -> Result<(), Error> {
             let (tpl, _src) = resolve_template(template)?;
             let bytes = std::fs::read(photo)?;
             let mut opts = build_opts(args, parse_format(format)?, *preview)?;
-            if let Some(edge) = max_edge { opts.max_edge = Some(*edge); }
+            if let Some(edge) = max_edge {
+                opts.max_edge = Some(*edge);
+            }
             let mut over = framegeist_core::TemplateOverrides {
                 aspect: aspect.clone(),
                 background: background.clone(),
@@ -276,7 +284,11 @@ fn run(args: &Args) -> Result<(), Error> {
                 eprintln!(
                     "metadata report: kept {} field(s); GPS {} (keep_gps={}); serials removed: {}",
                     r.kept,
-                    if r.gps_stripped > 0 { format!("stripped {} entr(ies)", r.gps_stripped) } else { "none".into() },
+                    if r.gps_stripped > 0 {
+                        format!("stripped {} entr(ies)", r.gps_stripped)
+                    } else {
+                        "none".into()
+                    },
                     r.keep_gps,
                     r.serial_stripped
                 );
@@ -356,7 +368,10 @@ fn run(args: &Args) -> Result<(), Error> {
                 std::fs::create_dir_all(parent)?;
             }
             std::fs::write(output, out)?;
-            if let Some(r) = framegeist_core::metadata_report(loaded.first().map(|v| v.as_slice()).unwrap_or(&[]), opts.keep_gps)? {
+            if let Some(r) = framegeist_core::metadata_report(
+                loaded.first().map(|v| v.as_slice()).unwrap_or(&[]),
+                opts.keep_gps,
+            )? {
                 eprintln!(
                     "metadata report (first photo): kept {} field(s); GPS stripped {}; serials stripped {}",
                     r.kept, r.gps_stripped, r.serial_stripped
@@ -377,9 +392,10 @@ fn run(args: &Args) -> Result<(), Error> {
             }
             let file = std::fs::File::create(output)?;
             let mut zip = zip::ZipWriter::new(file);
-            let opts: zip::write::FileOptions<'_, ()> =
-                zip::write::FileOptions::default().compression_method(zip::CompressionMethod::Deflated);
-            zip.start_file("manifest.json", opts).map_err(|e| Error::Encode(e.to_string()))?;
+            let opts: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default()
+                .compression_method(zip::CompressionMethod::Deflated);
+            zip.start_file("manifest.json", opts)
+                .map_err(|e| Error::Encode(e.to_string()))?;
             zip.write_all(
                 serde_json::to_string_pretty(&serde_json::json!({
                     "formatVersion": 1,
@@ -389,7 +405,8 @@ fn run(args: &Args) -> Result<(), Error> {
                 .map_err(|e| Error::TemplateJson(e.to_string()))?
                 .as_bytes(),
             )?;
-            zip.start_file("template.json", opts).map_err(|e| Error::Encode(e.to_string()))?;
+            zip.start_file("template.json", opts)
+                .map_err(|e| Error::Encode(e.to_string()))?;
             let raw = std::fs::read(&src)?;
             zip.write_all(&raw)?;
             zip.finish().map_err(|e| Error::Encode(e.to_string()))?;
@@ -426,7 +443,10 @@ fn run(args: &Args) -> Result<(), Error> {
         Cmd::Probe { photo } => {
             let bytes = std::fs::read(photo)?;
             let info = probe_exif(&bytes)?;
-            println!("{}", serde_json::to_string_pretty(&info).map_err(|e| Error::Exif(e.to_string()))?);
+            println!(
+                "{}",
+                serde_json::to_string_pretty(&info).map_err(|e| Error::Exif(e.to_string()))?
+            );
             Ok(())
         }
         Cmd::PhotoStats { photo } => {
@@ -442,7 +462,11 @@ fn run(args: &Args) -> Result<(), Error> {
                 let mut x = 0;
                 while x < w {
                     let p = img.get_pixel(x, y).0;
-                    let (r, g, b) = (p[0] as f64 / 255.0, p[1] as f64 / 255.0, p[2] as f64 / 255.0);
+                    let (r, g, b) = (
+                        p[0] as f64 / 255.0,
+                        p[1] as f64 / 255.0,
+                        p[2] as f64 / 255.0,
+                    );
                     let max = r.max(g).max(b);
                     let min = r.min(g).min(b);
                     sum_l += 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -506,12 +530,21 @@ fn run(args: &Args) -> Result<(), Error> {
             }
             let total = ia.as_raw().len() / 4;
             let mut diff = 0usize;
-            for (pa, pb) in ia.as_raw().as_chunks::<4>().0.iter().zip(ib.as_raw().as_chunks::<4>().0.iter()) {
+            for (pa, pb) in ia
+                .as_raw()
+                .as_chunks::<4>()
+                .0
+                .iter()
+                .zip(ib.as_raw().as_chunks::<4>().0.iter())
+            {
                 if pa[..3] != pb[..3] {
                     diff += 1;
                 }
             }
-            println!("diff={diff} total={total} ratio={:.6}", diff as f64 / total.max(1) as f64);
+            println!(
+                "diff={diff} total={total} ratio={:.6}",
+                diff as f64 / total.max(1) as f64
+            );
             Ok(())
         }
     }

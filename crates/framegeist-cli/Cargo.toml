@@ -22,5 +22,3 @@ zip = { version = "2", default-features = false, features = ["deflate"] }
 
 [dev-dependencies]
 exif = { package = "kamadak-exif", version = "0.6.1" }
-image = { version = "0.25", default-features = false, features = ["jpeg", "png"] }
-jpeg-encoder = "0.6"

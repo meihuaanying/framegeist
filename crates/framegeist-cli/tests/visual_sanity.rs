@@ -112,7 +112,11 @@ fn orientation_is_applied() {
     let template = tpl("minimal-corner-iso");
     let out = render(&jpeg, &template, &opts()).expect("render");
     let decoded = image::load_from_memory(&out).expect("decode").to_rgb8();
-    assert_eq!(decoded.dimensions(), (900, 1200), "orientation 6 must swap 1200x900 -> 900x1200");
+    assert_eq!(
+        decoded.dimensions(),
+        (900, 1200),
+        "orientation 6 must swap 1200x900 -> 900x1200"
+    );
 
     // exported EXIF must be normalized back to 1 so viewers don't double-rotate
     let info = framegeist_core::probe_exif(&out).expect("probe out");
@@ -129,7 +133,11 @@ fn preview_max_edge_and_export_full() {
         ..opts()
     };
     let preview = render_rgba(&photo, &template, &preview_opts).unwrap();
-    assert!(preview.width() <= 800 + 96, "preview canvas capped at max_edge + padding: {}", preview.width());
+    assert!(
+        preview.width() <= 800 + 96,
+        "preview canvas capped at max_edge + padding: {}",
+        preview.width()
+    );
     let full = render_rgba(&photo, &template, &opts()).unwrap();
     assert_eq!(full.width(), 1600 + 96 + 96, "export keeps full resolution");
 }
@@ -203,7 +211,10 @@ fn overrides_affect_render() {
             }
         }
     }
-    assert!(red_dominant > 200, "text_color override must produce red pixels, got {red_dominant}");
+    assert!(
+        red_dominant > 200,
+        "text_color override must produce red pixels, got {red_dominant}"
+    );
 }
 
 /// Raw RGBA path (browser pre-decode fast preview) must match the byte path.
@@ -215,14 +226,11 @@ fn raw_rgba_path_matches_byte_path() {
     let via_bytes = framegeist_core::render(&photo, &template, &o).unwrap();
     let decoded = image::load_from_memory(&photo).unwrap().to_rgba8();
     let (w, h) = decoded.dimensions();
-    let (via_raw, _report) = framegeist_core::render_from_rgba(
-        Some(&photo),
-        decoded.as_raw(),
-        w,
-        h,
-        &template,
-        &o,
-    )
-    .unwrap();
-    assert_eq!(via_bytes, via_raw, "raw path must be byte-identical to the decode path");
+    let (via_raw, _report) =
+        framegeist_core::render_from_rgba(Some(&photo), decoded.as_raw(), w, h, &template, &o)
+            .unwrap();
+    assert_eq!(
+        via_bytes, via_raw,
+        "raw path must be byte-identical to the decode path"
+    );
 }

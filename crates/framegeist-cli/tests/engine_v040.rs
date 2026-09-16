@@ -2,7 +2,9 @@
 //! shape layers, palette extraction, tint background, canvas radius/shadow,
 //! GPS expression gating and the new date tokens.
 
-use framegeist_core::{load_template, render_rgba, render_rgba_with_image, ExifInfo, RenderOptions};
+use framegeist_core::{
+    load_template, render_rgba, render_rgba_with_image, ExifInfo, RenderOptions,
+};
 
 fn repo_root() -> std::path::PathBuf {
     std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -38,7 +40,11 @@ fn split_jpeg(w: u32, h: u32, left: [u8; 3], right: [u8; 3]) -> Vec<u8> {
     framegeist_core::encode_jpeg_quality100(&img).expect("jpeg")
 }
 
-fn white_text_overlay(letter_spacing: f64, rotation: f64, opacity: f64) -> framegeist_core::Template {
+fn white_text_overlay(
+    letter_spacing: f64,
+    rotation: f64,
+    opacity: f64,
+) -> framegeist_core::Template {
     let json = format!(
         r##"{{
   "meta": {{ "id": "v040-text", "name": "T", "version": "0.4.0", "minEngineVersion": "0.4.0",
@@ -108,7 +114,10 @@ fn text_opacity_blends_with_photo() {
             (90..=175).contains(&v) && (p.0[0] as i32 - p.0[1] as i32).abs() < 12
         })
         .count();
-    assert!(mid_gray > 50, "50% text over black must produce gray pixels");
+    assert!(
+        mid_gray > 50,
+        "50% text over black must produce gray pixels"
+    );
 }
 
 #[test]
@@ -163,7 +172,10 @@ fn palette_layer_extracts_chip_colors() {
         .filter(|p| p.0[2] > 200 && p.0[0] < 70 && p.0[1] < 70)
         .count();
     assert!(reds > 100, "palette must contain the red half, got {reds}");
-    assert!(blues > 100, "palette must contain the blue half, got {blues}");
+    assert!(
+        blues > 100,
+        "palette must contain the blue half, got {blues}"
+    );
 }
 
 #[test]
@@ -254,14 +266,26 @@ fn gps_expressions_require_keep_gps() {
         ..ExifInfo::default()
     };
     let base = image::RgbaImage::from_pixel(800, 400, image::Rgba([0, 0, 0, 255]));
-    let hidden_opts = RenderOptions { keep_gps: false, ..opts() };
-    let shown_opts = RenderOptions { keep_gps: true, ..opts() };
+    let hidden_opts = RenderOptions {
+        keep_gps: false,
+        ..opts()
+    };
+    let shown_opts = RenderOptions {
+        keep_gps: true,
+        ..opts()
+    };
     let hidden = render_rgba_with_image(&base, &tpl, &info, &hidden_opts).unwrap();
     let shown = render_rgba_with_image(&base, &tpl, &info, &shown_opts).unwrap();
     let white = |img: &image::RgbaImage| {
-        img.pixels().filter(|p| p.0[0] > 180 && p.0[1] > 180).count()
+        img.pixels()
+            .filter(|p| p.0[0] > 180 && p.0[1] > 180)
+            .count()
     };
-    assert_eq!(white(&hidden), 0, "GPS text must stay hidden without keep_gps");
+    assert_eq!(
+        white(&hidden),
+        0,
+        "GPS text must stay hidden without keep_gps"
+    );
     assert!(white(&shown) > 50, "GPS text must render with keep_gps");
 
     // Formatted helpers (v0.4.0 A8).
@@ -282,7 +306,8 @@ fn date_english_tokens_render() {
         ..ExifInfo::default()
     };
     assert_eq!(
-        framegeist_core::sandbox::eval_expr("date('MMMM Do, YYYY', exif.datetime)", &info).as_deref(),
+        framegeist_core::sandbox::eval_expr("date('MMMM Do, YYYY', exif.datetime)", &info)
+            .as_deref(),
         Some("July 15th, 2026")
     );
     assert_eq!(

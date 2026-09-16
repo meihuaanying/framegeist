@@ -1,6 +1,7 @@
 use serde::Deserialize;
 
 use crate::sandbox;
+use crate::template::is_semver;
 use crate::{Error, Result};
 
 pub const MAX_LAYOUT_JSON_BYTES: usize = 64 * 1024;
@@ -13,7 +14,7 @@ pub struct Layout {
     pub cells: Vec<Cell>,
     #[serde(default = "default_gutter")]
     pub gutter: f64,
-    #[serde(default = "default_background")]
+    #[serde(default = "crate::template::default_background")]
     pub background: String,
     #[serde(rename = "aspect", default = "default_aspect")]
     pub aspect: f64,
@@ -23,10 +24,6 @@ pub struct Layout {
 
 fn default_gutter() -> f64 {
     0.01
-}
-
-fn default_background() -> String {
-    "#FFFFFF".to_string()
 }
 
 fn default_aspect() -> f64 {
@@ -93,14 +90,11 @@ fn default_info_text_color() -> String {
 fn is_layout_id(s: &str) -> bool {
     s.len() >= 3
         && s.len() <= 64
-        && s.chars().next().is_some_and(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
+        && s.chars()
+            .next()
+            .is_some_and(|c| c.is_ascii_lowercase() || c.is_ascii_digit())
         && s.chars()
             .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
-}
-
-fn is_semver(s: &str) -> bool {
-    let parts: Vec<&str> = s.split('.').collect();
-    parts.len() == 3 && parts.iter().all(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
 }
 
 pub fn load_layout(json: &[u8]) -> Result<Layout> {
@@ -113,8 +107,8 @@ pub fn load_layout(json: &[u8]) -> Result<Layout> {
     let value: serde_json::Value =
         serde_json::from_slice(json).map_err(|e| Error::TemplateJson(e.to_string()))?;
     sandbox::check(&value)?;
-    let layout: Layout =
-        serde_json::from_value(value).map_err(|e| Error::SchemaViolation(format!("layout structure rejected: {e}")))?;
+    let layout: Layout = serde_json::from_value(value)
+        .map_err(|e| Error::SchemaViolation(format!("layout structure rejected: {e}")))?;
     validate_layout(&layout)?;
     Ok(layout)
 }

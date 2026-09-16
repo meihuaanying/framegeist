@@ -80,7 +80,7 @@ python tools/subset-cjk.py           # 中文字体 GB2312 一级子集
 node tools/gen-brand-assets.mjs      # 品牌图标 + 系列徽章 + 游戏字标（resvg）
 node tools/gen-frame-assets.mjs      # 原创相框线稿（机身份轮廓/手机/胶片条/票卡/印章）
 node tools/gen-templates.mjs         # 重建 web/templates.json 清单 + web/templates/ 镜像
-pwsh tools/gen-samples.ps1           # samples(900)/previews(640)/thumbs(240)
+node tools/gen-samples.mjs          # samples(900)/previews(640)/thumbs(240)
 node tools/e2e-audit.mjs             # E2E 真机门禁（需桌面版带 CDP 运行）
 ```
 

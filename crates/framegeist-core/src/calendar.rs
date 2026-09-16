@@ -234,10 +234,7 @@ pub(crate) fn draw_calendar_layer(
     };
 
     // Date source.
-    let explicit = layer
-        .year
-        .zip(layer.month)
-        .map(|(y, m)| (y, m, 1u32));
+    let explicit = layer.year.zip(layer.month).map(|(y, m)| (y, m, 1u32));
     let date = match layer.date_source.as_deref() {
         Some("fixed") => explicit,
         _ => parse_date(&info.datetime).or(explicit),
@@ -250,8 +247,10 @@ pub(crate) fn draw_calendar_layer(
     let box_x = anchor_x(layer, box_w, geo, fwf, fhf);
     let box_y = anchor_y(layer, box_h, geo, fwf, fhf);
 
-    let color = parse_hex_color(layer.color.as_deref().unwrap_or("#1A1A1A")).unwrap_or([26, 26, 26, 255]);
-    let accent = parse_hex_color(layer.accent.as_deref().unwrap_or("#E10600")).unwrap_or([225, 6, 0, 255]);
+    let color =
+        parse_hex_color(layer.color.as_deref().unwrap_or("#1A1A1A")).unwrap_or([26, 26, 26, 255]);
+    let accent =
+        parse_hex_color(layer.accent.as_deref().unwrap_or("#E10600")).unwrap_or([225, 6, 0, 255]);
     let families: Vec<String> = if layer.font_family.is_empty() {
         vec!["Inter".into()]
     } else {

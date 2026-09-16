@@ -15,7 +15,11 @@ use crate::text::FontBook;
 
 /// Normalized family key (same convention as `FontBook`).
 pub fn family_key(name: &str) -> String {
-    name.split('-').next().unwrap_or(name).replace([' ', '_'], "").to_ascii_lowercase()
+    name.split('-')
+        .next()
+        .unwrap_or(name)
+        .replace([' ', '_'], "")
+        .to_ascii_lowercase()
 }
 
 pub struct ShapeRequest<'a> {
@@ -71,7 +75,10 @@ impl Shaper {
                 }
             }
         }
-        let first_family = db.faces().next().and_then(|f| f.families.first().map(|(n, _)| n.clone()));
+        let first_family = db
+            .faces()
+            .next()
+            .and_then(|f| f.families.first().map(|(n, _)| n.clone()));
         Shaper {
             system: FontSystem::new_with_locale_and_db("en-US".into(), db),
             cache: SwashCache::new(),
@@ -137,7 +144,9 @@ impl Shaper {
             for glyph in run.glyphs {
                 let physical = glyph.physical((0.0, 0.0), 1.0);
                 let image = self.cache.get_image(&mut self.system, physical.cache_key);
-                let Some(image) = image.as_ref() else { continue };
+                let Some(image) = image.as_ref() else {
+                    continue;
+                };
                 let x = physical.x + image.placement.left;
                 let y = (run.line_y.round() as i32) - physical.y - image.placement.top;
                 let (w, h) = (image.placement.width, image.placement.height);
@@ -146,7 +155,14 @@ impl Shaper {
                         cosmic_text::SwashContent::Mask => image.data.clone(),
                         _ => image.data.as_chunks::<4>().0.iter().map(|p| p[3]).collect(),
                     };
-                    rasters.push(Raster { x, y, w, h, data: alpha, run: run_index });
+                    rasters.push(Raster {
+                        x,
+                        y,
+                        w,
+                        h,
+                        data: alpha,
+                        run: run_index,
+                    });
                     min_x = min_x.min(x);
                     min_y = min_y.min(y);
                     max_x = max_x.max(x + w as i32);
@@ -202,7 +218,12 @@ impl Shaper {
             .first()
             .map(|(_, y)| (*y - min_y as f32).max(0.0))
             .unwrap_or(req.size_px);
-        Some(TextRaster { width, height, first_baseline, alpha })
+        Some(TextRaster {
+            width,
+            height,
+            first_baseline,
+            alpha,
+        })
     }
 }
 

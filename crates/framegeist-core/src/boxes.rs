@@ -43,7 +43,15 @@ fn anchor_name(a: Anchor) -> &'static str {
     }
 }
 
-fn place(w: f32, h: f32, bw: f32, bh: f32, anchor: Anchor, offset_x: f64, offset_y: f64) -> (f32, f32) {
+fn place(
+    w: f32,
+    h: f32,
+    bw: f32,
+    bh: f32,
+    anchor: Anchor,
+    offset_x: f64,
+    offset_y: f64,
+) -> (f32, f32) {
     let off_x = offset_x as f32 * w;
     let off_y = offset_y as f32 * h;
     let x = match anchor {
@@ -110,7 +118,16 @@ pub fn layer_boxes_json(
     let mut shaper = Shaper::new(&fonts);
     let mut boxes: Vec<LayerBox> = Vec::new();
     for layer in &template.layers {
-        if let Some(b) = layer_box(layer, info, &mut shaper, &geo, cw as f32, ch as f32, 0.0, 0.0) {
+        if let Some(b) = layer_box(
+            layer,
+            info,
+            &mut shaper,
+            &geo,
+            cw as f32,
+            ch as f32,
+            0.0,
+            0.0,
+        ) {
             boxes.push(b);
         }
     }
@@ -185,7 +202,12 @@ fn layer_box(
                 .size
                 .height
                 .map(|h| (h * photo_h).round().max(2.0))
-                .or_else(|| image.size.width.map(|w| (w * photo_h).round().max(2.0) * 0.66));
+                .or_else(|| {
+                    image
+                        .size
+                        .width
+                        .map(|w| (w * photo_h).round().max(2.0) * 0.66)
+                });
             let th = target_h.unwrap_or(0.03 * photo_h) as f32;
             let tw = image
                 .size
@@ -217,9 +239,24 @@ fn layer_box(
             if let Some(frame) = shape.frame.as_deref() {
                 let margin = shape.margin.unwrap_or(0.04) as f32;
                 let (x, y, w, h) = match frame {
-                    "opposite-h" => (margin * fw, margin * fh, fw * (1.0 - margin * 2.0), fh * (1.0 - margin * 2.0)),
-                    "opposite-v" => (margin * fw, margin * fh, fw * (1.0 - margin * 2.0), fh * (1.0 - margin * 2.0)),
-                    _ => (margin * fw, margin * fh, fw * (1.0 - margin * 2.0), fh * (1.0 - margin * 2.0)),
+                    "opposite-h" => (
+                        margin * fw,
+                        margin * fh,
+                        fw * (1.0 - margin * 2.0),
+                        fh * (1.0 - margin * 2.0),
+                    ),
+                    "opposite-v" => (
+                        margin * fw,
+                        margin * fh,
+                        fw * (1.0 - margin * 2.0),
+                        fh * (1.0 - margin * 2.0),
+                    ),
+                    _ => (
+                        margin * fw,
+                        margin * fh,
+                        fw * (1.0 - margin * 2.0),
+                        fh * (1.0 - margin * 2.0),
+                    ),
                 };
                 return Some(LayerBox {
                     id: shape.id.clone(),
@@ -245,7 +282,8 @@ fn layer_box(
                     id: shape.id.clone(),
                     kind: "shape".into(),
                     x: inset * fw + origin_x,
-                    y: place(fw, fh, w, h, shape.anchor, shape.offset.x, shape.offset.y).1 + origin_y,
+                    y: place(fw, fh, w, h, shape.anchor, shape.offset.x, shape.offset.y).1
+                        + origin_y,
                     w,
                     h,
                     anchor: anchor_name(shape.anchor).into(),

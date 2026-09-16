@@ -25,9 +25,7 @@ pub fn check(value: &Value) -> Result<()> {
     walk_strings(value, &mut |s: &str| {
         for bad in FORBIDDEN_SUBSTRINGS {
             if s.contains(bad) {
-                violations.push(format!(
-                    "forbidden substring {bad:?} in string {s:?}"
-                ));
+                violations.push(format!("forbidden substring {bad:?} in string {s:?}"));
             }
         }
         if s.starts_with("../") || s.contains("/../") {
@@ -38,7 +36,11 @@ pub fn check(value: &Value) -> Result<()> {
         Ok(())
     } else {
         Err(Error::SandboxViolation(
-            violations.into_iter().take(5).collect::<Vec<_>>().join("; "),
+            violations
+                .into_iter()
+                .take(5)
+                .collect::<Vec<_>>()
+                .join("; "),
         ))
     }
 }
@@ -77,11 +79,13 @@ pub fn validate_expr(expr: &str) -> Result<()> {
         let inner = rest.strip_suffix(')').ok_or_else(|| {
             Error::SandboxViolation(format!("if_empty() is unterminated: {expr:?}"))
         })?;
-        let (key, literal) = inner
-            .split_once(", ")
-            .ok_or_else(|| Error::SandboxViolation(format!("if_empty() needs two arguments: {expr:?}")))?;
+        let (key, literal) = inner.split_once(", ").ok_or_else(|| {
+            Error::SandboxViolation(format!("if_empty() needs two arguments: {expr:?}"))
+        })?;
         let key = key.strip_prefix("exif.").ok_or_else(|| {
-            Error::SandboxViolation(format!("if_empty() first argument must be exif.<key>: {expr:?}"))
+            Error::SandboxViolation(format!(
+                "if_empty() first argument must be exif.<key>: {expr:?}"
+            ))
         })?;
         if !is_ident(key) {
             return Err(Error::SandboxViolation(format!(
@@ -101,9 +105,9 @@ pub fn validate_expr(expr: &str) -> Result<()> {
         return Ok(());
     }
     if let Some(rest) = expr.strip_prefix("date(") {
-        let inner = rest.strip_suffix(')').ok_or_else(|| {
-            Error::SandboxViolation(format!("date() is unterminated: {expr:?}"))
-        })?;
+        let inner = rest
+            .strip_suffix(')')
+            .ok_or_else(|| Error::SandboxViolation(format!("date() is unterminated: {expr:?}")))?;
         let inner = inner.strip_prefix('\'').ok_or_else(|| {
             Error::SandboxViolation(format!(
                 "date() format must be a single-quoted literal: {expr:?}"
@@ -194,7 +198,11 @@ pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
         let key = key.strip_prefix("exif.")?;
         let value = info.get(key);
         let literal = &literal[1..literal.len() - 1];
-        return Some(value.filter(|v| !v.is_empty()).unwrap_or_else(|| literal.to_string()));
+        return Some(
+            value
+                .filter(|v| !v.is_empty())
+                .unwrap_or_else(|| literal.to_string()),
+        );
     }
     if let Some(rest) = expr.strip_prefix("date(") {
         let inner = rest.strip_suffix(')')?;
@@ -231,16 +239,11 @@ pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
 /// format. Tokens (longest match first): YYYY, MMMM, MMM, MM, M, DD, Do, D,
 /// HH, mm, SS, WW (English weekday). Other characters pass through.
 fn format_exif_date(raw: &str, format: &str) -> Option<String> {
-    let digits: Vec<u32> = raw
-        .chars()
-        .filter_map(|c| c.to_digit(10))
-        .collect();
+    let digits: Vec<u32> = raw.chars().filter_map(|c| c.to_digit(10)).collect();
     if digits.len() < 14 {
         return None;
     }
-    let num = |slice: &[u32]| -> u32 {
-        slice.iter().fold(0u32, |acc, d| acc * 10 + d)
-    };
+    let num = |slice: &[u32]| -> u32 { slice.iter().fold(0u32, |acc, d| acc * 10 + d) };
     let year = num(&digits[0..4]);
     let month = num(&digits[4..6]);
     let day = num(&digits[6..8]);
@@ -249,10 +252,23 @@ fn format_exif_date(raw: &str, format: &str) -> Option<String> {
     let second = num(&digits[12..14]);
 
     const MONTHS: [&str; 12] = [
-        "January", "February", "March", "April", "May", "June", "July", "August", "September",
-        "October", "November", "December",
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
     ];
-    let month_name = MONTHS.get(month.saturating_sub(1) as usize).copied().unwrap_or("");
+    let month_name = MONTHS
+        .get(month.saturating_sub(1) as usize)
+        .copied()
+        .unwrap_or("");
     let weekday = crate::exif::weekday_en(raw).unwrap_or("");
     let ordinal = |d: u32| -> String {
         let suffix = if (11..=13).contains(&(d % 100)) {
@@ -327,16 +343,16 @@ mod tests {
             ..ExifInfo::default()
         };
         let expr = "fmt('{focal}mm  ISO{iso}', exif)";
-        assert_eq!(
-            eval_expr(expr, &info).as_deref(),
-            Some("24mm  ISO200")
-        );
+        assert_eq!(eval_expr(expr, &info).as_deref(), Some("24mm  ISO200"));
         assert_eq!(eval_expr("fmt('{aperture}', exif)", &info), None);
     }
 
     #[test]
     fn constant_text_expr() {
-        assert_eq!(eval_expr("'FrameGeist'", &ExifInfo::default()).as_deref(), Some("FrameGeist"));
+        assert_eq!(
+            eval_expr("'FrameGeist'", &ExifInfo::default()).as_deref(),
+            Some("FrameGeist")
+        );
         assert!(validate_expr("'KODAK 400 1'").is_ok());
         assert!(validate_expr("'has 'quote' inside'").is_err());
     }
@@ -361,7 +377,10 @@ mod tests {
             eval_expr("date('YYYY-MM-DD HH:mm', exif.datetime)", &with).as_deref(),
             Some("2026-09-09 10:00")
         );
-        assert_eq!(eval_expr("date('YYYY-MM-DD', exif.datetime)", &without), None);
+        assert_eq!(
+            eval_expr("date('YYYY-MM-DD', exif.datetime)", &without),
+            None
+        );
         assert!(validate_expr("date('YYYY-MM-DD', exif.datetime)").is_ok());
         assert!(validate_expr("date('YYYY-MM-DD', exif.model)").is_err());
         assert!(validate_expr("if_empty(exif.model, 'ok')").is_ok());

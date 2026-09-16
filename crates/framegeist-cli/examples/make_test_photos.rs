@@ -35,8 +35,16 @@ fn exif_tiff(make: &str, model: &str, lens: &str, focal: u32) -> Vec<u8> {
         (exif::Tag::LensModel, exif::In::PRIMARY, ascii(lens)),
         (exif::Tag::FNumber, exif::In::PRIMARY, rational(28, 10)),
         (exif::Tag::ExposureTime, exif::In::PRIMARY, rational(1, 250)),
-        (exif::Tag::PhotographicSensitivity, exif::In::PRIMARY, short(200)),
-        (exif::Tag::FocalLength, exif::In::PRIMARY, rational(focal, 1)),
+        (
+            exif::Tag::PhotographicSensitivity,
+            exif::In::PRIMARY,
+            short(200),
+        ),
+        (
+            exif::Tag::FocalLength,
+            exif::In::PRIMARY,
+            rational(focal, 1),
+        ),
         (exif::Tag::Orientation, exif::In::PRIMARY, short(1)),
         (
             exif::Tag::DateTimeOriginal,
@@ -46,7 +54,11 @@ fn exif_tiff(make: &str, model: &str, lens: &str, focal: u32) -> Vec<u8> {
     ];
     let fields: Vec<exif::Field> = tuples
         .into_iter()
-        .map(|(tag, ifd_num, value)| exif::Field { tag, ifd_num, value })
+        .map(|(tag, ifd_num, value)| exif::Field {
+            tag,
+            ifd_num,
+            value,
+        })
         .collect();
     let mut writer = exif::experimental::Writer::new();
     for field in &fields {
@@ -83,11 +95,19 @@ fn main() {
     let photos: Vec<(&str, Vec<u8>)> = vec![
         (
             "sample-landscape.jpg",
-            jpeg_photo(1600, 1200, Some(exif_tiff("Sony", "ILCE-7CM2", "FE 35mm F1.4 GM", 35))),
+            jpeg_photo(
+                1600,
+                1200,
+                Some(exif_tiff("Sony", "ILCE-7CM2", "FE 35mm F1.4 GM", 35)),
+            ),
         ),
         (
             "sample-portrait.jpg",
-            jpeg_photo(1200, 1600, Some(exif_tiff("Fujifilm", "X-T5", "XF23mmF1.4 R LM WR", 23))),
+            jpeg_photo(
+                1200,
+                1600,
+                Some(exif_tiff("Fujifilm", "X-T5", "XF23mmF1.4 R LM WR", 23)),
+            ),
         ),
         ("sample-square.jpg", jpeg_photo(1280, 1280, None)),
         ("sample-noexif.png", png_photo(1600, 1200)),

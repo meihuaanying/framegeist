@@ -9,6 +9,7 @@ const PRECACHE = [
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./editor.js",
   "./i18n.js",
   "./pkg/framegeist_wasm.js",
   "./pkg/framegeist_wasm_bg.wasm",

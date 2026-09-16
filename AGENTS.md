@@ -2,9 +2,11 @@
 
 > 优先级：**PRD 红线 > 本文件 > 保守默认**。遇未预见决策自主推进并记入 PRD Discoveries，不打断用户。
 
-> ⚠️ **v0.5.0 进行时**：下一步（或用户令「开始 v0.5.0」后的会话）必须按 **`docs/V0.5.0-CONSTRAINTS.md`** 执行——那是已与用户逐项确认的强约束契约：展示照片唯一化、8 款自创艺术水印、frameelf 全编辑器功能对齐（含日历/相框制作/自由拼图）、cosmic-text 排版、E2E ≥70、一口气做到发布。**中途不停**。
+> ✅ **v0.5.0 已发布（2026-09-16）**：契约 `docs/V0.5.0-CONSTRAINTS.md` 已全部执行完毕。进度/证据见 `docs/reports/v0.5.0/PROGRESS.md`、发布报告 `docs/reports/v0.5.0/README.md`、功能对齐 `docs/reports/v0.5.0/PARITY.md`（14/14 ✅）。
 >
-> 📌 **会话交接（先读）**：`docs/reports/v0.5.0/HANDOFF-NEXT-SESSION.md`——环境/命令/已完成管线/M5 未验证项/M6–M8 待办/已知坑，全部在这里。
+> 🧭 **当前状态**：主干 `main` = v0.5.0；Release 六资产 + Pages 在线。后续版本（v0.5.x/v0.6）开工前先读 PROGRESS 与 PRD Discoveries 末尾条目。
+>
+> 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口，勿用 8123）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.5.0`（headless Edge + CDP 9237，当前 158/158）；wasm 重建后必须 `node tools/wasm-smoke.mjs`；push 代理不可用时加 `-c http.https://github.com/.proxy=`。
 
 ## 项目一句话
 

@@ -90,7 +90,12 @@ pub(crate) fn filter(sampling: Sampling) -> image::imageops::FilterType {
     }
 }
 
-fn resize_to_cover(src: &RgbaImage, target_w: u32, target_h: u32, filt: image::imageops::FilterType) -> RgbaImage {
+pub(crate) fn resize_to_cover(
+    src: &RgbaImage,
+    target_w: u32,
+    target_h: u32,
+    filt: image::imageops::FilterType,
+) -> RgbaImage {
     let (w, h) = src.dimensions();
     let scale = (target_w as f64 / w as f64).max(target_h as f64 / h as f64);
     let nw = ((w as f64) * scale).ceil().max(1.0) as u32;
@@ -98,7 +103,7 @@ fn resize_to_cover(src: &RgbaImage, target_w: u32, target_h: u32, filt: image::i
     image::imageops::resize(src, nw, nh, filt)
 }
 
-fn center_crop(src: &RgbaImage, w: u32, h: u32) -> RgbaImage {
+pub(crate) fn center_crop(src: &RgbaImage, w: u32, h: u32) -> RgbaImage {
     let (sw, sh) = src.dimensions();
     let x = sw.saturating_sub(w) / 2;
     let y = sh.saturating_sub(h) / 2;
@@ -186,7 +191,11 @@ pub(crate) struct CanvasGeometry {
     pub(crate) photo_h: u32,
 }
 
-pub(crate) fn compute_geometry(t: &Template, photo: &RgbaImage, overrides: Option<&TemplateOverrides>) -> CanvasGeometry {
+pub(crate) fn compute_geometry(
+    t: &Template,
+    photo: &RgbaImage,
+    overrides: Option<&TemplateOverrides>,
+) -> CanvasGeometry {
     let (w, h) = photo.dimensions();
     let pad_scale = overrides.map(|o| o.padding_scale()).unwrap_or(1.0);
     // v0.5.0: uniform extra margin, additive to canvas.padding (extend mode).
@@ -391,9 +400,7 @@ fn average_color(img: &RgbaImage) -> [u8; 4] {
 
 fn photo_radius_px(radius: Option<f64>, photo: &RgbaImage) -> f32 {
     let (w, h) = photo.dimensions();
-    radius
-        .map(|r| (r * w.min(h) as f64) as f32)
-        .unwrap_or(0.0)
+    radius.map(|r| (r * w.min(h) as f64) as f32).unwrap_or(0.0)
 }
 
 /// v0.5.0 card border: a stroke ring hugging the outside of the rounded card
@@ -516,7 +523,12 @@ fn rounded_photo(photo: &RgbaImage, radius_px: f32) -> RgbaImage {
     let (w, h) = photo.dimensions();
     let mut out = photo.clone();
     let r = radius_px.min(w.min(h) as f32 / 2.0).max(0.5);
-    for (corner_x, corner_y) in [(0.0f32, 0.0f32), (w as f32, 0.0), (0.0, h as f32), (w as f32, h as f32)] {
+    for (corner_x, corner_y) in [
+        (0.0f32, 0.0f32),
+        (w as f32, 0.0),
+        (0.0, h as f32),
+        (w as f32, h as f32),
+    ] {
         let cx = if corner_x == 0.0 { r } else { w as f32 - r };
         let cy = if corner_y == 0.0 { r } else { h as f32 - r };
         let x0 = (cx - r - 1.0).max(0.0) as u32;
@@ -525,8 +537,16 @@ fn rounded_photo(photo: &RgbaImage, radius_px: f32) -> RgbaImage {
         let y1 = ((cy + r + 1.0).min(h as f32)) as u32;
         for py in y0..y1 {
             for px in x0..x1 {
-                let inside_x = if corner_x == 0.0 { px as f32 + 0.5 < cx } else { px as f32 + 0.5 > cx };
-                let inside_y = if corner_y == 0.0 { py as f32 + 0.5 < cy } else { py as f32 + 0.5 > cy };
+                let inside_x = if corner_x == 0.0 {
+                    px as f32 + 0.5 < cx
+                } else {
+                    px as f32 + 0.5 > cx
+                };
+                let inside_y = if corner_y == 0.0 {
+                    py as f32 + 0.5 < cy
+                } else {
+                    py as f32 + 0.5 > cy
+                };
                 if !(inside_x && inside_y) {
                     continue;
                 }
@@ -548,7 +568,13 @@ fn place_photo(canvas: &mut RgbaImage, photo: &RgbaImage, geo: &CanvasGeometry, 
     if radius_px >= 0.5 {
         let rounded = rounded_photo(photo, radius_px);
         // Blend (not replace): rounded corners must reveal what's underneath.
-        composite_over(canvas, &rounded, geo.pad_left as i32, geo.pad_top as i32, 1.0);
+        composite_over(
+            canvas,
+            &rounded,
+            geo.pad_left as i32,
+            geo.pad_top as i32,
+            1.0,
+        );
     } else {
         canvas.copy_from(photo, geo.pad_left, geo.pad_top).ok();
     }
@@ -581,7 +607,11 @@ fn draw_photo_shadow(
         0.0,
     );
     let blur_px = (shadow.blur as f32 * photo_h).round() as u32;
-    let layer = if blur_px > 0 { box_blur_rgba(&layer, blur_px) } else { layer };
+    let layer = if blur_px > 0 {
+        box_blur_rgba(&layer, blur_px)
+    } else {
+        layer
+    };
     composite_over(canvas, &layer, 0, 0, 1.0);
 }
 
@@ -623,7 +653,12 @@ pub(crate) fn transparent_window(img: &RgbaImage) -> Option<(f64, f64, f64, f64)
     if best.0 == 0 {
         return None;
     }
-    Some((best.1 as f64 / w as f64, best.2 as f64 / h as f64, best.3 as f64 / w as f64, best.4 as f64 / h as f64))
+    Some((
+        best.1 as f64 / w as f64,
+        best.2 as f64 / h as f64,
+        best.3 as f64 / w as f64,
+        best.4 as f64 / h as f64,
+    ))
 }
 
 /// v0.5.0 frame overlay: draw the frame PNG (cover-fit to canvas × scale)
@@ -641,7 +676,9 @@ fn draw_canvas_frame(
     else {
         return;
     };
-    let Ok(img) = image::load_from_memory(&bytes) else { return };
+    let Ok(img) = image::load_from_memory(&bytes) else {
+        return;
+    };
     let frame_rgba = img.to_rgba8();
     let (fw, fh) = frame_rgba.dimensions();
     if fw == 0 || fh == 0 {
@@ -656,7 +693,11 @@ fn draw_canvas_frame(
     let dh = ((fh as f32) * s).round().max(1.0) as u32;
     let ox = if dw > cw { (dw - cw) / 2 } else { 0 };
     let oy = if dh > ch { (dh - ch) / 2 } else { 0 };
-    let off = frame.offset.as_ref().map(|o| (o.x, o.y)).unwrap_or((0.0, 0.0));
+    let off = frame
+        .offset
+        .as_ref()
+        .map(|o| (o.x, o.y))
+        .unwrap_or((0.0, 0.0));
     let dx = ((cw as f64 - dw as f64) / 2.0 - ox as f64 + off.0 * cw as f64).round() as i32;
     let dy = ((ch as f64 - dh as f64) / 2.0 - oy as f64 + off.1 * ch as f64).round() as i32;
 
@@ -673,12 +714,21 @@ fn draw_canvas_frame(
                 let ww = (nw as f32 * dw as f32).max(7.0);
                 let wh = (nh as f32 * dh as f32).max(7.0);
                 let trim = inset * ww.min(wh);
-                let (wx, wy, ww, wh) = (wx + trim, wy + trim, (ww - trim * 2.0).max(5.0), (wh - trim * 2.0).max(5.0));
+                let (wx, wy, ww, wh) = (
+                    wx + trim,
+                    wy + trim,
+                    (ww - trim * 2.0).max(5.0),
+                    (wh - trim * 2.0).max(5.0),
+                );
                 let cover_p = (ww / photo.width() as f32).max(wh / photo.height() as f32);
                 let pw = (photo.width() as f32 * cover_p).ceil().max(1.0) as u32;
                 let ph = (photo.height() as f32 * cover_p).ceil().max(1.0) as u32;
                 let scaled = image::imageops::resize(photo, pw, ph, filt);
-                let cropped = center_crop(&scaled, ww.round().max(1.0) as u32, wh.round().max(1.0) as u32);
+                let cropped = center_crop(
+                    &scaled,
+                    ww.round().max(1.0) as u32,
+                    wh.round().max(1.0) as u32,
+                );
                 composite_over(dst, &cropped, wx.round() as i32, wy.round() as i32, 1.0);
             }
         }
@@ -749,7 +799,10 @@ fn build_canvas(
         }
         (CanvasMode::Extend, BgKind::Tint) => {
             let c = average_color(photo);
-            fill_solid(&mut canvas, Some(&format!("#{:02X}{:02X}{:02X}", c[0], c[1], c[2])));
+            fill_solid(
+                &mut canvas,
+                Some(&format!("#{:02X}{:02X}{:02X}", c[0], c[1], c[2])),
+            );
         }
         (CanvasMode::Extend, BgKind::Texture) => {
             fill_texture(&mut canvas, plan, opts, filt);
@@ -775,7 +828,9 @@ fn build_canvas(
                 if let Ok(bg_img) = image::load_from_memory(&bytes) {
                     let rgba = bg_img.to_rgba8();
                     let fitted = resize_to_cover(&rgba, geo.width, geo.height, filt);
-                    canvas.copy_from(&center_crop(&fitted, geo.width, geo.height), 0, 0).ok();
+                    canvas
+                        .copy_from(&center_crop(&fitted, geo.width, geo.height), 0, 0)
+                        .ok();
                     covered = true;
                 }
             }
@@ -860,7 +915,10 @@ fn expand_to_aspect(
         BgKind::Solid => fill_solid(&mut canvas, plan.color.as_deref()),
         BgKind::Tint => {
             let c = average_color(photo);
-            fill_solid(&mut canvas, Some(&format!("#{:02X}{:02X}{:02X}", c[0], c[1], c[2])));
+            fill_solid(
+                &mut canvas,
+                Some(&format!("#{:02X}{:02X}{:02X}", c[0], c[1], c[2])),
+            );
         }
         BgKind::Texture => fill_texture(&mut canvas, plan, opts, filt),
     }
@@ -920,7 +978,10 @@ fn adapt_text_color(preferred: [u8; 4], bg_lum: f32, force_auto: bool) -> [u8; 4
     let dark = [17u8, 17, 17, 255];
     let light = [255u8, 255, 255, 255];
     if !force_auto {
-        let ratio = contrast_ratio(srgb_luminance([preferred[0], preferred[1], preferred[2]]), bg_lum);
+        let ratio = contrast_ratio(
+            srgb_luminance([preferred[0], preferred[1], preferred[2]]),
+            bg_lum,
+        );
         if ratio >= 2.5 {
             return preferred;
         }
@@ -979,8 +1040,9 @@ pub(crate) fn composite_over(dst: &mut RgbaImage, src: &RgbaImage, x: i32, y: i3
         for ch in 0..3 {
             let sc = p.0[ch] as f32 / 255.0;
             let dc = d.0[ch] as f32 / 255.0;
-            d.0[ch] =
-                (((sc * a + dc * da * (1.0 - a)) / out_a) * 255.0).round().clamp(0.0, 255.0) as u8;
+            d.0[ch] = (((sc * a + dc * da * (1.0 - a)) / out_a) * 255.0)
+                .round()
+                .clamp(0.0, 255.0) as u8;
         }
         d.0[3] = (out_a * 255.0).round().clamp(0.0, 255.0) as u8;
     }
@@ -996,7 +1058,18 @@ pub(crate) fn draw_rect(
     color: [u8; 4],
     opacity: f32,
 ) {
-    render_shape(canvas, x, y, w, h, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+    render_shape(
+        canvas,
+        x,
+        y,
+        w,
+        h,
+        ShapeForm::Rect { radius_px: 0.0 },
+        color,
+        opacity,
+        0.0,
+        0.0,
+    );
 }
 
 /// Per-line widths and vertical metrics for a text block (v0.4.0: with
@@ -1038,10 +1111,14 @@ fn render_text_block(
     align: &str,
     color: [u8; 4],
 ) -> RgbaImage {
-    let (widths, spacing, ascent, descent) =
-        line_metrics(lines, font, size_px, letter_spacing_em);
+    let (widths, spacing, ascent, descent) = line_metrics(lines, font, size_px, letter_spacing_em);
     let line_h = size_px * line_height;
-    let block_w = widths.iter().cloned().fold(0.0f32, f32::max).ceil().max(1.0) as u32;
+    let block_w = widths
+        .iter()
+        .cloned()
+        .fold(0.0f32, f32::max)
+        .ceil()
+        .max(1.0) as u32;
     let block_h = ((ascent - descent) + line_h * (lines.len() as f32 - 1.0))
         .ceil()
         .max(1.0) as u32;
@@ -1270,10 +1347,22 @@ fn draw_text_layer_v5(
     }
     let w = geo.width as f32;
     let h = geo.height as f32;
-    let col_left = matches!(layer.anchor, Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft);
-    let col_center = matches!(layer.anchor, Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter);
-    let row_top = matches!(layer.anchor, Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight);
-    let row_middle = matches!(layer.anchor, Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight);
+    let col_left = matches!(
+        layer.anchor,
+        Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft
+    );
+    let col_center = matches!(
+        layer.anchor,
+        Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter
+    );
+    let row_top = matches!(
+        layer.anchor,
+        Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight
+    );
+    let row_middle = matches!(
+        layer.anchor,
+        Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight
+    );
 
     let text_joined = lines.join("\n");
     let wrap_width = layer.width.map(|fw| (fw as f32 * w).max(4.0));
@@ -1468,7 +1557,12 @@ fn draw_text_layer_legacy(
     let line_h = size_px * layer.line_height as f32;
     let (widths, _spacing, ascent, descent) =
         line_metrics(&lines, font, size_px, layer.letter_spacing as f32);
-    let block_w = widths.iter().cloned().fold(0.0f32, f32::max).ceil().max(1.0);
+    let block_w = widths
+        .iter()
+        .cloned()
+        .fold(0.0f32, f32::max)
+        .ceil()
+        .max(1.0);
     let block_h = ((ascent - descent) + line_h * (lines.len() as f32 - 1.0))
         .ceil()
         .max(1.0);
@@ -1570,7 +1664,13 @@ fn draw_text_layer_legacy(
             opacity,
         );
     } else {
-        composite_over(canvas, &block, block_x.round() as i32, block_y.round() as i32, opacity);
+        composite_over(
+            canvas,
+            &block,
+            block_x.round() as i32,
+            block_y.round() as i32,
+            opacity,
+        );
     }
     Some(TextLayout {
         first_line_x: block_x,
@@ -1580,7 +1680,12 @@ fn draw_text_layer_legacy(
 }
 
 /// v0.4.0 A4: primitive shape layer (rules, borders, dots, chips).
-fn draw_shape_layer(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeometry, text_count: usize) {
+fn draw_shape_layer(
+    canvas: &mut RgbaImage,
+    layer: &ShapeLayer,
+    geo: &CanvasGeometry,
+    text_count: usize,
+) {
     // v0.5.0 auto divider: hide when there is nothing to separate.
     if layer.auto_hide && text_count < 2 {
         return;
@@ -1620,7 +1725,10 @@ fn draw_shape_layer(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeom
     // v0.5.0 `span: auto`: a rule spans the inset width around its anchor.
     let mut sx_override: Option<f32> = None;
     if layer.span.as_deref() == Some("auto") {
-        let inset = layer.margin.map(|m| m as f32 * geo.photo_w as f32).unwrap_or(0.06 * geo.photo_w as f32);
+        let inset = layer
+            .margin
+            .map(|m| m as f32 * geo.photo_w as f32)
+            .unwrap_or(0.06 * geo.photo_w as f32);
         sw = (w - inset * 2.0).max(2.0);
         sx_override = Some(inset);
     }
@@ -1708,19 +1816,107 @@ fn draw_shape_frame(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeom
     }
     match frame {
         "opposite-h" => {
-            render_shape(canvas, x0, y0, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
-            render_shape(canvas, x0, y1 - thickness, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(
+                canvas,
+                x0,
+                y0,
+                x1 - x0,
+                thickness,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
+            render_shape(
+                canvas,
+                x0,
+                y1 - thickness,
+                x1 - x0,
+                thickness,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
         }
         "opposite-v" => {
-            render_shape(canvas, x0, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
-            render_shape(canvas, x1 - thickness, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(
+                canvas,
+                x0,
+                y0,
+                thickness,
+                y1 - y0,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
+            render_shape(
+                canvas,
+                x1 - thickness,
+                y0,
+                thickness,
+                y1 - y0,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
         }
         _ => {
             // outer: four edges with square corners and optional double rule.
-            render_shape(canvas, x0, y0, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
-            render_shape(canvas, x0, y1 - thickness, x1 - x0, thickness, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
-            render_shape(canvas, x0, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
-            render_shape(canvas, x1 - thickness, y0, thickness, y1 - y0, ShapeForm::Rect { radius_px: 0.0 }, color, opacity, 0.0, 0.0);
+            render_shape(
+                canvas,
+                x0,
+                y0,
+                x1 - x0,
+                thickness,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
+            render_shape(
+                canvas,
+                x0,
+                y1 - thickness,
+                x1 - x0,
+                thickness,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
+            render_shape(
+                canvas,
+                x0,
+                y0,
+                thickness,
+                y1 - y0,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
+            render_shape(
+                canvas,
+                x1 - thickness,
+                y0,
+                thickness,
+                y1 - y0,
+                ShapeForm::Rect { radius_px: 0.0 },
+                color,
+                opacity,
+                0.0,
+                0.0,
+            );
             if layer.double {
                 let gap = layer.gap.unwrap_or(0.004) as f32 * geo.photo_h as f32;
                 let ix0 = x0 + thickness + gap;
@@ -1736,10 +1932,54 @@ fn draw_shape_frame(canvas: &mut RgbaImage, layer: &ShapeLayer, geo: &CanvasGeom
                 };
                 let _ = long;
                 let op = opacity * 0.8;
-                render_shape(canvas, ix0, iy0, (ix1 - ix0).max(1.0), t2, ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
-                render_shape(canvas, ix0, iy1 - t2, (ix1 - ix0).max(1.0), t2, ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
-                render_shape(canvas, ix0, iy0, t2, (iy1 - iy0).max(1.0), ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
-                render_shape(canvas, ix1 - t2, iy0, t2, (iy1 - iy0).max(1.0), ShapeForm::Rect { radius_px: 0.0 }, color, op, 0.0, 0.0);
+                render_shape(
+                    canvas,
+                    ix0,
+                    iy0,
+                    (ix1 - ix0).max(1.0),
+                    t2,
+                    ShapeForm::Rect { radius_px: 0.0 },
+                    color,
+                    op,
+                    0.0,
+                    0.0,
+                );
+                render_shape(
+                    canvas,
+                    ix0,
+                    iy1 - t2,
+                    (ix1 - ix0).max(1.0),
+                    t2,
+                    ShapeForm::Rect { radius_px: 0.0 },
+                    color,
+                    op,
+                    0.0,
+                    0.0,
+                );
+                render_shape(
+                    canvas,
+                    ix0,
+                    iy0,
+                    t2,
+                    (iy1 - iy0).max(1.0),
+                    ShapeForm::Rect { radius_px: 0.0 },
+                    color,
+                    op,
+                    0.0,
+                    0.0,
+                );
+                render_shape(
+                    canvas,
+                    ix1 - t2,
+                    iy0,
+                    t2,
+                    (iy1 - iy0).max(1.0),
+                    ShapeForm::Rect { radius_px: 0.0 },
+                    color,
+                    op,
+                    0.0,
+                    0.0,
+                );
             }
         }
     }
@@ -1784,12 +2024,14 @@ fn extract_palette(photo: &RgbaImage, count: usize) -> Vec<[u8; 3]> {
                 }
                 ranges[ch] = hi.saturating_sub(lo);
             }
-            let (ch, r) = ranges
+            let Some((ch, r)) = ranges
                 .iter()
                 .enumerate()
                 .max_by_key(|(_, r)| **r)
                 .map(|(c, r)| (c, *r))
-                .unwrap();
+            else {
+                continue;
+            };
             if r == 0 {
                 continue;
             }
@@ -1953,8 +2195,7 @@ fn draw_palette_layer(
             };
             for (cx, cy, entry) in labels {
                 let text = format!("#{:02X}{:02X}{:02X}", entry[0], entry[1], entry[2]);
-                let block =
-                    render_text_block(&[text], font, size_px, 1.2, 0.02, "left", color);
+                let block = render_text_block(&[text], font, size_px, 1.2, 0.02, "left", color);
                 let (bw, bh) = block.dimensions();
                 let (lx, ly) = if vertical {
                     (cx + size + gap * 0.6, cy + (size - bh as f32) / 2.0)
@@ -1979,8 +2220,8 @@ fn draw_image_layer(
     text_layouts: &std::collections::HashMap<String, TextLayout>,
 ) {
     if opts.overrides.as_ref().and_then(|o| o.show_logo) == Some(false) {
-        let is_brand = layer.asset.starts_with("@builtin/brand/")
-            || layer.asset.starts_with("@builtin/lens/");
+        let is_brand =
+            layer.asset.starts_with("@builtin/brand/") || layer.asset.starts_with("@builtin/lens/");
         if is_brand {
             return;
         }
@@ -2004,7 +2245,12 @@ fn draw_image_layer(
         .size
         .height
         .map(|h| (h * photo_h).round().max(2.0))
-        .or_else(|| layer.size.width.map(|w| (w * geo.photo_h as f64).round().max(2.0) * ih as f64 / iw as f64));
+        .or_else(|| {
+            layer
+                .size
+                .width
+                .map(|w| (w * geo.photo_h as f64).round().max(2.0) * ih as f64 / iw as f64)
+        });
     let scale = target_h.unwrap_or(0.03 * photo_h) / ih as f64;
     let tw = ((iw as f64) * scale).round().max(2.0) as u32;
     let th = ((ih as f64) * scale).round().max(2.0) as u32;
@@ -2020,10 +2266,22 @@ fn draw_image_layer(
     } else {
         let w = geo.width as f32;
         let h = geo.height as f32;
-        let align_left = matches!(layer.anchor, Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft);
-        let align_center = matches!(layer.anchor, Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter);
-        let from_top = matches!(layer.anchor, Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight);
-        let from_middle = matches!(layer.anchor, Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight);
+        let align_left = matches!(
+            layer.anchor,
+            Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft
+        );
+        let align_center = matches!(
+            layer.anchor,
+            Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter
+        );
+        let from_top = matches!(
+            layer.anchor,
+            Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight
+        );
+        let from_middle = matches!(
+            layer.anchor,
+            Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight
+        );
         let off_x = layer.offset.x as f32 * w;
         let off_y = layer.offset.y as f32 * h;
         let x = if align_left {
@@ -2122,7 +2380,12 @@ pub(crate) fn decode_oriented(
             let scale = cap as f64 / w.max(h) as f64;
             let nw = ((w as f64) * scale).ceil().max(1.0) as u32;
             let nh = ((h as f64) * scale).ceil().max(1.0) as u32;
-            Ok(image::imageops::resize(&rgba, nw, nh, image::imageops::FilterType::Triangle))
+            Ok(image::imageops::resize(
+                &rgba,
+                nw,
+                nh,
+                image::imageops::FilterType::Triangle,
+            ))
         }
         _ => Ok(rgba),
     }
@@ -2158,11 +2421,7 @@ fn flip_flags(opts: &RenderOptions) -> (bool, bool) {
 /// Render a photo against a template into an RGBA canvas. Preview and export
 /// share this exact code path; only `RenderOptions.max_edge`/`sampling`
 /// differ (PRD A5).
-pub fn render_rgba(
-    photo: &[u8],
-    template: &Template,
-    opts: &RenderOptions,
-) -> Result<RgbaImage> {
+pub fn render_rgba(photo: &[u8], template: &Template, opts: &RenderOptions) -> Result<RgbaImage> {
     let (fh, fv) = flip_flags(opts);
     let rgba = decode_oriented(photo, opts.max_edge, fh, fv)?;
     let rgba = apply_crop(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
@@ -2346,8 +2605,7 @@ fn draw_layer(
 ) -> Option<(String, TextLayout)> {
     match layer {
         Layer::Text(text) => {
-            let layout =
-                draw_text_layer(canvas, text, info, fonts, shaper, geo, overrides, opts)?;
+            let layout = draw_text_layer(canvas, text, info, fonts, shaper, geo, overrides, opts)?;
             Some((text.id.clone(), layout))
         }
         Layer::Image(image) => {
@@ -2380,7 +2638,14 @@ fn draw_layer(
         }
         Layer::Calendar(cal) => {
             if let Some(s) = shaper {
-                crate::calendar::draw_calendar_layer(canvas, cal, info, s, geo, (geo.width, geo.height));
+                crate::calendar::draw_calendar_layer(
+                    canvas,
+                    cal,
+                    info,
+                    s,
+                    geo,
+                    (geo.width, geo.height),
+                );
             }
             None
         }
@@ -2413,10 +2678,22 @@ fn draw_group_layer(
         .height
         .map(|v| (v * geo.height as f64).round().max(1.0) as u32)
         .unwrap_or(geo.height);
-    let col_left = matches!(group.anchor, Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft);
-    let col_center = matches!(group.anchor, Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter);
-    let row_top = matches!(group.anchor, Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight);
-    let row_middle = matches!(group.anchor, Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight);
+    let col_left = matches!(
+        group.anchor,
+        Anchor::TopLeft | Anchor::MiddleLeft | Anchor::BottomLeft
+    );
+    let col_center = matches!(
+        group.anchor,
+        Anchor::TopCenter | Anchor::MiddleCenter | Anchor::BottomCenter
+    );
+    let row_top = matches!(
+        group.anchor,
+        Anchor::TopLeft | Anchor::TopCenter | Anchor::TopRight
+    );
+    let row_middle = matches!(
+        group.anchor,
+        Anchor::MiddleLeft | Anchor::MiddleCenter | Anchor::MiddleRight
+    );
     let off_x = group.offset.x as f32 * w;
     let off_y = group.offset.y as f32 * h;
     let gx = if col_left {
@@ -2483,7 +2760,13 @@ fn draw_group_layer(
             layouts.insert(id, layout);
         }
     }
-    composite_over(canvas, &sub, gx.round() as i32, gy.round() as i32, group.opacity.clamp(0.0, 1.0) as f32);
+    composite_over(
+        canvas,
+        &sub,
+        gx.round() as i32,
+        gy.round() as i32,
+        group.opacity.clamp(0.0, 1.0) as f32,
+    );
 }
 
 /// Raw-encode path: caller supplies decoded RGBA bytes (orientation already
@@ -2539,20 +2822,27 @@ pub(crate) fn encode_output(
     let (cw, ch) = canvas.dimensions();
     // v0.5.0 export option: keep EXIF metadata (default on; GPS still gated
     // by keep_gps).
-    let write_exif = opts.write_exif && opts.overrides.as_ref().and_then(|o| o.metadata).unwrap_or(true);
+    let write_exif = opts.write_exif
+        && opts
+            .overrides
+            .as_ref()
+            .and_then(|o| o.metadata)
+            .unwrap_or(true);
     match opts.format {
         OutputFormat::Jpeg => {
             let flat = flatten_over_white(canvas);
             let mut out = encode::encode_jpeg_quality100(&flat)?;
             let report = if write_exif {
                 match photo {
-                    Some(bytes) => match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
-                        Some((tiff, report)) => {
-                            encode::splice_exif_app1(&mut out, &tiff)?;
-                            Some(report)
+                    Some(bytes) => {
+                        match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
+                            Some((tiff, report)) => {
+                                encode::splice_exif_app1(&mut out, &tiff)?;
+                                Some(report)
+                            }
+                            None => None,
                         }
-                        None => None,
-                    },
+                    }
                     None => None,
                 }
             } else {
@@ -2564,13 +2854,15 @@ pub(crate) fn encode_output(
             let mut out = encode::encode_png(canvas)?;
             let report = if write_exif {
                 match photo {
-                    Some(bytes) => match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
-                        Some((tiff, report)) => {
-                            encode::splice_png_exif(&mut out, &tiff)?;
-                            Some(report)
+                    Some(bytes) => {
+                        match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
+                            Some((tiff, report)) => {
+                                encode::splice_png_exif(&mut out, &tiff)?;
+                                Some(report)
+                            }
+                            None => None,
                         }
-                        None => None,
-                    },
+                    }
                     None => None,
                 }
             } else {

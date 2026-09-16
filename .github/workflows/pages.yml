@@ -29,7 +29,7 @@ jobs:
           rustup toolchain install stable --profile minimal
           cargo run --release -p framegeist-cli --example make_test_photos
           cargo build --release -p framegeist-cli
-          pwsh tools/gen-samples.ps1 || true
+          node tools/gen-samples.mjs || true
         env:
           CARGO_TARGET_DIR: target
       - name: assemble site

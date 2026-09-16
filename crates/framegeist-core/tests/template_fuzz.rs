@@ -23,7 +23,10 @@ const BASE: &str = r##"{
 struct Lcg(u64);
 impl Lcg {
     fn next(&mut self) -> u64 {
-        self.0 = self.0.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+        self.0 = self
+            .0
+            .wrapping_mul(6364136223846793005)
+            .wrapping_add(1442695040888963407);
         self.0
     }
 }
@@ -91,5 +94,8 @@ fn fuzz_100k_template_mutations_never_panic() {
         }
     }
     eprintln!("fuzz: {iterations} iterations, {accepted} accepted, {rejected} rejected");
-    assert!(rejected > 0, "fuzz produced no rejections; mutations too weak");
+    assert!(
+        rejected > 0,
+        "fuzz produced no rejections; mutations too weak"
+    );
 }

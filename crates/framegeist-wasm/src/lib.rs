@@ -11,7 +11,11 @@ use framegeist_core as core;
 
 fn js_err(e: core::Error) -> JsError {
     let message = serde_json::to_string(&e.to_string()).unwrap_or_else(|_| "\"error\"".into());
-    JsError::new(&format!(r#"{{"code":"{}","message":{}}}"#, e.code(), message))
+    JsError::new(&format!(
+        r#"{{"code":"{}","message":{}}}"#,
+        e.code(),
+        message
+    ))
 }
 
 /// Engine instance holding registered fonts + assets (loaded once, reused).
@@ -66,7 +70,9 @@ impl Engine {
     /// Validate a template JSON document (PRD C2). Field-level error text on
     /// rejection, as the JSON error object.
     pub fn validate_template(&self, json: &str) -> Result<(), JsError> {
-        core::load_template_from_str(json).map(|_| ()).map_err(js_err)
+        core::load_template_from_str(json)
+            .map(|_| ())
+            .map_err(js_err)
     }
 
     /// Register an optional model-map override (PRD B5).
@@ -89,7 +95,18 @@ impl Engine {
         format: &str,
         preview: bool,
     ) -> Result<Uint8Array, JsError> {
-        self.render_impl(photo, None, 0, 0, template_json, format, preview, "", 0, false)
+        self.render_impl(
+            photo,
+            None,
+            0,
+            0,
+            template_json,
+            format,
+            preview,
+            "",
+            0,
+            false,
+        )
     }
 
     /// Render with user overrides JSON (camelCase; empty = none).
@@ -106,7 +123,18 @@ impl Engine {
         max_edge: u32,
         keep_gps: bool,
     ) -> Result<Uint8Array, JsError> {
-        self.render_impl(photo, None, 0, 0, template_json, format, preview, overrides_json, max_edge, keep_gps)
+        self.render_impl(
+            photo,
+            None,
+            0,
+            0,
+            template_json,
+            format,
+            preview,
+            overrides_json,
+            max_edge,
+            keep_gps,
+        )
     }
 
     /// Raw-RGBA fast preview: caller pre-decoded/downscaled the photo;
@@ -122,7 +150,18 @@ impl Engine {
         format: &str,
         overrides_json: &str,
     ) -> Result<Uint8Array, JsError> {
-        self.render_impl(exif_bytes, Some(rgba), width, height, template_json, format, false, overrides_json, 0, false)
+        self.render_impl(
+            exif_bytes,
+            Some(rgba),
+            width,
+            height,
+            template_json,
+            format,
+            false,
+            overrides_json,
+            0,
+            false,
+        )
     }
 
     /// v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
@@ -167,7 +206,11 @@ impl Engine {
         let spec = core::free_collage::load_free_spec(spec_json.as_bytes()).map_err(js_err)?;
         let opts = core::RenderOptions {
             format: parse_format(format)?,
-            sampling: if preview { core::Sampling::Preview } else { core::Sampling::Full },
+            sampling: if preview {
+                core::Sampling::Preview
+            } else {
+                core::Sampling::Full
+            },
             fonts: Some(self.fonts.clone()),
             model_map: self.model_map.clone(),
             ..core::RenderOptions::default()
@@ -194,7 +237,11 @@ impl Engine {
         let fmt = parse_format(format)?;
         let opts = core::RenderOptions {
             format: fmt,
-            sampling: if preview { core::Sampling::Preview } else { core::Sampling::Full },
+            sampling: if preview {
+                core::Sampling::Preview
+            } else {
+                core::Sampling::Full
+            },
             fonts: Some(self.fonts.clone()),
             model_map: self.model_map.clone(),
             ..core::RenderOptions::default()
@@ -226,8 +273,18 @@ impl Engine {
         };
         let opts = core::RenderOptions {
             format: fmt,
-            sampling: if preview { core::Sampling::Preview } else { core::Sampling::Full },
-            max_edge: if max_edge > 0 { Some(max_edge) } else if preview { Some(1600) } else { None },
+            sampling: if preview {
+                core::Sampling::Preview
+            } else {
+                core::Sampling::Full
+            },
+            max_edge: if max_edge > 0 {
+                Some(max_edge)
+            } else if preview {
+                Some(1600)
+            } else {
+                None
+            },
             fonts: Some(self.fonts.clone()),
             model_map: self.model_map.clone(),
             assets: Some(self.assets.clone()),

@@ -1858,6 +1858,19 @@ const hexRgb = (h) => {
   await shot("10-background");
 }
 
+/* 64. web font manifest covers every engine font referenced by templates */
+{
+  const r = await ev(`(async () => {
+    const fams = (window.__fg.state.fonts ?? []).map((f) => f.family);
+    const need = ["Great Vibes", "Ma Shan Zheng", "Noto Serif SC", "Noto Sans SC"];
+    return { n: fams.length, missing: need.filter((f) => !fams.includes(f)) };
+  })()`);
+  check("fonts: web engine manifest lists all template fonts", r?.missing?.length === 0, `${r?.n} families, missing ${JSON.stringify(r?.missing)}`);
+  await ev(`(async () => { await window.__fg.useTemplate("art-vermilion-seal"); })()`);
+  const label = await waitLabel(30000);
+  check("fonts: Ma Shan Zheng renders in the web engine", label.includes("ms") && !label.includes("失败"), label);
+}
+
 clearTimeout(WATCHDOG);
 check("runtime: no page exceptions/console errors", pageErrors.length === 0, pageErrors.slice(0, 2).join(" | "));
 ws.close();

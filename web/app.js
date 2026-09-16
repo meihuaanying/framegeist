@@ -407,6 +407,10 @@ function filteredTemplates() {
   );
 }
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
 function tplName(tpl) {
   return tpl.names?.[currentLang()] ?? tpl.name ?? tpl.id;
 }
@@ -446,10 +450,10 @@ function buildTemplatePicker() {
     const src = thumbSrc(tpl);
     const isUser = !src;
     cell.innerHTML = (src
-      ? `<img loading="lazy" src="${src}" alt="">`
-      : `<div style="display:grid;place-items:center;height:100%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)));font-family:var(--font-display)">${tplName(tpl).slice(0, 14)}</div>`) +
+      ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
+      : `<div style="display:grid;place-items:center;height:100%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)));font-family:var(--font-display)">${escapeHtml(tplName(tpl).slice(0, 14))}</div>`) +
       (isUser ? `<span class="badge">${t("chip.mine")}</span>` : "") +
-      `<span class="tname">${tplName(tpl)}</span>` +
+      `<span class="tname">${escapeHtml(tplName(tpl))}</span>` +
       `<button class="zoom">⤢</button>`;
     cell.onclick = (e) => {
       if (e.target.classList.contains("zoom")) { e.stopPropagation(); openLightbox(tpl.id); return; }
@@ -580,9 +584,9 @@ function buildWall() {
     const src = thumbSrc(tpl) ? `./previews/${tpl.id}.jpg` : null;
     const catLabel = t("cat." + tpl.category) !== `cat.${tpl.category}` ? t("cat." + tpl.category) : (tpl.category ?? "");
     cell.innerHTML = (src
-      ? `<img loading="lazy" src="${src}" alt="">`
-      : `<div style="display:grid;place-items:center;aspect-ratio:3/2;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)))">${tplName(tpl).slice(0, 16)}</div>`) +
-      `<div class="wall-name"><b>${tplName(tpl)}</b><span class="wall-cat"></span></div>` +
+      ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
+      : `<div style="display:grid;place-items:center;aspect-ratio:3/2;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)))">${escapeHtml(tplName(tpl).slice(0, 16))}</div>`) +
+      `<div class="wall-name"><b>${escapeHtml(tplName(tpl))}</b><span class="wall-cat"></span></div>` +
       `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">⤢</button></div>`;
     cell.querySelector(".wall-cat").textContent = catLabel;
     cell.onclick = (e) => {
@@ -1689,7 +1693,7 @@ async function checkUpdates() {
   $("updateBox").textContent = t("update.checking");
   try {
     const rel = await (await fetch(`https://api.github.com/repos/${CC_REPO}/releases/latest`)).json();
-    $("updateBox").innerHTML = `${t("update.latest", { v: rel.tag_name })} · <a href="${rel.html_url}" target="_blank" rel="noreferrer">${t("update.view")}</a>`;
+    $("updateBox").innerHTML = `${t("update.latest", { v: escapeHtml(rel.tag_name) })} · <a href="${escapeHtml(rel.html_url)}" target="_blank" rel="noreferrer">${t("update.view")}</a>`;
   } catch {
     $("updateBox").textContent = t("update.fail");
   }

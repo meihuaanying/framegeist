@@ -2,7 +2,11 @@
 //! fills, foil, textures, shadows, flips) plus small helpers shared by the
 //! calendar layer. All effects post-process the alpha mask produced by
 //! `text_shape::Shaper`, so CLI/WASM/desktop stay pixel-identical.
-#![allow(clippy::too_many_arguments, clippy::needless_range_loop)]
+#![allow(
+    clippy::too_many_arguments,
+    clippy::needless_range_loop,
+    reason = "mask/geometry kernels are intentionally expressed with explicit x/y/radius/color parameter lists and indexed pixel loops"
+)]
 
 use image::{Rgba, RgbaImage};
 
@@ -34,7 +38,8 @@ pub fn compose_text_layer(
             pad = pad.max((r.depth.unwrap_or(0.06) as f32 * mask_unit(raster)).ceil() as i32 + 3);
         }
         if let Some(s) = &e.shadow {
-            let d = (s.offset_x.abs().max(s.offset_y.abs()) as f32 * mask_unit(raster)).ceil() as i32;
+            let d =
+                (s.offset_x.abs().max(s.offset_y.abs()) as f32 * mask_unit(raster)).ceil() as i32;
             let b = (s.blur as f32 * mask_unit(raster)).ceil() as i32;
             pad = pad.max(d + b + 2);
         }
@@ -334,7 +339,11 @@ fn paint_stroke(
         for i in 0..mask.len() {
             let d = dist[i].sqrt();
             let t = (d - (sw + gap)).clamp(0.0, inner + 0.5);
-            ring2[i] = if d >= sw + gap && t <= inner { 1.0 - (t / (inner + 0.5)) } else { 0.0 } * (1.0 - mask[i]);
+            ring2[i] = if d >= sw + gap && t <= inner {
+                1.0 - (t / (inner + 0.5))
+            } else {
+                0.0
+            } * (1.0 - mask[i]);
         }
         paint_mask(out, &ring2, color, opacity);
     }
@@ -352,8 +361,10 @@ fn paint_relief(
     let unit = mask_unit(raster);
     let depth = (relief.depth.unwrap_or(0.06) as f32 * unit).max(1.0);
     let d = depth.round() as i32;
-    let hi = parse_hex_color(relief.highlight.as_deref().unwrap_or("#FFFFFF")).unwrap_or([255, 255, 255, 255]);
-    let sh = parse_hex_color(relief.shadow.as_deref().unwrap_or("#000000")).unwrap_or([0, 0, 0, 255]);
+    let hi = parse_hex_color(relief.highlight.as_deref().unwrap_or("#FFFFFF"))
+        .unwrap_or([255, 255, 255, 255]);
+    let sh =
+        parse_hex_color(relief.shadow.as_deref().unwrap_or("#000000")).unwrap_or([0, 0, 0, 255]);
     let op = relief.opacity as f32 * opacity;
     match relief.mode.as_str() {
         "emboss" => {
@@ -412,7 +423,12 @@ fn paint_relief(
 }
 
 fn hs_darken(c: [u8; 4]) -> [u8; 4] {
-    [((c[0] as u16 * 3) / 5) as u8, ((c[1] as u16 * 3) / 5) as u8, ((c[2] as u16 * 3) / 5) as u8, c[3]]
+    [
+        ((c[0] as u16 * 3) / 5) as u8,
+        ((c[1] as u16 * 3) / 5) as u8,
+        ((c[2] as u16 * 3) / 5) as u8,
+        c[3],
+    ]
 }
 
 fn paint_gradient_fill(
@@ -429,8 +445,18 @@ fn paint_gradient_fill(
     let stops: Vec<[u8; 4]> = if fill.colors.is_empty() {
         let c = base_color;
         vec![
-            [c[0].saturating_add(30), c[1].saturating_add(30), c[2].saturating_add(20), c[3]],
-            [c[0].saturating_sub(40).max(8), c[1].saturating_sub(40).max(8), c[2].saturating_sub(40).max(8), c[3]],
+            [
+                c[0].saturating_add(30),
+                c[1].saturating_add(30),
+                c[2].saturating_add(20),
+                c[3],
+            ],
+            [
+                c[0].saturating_sub(40).max(8),
+                c[1].saturating_sub(40).max(8),
+                c[2].saturating_sub(40).max(8),
+                c[3],
+            ],
         ]
     } else {
         fill.colors
@@ -460,7 +486,9 @@ fn paint_gradient_fill(
             let mut color = sample_stops(&stops, t);
             if fill.mode == "foil" {
                 // Specular band sweeping across the glyphs.
-                let band = ((proj - (cx * cos_a + cy * sin_a).cos()) / (wf * 0.16)).sin().abs();
+                let band = ((proj - (cx * cos_a + cy * sin_a).cos()) / (wf * 0.16))
+                    .sin()
+                    .abs();
                 let spec = (1.0 - band).powi(3) * intensity;
                 color = [
                     (color[0] as f32 + (255.0 - color[0] as f32) * spec).min(255.0) as u8,
@@ -606,7 +634,11 @@ pub fn draw_solid_text(
                 continue;
             }
             let a = m * (color[3] as f32 / 255.0);
-            layer.put_pixel(px, py, Rgba([color[0], color[1], color[2], (a * 255.0) as u8]));
+            layer.put_pixel(
+                px,
+                py,
+                Rgba([color[0], color[1], color[2], (a * 255.0) as u8]),
+            );
         }
     }
     crate::render::composite_over(canvas, &layer, x, y, 1.0);

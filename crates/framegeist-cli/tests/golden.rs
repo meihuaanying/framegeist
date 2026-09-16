@@ -14,7 +14,11 @@ const TEMPLATE_IDS: [&str; 3] = [
     "polaroid-caption",
 ];
 
-const SHAPES: [(&str, u32, u32); 3] = [("landscape", 1600, 1200), ("portrait", 1200, 1600), ("square", 1280, 1280)];
+const SHAPES: [(&str, u32, u32); 3] = [
+    ("landscape", 1600, 1200),
+    ("portrait", 1200, 1600),
+    ("square", 1280, 1280),
+];
 
 const VARIANTS: [&str; 4] = ["jpeg-full-exif", "jpeg-partial-exif", "jpeg-no-exif", "png"];
 
@@ -46,10 +50,18 @@ fn exif_tiff(full: bool) -> Vec<u8> {
         vec![
             (exif::Tag::Make, exif::In::PRIMARY, ascii("Sony")),
             (exif::Tag::Model, exif::In::PRIMARY, ascii("ILCE-7CM2")),
-            (exif::Tag::LensModel, exif::In::PRIMARY, ascii("FE 35mm F1.4 GM")),
+            (
+                exif::Tag::LensModel,
+                exif::In::PRIMARY,
+                ascii("FE 35mm F1.4 GM"),
+            ),
             (exif::Tag::FNumber, exif::In::PRIMARY, rational(28, 10)),
             (exif::Tag::ExposureTime, exif::In::PRIMARY, rational(1, 125)),
-            (exif::Tag::PhotographicSensitivity, exif::In::PRIMARY, short(200)),
+            (
+                exif::Tag::PhotographicSensitivity,
+                exif::In::PRIMARY,
+                short(200),
+            ),
             (exif::Tag::FocalLength, exif::In::PRIMARY, rational(35, 1)),
             (exif::Tag::Orientation, exif::In::PRIMARY, short(1)),
             (
@@ -62,7 +74,11 @@ fn exif_tiff(full: bool) -> Vec<u8> {
         vec![
             (exif::Tag::Make, exif::In::PRIMARY, ascii("Fujifilm")),
             (exif::Tag::Model, exif::In::PRIMARY, ascii("X100VI")),
-            (exif::Tag::PhotographicSensitivity, exif::In::PRIMARY, short(125)),
+            (
+                exif::Tag::PhotographicSensitivity,
+                exif::In::PRIMARY,
+                short(125),
+            ),
         ]
     };
     let fields: Vec<exif::Field> = tuples
@@ -149,8 +165,9 @@ fn golden_regression() {
         for variant in VARIANTS {
             let photo = build_photo(variant, (w, h));
             for (id, tpl) in &templates {
-                let out = render(&photo, tpl, &opts)
-                    .unwrap_or_else(|e| panic!("render failed for {variant}/{shape_name}/{id}: {e}"));
+                let out = render(&photo, tpl, &opts).unwrap_or_else(|e| {
+                    panic!("render failed for {variant}/{shape_name}/{id}: {e}")
+                });
                 let key = format!("{variant}_{shape_name}@{id}");
                 hashes.insert(key, sha256_hex(&out));
             }

@@ -16,7 +16,12 @@ pub fn encode_jpeg_quality100(img: &RgbaImage) -> Result<Vec<u8>> {
     let mut encoder = jpeg_encoder::Encoder::new(&mut out, 100);
     encoder.set_sampling_factor(jpeg_encoder::SamplingFactor::R_4_4_4);
     encoder
-        .encode(rgb.as_raw(), w as u16, h as u16, jpeg_encoder::ColorType::Rgb)
+        .encode(
+            rgb.as_raw(),
+            w as u16,
+            h as u16,
+            jpeg_encoder::ColorType::Rgb,
+        )
         .map_err(|e| Error::Encode(e.to_string()))?;
     Ok(out)
 }
@@ -51,8 +56,7 @@ pub fn splice_png_exif(png: &mut Vec<u8>, exif_tiff: &[u8]) -> Result<()> {
         return Err(Error::Encode("not a PNG stream".into()));
     }
     // eXIf is allowed anywhere after IHDR; place it right after the first chunk.
-    let ihdr_len =
-        u32::from_be_bytes([png[8], png[9], png[10], png[11]]) as usize;
+    let ihdr_len = u32::from_be_bytes([png[8], png[9], png[10], png[11]]) as usize;
     let insert_at = 8 + 12 + ihdr_len;
     if insert_at > png.len() {
         return Err(Error::Encode("PNG stream truncated (bad IHDR)".into()));

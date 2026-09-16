@@ -79,9 +79,22 @@ fn unique_ids_and_valid_versions() {
     let mut seen = std::collections::HashSet::new();
     for (id, path, tpl) in &templates {
         assert!(seen.insert(id.clone()), "duplicate template id {id}");
-        let semver_ok = |s: &str| s.split('.').filter(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit())).count() == 3;
-        assert!(semver_ok(&tpl.meta.version), "bad version in {}", path.display());
-        assert!(semver_ok(&tpl.meta.min_engine_version), "bad minEngineVersion in {}", path.display());
+        let semver_ok = |s: &str| {
+            s.split('.')
+                .filter(|p| !p.is_empty() && p.chars().all(|c| c.is_ascii_digit()))
+                .count()
+                == 3
+        };
+        assert!(
+            semver_ok(&tpl.meta.version),
+            "bad version in {}",
+            path.display()
+        );
+        assert!(
+            semver_ok(&tpl.meta.min_engine_version),
+            "bad minEngineVersion in {}",
+            path.display()
+        );
     }
 }
 

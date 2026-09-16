@@ -77,8 +77,15 @@ fn stroke_paints_outside_glyphs() {
     ));
     let a = render_img(&p, &plain);
     let b = render_img(&p, &stroked);
-    assert_eq!(count(&a, red_pixels()), 0, "no stroke should mean no red pixels");
-    assert!(count(&b, red_pixels()) > 200, "stroke must paint a visible red ring");
+    assert_eq!(
+        count(&a, red_pixels()),
+        0,
+        "no stroke should mean no red pixels"
+    );
+    assert!(
+        count(&b, red_pixels()) > 200,
+        "stroke must paint a visible red ring"
+    );
 }
 
 #[test]
@@ -92,7 +99,10 @@ fn double_stroke_paints_more_than_single() {
     ));
     let a = count(&render_img(&p, &single), red_pixels());
     let b = count(&render_img(&p, &double), red_pixels());
-    assert!(b > a, "double stroke must paint more red pixels ({b} vs {a})");
+    assert!(
+        b > a,
+        "double stroke must paint more red pixels ({b} vs {a})"
+    );
 }
 
 #[test]
@@ -106,7 +116,10 @@ fn gradient_fill_changes_pixels() {
     let b = render_img(&p, &gradient);
     let reddish = count(&b, |px| px[0] > 150 && px[2] < 120 && px[1] < 120);
     let bluish = count(&b, |px| px[2] > 150 && px[0] < 120 && px[1] < 120);
-    assert!(reddish > 50 && bluish > 50, "gradient must show both stops ({reddish}/{bluish})");
+    assert!(
+        reddish > 50 && bluish > 50,
+        "gradient must show both stops ({reddish}/{bluish})"
+    );
     assert_ne!(a.as_raw(), b.as_raw());
 }
 
@@ -147,7 +160,10 @@ fn adaptive_height_scales_font() {
     let large = template(&text_layer(r##","height":0.35"##));
     let a = count(&render_img(&p, &small), ink());
     let b = count(&render_img(&p, &large), ink());
-    assert!(b > a * 2, "target height 0.35 must render a much larger block ({b} vs {a})");
+    assert!(
+        b > a * 2,
+        "target height 0.35 must render a much larger block ({b} vs {a})"
+    );
 }
 
 #[test]
@@ -174,7 +190,10 @@ fn group_offset_moves_children() {
         }
         sx / n.max(1.0)
     };
-    assert!(mean_x(&b) > mean_x(&a) + 80.0, "group offset must move children right");
+    assert!(
+        mean_x(&b) > mean_x(&a) + 80.0,
+        "group offset must move children right"
+    );
 }
 
 #[test]
@@ -195,7 +214,10 @@ fn divider_auto_hides_without_neighbours() {
     let a = count(&render_img(&p, &one_text), green);
     let b = count(&render_img(&p, &two_texts), green);
     assert_eq!(a, 0, "auto divider hides with a single text layer");
-    assert!(b > 100, "auto divider shows when it can separate two layers");
+    assert!(
+        b > 100,
+        "auto divider shows when it can separate two layers"
+    );
 }
 
 #[test]
@@ -206,7 +228,10 @@ fn calendar_layer_renders_month_grid() {
         "color":"#111111","accent":"#E10600","fontFamily":["Inter"]}"##;
     let tpl = template(cal);
     let img = render_img(&p, &tpl);
-    assert!(count(&img, ink()) > 400, "month calendar must render header + grid + day numbers");
+    assert!(
+        count(&img, ink()) > 400,
+        "month calendar must render header + grid + day numbers"
+    );
 }
 
 #[test]
@@ -217,8 +242,10 @@ fn crop_override_reduces_dimensions() {
         format: OutputFormat::Png,
         sampling: Sampling::Full,
         overrides: Some(
-            framegeist_core::TemplateOverrides::from_json(r##"{"crop":{"x":0,"y":0,"w":0.5,"h":0.5}}"##)
-                .expect("overrides"),
+            framegeist_core::TemplateOverrides::from_json(
+                r##"{"crop":{"x":0,"y":0,"w":0.5,"h":0.5}}"##,
+            )
+            .expect("overrides"),
         ),
         ..RenderOptions::default()
     };
@@ -240,7 +267,8 @@ fn metadata_switch_strips_exif() {
         &tpl,
         &RenderOptions {
             overrides: Some(
-                framegeist_core::TemplateOverrides::from_json(r##"{"metadata":false}"##).expect("ov"),
+                framegeist_core::TemplateOverrides::from_json(r##"{"metadata":false}"##)
+                    .expect("ov"),
             ),
             ..RenderOptions::default()
         },
@@ -274,7 +302,10 @@ fn legacy_renderer_still_paints_text() {
         },
     );
     assert!(count(&modern, ink()) > 100, "cosmic-text path paints text");
-    assert!(count(&legacy, ink()) > 100, "legacy ab_glyph path still paints text");
+    assert!(
+        count(&legacy, ink()) > 100,
+        "legacy ab_glyph path still paints text"
+    );
 }
 
 #[test]
@@ -287,7 +318,7 @@ fn free_collage_positions_items_and_honors_z() {
           {"photo":0,"x":0.25,"y":0.5,"w":0.4,"z":1},
           {"photo":1,"x":0.75,"y":0.5,"w":0.4,"z":2}
         ]}"##
-        .as_bytes(),
+            .as_bytes(),
     )
     .expect("spec");
     let opts = RenderOptions {
@@ -310,9 +341,8 @@ fn free_collage_positions_items_and_honors_z() {
 
 #[test]
 fn free_collage_rejects_bad_spec() {
-    let bad = framegeist_core::free_collage::load_free_spec(
-        br##"{"width":10,"height":10,"items":[]}"##,
-    );
+    let bad =
+        framegeist_core::free_collage::load_free_spec(br##"{"width":10,"height":10,"items":[]}"##);
     assert!(bad.is_err(), "canvas below 64px must be rejected");
 }
 
