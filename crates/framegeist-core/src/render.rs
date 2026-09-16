@@ -4,8 +4,10 @@ use ab_glyph::{Font, PxScale, ScaleFont};
 use image::{GenericImage, ImageBuffer, Rgba, RgbaImage};
 use imageproc::geometric_transformations::{rotate_about_center, Interpolation};
 
-use crate::exif::{cleaned_exif_tiff_full, probe_exif, ExifInfo};
-use crate::sandbox::eval_expr;
+use crate::exif::{
+    cleaned_exif_tiff_whitelist, passthrough_exif_tiff, probe_exif, ExifInfo, MetadataReport,
+};
+use crate::sandbox::eval_expr_locale;
 use crate::template::{
     Anchor, BgKind, CanvasMode, ChipShape, ImageLayer, Layer, PaletteLayer, ShapeKind, ShapeLayer,
     Template, TemplateOverrides, TextLayer,
@@ -17,6 +19,10 @@ use crate::{encode, Error, Result};
 pub enum OutputFormat {
     Jpeg,
     Png,
+    /// v0.6.0 Q10: lossy AVIF (ravif, pure Rust; wasm-friendly).
+    Avif,
+    /// v0.6.0 Q10: lossless WebP.
+    Webp,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -995,18 +1001,20 @@ fn adapt_text_color(preferred: [u8; 4], bg_lum: f32, force_auto: bool) -> [u8; 4
     }
 }
 
-fn text_lines(layer: &TextLayer, info: &ExifInfo) -> Vec<String> {
+fn text_lines(layer: &TextLayer, info: &ExifInfo, locale: &str) -> Vec<String> {
     layer
         .content
         .iter()
-        .filter_map(|item| eval_expr(&item.expr, info).or_else(|| item.fallback.clone()))
+        .filter_map(|item| {
+            eval_expr_locale(&item.expr, info, locale).or_else(|| item.fallback.clone())
+        })
         .filter(|s| !s.is_empty())
         .collect()
 }
 
 /// v0.5.0: public wrapper for the editor box calculations.
-pub(crate) fn text_lines_public(layer: &TextLayer, info: &ExifInfo) -> Vec<String> {
-    text_lines(layer, info)
+pub(crate) fn text_lines_public(layer: &TextLayer, info: &ExifInfo, locale: &str) -> Vec<String> {
+    text_lines(layer, info, locale)
 }
 
 /// Layout of a drawn text layer's first line (for attached logo placement).
@@ -1309,7 +1317,13 @@ fn draw_text_layer_v5(
     overrides: Option<&TemplateOverrides>,
     opts: &RenderOptions,
 ) -> Option<TextLayout> {
-    let mut lines = text_lines(layer, info);
+    let mut lines = text_lines(
+        layer,
+        info,
+        overrides
+            .and_then(|o| o.date_locale.as_deref())
+            .unwrap_or(""),
+    );
     if lines.is_empty() {
         return None;
     }
@@ -1381,6 +1395,7 @@ fn draw_text_layer_v5(
             "right"
         }),
         max_width: wrap,
+        features: &layer.features,
     };
     let mut raster = shaper.shape(&request(size_px, wrap_width))?;
 
@@ -1543,7 +1558,13 @@ fn draw_text_layer_legacy(
     geo: &CanvasGeometry,
     overrides: Option<&TemplateOverrides>,
 ) -> Option<TextLayout> {
-    let lines = text_lines(layer, info);
+    let lines = text_lines(
+        layer,
+        info,
+        overrides
+            .and_then(|o| o.date_locale.as_deref())
+            .unwrap_or(""),
+    );
     if lines.is_empty() {
         return None;
     }
@@ -2375,20 +2396,23 @@ pub(crate) fn decode_oriented(
     }
     let rgba = img.to_rgba8();
     let (w, h) = rgba.dimensions();
-    match max_edge {
+    let mut out = match max_edge {
         Some(cap) if w.max(h) > cap => {
             let scale = cap as f64 / w.max(h) as f64;
             let nw = ((w as f64) * scale).ceil().max(1.0) as u32;
             let nh = ((h as f64) * scale).ceil().max(1.0) as u32;
-            Ok(image::imageops::resize(
-                &rgba,
-                nw,
-                nh,
-                image::imageops::FilterType::Triangle,
-            ))
+            image::imageops::resize(&rgba, nw, nh, image::imageops::FilterType::Triangle)
         }
-        _ => Ok(rgba),
+        _ => rgba,
+    };
+    // v0.6.0: bring tagged sources (Display P3/Adobe RGB/…) into sRGB so the
+    // rendered pixels and the untagged sRGB export describe the same color.
+    if let Some(icc) = crate::photo_meta::raw_icc(photo) {
+        if let Ok(converted) = crate::color::convert_to_srgb_rgba(&out, &icc) {
+            out = converted;
+        }
     }
+    Ok(out)
 }
 
 /// Flatten RGBA over white, dropping alpha (JPEG has no alpha channel).
@@ -2427,6 +2451,9 @@ pub fn render_rgba(photo: &[u8], template: &Template, opts: &RenderOptions) -> R
     let rgba = apply_crop(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
     let mut info = probe_exif(photo)?;
     apply_model_map(&mut info, &opts.model_map);
+    if let Some(map) = opts.overrides.as_ref().and_then(|o| o.exif.as_ref()) {
+        info.apply_overrides(map);
+    }
     render_rgba_with_image(&rgba, template, &info, opts)
 }
 
@@ -2793,6 +2820,9 @@ pub fn render_from_rgba(
         None => ExifInfo::default(),
     };
     apply_model_map(&mut info, &opts.model_map);
+    if let Some(map) = opts.overrides.as_ref().and_then(|o| o.exif.as_ref()) {
+        info.apply_overrides(map);
+    }
     let img = apply_crop(img, opts.overrides.as_ref().and_then(|o| o.crop));
     let canvas = render_rgba_with_image(&img, template, &info, opts)?;
     encode_output(&canvas, photo_bytes, opts)
@@ -2833,18 +2863,7 @@ pub(crate) fn encode_output(
             let flat = flatten_over_white(canvas);
             let mut out = encode::encode_jpeg_quality100(&flat)?;
             let report = if write_exif {
-                match photo {
-                    Some(bytes) => {
-                        match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
-                            Some((tiff, report)) => {
-                                encode::splice_exif_app1(&mut out, &tiff)?;
-                                Some(report)
-                            }
-                            None => None,
-                        }
-                    }
-                    None => None,
-                }
+                write_metadata(photo, opts, cw, ch, &mut out, encode::splice_exif_app1)?
             } else {
                 None
             };
@@ -2853,23 +2872,90 @@ pub(crate) fn encode_output(
         OutputFormat::Png => {
             let mut out = encode::encode_png(canvas)?;
             let report = if write_exif {
-                match photo {
-                    Some(bytes) => {
-                        match cleaned_exif_tiff_full(bytes, Some((cw, ch)), opts.keep_gps)? {
-                            Some((tiff, report)) => {
-                                encode::splice_png_exif(&mut out, &tiff)?;
-                                Some(report)
-                            }
-                            None => None,
-                        }
-                    }
-                    None => None,
-                }
+                write_metadata(photo, opts, cw, ch, &mut out, encode::splice_png_exif)?
             } else {
                 None
             };
             Ok((out, report))
         }
+        // AVIF/WebP carry EXIF through their own container chunks, so the
+        // metadata blob must be computed *before* encoding (no byte splicing).
+        // Both encoders embed a raw EXIF TIFF block: WebP as an `EXIF` RIFF
+        // chunk (libwebp convention, no `Exif\0\0` prefix) and AVIF as an
+        // `Exif` item (ravif/avif-serialize adds the 4-byte offset header).
+        OutputFormat::Avif => {
+            let (tiff, report) = if write_exif {
+                match metadata_tiff(photo, opts, cw, ch)? {
+                    Some((tiff, report)) => (Some(tiff), Some(report)),
+                    None => (None, None),
+                }
+            } else {
+                (None, None)
+            };
+            let out = encode::encode_avif(canvas, tiff.as_deref())?;
+            Ok((out, report))
+        }
+        OutputFormat::Webp => {
+            let (tiff, report) = if write_exif {
+                match metadata_tiff(photo, opts, cw, ch)? {
+                    Some((tiff, report)) => (Some(tiff), Some(report)),
+                    None => (None, None),
+                }
+            } else {
+                (None, None)
+            };
+            let out = encode::encode_webp_lossless(canvas, tiff.as_deref())?;
+            Ok((out, report))
+        }
+    }
+}
+
+/// EXIF blob for containers that embed metadata at encode time (AVIF/WebP).
+/// Same policy as `write_metadata`: byte-level passthrough first, whitelist
+/// rebuild as fallback.
+fn metadata_tiff(
+    photo: Option<&[u8]>,
+    opts: &RenderOptions,
+    cw: u32,
+    ch: u32,
+) -> Result<Option<(Vec<u8>, crate::exif::MetadataReport)>> {
+    let Some(bytes) = photo else {
+        return Ok(None);
+    };
+    if let Ok(Some((tiff, report))) = passthrough_exif_tiff(bytes, opts.keep_gps) {
+        return Ok(Some((tiff, report)));
+    }
+    cleaned_exif_tiff_whitelist(bytes, Some((cw, ch)), opts.keep_gps)
+}
+
+/// v0.6.0 M3 EXIF write-back. The byte-level passthrough runs first so the
+/// source EXIF (MakerNote, Fujifilm recipe, unknown vendor tags) survives
+/// verbatim while GPS/serials are stripped and Orientation is fixed to 1.
+/// The whitelist rebuild is the fallback for containers without EXIF, for
+/// malformed blocks, and when the passthrough blob would not fit (JPEG APP1
+/// 64KiB limit).
+fn write_metadata(
+    photo: Option<&[u8]>,
+    opts: &RenderOptions,
+    cw: u32,
+    ch: u32,
+    out: &mut Vec<u8>,
+    splice: fn(&mut Vec<u8>, &[u8]) -> Result<()>,
+) -> Result<Option<MetadataReport>> {
+    let Some(bytes) = photo else {
+        return Ok(None);
+    };
+    if let Ok(Some((tiff, report))) = passthrough_exif_tiff(bytes, opts.keep_gps) {
+        if splice(out, &tiff).is_ok() {
+            return Ok(Some(report));
+        }
+    }
+    match cleaned_exif_tiff_whitelist(bytes, Some((cw, ch)), opts.keep_gps)? {
+        Some((tiff, report)) => {
+            splice(out, &tiff)?;
+            Ok(Some(report))
+        }
+        None => Ok(None),
     }
 }
 

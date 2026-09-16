@@ -7,7 +7,7 @@
       "en": "Genshin · Hero Frame"
     },
     "version": "0.3.0",
-    "minEngineVersion": "0.1.0",
+    "minEngineVersion": "0.6.0",
     "author": "framegeist",
     "license": "CC0-1.0",
     "category": "game",
@@ -55,7 +55,7 @@
       "content": [
         {
           "expr": "exif.model_pretty",
-          "fallback": "Unknown Camera"
+          "fallback": "Camera"
         },
         {
           "expr": "exif.lens",
@@ -65,7 +65,10 @@
       "offset": {
         "x": 0.03,
         "y": -0.05
-      }
+      },
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "image",
@@ -115,14 +118,17 @@
       },
       "content": [
         {
-          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "expr": "date('LOCAL', exif.datetime)",
           "fallback": "2026.09.12"
         }
       ],
       "offset": {
         "x": 0.03,
         "y": -0.095
-      }
+      },
+      "features": [
+        "tnum"
+      ]
     }
   ]
 }

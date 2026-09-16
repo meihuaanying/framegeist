@@ -7,7 +7,7 @@
       "en": "Grey Mono Stack"
     },
     "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
@@ -83,9 +83,12 @@
       "align": "right",
       "content": [
         {
-          "expr": "date('YYYY.MM.DD', exif.datetime)",
+          "expr": "date('LOCAL', exif.datetime)",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     }
   ],

@@ -1,4 +1,4 @@
-use image::{DynamicImage, ImageFormat, RgbaImage};
+use image::{DynamicImage, ExtendedColorType, ImageEncoder, ImageFormat, RgbaImage};
 use std::io::Cursor;
 
 use crate::{Error, Result};
@@ -32,6 +32,52 @@ pub fn encode_png(img: &RgbaImage) -> Result<Vec<u8>> {
     DynamicImage::ImageRgba8(img.clone())
         .write_to(&mut Cursor::new(&mut out), ImageFormat::Png)
         .map_err(Error::from)?;
+    Ok(out)
+}
+
+/// v0.6.0 Q10: encode RGBA pixels as lossy AVIF (ravif, pure Rust).
+///
+/// `exif_tiff` is a raw EXIF TIFF block (no `Exif\0\0` wrapper); ravif's
+/// serializer prepends the AVIF `Exif` item offset header that the HEIF/AVIF
+/// spec requires for TIFF payloads. `None` skips metadata entirely.
+pub fn encode_avif(img: &RgbaImage, exif_tiff: Option<&[u8]>) -> Result<Vec<u8>> {
+    let mut out = Vec::new();
+    let mut encoder = image::codecs::avif::AvifEncoder::new_with_speed_quality(&mut out, 6, 85);
+    if let Some(tiff) = exif_tiff {
+        ImageEncoder::set_exif_metadata(&mut encoder, tiff.to_vec())
+            .map_err(|e| Error::Encode(e.to_string()))?;
+    }
+    encoder
+        .write_image(
+            img.as_raw(),
+            img.width(),
+            img.height(),
+            ExtendedColorType::Rgba8,
+        )
+        .map_err(Error::from)?;
+    Ok(out)
+}
+
+/// v0.6.0 Q10: encode RGBA pixels as lossless WebP (image-webp VP8L).
+///
+/// The EXIF chunk payload is the raw TIFF block: libwebp's imageio stores
+/// APP1 payloads without the `Exif\0\0` signature and the RIFF container
+/// spec treats the chunk as the Exif block itself.
+pub fn encode_webp_lossless(img: &RgbaImage, exif_tiff: Option<&[u8]>) -> Result<Vec<u8>> {
+    let mut out = Vec::new();
+    let mut encoder = image::codecs::webp::WebPEncoder::new_lossless(Cursor::new(&mut out));
+    if let Some(tiff) = exif_tiff {
+        ImageEncoder::set_exif_metadata(&mut encoder, tiff.to_vec())
+            .map_err(|e| Error::Encode(e.to_string()))?;
+    }
+    ImageEncoder::write_image(
+        encoder,
+        img.as_raw(),
+        img.width(),
+        img.height(),
+        ExtendedColorType::Rgba8,
+    )
+    .map_err(Error::from)?;
     Ok(out)
 }
 

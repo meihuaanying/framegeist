@@ -7,7 +7,7 @@
       "en": "Arknights · Poster Card"
     },
     "version": "0.3.0",
-    "minEngineVersion": "0.1.0",
+    "minEngineVersion": "0.6.0",
     "author": "framegeist",
     "license": "CC0-1.0",
     "category": "game",
@@ -55,7 +55,7 @@
       "content": [
         {
           "expr": "exif.model_pretty",
-          "fallback": "Unknown Camera"
+          "fallback": "Camera"
         },
         {
           "expr": "exif.lens",
@@ -65,7 +65,10 @@
       "offset": {
         "x": 0,
         "y": -0.08
-      }
+      },
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "image",

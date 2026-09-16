@@ -114,6 +114,12 @@
           },
           "lineHeight": { "type": "number", "minimum": 0.5, "maximum": 4 },
           "letterSpacing": { "type": "number", "minimum": -0.05, "maximum": 0.5 },
+          "features": {
+            "type": "array",
+            "maxItems": 8,
+            "items": { "enum": ["tnum", "lnum", "onum", "pnum", "smcp", "c2sc", "liga", "kern", "frac", "ss01", "ss02"] },
+            "description": "v0.6.0 OpenType features (e.g. tabular numbers on EXIF lines)."
+          },
           "rotation": { "type": "number", "minimum": -360, "maximum": 360 },
           "align": { "enum": ["left", "center", "right"] },
           "effects": {
@@ -362,7 +368,20 @@
         "flipVertical": { "type": "boolean" },
         "showLogo": { "type": "boolean" },
         "metadata": { "type": "boolean", "description": "保留输出 EXIF 元数据（默认 true；GPS 仍受 keep_gps 独立控制）。" },
-        "crop": { "$ref": "#/definitions/CropRect" }
+        "crop": { "$ref": "#/definitions/CropRect" },
+        "dateLocale": {
+          "enum": ["zh", "en"],
+          "description": "v0.6.0: language for `date('LOCAL', …)` captions (missing = neutral ISO)."
+        },
+        "exif": {
+          "type": "object",
+          "maxProperties": 48,
+          "description": "v0.6.0 preview-only EXIF values (editor sample fill); whitelisted scalar keys, never written to the photo.",
+          "propertyNames": {
+            "enum": ["make", "model", "model_pretty", "lens", "focal", "focal_mm", "aperture", "shutter", "iso", "datetime", "brand_slug", "lens_slug", "lens_series", "film_mode", "wb_mode", "wb_shift_r", "wb_shift_b", "grain", "color_chrome", "chrome_fx_blue", "dynamic_range", "highlight_tone", "shadow_tone", "fuji_sharpness", "fuji_saturation", "fuji_nr", "fuji_clarity"]
+          },
+          "additionalProperties": { "type": ["string", "number", "boolean"] }
+        }
       }
     }
   }

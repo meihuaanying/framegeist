@@ -6,7 +6,8 @@
     "orientation": "landscape",
     "luminance": 0.2072,
     "saturation": 0.4671,
-    "sha256": "cbc4cff6bf7ec597c2c21db1ef06ef1b762d0eee6e39abf085537ab55fadadd9"
+    "sha256": "cf6817566f3d14fad5fca42c998d58a54c35e0538a2ab4ac77266e058dad2bf3",
+    "exif_source": "nikon-z6ii"
   },
   "black-frame-gold-line-01": {
     "file": "showcase/black-frame-gold-line-01.jpg",
@@ -15,7 +16,8 @@
     "orientation": "landscape",
     "luminance": 0.2839,
     "saturation": 0.5804,
-    "sha256": "43acaa3ade6e10c93dff65560f74cbc6131ca82910e39b5ee5026f3ca0f22ad4"
+    "sha256": "3b2ecd981d9011bef264b30d867c20b974893f5e846bf3aaed9682368ff8c822",
+    "exif_source": "canon-r7"
   },
   "black-frame-inner-rule-01": {
     "file": "showcase/black-frame-inner-rule-01.jpg",
@@ -24,7 +26,8 @@
     "orientation": "landscape",
     "luminance": 0.1386,
     "saturation": 0.7887,
-    "sha256": "2d7fd0c3fba7a40d25068892f65e8b734312bffd25dbc03bd901a132522dd6ba"
+    "sha256": "b809b07b898ed5638949f706793990342f2ce5c762553e59a25b72ca34553e00",
+    "exif_source": "nikon-z6ii"
   },
   "black-frame-mono-slate-01": {
     "file": "showcase/black-frame-mono-slate-01.jpg",
@@ -33,7 +36,8 @@
     "orientation": "landscape",
     "luminance": 0.2101,
     "saturation": 0.4229,
-    "sha256": "d018a2ded8ada73bf610e027cb7b660656f1d9939d43271ad31612c27c6453a8"
+    "sha256": "7cf995376fcefbd6cc4e08ef59e318168b372ac60f8fcbcaee7a60cfdd04da40",
+    "exif_source": "canon-r7"
   },
   "black-frame-side-stack-01": {
     "file": "showcase/black-frame-side-stack-01.jpg",
@@ -42,7 +46,8 @@
     "orientation": "landscape",
     "luminance": 0.2781,
     "saturation": 0,
-    "sha256": "c106b8216409e9efc50aa57c278f50b25595cc84f842e8fef0cd968a7ae68186"
+    "sha256": "ef296121f74ff73e42c68c2cde79530b91dc370493206b64d26f6d674e3a5795",
+    "exif_source": "nikon-z6ii"
   },
   "black-frame-two-line-01": {
     "file": "showcase/black-frame-two-line-01.jpg",
@@ -51,7 +56,8 @@
     "orientation": "landscape",
     "luminance": 0.2262,
     "saturation": 0.2912,
-    "sha256": "dadb4ec74b48b03431d9788e53c9de4a57a7d8541548f4af61c639a3df2fe59a"
+    "sha256": "17134fd24ebbfd775093e1dce1c679489ede94e9f685d256504a36819b022ee3",
+    "exif_source": "canon-r7"
   },
   "blur-bg-brandbar-02": {
     "file": "showcase/blur-bg-brandbar-02.jpg",
@@ -60,7 +66,8 @@
     "orientation": "landscape",
     "luminance": 0.0995,
     "saturation": 0.2132,
-    "sha256": "47b1a3dec3ce77e8f931b3710be6cf938daed8c4e77c33896453a78d50816aa6"
+    "sha256": "93859ccbc55b9bf71fdaf0f7b6b022c11765d21cff647da88170c847569c7332",
+    "exif_source": "nikon-z6ii"
   },
   "blur-bg-card-03": {
     "file": "showcase/blur-bg-card-03.jpg",
@@ -69,7 +76,8 @@
     "orientation": "landscape",
     "luminance": 0.0551,
     "saturation": 0.1174,
-    "sha256": "5ff57c801c39f544ac224bd30b246d3b8c7820044aa2895fb0a235077446b13e"
+    "sha256": "b7be8cc0fef6c252041d177a4211977ecca089ebe50868ffb19523159470d5f7",
+    "exif_source": "canon-r7"
   },
   "blur-bg-center-01": {
     "file": "showcase/blur-bg-center-01.jpg",
@@ -78,7 +86,8 @@
     "orientation": "landscape",
     "luminance": 0.1907,
     "saturation": 0,
-    "sha256": "38d7e35627c5447b1a2f1fa5a8d95813a6d4c98e5f53744c7ce70ff45b8d127e"
+    "sha256": "ee6f51c21c1eea48df43e952abf4f654073062d6d42e305379011d72b35fd5d1",
+    "exif_source": "nikon-z6ii"
   },
   "blur-bg-topcap-04": {
     "file": "showcase/blur-bg-topcap-04.jpg",
@@ -87,7 +96,8 @@
     "orientation": "landscape",
     "luminance": 0.2608,
     "saturation": 0.3919,
-    "sha256": "046cac44b4867687d6dc251a172ccaec4b8de99287a172ff33f1022a2c6a213d"
+    "sha256": "0a99c10294033b3aff8285a33868f6faeb7140cfa8a8e6279a80ea5bd61b39f8",
+    "exif_source": "canon-r7"
   },
   "borderless-center-caption-01": {
     "file": "showcase/borderless-center-caption-01.jpg",
@@ -96,7 +106,8 @@
     "orientation": "landscape",
     "luminance": 0.4965,
     "saturation": 0.3739,
-    "sha256": "6bab621d100971b76e253f4ee240600284f1007a8db51469860392ae4330db9e"
+    "sha256": "b035264c7ebdc0e43d8ed163cd25a3e42125e76cccf151c1d1c9564be7f24e20",
+    "exif_source": "nikon-z6ii"
   },
   "borderless-corner-stack-01": {
     "file": "showcase/borderless-corner-stack-01.jpg",
@@ -105,7 +116,8 @@
     "orientation": "landscape",
     "luminance": 0.484,
     "saturation": 0.341,
-    "sha256": "c071296fb7422aee6f989ee288b85ea18480100830f3b27b7f508e162f22ed5d"
+    "sha256": "094e760077d61022fdbaab8e7588bcde00540671d97b9324fd477860ce7bacc1",
+    "exif_source": "canon-r7"
   },
   "borderless-date-hero-01": {
     "file": "showcase/borderless-date-hero-01.jpg",
@@ -114,7 +126,8 @@
     "orientation": "landscape",
     "luminance": 0.5703,
     "saturation": 0.1544,
-    "sha256": "a53af4de7c1b2ea853a303262f6ea719670e0b1e9743b6c32f46074ee4b6cf73"
+    "sha256": "a1a12a7c31abcd92f399e7fae417307dbe58c270e51ec6f673e4ade56c524b28",
+    "exif_source": "nikon-z6ii"
   },
   "borderless-dot-corners-01": {
     "file": "showcase/borderless-dot-corners-01.jpg",
@@ -123,7 +136,8 @@
     "orientation": "landscape",
     "luminance": 0.566,
     "saturation": 0.1799,
-    "sha256": "6aa17efd3274a8f5bfd9e51150ec11ba93683a64d32a5695ca6eba0e49effb82"
+    "sha256": "20281970f23e6902f5615618d179e908de06e093f64b7d02f4c93fe0a058bef7",
+    "exif_source": "canon-r7"
   },
   "borderless-geo-pin-01": {
     "file": "showcase/borderless-geo-pin-01.jpg",
@@ -132,7 +146,8 @@
     "orientation": "landscape",
     "luminance": 0.5024,
     "saturation": 0.3743,
-    "sha256": "abce832256f2053a096843e47007088c2a17e831109b78de04ee315f71c61814"
+    "sha256": "3dca59116356aec29ee8ae702b87bc1609c76325f8c80034126bbe84c10a37d8",
+    "exif_source": "nikon-z6ii"
   },
   "borderless-lowleft-pair-01": {
     "file": "showcase/borderless-lowleft-pair-01.jpg",
@@ -141,7 +156,8 @@
     "orientation": "landscape",
     "luminance": 0.4691,
     "saturation": 0.225,
-    "sha256": "70c3da5e1283f47927fafaf6ffb306f59417d5d7b7ba460eaec86c5de2814499"
+    "sha256": "fec722e4164036097c179bd93424629d4e96cef232ade161c243cf947319d8b7",
+    "exif_source": "canon-r7"
   },
   "borderless-one-liner-01": {
     "file": "showcase/borderless-one-liner-01.jpg",
@@ -150,7 +166,8 @@
     "orientation": "landscape",
     "luminance": 0.5747,
     "saturation": 0.1342,
-    "sha256": "6f4f1fd73b85c74eea2498b520856a5257f6e169f67d3257896a49371eac26fe"
+    "sha256": "90b46c4ddd875e678a72b127c6abc1898c32117bed7d7802052d14463294e45b",
+    "exif_source": "nikon-z6ii"
   },
   "borderless-quad-anchors-01": {
     "file": "showcase/borderless-quad-anchors-01.jpg",
@@ -159,7 +176,8 @@
     "orientation": "landscape",
     "luminance": 0.4386,
     "saturation": 0.4268,
-    "sha256": "e4d5e5672f6580a09a799a4348a6e8c9af74c9b024905e9bcd22e4640f660f96"
+    "sha256": "31241bd7c3c7bed3119248cc32871ed1d7faa05292b7864088bb7f746281ac2a",
+    "exif_source": "canon-r7"
   },
   "borderless-right-roll-01": {
     "file": "showcase/borderless-right-roll-01.jpg",
@@ -168,7 +186,8 @@
     "orientation": "landscape",
     "luminance": 0.4936,
     "saturation": 0.3256,
-    "sha256": "7cbf82b963d933d766dcf851faf222ed4a711b1b7dbdf67ec3b021e46d7ee6b0"
+    "sha256": "08b7c59d91d0c40a3f06623351f852fba1937dda2162ccd2dbcfd713197b0027",
+    "exif_source": "nikon-z6ii"
   },
   "borderless-signoff-block-01": {
     "file": "showcase/borderless-signoff-block-01.jpg",
@@ -177,7 +196,8 @@
     "orientation": "landscape",
     "luminance": 0.4937,
     "saturation": 0.4864,
-    "sha256": "c9af89caf7995a0de53084df836df36ab20a3ac74e9b98752974f149e6e12e52"
+    "sha256": "5bbc96a62d04fe26af39ef1500b258836da63b1bc6c1388bacb34c7e16e814e2",
+    "exif_source": "canon-r7"
   },
   "borderless-vertical-spine-01": {
     "file": "showcase/borderless-vertical-spine-01.jpg",
@@ -186,7 +206,8 @@
     "orientation": "landscape",
     "luminance": 0.6045,
     "saturation": 0.1096,
-    "sha256": "39e8316bed8f7b25a63c39adc37a9ad02745c0303d29d29e704e9f2db2119684"
+    "sha256": "0f1fcda27a4c83b02f13974d3de5d059ca063d1253634a30fd0cb3591acacbc6",
+    "exif_source": "nikon-z6ii"
   },
   "calendar-center-rule-01": {
     "file": "showcase/calendar-center-rule-01.jpg",
@@ -195,7 +216,8 @@
     "orientation": "portrait",
     "luminance": 0.5059,
     "saturation": 0.0903,
-    "sha256": "a9a96e8b807b2b29c4a3dc8fe89a5fceeea057f26e79a6eb33119e54b3e1108d"
+    "sha256": "f7164b124650f520f1b61313d110c40497cbe36d32d1ac28d81d9d25d217d147",
+    "exif_source": "sony-a7r3"
   },
   "calendar-corner-day-01": {
     "file": "showcase/calendar-corner-day-01.jpg",
@@ -204,7 +226,8 @@
     "orientation": "portrait",
     "luminance": 0.5163,
     "saturation": 0.218,
-    "sha256": "78367de2bd58c443a03334cd06e0b316d5d05d811f8026f8088a6fe707b6eb65"
+    "sha256": "b280ebcc20d5824bf1a6d45d9fc5867f3b3b56115acb5f5d698d385a7a929882",
+    "exif_source": "sony-a7r3"
   },
   "calendar-portrait-stack-01": {
     "file": "showcase/calendar-portrait-stack-01.jpg",
@@ -213,7 +236,8 @@
     "orientation": "portrait",
     "luminance": 0.5631,
     "saturation": 0.4359,
-    "sha256": "2ced9356873cdfc495eef9a43a459326312b96ccd18c130872e0a80fc34ea510"
+    "sha256": "8d177dbd900c8fb9e81c1c0901eed9db76c23f03050f08d513ce97964ea41008",
+    "exif_source": "sony-a7r3"
   },
   "calendar-rail-date-01": {
     "file": "showcase/calendar-rail-date-01.jpg",
@@ -222,7 +246,8 @@
     "orientation": "portrait",
     "luminance": 0.5187,
     "saturation": 0.2884,
-    "sha256": "8db7b569fec1afa76feb10b553408cc60a79d0be673ef890f75bcaefc834672d"
+    "sha256": "d6e2b514269851583f12261a2b10b7243eb68fb4e20dd8c630a931d5ab8f4b27",
+    "exif_source": "sony-a7r3"
   },
   "calendar-split-columns-01": {
     "file": "showcase/calendar-split-columns-01.jpg",
@@ -231,7 +256,8 @@
     "orientation": "portrait",
     "luminance": 0.3572,
     "saturation": 0.2351,
-    "sha256": "f3ae3476c85114eab87533d3a34570fa131e0c6fb6970a8fbbc2d946b7d706a5"
+    "sha256": "f4cba4560b2a116e417879e70da2ae5e76d8787e09df30f19a781cede0fcb15e",
+    "exif_source": "sony-a7r3"
   },
   "calendar-strip-date-01": {
     "file": "showcase/calendar-strip-date-01.jpg",
@@ -240,7 +266,8 @@
     "orientation": "portrait",
     "luminance": 0.5004,
     "saturation": 0.0997,
-    "sha256": "c4c0fed649d98c62d29e49e234da5e388fef8433ace3d002381a2206b2b1d2f9"
+    "sha256": "48551b5247db4d47bc628747ad01f6b3ed1661a0c94cf420464ee6db2ea6921f",
+    "exif_source": "sony-a7r3"
   },
   "camera-corner-body-03": {
     "file": "showcase/camera-corner-body-03.jpg",
@@ -249,7 +276,8 @@
     "orientation": "landscape",
     "luminance": 0.5296,
     "saturation": 0.5547,
-    "sha256": "291757da6baf6c6c0f38e2636aee848a18174504c5475db30ac02d3cceea49d0"
+    "sha256": "e6d2db631a8426e3eb7dcd037d7b8cb727024acc86631b5c05834abbe66c4479",
+    "exif_source": "nikon-z6ii"
   },
   "camera-lens-dial-06": {
     "file": "showcase/camera-lens-dial-06.jpg",
@@ -258,7 +286,8 @@
     "orientation": "landscape",
     "luminance": 0.4603,
     "saturation": 0.243,
-    "sha256": "e7ee4f2b4b9483d48d5b07d9ae63484d34fabaf6669d0a9d31f9812e699adaa3"
+    "sha256": "96d18b4452a0ebbcec9ead3570a423b808845430cff8e0a3baf6d2c02095a131",
+    "exif_source": "canon-r7"
   },
   "camera-retro-sidecar-04": {
     "file": "showcase/camera-retro-sidecar-04.jpg",
@@ -267,7 +296,8 @@
     "orientation": "landscape",
     "luminance": 0.6111,
     "saturation": 0.3227,
-    "sha256": "44af9aa3853927919ddee04a2d3913c08ab78339e03c9ffafa90369db0b18753"
+    "sha256": "224b88e4f970615134252d052619ff854cf95c01cbdc7ad9fbfbdd5901f61baf",
+    "exif_source": "nikon-z6ii"
   },
   "camera-ricoh-slimline-08": {
     "file": "showcase/camera-ricoh-slimline-08.jpg",
@@ -276,7 +306,8 @@
     "orientation": "landscape",
     "luminance": 0.4209,
     "saturation": 0.508,
-    "sha256": "65e955064180eca8fde38a763f1edb80842618ab10a66dfed450ab22afa2f282"
+    "sha256": "76d20c7b4c37586601e531bfdb4e10179e48f09daaea64365d9b1f3eb71d0f74",
+    "exif_source": "canon-r7"
   },
   "camera-series-emblem-07": {
     "file": "showcase/camera-series-emblem-07.jpg",
@@ -285,7 +316,8 @@
     "orientation": "landscape",
     "luminance": 0.4773,
     "saturation": 0.1983,
-    "sha256": "76f08ea5076dd8be8535ca55656666699c0b20228f382938477c0f919080b2fd"
+    "sha256": "0111ce91d671da6ded16aed4b730c4abe598f96f2d32ed82f980e0869df24898",
+    "exif_source": "nikon-z6ii"
   },
   "camera-stencil-mono-05": {
     "file": "showcase/camera-stencil-mono-05.jpg",
@@ -294,7 +326,8 @@
     "orientation": "landscape",
     "luminance": 0.5375,
     "saturation": 0.5517,
-    "sha256": "e0f2a6bd2c862c22b53fc27f95385b6934fffbabd5c7810bea40bfd982ffd5c4"
+    "sha256": "05cf83b2208637e8bd35eb646ac6d0f7b616c23cf5fd0b54294245f8b69db8f6",
+    "exif_source": "canon-r7"
   },
   "camera-topdeck-bar-01": {
     "file": "showcase/camera-topdeck-bar-01.jpg",
@@ -303,7 +336,8 @@
     "orientation": "landscape",
     "luminance": 0.4829,
     "saturation": 0.0906,
-    "sha256": "05a6f289a604e8320801fa1ef562a434feaae3175b0913b0c9d38a286021f1da"
+    "sha256": "feb24a564804b9a2e0e20a3b56d60696de004d7dc2b02fb9783a0e1d74802e7e",
+    "exif_source": "nikon-z6ii"
   },
   "classic-watermark-black-bar": {
     "file": "showcase/classic-watermark-black-bar.jpg",
@@ -312,7 +346,8 @@
     "orientation": "landscape",
     "luminance": 0.4451,
     "saturation": 0.3562,
-    "sha256": "5ae24ac02e7c292140c39b157aded02945e4714a3953b3bb53593e3403cba44a"
+    "sha256": "ae4928bfce4c1a527e884de3ce5f143bc3a023fd0d61889b2a2dd7b023229db7",
+    "exif_source": "canon-r7"
   },
   "classic-watermark-brand-center": {
     "file": "showcase/classic-watermark-brand-center.jpg",
@@ -321,7 +356,8 @@
     "orientation": "landscape",
     "luminance": 0.5267,
     "saturation": 0.3654,
-    "sha256": "359912dcbc2c388652903ecab3f21aa87e637b7a8061c2f14daef2502c543163"
+    "sha256": "c5b126ad42b730b0ae53f3036e2c84d948d41752ce7b7886313b25f67195ad5d",
+    "exif_source": "nikon-z6ii"
   },
   "classic-watermark-date-right": {
     "file": "showcase/classic-watermark-date-right.jpg",
@@ -330,7 +366,8 @@
     "orientation": "landscape",
     "luminance": 0.4374,
     "saturation": 0.2431,
-    "sha256": "0742ec54aeece740bda057ba412aa8ade6cc7cd9d234f56c8b55a5cb2f31965a"
+    "sha256": "2b2247803e60bd791106f7726e6f7821a9b2e551d6f749d999eb8fc08410f557",
+    "exif_source": "canon-r7"
   },
   "classic-watermark-double-row": {
     "file": "showcase/classic-watermark-double-row.jpg",
@@ -339,7 +376,8 @@
     "orientation": "landscape",
     "luminance": 0.4235,
     "saturation": 0.1045,
-    "sha256": "cf3aff11a78b7c9f5f0939003ddafcc03da2fef23bac7da0cc74debc65fb00de"
+    "sha256": "bb6627e878cd5018a0a3bc27598d517af50b5a011fb4fa1ff9ee2234f499ba32",
+    "exif_source": "nikon-z6ii"
   },
   "classic-watermark-hairline-thin": {
     "file": "showcase/classic-watermark-hairline-thin.jpg",
@@ -348,7 +386,8 @@
     "orientation": "landscape",
     "luminance": 0.6025,
     "saturation": 0.2643,
-    "sha256": "87cde9e001aa4c63e50156d73014d21da36a1be5c7e3cb900a794b6317abb404"
+    "sha256": "e83a6faad4afe593f81fda29164ec4a2c1f6650d9b3783855f5ab1d765b86925",
+    "exif_source": "canon-r7"
   },
   "classic-watermark-mono-stack": {
     "file": "showcase/classic-watermark-mono-stack.jpg",
@@ -357,7 +396,8 @@
     "orientation": "landscape",
     "luminance": 0.5335,
     "saturation": 0.1598,
-    "sha256": "ada54102bbe18effdb5b79b5c9fe5d53b151b680c966df6d3b08d49bde03c2e8"
+    "sha256": "2dab103cdbb4725e95849a0d560ae479cbf56b0b6787a4ce5aa59b88c6f7c080",
+    "exif_source": "nikon-z6ii"
   },
   "classic-watermark-red-dot": {
     "file": "showcase/classic-watermark-red-dot.jpg",
@@ -366,7 +406,8 @@
     "orientation": "landscape",
     "luminance": 0.4237,
     "saturation": 0.2784,
-    "sha256": "7019f4f9a66682834c70877b96686ada81d10c4b293e4dd314fbcefcec34d3e0"
+    "sha256": "1cb5e8d4f0284f643c6e64c2f56810251910c0d53edcdf874c3e6e06b4d2d4bf",
+    "exif_source": "canon-r7"
   },
   "classic-watermark-single-row": {
     "file": "showcase/classic-watermark-single-row.jpg",
@@ -375,7 +416,8 @@
     "orientation": "landscape",
     "luminance": 0.4972,
     "saturation": 0.2302,
-    "sha256": "ea66782d99ca2394606cc9badf80e842bb8acacef7b8a0a5bd3c6abf1fa6624a"
+    "sha256": "3361572539356c973aa06eec61cd5764d3bcabd6575344925e1ff0cb74bb9dd4",
+    "exif_source": "nikon-z6ii"
   },
   "colorcard-column-02": {
     "file": "showcase/colorcard-column-02.jpg",
@@ -384,7 +426,8 @@
     "orientation": "landscape",
     "luminance": 0.2886,
     "saturation": 0.566,
-    "sha256": "e3f404f6f39eb9ad81c798c3c4afae11c6f807d3dd19017e9582c8b821e4a15e"
+    "sha256": "36f975beae1c12e37e29ef6ddc0f85f2442ad3a39e33e61f274825ccc38949fe",
+    "exif_source": "canon-r7"
   },
   "colorcard-cream-date-04": {
     "file": "showcase/colorcard-cream-date-04.jpg",
@@ -393,7 +436,8 @@
     "orientation": "landscape",
     "luminance": 0.3884,
     "saturation": 0.7579,
-    "sha256": "e814e75608a775f8994f2e6974257b5a67a97e04b08a44f1fb53a90caa7e1cc5"
+    "sha256": "adce96c629de36df788ad277f1aa96edcc0c62bafd51271a148367c364f10a1d",
+    "exif_source": "nikon-z6ii"
   },
   "colorcard-diamonds-03": {
     "file": "showcase/colorcard-diamonds-03.jpg",
@@ -402,7 +446,8 @@
     "orientation": "landscape",
     "luminance": 0.3581,
     "saturation": 0.4895,
-    "sha256": "9eaaa4ab95af9370156bf19e3e80a2a50db9a41f1e3cc0538fb96c043449da5e"
+    "sha256": "393a4c5c63190374ecb4e7e3bbb63b99c1c581c78392995c317e059506c55259",
+    "exif_source": "canon-r7"
   },
   "colorcard-index-05": {
     "file": "showcase/colorcard-index-05.jpg",
@@ -411,7 +456,8 @@
     "orientation": "landscape",
     "luminance": 0.2656,
     "saturation": 0.8601,
-    "sha256": "6b0fd0a00d29d3efc96fa62143db119ba4e29370934cd1ac31417ac05641f445"
+    "sha256": "36bba426cd7e273b9bcfdf560ee279e4ecc183c296429f667a5372870e3daf11",
+    "exif_source": "nikon-z6ii"
   },
   "colorcard-sunrise-chips-01": {
     "file": "showcase/colorcard-sunrise-chips-01.jpg",
@@ -420,7 +466,8 @@
     "orientation": "landscape",
     "luminance": 0.379,
     "saturation": 0.749,
-    "sha256": "41dcb8da481f473d12a75513d661f6bc5148d1165f7307c8a6e67d0cdd655b6d"
+    "sha256": "3bbb17be0344a8533d2dbcad13f457f1f042d18c3e26d8a2dd6e6c5cd559d852",
+    "exif_source": "canon-r7"
   },
   "colorcard-tint-chips-01": {
     "file": "showcase/colorcard-tint-chips-01.jpg",
@@ -429,7 +476,8 @@
     "orientation": "landscape",
     "luminance": 0.272,
     "saturation": 0.6225,
-    "sha256": "e12234c645a448ee5dd1b7d4e2496b2b0e411390917db4e8e12fded55cb664b2"
+    "sha256": "b6e53b8ac3aaaeb7238ab2e8b6ed78dc73ceaa6b8780bc2687eda12b0ea0de03",
+    "exif_source": "nikon-z6ii"
   },
   "colorful-corner-blocks-01": {
     "file": "showcase/colorful-corner-blocks-01.jpg",
@@ -438,7 +486,8 @@
     "orientation": "landscape",
     "luminance": 0.3319,
     "saturation": 0.4875,
-    "sha256": "92fc0bf75c2cce6836219594b7e3cdb224793330476d64cb05e98fe11aa88036"
+    "sha256": "338e4e53150188d14e53ff91c803f23e09b6ed4b197336252d81b8c27063237b",
+    "exif_source": "nikon-z6ii"
   },
   "colorful-dot-cluster-01": {
     "file": "showcase/colorful-dot-cluster-01.jpg",
@@ -447,7 +496,8 @@
     "orientation": "landscape",
     "luminance": 0.2733,
     "saturation": 0.9562,
-    "sha256": "dc2addefe8c6350dc11c326b83a639a8fa436026e6354e51fd53701b7a4930b6"
+    "sha256": "b6a405d6ea14ca26e8a88b0dea4637ec6dc58827d24886f7f50e79a05fc10b88",
+    "exif_source": "canon-r7"
   },
   "colorful-frame-quad-01": {
     "file": "showcase/colorful-frame-quad-01.jpg",
@@ -456,7 +506,8 @@
     "orientation": "landscape",
     "luminance": 0.2136,
     "saturation": 0.894,
-    "sha256": "e94b40b99992d7592b523b886666f9746605e78292b8339cc6ccd9982ecbaf04"
+    "sha256": "d38edd8d10affedd853a3ca5551e6e74b1d3520fd68f202c6253652559423705",
+    "exif_source": "nikon-z6ii"
   },
   "colorful-pastel-card-01": {
     "file": "showcase/colorful-pastel-card-01.jpg",
@@ -465,7 +516,8 @@
     "orientation": "landscape",
     "luminance": 0.2674,
     "saturation": 0.6344,
-    "sha256": "1f8bad907f0bc90510109eee3b3567773cd4eb7a0b84eb828a35dad3d2797742"
+    "sha256": "f26de8ef723a82c40c9e770012a60cdc4b66db68b71c1bd5d4790b33e8c2216d",
+    "exif_source": "canon-r7"
   },
   "colorful-rainbow-lines-01": {
     "file": "showcase/colorful-rainbow-lines-01.jpg",
@@ -474,7 +526,8 @@
     "orientation": "landscape",
     "luminance": 0.3592,
     "saturation": 0.5462,
-    "sha256": "f32f2e22b65427f8a7ef01c275f5ee08f17b24c3fd669f5b9461db19f6f9670b"
+    "sha256": "aba677b7ee835a4f83d60a2fa0198617c75b5282099ae7963b5b2f44a0889ce7",
+    "exif_source": "nikon-z6ii"
   },
   "colorful-split-duo-01": {
     "file": "showcase/colorful-split-duo-01.jpg",
@@ -483,7 +536,8 @@
     "orientation": "landscape",
     "luminance": 0.3505,
     "saturation": 0.4828,
-    "sha256": "97125975ea773fc796a611267a83c6df7306e9fdd549199b9911c2e64d769bfb"
+    "sha256": "ee499fd7f274c276a2ecdd2c22d55f9fd666d14f0e40fd93c210b9d3ce24eb88",
+    "exif_source": "canon-r7"
   },
   "colorful-sticker-date-01": {
     "file": "showcase/colorful-sticker-date-01.jpg",
@@ -492,7 +546,8 @@
     "orientation": "landscape",
     "luminance": 0.263,
     "saturation": 0.555,
-    "sha256": "b1f7037724cdc4dd92dfdf5fd856d6eefb925a949e236e657146e42a5b176007"
+    "sha256": "8e4c2e5565b7b0caae5f79f542d4d81a1a16acb668b43662fff0d4b505993410",
+    "exif_source": "nikon-z6ii"
   },
   "colorwalk-ribbon-01": {
     "file": "showcase/colorwalk-ribbon-01.jpg",
@@ -501,7 +556,8 @@
     "orientation": "landscape",
     "luminance": 0.5948,
     "saturation": 0.4079,
-    "sha256": "7c89dde84d711a5d87a98dc083f11dbc9289f0b1fdebe36ccc80472210e1febd"
+    "sha256": "140a6a0dccd18b5a7ab5245f6f26c67d722510f163c312c1441ae9994bad0bc3",
+    "exif_source": "nikon-z6ii"
   },
   "colorwalk-round-card-01": {
     "file": "showcase/colorwalk-round-card-01.jpg",
@@ -510,7 +566,8 @@
     "orientation": "landscape",
     "luminance": 0.5136,
     "saturation": 0.6742,
-    "sha256": "3e3b120fe4d12a4697f57076be53d680eff988cc62effc86886e3680204a138d"
+    "sha256": "da407bf49a5db539dd8ef08e9691f733cf7184ed921c417ebc23b8305a161260",
+    "exif_source": "canon-r7"
   },
   "colorwalk-single-line-01": {
     "file": "showcase/colorwalk-single-line-01.jpg",
@@ -519,7 +576,8 @@
     "orientation": "landscape",
     "luminance": 0.4574,
     "saturation": 0.3321,
-    "sha256": "09a337047189d98b2774b3858f6e39ac9e270d64960fce1a854700167d3ad558"
+    "sha256": "f2a2b32c298f8b8591f31798d0727ff9d93cd6b436aaafe2a35ac123b5199608",
+    "exif_source": "nikon-z6ii"
   },
   "colorwalk-tint-seam-01": {
     "file": "showcase/colorwalk-tint-seam-01.jpg",
@@ -528,7 +586,8 @@
     "orientation": "landscape",
     "luminance": 0.5609,
     "saturation": 0.3291,
-    "sha256": "5d9f462488ddf396b92fd12fb5b47a78e66c2763bef46eb2309328867bd79aba"
+    "sha256": "66889ccf32cd6ed6dcf0035b3cd20df681f143b7240b51920efe9238663b781c",
+    "exif_source": "canon-r7"
   },
   "colorwalk-top-field-01": {
     "file": "showcase/colorwalk-top-field-01.jpg",
@@ -537,7 +596,8 @@
     "orientation": "landscape",
     "luminance": 0.4551,
     "saturation": 0.2613,
-    "sha256": "aee451265d80997f1fbaa8d4cc16b6b374748cdcfde4781649c817248196f302"
+    "sha256": "319e31a3d650f8a19300484853d795682782c7c49fe1b6d21ca72d57950d0345",
+    "exif_source": "nikon-z6ii"
   },
   "colorwalk-vbar-01": {
     "file": "showcase/colorwalk-vbar-01.jpg",
@@ -546,7 +606,8 @@
     "orientation": "landscape",
     "luminance": 0.4512,
     "saturation": 0.3197,
-    "sha256": "b7b3d974c70b505cd48b23353e1839af0ea2afc268cbe6300201f44261560440"
+    "sha256": "a99d2aa46cef045261a7ebb91ad39dedb518807938a53536aac293578c132893",
+    "exif_source": "canon-r7"
   },
   "colorwalk-verse-01": {
     "file": "showcase/colorwalk-verse-01.jpg",
@@ -555,7 +616,8 @@
     "orientation": "landscape",
     "luminance": 0.4117,
     "saturation": 0.2209,
-    "sha256": "edb279e65d7a4569276068519ade1231f2bb4189c9fce11666f22ce2de1c89bb"
+    "sha256": "1ab14a990abc883e807b08fc992c34d4cb0fb07ca8e6a5bb44a01c96656a4c7e",
+    "exif_source": "nikon-z6ii"
   },
   "drone-altitude-hero-01": {
     "file": "showcase/drone-altitude-hero-01.jpg",
@@ -564,7 +626,8 @@
     "orientation": "landscape",
     "luminance": 0.4391,
     "saturation": 0.6276,
-    "sha256": "e3efd450533e0b706f6efaffb2d2aa51dbbc68af063726a3dc4ae1f4a71914e3"
+    "sha256": "5d0d3f285afa2d97a8a3df1ee842e9495fc8ab52d0f529d096b157d6f3cabdec",
+    "exif_source": "nikon-z6ii"
   },
   "drone-geoblock-01": {
     "file": "showcase/drone-geoblock-01.jpg",
@@ -573,7 +636,8 @@
     "orientation": "landscape",
     "luminance": 0.4185,
     "saturation": 0.2455,
-    "sha256": "0c09992d7e4ef3a5af3bed8e7f2413ab16adf60c049624bfc8cef57036998b19"
+    "sha256": "37353a9ca204c98b9753ea49df95f74e7cb4fff85888880f3ec508d85d83f772",
+    "exif_source": "canon-r7"
   },
   "drone-skybar-01": {
     "file": "showcase/drone-skybar-01.jpg",
@@ -582,7 +646,8 @@
     "orientation": "landscape",
     "luminance": 0.438,
     "saturation": 0.2107,
-    "sha256": "21be9ebc7c0beaac29c103f946ac1c15cde990378d18bd4308e9053707c87df2"
+    "sha256": "443367f90ca867a61261185d14f62a4eac0866d5e4221551f69260f7bfcd9f0e",
+    "exif_source": "nikon-z6ii"
   },
   "drone-topline-01": {
     "file": "showcase/drone-topline-01.jpg",
@@ -591,7 +656,8 @@
     "orientation": "landscape",
     "luminance": 0.474,
     "saturation": 0.4414,
-    "sha256": "ce8c5eed56cd9de08f48fc384c1bb81549c3ae9c7ebf7da21556879b519cb945"
+    "sha256": "879e76b181af35dd6b5a32ce5714468eef7f87e99c1228e55bab32e94e05c3db",
+    "exif_source": "canon-r7"
   },
   "effect-float-card-01": {
     "file": "showcase/effect-float-card-01.jpg",
@@ -600,7 +666,8 @@
     "orientation": "landscape",
     "luminance": 0.253,
     "saturation": 0.1664,
-    "sha256": "344877d2238523897f59a26db7b2f74aa8d1632759bc478c250e3b842ff93a54"
+    "sha256": "8188057908143958df65d76d7461e4dea184523ed99bcac447c692c22caa81c9",
+    "exif_source": "canon-r7"
   },
   "effect-minimal-shadow-08": {
     "file": "showcase/effect-minimal-shadow-08.jpg",
@@ -609,7 +676,8 @@
     "orientation": "landscape",
     "luminance": 0.2089,
     "saturation": 0.4178,
-    "sha256": "b01fe2779a073f35ef7717abdad6967cd2f64b5ee18e021c262e12b7c8a2a056"
+    "sha256": "fa6d22bdb7ad7e6cf657bd71f5002e12c982171053032666c7774e4f18fffcc7",
+    "exif_source": "nikon-z6ii"
   },
   "effect-mirror-pool-02": {
     "file": "showcase/effect-mirror-pool-02.jpg",
@@ -618,7 +686,8 @@
     "orientation": "landscape",
     "luminance": 0.2752,
     "saturation": 0.1629,
-    "sha256": "7b9dcbf1827693ace121ca8d596ca323dc55376e4eba69777b94340c7168822c"
+    "sha256": "98292580fa6be7a82743050d0a21b174b0e6f0041fd9235612d39e7114f1ba02",
+    "exif_source": "canon-r7"
   },
   "effect-paper-stack-05": {
     "file": "showcase/effect-paper-stack-05.jpg",
@@ -627,7 +696,8 @@
     "orientation": "landscape",
     "luminance": 0.2275,
     "saturation": 0.7315,
-    "sha256": "f1903f24e4cfbe8b3a784309f643d139b4cb1fcf4200988bca41f3e43ce429c2"
+    "sha256": "2dba3ff3a66f6e166e55bb0c11699c0122f4336909c6db41e23207dd2b82e5e4",
+    "exif_source": "nikon-z6ii"
   },
   "effect-polaroid-float-06": {
     "file": "showcase/effect-polaroid-float-06.jpg",
@@ -636,7 +706,8 @@
     "orientation": "landscape",
     "luminance": 0.2236,
     "saturation": 0.1516,
-    "sha256": "0477461ca1be2f40b08fcfe8246760031933ff1a3b45c36046ac637a473b256a"
+    "sha256": "1b17e98021b0298a34d1609c10ba7ff5e1c8122b3ba1c335cde9e4bd4bf6967e",
+    "exif_source": "canon-r7"
   },
   "effect-top-gradient-band-07": {
     "file": "showcase/effect-top-gradient-band-07.jpg",
@@ -645,7 +716,8 @@
     "orientation": "landscape",
     "luminance": 0.285,
     "saturation": 0.1824,
-    "sha256": "ab74d39abac4501d2649e6cc9156dfbd2cdbbf235064c3ebfcaf87a601d1a0d2"
+    "sha256": "61a75e7b520833e568abd27a568635d8aa809984a6d92ea90720bcf83caf6368",
+    "exif_source": "nikon-z6ii"
   },
   "effect-vignette-card-04": {
     "file": "showcase/effect-vignette-card-04.jpg",
@@ -654,7 +726,8 @@
     "orientation": "landscape",
     "luminance": 0.0583,
     "saturation": 0.8802,
-    "sha256": "903592424b1b4eeedae2e8734e4d71f8b2c1c9c5e2c3889d4101cb0f5870ad42"
+    "sha256": "1965ae709d95611ece76bd914ca3293ed9b6bdcb500c734e7da294ed4cec08a1",
+    "exif_source": "canon-r7"
   },
   "festival-dragon-boat-01": {
     "file": "showcase/festival-dragon-boat-01.jpg",
@@ -663,7 +736,8 @@
     "orientation": "landscape",
     "luminance": 0.3242,
     "saturation": 0.6449,
-    "sha256": "089513b2565a9e6cf3de7a614f46496705b3f52175db622f0c23cfffe621cc96"
+    "sha256": "b671c7250e97ab5c693753f7cddfc0cbd3c8cc91bb4251156c4ffce6af2a92d1",
+    "exif_source": "nikon-z6ii"
   },
   "festival-gold-frame-01": {
     "file": "showcase/festival-gold-frame-01.jpg",
@@ -672,7 +746,8 @@
     "orientation": "landscape",
     "luminance": 0.3391,
     "saturation": 0.4623,
-    "sha256": "90200a6603bc51a28a470b02ab92288c3bebbafd132891cb1cf0318b3c37cbe5"
+    "sha256": "5ca238dfee4f9d1ff6dbd1c56d3c97f239949d8f33a591ed60674c1bb5304212",
+    "exif_source": "canon-r7"
   },
   "festival-lantern-night-01": {
     "file": "showcase/festival-lantern-night-01.jpg",
@@ -681,7 +756,8 @@
     "orientation": "landscape",
     "luminance": 0.3882,
     "saturation": 0.6739,
-    "sha256": "b64a304782c5d3f8c958bbf135bac7ebca562fa5e567312b0a336b0949fc8e64"
+    "sha256": "d94793e422df709330bd3003af0991de039b8d8f4f5fa649303915966a6ef6e1",
+    "exif_source": "nikon-z6ii"
   },
   "festival-lantern-warm-01": {
     "file": "showcase/festival-lantern-warm-01.jpg",
@@ -690,7 +766,8 @@
     "orientation": "landscape",
     "luminance": 0.2731,
     "saturation": 0.5456,
-    "sha256": "1f0cb5b24faf4357f44e6369515b889d526d8c823d3f49b65c4b4e9d2c09dccc"
+    "sha256": "73e2ec867f67f3110487d87550c63eed2b88104117ce9fece4456da3360e8d7d",
+    "exif_source": "canon-r7"
   },
   "festival-moon-full-01": {
     "file": "showcase/festival-moon-full-01.jpg",
@@ -699,7 +776,8 @@
     "orientation": "landscape",
     "luminance": 0.256,
     "saturation": 0.9893,
-    "sha256": "1dbb264fda7c799bffb8f3f4c5f308b0285da57e9e8464c5a51194254432ba5e"
+    "sha256": "58ef93e936cbe682eda397c5c1c76d153965216a5ecb6e1fe71c89a7b7d0386c",
+    "exif_source": "nikon-z6ii"
   },
   "festival-spring-gold-01": {
     "file": "showcase/festival-spring-gold-01.jpg",
@@ -708,7 +786,8 @@
     "orientation": "landscape",
     "luminance": 0.3214,
     "saturation": 0.786,
-    "sha256": "7490233008b0bfd998b8ccc381439a578d59bf50990a35bae8ce21278bf6ed52"
+    "sha256": "6dfc8971e8ae2f1a06e520f9c8448180c5e551741841c528713c1ecf1a730c51",
+    "exif_source": "canon-r7"
   },
   "film-darkroom-pillar-03": {
     "file": "showcase/film-darkroom-pillar-03.jpg",
@@ -717,7 +796,8 @@
     "orientation": "landscape",
     "luminance": 0.1217,
     "saturation": 0.3025,
-    "sha256": "ba0d8a97f31e0f118f5d48310b41934fd0c714a4f4675f1689617f6f15ef349c"
+    "sha256": "534881c13f71306f6b1b68be4760585379a7a168d14d343a234807d584bdfdd0",
+    "exif_source": "nikon-z6ii"
   },
   "film-diptych-hairline-07": {
     "file": "showcase/film-diptych-hairline-07.jpg",
@@ -726,7 +806,8 @@
     "orientation": "landscape",
     "luminance": 0.2291,
     "saturation": 0.3667,
-    "sha256": "0ef6fe30967d357629a3e3921570d5070b842b70697cf1ecf5f9a7b015ca0015"
+    "sha256": "69031c6c154199521527b11ad93ed4a81e789710e2f7235591f16c80dd3d5435",
+    "exif_source": "canon-r7"
   },
   "film-led-datestamp-04": {
     "file": "showcase/film-led-datestamp-04.jpg",
@@ -735,7 +816,8 @@
     "orientation": "landscape",
     "luminance": 0.2841,
     "saturation": 0.1006,
-    "sha256": "c8945af6f7f336a27c9c3464b269cb475bc6cf76b70b484035a87d51ea0bd7ab"
+    "sha256": "99cead351c2bf417e20b806d8adc738f71aa8a2ff48280aaa2dfc8b478378c12",
+    "exif_source": "nikon-z6ii"
   },
   "film-mono-roll-06": {
     "file": "showcase/film-mono-roll-06.jpg",
@@ -744,7 +826,8 @@
     "orientation": "landscape",
     "luminance": 0.2313,
     "saturation": 0.4457,
-    "sha256": "53b75418c3f7696eefa025ee868759e9fead660baa9b3bfb49afb3079320b23c"
+    "sha256": "08264f89b6732cbb1cdf9a8e5292655eb34350a53b1f71a8f3868778e8cf3338",
+    "exif_source": "canon-r7"
   },
   "film-positive-print-08": {
     "file": "showcase/film-positive-print-08.jpg",
@@ -753,7 +836,8 @@
     "orientation": "landscape",
     "luminance": 0.2394,
     "saturation": 0.3939,
-    "sha256": "24bf516a6cb967cf214bb53cbe8912a8b416b7be714f1ca3b4f279256a9e674d"
+    "sha256": "edb8aa3ab2b0256afb99be708dfaedc978ebe2936e1ff4a7ec7b349b800cb1ec",
+    "exif_source": "nikon-z6ii"
   },
   "film-serif-stock-05": {
     "file": "showcase/film-serif-stock-05.jpg",
@@ -762,7 +846,8 @@
     "orientation": "landscape",
     "luminance": 0.2153,
     "saturation": 0.2791,
-    "sha256": "8da87e62270a22fa1ffdaa92043b95763a916750d75b85f753d00f03aedf67d6"
+    "sha256": "2f7f0b27c4c88800b9caec3aff4b118b975b6c7671b0de5867c925717c755722",
+    "exif_source": "canon-r7"
   },
   "film-sprocket-01": {
     "file": "showcase/film-sprocket-01.jpg",
@@ -771,7 +856,8 @@
     "orientation": "landscape",
     "luminance": 0.2633,
     "saturation": 0.453,
-    "sha256": "717106d63e1fbd27ca5c5ef1d029f8ca1a0d24930708bbe66ed99762021a1ea8"
+    "sha256": "538c3103060aef6441e044b261cceb9eb1c8cd9f0cecbf446fc1acae08459f34",
+    "exif_source": "nikon-z6ii"
   },
   "film-sprocket-02": {
     "file": "showcase/film-sprocket-02.jpg",
@@ -780,7 +866,8 @@
     "orientation": "landscape",
     "luminance": 0.2436,
     "saturation": 0.451,
-    "sha256": "8a5a1da2e9b6fb8e7b3596c772651a684aff18b9a179d1b1927733103aa9c73f"
+    "sha256": "6c818e98f6fb25f4a802bc5a4632c90879c15a14ad6ce6d271786d87f3195200",
+    "exif_source": "canon-r7"
   },
   "fuji-recipe-column-03": {
     "file": "showcase/fuji-recipe-column-03.jpg",
@@ -789,7 +876,8 @@
     "orientation": "landscape",
     "luminance": 0.389,
     "saturation": 0.2888,
-    "sha256": "5139c9a9f953a6e436e7bbfdec3783db1092fecf549a378c49d1f6177180b536"
+    "sha256": "9f8d2b88d5d0f4f4a0e2027325d25b1a613110bcb63b96b93c5a36e761b76f53",
+    "exif_source": "canon-r7"
   },
   "fuji-recipe-hero-04": {
     "file": "showcase/fuji-recipe-hero-04.jpg",
@@ -798,7 +886,8 @@
     "orientation": "landscape",
     "luminance": 0.5694,
     "saturation": 0.1993,
-    "sha256": "33be13d788bc54055703791975e93798ce26697c70f694b023e740c6c045c791"
+    "sha256": "06d9fad431f7c056b48a378ff84066dacdd24718887d48927d4163beefd81122",
+    "exif_source": "nikon-z6ii"
   },
   "fuji-recipe-panel-01": {
     "file": "showcase/fuji-recipe-panel-01.jpg",
@@ -807,7 +896,8 @@
     "orientation": "landscape",
     "luminance": 0.5991,
     "saturation": 0.175,
-    "sha256": "dabdf34bc473085a7f7a18f41e0c70cca17d81d7e66e94d2ca55400f429c098c"
+    "sha256": "655d54b65e22c8b0a3aa36c7911df822c86f96946555ad9a63c8d533305df734",
+    "exif_source": "canon-r7"
   },
   "fuji-recipe-rails-05": {
     "file": "showcase/fuji-recipe-rails-05.jpg",
@@ -816,7 +906,8 @@
     "orientation": "landscape",
     "luminance": 0.5572,
     "saturation": 0.3912,
-    "sha256": "5e97b05e6ddd9b2d287c06e9a00bfe656acc6c9cf7d41841f4a2eaedbe45a280"
+    "sha256": "70261555bf9ddbd6fe650b2f218ec49da12e3762f1601cc17a3965b127d72703",
+    "exif_source": "nikon-z6ii"
   },
   "game-arknights-v1": {
     "file": "showcase/game-arknights-v1.jpg",
@@ -825,7 +916,8 @@
     "orientation": "landscape",
     "luminance": 0.4115,
     "saturation": 0.3922,
-    "sha256": "295c9771657c169ec63191ba40550f4a6ca55c7960dd209a40dfa46e081d6992"
+    "sha256": "d8d50307a2d8ca8f8d6581b560c9d932a044941f70608234fc11e2a078f0ad8d",
+    "exif_source": "canon-r7"
   },
   "game-arknights-v2": {
     "file": "showcase/game-arknights-v2.jpg",
@@ -834,7 +926,8 @@
     "orientation": "landscape",
     "luminance": 0.3985,
     "saturation": 0.1679,
-    "sha256": "78d0345e2ed355fcd90371638602bb36c1e5974cab90921f6867c0e74833698f"
+    "sha256": "e7e1822c5659f02a163a2ca92c9cb0fe60a0755d63ba4c09ce91b7e10ce336fe",
+    "exif_source": "nikon-z6ii"
   },
   "game-arknights-v3": {
     "file": "showcase/game-arknights-v3.jpg",
@@ -843,7 +936,8 @@
     "orientation": "landscape",
     "luminance": 0.5207,
     "saturation": 0.4457,
-    "sha256": "aac53c92acd38021110472ab3096139695a57cb558d4af8410a7d4b1300c5b39"
+    "sha256": "a3b8fa4e440636919b9762cb5dd86c72164f1ad18f40b96ed4e9e1cb96502ae9",
+    "exif_source": "canon-r7"
   },
   "game-genshin-v1": {
     "file": "showcase/game-genshin-v1.jpg",
@@ -852,7 +946,8 @@
     "orientation": "landscape",
     "luminance": 0.5228,
     "saturation": 0.481,
-    "sha256": "18b99c0bc5b15c98ce2a19e38577a8a9d4a6645612c6d189204e4e449bc4bc3c"
+    "sha256": "2b1ddcbf3d990b06e83e88d9d1dca671591ad83f78c078ad68ed5e5f83695b1b",
+    "exif_source": "nikon-z6ii"
   },
   "game-genshin-v2": {
     "file": "showcase/game-genshin-v2.jpg",
@@ -861,7 +956,8 @@
     "orientation": "landscape",
     "luminance": 0.5381,
     "saturation": 0.2004,
-    "sha256": "ac7c45364db176f3d380e0797cf655e2d7122496381c8960966a49e33ea73114"
+    "sha256": "d1b098fcef6fe571155dd7f83f3d746f70df997413352d94d8e01c5ffcd480d7",
+    "exif_source": "canon-r7"
   },
   "game-genshin-v3": {
     "file": "showcase/game-genshin-v3.jpg",
@@ -870,7 +966,8 @@
     "orientation": "landscape",
     "luminance": 0.5376,
     "saturation": 0.2628,
-    "sha256": "01c53887531f0cd0b360347b9298866673236868b607293fc069633bc9eee9ba"
+    "sha256": "019a7eed72be4bdbed161b767b50c6e36bc4f444519dc3e8ee1df127ea2bcdae",
+    "exif_source": "nikon-z6ii"
   },
   "game-honkai-v1": {
     "file": "showcase/game-honkai-v1.jpg",
@@ -879,7 +976,8 @@
     "orientation": "landscape",
     "luminance": 0.6053,
     "saturation": 0.1708,
-    "sha256": "a526f0622e1377175b8bda7b0da022b6d142546bb3eb2a704d2a7c84ed247bd0"
+    "sha256": "086c9185ee9fa8a560a3de99a317ae81edc83a37a21473c622859c9368ac9e29",
+    "exif_source": "canon-r7"
   },
   "game-honkai-v2": {
     "file": "showcase/game-honkai-v2.jpg",
@@ -888,7 +986,8 @@
     "orientation": "landscape",
     "luminance": 0.4295,
     "saturation": 0.2603,
-    "sha256": "76e7a8d1cc37f2eb85f4d0c0f334f1491497f4f4c5e6e1505abc5808ab98ea38"
+    "sha256": "7a9e2aa9038b56d7fe6cf35e2ddc2ded39dbda6d3128bd3363bd3f5e987bf780",
+    "exif_source": "nikon-z6ii"
   },
   "game-honkai-v3": {
     "file": "showcase/game-honkai-v3.jpg",
@@ -897,7 +996,8 @@
     "orientation": "landscape",
     "luminance": 0.4936,
     "saturation": 0.3269,
-    "sha256": "3cc6706c4112a3a5d634e251019187b0d47e16680f2ed008ad99f3770453fbb6"
+    "sha256": "97ab932cef563cd84e4d83ec6aba1e6f1929a9feb872972fab77339b4675141b",
+    "exif_source": "canon-r7"
   },
   "game-wukong-v1": {
     "file": "showcase/game-wukong-v1.jpg",
@@ -906,7 +1006,8 @@
     "orientation": "landscape",
     "luminance": 0.4298,
     "saturation": 0.3461,
-    "sha256": "23c21da5dfaf6025b647ad10720d704a1666e03f54ab43e149f1af0b1424ac2c"
+    "sha256": "16c18baf3b9cf9b80bee6e1a2fe8403c0d4a22245e3b655dd66d63f1c454395c",
+    "exif_source": "nikon-z6ii"
   },
   "game-wukong-v2": {
     "file": "showcase/game-wukong-v2.jpg",
@@ -915,7 +1016,8 @@
     "orientation": "landscape",
     "luminance": 0.3962,
     "saturation": 0.2823,
-    "sha256": "d281575b9fb883820dd8f12b32017d19215f840986188a798bda7edfb755ffac"
+    "sha256": "fe77d84dcb14a06c9b5109a9b0f6310a38a5a55b0025c5ff6962e2098792977f",
+    "exif_source": "canon-r7"
   },
   "game-wukong-v3": {
     "file": "showcase/game-wukong-v3.jpg",
@@ -924,7 +1026,8 @@
     "orientation": "landscape",
     "luminance": 0.3988,
     "saturation": 0.4127,
-    "sha256": "c3ecef2ffbe8f98f1e6c5eb777e37b8b8a414eb880942469a1367bc911a5c956"
+    "sha256": "97ccb71238c46aa0d433c5f4ab9e56dadc523265d9d58404dd7e14916004044f",
+    "exif_source": "nikon-z6ii"
   },
   "game-wwmeet-v1": {
     "file": "showcase/game-wwmeet-v1.jpg",
@@ -933,7 +1036,8 @@
     "orientation": "landscape",
     "luminance": 0.4867,
     "saturation": 0.2004,
-    "sha256": "af62e2e4a1434350d14d90606d8a314219b0780332ed1eb457c3b8bc790ca65d"
+    "sha256": "aaac99d24404612ce98b5129516a5440fc6a2a61c145d546ac85c88f09df2fa4",
+    "exif_source": "canon-r7"
   },
   "game-wwmeet-v2": {
     "file": "showcase/game-wwmeet-v2.jpg",
@@ -942,7 +1046,8 @@
     "orientation": "landscape",
     "luminance": 0.4846,
     "saturation": 0.1348,
-    "sha256": "6b04ddb4ee449bad58b00419d6ccea6a84d391d62be6b4c96e1d0f0041b1d468"
+    "sha256": "a8b9168b2fc1363f7d0b6908a616656f68e3b941d2c8fecde85201aefe38b5b6",
+    "exif_source": "nikon-z6ii"
   },
   "game-wwmeet-v3": {
     "file": "showcase/game-wwmeet-v3.jpg",
@@ -951,7 +1056,8 @@
     "orientation": "landscape",
     "luminance": 0.4228,
     "saturation": 0.1434,
-    "sha256": "391e09c17c63de644f77dfe5f9072200c5deb67618ca6f6fb6d23ac9c69f8ac5"
+    "sha256": "a17c7865ed9e54c24d18f7d88456b4a79a4e82afbce188909229abb690d94df9",
+    "exif_source": "canon-r7"
   },
   "game-zzz-v1": {
     "file": "showcase/game-zzz-v1.jpg",
@@ -960,7 +1066,8 @@
     "orientation": "landscape",
     "luminance": 0.426,
     "saturation": 0.439,
-    "sha256": "72ce624cbcce04c356845c170af1fa5764ea1e3b31bd6dcfcda625a6ed984ff0"
+    "sha256": "8861442de11f9acec92b8fcfb98a0001324fbbcba57c780f2c684e588ac37c02",
+    "exif_source": "nikon-z6ii"
   },
   "game-zzz-v2": {
     "file": "showcase/game-zzz-v2.jpg",
@@ -969,7 +1076,8 @@
     "orientation": "landscape",
     "luminance": 0.6003,
     "saturation": 0.2692,
-    "sha256": "318ddaf4d5e6232b1fdb54aa735b286395a3394cc2bbc5f703daae0a50015fa7"
+    "sha256": "089595a734c5e7eb8e7e9e65f11c0e2c829844b5c4a204014c8a700f6722a98e",
+    "exif_source": "canon-r7"
   },
   "game-zzz-v3": {
     "file": "showcase/game-zzz-v3.jpg",
@@ -978,7 +1086,8 @@
     "orientation": "landscape",
     "luminance": 0.5726,
     "saturation": 0.3804,
-    "sha256": "29003cb2ea0d7716443058caeaabbfa7390739ef08d73cb0bd3e3fde2757038c"
+    "sha256": "94c962c556fc01d7d8779a77fb567179eff71b22ad49c8e78c49bfa3d71e3ec1",
+    "exif_source": "nikon-z6ii"
   },
   "magazine-double-rule-01": {
     "file": "showcase/magazine-double-rule-01.jpg",
@@ -987,7 +1096,8 @@
     "orientation": "landscape",
     "luminance": 0.5741,
     "saturation": 0.1627,
-    "sha256": "200198b58e9a1aef1186224cd640fc5f10926a65c9dc44f9d8eadbe71d75a443"
+    "sha256": "43dc1e8cada82104d4557e13c3159e51e08253927cf29d9589d2102a76984153",
+    "exif_source": "nikon-z6ii"
   },
   "magazine-gallery-left-01": {
     "file": "showcase/magazine-gallery-left-01.jpg",
@@ -996,7 +1106,8 @@
     "orientation": "landscape",
     "luminance": 0.5271,
     "saturation": 0.5817,
-    "sha256": "55ce2a1c8b218869a4457a31bedfb285c2ef21fc7545ffcb10b8a4f7e4b38a8a"
+    "sha256": "263a320fe3daf724f1a1c790a6ceb65ae9849ac62f1b035b3b886f705dbc20bc",
+    "exif_source": "canon-r7"
   },
   "magazine-index-column-01": {
     "file": "showcase/magazine-index-column-01.jpg",
@@ -1005,7 +1116,8 @@
     "orientation": "landscape",
     "luminance": 0.5701,
     "saturation": 0.1579,
-    "sha256": "b6653ab8c954679135aa55b64ff09e3aaa93c81795ab8316b3cbb593630d220b"
+    "sha256": "26891f01601645e3b88f69e55f6d4c3977432fd657e078f330de8afd8792c9eb",
+    "exif_source": "nikon-z6ii"
   },
   "magazine-poster-manifesto-01": {
     "file": "showcase/magazine-poster-manifesto-01.jpg",
@@ -1014,7 +1126,8 @@
     "orientation": "landscape",
     "luminance": 0.5518,
     "saturation": 0.3842,
-    "sha256": "c3afb1ef30e603216494e35f5ba7bb91d61672c896f847241126294cb18183f1"
+    "sha256": "cd2744ec90e9b07b6c672095f91d31882883eb38f5e398313ed201de49f71df5",
+    "exif_source": "canon-r7"
   },
   "magazine-triptych-slices-01": {
     "file": "showcase/magazine-triptych-slices-01.jpg",
@@ -1023,7 +1136,8 @@
     "orientation": "landscape",
     "luminance": 0.4896,
     "saturation": 0.0915,
-    "sha256": "547eb09914020a5bc7dcb18076f5ae0e46759b054cbd5a51878838cdafd1a0b1"
+    "sha256": "e6dff271dba08ec980a23189da294418848723ee7d400b2af6147e35efb297e1",
+    "exif_source": "nikon-z6ii"
   },
   "master-cream-dot-01": {
     "file": "showcase/master-cream-dot-01.jpg",
@@ -1032,7 +1146,8 @@
     "orientation": "landscape",
     "luminance": 0.4015,
     "saturation": 0.488,
-    "sha256": "b9a3bd62b98e6f10d39434ba9630d62fdd22c7f118e722da1a9ee35956aa2396"
+    "sha256": "351cb027ba2626fadc593b2eef38f21d8b32b0417fab35e9efbfa8d3dce2e53f",
+    "exif_source": "canon-r7"
   },
   "master-crown-wordmark-01": {
     "file": "showcase/master-crown-wordmark-01.jpg",
@@ -1041,7 +1156,8 @@
     "orientation": "landscape",
     "luminance": 0.4996,
     "saturation": 0.5352,
-    "sha256": "4903aacea7a131e2769df1da73242c88440a8021601885448b790e7e62fdd6cd"
+    "sha256": "baf54e13b65d23cace34a557ef923d9ff8fe69e9310ca2c34e123e2ff217582a",
+    "exif_source": "nikon-z6ii"
   },
   "master-ivory-plate-01": {
     "file": "showcase/master-ivory-plate-01.jpg",
@@ -1050,7 +1166,8 @@
     "orientation": "landscape",
     "luminance": 0.5992,
     "saturation": 0.0438,
-    "sha256": "dc37999b3f7996be4e010c0318322d5d447dafaeee39b090b5324499a76f49ea"
+    "sha256": "e2c010eb0f4ef5be2da60a02e2a0345888fe1607e419234d890b317cc5cf860d",
+    "exif_source": "canon-r7"
   },
   "master-noir-plate-01": {
     "file": "showcase/master-noir-plate-01.jpg",
@@ -1059,7 +1176,8 @@
     "orientation": "landscape",
     "luminance": 0.5842,
     "saturation": 0.2865,
-    "sha256": "cee9829e2d56a57e3f24fc022c0e9fc5865784bdb4aa3c4ab03be13469b8a28e"
+    "sha256": "9c7ce2717bc0c9d0d6b1c3318685bd42f707a095ae8db9cc7532d8f2bec5d9e3",
+    "exif_source": "nikon-z6ii"
   },
   "master-seal-frame-01": {
     "file": "showcase/master-seal-frame-01.jpg",
@@ -1068,7 +1186,8 @@
     "orientation": "landscape",
     "luminance": 0.5716,
     "saturation": 0.4149,
-    "sha256": "aad25cb4390e8dc47c3210405908c3e0b53e8b0e9e4c80b247128a89ba4c81e3"
+    "sha256": "1d86ec4bf0c639117550619492148094440703415bfcde08c9245f4944e0489f",
+    "exif_source": "canon-r7"
   },
   "master-three-column-01": {
     "file": "showcase/master-three-column-01.jpg",
@@ -1077,7 +1196,8 @@
     "orientation": "landscape",
     "luminance": 0.5141,
     "saturation": 0.2538,
-    "sha256": "495a1b749f7559e7653fbc2b1f978c6b6e4324a4bf6d0c894295b0bf9adbfb54"
+    "sha256": "0208ea49056aaa6d9e33dcc9a2d16feb107753ea4a4159d8aeb8207b44f245f1",
+    "exif_source": "nikon-z6ii"
   },
   "minimal-brand-right": {
     "file": "showcase/minimal-brand-right.jpg",
@@ -1086,7 +1206,8 @@
     "orientation": "landscape",
     "luminance": 0.6611,
     "saturation": 0.1186,
-    "sha256": "d80e8068a42a67cfa852f0c6d9f638feb27a97606b9fc19558d572a67e3da1d3"
+    "sha256": "2c9a62c4a4bb848d6855e0ad8bc9bd6ef139aea4e359fd0f506651d5f3e6cb0f",
+    "exif_source": "canon-r7"
   },
   "minimal-center-line": {
     "file": "showcase/minimal-center-line.jpg",
@@ -1095,7 +1216,8 @@
     "orientation": "landscape",
     "luminance": 0.6778,
     "saturation": 0.1831,
-    "sha256": "fe177f0cf3fea4ecfaedbece95a75d10b940c99d7a23485c023045bb9a5c6ac3"
+    "sha256": "75caa59808e283d15cad0308f570ea05b19a7a2080507722cadbcbee936eeb0e",
+    "exif_source": "nikon-z6ii"
   },
   "minimal-copyright": {
     "file": "showcase/minimal-copyright.jpg",
@@ -1104,7 +1226,8 @@
     "orientation": "landscape",
     "luminance": 0.6733,
     "saturation": 0.3479,
-    "sha256": "396374fc72880b62f2da270b3cd126fd17fade853777aa791419e6d67620396c"
+    "sha256": "df3223fbcafed7dfd62987270f0c6ad31a032dee9deb290ca06c02a1dabb88f2",
+    "exif_source": "canon-r7"
   },
   "minimal-corner-mono": {
     "file": "showcase/minimal-corner-mono.jpg",
@@ -1113,7 +1236,8 @@
     "orientation": "landscape",
     "luminance": 0.6887,
     "saturation": 0.1974,
-    "sha256": "7ec4a4e52d6c20394734202560d52d45d34607934fa33efa65bc97079463b741"
+    "sha256": "2fe7d6a0be6460fe893bb658f2eece109f789a66229a085ecf8b94af1ba3ba95",
+    "exif_source": "nikon-z6ii"
   },
   "minimal-letterbox": {
     "file": "showcase/minimal-letterbox.jpg",
@@ -1122,7 +1246,8 @@
     "orientation": "landscape",
     "luminance": 0.7104,
     "saturation": 0.0714,
-    "sha256": "7c73cbcb5d431b82b55cb3280edca4472c9c5e02ad92687618072c5be955b969"
+    "sha256": "fdc5c2ff6bb02efcbfa0c384e1c6ffc787521d83c254bebd694a9ed2ba8ff4e0",
+    "exif_source": "canon-r7"
   },
   "minimal-model-stack": {
     "file": "showcase/minimal-model-stack.jpg",
@@ -1131,7 +1256,8 @@
     "orientation": "landscape",
     "luminance": 0.8618,
     "saturation": 0.0238,
-    "sha256": "bf6e93b0d498688c71b0b2771e93ce76b7356a724699149887043cd823171158"
+    "sha256": "6b5bf104fccb556954e07f9a7775eccdf6234cf40ecf0a51bc82c4998a5dccd5",
+    "exif_source": "nikon-z6ii"
   },
   "minimal-portrait-line": {
     "file": "showcase/minimal-portrait-line.jpg",
@@ -1140,7 +1266,8 @@
     "orientation": "landscape",
     "luminance": 0.6925,
     "saturation": 0.3653,
-    "sha256": "378325b5b81eb0fb2e2d51f475e1427970337fbef63901debff73e857e177fac"
+    "sha256": "fd10bf0af2fbab4621690fea98dc52b411f6958f188b08e82129da4ffa79320c",
+    "exif_source": "canon-r7"
   },
   "minimal-topright-date": {
     "file": "showcase/minimal-topright-date.jpg",
@@ -1149,7 +1276,8 @@
     "orientation": "landscape",
     "luminance": 0.7623,
     "saturation": 0.1115,
-    "sha256": "42e5e17f51b68c3d1e274ca4df6bee62365d7d1349a5ce258624e26b427e42da"
+    "sha256": "5df7d84990a2b446f2e673b07251f937aab10d198f68e9323f2e14031396edfe",
+    "exif_source": "nikon-z6ii"
   },
   "personal-cn-inscription-01": {
     "file": "showcase/personal-cn-inscription-01.jpg",
@@ -1158,7 +1286,8 @@
     "orientation": "portrait",
     "luminance": 0.6408,
     "saturation": 0.2617,
-    "sha256": "bbaa209e7ae127aa5c1acdf39cc800b2a42b98ccaf40cd4616819be2392cf117"
+    "sha256": "ed68130ec5bc9440127b44fa7cad78d9d9c7cb2cc09a2471567d63b79dd24834",
+    "exif_source": "sony-a7r3"
   },
   "personal-credit-social-01": {
     "file": "showcase/personal-credit-social-01.jpg",
@@ -1167,7 +1296,8 @@
     "orientation": "portrait",
     "luminance": 0.3199,
     "saturation": 0.6387,
-    "sha256": "61c1362ab264c91ba730ddc086f409d899f6d69fd5179a2aaa8a97e80b732edd"
+    "sha256": "0c571a90a0bcfb2624a04ff801763e2696ea953ff1e1ae9d16585ede43f8f042",
+    "exif_source": "sony-a7r3"
   },
   "personal-micro-copyright-01": {
     "file": "showcase/personal-micro-copyright-01.jpg",
@@ -1176,7 +1306,8 @@
     "orientation": "portrait",
     "luminance": 0.4379,
     "saturation": 0.3919,
-    "sha256": "553c66e00c1e54d48f14def7f18ec3530bdc35681c6237eee32aa541d387c557"
+    "sha256": "73137f0d89ddf19c554311be646330dc5b355153cecffa2fc9e8a56b86ca1fd5",
+    "exif_source": "sony-a7r3"
   },
   "personal-name-columns-01": {
     "file": "showcase/personal-name-columns-01.jpg",
@@ -1185,7 +1316,8 @@
     "orientation": "portrait",
     "luminance": 0.4161,
     "saturation": 0.4136,
-    "sha256": "b086dc4ddc4685541e87ef6ee74e13cb8d17117557e9a9fc9fea46aa4bd99fde"
+    "sha256": "033c07d39615e6539a5ad12b12088956ed25b48212067e8aeb8d34f9613ed03a",
+    "exif_source": "sony-a7r3"
   },
   "personal-polaroid-script-01": {
     "file": "showcase/personal-polaroid-script-01.jpg",
@@ -1194,7 +1326,8 @@
     "orientation": "portrait",
     "luminance": 0.346,
     "saturation": 0.3138,
-    "sha256": "d12b21050ea481fdf6e0b2806c40a75c6572c54bcdb42a4d6e7ec8b2dfcc6176"
+    "sha256": "4466f6488dccb81fbc807dc1dc7f28be05f979329175641707a82b73fb67504d",
+    "exif_source": "sony-a7r3"
   },
   "personal-script-signature-01": {
     "file": "showcase/personal-script-signature-01.jpg",
@@ -1203,7 +1336,8 @@
     "orientation": "portrait",
     "luminance": 0.3351,
     "saturation": 0.2631,
-    "sha256": "4391fa7edeb7ff7be0ce51c5cde9b293257cb60de8859878db779d4e1bacfb55"
+    "sha256": "14d5c55fb2a322d7e1a52e121bfc6b632d78fd56ff37ab1dbdaf45c35f6c817f",
+    "exif_source": "sony-a7r3"
   },
   "personal-triptych-01": {
     "file": "showcase/personal-triptych-01.jpg",
@@ -1212,7 +1346,8 @@
     "orientation": "portrait",
     "luminance": 0.428,
     "saturation": 0.4968,
-    "sha256": "d777e9daf0b35494a2421158a424f85ff989467fe4046ff7188313a0d11b371e"
+    "sha256": "ef1417fe31dc635551425973ca77e21d109ff060f031bbdf522d92ec3672c04b",
+    "exif_source": "sony-a7r3"
   },
   "phone-accent-dots-01": {
     "file": "showcase/phone-accent-dots-01.jpg",
@@ -1221,7 +1356,8 @@
     "orientation": "portrait",
     "luminance": 0.566,
     "saturation": 0,
-    "sha256": "926f0f045751e4a8f9ea18366517147ae5a956712f8a86f25e708149e1e28572"
+    "sha256": "1eae25b2d63e8a1bd2c75554d5713f8abcc36067b6ccc60919b73a5422883998",
+    "exif_source": "sony-a7r3"
   },
   "phone-camera-ui-01": {
     "file": "showcase/phone-camera-ui-01.jpg",
@@ -1230,7 +1366,8 @@
     "orientation": "portrait",
     "luminance": 0.4177,
     "saturation": 0.6452,
-    "sha256": "99c9f940370f2f3d617341b79dcaf6dc94138052c843fedb7ddd9bcd99b5478f"
+    "sha256": "19f8ba45b9793fa84c6106806b9447d039ef1662fc36bd553868f1f05a816106",
+    "exif_source": "sony-a7r3"
   },
   "phone-dual-optics-01": {
     "file": "showcase/phone-dual-optics-01.jpg",
@@ -1239,7 +1376,8 @@
     "orientation": "portrait",
     "luminance": 0.4532,
     "saturation": 0.367,
-    "sha256": "3dc6545e2a14631ecbeb64534acf9aa34a5ad29fe8607f1a575927a3ed67b7c2"
+    "sha256": "ced476f4a296363004ff19b99c11742a6962739085defaebcce79fef11fdceb8",
+    "exif_source": "sony-a7r3"
   },
   "phone-midnight-bar-01": {
     "file": "showcase/phone-midnight-bar-01.jpg",
@@ -1248,7 +1386,8 @@
     "orientation": "portrait",
     "luminance": 0.5769,
     "saturation": 0.3254,
-    "sha256": "b8ebe3ceb7dac57c9ab9e566fa12afbcc935915f391b65df0a12ebbc0f8eeca2"
+    "sha256": "416ba6a3e529ea8a0a670c9f79f4564fcd49f26cf0fe8b68d39f69121b403c16",
+    "exif_source": "sony-a7r3"
   },
   "phone-minimal-line-01": {
     "file": "showcase/phone-minimal-line-01.jpg",
@@ -1257,7 +1396,8 @@
     "orientation": "portrait",
     "luminance": 0.4744,
     "saturation": 0.2933,
-    "sha256": "f4243153a8359bf5638751d0a59a084729cfc1ab23f4b7b38f198bbf95b10b73"
+    "sha256": "87d169ff2631569498ab3e08ed9e838acf673e754f4dd522c4c3cada2eb19e97",
+    "exif_source": "sony-a7r3"
   },
   "phone-paper-spec-01": {
     "file": "showcase/phone-paper-spec-01.jpg",
@@ -1266,7 +1406,8 @@
     "orientation": "portrait",
     "luminance": 0.4004,
     "saturation": 0.6151,
-    "sha256": "77234d39ccef569c6fc6ad7ed34099af49f2310e1fd5ab81c67a4d1ac37aa76e"
+    "sha256": "98cfa7300dbdc808d57ff89c22eba0e21e4e5fa890cdc8d29a6fe308c6ca48b0",
+    "exif_source": "sony-a7r3"
   },
   "phone-shot-on-01": {
     "file": "showcase/phone-shot-on-01.jpg",
@@ -1275,7 +1416,8 @@
     "orientation": "portrait",
     "luminance": 0.4183,
     "saturation": 0.1419,
-    "sha256": "c5fd09d60085787eb50e165b23aa4b2154695f9cbfd0c4671d9ba4f29a8929c5"
+    "sha256": "fb210332b51c45511ee37137f69cb791dd50bcb73a1b3843f6d5a76307d6c4db",
+    "exif_source": "sony-a7r3"
   },
   "phone-side-rail-01": {
     "file": "showcase/phone-side-rail-01.jpg",
@@ -1284,7 +1426,8 @@
     "orientation": "portrait",
     "luminance": 0.4715,
     "saturation": 0,
-    "sha256": "fd60d629f34740d1f37da2f8ca3c3c3b271ba6484cf256c11cfac9c5760a3cac"
+    "sha256": "602ab3ceb4631d3efeea572ccf06c3334e76a47bfdb7a015f55ea6e849354c54",
+    "exif_source": "sony-a7r3"
   },
   "phone-studio-card-01": {
     "file": "showcase/phone-studio-card-01.jpg",
@@ -1293,7 +1436,8 @@
     "orientation": "portrait",
     "luminance": 0.4425,
     "saturation": 0.371,
-    "sha256": "6e4af14109fab9f733b15dac1bfb2cb35663a88ab7e4b184888777d3075f1b0a"
+    "sha256": "975d8aafb95d24515a2a80104967ccab68c145496d243f2a0f9589ddbdbdca60",
+    "exif_source": "sony-a7r3"
   },
   "phone-vendor-bar-01": {
     "file": "showcase/phone-vendor-bar-01.jpg",
@@ -1302,7 +1446,8 @@
     "orientation": "portrait",
     "luminance": 0.5366,
     "saturation": 0.3938,
-    "sha256": "57766e67938e4a61e69053f6d140827061d7debb2ad2e9622344f03363cc0a30"
+    "sha256": "f1002dd9d58135ec162cf4dd21056f4bbf9a14cc254b9250bc5437f63b8c206f",
+    "exif_source": "sony-a7r3"
   },
   "polaroid-classic-script-03": {
     "file": "showcase/polaroid-classic-script-03.jpg",
@@ -1311,7 +1456,8 @@
     "orientation": "portrait",
     "luminance": 0.4249,
     "saturation": 0.2844,
-    "sha256": "8d29f6c95fe46312f28bfd649a53d83380b79e52d700c39de1fb7a68949b09c7"
+    "sha256": "2c7d37000902f10e2aee1538654a37fce13affe841556d64d058b6349ac2d1f6",
+    "exif_source": "sony-a7r3"
   },
   "polaroid-duo-stamps-05": {
     "file": "showcase/polaroid-duo-stamps-05.jpg",
@@ -1320,7 +1466,8 @@
     "orientation": "portrait",
     "luminance": 0.272,
     "saturation": 0.7206,
-    "sha256": "ffe44b695f61c52cffb886179bec41a12998949a031ced582eec3b925370bd19"
+    "sha256": "db47295786de9f2d26a63941d40dc7f0464de79558decf6f35fbfc4cc6e0b401",
+    "exif_source": "sony-a7r3"
   },
   "polaroid-pastel-ring-04": {
     "file": "showcase/polaroid-pastel-ring-04.jpg",
@@ -1329,7 +1476,8 @@
     "orientation": "portrait",
     "luminance": 0.4388,
     "saturation": 0.3538,
-    "sha256": "e1fe26218d9499d36633bb1ada01bf137c88ad530fa39f517edb5de44dd2b879"
+    "sha256": "76f9704f4e5b53c450dfa6494c36ea0f8ecd192b259cad614f950756204e5783",
+    "exif_source": "sony-a7r3"
   },
   "polaroid-stamp-postcard-01": {
     "file": "showcase/polaroid-stamp-postcard-01.jpg",
@@ -1338,7 +1486,8 @@
     "orientation": "portrait",
     "luminance": 0.5379,
     "saturation": 0.2678,
-    "sha256": "7c8dbe26a8610083585c53f8514f9e4155a0f751e616fd0009bde14bc6b3a1e6"
+    "sha256": "50a880893d3e6d6c132add9cf427d19d9774083ff841bbcf678eb7b851e98feb",
+    "exif_source": "sony-a7r3"
   },
   "polaroid-tilt-plate-02": {
     "file": "showcase/polaroid-tilt-plate-02.jpg",
@@ -1347,7 +1496,8 @@
     "orientation": "portrait",
     "luminance": 0.6182,
     "saturation": 0.1518,
-    "sha256": "793372c2038932d57bf73a538be178d2fd9c3830365b24a87d57568d59d13c9a"
+    "sha256": "537ea4cb7bb24e9c70a8ed3f0bff9e96f95408c928dc30000b991591cefdb454",
+    "exif_source": "sony-a7r3"
   },
   "portfolio-credit-still-01": {
     "file": "showcase/portfolio-credit-still-01.jpg",
@@ -1356,7 +1506,8 @@
     "orientation": "landscape",
     "luminance": 0.6952,
     "saturation": 0.147,
-    "sha256": "a3fe2ebf4c5b0dcc70aae4f3bd34f6353e82666988693d3afee431edf51d6173"
+    "sha256": "f74f3096279c5be9a375022282e0131e1a19ed3aeef230670af5e51f2360eea6",
+    "exif_source": "nikon-z6ii"
   },
   "portfolio-double-rule-01": {
     "file": "showcase/portfolio-double-rule-01.jpg",
@@ -1365,7 +1516,8 @@
     "orientation": "landscape",
     "luminance": 0.7237,
     "saturation": 0.3311,
-    "sha256": "c3002394cf55362de4b33cacab5b9c83362acb76ea186ea47dbb67077220ee6c"
+    "sha256": "432d566fb503f97cd705c37028117f6f4b24e13745e1105d566ccf2cf3a273b3",
+    "exif_source": "canon-r7"
   },
   "portfolio-marginalia-01": {
     "file": "showcase/portfolio-marginalia-01.jpg",
@@ -1374,7 +1526,8 @@
     "orientation": "landscape",
     "luminance": 0.7418,
     "saturation": 0.1141,
-    "sha256": "0e6b99ca46256884c9d5fdfe186212d33d6a5caeb2cb0ff0f230caeddf2dea0e"
+    "sha256": "04251af96f994c09c95349be03b60be10a49cb3ecf0cf85e3a4ad2d956a4b201",
+    "exif_source": "nikon-z6ii"
   },
   "portfolio-noir-matte-01": {
     "file": "showcase/portfolio-noir-matte-01.jpg",
@@ -1383,7 +1536,8 @@
     "orientation": "landscape",
     "luminance": 0.8085,
     "saturation": 0.0684,
-    "sha256": "40041292a0e115a82d005d38089297c1cb4e745be3b79bf3c44d36d294955907"
+    "sha256": "5fa15ec4f6d68f620eb3d3e58d7bb15dc37754990b415b61a1571f33bfc05046",
+    "exif_source": "canon-r7"
   },
   "portfolio-vertical-scroll-01": {
     "file": "showcase/portfolio-vertical-scroll-01.jpg",
@@ -1392,7 +1546,8 @@
     "orientation": "landscape",
     "luminance": 0.8235,
     "saturation": 0.1592,
-    "sha256": "71b413a1fd1a9bb7aeaf406af375a270878f7e8e68823c79eb95f1a5a43a597a"
+    "sha256": "6d279d9f569e6114459121f24d202da762d2776cfa85ef39dd8ceec8dc881456",
+    "exif_source": "nikon-z6ii"
   },
   "portfolio-wall-label-01": {
     "file": "showcase/portfolio-wall-label-01.jpg",
@@ -1401,7 +1556,8 @@
     "orientation": "landscape",
     "luminance": 0.7269,
     "saturation": 0.1997,
-    "sha256": "b6ed37d2ce6924f4a417944dd7bf9eddf3e3a259c20941308114a6cb34edae11"
+    "sha256": "e6e056c7ab18fc3ad1d58ae4de5c72d6a048e114a43afefca898abbb6a8139bd",
+    "exif_source": "canon-r7"
   },
   "sports-big-trail-01": {
     "file": "showcase/sports-big-trail-01.jpg",
@@ -1410,7 +1566,8 @@
     "orientation": "landscape",
     "luminance": 0.4213,
     "saturation": 0.325,
-    "sha256": "32b813b39126a2303a28f10fab86591997304a69756b55b004e5e6baa6a289aa"
+    "sha256": "8dc2c5be556d89e2bba08d663b97b39b21acffa3313989a26613e1423940f2e4",
+    "exif_source": "canon-r7"
   },
   "sports-finish-line-01": {
     "file": "showcase/sports-finish-line-01.jpg",
@@ -1419,7 +1576,8 @@
     "orientation": "landscape",
     "luminance": 0.5543,
     "saturation": 0.3072,
-    "sha256": "d1e738b576bafc2dc10ebafc1ebe35c8df1e03c63ca638e29e35f09b45cdd4b2"
+    "sha256": "5321c78882f794b60097d0e961b206d5d2d04a6be38964eacad26f89bfc62a15",
+    "exif_source": "nikon-z6ii"
   },
   "sports-ride-stats-01": {
     "file": "showcase/sports-ride-stats-01.jpg",
@@ -1428,7 +1586,8 @@
     "orientation": "landscape",
     "luminance": 0.5813,
     "saturation": 0.1652,
-    "sha256": "ffe187dae3cf78d43f4a32ddc567b42faa3dfa2bbc75bcbbdad916fc63032e91"
+    "sha256": "08fa949b212c1c12166d759f2e21cbceae54e516ad6195e511687b4affdbae95",
+    "exif_source": "canon-r7"
   },
   "sports-side-rail-01": {
     "file": "showcase/sports-side-rail-01.jpg",
@@ -1437,7 +1596,8 @@
     "orientation": "landscape",
     "luminance": 0.4419,
     "saturation": 0.6612,
-    "sha256": "d17858ca0c99813d87650556ec6ee5a29feab0d6b04f807582f9edd31bee1391"
+    "sha256": "71ac512c557146c1a5f52284902e6d2b5e8bce2194aa2c148f7b6d69ad5349cf",
+    "exif_source": "nikon-z6ii"
   },
   "ticket-boarding-pass-03": {
     "file": "showcase/ticket-boarding-pass-03.jpg",
@@ -1446,7 +1606,8 @@
     "orientation": "portrait",
     "luminance": 0.4635,
     "saturation": 0.3013,
-    "sha256": "b529aa03a594a19dafc4d790e714c3935f45f510c7d26ea5c0b05fdbeeb03a89"
+    "sha256": "6d63262b3cd7fc98f81072a0a17b029347802fbe2c8ea19ce9b73cf87000c428",
+    "exif_source": "sony-a7r3"
   },
   "ticket-night-tilt-05": {
     "file": "showcase/ticket-night-tilt-05.jpg",
@@ -1455,7 +1616,8 @@
     "orientation": "portrait",
     "luminance": 0.6286,
     "saturation": 0.2075,
-    "sha256": "2c05523495cba964e8222f6f7ab385f79eb039ddb55e3dbf11b3935592c46aff"
+    "sha256": "912592f4330e24df7f7b08d9d74e84dd048b0885576ea230543127714dc7971d",
+    "exif_source": "sony-a7r3"
   },
   "ticket-park-pass-04": {
     "file": "showcase/ticket-park-pass-04.jpg",
@@ -1464,7 +1626,8 @@
     "orientation": "portrait",
     "luminance": 0.5707,
     "saturation": 0.0557,
-    "sha256": "b4c06e9e2a789bd245efa1b5d60c064d0cb6b3dc00758a6ddebf2396148832c5"
+    "sha256": "b78fd9a0feff3a77a40d2a2c1b4a736a8f6701d9016d7bbc2c55abaa25f381b6",
+    "exif_source": "sony-a7r3"
   },
   "ticket-stub-horizontal-01": {
     "file": "showcase/ticket-stub-horizontal-01.jpg",
@@ -1473,7 +1636,8 @@
     "orientation": "portrait",
     "luminance": 0.3791,
     "saturation": 0.1205,
-    "sha256": "93c72069802902f7882dd2c2871f176de57232fc5106ffc98381ad1c157c5dc6"
+    "sha256": "d34fbec4120942d4910999dc9a2da351a5082a5fa6f7d7dbf8993717ea866fd3",
+    "exif_source": "sony-a7r3"
   },
   "ticket-vertical-rail-02": {
     "file": "showcase/ticket-vertical-rail-02.jpg",
@@ -1482,7 +1646,8 @@
     "orientation": "portrait",
     "luminance": 0.5343,
     "saturation": 0.3734,
-    "sha256": "fc475d88ad9d2adeedde4552e97e336fcfb85f991210c8d01fe47d611b38fe82"
+    "sha256": "e1d3282d5cf86b33b6492aeb89f77da93d0230e1ed0611c0dde2864c0d3dd559",
+    "exif_source": "sony-a7r3"
   },
   "white-border-editorial-01": {
     "file": "showcase/white-border-editorial-01.jpg",
@@ -1491,7 +1656,8 @@
     "orientation": "landscape",
     "luminance": 0.8751,
     "saturation": 0.1052,
-    "sha256": "fb8f97ec4262c7823c5cff94e101de98f78b3bfdc47160046135eb627955501e"
+    "sha256": "a974fd9f143d20b54cb70e3cbfab1a52f48a2c1e2786bc3fed8fb1cd96b9951c",
+    "exif_source": "nikon-z6ii"
   },
   "white-border-letterhead": {
     "file": "showcase/white-border-letterhead.jpg",
@@ -1500,7 +1666,8 @@
     "orientation": "landscape",
     "luminance": 0.6658,
     "saturation": 0.3196,
-    "sha256": "e36b4a0058ee2df11e9084bca1739ef798d66ca74dca6c61b497f5e8ca9140c1"
+    "sha256": "a93e019776fa5906ca4a7386d40c2d994a5b8c9672fa907a0a11e380cd67d8b0",
+    "exif_source": "canon-r7"
   },
   "white-border-linen-dot": {
     "file": "showcase/white-border-linen-dot.jpg",
@@ -1509,7 +1676,8 @@
     "orientation": "landscape",
     "luminance": 0.6905,
     "saturation": 0.0058,
-    "sha256": "761c4da9cee8cec53f113226ca0e46e0a348ac93c5a75afbc43f67069a5bb2e8"
+    "sha256": "fa57150152bc5af5fd9f2bd16cb31b6b8800d5e2d43058f530773a8455343fcd",
+    "exif_source": "nikon-z6ii"
   },
   "white-border-passport-mono": {
     "file": "showcase/white-border-passport-mono.jpg",
@@ -1518,7 +1686,8 @@
     "orientation": "landscape",
     "luminance": 0.8207,
     "saturation": 0.0226,
-    "sha256": "32b1e532dac17f650638b3b859c734c8e410db81403a8b8bb273f32b19059259"
+    "sha256": "aa8bb5db77e9df06b89048fa86db2a858b49b8e042c837d6dba67407fc9ca0ec",
+    "exif_source": "canon-r7"
   },
   "white-border-quiet-stack": {
     "file": "showcase/white-border-quiet-stack.jpg",
@@ -1527,7 +1696,8 @@
     "orientation": "landscape",
     "luminance": 0.6727,
     "saturation": 0.2991,
-    "sha256": "2364e35534e041fa65297d42994aec346e46f1e107740a06d6fb4352752e85eb"
+    "sha256": "0f89332811fb33626b3211320fcc8f164d8e543805c8b9069e6e30b362b14994",
+    "exif_source": "nikon-z6ii"
   },
   "white-border-ruled-band": {
     "file": "showcase/white-border-ruled-band.jpg",
@@ -1536,7 +1706,8 @@
     "orientation": "landscape",
     "luminance": 0.7177,
     "saturation": 0.093,
-    "sha256": "8713f8c5cdb6d7ee5805ed96023790dc1121cb69682a9313d49b093a0c0c0408"
+    "sha256": "5a64b90beeab12b8a9d80feaeab93c269bea3fc11c205c4a377e02022dd9fd9e",
+    "exif_source": "canon-r7"
   },
   "white-border-top-note": {
     "file": "showcase/white-border-top-note.jpg",
@@ -1545,7 +1716,8 @@
     "orientation": "landscape",
     "luminance": 0.7421,
     "saturation": 0.1363,
-    "sha256": "248d4b2e90e04367ac773ecd71c4136f744141c21d9ab33fa7f8e60b4b465691"
+    "sha256": "53c9b80c27dac3cdeb7ea2cd993a58456530e2ee426f29c5c8eaa38e56547bb4",
+    "exif_source": "nikon-z6ii"
   },
   "white-border-twin-columns": {
     "file": "showcase/white-border-twin-columns.jpg",
@@ -1554,7 +1726,8 @@
     "orientation": "landscape",
     "luminance": 0.7679,
     "saturation": 0.1993,
-    "sha256": "fed8979bc3d8541c13a7276c7c62a03fcee40a2c69a4865f7aa1c752e8e9b202"
+    "sha256": "7d701f6aef16bc88411b43c810e83106cc5ef79e40bca906c53d4ccd6079e9aa",
+    "exif_source": "canon-r7"
   },
   "art-copperplate-etch": {
     "file": "showcase/art-copperplate-etch.jpg",
@@ -1563,7 +1736,8 @@
     "orientation": "landscape",
     "luminance": 0.3606,
     "saturation": 0.3414,
-    "sha256": "c8a45c28d54bc5da48d9f1ee9b71be738bf8a705db2e3e73442cb89cfc3f0bb7"
+    "sha256": "8439fc9df63f9a5f1f61e9596669cd56a5fcc2c91b5c002704aeaef87c7100b1",
+    "exif_source": "nikon-z6ii"
   },
   "art-letterpress-relief": {
     "file": "showcase/art-letterpress-relief.jpg",
@@ -1572,7 +1746,8 @@
     "orientation": "landscape",
     "luminance": 0.6454,
     "saturation": 0.14,
-    "sha256": "08ed32ec09fee92748746dddf8a8204f957b9810d43095c86eb5b970f824f645"
+    "sha256": "1005dc69e1ce07c4f9afa5fab36fa54899baf46b0d6497a765d1d4e942b5a8e2",
+    "exif_source": "canon-r7"
   },
   "art-ukiyoe-cartouche": {
     "file": "showcase/art-ukiyoe-cartouche.jpg",
@@ -1581,7 +1756,8 @@
     "orientation": "landscape",
     "luminance": 0.3434,
     "saturation": 0.2476,
-    "sha256": "c6d59a79458ef43147535e20c241acab61fa25de13f8a9a41d4d27ad3093d1f8"
+    "sha256": "c8776b9300aedf12197117f5b2f8d299d4545559033d1c0986e211a428bf212e",
+    "exif_source": "canon-r7"
   },
   "art-vermilion-seal": {
     "file": "showcase/art-vermilion-seal.jpg",
@@ -1590,7 +1766,8 @@
     "orientation": "landscape",
     "luminance": 0.3782,
     "saturation": 0.18,
-    "sha256": "f92c5bbf441dfdd948a9fb40ea757ac1f274c0a24be21a822216095973aff6f9"
+    "sha256": "f1b05945f612366c3258d0c7727278e622e11ce534c705ec48611145dc6e1806",
+    "exif_source": "nikon-z6ii"
   },
   "art-woodtype-press": {
     "file": "showcase/art-woodtype-press.jpg",
@@ -1599,42 +1776,57 @@
     "orientation": "landscape",
     "luminance": 0.3836,
     "saturation": 0.1203,
-    "sha256": "97f3f5a966e52c9653d1f7d800709209af7e194a540219ffed5482b7a25a2fb8"
+    "sha256": "1069c9e3afc44798d310d9f66e85003585c596f292c72765110d8972454a2e6e",
+    "exif_source": "canon-r7"
   },
   "art-deco-double": {
     "file": "showcase/art-deco-double.jpg",
     "source": "existing:mist-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "e8a386c85c59ea5c5c3c11823a0b03c2f1ef2c69532e6fdddafb86938b2a9585",
+    "exif_source": "canon-r7"
   },
   "art-gilt-foil": {
     "file": "showcase/art-gilt-foil.jpg",
     "source": "existing:night-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "07425503d3aaa725a49711143ed3b6c0732bbe3a27718377592f7b7166dc9cce",
+    "exif_source": "nikon-z6ii"
   },
   "art-republican-press": {
     "file": "showcase/art-republican-press.jpg",
     "source": "existing:people-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "1f5f95e5d3595593c23fca196ea8a5db7e1658a8f9e393b02a49dc65a958db39",
+    "exif_source": "nikon-z6ii"
   },
   "camera-baseplate-02": {
     "file": "showcase/camera-baseplate-02.jpg",
     "source": "existing:street-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "bc025cd015bb5e7a8ed83f35e7c29d01ea8c9f4df84008388bf06dee5f4f253b",
+    "exif_source": "canon-r7"
   },
   "colorful-chip-strip-01": {
     "file": "showcase/colorful-chip-strip-01.jpg",
     "source": "existing:square-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "205913c1886762f5add370e8cd28a6d7343e826bc6a812a00de83ec332cace24",
+    "exif_source": "canon-r7"
   },
   "colorwalk-blur-stage-01": {
     "file": "showcase/colorwalk-blur-stage-01.jpg",
     "source": "existing:architecture-2.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "26796b0a861074fc1ea8f9c9b9685bf575782276f991d13cee8b9f8a8a508164",
+    "exif_source": "canon-r7"
   },
   "drone-aerial-editorial-01": {
     "file": "showcase/drone-aerial-editorial-01.jpg",
     "source": "existing:landscape-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "266ceffa493b0df94d6552c818a12ec4c1eecead6eabf8ccda5f29f798cbf0a2",
+    "exif_source": "canon-r7"
   },
   "effect-duotone-wash-03": {
     "file": "showcase/effect-duotone-wash-03.jpg",
@@ -1643,12 +1835,15 @@
     "orientation": "landscape",
     "luminance": 0.2935,
     "saturation": 0.2902,
-    "sha256": "e10e4a542d0fdd86fef34729f03a923ddeecad9ce230f54e2f06ab7f4e552aff"
+    "sha256": "cd68c339ef8730b92b69059f636d4b7d5aa94fce8b650ade017fbbed084c8994",
+    "exif_source": "nikon-z6ii"
   },
   "fuji-recipe-band-02": {
     "file": "showcase/fuji-recipe-band-02.jpg",
     "source": "existing:landscape-2.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "0979a9880288a0531d132fa5775ed95c980d4d5ed1542f433c959521c71f1a93",
+    "exif_source": "nikon-z6ii"
   },
   "magazine-cover-banner-01": {
     "file": "showcase/magazine-cover-banner-01.jpg",
@@ -1657,12 +1852,15 @@
     "orientation": "landscape",
     "luminance": 0.3031,
     "saturation": 0.3523,
-    "sha256": "d6f7a1c6dd0ee1bc25b60d54fede35faa4e42663aeb71d91fafbcfe6c82932c3"
+    "sha256": "5c7c4ea6be26f8249692cac2182eb962312eafc8c0b6b825a9c7ba7f818de4c1",
+    "exif_source": "canon-r7"
   },
   "personal-avatar-ring-01": {
     "file": "showcase/personal-avatar-ring-01.jpg",
     "source": "existing:portrait-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "e5b0a0352024995ebcc92518840e1bcb030cf8de0d729f733859064738eeccc9",
+    "exif_source": "sony-a7r3"
   },
   "portfolio-atelier-plate-01": {
     "file": "showcase/portfolio-atelier-plate-01.jpg",
@@ -1671,16 +1869,21 @@
     "orientation": "landscape",
     "luminance": 0.3261,
     "saturation": 0,
-    "sha256": "41f6137582802b710682d49568e55c9cd87afcf53b6fff8f05b3a0de7bb9aaad"
+    "sha256": "670dfc7e664603130179da4a1ea321d9c323948c855c55b389b4398f9de53dcf",
+    "exif_source": "canon-r7"
   },
   "sports-alt-badge-01": {
     "file": "showcase/sports-alt-badge-01.jpg",
     "source": "existing:landscape-3.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "55e4329553af4ac688e660a3f662468ae63159d29d57de9ef0c172a8a38b9403",
+    "exif_source": "nikon-z6ii"
   },
   "white-border-centered-lockup": {
     "file": "showcase/white-border-centered-lockup.jpg",
     "source": "existing:architecture-1.jpg",
-    "orientation": null
+    "orientation": null,
+    "sha256": "e6df29120e7d1eab9ed9d40d2d4cc831443bad2621cc5c3e93128c5878db7c96",
+    "exif_source": "canon-r7"
   }
 }

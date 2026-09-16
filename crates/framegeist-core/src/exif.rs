@@ -1,5 +1,7 @@
 use std::io::Cursor;
 
+use img_parts::{jpeg::Jpeg, png::Png, webp::WebP, Bytes, ImageEXIF};
+
 use crate::{Error, Result};
 
 #[derive(Debug, Clone, Default, serde::Serialize)]
@@ -40,6 +42,18 @@ pub struct ExifInfo {
     pub fuji_clarity: Option<String>,
     pub fuji_lut1: Option<String>,
     pub fuji_lut2: Option<String>,
+}
+
+/// v0.6.0 polish: "25.0s" -> "25s" (keep sub-second decimals and fractions).
+fn trim_shutter(raw: &str) -> String {
+    if let Some(num) = raw.strip_suffix("s") {
+        if let Ok(v) = num.parse::<f64>() {
+            if (v.fract()).abs() < 0.001 {
+                return format!("{}s", v.round() as i64);
+            }
+        }
+    }
+    raw.to_string()
 }
 
 fn format_dms(value: f64, positive: char, negative: char) -> String {
@@ -104,6 +118,59 @@ fn weekday_cn(datetime: &str) -> Option<&'static str> {
 }
 
 impl ExifInfo {
+    /// v0.6.0: merge user/editor supplied EXIF overrides (preview-only values).
+    /// Unknown keys are ignored; numbers are formatted like the original tags.
+    pub fn apply_overrides(&mut self, map: &serde_json::Map<String, serde_json::Value>) {
+        fn text(v: &serde_json::Value) -> Option<String> {
+            match v {
+                serde_json::Value::String(s) => Some(s.clone()),
+                serde_json::Value::Number(n) => Some(n.to_string()),
+                serde_json::Value::Bool(b) => Some(b.to_string()),
+                _ => None,
+            }
+        }
+        fn number(v: &serde_json::Value) -> Option<f64> {
+            match v {
+                serde_json::Value::Number(n) => n.as_f64(),
+                serde_json::Value::String(s) => s.parse().ok(),
+                _ => None,
+            }
+        }
+        for (key, value) in map {
+            match key.as_str() {
+                "make" => self.make = text(value),
+                "model" => self.model = text(value),
+                "model_pretty" => self.model_pretty = text(value),
+                "lens" => self.lens = text(value),
+                "focal" | "focal_mm" => self.focal_mm = number(value),
+                "aperture" => self.aperture = number(value),
+                "shutter" => self.shutter = text(value),
+                "iso" => {
+                    self.iso = number(value).map(|v| v.round().clamp(0.0, u16::MAX as f64) as u16)
+                }
+                "datetime" => self.datetime = text(value),
+                "brand_slug" => self.brand_slug = text(value),
+                "lens_slug" => self.lens_slug = text(value),
+                "lens_series" => self.lens_series = text(value),
+                "film_mode" => self.film_mode = text(value),
+                "wb_mode" => self.wb_mode = text(value),
+                "wb_shift_r" => self.wb_shift_r = text(value),
+                "wb_shift_b" => self.wb_shift_b = text(value),
+                "grain" => self.grain = text(value),
+                "color_chrome" => self.color_chrome = text(value),
+                "chrome_fx_blue" => self.chrome_fx_blue = text(value),
+                "dynamic_range" => self.dynamic_range = text(value),
+                "highlight_tone" => self.highlight_tone = text(value),
+                "shadow_tone" => self.shadow_tone = text(value),
+                "fuji_sharpness" => self.fuji_sharpness = text(value),
+                "fuji_saturation" => self.fuji_saturation = text(value),
+                "fuji_nr" => self.fuji_noise_reduction = text(value),
+                "fuji_clarity" => self.fuji_clarity = text(value),
+                _ => {}
+            }
+        }
+    }
+
     pub fn get(&self, key: &str) -> Option<String> {
         match key {
             "make" => self.make.clone(),
@@ -111,8 +178,14 @@ impl ExifInfo {
             "model_pretty" => self.model_pretty.clone().or_else(|| self.model.clone()),
             "lens" => self.lens.clone(),
             "focal" => self.focal_mm.map(|f| format!("{:.0}", f)),
-            "aperture" => self.aperture.map(|f| format!("{:.1}", f)),
-            "shutter" => self.shutter.clone(),
+            "aperture" => self.aperture.map(|f| {
+                if (f.fract()).abs() < 0.001 {
+                    format!("{f:.0}")
+                } else {
+                    format!("{f:.1}")
+                }
+            }),
+            "shutter" => self.shutter.as_deref().map(trim_shutter),
             "iso" => self.iso.map(|v| v.to_string()),
             "datetime" => self.datetime.clone(),
             "orientation" => self.orientation.map(|v| v.to_string()),
@@ -643,15 +716,70 @@ pub struct MetadataReport {
     pub gps_stripped: usize,
     pub serial_stripped: usize,
     pub keep_gps: bool,
+    /// v0.6.0 M3: true when the export copied the source EXIF byte-for-byte
+    /// (MakerNote/vendor tags preserved) instead of rebuilding a whitelist.
+    pub passthrough: bool,
 }
 
 /// Serial-number tags stripped regardless of settings (PRD B3).
 const SERIAL_TAGS: [u16; 2] = [0xA431, 0xA435]; // BodySerialNumber, LensSerialNumber
 
+/// v0.6.0 M3: raw EXIF TIFF block (no `Exif\0\0` wrapper) from a JPEG APP1,
+/// PNG eXIf chunk or WebP EXIF chunk. `None` for unsupported containers or
+/// when the source carries no EXIF.
+pub fn raw_exif_block(source: &[u8]) -> Option<Vec<u8>> {
+    let bytes = Bytes::copy_from_slice(source);
+    if source.starts_with(&[0xFF, 0xD8]) {
+        Jpeg::from_bytes(bytes).ok()?.exif().map(|b| b.to_vec())
+    } else if source.starts_with(&[0x89, b'P', b'N', b'G']) {
+        Png::from_bytes(bytes).ok()?.exif().map(|b| b.to_vec())
+    } else if source.len() >= 12 && &source[..4] == b"RIFF" && &source[8..12] == b"WEBP" {
+        WebP::from_bytes(bytes).ok()?.exif().map(|b| b.to_vec())
+    } else {
+        None
+    }
+}
+
+/// v0.6.0 M3 export passthrough: edit the source EXIF blob instead of
+/// rebuilding it. GPS + camera owner/serials are removed (GPS only unless
+/// `keep_gps`) and Orientation is normalized to 1; every other byte,
+/// including MakerNote and unknown vendor tags, survives verbatim.
+///
+/// `Ok(None)` when the source has no EXIF block; `Err` when a block exists
+/// but is malformed (callers fall back to the whitelist rebuild).
+pub fn passthrough_exif_tiff(
+    source: &[u8],
+    keep_gps: bool,
+) -> Result<Option<(Vec<u8>, MetadataReport)>> {
+    let Some(raw) = raw_exif_block(source) else {
+        return Ok(None);
+    };
+    let sanitized = crate::exif_surgery::sanitize_exif_block(&raw, keep_gps)?;
+    let report = sanitized.report;
+    Ok(Some((sanitized.into_tiff(), report)))
+}
+
 /// Cleaned EXIF write-back with metadata report (PRD B3):
-/// GPS and serials are removed unless `keep_gps` (user opt-in, B3);
-/// `final_size` normalizes Orientation to 1 and records final pixel dims.
+/// GPS and serials are removed unless `keep_gps` (user opt-in, B3).
+///
+/// v0.6.0 M3: tries the byte-level passthrough first (source EXIF preserved
+/// verbatim except the removed tags + Orientation->1) and only falls back to
+/// the whitelist rebuild when the source EXIF is malformed/unreadable; the
+/// whitelist fallback honors `final_size` (Orientation->1 + PixelXDimension/
+/// PixelYDimension of the output).
 pub fn cleaned_exif_tiff_full(
+    photo: &[u8],
+    final_size: Option<(u32, u32)>,
+    keep_gps: bool,
+) -> Result<Option<(Vec<u8>, MetadataReport)>> {
+    if let Ok(Some(hit)) = passthrough_exif_tiff(photo, keep_gps) {
+        return Ok(Some(hit));
+    }
+    cleaned_exif_tiff_whitelist(photo, final_size, keep_gps)
+}
+
+/// Legacy whitelist rebuild (fallback path): only whitelisted tags survive.
+pub(crate) fn cleaned_exif_tiff_whitelist(
     photo: &[u8],
     final_size: Option<(u32, u32)>,
     keep_gps: bool,
@@ -713,4 +841,47 @@ pub fn cleaned_exif_tiff_full(
         .write(&mut buf, false)
         .map_err(|e| Error::Exif(e.to_string()))?;
     Ok(Some((buf.into_inner(), report)))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn numeric_display_is_polished() {
+        let info = ExifInfo {
+            aperture: Some(4.0),
+            focal_mm: Some(24.0),
+            shutter: Some("25.0s".into()),
+            ..ExifInfo::default()
+        };
+        assert_eq!(info.get("aperture").as_deref(), Some("4"));
+        assert_eq!(info.get("focal").as_deref(), Some("24"));
+        assert_eq!(info.get("shutter").as_deref(), Some("25s"));
+        let info = ExifInfo {
+            aperture: Some(1.8),
+            shutter: Some("1/250s".into()),
+            ..ExifInfo::default()
+        };
+        assert_eq!(info.get("aperture").as_deref(), Some("1.8"));
+        assert_eq!(info.get("shutter").as_deref(), Some("1/250s"));
+    }
+
+    #[test]
+    fn overrides_merge_whitelisted_keys() {
+        let mut info = ExifInfo::default();
+        let map = serde_json::json!({
+            "model": "ILCE-7RM3",
+            "focal": 35,
+            "aperture": "1.2",
+            "iso": 100,
+            "not_a_key": "ignored",
+            "object": {"nested": true}
+        });
+        info.apply_overrides(map.as_object().expect("object"));
+        assert_eq!(info.model.as_deref(), Some("ILCE-7RM3"));
+        assert_eq!(info.get("focal").as_deref(), Some("35"));
+        assert_eq!(info.get("aperture").as_deref(), Some("1.2"));
+        assert_eq!(info.iso, Some(100));
+    }
 }

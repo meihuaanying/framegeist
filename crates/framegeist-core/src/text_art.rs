@@ -620,6 +620,7 @@ pub fn draw_solid_text(
         letter_spacing_em: 0.0,
         align: "left",
         max_width: None,
+        features: &[],
     };
     let Some(raster) = shaper.shape(&req) else {
         return (0, 0);

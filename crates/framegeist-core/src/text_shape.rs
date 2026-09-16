@@ -9,7 +9,10 @@
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use cosmic_text::{Attrs, Buffer, Family, FontSystem, Metrics, Shaping, SwashCache, Weight};
+use cosmic_text::{
+    Attrs, Buffer, Family, FeatureTag, FontFeatures, FontSystem, Metrics, Shaping, SwashCache,
+    Weight,
+};
 
 use crate::text::FontBook;
 
@@ -32,6 +35,8 @@ pub struct ShapeRequest<'a> {
     pub align: &'a str,
     /// Wrap width in pixels (`None` = no wrapping).
     pub max_width: Option<f32>,
+    /// v0.6.0: OpenType features to enable (e.g. `tnum`, `smcp`).
+    pub features: &'a [String],
 }
 
 /// Rasterized text block: tight alpha mask, origin-normalized.
@@ -112,10 +117,19 @@ impl Shaper {
             return None;
         }
         let family = self.family_for(req.families)?;
+        let mut font_features = FontFeatures::new();
+        for feature in req.features {
+            if feature.len() == 4 {
+                let mut tag = [0u8; 4];
+                tag.copy_from_slice(feature.as_bytes());
+                font_features.enable(FeatureTag::new(&tag));
+            }
+        }
         let attrs = Attrs::new()
             .family(Family::Name(family.as_str()))
             .weight(Weight(req.weight.unwrap_or(400).clamp(100, 900) as u16))
-            .letter_spacing(req.letter_spacing_em);
+            .letter_spacing(req.letter_spacing_em)
+            .font_features(font_features);
         let metrics = Metrics::new(req.size_px, req.size_px * req.line_height);
         let mut buffer = Buffer::new(&mut self.system, metrics);
         buffer.set_size(req.max_width, None);

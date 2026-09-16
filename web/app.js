@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.5.0";
+const APP_VERSION = "0.6.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -45,6 +45,8 @@ const LS = {
   const settings = loadJson(LS.settings, {
   aspect: "original", background: "default", bgColor: "#FFFFFF",
   flipH: false, flipV: false, showLogo: true, exportSize: "0",
+  // v0.6.0 Q10: export container (jpeg | png | avif | webp).
+  exportFormat: "jpeg",
   exportCustom: 3000, fontFamily: "",
   defaultFontSize: 1, defaultUseColor: false, defaultTextColor: "#111111",
   saveMode: "dialog", keepGps: false, channel: "stable", keepMetadata: true,
@@ -126,7 +128,7 @@ function applyTheme() {
   const dark = mode === "dark" || (mode === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
   document.documentElement.dataset.theme = dark ? "dark" : "light";
   const btn = $("themeBtn");
-  btn.textContent = mode === "auto" ? "◐" : mode === "light" ? "☀" : "☾";
+  btn.textContent = mode === "auto" ? "�? : mode === "light" ? "☀" : "�?;
   btn.title = t(`theme.${mode}`);
 }
 function cycleTheme() {
@@ -178,16 +180,34 @@ function buildOverridesJson() {
   if (settings.flipV) out.flipVertical = true;
   out.showLogo = settings.showLogo && state.brandOverride !== "none";
   if (settings.keepMetadata === false) out.metadata = false;
+  // v0.6.0: localize `date('LOCAL', ...)` captions to the UI language.
+  out.dateLocale = currentLang();
   // v0.5.0: crop + editor extras.
   const extra = window.__fgEditor?.editorOverrides?.() ?? {};
   if (extra.crop) out.crop = extra.crop;
   if (extra.card) out.card = extra.card;
+  if (extra.exif) out.exif = extra.exif;
   return Object.keys(out).length ? JSON.stringify(out) : "";
 }
 function exportMaxEdge() {
   const v = settings.exportSize;
   if (v === "custom") return Number(settings.exportCustom) || 0;
   return Number(v) || 0;
+}
+
+/* v0.6.0 Q10: export container formats (engine `parse_format` strings).
+   The fast-preview path is `render_raw`, which only encodes JPEG by design:
+   AVIF/WebP encodes are much slower and previews must stay snappy. So the
+   on-screen fast preview stays JPEG, while the final export render (preview
+   checkbox off) passes the selected format to `render_with_overrides`. */
+const EXPORT_FORMATS = {
+  jpeg: { ext: "jpg", mime: "image/jpeg" },
+  png: { ext: "png", mime: "image/png" },
+  avif: { ext: "avif", mime: "image/avif" },
+  webp: { ext: "webp", mime: "image/webp" },
+};
+function exportFormat() {
+  return EXPORT_FORMATS[settings.exportFormat] ? settings.exportFormat : "jpeg";
 }
 
 /* --------------------------------------- background swatches + eyedropper */
@@ -454,7 +474,7 @@ function buildTemplatePicker() {
       : `<div style="display:grid;place-items:center;height:100%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)));font-family:var(--font-display)">${escapeHtml(tplName(tpl).slice(0, 14))}</div>`) +
       (isUser ? `<span class="badge">${t("chip.mine")}</span>` : "") +
       `<span class="tname">${escapeHtml(tplName(tpl))}</span>` +
-      `<button class="zoom">⤢</button>`;
+      `<button class="zoom">�?/button>`;
     cell.onclick = (e) => {
       if (e.target.classList.contains("zoom")) { e.stopPropagation(); openLightbox(tpl.id); return; }
       if (state.photos.length) selectTemplate(tpl.id);
@@ -468,7 +488,7 @@ function buildTemplatePicker() {
 function updatePinned() {
   const tpl = state.templates.find((x) => x.id === state.templateId)
     || state.userTemplates.find((x) => x.id === state.templateId);
-  $("pinnedName").textContent = tpl ? tplName(tpl) : "—";
+  $("pinnedName").textContent = tpl ? tplName(tpl) : "�?;
   const cat = tpl?.category ?? "";
   $("pinnedCat").textContent = tpl
     ? (t(`cat.${cat}`) !== `cat.${cat}` ? t(`cat.${cat}`) : cat || "user")
@@ -587,7 +607,7 @@ function buildWall() {
       ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
       : `<div style="display:grid;place-items:center;aspect-ratio:3/2;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)))">${escapeHtml(tplName(tpl).slice(0, 16))}</div>`) +
       `<div class="wall-name"><b>${escapeHtml(tplName(tpl))}</b><span class="wall-cat"></span></div>` +
-      `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">⤢</button></div>`;
+      `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">�?/button></div>`;
     cell.querySelector(".wall-cat").textContent = catLabel;
     cell.onclick = (e) => {
       if (e.target.classList.contains("icon")) { e.stopPropagation(); openLightbox(tpl.id); return; }
@@ -647,21 +667,148 @@ function updateBrandDetected() {
   $("brandDetected").textContent = t("brand.detected", { brand: info.brand_slug + lens });
 }
 
+const SAMPLE_PHOTOS = [
+  { file: "sony-a7r3.jpg", key: "samples.sony" },
+  { file: "nikon-z6ii.jpg", key: "samples.nikon" },
+  { file: "canon-r7.jpg", key: "samples.canon" },
+];
+async function loadSamplePhoto(file) {
+  try {
+    const res = await fetch(`./examples/${file}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const blob = await res.blob();
+    await acceptFiles([new File([blob], file, { type: blob.type || "image/jpeg" })]);
+  } catch (e) {
+    toast("error", `${file}: ${e.message || e}`);
+  }
+}
+function buildSampleRow() {
+  const row = $("sampleRow");
+  if (!row) return;
+  row.innerHTML = "";
+  const label = document.createElement("span");
+  label.className = "muted";
+  label.textContent = t("samples.label");
+  row.appendChild(label);
+  for (const s of SAMPLE_PHOTOS) {
+    const btn = document.createElement("button");
+    btn.className = "btn small ghost sample-chip";
+    btn.textContent = t(s.key);
+    btn.onclick = () => loadSamplePhoto(s.file);
+    row.appendChild(btn);
+  }
+}
+
 /* --------------------------------------------------------------- photos */
+/* v0.6.0 (contract Q10): HEIC/HEIF is decoded fully in-browser by a lazily
+   imported libheif-js wasm bundle (vendored under web/vendor/libheif/, LGPL-3.0,
+   see docs/licenses/ and docs/CREDITS.md). The module is an EXTERNAL file loaded
+   via dynamic import() on first HEIC drop: on a first offline visit the import
+   fails and we degrade to the err.heicOffline toast. Photos never leave the
+   machine (PRD G1). HEIC EXIF is out of scope: probe_exif on the original bytes
+   may return null and the converted JPEG carries none. */
+const HEIC_RE = /\.(heic|heif)$/i;
+const HEIC_MAX_BYTES = 64 * 1024 * 1024;
+const HEIC_MAX_PIXELS = 40e6;
+let heifModulePromise = null;
+async function loadHeifModule() {
+  if (!heifModulePromise) {
+    heifModulePromise = import("./vendor/libheif/libheif-bundle.mjs")
+      .then((mod) => {
+        const factory = mod?.default ?? mod;
+        const out = typeof factory === "function" ? factory() : factory;
+        return out?.then ? out : Promise.resolve(out);
+      })
+      .then((libheif) => {
+        if (!libheif?.HeifDecoder) throw new Error("libheif API missing");
+        return libheif;
+      })
+      .catch((e) => { heifModulePromise = null; throw e; });
+  }
+  return heifModulePromise;
+}
+/* Cheap container sniff so junk `.heic` files never load the 2MB module nor
+   make the libheif wasm print parse diagnostics to the console. */
+function looksLikeHeif(bytes) {
+  if (!(bytes instanceof Uint8Array) || bytes.length < 12) return false;
+  const tag = (o) => String.fromCharCode(bytes[o], bytes[o + 1], bytes[o + 2], bytes[o + 3]);
+  if (tag(4) !== "ftyp") return false;
+  return /^(heic|heix|hevc|hevx|heim|heis|hevm|hevs|mif1|msf1|avif|avis|miaf)$/.test(tag(8));
+}
+async function rgbaToJpeg(imageData, width, height) {
+  if (typeof OffscreenCanvas === "function") {
+    const canvas = new OffscreenCanvas(width, height);
+    canvas.getContext("2d").putImageData(new ImageData(imageData.data, width, height), 0, 0);
+    return canvas.convertToBlob({ type: "image/jpeg", quality: 0.92 });
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = width; canvas.height = height;
+  canvas.getContext("2d").putImageData(new ImageData(imageData.data, width, height), 0, 0);
+  return new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+}
+/// Decode one HEIC/HEIF File to a JPEG File. Returns { file, probeBytes } or
+/// null (a localized toast has already been shown).
+async function heicToJpeg(file) {
+  if (file.size > HEIC_MAX_BYTES) { toast("error", t("err.heicTooLarge")); return null; }
+  let bytes;
+  try { bytes = new Uint8Array(await file.arrayBuffer()); } catch { toast("error", t("err.heic")); return null; }
+  if (!looksLikeHeif(bytes)) { toast("error", t("err.heic")); return null; }
+  let libheif;
+  try {
+    libheif = await loadHeifModule();
+  } catch {
+    toast("error", t("err.heicOffline"));
+    return null;
+  }
+  let image = null;
+  try {
+    image = new libheif.HeifDecoder().decode(bytes)?.[0] ?? null;
+    if (!image) throw new Error("no image");
+    const width = image.get_width();
+    const height = image.get_height();
+    if (width <= 0 || height <= 0) throw new Error("bad dimensions");
+    if (width * height >= HEIC_MAX_PIXELS) { toast("error", t("err.heicTooLarge")); return null; }
+    const imageData = { data: new Uint8ClampedArray(width * height * 4), width, height };
+    await new Promise((resolve, reject) => {
+      image.display(imageData, (out) => (out ? resolve() : reject(new Error("display failed"))));
+    });
+    const blob = await rgbaToJpeg(imageData, width, height);
+    if (!blob) throw new Error("encode failed");
+    return {
+      file: new File([blob], file.name.replace(HEIC_RE, "") + ".jpg", { type: "image/jpeg" }),
+      probeBytes: bytes,
+    };
+  } catch {
+    toast("error", t("err.heic"));
+    return null;
+  } finally {
+    try { image?.free?.(); } catch { /* best effort */ }
+  }
+}
 async function acceptFiles(fileList) {
   const files = [...fileList].filter((f) => /image\//.test(f.type) || /\.(jpe?g|png|webp|tiff?|heic|heif)$/i.test(f.name));
   if (!files.length) { toast("error", t("err.decode")); return; }
-  const heic = files.find((f) => /\.(heic|heif)$/i.test(f.name));
-  if (heic) { toast("error", t("err.heic")); }
-  const good = files.filter((f) => !/\.(heic|heif)$/i.test(f.name));
-  if (!good.length) return;
+  const prepared = [];
+  for (const f of files) {
+    if (HEIC_RE.test(f.name)) {
+      const decoded = await heicToJpeg(f);
+      if (decoded) prepared.push({ file: decoded.file, name: f.name, probeBytes: decoded.probeBytes });
+    } else {
+      prepared.push({ file: f, name: f.name });
+    }
+  }
+  if (!prepared.length) return;
   state.photos = [];
-  for (const f of good) {
+  for (const item of prepared) {
     try {
-      const bytes = new Uint8Array(await f.arrayBuffer());
+      const bytes = new Uint8Array(await item.file.arrayBuffer());
       let exif = null;
-      try { exif = JSON.parse(state.engine.probe_exif(bytes)); } catch { /* no exif */ }
-      const photo = { bytes, name: f.name, exif };
+      const probeSrc = item.probeBytes ?? bytes;
+      try { exif = JSON.parse(state.engine.probe_exif(probeSrc)); } catch { /* no exif */ }
+      if (!exif && item.probeBytes) {
+        try { exif = JSON.parse(state.engine.probe_exif(bytes)); } catch { /* no exif */ }
+      }
+      const photo = { bytes, name: item.name, exif };
       // Free-collage overlay needs the oriented aspect ratio the engine uses.
       try {
         const bmp = await createImageBitmap(new Blob([bytes]), { imageOrientation: "from-image" });
@@ -670,7 +817,7 @@ async function acceptFiles(fileList) {
       } catch { /* overlay falls back to a default box height */ }
       state.photos.push(photo);
     } catch (e) {
-      toast("error", `${f.name}: ${e.message || e}`);
+      toast("error", `${item.name}: ${e.message || e}`);
     }
   }
   if (!state.photos.length) return;
@@ -718,7 +865,7 @@ function setStage(url, label) {
 
 /* -------------------------------------------------------------- exif panel */
 /* Fuji recipe keys exposed by the engine `exif.get()` (v0.5.0 M2). Rows are
-   only emitted for values that are actually present — never fabricated. */
+   only emitted for values that are actually present �?never fabricated. */
 const FUJI_KEYS = [
   ["film_mode", "exif.fuji.film_mode"],
   ["wb_mode", "exif.fuji.wb_mode"],
@@ -770,7 +917,7 @@ function showExif() {
     const dt = document.createElement("dt");
     dt.textContent = t(key);
     const dd = document.createElement("dd");
-    if (val === null || val === undefined || val === "") { dd.textContent = "—"; dd.className = "none"; }
+    if (val === null || val === undefined || val === "") { dd.textContent = "�?; dd.className = "none"; }
     else dd.textContent = String(val);
     dl.appendChild(dt); dl.appendChild(dd);
   }
@@ -846,9 +993,9 @@ function buildLineEditor() {
         b.onclick = fn;
         row.appendChild(b);
       };
-      mk("↑", () => moveLine(edits, layer.id, items, idx, -1));
-      mk("↓", () => moveLine(edits, layer.id, items, idx, +1));
-      mk("✕", () => {
+      mk("�?, () => moveLine(edits, layer.id, items, idx, -1));
+      mk("�?, () => moveLine(edits, layer.id, items, idx, +1));
+      mk("�?, () => {
         const newItems = items.filter((_, i) => i !== idx);
         setLayerEdits(state.templateId, { ...edits, [layer.id]: newItems });
         buildLineEditor(); renderNow();
@@ -859,7 +1006,7 @@ function buildLineEditor() {
     add.className = "mini"; add.style.width = "auto"; add.style.padding = "0 8px";
     add.textContent = t("exifEdit.add");
     add.onclick = () => {
-      const newItems = [...items, { expr: "'新文字'", fallback: null }];
+      const newItems = [...items, { expr: "'新文�?", fallback: null }];
       setLayerEdits(state.templateId, { ...edits, [layer.id]: newItems });
       buildLineEditor(); renderNow();
     };
@@ -937,12 +1084,67 @@ async function ensureFont(family) {
   }
 }
 
+/* ------------------------------------------------------ font warmup (v0.6.0) */
+/* Contract Q10 「引擎字体离线预缓存�? after boot (first paint done) fetch the
+   engine fonts that are not loaded yet, ONE AT A TIME, so the Service Worker
+   fetch handler caches every successful GET for offline use. Deliberately NOT
+   part of the SW install-time PRECACHE (~15MB would slow first paint). The
+   page also writes into CacheStorage directly so fonts warm up even when the
+   SW is bypassed/absent (Tauri, first visit, automation). Exposed as
+   window.__fg.warmFonts / warmFontsStatus for the E2E gate. */
+const FONT_CACHE_PREFIX = "framegeist-";
+const fontWarm = {
+  status: "idle", engineFonts: 0, loaded: 0, total: 0, done: 0,
+  cached: 0, maxInflight: 0, cache: null, startedAt: 0, finishedAt: 0,
+};
+function warmFontsStatus() { return { ...fontWarm }; }
+let fontWarmPromise = null;
+function warmEngineFonts() {
+  if (fontWarmPromise) return fontWarmPromise;
+  fontWarmPromise = (async () => {
+    fontWarm.status = "running";
+    fontWarm.startedAt = Date.now();
+    fontWarm.engineFonts = state.fonts.length;
+    fontWarm.loaded = state.loadedFonts.size;
+    const candidates = state.fonts.filter((f) => f.file && !state.loadedFonts.has(f.family));
+    fontWarm.total = candidates.length;
+    let cache = null;
+    try {
+      const keys = await caches.keys();
+      const key = keys.find((k) => k.startsWith(FONT_CACHE_PREFIX)) ?? `${FONT_CACHE_PREFIX}0.6.0`;
+      cache = await caches.open(key);
+      fontWarm.cache = key;
+    } catch { /* CacheStorage unavailable: still warm the HTTP cache */ }
+    for (const f of candidates) {
+      fontWarm.maxInflight = Math.max(fontWarm.maxInflight, 1);
+      try {
+        const url = new URL(`fonts/engine/${f.file}`, document.baseURI).href;
+        const res = await fetch(url);
+        if (res?.ok && cache) {
+          await cache.put(new Request(url), res.clone());
+          fontWarm.cached++;
+        }
+      } catch { /* offline: retried on a later visit */ }
+      fontWarm.done++;
+      await sleep(60); // idle gap: keeps exactly one request in flight
+    }
+    fontWarm.status = "done";
+    fontWarm.finishedAt = Date.now();
+  })().catch(() => { fontWarm.status = "done"; });
+  return fontWarmPromise;
+}
+function requestFontWarmup() {
+  const run = () => { warmEngineFonts(); };
+  if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(run, { timeout: 4000 });
+  else setTimeout(run, 1500);
+}
+
 /* ----------------------------------------------------------------- render */
 function renderOverridesJson() { return buildOverridesJson(); }
 
 const builtinAssetCache = new Set();
 /// Fetch and register built-in image assets (@builtin/<kind>/<slug>[-light].png)
-/// on demand — the WASM engine has no filesystem (v0.3.0 T-A fix).
+/// on demand �?the WASM engine has no filesystem (v0.3.0 T-A fix).
 async function ensureBuiltinAssets(templateJson) {
   const wanted = new Set();
   for (const m of String(templateJson).matchAll(/@builtin\/([a-z]+)\/([a-z0-9-]+)/g)) {
@@ -996,6 +1198,7 @@ async function renderNow() {
   const t0 = performance.now();
   try {
     let out;
+    let fmt = "jpeg";
     if (state.mode === "frame") {
       await ensureFont(loadOverrides(state.templateId).fontFamily || settings.fontFamily);
       const tpl = effectiveTemplateJson();
@@ -1009,7 +1212,9 @@ async function renderNow() {
           out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", true, ojson, 0, settings.keepGps);
         }
       } else {
-        out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, "jpeg", false, ojson, exportMaxEdge(), settings.keepGps);
+        // Final render path: honor the selected export container (Q10).
+        fmt = exportFormat();
+        out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, fmt, false, ojson, exportMaxEdge(), settings.keepGps);
       }
     } else if (state.freeCollage) {
       if (!state.freeSpec) state.freeSpec = freeSpecDefault();
@@ -1026,12 +1231,13 @@ async function renderNow() {
     if (token !== renderToken) return;
     const ms = (performance.now() - t0).toFixed(0);
     state.lastRender = out;
+    const ext = EXPORT_FORMATS[fmt].ext;
     state.lastRenderName = state.mode === "frame"
-      ? `${stem(state.photos[0].name)}-${state.templateId}.jpg`
+      ? `${stem(state.photos[0].name)}-${state.templateId}.${ext}`
       : state.freeCollage
-        ? `framegeist-free-collage.jpg`
-        : `framegeist-collage-${state.layoutId}.jpg`;
-    const url = URL.createObjectURL(new Blob([out], { type: "image/jpeg" }));
+        ? `framegeist-free-collage.${ext}`
+        : `framegeist-collage-${state.layoutId}.${ext}`;
+    const url = URL.createObjectURL(new Blob([out], { type: EXPORT_FORMATS[fmt].mime }));
     withViewTransition(() => setStage(url, `${t("stage.rendered")} · ${ms} ms · ${(out.length / 1024).toFixed(0)} KB`));
     $("exportBtn").disabled = false;
     $("exportBatchBtn").classList.toggle("hidden", !(state.mode === "frame" && state.photos.length > 1));
@@ -1152,6 +1358,10 @@ function uniqueName(filename) {
 
 async function exportCurrent() {
   if (!state.lastRender) { toast("error", t("toast.renderFirst")); return; }
+  // v0.6.0: metadata transparency before the file hits the disk.
+  toast("info", settings.keepMetadata === false
+    ? t("export.metaStripped")
+    : settings.keepGps ? t("export.metaGps") : t("export.metaKept"));
   const name = uniqueName(state.lastRenderName);
   if (await saveBytes(state.lastRender, name, { dialog: true }))
     toast("ok", t("toast.exported", { name }));
@@ -1166,8 +1376,9 @@ async function exportBatch() {
   let ok = 0;
   for (let i = 0; i < photos.length; i++) {
     try {
-      const out = state.engine.render_with_overrides(photos[i].bytes, tpl, "jpeg", false, ojson, exportMaxEdge(), settings.keepGps);
-      const name = uniqueName(`${stem(photos[i].name)}-${state.templateId}.jpg`);
+      const fmt = exportFormat();
+      const out = state.engine.render_with_overrides(photos[i].bytes, tpl, fmt, false, ojson, exportMaxEdge(), settings.keepGps);
+      const name = uniqueName(`${stem(photos[i].name)}-${state.templateId}.${EXPORT_FORMATS[fmt].ext}`);
       if (await saveBytes(out, name, { dialog: false })) ok++;
     } catch (e) {
       toast("error", `${photos[i].name}: ${localizeEngineError(e)}`);
@@ -1380,6 +1591,7 @@ async function boot() {
   buildLayoutPicker();
   buildBrandGrid();
   buildBgSwatches();
+  buildSampleRow();
   updateTweakUI();
   buildLineEditor();
   showExif();
@@ -1388,6 +1600,7 @@ async function boot() {
   showWall();
   setStatus("ready", t("status.ready"));
   window.__bootMs = Math.round(performance.now());
+  requestFontWarmup();
 }
 
 function syncCanvasUI() {
@@ -1402,6 +1615,9 @@ function syncCanvasUI() {
   $("flipV").classList.toggle("on", settings.flipV);
   $("brandShow").checked = settings.showLogo;
   $("exportSize").value = settings.exportSize;
+  $("exportFormat").value = exportFormat();
+  $("exportBtn").textContent = `${t("btn.export")} ${exportFormat().toUpperCase()}`;
+  $("exportBatchBtn").textContent = t("btn.exportBatch", { n: state.photos.length });
   $("exportCustom").classList.toggle("hidden", settings.exportSize !== "custom");
   $("exportCustom").value = settings.exportCustom;
   $("pickerCompact").classList.toggle("on", pickerMode === "compact");
@@ -1602,6 +1818,8 @@ function wire() {
   };
 
   $("exportSize").onchange = (e) => { settings.exportSize = e.target.value; saveSettings(); syncCanvasUI(); };
+  // Q10: re-render so the next export uses the selected container.
+  $("exportFormat").onchange = (e) => { settings.exportFormat = e.target.value; saveSettings(); syncCanvasUI(); renderNow(); };
   $("exportCustom").oninput = (e) => { settings.exportCustom = Number(e.target.value) || 3000; saveSettings(); };
 
   $("saveTemplate").onclick = () => { $("saveRow").classList.toggle("hidden"); $("saveName").focus(); };
@@ -1628,6 +1846,7 @@ function wire() {
   document.getElementById("setTheme").onchange = (e) => { localStorage.setItem(LS.theme, e.target.value); applyTheme(); };
   document.getElementById("setLang").onchange = (e) => setLang(e.target.value);
   document.getElementById("setExportSize").onchange = (e) => { settings.exportSize = e.target.value; saveSettings(); syncCanvasUI(); };
+  document.getElementById("setExportFormat").onchange = (e) => { settings.exportFormat = e.target.value; saveSettings(); syncCanvasUI(); renderNow(); };
   document.getElementById("setDefaultFont").onchange = (e) => { settings.fontFamily = e.target.value; saveSettings(); ensureFont(e.target.value); updateTweakUI(); };
   document.getElementById("setDefaultSize").oninput = (e) => {
     settings.defaultFontSize = Number(e.target.value);
@@ -1675,6 +1894,7 @@ function wire() {
     $("langBtn").textContent = t("lang.toggle");
     applyI18n();
     buildBgSwatches();
+    buildSampleRow();
     buildTemplatePicker();
     buildLayoutPicker();
     buildWall();
@@ -1685,6 +1905,7 @@ function wire() {
     updateBrandDetected();
     syncCanvasUI();
     if (!state.photos.length && state.view === "editor") showTemplatePreview();
+    else if (state.photos.length && state.view === "editor") renderNow();
   });
 }
 
@@ -1767,6 +1988,7 @@ function openSettings() {
   document.getElementById("setTheme").value = currentTheme();
   document.getElementById("setLang").value = currentLang();
   document.getElementById("setExportSize").value = settings.exportSize;
+  document.getElementById("setExportFormat").value = exportFormat();
   const sel = document.getElementById("setDefaultFont");
   sel.innerHTML = "";
   const def = document.createElement("option");
@@ -1853,4 +2075,8 @@ window.__fg = {
   fujiRows,
   templateCategory,
   get engine() { return state.engine; },
+  // v0.6.0: HEIC lazy decoder + engine font offline warmup probes.
+  loadHeifModule,
+  warmFonts: warmEngineFonts,
+  warmFontsStatus,
 };

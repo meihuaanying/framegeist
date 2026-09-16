@@ -2,17 +2,28 @@
   "meta": {
     "id": "art-copperplate-etch",
     "name": "Copperplate Etch",
-    "nameI18n": { "zh": "铜版雕刻", "en": "Copperplate Etch" },
+    "nameI18n": {
+      "zh": "铜版雕刻",
+      "en": "Copperplate Etch"
+    },
     "version": "1.0.0",
-    "minEngineVersion": "0.5.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.13, "right": 0.055, "bottom": 0.22, "left": 0.055 },
-    "background": { "type": "solid", "color": "#F2ECDD" }
+    "padding": {
+      "top": 0.13,
+      "right": 0.055,
+      "bottom": 0.22,
+      "left": 0.055
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F2ECDD"
+    }
   },
   "layers": [
     {
@@ -20,7 +31,10 @@
       "id": "etch-frame",
       "anchor": "middle-center",
       "shape": "rect",
-      "size": { "width": 0.9, "height": 0.9 },
+      "size": {
+        "width": 0.9,
+        "height": 0.9
+      },
       "color": "#3A3026",
       "opacity": 0.9,
       "strokeWidth": 0.0016,
@@ -34,27 +48,132 @@
       "type": "group",
       "id": "etch-hatch",
       "anchor": "top-left",
-      "offset": { "x": 0.09, "y": 0.115 },
+      "offset": {
+        "x": 0.09,
+        "y": 0.115
+      },
       "width": 0.55,
       "height": 0.075,
       "opacity": 0.5,
       "z": -1,
       "children": [
-        { "type": "shape", "id": "etch-hatch-1", "anchor": "middle-center", "offset": { "x": -0.35, "y": 0 }, "shape": "line", "size": { "width": 0.09, "height": 0.0013 }, "color": "#4A3A28", "opacity": 0.55, "rotation": 45 },
-        { "type": "shape", "id": "etch-hatch-2", "anchor": "middle-center", "offset": { "x": -0.21, "y": 0 }, "shape": "line", "size": { "width": 0.09, "height": 0.0013 }, "color": "#4A3A28", "opacity": 0.55, "rotation": 45 },
-        { "type": "shape", "id": "etch-hatch-3", "anchor": "middle-center", "offset": { "x": -0.07, "y": 0 }, "shape": "line", "size": { "width": 0.09, "height": 0.0013 }, "color": "#4A3A28", "opacity": 0.55, "rotation": 45 },
-        { "type": "shape", "id": "etch-hatch-4", "anchor": "middle-center", "offset": { "x": 0.07, "y": 0 }, "shape": "line", "size": { "width": 0.09, "height": 0.0013 }, "color": "#4A3A28", "opacity": 0.55, "rotation": 45 },
-        { "type": "shape", "id": "etch-hatch-5", "anchor": "middle-center", "offset": { "x": 0.21, "y": 0 }, "shape": "line", "size": { "width": 0.09, "height": 0.0013 }, "color": "#4A3A28", "opacity": 0.55, "rotation": 45 },
-        { "type": "shape", "id": "etch-hatch-6", "anchor": "middle-center", "offset": { "x": 0.35, "y": 0 }, "shape": "line", "size": { "width": 0.09, "height": 0.0013 }, "color": "#4A3A28", "opacity": 0.55, "rotation": 45 }
+        {
+          "type": "shape",
+          "id": "etch-hatch-1",
+          "anchor": "middle-center",
+          "offset": {
+            "x": -0.35,
+            "y": 0
+          },
+          "shape": "line",
+          "size": {
+            "width": 0.09,
+            "height": 0.0013
+          },
+          "color": "#4A3A28",
+          "opacity": 0.55,
+          "rotation": 45
+        },
+        {
+          "type": "shape",
+          "id": "etch-hatch-2",
+          "anchor": "middle-center",
+          "offset": {
+            "x": -0.21,
+            "y": 0
+          },
+          "shape": "line",
+          "size": {
+            "width": 0.09,
+            "height": 0.0013
+          },
+          "color": "#4A3A28",
+          "opacity": 0.55,
+          "rotation": 45
+        },
+        {
+          "type": "shape",
+          "id": "etch-hatch-3",
+          "anchor": "middle-center",
+          "offset": {
+            "x": -0.07,
+            "y": 0
+          },
+          "shape": "line",
+          "size": {
+            "width": 0.09,
+            "height": 0.0013
+          },
+          "color": "#4A3A28",
+          "opacity": 0.55,
+          "rotation": 45
+        },
+        {
+          "type": "shape",
+          "id": "etch-hatch-4",
+          "anchor": "middle-center",
+          "offset": {
+            "x": 0.07,
+            "y": 0
+          },
+          "shape": "line",
+          "size": {
+            "width": 0.09,
+            "height": 0.0013
+          },
+          "color": "#4A3A28",
+          "opacity": 0.55,
+          "rotation": 45
+        },
+        {
+          "type": "shape",
+          "id": "etch-hatch-5",
+          "anchor": "middle-center",
+          "offset": {
+            "x": 0.21,
+            "y": 0
+          },
+          "shape": "line",
+          "size": {
+            "width": 0.09,
+            "height": 0.0013
+          },
+          "color": "#4A3A28",
+          "opacity": 0.55,
+          "rotation": 45
+        },
+        {
+          "type": "shape",
+          "id": "etch-hatch-6",
+          "anchor": "middle-center",
+          "offset": {
+            "x": 0.35,
+            "y": 0
+          },
+          "shape": "line",
+          "size": {
+            "width": 0.09,
+            "height": 0.0013
+          },
+          "color": "#4A3A28",
+          "opacity": 0.55,
+          "rotation": 45
+        }
       ]
     },
     {
       "type": "shape",
       "id": "etch-rule",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.13 },
+      "offset": {
+        "x": 0,
+        "y": -0.13
+      },
       "shape": "line",
-      "size": { "width": 0.52, "height": 0.0011 },
+      "size": {
+        "width": 0.52,
+        "height": 0.0011
+      },
       "color": "#6B5136",
       "opacity": 0.9,
       "double": true,
@@ -64,73 +183,185 @@
       "type": "text",
       "id": "etch-eyebrow",
       "anchor": "top-left",
-      "offset": { "x": 0.06, "y": 0.042 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#5A4632" },
+      "offset": {
+        "x": 0.06,
+        "y": 0.042
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#5A4632"
+      },
       "letterSpacing": 0.22,
       "effects": {
         "case": "upper",
-        "relief": { "mode": "engrave", "depth": 0.04, "highlight": "#FFF8E7", "shadow": "#2A2118", "opacity": 0.4 }
+        "relief": {
+          "mode": "engrave",
+          "depth": 0.04,
+          "highlight": "#FFF8E7",
+          "shadow": "#2A2118",
+          "opacity": 0.4
+        }
       },
-      "content": [{ "expr": "'Etched Plates · Volume Four'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'Etched Plates · Volume Four'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "etch-model",
       "anchor": "top-right",
-      "offset": { "x": -0.06, "y": 0.042 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#5A4632" },
+      "offset": {
+        "x": -0.06,
+        "y": 0.042
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#5A4632"
+      },
       "letterSpacing": 0.18,
       "align": "right",
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unrecorded Camera')", "fallback": "Unrecorded Camera" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Unrecorded Camera')",
+          "fallback": "Unrecorded Camera"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "etch-title-zh",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.085 },
-      "font": { "family": ["Noto Serif SC"], "size": 0.028, "color": "#4A3A28" },
+      "offset": {
+        "x": 0,
+        "y": -0.085
+      },
+      "font": {
+        "family": [
+          "Noto Serif SC"
+        ],
+        "size": 0.028,
+        "color": "#4A3A28"
+      },
       "letterSpacing": 0.26,
       "effects": {
-        "relief": { "mode": "engrave", "depth": 0.045, "highlight": "#FFF9EC", "shadow": "#241C12", "opacity": 0.75 }
+        "relief": {
+          "mode": "engrave",
+          "depth": 0.045,
+          "highlight": "#FFF9EC",
+          "shadow": "#241C12",
+          "opacity": 0.75
+        }
       },
-      "content": [{ "expr": "'静光手记'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'静光手记'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "etch-title-en",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.04 },
-      "font": { "family": ["Cormorant Garamond"], "size": 0.042, "color": "#2C2318" },
+      "offset": {
+        "x": 0,
+        "y": -0.04
+      },
+      "font": {
+        "family": [
+          "Cormorant Garamond"
+        ],
+        "size": 0.042,
+        "color": "#2C2318"
+      },
       "letterSpacing": 0.13,
       "effects": {
         "case": "upper",
-        "relief": { "mode": "engrave", "depth": 0.05, "highlight": "#FFFDF4", "shadow": "#1A130C", "opacity": 0.9 }
+        "relief": {
+          "mode": "engrave",
+          "depth": 0.05,
+          "highlight": "#FFFDF4",
+          "shadow": "#1A130C",
+          "opacity": 0.9
+        }
       },
-      "content": [{ "expr": "'Quiet Light Studies'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'Quiet Light Studies'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "etch-params",
       "anchor": "bottom-left",
-      "offset": { "x": 0.06, "y": -0.013 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B5136" },
+      "offset": {
+        "x": 0.06,
+        "y": -0.013
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#6B5136"
+      },
       "letterSpacing": 0.16,
-      "effects": { "case": "upper" },
+      "effects": {
+        "case": "upper"
+      },
       "content": [
-        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Contact Print · Unnumbered" }
+        {
+          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": "Contact Print · Unnumbered"
+        }
       ]
     },
     {
       "type": "text",
       "id": "etch-plate",
       "anchor": "bottom-right",
-      "offset": { "x": -0.06, "y": -0.013 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B5136" },
+      "offset": {
+        "x": -0.06,
+        "y": -0.013
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#6B5136"
+      },
       "letterSpacing": 0.16,
       "align": "right",
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "Plate I · Archive Copy" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "date('LOCAL', exif.datetime)",
+          "fallback": "Plate I · Archive Copy"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     }
   ]
 }

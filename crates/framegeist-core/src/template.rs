@@ -289,6 +289,10 @@ pub struct TextLayer {
     /// v0.5.0: text art effects (stroke/relief/fill/shadow/case/flip/stretch).
     #[serde(default)]
     pub effects: Option<TextEffects>,
+    /// v0.6.0: OpenType features to enable (`tnum`, `lnum`, `onum`, `pnum`,
+    /// `smcp`, `c2sc`, `liga`, `kern`, `frac`, `ss01`, `ss02`).
+    #[serde(default)]
+    pub features: Vec<String>,
     /// v0.5.0: fixed wrap width, relative canvas width (0–1).
     #[serde(default)]
     pub width: Option<f64>,
@@ -744,6 +748,13 @@ pub struct TemplateOverrides {
     /// v0.5.0: card effect (rounded corners / outer shadow / edge border).
     #[serde(default)]
     pub card: Option<CardOverrides>,
+    /// v0.6.0: date localization for `date('LOCAL', ...)` ("zh" | "en").
+    #[serde(default)]
+    pub date_locale: Option<String>,
+    /// v0.6.0: preview-only EXIF values (editor "fill with sample values").
+    /// Whitelisted scalar keys; never persisted into the photo.
+    #[serde(default)]
+    pub exif: Option<serde_json::Map<String, serde_json::Value>>,
 }
 
 /// v0.5.0 card effect overrides: rounded corners, outer shadow, edge border and
@@ -930,6 +941,68 @@ impl TemplateOverrides {
                     -0.5,
                     0.5,
                 )?;
+            }
+        }
+        if let Some(locale) = &self.date_locale {
+            if !matches!(locale.as_str(), "zh" | "en") {
+                return Err(Error::SchemaViolation(
+                    "overrides.dateLocale must be \"zh\" or \"en\"".into(),
+                ));
+            }
+        }
+        if let Some(exif) = &self.exif {
+            const MAX_KEYS: usize = 48;
+            const MAX_LEN: usize = 256;
+            const ALLOWED: [&str; 27] = [
+                "make",
+                "model",
+                "model_pretty",
+                "lens",
+                "focal",
+                "focal_mm",
+                "aperture",
+                "shutter",
+                "iso",
+                "datetime",
+                "brand_slug",
+                "lens_slug",
+                "lens_series",
+                "film_mode",
+                "wb_mode",
+                "wb_shift_r",
+                "wb_shift_b",
+                "grain",
+                "color_chrome",
+                "chrome_fx_blue",
+                "dynamic_range",
+                "highlight_tone",
+                "shadow_tone",
+                "fuji_sharpness",
+                "fuji_saturation",
+                "fuji_nr",
+                "fuji_clarity",
+            ];
+            if exif.len() > MAX_KEYS {
+                return Err(Error::SchemaViolation(format!(
+                    "overrides.exif supports at most {MAX_KEYS} keys"
+                )));
+            }
+            for (key, value) in exif {
+                if !ALLOWED.contains(&key.as_str()) {
+                    return Err(Error::SchemaViolation(format!(
+                        "overrides.exif key {key:?} is not supported"
+                    )));
+                }
+                match value {
+                    serde_json::Value::String(s) if s.len() <= MAX_LEN => {}
+                    serde_json::Value::Number(_) => {}
+                    serde_json::Value::Bool(_) => {}
+                    _ => {
+                        return Err(Error::SchemaViolation(format!(
+                            "overrides.exif[{key:?}] must be a short string, number or bool"
+                        )))
+                    }
+                }
             }
         }
         Ok(())
@@ -1212,6 +1285,26 @@ fn validate_layer(layer: &Layer, i: usize) -> Result<()> {
                 if !matches!(align.as_str(), "left" | "center" | "right") {
                     return Err(Error::SchemaViolation(format!(
                         "layers[{i}].align must be left|center|right"
+                    )));
+                }
+            }
+            for feature in &text.features {
+                if !matches!(
+                    feature.as_str(),
+                    "tnum"
+                        | "lnum"
+                        | "onum"
+                        | "pnum"
+                        | "smcp"
+                        | "c2sc"
+                        | "liga"
+                        | "kern"
+                        | "frac"
+                        | "ss01"
+                        | "ss02"
+                ) {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].features contains unsupported feature {feature:?}"
                     )));
                 }
             }

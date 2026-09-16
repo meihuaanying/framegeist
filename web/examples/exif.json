@@ -1,0 +1,35 @@
+{
+  "note": "Editor preview values for photos without EXIF (real data from the three v0.6.0 sample photos)",
+  "profiles": {
+    "sony-a7r3": {
+      "model": "ILCE-7RM3",
+      "lens": "Viltrox AF 35/1.2 LAB FE",
+      "focal": 35,
+      "aperture": 4,
+      "shutter": "1/250s",
+      "iso": 100,
+      "datetime": "2026:05:02 15:13:35",
+      "brand_slug": "sony"
+    },
+    "nikon-z6ii": {
+      "model": "NIKON Z 6_2",
+      "lens": "Viltrox AF 24/1.8 Z",
+      "focal": 24,
+      "aperture": 1.8,
+      "shutter": "25.0s",
+      "iso": 2500,
+      "datetime": "2026:03:15 03:37:24",
+      "brand_slug": "nikon"
+    },
+    "canon-r7": {
+      "model": "Canon EOS R7",
+      "lens": "16-300mm F3.5-6.7 DC OS | Contemporary 025",
+      "focal": 142,
+      "aperture": 6.3,
+      "shutter": "1/40s",
+      "iso": 6400,
+      "datetime": "2025:12:31 22:42:10",
+      "brand_slug": "canon"
+    }
+  }
+}

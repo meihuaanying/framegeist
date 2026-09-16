@@ -2,47 +2,92 @@
   "meta": {
     "id": "camera-lens-dial-06",
     "name": "Lens Dial",
-    "nameI18n": { "zh": "镜头圈刻度", "en": "Lens Dial" },
+    "nameI18n": {
+      "zh": "镜头圈刻度",
+      "en": "Lens Dial"
+    },
     "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "camera"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.10, "right": 0.08, "bottom": 0.44, "left": 0.08 },
-    "background": { "type": "solid", "color": "#131317" },
+    "padding": {
+      "top": 0.1,
+      "right": 0.08,
+      "bottom": 0.44,
+      "left": 0.08
+    },
+    "background": {
+      "type": "solid",
+      "color": "#131317"
+    },
     "radius": 0.025,
-    "shadow": { "enabled": true, "blur": 0.12, "opacity": 0.35, "offsetX": 0, "offsetY": 0.03 }
+    "shadow": {
+      "enabled": true,
+      "blur": 0.12,
+      "opacity": 0.35,
+      "offsetX": 0,
+      "offsetY": 0.03
+    }
   },
   "layers": [
     {
       "type": "image",
       "id": "brand",
       "anchor": "top-left",
-      "offset": { "x": 0.055, "y": 0.030 },
+      "offset": {
+        "x": 0.055,
+        "y": 0.03
+      },
       "asset": "@builtin/brand/{exif.brand_slug}",
-      "size": { "height": 0.016 },
+      "size": {
+        "height": 0.016
+      },
       "tint": "light"
     },
     {
       "type": "text",
       "id": "date",
       "anchor": "top-right",
-      "offset": { "x": -0.055, "y": 0.034 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#A7ABB3" },
+      "offset": {
+        "x": -0.055,
+        "y": 0.034
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.0115,
+        "color": "#A7ABB3"
+      },
       "letterSpacing": 0.14,
       "align": "right",
-      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }]
+      "content": [
+        {
+          "expr": "date('LOCAL', exif.datetime)",
+          "fallback": null
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "shape",
       "id": "ring-outer",
       "anchor": "middle-center",
-      "offset": { "x": 0, "y": 0.357 },
+      "offset": {
+        "x": 0,
+        "y": 0.357
+      },
       "shape": "ellipse",
-      "size": { "width": 0.227, "height": 0.34 },
+      "size": {
+        "width": 0.227,
+        "height": 0.34
+      },
       "color": "#E8E4DA",
       "opacity": 0.85,
       "strokeWidth": 0.004
@@ -51,119 +96,185 @@
       "type": "shape",
       "id": "tick-000",
       "anchor": "middle-center",
-      "offset": { "x": 0.0978, "y": 0.357 },
+      "offset": {
+        "x": 0.0978,
+        "y": 0.357
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 0
     },
     {
       "type": "shape",
       "id": "tick-045",
       "anchor": "middle-center",
-      "offset": { "x": 0.0692, "y": 0.4351 },
+      "offset": {
+        "x": 0.0692,
+        "y": 0.4351
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 45
     },
     {
       "type": "shape",
       "id": "tick-090",
       "anchor": "middle-center",
-      "offset": { "x": 0, "y": 0.4674 },
+      "offset": {
+        "x": 0,
+        "y": 0.4674
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 90
     },
     {
       "type": "shape",
       "id": "tick-135",
       "anchor": "middle-center",
-      "offset": { "x": -0.0692, "y": 0.4351 },
+      "offset": {
+        "x": -0.0692,
+        "y": 0.4351
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 135
     },
     {
       "type": "shape",
       "id": "tick-180",
       "anchor": "middle-center",
-      "offset": { "x": -0.0978, "y": 0.357 },
+      "offset": {
+        "x": -0.0978,
+        "y": 0.357
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 180
     },
     {
       "type": "shape",
       "id": "tick-225",
       "anchor": "middle-center",
-      "offset": { "x": -0.0692, "y": 0.2789 },
+      "offset": {
+        "x": -0.0692,
+        "y": 0.2789
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 225
     },
     {
       "type": "shape",
       "id": "tick-270",
       "anchor": "middle-center",
-      "offset": { "x": 0, "y": 0.2466 },
+      "offset": {
+        "x": 0,
+        "y": 0.2466
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 270
     },
     {
       "type": "shape",
       "id": "tick-315",
       "anchor": "middle-center",
-      "offset": { "x": 0.0692, "y": 0.2789 },
+      "offset": {
+        "x": 0.0692,
+        "y": 0.2789
+      },
       "shape": "line",
-      "size": { "width": 0.026, "height": 0.0045 },
+      "size": {
+        "width": 0.026,
+        "height": 0.0045
+      },
       "color": "#E8E4DA",
-      "opacity": 0.70,
+      "opacity": 0.7,
       "rotation": 315
     },
     {
       "type": "shape",
       "id": "ring-mid",
       "anchor": "middle-center",
-      "offset": { "x": 0, "y": 0.357 },
+      "offset": {
+        "x": 0,
+        "y": 0.357
+      },
       "shape": "ellipse",
-      "size": { "width": 0.160, "height": 0.24 },
+      "size": {
+        "width": 0.16,
+        "height": 0.24
+      },
       "color": "#E8E4DA",
-      "opacity": 0.50,
+      "opacity": 0.5,
       "strokeWidth": 0.0028
     },
     {
       "type": "shape",
       "id": "ring-inner",
       "anchor": "middle-center",
-      "offset": { "x": 0, "y": 0.357 },
+      "offset": {
+        "x": 0,
+        "y": 0.357
+      },
       "shape": "ellipse",
-      "size": { "width": 0.093, "height": 0.14 },
+      "size": {
+        "width": 0.093,
+        "height": 0.14
+      },
       "color": "#E8E4DA",
-      "opacity": 0.30,
+      "opacity": 0.3,
       "strokeWidth": 0.002
     },
     {
       "type": "shape",
       "id": "iris",
       "anchor": "middle-center",
-      "offset": { "x": 0, "y": 0.357 },
+      "offset": {
+        "x": 0,
+        "y": 0.357
+      },
       "shape": "ellipse",
-      "size": { "width": 0.053, "height": 0.08 },
+      "size": {
+        "width": 0.053,
+        "height": 0.08
+      },
       "color": "#E8C06A",
       "opacity": 0.95
     },
@@ -171,33 +282,88 @@
       "type": "text",
       "id": "model",
       "anchor": "bottom-left",
-      "offset": { "x": 0.055, "y": -0.13 },
-      "font": { "family": ["Inter"], "size": 0.019, "color": "#F0EFEA" },
+      "offset": {
+        "x": 0.055,
+        "y": -0.13
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.019,
+        "color": "#F0EFEA"
+      },
       "letterSpacing": 0.05,
-      "content": [{ "expr": "if_empty(exif.model_pretty, 'Camera')", "fallback": "Camera" }]
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Camera')",
+          "fallback": "Camera"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "lens",
       "anchor": "bottom-left",
-      "offset": { "x": 0.055, "y": -0.165 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.0115, "color": "#9BA0A8" },
+      "offset": {
+        "x": 0.055,
+        "y": -0.165
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.0115,
+        "color": "#9BA0A8"
+      },
       "letterSpacing": 0.04,
-      "content": [{ "expr": "exif.lens", "fallback": null }]
+      "content": [
+        {
+          "expr": "exif.lens",
+          "fallback": null
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "params",
       "anchor": "bottom-right",
-      "offset": { "x": -0.055, "y": -0.13 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.0125, "color": "#C6CAD1" },
+      "offset": {
+        "x": -0.055,
+        "y": -0.13
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.0125,
+        "color": "#C6CAD1"
+      },
       "letterSpacing": 0.04,
       "align": "right",
-      "content": [{ "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }]
+      "content": [
+        {
+          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": null
+        }
+      ]
     }
   ],
   "fields": {
-    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
-    "params": { "type": "string", "source": "exif" }
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "params": {
+      "type": "string",
+      "source": "exif"
+    }
   }
 }

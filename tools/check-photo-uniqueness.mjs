@@ -1,12 +1,15 @@
 // v0.5.0 T1 gate — showcase photo uniquification.
+// v0.6.0: adds showcase EXIF authenticity (real camera data injected from the
+// three user-provided sample photos, docs/reports/v0.6.0/source-exif.json).
 //
-// Verifies per docs/V0.5.0-CONSTRAINTS.md §1:
-//   1. every template (184/184) has exactly one showcase photo;
+// Verifies per docs/V0.5.0-CONSTRAINTS.md §1 and docs/V0.6.0-CONSTRAINTS.md §M1:
+//   1. every template (192+) has exactly one showcase photo;
 //   2. all showcase photos are byte-unique (SHA-256);
 //   3. orientation rules hold (portrait categories must be portrait);
 //   4. tone bias holds in aggregate (dark categories visibly darker than bright);
 //   5. showcase tree contains zero test photos;
-//   6. rendered samples/previews/thumbs are one-per-template and unique.
+//   6. rendered samples/previews/thumbs are one-per-template and unique;
+//   7. every showcase photo carries real EXIF and follows the orientation->camera map.
 //
 // Usage: node tools/check-photo-uniqueness.mjs
 import { createHash } from "node:crypto";
@@ -55,6 +58,7 @@ check("showcase: every template mapped", missingMap.length === 0, missingMap.sli
 const hashes = new Map();
 const dupes = [];
 const stats = new Map();
+const exif = new Map();
 let missingFile = 0;
 for (const t of templates) {
   const file = join(SHOWCASE, `${t.id}.jpg`);
@@ -68,9 +72,40 @@ for (const t of templates) {
   hashes.set(h, t.id);
   const out = JSON.parse(execFileSync(cliPath(), ["photo-stats", file], { cwd: ROOT }).toString());
   stats.set(t.id, out);
+  exif.set(t.id, JSON.parse(execFileSync(cliPath(), ["probe", file], { cwd: ROOT }).toString()));
 }
 check("showcase: files exist for every template", missingFile === 0, `missing ${missingFile}`);
 check("showcase: byte-unique photos", dupes.length === 0, dupes.slice(0, 3).join("; "));
+
+const EXIF_FIELDS = ["lens", "focal_mm", "aperture", "shutter", "iso", "datetime"];
+const emptyExif = [];
+for (const t of templates) {
+  const e = exif.get(t.id);
+  if (!e) continue;
+  const filled = EXIF_FIELDS.filter((k) => e[k] !== null && e[k] !== undefined && e[k] !== "");
+  if (!e.model || filled.length < 4) emptyExif.push(`${t.id} model=${e.model} fields=${filled.length}`);
+}
+check("showcase: every photo carries real EXIF", emptyExif.length === 0, emptyExif.slice(0, 3).join("; "));
+
+const CAMERA_BY_SOURCE = { "sony-a7r3": "ILCE-7RM3", "nikon-z6ii": "NIKON Z 6_2", "canon-r7": "Canon EOS R7" };
+const mapSource = JSON.parse(readFileSync(join(PHOTOS, "showcase-map.json"), "utf8"));
+const wrongCam = [];
+const camCounts = { "NIKON Z 6_2": 0, "Canon EOS R7": 0, "ILCE-7RM3": 0 };
+for (const t of templates) {
+  const e = exif.get(t.id);
+  if (!e) continue;
+  const portrait = stats.get(t.id)?.height > stats.get(t.id)?.width;
+  const want = portrait ? "ILCE-7RM3" : null;
+  if (want && e.model !== want) wrongCam.push(`${t.id} portrait model=${e.model}`);
+  if (!want && !["NIKON Z 6_2", "Canon EOS R7"].includes(e.model)) wrongCam.push(`${t.id} landscape model=${e.model}`);
+  const src = mapSource[t.id]?.exif_source;
+  if (src && CAMERA_BY_SOURCE[src] !== e.model) wrongCam.push(`${t.id} map=${src} probe=${e.model}`);
+  if (camCounts[e.model] !== undefined) camCounts[e.model]++;
+}
+check("showcase: EXIF matches the orientation->camera map", wrongCam.length === 0, wrongCam.slice(0, 3).join("; "));
+const totalCam = Object.values(camCounts).reduce((a, b) => a + b, 0);
+const minShare = Math.min(...Object.values(camCounts)) / Math.max(1, totalCam);
+check("showcase: camera distribution is balanced", minShare >= 0.15, JSON.stringify(camCounts));
 
 const wrongOrient = [];
 for (const t of templates) {

@@ -7,11 +7,14 @@ pub mod boxes;
 pub mod brand;
 pub mod calendar;
 pub mod collage;
+pub mod color;
 pub mod encode;
 pub mod exif;
+pub mod exif_surgery;
 pub mod free_collage;
 pub mod layout;
 pub mod model_map;
+pub mod photo_meta;
 pub mod render;
 pub mod sandbox;
 pub mod template;
@@ -20,9 +23,14 @@ pub mod text_art;
 pub mod text_shape;
 
 pub use encode::{encode_jpeg_quality100, encode_png, splice_exif_app1, splice_png_exif};
-pub use exif::{cleaned_exif_tiff, metadata_report, probe_exif, ExifInfo, MetadataReport};
+pub use exif::{
+    cleaned_exif_tiff, metadata_report, passthrough_exif_tiff, probe_exif, raw_exif_block,
+    ExifInfo, MetadataReport,
+};
+pub use exif_surgery::{sanitize_exif_block, SanitizedExif};
 pub use layout::{load_layout, Layout};
 pub use model_map::ModelMap;
+pub use photo_meta::{inject_exif, jpeg_exif, jpeg_icc, shrink_jpeg};
 pub use render::{
     load_model_map, render, render_from_rgba, render_rgba, render_rgba_with_image,
     render_with_report, OutputFormat, RenderOptions, Sampling,

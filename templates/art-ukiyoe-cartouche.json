@@ -2,37 +2,60 @@
   "meta": {
     "id": "art-ukiyoe-cartouche",
     "name": "Ukiyo-e Cartouche",
-    "nameI18n": { "zh": "浮世绘题签", "en": "Ukiyo-e Cartouche" },
+    "nameI18n": {
+      "zh": "浮世绘题签",
+      "en": "Ukiyo-e Cartouche"
+    },
     "version": "1.0.0",
-    "minEngineVersion": "0.5.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.06, "right": 0.26, "bottom": 0.1, "left": 0.05 },
-    "background": { "type": "solid", "color": "#F6EFDF" }
+    "padding": {
+      "top": 0.06,
+      "right": 0.26,
+      "bottom": 0.1,
+      "left": 0.05
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F6EFDF"
+    }
   },
   "layers": [
     {
       "type": "shape",
       "id": "ukiyo-panel",
       "anchor": "middle-right",
-      "offset": { "x": -0.058, "y": 0 },
+      "offset": {
+        "x": -0.058,
+        "y": 0
+      },
       "shape": "rect",
-      "size": { "width": 0.155, "height": 0.6 },
+      "size": {
+        "width": 0.155,
+        "height": 0.6
+      },
       "color": "#FBF6E8",
-      "opacity": 1.0,
+      "opacity": 1,
       "radius": 0.04
     },
     {
       "type": "shape",
       "id": "ukiyo-panel-line",
       "anchor": "middle-right",
-      "offset": { "x": -0.058, "y": 0 },
+      "offset": {
+        "x": -0.058,
+        "y": 0
+      },
       "shape": "rect",
-      "size": { "width": 0.155, "height": 0.6 },
+      "size": {
+        "width": 0.155,
+        "height": 0.6
+      },
       "color": "#3A342A",
       "opacity": 0.9,
       "radius": 0.04,
@@ -42,9 +65,15 @@
       "type": "shape",
       "id": "ukiyo-cloud-top",
       "anchor": "middle-center",
-      "offset": { "x": 0.383, "y": -0.275 },
+      "offset": {
+        "x": 0.383,
+        "y": -0.275
+      },
       "shape": "line",
-      "size": { "width": 0.15, "height": 0.0012 },
+      "size": {
+        "width": 0.15,
+        "height": 0.0012
+      },
       "color": "#9C8B6B",
       "opacity": 0.95,
       "double": true,
@@ -54,9 +83,15 @@
       "type": "shape",
       "id": "ukiyo-cloud-bottom",
       "anchor": "middle-center",
-      "offset": { "x": 0.383, "y": 0.278 },
+      "offset": {
+        "x": 0.383,
+        "y": 0.278
+      },
       "shape": "line",
-      "size": { "width": 0.15, "height": 0.0012 },
+      "size": {
+        "width": 0.15,
+        "height": 0.0012
+      },
       "color": "#9C8B6B",
       "opacity": 0.95,
       "double": true,
@@ -66,71 +101,165 @@
       "type": "text",
       "id": "ukiyo-title",
       "anchor": "middle-center",
-      "offset": { "x": 0.383, "y": -0.005 },
-      "font": { "family": ["Ma Shan Zheng"], "size": 0.032, "color": "#2B241C" },
+      "offset": {
+        "x": 0.383,
+        "y": -0.005
+      },
+      "font": {
+        "family": [
+          "Ma Shan Zheng"
+        ],
+        "size": 0.032,
+        "color": "#2B241C"
+      },
       "lineHeight": 1.05,
       "letterSpacing": 0.1,
       "align": "center",
       "content": [
-        { "expr": "'潮'", "fallback": null },
-        { "expr": "'汐'", "fallback": null },
-        { "expr": "'绘'", "fallback": null },
-        { "expr": "'卷'", "fallback": null }
+        {
+          "expr": "'潮'",
+          "fallback": null
+        },
+        {
+          "expr": "'汐'",
+          "fallback": null
+        },
+        {
+          "expr": "'绘'",
+          "fallback": null
+        },
+        {
+          "expr": "'卷'",
+          "fallback": null
+        }
       ]
     },
     {
       "type": "text",
       "id": "ukiyo-side",
       "anchor": "middle-center",
-      "offset": { "x": 0.346, "y": 0.045 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#7A6A55" },
+      "offset": {
+        "x": 0.346,
+        "y": 0.045
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#7A6A55"
+      },
       "letterSpacing": 0.24,
       "rotation": -90,
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "'The Floating World'", "fallback": null }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "'The Floating World'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "image",
       "id": "ukiyo-seal",
       "anchor": "middle-center",
-      "offset": { "x": 0.383, "y": 0.19 },
+      "offset": {
+        "x": 0.383,
+        "y": 0.19
+      },
       "asset": "@builtin/frame/seal-red",
-      "size": { "height": 0.058 },
-      "opacity": 1.0,
+      "size": {
+        "height": 0.058
+      },
+      "opacity": 1,
       "tint": "auto"
     },
     {
       "type": "text",
       "id": "ukiyo-model",
       "anchor": "bottom-left",
-      "offset": { "x": 0.05, "y": -0.035 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#5C5245" },
+      "offset": {
+        "x": 0.05,
+        "y": -0.035
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#5C5245"
+      },
       "letterSpacing": 0.2,
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "if_empty(exif.model_pretty, 'Provincial Camera')", "fallback": "Provincial Camera" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Provincial Camera')",
+          "fallback": "Provincial Camera"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "ukiyo-date",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.035 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#5C5245" },
+      "offset": {
+        "x": 0,
+        "y": -0.035
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#5C5245"
+      },
       "letterSpacing": 0.2,
       "align": "center",
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "The Tidal Suite" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "date('LOCAL', exif.datetime)",
+          "fallback": "The Tidal Suite"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "ukiyo-params",
       "anchor": "bottom-right",
-      "offset": { "x": -0.05, "y": -0.035 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#5C5245" },
+      "offset": {
+        "x": -0.05,
+        "y": -0.035
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#5C5245"
+      },
       "letterSpacing": 0.2,
       "align": "right",
-      "effects": { "case": "upper" },
+      "effects": {
+        "case": "upper"
+      },
       "content": [
-        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Hand-Cut · Provincial Print" }
+        {
+          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": "Hand-Cut · Provincial Print"
+        }
       ]
     }
   ]

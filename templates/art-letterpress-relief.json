@@ -2,17 +2,28 @@
   "meta": {
     "id": "art-letterpress-relief",
     "name": "Letterpress Relief",
-    "nameI18n": { "zh": "压印浮雕", "en": "Letterpress Relief" },
+    "nameI18n": {
+      "zh": "压印浮雕",
+      "en": "Letterpress Relief"
+    },
     "version": "1.0.0",
-    "minEngineVersion": "0.5.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.1, "right": 0.07, "bottom": 0.22, "left": 0.07 },
-    "background": { "type": "solid", "color": "#FAF8F3" }
+    "padding": {
+      "top": 0.1,
+      "right": 0.07,
+      "bottom": 0.22,
+      "left": 0.07
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FAF8F3"
+    }
   },
   "layers": [
     {
@@ -20,9 +31,12 @@
       "id": "press-frame",
       "anchor": "middle-center",
       "shape": "rect",
-      "size": { "width": 0.9, "height": 0.9 },
+      "size": {
+        "width": 0.9,
+        "height": 0.9
+      },
       "color": "#D9D2C4",
-      "opacity": 1.0,
+      "opacity": 1,
       "strokeWidth": 0.0009,
       "frame": "outer",
       "margin": 0.035
@@ -31,9 +45,15 @@
       "type": "shape",
       "id": "press-rule-dark",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.1525 },
+      "offset": {
+        "x": 0,
+        "y": -0.1525
+      },
       "shape": "line",
-      "size": { "width": 0.5, "height": 0.0015 },
+      "size": {
+        "width": 0.5,
+        "height": 0.0015
+      },
       "color": "#C9C2B4",
       "opacity": 0.95
     },
@@ -41,9 +61,15 @@
       "type": "shape",
       "id": "press-rule-light",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.148 },
+      "offset": {
+        "x": 0,
+        "y": -0.148
+      },
       "shape": "line",
-      "size": { "width": 0.5, "height": 0.0015 },
+      "size": {
+        "width": 0.5,
+        "height": 0.0015
+      },
       "color": "#FFFFFF",
       "opacity": 0.95
     },
@@ -51,62 +77,158 @@
       "type": "text",
       "id": "press-title",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.065 },
-      "font": { "family": ["Playfair Display"], "size": 0.052, "color": "#373A40" },
+      "offset": {
+        "x": 0,
+        "y": -0.065
+      },
+      "font": {
+        "family": [
+          "Playfair Display"
+        ],
+        "size": 0.052,
+        "color": "#373A40"
+      },
       "letterSpacing": 0.1,
       "effects": {
-        "relief": { "mode": "letterpress", "depth": 0.045, "highlight": "#FFFFFF", "shadow": "#8F8A7E", "opacity": 0.65 }
+        "relief": {
+          "mode": "letterpress",
+          "depth": 0.045,
+          "highlight": "#FFFFFF",
+          "shadow": "#8F8A7E",
+          "opacity": 0.65
+        }
       },
-      "content": [{ "expr": "'Pressed Light'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'Pressed Light'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "press-title-zh",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.045 },
-      "font": { "family": ["Noto Serif SC"], "size": 0.026, "color": "#4A4E55" },
+      "offset": {
+        "x": 0,
+        "y": -0.045
+      },
+      "font": {
+        "family": [
+          "Noto Serif SC"
+        ],
+        "size": 0.026,
+        "color": "#4A4E55"
+      },
       "letterSpacing": 0.22,
       "effects": {
-        "relief": { "mode": "letterpress", "depth": 0.035, "highlight": "#FFFFFF", "shadow": "#8F8A7E", "opacity": 0.7 }
+        "relief": {
+          "mode": "letterpress",
+          "depth": 0.035,
+          "highlight": "#FFFFFF",
+          "shadow": "#8F8A7E",
+          "opacity": 0.7
+        }
       },
-      "content": [{ "expr": "'纸上年华'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'纸上年华'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "press-model",
       "anchor": "top-left",
-      "offset": { "x": 0.07, "y": 0.04 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6E6A61" },
+      "offset": {
+        "x": 0.07,
+        "y": 0.04
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#6E6A61"
+      },
       "letterSpacing": 0.2,
       "effects": {
         "case": "upper",
-        "relief": { "mode": "letterpress", "depth": 0.03, "highlight": "#FFFFFF", "shadow": "#A9A498", "opacity": 0.5 }
+        "relief": {
+          "mode": "letterpress",
+          "depth": 0.03,
+          "highlight": "#FFFFFF",
+          "shadow": "#A9A498",
+          "opacity": 0.5
+        }
       },
-      "content": [{ "expr": "if_empty(exif.model_pretty, 'Press No. 03')", "fallback": "Press No. 03" }]
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Press No. 03')",
+          "fallback": "Press No. 03"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "press-params",
       "anchor": "top-right",
-      "offset": { "x": -0.07, "y": 0.04 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6E6A61" },
+      "offset": {
+        "x": -0.07,
+        "y": 0.04
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#6E6A61"
+      },
       "letterSpacing": 0.2,
       "align": "right",
-      "effects": { "case": "upper" },
+      "effects": {
+        "case": "upper"
+      },
       "content": [
-        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Ink · Paper · Time" }
+        {
+          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": "Ink · Paper · Time"
+        }
       ]
     },
     {
       "type": "text",
       "id": "press-date",
       "anchor": "top-center",
-      "offset": { "x": 0, "y": 0.04 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6E6A61" },
+      "offset": {
+        "x": 0,
+        "y": 0.04
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#6E6A61"
+      },
       "letterSpacing": 0.2,
       "align": "center",
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "Edition of One" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "date('LOCAL', exif.datetime)",
+          "fallback": "Edition of One"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     }
   ]
 }

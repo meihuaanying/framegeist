@@ -7,7 +7,7 @@
       "en": "Thin Bar Hairline"
     },
     "version": "1.1.0",
-    "minEngineVersion": "0.5.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
@@ -77,8 +77,11 @@
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Unknown Camera"
+          "fallback": "Camera"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {

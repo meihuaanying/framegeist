@@ -21,3 +21,6 @@ debug.log
 
 # local caches (showcase downloads etc.)
 .cache/
+
+# v0.6.0 EXIF sample originals (user-provided, not for redistribution until processed)
+/incoming/

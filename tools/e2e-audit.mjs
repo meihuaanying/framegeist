@@ -66,10 +66,10 @@ const PHOTO_C = ABS("templates/assets/test-photos/sample-square.jpg");
 const PHOTO_D = ABS("templates/assets/test-photos/sample-noexif.png");
 
 const WATCHDOG = setTimeout(() => {
-  console.log("WATCHDOG: audit exceeded 8 minutes; results so far:");
+  console.log("WATCHDOG: audit exceeded 15 minutes; results so far:");
   console.log(results.map((r) => `${r.ok ? "PASS" : "FAIL"} ${r.name}`).join("\n"));
   process.exit(3);
-}, 8 * 60 * 1000);
+}, 15 * 60 * 1000);
 const results = [];
 const pageErrors = [];
 const check = (name, ok, detail = "") => {
@@ -93,18 +93,53 @@ const send = (method, params) =>
     pending.set(mid, res);
     ws.send(JSON.stringify({ id: mid, method, params: params ?? {} }));
   });
-ws.onmessage = (ev) => {
-  const m = JSON.parse(ev.data);
-  if (m.id && pending.has(m.id)) { pending.get(m.id)(m.result); pending.delete(m.id); }
-  if (m.method === "Runtime.exceptionThrown") {
-    const text = JSON.stringify(m.params.exceptionDetails).slice(0, 500);
-    pageErrors.push(`EXC ${text}`);
-    console.log("PAGE-EXC:", text);
+/* Race a CDP call against a timeout so a lost/huge response can never hang the
+   gate (Node's built-in WebSocket intermittently drops/glues large messages). */
+const sendT = (method, params, ms = 30000) =>
+  Promise.race([send(method, params), new Promise((res) => setTimeout(() => res({}), ms))]);
+/* Node's built-in WebSocket (undici) occasionally delivers two consecutive CDP
+   JSON messages glued into a single `message` event (intermittent, observed on
+   Node 24.20). Re-split concatenated documents with a brace-depth scanner so a
+   framing quirk cannot crash the gate. */
+const splitCdpMessages = (raw) => {
+  const text = typeof raw === "string" ? raw : String(raw);
+  const out = [];
+  let depth = 0, start = -1, inStr = false, esc = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === "\\") esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') { inStr = true; continue; }
+    if (c === "{") { if (depth === 0) start = i; depth++; continue; }
+    if (c === "}") {
+      if (depth > 0 && --depth === 0 && start >= 0) {
+        try { out.push(JSON.parse(text.slice(start, i + 1))); } catch { /* drop malformed doc */ }
+        start = -1;
+      }
+    }
   }
-  if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") {
-    const text = m.params.args.map((a) => a.value ?? a.description).join(" ").slice(0, 300);
-    pageErrors.push(`CONSOLE ${text}`);
-    console.log("CONSOLE-ERR:", text);
+  if (!out.length && text.trim()) {
+    try { out.push(JSON.parse(text)); } catch { /* ignore */ }
+  }
+  return out;
+};
+ws.onmessage = (ev) => {
+  for (const m of splitCdpMessages(ev.data)) {
+    if (m.id && pending.has(m.id)) { pending.get(m.id)(m.result); pending.delete(m.id); }
+    if (m.method === "Runtime.exceptionThrown") {
+      const text = JSON.stringify(m.params.exceptionDetails).slice(0, 500);
+      pageErrors.push(`EXC ${text}`);
+      console.log("PAGE-EXC:", text);
+    }
+    if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") {
+      const text = m.params.args.map((a) => a.value ?? a.description).join(" ").slice(0, 300);
+      pageErrors.push(`CONSOLE ${text}`);
+      console.log("CONSOLE-ERR:", text);
+    }
   }
 };
 await new Promise((res) => { ws.onopen = res; });
@@ -117,21 +152,31 @@ await send("Page.enable");
 await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
 
 const ev = async (expr) => {
-  const timeout = new Promise((resolve) => setTimeout(() => resolve({ result: { value: undefined } }), 30000));
+  // 90s: a single wasm render can block the main thread for a long time when
+  // the build machine is busy (parallel workstreams compile wasm/cargo).
+  const timeout = new Promise((resolve) => setTimeout(() => resolve({ result: { value: undefined } }), 90000));
   const call = send("Runtime.evaluate", { expression: expr, returnByValue: true, awaitPromise: true });
   const r = await Promise.race([call, timeout]);
   return r.result?.value;
 };
+/* Fire a Runtime.evaluate that navigates; the reply is usually lost, so don't
+   wait more than a moment for it. */
+const evNav = (expr) => sendT("Runtime.evaluate", { expression: expr, awaitPromise: false, returnByValue: true }, 3000);
 const shot = async (name) => {
-  const r = await send("Page.captureScreenshot", { format: "png" });
-  writeFileSync(join(SHOTS, `${name}.png`), Buffer.from(r.data, "base64"));
+  const r = await sendT("Page.captureScreenshot", { format: "png" }, 60000);
+  if (r?.data) writeFileSync(join(SHOTS, `${name}.png`), Buffer.from(r.data, "base64"));
 };
 const inject = async (files, selector = "#fileInput") => {
   await ev(`document.querySelector("${selector}").value = ""`);
-  const doc = await send("DOM.getDocument", { depth: -1 });
-  const q = await send("DOM.querySelector", { nodeId: doc.root.nodeId, selector });
-  if (!q.nodeId) throw new Error(`selector ${selector} not found`);
-  await send("DOM.setFileInputFiles", { files, nodeId: q.nodeId });
+  // depth 0 (root only): the whole-DOM depth:-1 response is multi-MB and made
+  // Node's built-in WebSocket drop/glue frames. querySelector searches the tree.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const doc = await sendT("DOM.getDocument", { depth: 0 });
+    const q = await sendT("DOM.querySelector", { nodeId: doc.root?.nodeId, selector });
+    if (q.nodeId) { await sendT("DOM.setFileInputFiles", { files, nodeId: q.nodeId }); return; }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error(`selector ${selector} not found`);
 };
 const waitLabel = async (timeoutMs = 60000) => {
   await ev(`document.getElementById("stageLabel").textContent = "WAIT"`);
@@ -148,7 +193,7 @@ const waitLabel = async (timeoutMs = 60000) => {
 /* ---- 0. boot ---- */
 // Warm reload on the clean network path (no stale service worker cache;
 // Tauri has no SW either). Measures a warm-cache start.
-await send("Runtime.evaluate", {
+await sendT("Runtime.evaluate", {
   expression: `(async () => {
     try {
       const ks = await caches.keys();
@@ -362,7 +407,7 @@ check("picker: two modes", large === true);
 await ev(`document.getElementById("pickerCompact").click()`);
 
 /* ---- 12. theme + i18n ---- */
-await ev(`localStorage.setItem("fg-theme","light"); location.reload()`);
+await evNav(`localStorage.setItem("fg-theme","light"); location.reload()`);
 await new Promise((r) => setTimeout(r, 6500));
 await inject([PHOTO_24MP]);
 await waitLabel(30000);
@@ -373,14 +418,39 @@ const en = await ev(`document.getElementById("renderBtn").textContent`);
 check("i18n: en switch", /Render/.test(en), en);
 await ev(`document.getElementById("langBtn").click()`);
 
-/* ---- 13. HEIC error path ---- */
-writeFileSync(join(SHOTS, "fake.heic"), "not really heic");
+/* ---- 13. HEIC path (v0.6.0: lazy libheif — vendored, or graceful) ---- */
+// Synthesize a 15-byte fake .heic (same in-memory approach as writeFramePng):
+// the input must never crash the page. Either it stages (decoder present and
+// the fixture were valid) or a friendly localized toast appears.
+writeFileSync(join(SHOTS, "fake.heic"), Buffer.from("not really heic"));
 const FAKE_HEIC = ABS(join(SHOTS, "fake.heic"));
-await inject([FAKE_HEIC]);
-await new Promise((r) => setTimeout(r, 1200));
-const toasts = await ev(`document.getElementById("toasts").textContent`);
-check("heic: localized unsupported message", /HEIC/i.test(toasts), toasts.slice(0, 80));
-check("heic: no crash (status ok)", (await ev(`document.getElementById("statusText").textContent`)) !== "出错");
+const HEIC_PAGE_ERRORS_BEFORE = pageErrors.length;
+{
+  const before = await ev(`window.__fg.state.photos.length`);
+  await inject([FAKE_HEIC]);
+  await new Promise((r) => setTimeout(r, 2500));
+  const outcome = await ev(`(() => ({
+    photos: window.__fg.state.photos.length,
+    toasts: [...document.querySelectorAll("#toasts .toast")].map((x) => x.textContent),
+    status: document.getElementById("statusText").textContent,
+  }))()`);
+  const staged = outcome.photos > before;
+  const friendly = outcome.toasts.some((x) => /HEIC|HEIF/i.test(x));
+  check("heic: .heic input stages or shows a friendly toast", staged || friendly, JSON.stringify({ staged, toasts: outcome.toasts.slice(-2) }));
+  check("heic: no page error during the HEIC path", pageErrors.length === HEIC_PAGE_ERRORS_BEFORE, pageErrors.slice(HEIC_PAGE_ERRORS_BEFORE).join(" | ").slice(0, 200));
+  check("heic: app status stays healthy", outcome.status !== "出错", outcome.status);
+}
+if (existsSync("web/vendor/libheif/libheif-bundle.mjs")) {
+  const mod = await ev(`(async () => {
+    try {
+      const m = await window.__fg.loadHeifModule();
+      return { ok: typeof m?.HeifDecoder === "function", decoder: typeof m?.HeifDecoder };
+    } catch (e) { return { ok: false, error: String(e) }; }
+  })()`);
+  check("heic: vendored libheif module loads and exposes HeifDecoder", mod?.ok === true, JSON.stringify(mod));
+} else {
+  check("heic: offline degradation hook wired (no vendored module)", (await ev(`typeof window.__fg.loadHeifModule === "function"`)) === true);
+}
 
 /* ---- 14. collage mode ---- */
 await ev(`document.getElementById("modeCollage").click()`);
@@ -558,7 +628,7 @@ function makeFgt(jsonBuf) {
   const val = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1")).exportSize`);
   check("settings: export size persists", val === "2048", String(val));
   await ev(`document.getElementById("settingsClose").click()`);
-  await send("Page.reload");
+  await sendT("Page.reload");
   await new Promise((r) => setTimeout(r, 7000));
   const after = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1")).exportSize`);
   check("settings: persists across reload", after === "2048", String(after));
@@ -1263,16 +1333,32 @@ await ev(`(async () => {
     if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(120); }
     document.getElementById("cropReset").click();
     await sleep(300);
-    const img = document.querySelector("#canvasWrap img");
+    const stageImg = async () => {
+      for (let i = 0; i < 40; i++) {
+        const img = document.querySelector("#canvasWrap img");
+        if (img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0) return img;
+        await sleep(150);
+      }
+      return document.querySelector("#canvasWrap img");
+    };
+    const img = await stageImg();
     if (!img) return { error: "no stage img" };
-    const rect = img.getBoundingClientRect();
-    document.getElementById("viewport").dispatchEvent(new MouseEvent("dblclick", {
-      clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2, bubbles: true, cancelable: true,
-    }));
-    await sleep(150);
-    const entered = window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect");
-    document.getElementById("cropToggle").click();
-    await sleep(120);
+    const dbl = () => {
+      const rect = img.getBoundingClientRect();
+      document.getElementById("viewport").dispatchEvent(new MouseEvent("dblclick", {
+        clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2, bubbles: true, cancelable: true,
+      }));
+    };
+    dbl();
+    await sleep(200);
+    let entered = window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect");
+    if (!entered) {
+      if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(150); }
+      dbl();
+      await sleep(250);
+      entered = window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect");
+    }
+    if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(120); }
     const ui = () => JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId] ?? {};
     document.getElementById("cropFillW").click();
     await sleep(250);
@@ -1867,8 +1953,288 @@ const hexRgb = (h) => {
   })()`);
   check("fonts: web engine manifest lists all template fonts", r?.missing?.length === 0, `${r?.n} families, missing ${JSON.stringify(r?.missing)}`);
   await ev(`(async () => { await window.__fg.useTemplate("art-vermilion-seal"); })()`);
-  const label = await waitLabel(30000);
+  const label = await waitLabel(60000);
   check("fonts: Ma Shan Zheng renders in the web engine", label.includes("ms") && !label.includes("失败"), label);
+}
+
+/* 65. v0.6.0: sample photo chips load real EXIF */
+{
+  const chips = await ev(`[...document.querySelectorAll("#sampleRow .sample-chip")].map((b) => b.textContent)`);
+  check("samples: three sample photo chips render", chips?.length === 3, JSON.stringify(chips));
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); })()`);
+  await ev(`document.querySelectorAll("#sampleRow .sample-chip")[1].click()`);
+  const staged = await ev(`(async () => {
+    const t0 = Date.now();
+    while (Date.now() - t0 < 20000) {
+      const p = window.__fg.state.photos[0];
+      if (p && p.name === "nikon-z6ii.jpg") return true;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    return false;
+  })()`);
+  const label = await waitLabel(40000);
+  const info = await ev(`window.__fg.state.photos[0]?.exif ?? null`);
+  check(
+    "samples: chip loads the example photo with real EXIF",
+    staged === true && label.includes("ms") && !!info?.model && !!info?.lens && !!info?.datetime,
+    `${label}; ${JSON.stringify({ staged, model: info?.model, lens: info?.lens, dt: info?.datetime })}`,
+  );
+}
+
+/* 66. v0.6.0: no-EXIF hint + fill/clear sample preview */
+{
+  await ev(`document.getElementById("fileInput").value = ""`);
+  await inject([PHOTO_D]);
+  const label1 = await waitLabel(40000);
+  const hintShown = await ev(`!document.getElementById("exifHint").classList.contains("hidden")`);
+  const before = await ev(RENDER_HASH);
+  await ev(`document.getElementById("exifFill").click()`);
+  await waitLabel(40000);
+  const ov = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").exif ?? null`);
+  const after = await ev(RENDER_HASH);
+  check("exif hint: shown for a photo without EXIF", hintShown && label1.includes("ms"), label1);
+  check(
+    "exif hint: fill sample writes a preview override",
+    !!ov?.model && !!ov?.lens && ov?.focal != null,
+    JSON.stringify(ov),
+  );
+  check("exif hint: sample preview changes rendered pixels", before !== after && after !== 0, `${before} -> ${after}`);
+  await ev(`document.getElementById("exifClear").click()`);
+  await waitLabel(40000);
+  const cleared = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").exif ?? null`);
+  check("exif hint: clear removes the preview override", cleared === null, JSON.stringify(cleared));
+}
+
+/* 67. v0.6.0: date localization follows the UI language */
+{
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-date-right"); })()`);
+  await ev(`document.querySelectorAll("#sampleRow .sample-chip")[1].click()`);
+  await waitLabel(40000);
+  const zh = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").dateLocale`);
+  const zhHash = await ev(RENDER_HASH);
+  await ev(`document.getElementById("langBtn").click()`);
+  await waitLabel(40000);
+  const en = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").dateLocale`);
+  const enHash = await ev(RENDER_HASH);
+  await ev(`document.getElementById("langBtn").click()`);
+  await waitLabel(40000);
+  check("locale: overrides carry the UI language", zh === "zh" && en === "en", `${zh} -> ${en}`);
+  check("locale: zh/en dates render differently", zhHash !== enHash && zhHash !== 0, `${zhHash} -> ${enHash}`);
+}
+
+/* 68. v0.6.0: export metadata transparency notice */
+{
+  await ev(`document.getElementById("renderBtn").click()`);
+  await waitLabel(40000);
+  await ev(`document.getElementById("exportBtn").click()`);
+  await new Promise((r) => setTimeout(r, 800));
+  const toasts = await ev(`[...document.querySelectorAll("#toasts .toast")].map((t) => t.textContent)`);
+  check(
+    "export: metadata notice shown before saving",
+    Array.isArray(toasts) && toasts.some((x) => /EXIF|元数据/.test(x)),
+    JSON.stringify(toasts?.slice(-2)),
+  );
+}
+
+/* 69. v0.6.0: EXIF field chips append tokens to the selected text layer */
+let EXIF_TEXT_ID = null;
+{
+  await inject([PHOTO_A]);
+  await waitLabel(40000);
+  await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); await new Promise((r) => setTimeout(r, 600)); })()`);
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const flat = (list, out = []) => { for (const l of list ?? []) { out.push(l); if (l.type === "group") flat(l.children, out); } return out; };
+    const storedJson = () => JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
+    let id = null;
+    const readLayer = (json) => flat(JSON.parse(json || "{}").layers ?? []).find((l) => l.id === id);
+    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.querySelector(".ltag")?.textContent === "text");
+    if (!row) return { error: "no text layer row" };
+    row.click();
+    await sleep(200);
+    id = row.dataset.id;
+    const chipRow = document.getElementById("exifFieldChips");
+    const chips = [...document.querySelectorAll("#exifFieldChips button")];
+    const keys = chips.map((c) => c.dataset.exif);
+    const labels = chips.map((c) => c.textContent.trim());
+    const modelChip = chips.find((c) => c.dataset.exif === "model");
+    const effective = storedJson() ?? JSON.stringify(window.__fg.currentTemplateObject());
+    const content0 = JSON.parse(JSON.stringify(readLayer(effective)?.content ?? []));
+    const hash0 = ${RENDER_HASH};
+    if (!chipRow || !modelChip) return { error: "no chip row", chips: chips.length };
+    modelChip.click();
+    await sleep(900);
+    const content1 = readLayer(storedJson())?.content ?? [];
+    const hash1 = ${RENDER_HASH};
+    document.getElementById("editUndo").click();
+    await sleep(900);
+    const content2 = readLayer(storedJson())?.content ?? [];
+    return {
+      id,
+      inProps: !!document.querySelector("#propsBody #exifFieldChips"),
+      chips: chips.length, keys, labels,
+      content0, content1, content2,
+      appended: content1[content1.length - 1] ?? null,
+      kept: JSON.stringify(content1.slice(0, -1)) === JSON.stringify(content0),
+      undone: JSON.stringify(content2) === JSON.stringify(content0),
+      hash0, hash1, changed: hash0 !== hash1,
+      photoModel: window.__fg.state.photos[0]?.exif?.model ?? null,
+    };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  EXIF_TEXT_ID = r?.id ?? null;
+  check("exif fields: chip row renders inside text props", r?.inProps === true && r?.chips === 14, JSON.stringify({ inProps: r?.inProps, n: r?.chips }));
+  check(
+    "exif fields: chips cover the contract tokens",
+    r?.keys?.join(",") === "model,lens,focal,aperture,shutter,iso,datetime,weekday,weekday_cn,film_mode,wb_mode,grain,dynamic_range,params",
+    JSON.stringify(r?.keys),
+  );
+  check(
+    "exif fields: chip labels resolve through i18n",
+    Array.isArray(r?.labels) && r.labels.every((s) => s && !s.startsWith("exif.")),
+    JSON.stringify(r?.labels?.slice(0, 4)),
+  );
+  check(
+    "exif fields: model chip appends one exif.model item",
+    !!r && !r.error && r.content1.length === r.content0.length + 1 && r.appended?.expr === "exif.model" && r.appended?.fallback === "" && r.kept === true,
+    JSON.stringify({ before: r?.content0?.length, after: r?.content1?.length, appended: r?.appended }),
+  );
+  check("exif fields: insertion changes rendered pixels", r?.changed === true && r?.hash1 !== 0, `${r?.hash0} -> ${r?.hash1} (model=${r?.photoModel})`);
+  check("exif fields: undo removes the appended token", r?.undone === true, JSON.stringify(r?.content2));
+}
+
+/* 70. v0.6.0: insert-params chip writes a fmt() parameter line */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const flat = (list, out = []) => { for (const l of list ?? []) { out.push(l); if (l.type === "group") flat(l.children, out); } return out; };
+    const btn = document.getElementById("exifInsertParams");
+    if (!btn) return { error: "no params chip" };
+    const label = btn.textContent.trim();
+    btn.click();
+    await sleep(900);
+    const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId] ?? "{}";
+    const layer = flat(JSON.parse(stored).layers ?? []).find((l) => l.id === ${JSON.stringify(EXIF_TEXT_ID)});
+    const last = (layer?.content ?? [])[layer?.content?.length - 1] ?? null;
+    return { label, expr: last?.expr ?? null, fallback: last?.fallback ?? null, n: (layer?.content ?? []).length };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check(
+    "exif fields: insert params chip writes a fmt() expr",
+    typeof r?.expr === "string" && r.expr.includes("fmt(") && r.expr.includes("{aperture}") && r.expr.includes("{iso}") && r.fallback === "",
+    JSON.stringify(r),
+  );
+  check("exif fields: insert params chip label is localized", typeof r?.label === "string" && r.label.length > 0 && !r.label.startsWith("exif."), String(r?.label));
+}
+
+/* 71. v0.6.0: engine font offline warmup (contract Q10)
+   The harness bypasses the Service Worker (Page.setBypassServiceWorker at the
+   top), so the robust path asserted here is the prefetch status half of the
+   requirement — window.__fg.warmFontsStatus — plus the direct CacheStorage
+   write the warmup performs itself. Deterministic: up to 30s waiting. */
+{
+  const t0 = Date.now();
+  let st = null;
+  while (Date.now() - t0 < 30000) {
+    st = await ev(`window.__fg.warmFontsStatus ? window.__fg.warmFontsStatus() : null`);
+    if (st && st.status === "done") break;
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  const expected = st ? st.engineFonts - st.loaded : -1;
+  check("fonts: warmup exposed and completed within 30s", !!st && st.status === "done" && st.done === st.total, JSON.stringify(st));
+  check(
+    "fonts: candidate count = engine fonts minus preloaded",
+    !!st && st.total === expected && st.total >= 8,
+    JSON.stringify({ total: st?.total, engineFonts: st?.engineFonts, loaded: st?.loaded }),
+  );
+  check("fonts: warmup keeps <=3 concurrent requests", !!st && st.maxInflight <= 3, `maxInflight=${st?.maxInflight}`);
+  check("fonts: warmup wrote engine fonts to CacheStorage", !!st && st.cached >= 1, JSON.stringify({ cached: st?.cached, cache: st?.cache }));
+  const hit = await ev(`(async () => {
+    for (const key of await caches.keys()) {
+      const c = await caches.open(key);
+      const reqs = await c.keys();
+      const fonts = reqs.filter((r) => r.url.includes("fonts/engine/"));
+      if (fonts.length) return { key, n: fonts.length, sample: fonts[0].url.split("/").pop() };
+    }
+    return { key: null, n: 0 };
+  })()`);
+  check("fonts: CacheStorage contains engine font files", hit?.n >= 1 && /^framegeist-/.test(hit.key), JSON.stringify(hit));
+}
+
+/* 72. v0.6.0 Q10: AVIF/WebP export formats end-to-end */
+{
+  const ui = await ev(`(() => {
+    const sel = document.getElementById("exportFormat");
+    const label = document.querySelector('label span[data-i18n="export.format"]');
+    return {
+      exists: !!sel,
+      values: [...(sel?.options ?? [])].map((o) => o.value),
+      value: sel?.value ?? null,
+      label: label?.textContent ?? "",
+      button: document.getElementById("exportBtn").textContent,
+    };
+  })()`);
+  check("export format: select exists with jpeg/png/avif/webp", ui?.exists === true && ui.values.join(",") === "jpeg,png,avif,webp", JSON.stringify(ui));
+  check("export format: defaults to jpeg", ui?.value === "jpeg", String(ui?.value));
+  check("export format: field label is localized", !!ui?.label && ui.label !== "export.format", ui?.label);
+
+  // Force the final export render path (the fast preview path stays JPEG).
+  await ev(`(() => { const p = document.getElementById("preview"); p.checked = false; p.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(60000);
+  await ev(`(() => { const s = document.getElementById("exportFormat"); s.value = "avif"; s.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(120000);
+  const avifState = await ev(`(() => {
+    const b = window.__fg.state.lastRender;
+    if (!b) return null;
+    const tag = (i) => String.fromCharCode(b[i], b[i + 1], b[i + 2], b[i + 3]);
+    return { ftyp: tag(4), brand: tag(8), n: b.length, name: window.__fg.state.lastRenderName, button: document.getElementById("exportBtn").textContent };
+  })()`);
+  check("export format: persisted in fg-settings-v1", (await ev(`JSON.parse(localStorage.getItem("fg-settings-v1") || "{}").exportFormat`)) === "avif", String(avifState?.name));
+  check("export format: final render emits an AVIF signature", avifState?.ftyp === "ftyp" && ["avif", "avis"].includes(avifState?.brand) && avifState.n > 100, JSON.stringify(avifState));
+  check("export format: filename + button reflect AVIF", /\.avif$/.test(avifState?.name ?? "") && /AVIF/.test(avifState?.button ?? ""), JSON.stringify({ name: avifState?.name, button: avifState?.button }));
+
+  await ev(`(() => { const s = document.getElementById("exportFormat"); s.value = "webp"; s.dispatchEvent(new Event("change")); })()`);
+  await waitLabel(120000);
+  const webpState = await ev(`(() => {
+    const b = window.__fg.state.lastRender;
+    if (!b) return null;
+    const tag = (i) => String.fromCharCode(b[i], b[i + 1], b[i + 2], b[i + 3]);
+    return { riff: tag(0), webp: tag(8), n: b.length, name: window.__fg.state.lastRenderName };
+  })()`);
+  check("export format: final render emits a RIFF/WEBP container", webpState?.riff === "RIFF" && webpState?.webp === "WEBP" && webpState.n > 100, JSON.stringify(webpState));
+  check("export format: filename reflects WebP", /\.webp$/.test(webpState?.name ?? ""), String(webpState?.name));
+
+  // Engine-level calls (256px) per contract Q10: valid blobs for both formats.
+  const engineOut = await ev(`(() => {
+    const st = window.__fg.state;
+    const tpl = window.__fg.effectiveTemplateJson();
+    const ojson = window.__fg.buildOverridesJson();
+    const a = new Uint8Array(st.engine.render_with_overrides(st.photos[0].bytes, tpl, "avif", false, ojson, 256, false));
+    const w = new Uint8Array(st.engine.render_with_overrides(st.photos[0].bytes, tpl, "webp", false, ojson, 256, false));
+    const tag = (b, i) => String.fromCharCode(b[i], b[i + 1], b[i + 2], b[i + 3]);
+    return {
+      avif: { ftyp: tag(a, 4), brand: tag(a, 8), n: a.length },
+      webp: { magic: tag(w, 0) + tag(w, 8), n: w.length },
+    };
+  })()`);
+  check("engine: avif render carries ftyp/avif signature", engineOut?.avif?.ftyp === "ftyp" && ["avif", "avis"].includes(engineOut?.avif?.brand) && engineOut.avif.n > 100, JSON.stringify(engineOut?.avif));
+  check("engine: webp render carries RIFF/WEBP magic", engineOut?.webp?.magic === "RIFFWEBP" && engineOut.webp.n > 100, JSON.stringify(engineOut?.webp));
+
+  const bad = await ev(`(() => {
+    try {
+      window.__fg.state.engine.render_with_overrides(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), "gif", false, "", 64, false);
+      return "no-error";
+    } catch (e) { return String(e && (e.message || e)); }
+  })()`);
+  check("engine: unknown format throws a clear encode error", /unsupported format/i.test(bad) && /gif/.test(bad), String(bad).slice(0, 120));
+
+  // Restore defaults for any later sections.
+  await ev(`(() => {
+    const s = document.getElementById("exportFormat");
+    s.value = "jpeg"; s.dispatchEvent(new Event("change"));
+    const p = document.getElementById("preview"); p.checked = true; p.dispatchEvent(new Event("change"));
+  })()`);
+  await waitLabel(60000);
 }
 
 clearTimeout(WATCHDOG);

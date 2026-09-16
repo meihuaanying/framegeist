@@ -395,6 +395,7 @@ input[type="color"] {
   transition: all var(--t-fast) var(--ease);
 }
 .field-chips button:hover { border-color: var(--accent-a); color: var(--text); }
+.field-chips button.primary { border-color: color-mix(in srgb, var(--accent-a) 45%, var(--border)); color: var(--accent-a); }
 
 /* ---------- brand ---------- */
 .brand-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; max-height: 150px; overflow-y: auto; margin-top: 6px; }
@@ -711,3 +712,10 @@ body[data-tier="simple"] .advanced-only { display: none !important; }
 .fuji-title { font-weight: 600; font-size: 12px; color: var(--text); margin: 10px 0 4px; }
 .cal-presets { grid-template-columns: repeat(4, 1fr); gap: 4px; }
 .cal-accents { margin: 2px 0 0; }
+
+/* v0.6.0: sample photo chips + no-EXIF hint */
+.sample-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.sample-row .muted { font-size: 11.5px; }
+.sample-chip { width: auto; padding: 0 10px; }
+.exif-hint { margin-top: 8px; padding: 8px 10px; border: 1px dashed var(--border); border-radius: 8px; }
+.exif-hint p { margin: 0 0 6px; font-size: 11.5px; }

@@ -37,7 +37,28 @@ OFL-1.1（SIL Open Font License），许可原文见 `templates/assets/fonts/lic
 
 Host Grotesk、DM Sans（OFL-1.1，自托管 latin 子集）。
 
+## HEIC 解码（`web/vendor/libheif/`，v0.6.0）
+
+- [libheif-js](https://github.com/catdad-experiments/libheif-js) **v1.23.2**（Kiril Vatev；npm `libheif-js`），
+  基于 [strukturag/libheif](https://github.com/strukturag/libheif) 的 Emscripten WASM 构建，**LGPL-3.0**。
+  预打包 wasm 变体 `libheif-wasm/libheif-bundle.mjs` 以**独立外部文件**随包分发
+  （`web/vendor/libheif/libheif-bundle.mjs`），仅在用户拖入 HEIC/HEIF 时通过动态 `import()` 惰性加载，
+  不被静态内联进应用代码；加载失败（首次离线访问）时优雅降级为本地化提示。
+- 许可原文（npm 包 LICENSE 逐字拷贝）：`docs/licenses/libheif-js-LGPL-3.0.txt`
+  （sha256 `e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118`）。
+- 来源与校验：npm tarball `libheif-js-1.23.2.tgz`
+  （sha256 `728cf3795a94b18039ac07c6d38c089b72f1eeae12c37bc9f18b0925fc709daa`）；
+  vendored 文件 sha256 `d05292271af008d300cc75be374feb8fd35b418a71420a556c3fb817f662b502`。
+
 ## 模板
 
 内置模板（`templates/*.json`）由 FrameGeist 原创设计（v0.4.0 起为手工创作/子 Agent 设计产出，
 清单由 `tools/gen-templates.mjs` 扫描重建），许可以模板 meta 为准（当前全部 CC0-1.0）。
+
+## 示例摄影（v0.6.0）
+
+`web/examples/` 三张示例照片与 192 张 showcase 样片注入的 EXIF 元数据，来源于用户提供的三张
+自有摄影作品（1× SONY ILCE-7RM3、1× NIKON Z 6_2、1× Canon EOS R7）。原片不入仓
+（`incoming/` 已 gitignore）；入库派生物为压缩至长边 ≤2560、质量 92 的 JPEG。
+署名：**由用户提供的示例摄影**（如作者需要具名，请在仓库 Issue 中告知）。
+样片展示照片本体仍来自 Lorem Picsum（作者与许可见 `templates/assets/photos/CREDITS-DEMO.json`）。

@@ -1,0 +1,3077 @@
+{
+  "generatedAt": "2026-09-16T09:28:28.089Z",
+  "items": {
+    "templates/samples/art-copperplate-etch.jpg": {
+      "dhash": "0e71794941616561",
+      "mean": [
+        133.114,
+        139.337,
+        135.625
+      ]
+    },
+    "templates/samples/art-deco-double.jpg": {
+      "dhash": "4f61392163410101",
+      "mean": [
+        164.043,
+        163.665,
+        158.575
+      ]
+    },
+    "templates/samples/art-gilt-foil.jpg": {
+      "dhash": "3163e1f0f0f8f8f8",
+      "mean": [
+        104.326,
+        95.558,
+        87.375
+      ]
+    },
+    "templates/samples/art-letterpress-relief.jpg": {
+      "dhash": "4f73737171e1e2c8",
+      "mean": [
+        192.621,
+        191.991,
+        186.989
+      ]
+    },
+    "templates/samples/art-republican-press.jpg": {
+      "dhash": "0f0f4f4f7f7f7f9d",
+      "mean": [
+        145.668,
+        165.592,
+        166.266
+      ]
+    },
+    "templates/samples/art-ukiyoe-cartouche.jpg": {
+      "dhash": "0d0f051531232313",
+      "mean": [
+        140.041,
+        139.593,
+        130.454
+      ]
+    },
+    "templates/samples/art-vermilion-seal.jpg": {
+      "dhash": "171f1d7d79797939",
+      "mean": [
+        148.699,
+        127.715,
+        123.461
+      ]
+    },
+    "templates/samples/art-woodtype-press.jpg": {
+      "dhash": "0f1f4f4f77737171",
+      "mean": [
+        135.305,
+        135.373,
+        128.287
+      ]
+    },
+    "templates/samples/black-frame-charcoal-split-01.jpg": {
+      "dhash": "033c3c723c3cbc1e",
+      "mean": [
+        52.815,
+        46.737,
+        54.381
+      ]
+    },
+    "templates/samples/black-frame-gold-line-01.jpg": {
+      "dhash": "03f0f4f0f0e8e8d0",
+      "mean": [
+        57.245,
+        59.15,
+        39.932
+      ]
+    },
+    "templates/samples/black-frame-inner-rule-01.jpg": {
+      "dhash": "d26efe9ebefefefe",
+      "mean": [
+        17.233,
+        33.266,
+        39.905
+      ]
+    },
+    "templates/samples/black-frame-mono-slate-01.jpg": {
+      "dhash": "b3d0c8e0e0f0f0d0",
+      "mean": [
+        47.416,
+        46.287,
+        29.64
+      ]
+    },
+    "templates/samples/black-frame-side-stack-01.jpg": {
+      "dhash": "3130b8f8f8faf2d6",
+      "mean": [
+        55.441,
+        55.441,
+        55.445
+      ]
+    },
+    "templates/samples/black-frame-two-line-01.jpg": {
+      "dhash": "03e2f8f0f0f0f0e0",
+      "mean": [
+        48.781,
+        43.852,
+        44.077
+      ]
+    },
+    "templates/samples/blur-bg-brandbar-02.jpg": {
+      "dhash": "30b07173c799e9d8",
+      "mean": [
+        26.193,
+        25.691,
+        29.787
+      ]
+    },
+    "templates/samples/blur-bg-card-03.jpg": {
+      "dhash": "d3d3e4ecb860fc7b",
+      "mean": [
+        16.243,
+        10.667,
+        12.783
+      ]
+    },
+    "templates/samples/blur-bg-center-01.jpg": {
+      "dhash": "617527664e1e9ebe",
+      "mean": [
+        48.147,
+        48.147,
+        48.146
+      ]
+    },
+    "templates/samples/blur-bg-topcap-04.jpg": {
+      "dhash": "f372f0f07171b0b0",
+      "mean": [
+        69.637,
+        65.16,
+        47.037
+      ]
+    },
+    "templates/samples/borderless-center-caption-01.jpg": {
+      "dhash": "e18332e56547fffc",
+      "mean": [
+        141.385,
+        125.035,
+        96.922
+      ]
+    },
+    "templates/samples/borderless-corner-stack-01.jpg": {
+      "dhash": "773a98e9e166ecec",
+      "mean": [
+        94.112,
+        133.478,
+        109.483
+      ]
+    },
+    "templates/samples/borderless-date-hero-01.jpg": {
+      "dhash": "569d8d0fcccccccc",
+      "mean": [
+        142.571,
+        146.959,
+        150.414
+      ]
+    },
+    "templates/samples/borderless-dot-corners-01.jpg": {
+      "dhash": "58e8f0f0b0302223",
+      "mean": [
+        159.008,
+        140.95,
+        133.409
+      ]
+    },
+    "templates/samples/borderless-geo-pin-01.jpg": {
+      "dhash": "c0c8d8d2c3dbdaf0",
+      "mean": [
+        107.894,
+        133.581,
+        127.257
+      ]
+    },
+    "templates/samples/borderless-lowleft-pair-01.jpg": {
+      "dhash": "c8ccec99b9f0f8f0",
+      "mean": [
+        115.041,
+        122.071,
+        108.103
+      ]
+    },
+    "templates/samples/borderless-one-liner-01.jpg": {
+      "dhash": "e0308ce1c8ccccd9",
+      "mean": [
+        145.709,
+        147.029,
+        142.089
+      ]
+    },
+    "templates/samples/borderless-quad-anchors-01.jpg": {
+      "dhash": "7070b192ccc8f0f0",
+      "mean": [
+        147.899,
+        104.792,
+        77.7
+      ]
+    },
+    "templates/samples/borderless-right-roll-01.jpg": {
+      "dhash": "fcfcf46e3e393436",
+      "mean": [
+        142.915,
+        122.619,
+        109.231
+      ]
+    },
+    "templates/samples/borderless-signoff-block-01.jpg": {
+      "dhash": "b030a8e0e0c08000",
+      "mean": [
+        142.258,
+        123.444,
+        97.636
+      ]
+    },
+    "templates/samples/borderless-vertical-spine-01.jpg": {
+      "dhash": "0d090909010141c0",
+      "mean": [
+        155.676,
+        154.083,
+        146.727
+      ]
+    },
+    "templates/samples/calendar-center-rule-01.jpg": {
+      "dhash": "cc2d393371717979",
+      "mean": [
+        176.357,
+        176.578,
+        176.161
+      ]
+    },
+    "templates/samples/calendar-corner-day-01.jpg": {
+      "dhash": "a48c8ccccfcfefee",
+      "mean": [
+        136.09,
+        131.793,
+        141.731
+      ]
+    },
+    "templates/samples/calendar-portrait-stack-01.jpg": {
+      "dhash": "0c7b7d352161796d",
+      "mean": [
+        199.167,
+        180.413,
+        162.441
+      ]
+    },
+    "templates/samples/calendar-rail-date-01.jpg": {
+      "dhash": "3d33334305253939",
+      "mean": [
+        174.896,
+        172.864,
+        154.097
+      ]
+    },
+    "templates/samples/calendar-split-columns-01.jpg": {
+      "dhash": "2323636161614149",
+      "mean": [
+        153.964,
+        151.687,
+        150.373
+      ]
+    },
+    "templates/samples/calendar-strip-date-01.jpg": {
+      "dhash": "4411010911111101",
+      "mean": [
+        172.032,
+        169.581,
+        168.071
+      ]
+    },
+    "templates/samples/camera-baseplate-02.jpg": {
+      "dhash": "0888a2b2e0e0e0e0",
+      "mean": [
+        91.517,
+        91.966,
+        95.228
+      ]
+    },
+    "templates/samples/camera-corner-body-03.jpg": {
+      "dhash": "01070113030f4b61",
+      "mean": [
+        156.499,
+        173.08,
+        189.148
+      ]
+    },
+    "templates/samples/camera-lens-dial-06.jpg": {
+      "dhash": "32b2f0f0f0c8b2f2",
+      "mean": [
+        74.129,
+        74.985,
+        72.155
+      ]
+    },
+    "templates/samples/camera-retro-sidecar-04.jpg": {
+      "dhash": "777373777773f1f1",
+      "mean": [
+        194.224,
+        180.638,
+        149.947
+      ]
+    },
+    "templates/samples/camera-ricoh-slimline-08.jpg": {
+      "dhash": "0b1f377f373d3c3d",
+      "mean": [
+        154.378,
+        141.682,
+        122.449
+      ]
+    },
+    "templates/samples/camera-series-emblem-07.jpg": {
+      "dhash": "c07171717d3d3de1",
+      "mean": [
+        180.173,
+        173.795,
+        163.379
+      ]
+    },
+    "templates/samples/camera-stencil-mono-05.jpg": {
+      "dhash": "4961010989131919",
+      "mean": [
+        177.276,
+        172.111,
+        133.965
+      ]
+    },
+    "templates/samples/camera-topdeck-bar-01.jpg": {
+      "dhash": "4f597b79596d4d0c",
+      "mean": [
+        172.204,
+        167.082,
+        163.798
+      ]
+    },
+    "templates/samples/classic-watermark-black-bar.jpg": {
+      "dhash": "e3dcb5e1f3dacece",
+      "mean": [
+        131.427,
+        100.378,
+        83.753
+      ]
+    },
+    "templates/samples/classic-watermark-brand-center.jpg": {
+      "dhash": "ccccccc8e8e0e2e2",
+      "mean": [
+        153.06,
+        145.135,
+        110.17
+      ]
+    },
+    "templates/samples/classic-watermark-date-right.jpg": {
+      "dhash": "0f674319b9b1a7cc",
+      "mean": [
+        134.627,
+        123.442,
+        116.452
+      ]
+    },
+    "templates/samples/classic-watermark-double-row.jpg": {
+      "dhash": "a46080f898f8f8e0",
+      "mean": [
+        122.784,
+        125.061,
+        125.24
+      ]
+    },
+    "templates/samples/classic-watermark-hairline-thin.jpg": {
+      "dhash": "8c9c8edcf0f0ccf0",
+      "mean": [
+        173.621,
+        155.398,
+        140.17
+      ]
+    },
+    "templates/samples/classic-watermark-mono-stack.jpg": {
+      "dhash": "dc9f8745c9635ada",
+      "mean": [
+        149.505,
+        147.535,
+        136.889
+      ]
+    },
+    "templates/samples/classic-watermark-red-dot.jpg": {
+      "dhash": "169edccec0e0e0e0",
+      "mean": [
+        115.096,
+        119.639,
+        116.25
+      ]
+    },
+    "templates/samples/classic-watermark-single-row.jpg": {
+      "dhash": "d8dada50d8d8d8f8",
+      "mean": [
+        145.31,
+        135.432,
+        123.389
+      ]
+    },
+    "templates/samples/colorcard-column-02.jpg": {
+      "dhash": "e3e3e3d3f1f1e1e1",
+      "mean": [
+        64.118,
+        52.087,
+        40.928
+      ]
+    },
+    "templates/samples/colorcard-cream-date-04.jpg": {
+      "dhash": "c1797d6925217139",
+      "mean": [
+        121.604,
+        158.207,
+        186.928
+      ]
+    },
+    "templates/samples/colorcard-diamonds-03.jpg": {
+      "dhash": "0f0f1f3d1f5f7f3f",
+      "mean": [
+        138.693,
+        155.91,
+        167.259
+      ]
+    },
+    "templates/samples/colorcard-index-05.jpg": {
+      "dhash": "0d45455959012121",
+      "mean": [
+        161.772,
+        122.137,
+        98.367
+      ]
+    },
+    "templates/samples/colorcard-sunrise-chips-01.jpg": {
+      "dhash": "0f73636367657979",
+      "mean": [
+        136.098,
+        145.051,
+        154.845
+      ]
+    },
+    "templates/samples/colorcard-tint-chips-01.jpg": {
+      "dhash": "031373c6c6c885c7",
+      "mean": [
+        95.516,
+        62.495,
+        43.415
+      ]
+    },
+    "templates/samples/colorful-chip-strip-01.jpg": {
+      "dhash": "f84c6949e96666e4",
+      "mean": [
+        176.444,
+        96.67,
+        113.573
+      ]
+    },
+    "templates/samples/colorful-corner-blocks-01.jpg": {
+      "dhash": "f8f1707070707060",
+      "mean": [
+        70.712,
+        90.341,
+        70.793
+      ]
+    },
+    "templates/samples/colorful-dot-cluster-01.jpg": {
+      "dhash": "f8fcbefcb8b07078",
+      "mean": [
+        30.967,
+        75.339,
+        131.311
+      ]
+    },
+    "templates/samples/colorful-frame-quad-01.jpg": {
+      "dhash": "c9c8c8d9b9393939",
+      "mean": [
+        10.12,
+        75.451,
+        33.621
+      ]
+    },
+    "templates/samples/colorful-pastel-card-01.jpg": {
+      "dhash": "0b231b7979793b33",
+      "mean": [
+        133.069,
+        130.865,
+        130.593
+      ]
+    },
+    "templates/samples/colorful-rainbow-lines-01.jpg": {
+      "dhash": "454d4f4746657171",
+      "mean": [
+        124.912,
+        147.585,
+        154.592
+      ]
+    },
+    "templates/samples/colorful-split-duo-01.jpg": {
+      "dhash": "c0f070f07062cc4c",
+      "mean": [
+        137.247,
+        103.861,
+        85.761
+      ]
+    },
+    "templates/samples/colorful-sticker-date-01.jpg": {
+      "dhash": "e0eee4e0e0e0e0e0",
+      "mean": [
+        86.813,
+        69.743,
+        51.209
+      ]
+    },
+    "templates/samples/colorwalk-blur-stage-01.jpg": {
+      "dhash": "60a1217d6574f879",
+      "mean": [
+        96.82,
+        111.733,
+        110.333
+      ]
+    },
+    "templates/samples/colorwalk-ribbon-01.jpg": {
+      "dhash": "497f7f57f4f0c0c2",
+      "mean": [
+        110.215,
+        150.244,
+        139.18
+      ]
+    },
+    "templates/samples/colorwalk-round-card-01.jpg": {
+      "dhash": "03f1f0f0f0717171",
+      "mean": [
+        94.251,
+        135.744,
+        134.297
+      ]
+    },
+    "templates/samples/colorwalk-single-line-01.jpg": {
+      "dhash": "9998d8f170f0e44e",
+      "mean": [
+        108.794,
+        118.064,
+        125.023
+      ]
+    },
+    "templates/samples/colorwalk-tint-seam-01.jpg": {
+      "dhash": "5405074f7372fcfc",
+      "mean": [
+        147.719,
+        142.597,
+        131.64
+      ]
+    },
+    "templates/samples/colorwalk-top-field-01.jpg": {
+      "dhash": "59797971f1f9b8b8",
+      "mean": [
+        125.975,
+        115.756,
+        95.471
+      ]
+    },
+    "templates/samples/colorwalk-vbar-01.jpg": {
+      "dhash": "6371b386822e3c30",
+      "mean": [
+        125.222,
+        113.749,
+        89.78
+      ]
+    },
+    "templates/samples/colorwalk-verse-01.jpg": {
+      "dhash": "036d617171f2f0e0",
+      "mean": [
+        104.377,
+        105.15,
+        106.145
+      ]
+    },
+    "templates/samples/drone-aerial-editorial-01.jpg": {
+      "dhash": "393b3d3f35272141",
+      "mean": [
+        155.932,
+        183.477,
+        206.1
+      ]
+    },
+    "templates/samples/drone-altitude-hero-01.jpg": {
+      "dhash": "0379797971717171",
+      "mean": [
+        142.253,
+        172.83,
+        191.977
+      ]
+    },
+    "templates/samples/drone-geoblock-01.jpg": {
+      "dhash": "4179192169717979",
+      "mean": [
+        158.87,
+        154.208,
+        148.52
+      ]
+    },
+    "templates/samples/drone-skybar-01.jpg": {
+      "dhash": "00154951094d6d7b",
+      "mean": [
+        155.556,
+        157.634,
+        162.251
+      ]
+    },
+    "templates/samples/drone-topline-01.jpg": {
+      "dhash": "09094d5d5373735b",
+      "mean": [
+        146.406,
+        161.716,
+        161.807
+      ]
+    },
+    "templates/samples/effect-duotone-wash-03.jpg": {
+      "dhash": "03c6bcdc9ced5117",
+      "mean": [
+        83.464,
+        73.605,
+        56.103
+      ]
+    },
+    "templates/samples/effect-float-card-01.jpg": {
+      "dhash": "e7f6fcfcde96e5e6",
+      "mean": [
+        56.958,
+        64.508,
+        61.947
+      ]
+    },
+    "templates/samples/effect-minimal-shadow-08.jpg": {
+      "dhash": "0f33717171716123",
+      "mean": [
+        120.15,
+        108.915,
+        102.107
+      ]
+    },
+    "templates/samples/effect-mirror-pool-02.jpg": {
+      "dhash": "737771ddb8f071e0",
+      "mean": [
+        67.752,
+        69.019,
+        64.97
+      ]
+    },
+    "templates/samples/effect-paper-stack-05.jpg": {
+      "dhash": "0b4d497131717173",
+      "mean": [
+        126.311,
+        60.936,
+        41.48
+      ]
+    },
+    "templates/samples/effect-polaroid-float-06.jpg": {
+      "dhash": "c03939393b3b3b23",
+      "mean": [
+        150.28,
+        147.276,
+        141.042
+      ]
+    },
+    "templates/samples/effect-top-gradient-band-07.jpg": {
+      "dhash": "23737161e8f8e1c1",
+      "mean": [
+        68.573,
+        68.438,
+        63.011
+      ]
+    },
+    "templates/samples/effect-vignette-card-04.jpg": {
+      "dhash": "8fe4e66671717123",
+      "mean": [
+        15.565,
+        13.088,
+        26.075
+      ]
+    },
+    "templates/samples/festival-dragon-boat-01.jpg": {
+      "dhash": "2123236363636363",
+      "mean": [
+        185.369,
+        145.724,
+        132.098
+      ]
+    },
+    "templates/samples/festival-gold-frame-01.jpg": {
+      "dhash": "b071797874cd80c0",
+      "mean": [
+        123.765,
+        64.603,
+        56.522
+      ]
+    },
+    "templates/samples/festival-lantern-night-01.jpg": {
+      "dhash": "4dcd4d4d4d4d4f8e",
+      "mean": [
+        128.428,
+        94.061,
+        76.988
+      ]
+    },
+    "templates/samples/festival-lantern-warm-01.jpg": {
+      "dhash": "c0393d7d7d7d7d7d",
+      "mean": [
+        158.32,
+        134.198,
+        119.06
+      ]
+    },
+    "templates/samples/festival-moon-full-01.jpg": {
+      "dhash": "31f0f0e0f0f0f030",
+      "mean": [
+        15.189,
+        59.72,
+        76.902
+      ]
+    },
+    "templates/samples/festival-spring-gold-01.jpg": {
+      "dhash": "313785c6c3838b83",
+      "mean": [
+        158.253,
+        50.157,
+        36.97
+      ]
+    },
+    "templates/samples/film-darkroom-pillar-03.jpg": {
+      "dhash": "42f090c8e0f0e0c0",
+      "mean": [
+        36.95,
+        40.264,
+        38.277
+      ]
+    },
+    "templates/samples/film-diptych-hairline-07.jpg": {
+      "dhash": "093d616d65536b2b",
+      "mean": [
+        130.6,
+        115.471,
+        116.684
+      ]
+    },
+    "templates/samples/film-led-datestamp-04.jpg": {
+      "dhash": "0361b8e8e0e4f0f8",
+      "mean": [
+        55.034,
+        53.11,
+        52.792
+      ]
+    },
+    "templates/samples/film-mono-roll-06.jpg": {
+      "dhash": "031ab0c0c0c04141",
+      "mean": [
+        46.498,
+        41.618,
+        50.905
+      ]
+    },
+    "templates/samples/film-positive-print-08.jpg": {
+      "dhash": "4123216373030525",
+      "mean": [
+        126.561,
+        134.578,
+        136.237
+      ]
+    },
+    "templates/samples/film-serif-stock-05.jpg": {
+      "dhash": "8c6d4f7531736b6b",
+      "mean": [
+        125.409,
+        126.162,
+        124.052
+      ]
+    },
+    "templates/samples/film-sprocket-01.jpg": {
+      "dhash": "e0f7f7e2e2fafeee",
+      "mean": [
+        59.804,
+        49.479,
+        41.844
+      ]
+    },
+    "templates/samples/film-sprocket-02.jpg": {
+      "dhash": "4341716969497921",
+      "mean": [
+        54.965,
+        51.346,
+        41.396
+      ]
+    },
+    "templates/samples/fuji-recipe-band-02.jpg": {
+      "dhash": "1451616373716171",
+      "mean": [
+        137.43,
+        115.636,
+        98.221
+      ]
+    },
+    "templates/samples/fuji-recipe-column-03.jpg": {
+      "dhash": "6040404048484140",
+      "mean": [
+        108.124,
+        100.051,
+        93.819
+      ]
+    },
+    "templates/samples/fuji-recipe-hero-04.jpg": {
+      "dhash": "c05d39391f1f1c38",
+      "mean": [
+        184.861,
+        186.639,
+        186.086
+      ]
+    },
+    "templates/samples/fuji-recipe-panel-01.jpg": {
+      "dhash": "02d6f0f89a8682ca",
+      "mean": [
+        106.361,
+        99.249,
+        102.772
+      ]
+    },
+    "templates/samples/fuji-recipe-rails-05.jpg": {
+      "dhash": "fddbdbf3dbdbf7f2",
+      "mean": [
+        133.849,
+        127.598,
+        113.648
+      ]
+    },
+    "templates/samples/game-arknights-v1.jpg": {
+      "dhash": "9ed4c5e4fefefcbc",
+      "mean": [
+        80.374,
+        82.938,
+        81.59
+      ]
+    },
+    "templates/samples/game-arknights-v2.jpg": {
+      "dhash": "0000071000000000",
+      "mean": [
+        102.634,
+        101.585,
+        99.591
+      ]
+    },
+    "templates/samples/game-arknights-v3.jpg": {
+      "dhash": "f09a8eeedcd0c4c4",
+      "mean": [
+        117.266,
+        84.113,
+        66.777
+      ]
+    },
+    "templates/samples/game-genshin-v1.jpg": {
+      "dhash": "6121717171f17171",
+      "mean": [
+        167.156,
+        162.615,
+        143.869
+      ]
+    },
+    "templates/samples/game-genshin-v2.jpg": {
+      "dhash": "830202e2e6060800",
+      "mean": [
+        142.796,
+        135.753,
+        133.862
+      ]
+    },
+    "templates/samples/game-genshin-v3.jpg": {
+      "dhash": "0f2727150505050d",
+      "mean": [
+        170.67,
+        178.677,
+        177.079
+      ]
+    },
+    "templates/samples/game-honkai-v1.jpg": {
+      "dhash": "39b898ecececfcec",
+      "mean": [
+        114.294,
+        120.623,
+        114.57
+      ]
+    },
+    "templates/samples/game-honkai-v2.jpg": {
+      "dhash": "909091d756078c20",
+      "mean": [
+        105.286,
+        110.577,
+        115.969
+      ]
+    },
+    "templates/samples/game-honkai-v3.jpg": {
+      "dhash": "f0fefefcfefefcfc",
+      "mean": [
+        78.827,
+        87.196,
+        97.423
+      ]
+    },
+    "templates/samples/game-wukong-v1.jpg": {
+      "dhash": "eff8b0b0a4a4e6a4",
+      "mean": [
+        86.66,
+        86.654,
+        61.331
+      ]
+    },
+    "templates/samples/game-wukong-v2.jpg": {
+      "dhash": "f0f0b070f071e8cc",
+      "mean": [
+        110.584,
+        100.789,
+        79.689
+      ]
+    },
+    "templates/samples/game-wukong-v3.jpg": {
+      "dhash": "b0acd0f0f0f0b0b0",
+      "mean": [
+        74.289,
+        69.067,
+        54.645
+      ]
+    },
+    "templates/samples/game-wwmeet-v1.jpg": {
+      "dhash": "4171611194416161",
+      "mean": [
+        144.828,
+        156.804,
+        156.926
+      ]
+    },
+    "templates/samples/game-wwmeet-v2.jpg": {
+      "dhash": "70f0e0603e3b8ec4",
+      "mean": [
+        125.356,
+        122.646,
+        124.61
+      ]
+    },
+    "templates/samples/game-wwmeet-v3.jpg": {
+      "dhash": "0d55573333717179",
+      "mean": [
+        155.923,
+        157.614,
+        152.538
+      ]
+    },
+    "templates/samples/game-zzz-v1.jpg": {
+      "dhash": "33f0f2b2969ef0e6",
+      "mean": [
+        97.591,
+        82.273,
+        63.082
+      ]
+    },
+    "templates/samples/game-zzz-v2.jpg": {
+      "dhash": "ff7f8fe7fa1f07e2",
+      "mean": [
+        164.786,
+        150.966,
+        135.688
+      ]
+    },
+    "templates/samples/game-zzz-v3.jpg": {
+      "dhash": "b0908c848080c098",
+      "mean": [
+        115.817,
+        93.431,
+        79.316
+      ]
+    },
+    "templates/samples/magazine-cover-banner-01.jpg": {
+      "dhash": "96defcfcfcfcfcde",
+      "mean": [
+        68.124,
+        57.849,
+        58.635
+      ]
+    },
+    "templates/samples/magazine-double-rule-01.jpg": {
+      "dhash": "414f2f372343714f",
+      "mean": [
+        187.17,
+        190.081,
+        190.101
+      ]
+    },
+    "templates/samples/magazine-gallery-left-01.jpg": {
+      "dhash": "7777777767477f7e",
+      "mean": [
+        158.835,
+        187.95,
+        203.833
+      ]
+    },
+    "templates/samples/magazine-index-column-01.jpg": {
+      "dhash": "171f1b1b3d3d3f33",
+      "mean": [
+        195.09,
+        189.485,
+        182.078
+      ]
+    },
+    "templates/samples/magazine-poster-manifesto-01.jpg": {
+      "dhash": "4133332303070343",
+      "mean": [
+        199.201,
+        193.893,
+        173.279
+      ]
+    },
+    "templates/samples/magazine-triptych-slices-01.jpg": {
+      "dhash": "b186c85d7cf8ff0f",
+      "mean": [
+        124.446,
+        124.664,
+        122.87
+      ]
+    },
+    "templates/samples/master-cream-dot-01.jpg": {
+      "dhash": "ea0b011111010103",
+      "mean": [
+        187.703,
+        153.069,
+        146.746
+      ]
+    },
+    "templates/samples/master-crown-wordmark-01.jpg": {
+      "dhash": "0c7d4f7f7f7d7159",
+      "mean": [
+        156.517,
+        181.325,
+        209.895
+      ]
+    },
+    "templates/samples/master-ivory-plate-01.jpg": {
+      "dhash": "ea096b0f47430008",
+      "mean": [
+        193.58,
+        192.969,
+        192.204
+      ]
+    },
+    "templates/samples/master-noir-plate-01.jpg": {
+      "dhash": "15d6fef0c0808080",
+      "mean": [
+        99.22,
+        96.802,
+        85.054
+      ]
+    },
+    "templates/samples/master-seal-frame-01.jpg": {
+      "dhash": "eac34349675d1b3b",
+      "mean": [
+        172.537,
+        191.708,
+        214.69
+      ]
+    },
+    "templates/samples/master-three-column-01.jpg": {
+      "dhash": "2401116141757173",
+      "mean": [
+        177.13,
+        174.429,
+        163.628
+      ]
+    },
+    "templates/samples/minimal-brand-right.jpg": {
+      "dhash": "3122332334e06627",
+      "mean": [
+        178.224,
+        166.354,
+        161.134
+      ]
+    },
+    "templates/samples/minimal-center-line.jpg": {
+      "dhash": "57570f0f4d4d4d61",
+      "mean": [
+        195.285,
+        188.421,
+        187.124
+      ]
+    },
+    "templates/samples/minimal-copyright.jpg": {
+      "dhash": "e8f8d89090b8b0f0",
+      "mean": [
+        187.403,
+        170.246,
+        140.813
+      ]
+    },
+    "templates/samples/minimal-corner-mono.jpg": {
+      "dhash": "f1f1f1e9e8e0f4f4",
+      "mean": [
+        182.779,
+        174.164,
+        165.966
+      ]
+    },
+    "templates/samples/minimal-letterbox.jpg": {
+      "dhash": "5b716167117b7f7d",
+      "mean": [
+        191.671,
+        197.986,
+        200.983
+      ]
+    },
+    "templates/samples/minimal-model-stack.jpg": {
+      "dhash": "707971793f5cfcf8",
+      "mean": [
+        228.259,
+        226.344,
+        228.537
+      ]
+    },
+    "templates/samples/minimal-portrait-line.jpg": {
+      "dhash": "5d1d4d4d49491000",
+      "mean": [
+        197.876,
+        191.902,
+        164.86
+      ]
+    },
+    "templates/samples/minimal-topright-date.jpg": {
+      "dhash": "ecccc8c1c0e4e0e0",
+      "mean": [
+        186.656,
+        196.15,
+        200.158
+      ]
+    },
+    "templates/samples/personal-avatar-ring-01.jpg": {
+      "dhash": "414949537377777f",
+      "mean": [
+        150.58,
+        145.121,
+        140.809
+      ]
+    },
+    "templates/samples/personal-cn-inscription-01.jpg": {
+      "dhash": "4171717171797971",
+      "mean": [
+        185.97,
+        199.265,
+        201.313
+      ]
+    },
+    "templates/samples/personal-credit-social-01.jpg": {
+      "dhash": "01792d2b3d232129",
+      "mean": [
+        136.019,
+        140.054,
+        161.274
+      ]
+    },
+    "templates/samples/personal-micro-copyright-01.jpg": {
+      "dhash": "093f7f7f7b616161",
+      "mean": [
+        164.512,
+        156.853,
+        140.746
+      ]
+    },
+    "templates/samples/personal-name-columns-01.jpg": {
+      "dhash": "2d21233101010101",
+      "mean": [
+        147.604,
+        161.081,
+        167.582
+      ]
+    },
+    "templates/samples/personal-polaroid-script-01.jpg": {
+      "dhash": "0e1f1b0f17172323",
+      "mean": [
+        167.46,
+        156.628,
+        155.526
+      ]
+    },
+    "templates/samples/personal-script-signature-01.jpg": {
+      "dhash": "c109115151193367",
+      "mean": [
+        144.162,
+        142.98,
+        138.971
+      ]
+    },
+    "templates/samples/personal-triptych-01.jpg": {
+      "dhash": "0d3b7b7979696975",
+      "mean": [
+        161.8,
+        164.172,
+        171.958
+      ]
+    },
+    "templates/samples/phone-accent-dots-01.jpg": {
+      "dhash": "7971732f369698f0",
+      "mean": [
+        174.953,
+        171.951,
+        168.394
+      ]
+    },
+    "templates/samples/phone-camera-ui-01.jpg": {
+      "dhash": "1b2d295961617909",
+      "mean": [
+        147.284,
+        143.182,
+        145.395
+      ]
+    },
+    "templates/samples/phone-dual-optics-01.jpg": {
+      "dhash": "7171371737333171",
+      "mean": [
+        173.308,
+        157.401,
+        148.057
+      ]
+    },
+    "templates/samples/phone-midnight-bar-01.jpg": {
+      "dhash": "96b6b4868e9ededa",
+      "mean": [
+        101.86,
+        112.982,
+        95.368
+      ]
+    },
+    "templates/samples/phone-minimal-line-01.jpg": {
+      "dhash": "573f0f2737373701",
+      "mean": [
+        137.69,
+        147.113,
+        164.569
+      ]
+    },
+    "templates/samples/phone-paper-spec-01.jpg": {
+      "dhash": "396d4f6f6f676f5f",
+      "mean": [
+        130.353,
+        157.21,
+        177.38
+      ]
+    },
+    "templates/samples/phone-shot-on-01.jpg": {
+      "dhash": "89c0a13470103031",
+      "mean": [
+        108.847,
+        106.515,
+        106.817
+      ]
+    },
+    "templates/samples/phone-side-rail-01.jpg": {
+      "dhash": "61793d6171786131",
+      "mean": [
+        149.267,
+        149.253,
+        149.258
+      ]
+    },
+    "templates/samples/phone-studio-card-01.jpg": {
+      "dhash": "0149490b390f0f07",
+      "mean": [
+        143.457,
+        161.005,
+        168.521
+      ]
+    },
+    "templates/samples/phone-vendor-bar-01.jpg": {
+      "dhash": "515f637101010101",
+      "mean": [
+        154.493,
+        177.148,
+        190.219
+      ]
+    },
+    "templates/samples/polaroid-classic-script-03.jpg": {
+      "dhash": "4171713b1b1b533b",
+      "mean": [
+        171.712,
+        158.113,
+        154.724
+      ]
+    },
+    "templates/samples/polaroid-duo-stamps-05.jpg": {
+      "dhash": "8001617971717175",
+      "mean": [
+        116.72,
+        131.857,
+        157.512
+      ]
+    },
+    "templates/samples/polaroid-pastel-ring-04.jpg": {
+      "dhash": "4043476749797901",
+      "mean": [
+        139.52,
+        152.626,
+        160.802
+      ]
+    },
+    "templates/samples/polaroid-stamp-postcard-01.jpg": {
+      "dhash": "80696569392d2d6b",
+      "mean": [
+        184.488,
+        169.361,
+        154.401
+      ]
+    },
+    "templates/samples/polaroid-tilt-plate-02.jpg": {
+      "dhash": "98b96e7e7f7f1b59",
+      "mean": [
+        183.806,
+        185.307,
+        189.597
+      ]
+    },
+    "templates/samples/portfolio-atelier-plate-01.jpg": {
+      "dhash": "c039317175757175",
+      "mean": [
+        153.827,
+        153.404,
+        151.286
+      ]
+    },
+    "templates/samples/portfolio-credit-still-01.jpg": {
+      "dhash": "1b0f0f68e82f6542",
+      "mean": [
+        185.278,
+        175.451,
+        169.305
+      ]
+    },
+    "templates/samples/portfolio-double-rule-01.jpg": {
+      "dhash": "086f7f5f5f777777",
+      "mean": [
+        208.047,
+        211.844,
+        182.278
+      ]
+    },
+    "templates/samples/portfolio-marginalia-01.jpg": {
+      "dhash": "33332f0f3323191b",
+      "mean": [
+        212.084,
+        214.082,
+        216.353
+      ]
+    },
+    "templates/samples/portfolio-noir-matte-01.jpg": {
+      "dhash": "8825371737171717",
+      "mean": [
+        229.533,
+        229.901,
+        231.068
+      ]
+    },
+    "templates/samples/portfolio-vertical-scroll-01.jpg": {
+      "dhash": "3139393d39393939",
+      "mean": [
+        220.206,
+        231.787,
+        239.517
+      ]
+    },
+    "templates/samples/portfolio-wall-label-01.jpg": {
+      "dhash": "2f0f1f0f47667373",
+      "mean": [
+        209.446,
+        212.97,
+        222.74
+      ]
+    },
+    "templates/samples/sports-alt-badge-01.jpg": {
+      "dhash": "c161471f69697f7f",
+      "mean": [
+        173.176,
+        181.471,
+        199.672
+      ]
+    },
+    "templates/samples/sports-big-trail-01.jpg": {
+      "dhash": "8165737333476371",
+      "mean": [
+        151.243,
+        160.632,
+        163.865
+      ]
+    },
+    "templates/samples/sports-finish-line-01.jpg": {
+      "dhash": "797965756d7d7373",
+      "mean": [
+        176.919,
+        174.357,
+        163.323
+      ]
+    },
+    "templates/samples/sports-ride-stats-01.jpg": {
+      "dhash": "47733313090b0f0f",
+      "mean": [
+        176.079,
+        179.168,
+        181.041
+      ]
+    },
+    "templates/samples/sports-side-rail-01.jpg": {
+      "dhash": "7979716363434707",
+      "mean": [
+        119.222,
+        154.78,
+        155.194
+      ]
+    },
+    "templates/samples/ticket-boarding-pass-03.jpg": {
+      "dhash": "640d0d0f09098080",
+      "mean": [
+        161.988,
+        157.813,
+        161.387
+      ]
+    },
+    "templates/samples/ticket-night-tilt-05.jpg": {
+      "dhash": "84bcf0e6c6ccecae",
+      "mean": [
+        120.622,
+        109.966,
+        105.208
+      ]
+    },
+    "templates/samples/ticket-park-pass-04.jpg": {
+      "dhash": "0529313c383899e1",
+      "mean": [
+        179.417,
+        179.446,
+        175.554
+      ]
+    },
+    "templates/samples/ticket-stub-horizontal-01.jpg": {
+      "dhash": "e465296fcf6b0147",
+      "mean": [
+        139.026,
+        139.079,
+        143.129
+      ]
+    },
+    "templates/samples/ticket-vertical-rail-02.jpg": {
+      "dhash": "8181898181818181",
+      "mean": [
+        155.952,
+        177.016,
+        188.316
+      ]
+    },
+    "templates/samples/white-border-centered-lockup.jpg": {
+      "dhash": "0c4f0f3323437371",
+      "mean": [
+        185.372,
+        188.996,
+        191.383
+      ]
+    },
+    "templates/samples/white-border-editorial-01.jpg": {
+      "dhash": "4078783c3e3e7f7d",
+      "mean": [
+        233.859,
+        232.859,
+        226.238
+      ]
+    },
+    "templates/samples/white-border-letterhead.jpg": {
+      "dhash": "793f07634d4d7979",
+      "mean": [
+        212.791,
+        199.496,
+        192.718
+      ]
+    },
+    "templates/samples/white-border-linen-dot.jpg": {
+      "dhash": "c00d09038d897171",
+      "mean": [
+        199.113,
+        198.659,
+        197.06
+      ]
+    },
+    "templates/samples/white-border-passport-mono.jpg": {
+      "dhash": "6141011111010101",
+      "mean": [
+        224.715,
+        225.164,
+        226.937
+      ]
+    },
+    "templates/samples/white-border-quiet-stack.jpg": {
+      "dhash": "00717967676f7949",
+      "mean": [
+        215.118,
+        199.994,
+        189.099
+      ]
+    },
+    "templates/samples/white-border-ruled-band.jpg": {
+      "dhash": "c01d0d1d0d4d7979",
+      "mean": [
+        209.531,
+        204.013,
+        197.801
+      ]
+    },
+    "templates/samples/white-border-top-note.jpg": {
+      "dhash": "6553537381e05910",
+      "mean": [
+        202.741,
+        207.456,
+        215.302
+      ]
+    },
+    "templates/samples/white-border-twin-columns.jpg": {
+      "dhash": "4087878787878786",
+      "mean": [
+        218.917,
+        213.556,
+        202.458
+      ]
+    },
+    "web/previews/art-copperplate-etch.jpg": {
+      "dhash": "8e71794941616561",
+      "mean": [
+        132.728,
+        138.952,
+        135.236
+      ]
+    },
+    "web/previews/art-deco-double.jpg": {
+      "dhash": "4f61392163410101",
+      "mean": [
+        163.859,
+        163.463,
+        158.332
+      ]
+    },
+    "web/previews/art-gilt-foil.jpg": {
+      "dhash": "3163e1f0f0f8f8f8",
+      "mean": [
+        104.609,
+        95.798,
+        87.486
+      ]
+    },
+    "web/previews/art-letterpress-relief.jpg": {
+      "dhash": "4f73737171e1e248",
+      "mean": [
+        192.702,
+        192.062,
+        187.052
+      ]
+    },
+    "web/previews/art-republican-press.jpg": {
+      "dhash": "0f0f4f0f7f7f7f99",
+      "mean": [
+        145.536,
+        165.487,
+        166.177
+      ]
+    },
+    "web/previews/art-ukiyoe-cartouche.jpg": {
+      "dhash": "0d0f051531232313",
+      "mean": [
+        140.184,
+        139.737,
+        130.583
+      ]
+    },
+    "web/previews/art-vermilion-seal.jpg": {
+      "dhash": "171f1d7d79797939",
+      "mean": [
+        148.675,
+        127.713,
+        123.452
+      ]
+    },
+    "web/previews/art-woodtype-press.jpg": {
+      "dhash": "0f5f4f4f77737171",
+      "mean": [
+        134.992,
+        135.075,
+        128.027
+      ]
+    },
+    "web/previews/black-frame-charcoal-split-01.jpg": {
+      "dhash": "033c3c723c3cbc9e",
+      "mean": [
+        52.831,
+        46.746,
+        54.389
+      ]
+    },
+    "web/previews/black-frame-gold-line-01.jpg": {
+      "dhash": "03f0f4f0f0e8e8d0",
+      "mean": [
+        57.18,
+        59.088,
+        39.904
+      ]
+    },
+    "web/previews/black-frame-inner-rule-01.jpg": {
+      "dhash": "f24efe9ebefefefe",
+      "mean": [
+        17.3,
+        33.347,
+        39.988
+      ]
+    },
+    "web/previews/black-frame-mono-slate-01.jpg": {
+      "dhash": "93d0c8e0e0f0f0d0",
+      "mean": [
+        47.43,
+        46.307,
+        29.643
+      ]
+    },
+    "web/previews/black-frame-side-stack-01.jpg": {
+      "dhash": "3130b8f8f8faf2d6",
+      "mean": [
+        55.382,
+        55.383,
+        55.385
+      ]
+    },
+    "web/previews/black-frame-two-line-01.jpg": {
+      "dhash": "03e2f8f0f0f0f0e0",
+      "mean": [
+        48.753,
+        43.834,
+        44.06
+      ]
+    },
+    "web/previews/blur-bg-brandbar-02.jpg": {
+      "dhash": "30b07173c799e9d8",
+      "mean": [
+        26.16,
+        25.658,
+        29.751
+      ]
+    },
+    "web/previews/blur-bg-card-03.jpg": {
+      "dhash": "d3f3e4ecb8607cbb",
+      "mean": [
+        16.139,
+        10.662,
+        12.739
+      ]
+    },
+    "web/previews/blur-bg-center-01.jpg": {
+      "dhash": "617527e64e1e9ebe",
+      "mean": [
+        48.136,
+        48.136,
+        48.135
+      ]
+    },
+    "web/previews/blur-bg-topcap-04.jpg": {
+      "dhash": "f3f2f1f07171b0b0",
+      "mean": [
+        69.754,
+        65.291,
+        47.187
+      ]
+    },
+    "web/previews/borderless-center-caption-01.jpg": {
+      "dhash": "e18332e56547fffc",
+      "mean": [
+        141.39,
+        125.046,
+        96.933
+      ]
+    },
+    "web/previews/borderless-corner-stack-01.jpg": {
+      "dhash": "773a98e9e166ecec",
+      "mean": [
+        94.111,
+        133.481,
+        109.484
+      ]
+    },
+    "web/previews/borderless-date-hero-01.jpg": {
+      "dhash": "569d8d0fcccccccc",
+      "mean": [
+        142.583,
+        146.979,
+        150.422
+      ]
+    },
+    "web/previews/borderless-dot-corners-01.jpg": {
+      "dhash": "58e8f0f0b0302223",
+      "mean": [
+        159.003,
+        140.957,
+        133.402
+      ]
+    },
+    "web/previews/borderless-geo-pin-01.jpg": {
+      "dhash": "c0c8d8d2c3dbdaf0",
+      "mean": [
+        107.911,
+        133.605,
+        127.277
+      ]
+    },
+    "web/previews/borderless-lowleft-pair-01.jpg": {
+      "dhash": "c8ccec99b9f0f8f0",
+      "mean": [
+        115.021,
+        122.055,
+        108.077
+      ]
+    },
+    "web/previews/borderless-one-liner-01.jpg": {
+      "dhash": "e0308ce1c8ccccd9",
+      "mean": [
+        145.715,
+        147.04,
+        142.099
+      ]
+    },
+    "web/previews/borderless-quad-anchors-01.jpg": {
+      "dhash": "7070b192ccc8f0f0",
+      "mean": [
+        147.885,
+        104.78,
+        77.684
+      ]
+    },
+    "web/previews/borderless-right-roll-01.jpg": {
+      "dhash": "fcfcf46e3e393436",
+      "mean": [
+        142.905,
+        122.619,
+        109.222
+      ]
+    },
+    "web/previews/borderless-signoff-block-01.jpg": {
+      "dhash": "b030a8e0e0c08000",
+      "mean": [
+        142.253,
+        123.444,
+        97.629
+      ]
+    },
+    "web/previews/borderless-vertical-spine-01.jpg": {
+      "dhash": "0d090909010141c0",
+      "mean": [
+        155.68,
+        154.098,
+        146.729
+      ]
+    },
+    "web/previews/calendar-center-rule-01.jpg": {
+      "dhash": "cc2d393371717979",
+      "mean": [
+        176.293,
+        176.516,
+        176.112
+      ]
+    },
+    "web/previews/calendar-corner-day-01.jpg": {
+      "dhash": "a48c8ccccfcfefee",
+      "mean": [
+        136.052,
+        131.755,
+        141.693
+      ]
+    },
+    "web/previews/calendar-portrait-stack-01.jpg": {
+      "dhash": "0c7b7d352161796d",
+      "mean": [
+        199.224,
+        180.497,
+        162.54
+      ]
+    },
+    "web/previews/calendar-rail-date-01.jpg": {
+      "dhash": "3d33334305253939",
+      "mean": [
+        174.878,
+        172.85,
+        154.092
+      ]
+    },
+    "web/previews/calendar-split-columns-01.jpg": {
+      "dhash": "2323636161614149",
+      "mean": [
+        153.89,
+        151.62,
+        150.296
+      ]
+    },
+    "web/previews/calendar-strip-date-01.jpg": {
+      "dhash": "4411010911111101",
+      "mean": [
+        171.912,
+        169.451,
+        167.931
+      ]
+    },
+    "web/previews/camera-baseplate-02.jpg": {
+      "dhash": "088aa2b2e0e0e0e0",
+      "mean": [
+        91.444,
+        91.888,
+        95.157
+      ]
+    },
+    "web/previews/camera-corner-body-03.jpg": {
+      "dhash": "01070113030f4b61",
+      "mean": [
+        156.394,
+        172.997,
+        189.095
+      ]
+    },
+    "web/previews/camera-lens-dial-06.jpg": {
+      "dhash": "32b2f0f0f0c8b2f2",
+      "mean": [
+        74.094,
+        74.952,
+        72.122
+      ]
+    },
+    "web/previews/camera-retro-sidecar-04.jpg": {
+      "dhash": "777373777773f1f1",
+      "mean": [
+        194.169,
+        180.583,
+        149.88
+      ]
+    },
+    "web/previews/camera-ricoh-slimline-08.jpg": {
+      "dhash": "0b1f377f373d3c39",
+      "mean": [
+        154.231,
+        141.532,
+        122.289
+      ]
+    },
+    "web/previews/camera-series-emblem-07.jpg": {
+      "dhash": "407171717d3d3de1",
+      "mean": [
+        180.247,
+        173.878,
+        163.459
+      ]
+    },
+    "web/previews/camera-stencil-mono-05.jpg": {
+      "dhash": "4961010989131919",
+      "mean": [
+        177.171,
+        172.002,
+        133.8
+      ]
+    },
+    "web/previews/camera-topdeck-bar-01.jpg": {
+      "dhash": "4f597b79596d4d0c",
+      "mean": [
+        172.289,
+        167.176,
+        163.877
+      ]
+    },
+    "web/previews/classic-watermark-black-bar.jpg": {
+      "dhash": "e3dcb5e1f3dacece",
+      "mean": [
+        131.474,
+        100.419,
+        83.78
+      ]
+    },
+    "web/previews/classic-watermark-brand-center.jpg": {
+      "dhash": "ccccccc8e8e0e2e2",
+      "mean": [
+        153.125,
+        145.208,
+        110.265
+      ]
+    },
+    "web/previews/classic-watermark-date-right.jpg": {
+      "dhash": "0f674319b9b1a7cc",
+      "mean": [
+        134.647,
+        123.464,
+        116.473
+      ]
+    },
+    "web/previews/classic-watermark-double-row.jpg": {
+      "dhash": "a42080f898f8f8e0",
+      "mean": [
+        122.923,
+        125.206,
+        125.383
+      ]
+    },
+    "web/previews/classic-watermark-hairline-thin.jpg": {
+      "dhash": "8c9c8edcf0f0ccf0",
+      "mean": [
+        173.582,
+        155.267,
+        140.028
+      ]
+    },
+    "web/previews/classic-watermark-mono-stack.jpg": {
+      "dhash": "dc9f8745c9635ada",
+      "mean": [
+        149.465,
+        147.5,
+        136.847
+      ]
+    },
+    "web/previews/classic-watermark-red-dot.jpg": {
+      "dhash": "569edccec0e0e0e0",
+      "mean": [
+        115.054,
+        119.601,
+        116.21
+      ]
+    },
+    "web/previews/classic-watermark-single-row.jpg": {
+      "dhash": "d8dada50d8d8d8f8",
+      "mean": [
+        145.246,
+        135.369,
+        123.313
+      ]
+    },
+    "web/previews/colorcard-column-02.jpg": {
+      "dhash": "e3e3e3d3f1f1e1e1",
+      "mean": [
+        64.075,
+        52.06,
+        40.91
+      ]
+    },
+    "web/previews/colorcard-cream-date-04.jpg": {
+      "dhash": "c1797d6925217139",
+      "mean": [
+        121.486,
+        158.116,
+        186.867
+      ]
+    },
+    "web/previews/colorcard-diamonds-03.jpg": {
+      "dhash": "0f0f1f3d1f5f7f3f",
+      "mean": [
+        138.694,
+        155.909,
+        167.257
+      ]
+    },
+    "web/previews/colorcard-index-05.jpg": {
+      "dhash": "0d45455959012121",
+      "mean": [
+        161.855,
+        122.237,
+        98.477
+      ]
+    },
+    "web/previews/colorcard-sunrise-chips-01.jpg": {
+      "dhash": "0f73636367657979",
+      "mean": [
+        136.016,
+        144.967,
+        154.762
+      ]
+    },
+    "web/previews/colorcard-tint-chips-01.jpg": {
+      "dhash": "073373c6c6c885c7",
+      "mean": [
+        95.026,
+        62.409,
+        43.393
+      ]
+    },
+    "web/previews/colorful-chip-strip-01.jpg": {
+      "dhash": "f84c6949e96666e4",
+      "mean": [
+        176.462,
+        96.699,
+        113.603
+      ]
+    },
+    "web/previews/colorful-corner-blocks-01.jpg": {
+      "dhash": "f8f1707070707060",
+      "mean": [
+        70.716,
+        90.349,
+        70.804
+      ]
+    },
+    "web/previews/colorful-dot-cluster-01.jpg": {
+      "dhash": "f8fcbefcb8b07078",
+      "mean": [
+        30.973,
+        75.345,
+        131.309
+      ]
+    },
+    "web/previews/colorful-frame-quad-01.jpg": {
+      "dhash": "c9c8c8d9b9393939",
+      "mean": [
+        9.989,
+        75.385,
+        33.53
+      ]
+    },
+    "web/previews/colorful-pastel-card-01.jpg": {
+      "dhash": "0f131b7979793b33",
+      "mean": [
+        132.903,
+        130.722,
+        130.463
+      ]
+    },
+    "web/previews/colorful-rainbow-lines-01.jpg": {
+      "dhash": "454d4f4746657171",
+      "mean": [
+        124.708,
+        147.4,
+        154.414
+      ]
+    },
+    "web/previews/colorful-split-duo-01.jpg": {
+      "dhash": "c0f270f07062cc4c",
+      "mean": [
+        137.194,
+        103.801,
+        85.689
+      ]
+    },
+    "web/previews/colorful-sticker-date-01.jpg": {
+      "dhash": "e0eee4e0e0e0e0e0",
+      "mean": [
+        86.905,
+        69.852,
+        51.259
+      ]
+    },
+    "web/previews/colorwalk-blur-stage-01.jpg": {
+      "dhash": "60a1217d6574f879",
+      "mean": [
+        96.776,
+        111.687,
+        110.29
+      ]
+    },
+    "web/previews/colorwalk-ribbon-01.jpg": {
+      "dhash": "497f7f57f4f0c0c2",
+      "mean": [
+        109.969,
+        149.999,
+        138.94
+      ]
+    },
+    "web/previews/colorwalk-round-card-01.jpg": {
+      "dhash": "03f1f0f0f0717171",
+      "mean": [
+        94.604,
+        135.646,
+        133.974
+      ]
+    },
+    "web/previews/colorwalk-single-line-01.jpg": {
+      "dhash": "9998d8f170f0e44e",
+      "mean": [
+        108.791,
+        118.065,
+        125.022
+      ]
+    },
+    "web/previews/colorwalk-tint-seam-01.jpg": {
+      "dhash": "5405074f7372fcfc",
+      "mean": [
+        147.727,
+        142.604,
+        131.646
+      ]
+    },
+    "web/previews/colorwalk-top-field-01.jpg": {
+      "dhash": "59797171f1f9b8b8",
+      "mean": [
+        125.632,
+        115.381,
+        95.072
+      ]
+    },
+    "web/previews/colorwalk-vbar-01.jpg": {
+      "dhash": "6371b386822e3c30",
+      "mean": [
+        124.836,
+        114.12,
+        89.775
+      ]
+    },
+    "web/previews/colorwalk-verse-01.jpg": {
+      "dhash": "0365617171f2f0e0",
+      "mean": [
+        103.996,
+        104.768,
+        105.765
+      ]
+    },
+    "web/previews/drone-aerial-editorial-01.jpg": {
+      "dhash": "393b3d3f35272141",
+      "mean": [
+        155.755,
+        183.344,
+        205.999
+      ]
+    },
+    "web/previews/drone-altitude-hero-01.jpg": {
+      "dhash": "0371797971717171",
+      "mean": [
+        142.362,
+        172.917,
+        192.044
+      ]
+    },
+    "web/previews/drone-geoblock-01.jpg": {
+      "dhash": "4179192169717979",
+      "mean": [
+        158.861,
+        154.199,
+        148.509
+      ]
+    },
+    "web/previews/drone-skybar-01.jpg": {
+      "dhash": "00154951094d6d79",
+      "mean": [
+        155.561,
+        157.643,
+        162.263
+      ]
+    },
+    "web/previews/drone-topline-01.jpg": {
+      "dhash": "09094d5d5373734b",
+      "mean": [
+        146.275,
+        161.602,
+        161.691
+      ]
+    },
+    "web/previews/effect-duotone-wash-03.jpg": {
+      "dhash": "0bc6bcdc9ced5117",
+      "mean": [
+        83.448,
+        73.592,
+        56.088
+      ]
+    },
+    "web/previews/effect-float-card-01.jpg": {
+      "dhash": "e7f6fcfcde96e5e6",
+      "mean": [
+        56.965,
+        64.511,
+        61.984
+      ]
+    },
+    "web/previews/effect-minimal-shadow-08.jpg": {
+      "dhash": "0f33717171716123",
+      "mean": [
+        120.333,
+        109.116,
+        102.311
+      ]
+    },
+    "web/previews/effect-mirror-pool-02.jpg": {
+      "dhash": "737771ddb8f071e0",
+      "mean": [
+        67.827,
+        69.102,
+        65.062
+      ]
+    },
+    "web/previews/effect-paper-stack-05.jpg": {
+      "dhash": "0b4d497131717173",
+      "mean": [
+        126.271,
+        60.912,
+        41.461
+      ]
+    },
+    "web/previews/effect-polaroid-float-06.jpg": {
+      "dhash": "c03939393b3b3b23",
+      "mean": [
+        150.151,
+        147.146,
+        140.899
+      ]
+    },
+    "web/previews/effect-top-gradient-band-07.jpg": {
+      "dhash": "23737161e8f8e1e1",
+      "mean": [
+        68.581,
+        68.447,
+        63.018
+      ]
+    },
+    "web/previews/effect-vignette-card-04.jpg": {
+      "dhash": "8fe4e66671717121",
+      "mean": [
+        15.568,
+        13.089,
+        26.092
+      ]
+    },
+    "web/previews/festival-dragon-boat-01.jpg": {
+      "dhash": "2323236363636363",
+      "mean": [
+        185.357,
+        145.705,
+        132.073
+      ]
+    },
+    "web/previews/festival-gold-frame-01.jpg": {
+      "dhash": "b071797874cc80c0",
+      "mean": [
+        123.896,
+        64.57,
+        56.542
+      ]
+    },
+    "web/previews/festival-lantern-night-01.jpg": {
+      "dhash": "4dcd4d4d4d4d4f8e",
+      "mean": [
+        128.452,
+        94.086,
+        76.986
+      ]
+    },
+    "web/previews/festival-lantern-warm-01.jpg": {
+      "dhash": "80393d7d7d7d7d7d",
+      "mean": [
+        158.495,
+        134.405,
+        119.265
+      ]
+    },
+    "web/previews/festival-moon-full-01.jpg": {
+      "dhash": "31f0f0e0f0f0f030",
+      "mean": [
+        15.2,
+        59.692,
+        76.85
+      ]
+    },
+    "web/previews/festival-spring-gold-01.jpg": {
+      "dhash": "313785c6c3838b83",
+      "mean": [
+        158.241,
+        50.15,
+        36.963
+      ]
+    },
+    "web/previews/film-darkroom-pillar-03.jpg": {
+      "dhash": "42e080c8e0f0e0c0",
+      "mean": [
+        36.861,
+        40.189,
+        38.2
+      ]
+    },
+    "web/previews/film-diptych-hairline-07.jpg": {
+      "dhash": "093d616d65536b2b",
+      "mean": [
+        130.499,
+        115.366,
+        116.578
+      ]
+    },
+    "web/previews/film-led-datestamp-04.jpg": {
+      "dhash": "0361b8e8e0e4f0f8",
+      "mean": [
+        54.965,
+        53.06,
+        52.729
+      ]
+    },
+    "web/previews/film-mono-roll-06.jpg": {
+      "dhash": "031ab0c0c0c04041",
+      "mean": [
+        46.323,
+        41.447,
+        50.725
+      ]
+    },
+    "web/previews/film-positive-print-08.jpg": {
+      "dhash": "4123216373030535",
+      "mean": [
+        126.617,
+        134.628,
+        136.286
+      ]
+    },
+    "web/previews/film-serif-stock-05.jpg": {
+      "dhash": "8c6d4f7531736b6b",
+      "mean": [
+        125.432,
+        126.184,
+        124.078
+      ]
+    },
+    "web/previews/film-sprocket-01.jpg": {
+      "dhash": "e0f7f7e2e2fafeee",
+      "mean": [
+        59.606,
+        49.299,
+        41.672
+      ]
+    },
+    "web/previews/film-sprocket-02.jpg": {
+      "dhash": "0741716969497921",
+      "mean": [
+        54.862,
+        51.245,
+        41.294
+      ]
+    },
+    "web/previews/fuji-recipe-band-02.jpg": {
+      "dhash": "1451616373716171",
+      "mean": [
+        137.45,
+        115.66,
+        98.244
+      ]
+    },
+    "web/previews/fuji-recipe-column-03.jpg": {
+      "dhash": "6040404048484040",
+      "mean": [
+        108.142,
+        100.075,
+        93.831
+      ]
+    },
+    "web/previews/fuji-recipe-hero-04.jpg": {
+      "dhash": "c06d39391f1f1c38",
+      "mean": [
+        184.76,
+        186.55,
+        186.002
+      ]
+    },
+    "web/previews/fuji-recipe-panel-01.jpg": {
+      "dhash": "02d6f0f89a8682ca",
+      "mean": [
+        106.325,
+        99.217,
+        102.74
+      ]
+    },
+    "web/previews/fuji-recipe-rails-05.jpg": {
+      "dhash": "fddbdbf3dbdbf7f2",
+      "mean": [
+        133.895,
+        127.644,
+        113.694
+      ]
+    },
+    "web/previews/game-arknights-v1.jpg": {
+      "dhash": "ded4c5e4fefefcbc",
+      "mean": [
+        80.443,
+        83.008,
+        81.654
+      ]
+    },
+    "web/previews/game-arknights-v2.jpg": {
+      "dhash": "0000071000000000",
+      "mean": [
+        102.614,
+        101.571,
+        99.567
+      ]
+    },
+    "web/previews/game-arknights-v3.jpg": {
+      "dhash": "f09a8eeedcd0c4c4",
+      "mean": [
+        117.249,
+        84.108,
+        66.777
+      ]
+    },
+    "web/previews/game-genshin-v1.jpg": {
+      "dhash": "6921717171f17171",
+      "mean": [
+        167.088,
+        162.552,
+        143.798
+      ]
+    },
+    "web/previews/game-genshin-v2.jpg": {
+      "dhash": "830202e2e6060800",
+      "mean": [
+        142.782,
+        135.747,
+        133.847
+      ]
+    },
+    "web/previews/game-genshin-v3.jpg": {
+      "dhash": "0d2727150505050d",
+      "mean": [
+        170.679,
+        178.685,
+        177.084
+      ]
+    },
+    "web/previews/game-honkai-v1.jpg": {
+      "dhash": "39b898ecececfcec",
+      "mean": [
+        114.377,
+        120.715,
+        114.664
+      ]
+    },
+    "web/previews/game-honkai-v2.jpg": {
+      "dhash": "909091d756078c20",
+      "mean": [
+        105.285,
+        110.581,
+        115.963
+      ]
+    },
+    "web/previews/game-honkai-v3.jpg": {
+      "dhash": "f0fcfefcfefefcfc",
+      "mean": [
+        78.812,
+        87.19,
+        97.419
+      ]
+    },
+    "web/previews/game-wukong-v1.jpg": {
+      "dhash": "e7f0b0b0a4a4e6a4",
+      "mean": [
+        86.709,
+        86.701,
+        61.358
+      ]
+    },
+    "web/previews/game-wukong-v2.jpg": {
+      "dhash": "f0f0b070f071e8cc",
+      "mean": [
+        110.557,
+        100.77,
+        79.658
+      ]
+    },
+    "web/previews/game-wukong-v3.jpg": {
+      "dhash": "b0acd0f0f0f0b0b0",
+      "mean": [
+        74.276,
+        69.055,
+        54.617
+      ]
+    },
+    "web/previews/game-wwmeet-v1.jpg": {
+      "dhash": "5171611194416161",
+      "mean": [
+        144.73,
+        156.711,
+        156.842
+      ]
+    },
+    "web/previews/game-wwmeet-v2.jpg": {
+      "dhash": "70f0e0603e3b8ec4",
+      "mean": [
+        125.319,
+        122.614,
+        124.573
+      ]
+    },
+    "web/previews/game-wwmeet-v3.jpg": {
+      "dhash": "0d55573333717179",
+      "mean": [
+        155.923,
+        157.616,
+        152.54
+      ]
+    },
+    "web/previews/game-zzz-v1.jpg": {
+      "dhash": "33f0f2b2969ef0e6",
+      "mean": [
+        97.657,
+        82.33,
+        63.11
+      ]
+    },
+    "web/previews/game-zzz-v2.jpg": {
+      "dhash": "ff7f8fe7fa1f07e2",
+      "mean": [
+        164.782,
+        150.968,
+        135.681
+      ]
+    },
+    "web/previews/game-zzz-v3.jpg": {
+      "dhash": "b0908c848080c098",
+      "mean": [
+        115.802,
+        93.423,
+        79.301
+      ]
+    },
+    "web/previews/magazine-cover-banner-01.jpg": {
+      "dhash": "96defcfcfcfcfcde",
+      "mean": [
+        68.074,
+        57.81,
+        58.592
+      ]
+    },
+    "web/previews/magazine-double-rule-01.jpg": {
+      "dhash": "414f2f332343754d",
+      "mean": [
+        187.162,
+        190.066,
+        190.082
+      ]
+    },
+    "web/previews/magazine-gallery-left-01.jpg": {
+      "dhash": "7777777767477f7e",
+      "mean": [
+        158.822,
+        187.934,
+        203.819
+      ]
+    },
+    "web/previews/magazine-index-column-01.jpg": {
+      "dhash": "171f1b1b3d3d3f33",
+      "mean": [
+        195.119,
+        189.522,
+        182.115
+      ]
+    },
+    "web/previews/magazine-poster-manifesto-01.jpg": {
+      "dhash": "4133332303070343",
+      "mean": [
+        199.246,
+        193.944,
+        173.343
+      ]
+    },
+    "web/previews/magazine-triptych-slices-01.jpg": {
+      "dhash": "b186c85d7cf8ff0f",
+      "mean": [
+        124.46,
+        124.68,
+        122.875
+      ]
+    },
+    "web/previews/master-cream-dot-01.jpg": {
+      "dhash": "ea0b011111010103",
+      "mean": [
+        187.547,
+        152.851,
+        146.525
+      ]
+    },
+    "web/previews/master-crown-wordmark-01.jpg": {
+      "dhash": "0c7d4f7f7f7d7159",
+      "mean": [
+        156.306,
+        181.167,
+        209.798
+      ]
+    },
+    "web/previews/master-ivory-plate-01.jpg": {
+      "dhash": "ea096b0f47430008",
+      "mean": [
+        193.425,
+        192.819,
+        192.049
+      ]
+    },
+    "web/previews/master-noir-plate-01.jpg": {
+      "dhash": "15d6fef0c0808080",
+      "mean": [
+        99.41,
+        96.994,
+        85.218
+      ]
+    },
+    "web/previews/master-seal-frame-01.jpg": {
+      "dhash": "e8c34349675d1b3b",
+      "mean": [
+        172.332,
+        191.54,
+        214.572
+      ]
+    },
+    "web/previews/master-three-column-01.jpg": {
+      "dhash": "2401116141757173",
+      "mean": [
+        176.994,
+        174.294,
+        163.472
+      ]
+    },
+    "web/previews/minimal-brand-right.jpg": {
+      "dhash": "3122332334e06627",
+      "mean": [
+        178.22,
+        166.358,
+        161.127
+      ]
+    },
+    "web/previews/minimal-center-line.jpg": {
+      "dhash": "47570f0f4d4d4d61",
+      "mean": [
+        195.225,
+        188.355,
+        187.059
+      ]
+    },
+    "web/previews/minimal-copyright.jpg": {
+      "dhash": "e8f8d89090b8b0f0",
+      "mean": [
+        187.399,
+        170.241,
+        140.814
+      ]
+    },
+    "web/previews/minimal-corner-mono.jpg": {
+      "dhash": "f1f1f1e9e8e0f4f4",
+      "mean": [
+        182.782,
+        174.169,
+        165.969
+      ]
+    },
+    "web/previews/minimal-letterbox.jpg": {
+      "dhash": "5f716167117b7f69",
+      "mean": [
+        191.639,
+        197.962,
+        200.965
+      ]
+    },
+    "web/previews/minimal-model-stack.jpg": {
+      "dhash": "707971793f5cfcf8",
+      "mean": [
+        228.31,
+        226.402,
+        228.588
+      ]
+    },
+    "web/previews/minimal-portrait-line.jpg": {
+      "dhash": "5d1d4d4d4d491000",
+      "mean": [
+        197.831,
+        191.856,
+        164.792
+      ]
+    },
+    "web/previews/minimal-topright-date.jpg": {
+      "dhash": "ecccc8c1c0e4e0e0",
+      "mean": [
+        186.652,
+        196.149,
+        200.161
+      ]
+    },
+    "web/previews/personal-avatar-ring-01.jpg": {
+      "dhash": "414949537377777f",
+      "mean": [
+        150.455,
+        144.995,
+        140.663
+      ]
+    },
+    "web/previews/personal-cn-inscription-01.jpg": {
+      "dhash": "4171717171797971",
+      "mean": [
+        185.922,
+        199.244,
+        201.289
+      ]
+    },
+    "web/previews/personal-credit-social-01.jpg": {
+      "dhash": "01792d2b3d232129",
+      "mean": [
+        135.832,
+        139.877,
+        161.14
+      ]
+    },
+    "web/previews/personal-micro-copyright-01.jpg": {
+      "dhash": "093f7f7f7f616161",
+      "mean": [
+        164.495,
+        156.841,
+        140.73
+      ]
+    },
+    "web/previews/personal-name-columns-01.jpg": {
+      "dhash": "2d21233101010101",
+      "mean": [
+        147.468,
+        160.963,
+        167.479
+      ]
+    },
+    "web/previews/personal-polaroid-script-01.jpg": {
+      "dhash": "0e171b0f17172323",
+      "mean": [
+        167.441,
+        156.611,
+        155.505
+      ]
+    },
+    "web/previews/personal-script-signature-01.jpg": {
+      "dhash": "c109115151193367",
+      "mean": [
+        143.99,
+        142.817,
+        138.803
+      ]
+    },
+    "web/previews/personal-triptych-01.jpg": {
+      "dhash": "2d3b7b7979696975",
+      "mean": [
+        161.678,
+        164.053,
+        171.847
+      ]
+    },
+    "web/previews/phone-accent-dots-01.jpg": {
+      "dhash": "7971732f369698f0",
+      "mean": [
+        174.988,
+        171.994,
+        168.441
+      ]
+    },
+    "web/previews/phone-camera-ui-01.jpg": {
+      "dhash": "1b2d295961617909",
+      "mean": [
+        147.465,
+        143.38,
+        145.59
+      ]
+    },
+    "web/previews/phone-dual-optics-01.jpg": {
+      "dhash": "7171371737333171",
+      "mean": [
+        173.28,
+        157.375,
+        148.023
+      ]
+    },
+    "web/previews/phone-midnight-bar-01.jpg": {
+      "dhash": "96b6b4868e9ededa",
+      "mean": [
+        101.958,
+        113.089,
+        95.455
+      ]
+    },
+    "web/previews/phone-minimal-line-01.jpg": {
+      "dhash": "573f0f2737373701",
+      "mean": [
+        137.46,
+        146.9,
+        164.388
+      ]
+    },
+    "web/previews/phone-paper-spec-01.jpg": {
+      "dhash": "196d4f6f6f676f7f",
+      "mean": [
+        130.279,
+        157.157,
+        177.338
+      ]
+    },
+    "web/previews/phone-shot-on-01.jpg": {
+      "dhash": "89c0a13470103031",
+      "mean": [
+        108.867,
+        106.542,
+        106.828
+      ]
+    },
+    "web/previews/phone-side-rail-01.jpg": {
+      "dhash": "61793d6171786131",
+      "mean": [
+        149.218,
+        149.204,
+        149.21
+      ]
+    },
+    "web/previews/phone-studio-card-01.jpg": {
+      "dhash": "0149490b390f070b",
+      "mean": [
+        143.715,
+        161.215,
+        168.713
+      ]
+    },
+    "web/previews/phone-vendor-bar-01.jpg": {
+      "dhash": "115f637101010101",
+      "mean": [
+        154.438,
+        177.104,
+        190.178
+      ]
+    },
+    "web/previews/polaroid-classic-script-03.jpg": {
+      "dhash": "4171713b1b1b533b",
+      "mean": [
+        171.881,
+        158.31,
+        154.924
+      ]
+    },
+    "web/previews/polaroid-duo-stamps-05.jpg": {
+      "dhash": "8001617971717175",
+      "mean": [
+        116.736,
+        131.866,
+        157.515
+      ]
+    },
+    "web/previews/polaroid-pastel-ring-04.jpg": {
+      "dhash": "4043676749797901",
+      "mean": [
+        139.49,
+        152.599,
+        160.785
+      ]
+    },
+    "web/previews/polaroid-stamp-postcard-01.jpg": {
+      "dhash": "80696569392d2d6b",
+      "mean": [
+        184.481,
+        169.355,
+        154.394
+      ]
+    },
+    "web/previews/polaroid-tilt-plate-02.jpg": {
+      "dhash": "98b96e7e7f7f1b59",
+      "mean": [
+        183.705,
+        185.226,
+        189.545
+      ]
+    },
+    "web/previews/portfolio-atelier-plate-01.jpg": {
+      "dhash": "c039317175757175",
+      "mean": [
+        153.815,
+        153.39,
+        151.271
+      ]
+    },
+    "web/previews/portfolio-credit-still-01.jpg": {
+      "dhash": "1b0f0f68e82f6542",
+      "mean": [
+        185.287,
+        175.468,
+        169.315
+      ]
+    },
+    "web/previews/portfolio-double-rule-01.jpg": {
+      "dhash": "086f7f5f5f777777",
+      "mean": [
+        208.126,
+        211.914,
+        182.403
+      ]
+    },
+    "web/previews/portfolio-marginalia-01.jpg": {
+      "dhash": "233b2f0f33231b1b",
+      "mean": [
+        212.115,
+        214.116,
+        216.381
+      ]
+    },
+    "web/previews/portfolio-noir-matte-01.jpg": {
+      "dhash": "082537173717171f",
+      "mean": [
+        229.522,
+        229.894,
+        231.052
+      ]
+    },
+    "web/previews/portfolio-vertical-scroll-01.jpg": {
+      "dhash": "3139393d39393939",
+      "mean": [
+        220.238,
+        231.809,
+        239.537
+      ]
+    },
+    "web/previews/portfolio-wall-label-01.jpg": {
+      "dhash": "2f0f1f0f47667373",
+      "mean": [
+        209.47,
+        212.993,
+        222.758
+      ]
+    },
+    "web/previews/sports-alt-badge-01.jpg": {
+      "dhash": "4161471f69697f7f",
+      "mean": [
+        173.299,
+        181.589,
+        199.773
+      ]
+    },
+    "web/previews/sports-big-trail-01.jpg": {
+      "dhash": "4165337333476371",
+      "mean": [
+        151.477,
+        160.842,
+        164.053
+      ]
+    },
+    "web/previews/sports-finish-line-01.jpg": {
+      "dhash": "797965756d7d7373",
+      "mean": [
+        176.969,
+        174.417,
+        163.399
+      ]
+    },
+    "web/previews/sports-ride-stats-01.jpg": {
+      "dhash": "43733313090b0f0f",
+      "mean": [
+        176.109,
+        179.199,
+        181.069
+      ]
+    },
+    "web/previews/sports-side-rail-01.jpg": {
+      "dhash": "7979716363474707",
+      "mean": [
+        119.433,
+        154.939,
+        155.352
+      ]
+    },
+    "web/previews/ticket-boarding-pass-03.jpg": {
+      "dhash": "6c4d0d0f09098080",
+      "mean": [
+        162.077,
+        157.909,
+        161.468
+      ]
+    },
+    "web/previews/ticket-night-tilt-05.jpg": {
+      "dhash": "84bce0e6c6ccecae",
+      "mean": [
+        120.637,
+        110.006,
+        105.249
+      ]
+    },
+    "web/previews/ticket-park-pass-04.jpg": {
+      "dhash": "0d23313d383819e1",
+      "mean": [
+        179.502,
+        179.527,
+        175.62
+      ]
+    },
+    "web/previews/ticket-stub-horizontal-01.jpg": {
+      "dhash": "e465296f4f6b0147",
+      "mean": [
+        139.13,
+        139.19,
+        143.242
+      ]
+    },
+    "web/previews/ticket-vertical-rail-02.jpg": {
+      "dhash": "8181898181818181",
+      "mean": [
+        156.086,
+        177.108,
+        188.362
+      ]
+    },
+    "web/previews/white-border-centered-lockup.jpg": {
+      "dhash": "0c4f0f3323437779",
+      "mean": [
+        185.354,
+        188.977,
+        191.366
+      ]
+    },
+    "web/previews/white-border-editorial-01.jpg": {
+      "dhash": "4078783c3e3e7f7d",
+      "mean": [
+        233.828,
+        232.832,
+        226.204
+      ]
+    },
+    "web/previews/white-border-letterhead.jpg": {
+      "dhash": "793f07634d4d7979",
+      "mean": [
+        212.705,
+        199.389,
+        192.598
+      ]
+    },
+    "web/previews/white-border-linen-dot.jpg": {
+      "dhash": "c00d09038d897171",
+      "mean": [
+        199.112,
+        198.658,
+        197.058
+      ]
+    },
+    "web/previews/white-border-passport-mono.jpg": {
+      "dhash": "6141011111010101",
+      "mean": [
+        224.642,
+        225.092,
+        226.874
+      ]
+    },
+    "web/previews/white-border-quiet-stack.jpg": {
+      "dhash": "00717967676f7949",
+      "mean": [
+        215.162,
+        200.062,
+        189.175
+      ]
+    },
+    "web/previews/white-border-ruled-band.jpg": {
+      "dhash": "c01d0d1d0d4d7979",
+      "mean": [
+        209.545,
+        204.037,
+        197.812
+      ]
+    },
+    "web/previews/white-border-top-note.jpg": {
+      "dhash": "6553537381e04900",
+      "mean": [
+        202.753,
+        207.461,
+        215.31
+      ]
+    },
+    "web/previews/white-border-twin-columns.jpg": {
+      "dhash": "4087878787878786",
+      "mean": [
+        218.918,
+        213.56,
+        202.461
+      ]
+    }
+  }
+}

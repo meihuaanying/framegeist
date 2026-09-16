@@ -491,3 +491,14 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
 | "FrameGeist / 框灵"可用作最终品牌名 | 品牌展示层需改名（不影响代码与仓库结构） | 商标检索（中国商标网 9/42 类 + WIPO/USPTO） | Q1 | 待办（检索通过前用工作名） |
 
 **门禁结论**：聚合 0.20 达到 spec 阈值（0.2），可进入执行。Q6 决策后 `Assumptions` 由 0.50 降至约 0.25（仅剩鸿蒙链路 / HEIF / Motion Photo 三项技术假设，均可在引擎骨架阶段低成本证伪）——**这四个假设中任意一个为假，都会改变交付范围**。因此执行顺序刻意把"环境基线 + 引擎骨架"排在前面，让最贵的假设（鸿蒙链路）在模板库扩容之前就被证伪或证实。
+
+- **2026-09-16 ｜ v0.6.0 发布（EXIF 真实化 + 十项前沿增强） ｜** 按 `docs/V0.6.0-CONSTRAINTS.md`（14 项 grill 确认）执行到发布。发现与决策：
+  1. **样片 EXIF 注入用容器级手术**：`img-parts` 复制 APP1 不重编码像素（像素哈希不变，唯一性门禁保持 192/192）；按**真实像素方向**分配机型（map.orientation 是个别软匹配，不可直接采用——首轮注入因此 1 例错配，门禁抓出后修正）。
+  2. **导出 EXIF 字节直通**：自研 TIFF IFD 重建（端序/边界/深度安全；剥 GPS/序列号；Orientation 归一 1；MakerNote/未知标签/IFD1 缩略图原样），畸形输入回退白名单重建；1 万次变异零 panic。**金标因此按 Q13 重生成**（导出 APP1 字节变化，像素未变）。
+  3. **ICC 决策**：渲染前把 Display P3/Adobe RGB 等转成 sRGB 数值、导出不贴源档案（否则文字/绘制色二次偏配）；moxcms 纯 Rust 无 C 依赖，wasm 兼容；sRGB 档案零操作、畸形 ICC 静默降级。
+  4. **HEIC**：`libheif-js` 作为**独立外部文件惰性动态 import**（LGPL-3.0 全文入 `docs/licenses/` + CREDITS），不在 PRECACHE、不静态内联；libheif 不产出 EXIF，故 HEIC 照片元数据为空并如实提示。
+  5. **AVIF/WebP**：`image` 纯 Rust 编码（ravif/image-webp），AVIF/WebP 均能携带 EXIF（EXIF item / RIFF EXIF chunk）；为免 C 依赖未开 `avif-native`，CLI `pixel-hash/visual-hash` 不支持 `.avif`（浏览器可解）。
+  6. **wasm 性能**：`.cargo/config.toml` 默认 `+simd128`；`tools/wasm-build.mjs` 固化 `wasm-opt -O2`（binaryen，npx 按需，无 npm 依赖入仓）；模块 5.95MB，帧字节一致 + 性能 4/4 复测通过。
+  7. **回归防线**：新增 dHash+均色视觉回归门禁（384 图基线）与 EXIF 真实性门禁；E2E 195 条（含 HEIC 降级路径、AVIF/WebP magic、字体预热）。
+  8. **Tauri**：crates.io 最新稳定 = 2.11.5 = 当前锁定；3.x 为 alpha，不升级并记录。
+  9. **Q8 失效说明**：三张原图均无 GPS 标签，样片“保留 GPS”条款自然失效。

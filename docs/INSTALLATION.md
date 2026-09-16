@@ -90,13 +90,18 @@ node tools/e2e-audit.mjs             # E2E 真机门禁（需桌面版带 CDP �
 # 一次性：wasm-bindgen-cli 版本必须与 wasm-bindgen crate 一致
 cargo install wasm-bindgen-cli --version 0.2.128
 
-# 构建与胶水生成
+# v0.6.0 起建议用固化管线（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke；
+# wasm-opt 通过 npx 按需获取 binaryen，无需 npm 依赖入仓）
+node tools/wasm-build.mjs
+
+# 或手动分步
 cargo build -p framegeist-wasm --target wasm32-unknown-unknown --release
 wasm-bindgen --out-dir web\pkg --target web target\wasm32-unknown-unknown\release\framegeist_wasm.wasm
 
 # 本地服务（零依赖）+ 冒烟验证
 node tools/serve.mjs 8000        # http://localhost:8000/web/
 node tools/wasm-smoke.mjs        # 验证 WASM 与 CLI 渲染字节级一致
+node tools/visual-regression.mjs # dHash+均色样片回归（基线 tools/visual-baselines.json）
 ```
 
 ## 已知坑（2026-09-09 实测）

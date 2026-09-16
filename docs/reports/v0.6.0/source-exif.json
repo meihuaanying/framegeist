@@ -1,0 +1,56 @@
+{
+  "version": "0.6.0",
+  "generatedAt": "2026-09-16T06:37:10.433Z",
+  "note": "Real EXIF from three user-provided originals. Originals live in incoming/ (gitignored) and are not redistributed; compressed derivatives are committed under web/examples/.",
+  "gps": "none of the three originals contain GPS tags — sample-GPS retention (Q8) is a no-op",
+  "sources": {
+    "sony-a7r3": {
+      "file": "DSC09556.jpg",
+      "sha256": "600055fa8328b778eca4bb5f97c467efc9fc561b2256071d5c8eb8aa4257ff76",
+      "width": 5304,
+      "height": 7952,
+      "orientation": "portrait",
+      "make": "SONY",
+      "model": "ILCE-7RM3",
+      "lens": "Viltrox AF 35/1.2 LAB FE",
+      "focal_mm": 35,
+      "aperture": 4,
+      "shutter": "1/250s",
+      "iso": 100,
+      "datetime": "2026:05:02 15:13:35",
+      "gps": null
+    },
+    "nikon-z6ii": {
+      "file": "DSC_6050.jpg",
+      "sha256": "6dbc9bc9c84c6092b12631436d1231cfa40d1938a17bf0b37bd328af76a31aea",
+      "width": 6048,
+      "height": 4024,
+      "orientation": "landscape",
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z 6_2",
+      "lens": "Viltrox AF 24/1.8 Z",
+      "focal_mm": 24,
+      "aperture": 1.8,
+      "shutter": "25.0s",
+      "iso": 2500,
+      "datetime": "2026:03:15 03:37:24",
+      "gps": null
+    },
+    "canon-r7": {
+      "file": "IMG_8387.JPG",
+      "sha256": "d66b095acb79ce667b1c4ec81e33a3cc87b4e0a8c3e7db659ce1339b7d7e6e0a",
+      "width": 6960,
+      "height": 4640,
+      "orientation": "landscape",
+      "make": "Canon",
+      "model": "Canon EOS R7",
+      "lens": "16-300mm F3.5-6.7 DC OS | Contemporary 025",
+      "focal_mm": 142,
+      "aperture": 6.3,
+      "shutter": "1/40s",
+      "iso": 6400,
+      "datetime": "2025:12:31 22:42:10",
+      "gps": null
+    }
+  }
+}

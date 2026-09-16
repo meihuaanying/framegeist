@@ -2,49 +2,98 @@
   "meta": {
     "id": "magazine-double-rule-01",
     "name": "Double Rule",
-    "nameI18n": { "zh": "双线刊头", "en": "Double Rule" },
+    "nameI18n": {
+      "zh": "双线刊头",
+      "en": "Double Rule"
+    },
     "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.17, "right": 0.10, "bottom": 0.30, "left": 0.10 },
-    "background": { "type": "solid", "color": "#FAF8F3" }
+    "padding": {
+      "top": 0.17,
+      "right": 0.1,
+      "bottom": 0.3,
+      "left": 0.1
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FAF8F3"
+    }
   },
   "layers": [
     {
       "type": "text",
       "id": "masthead",
       "anchor": "top-center",
-      "offset": { "x": 0, "y": 0.035 },
-      "font": { "family": ["Playfair Display"], "size": 0.052, "color": "#1A1A1A" },
-      "letterSpacing": 0.10,
-      "content": [{ "expr": "'FRAME & LIGHT'", "fallback": null }]
+      "offset": {
+        "x": 0,
+        "y": 0.035
+      },
+      "font": {
+        "family": [
+          "Playfair Display"
+        ],
+        "size": 0.052,
+        "color": "#1A1A1A"
+      },
+      "letterSpacing": 0.1,
+      "content": [
+        {
+          "expr": "'FRAME & LIGHT'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "issue",
       "anchor": "top-right",
-      "offset": { "x": -0.10, "y": 0.042 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.010, "color": "#6B7280" },
+      "offset": {
+        "x": -0.1,
+        "y": 0.042
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.01,
+        "color": "#6B7280"
+      },
       "letterSpacing": 0.18,
       "lineHeight": 1.6,
       "align": "right",
       "content": [
-        { "expr": "'Nº 01 — PHOTOGRAPHY'", "fallback": null },
-        { "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": null }
+        {
+          "expr": "'Nº 01 — PHOTOGRAPHY'",
+          "fallback": null
+        },
+        {
+          "expr": "date('LOCAL', exif.datetime)",
+          "fallback": null
+        }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
       "type": "shape",
       "id": "frame-outer",
       "anchor": "top-left",
-      "offset": { "x": 0.10, "y": 0.1293 },
+      "offset": {
+        "x": 0.1,
+        "y": 0.1293
+      },
       "shape": "rect",
-      "size": { "width": 0.96, "height": 0.96 },
+      "size": {
+        "width": 0.96,
+        "height": 0.96
+      },
       "color": "#1A1A1A",
       "strokeWidth": 0.0018
     },
@@ -52,9 +101,15 @@
       "type": "shape",
       "id": "frame-inner",
       "anchor": "top-left",
-      "offset": { "x": 0.1125, "y": 0.1395 },
+      "offset": {
+        "x": 0.1125,
+        "y": 0.1395
+      },
       "shape": "rect",
-      "size": { "width": 0.93, "height": 0.93 },
+      "size": {
+        "width": 0.93,
+        "height": 0.93
+      },
       "color": "#1A1A1A",
       "strokeWidth": 0.001,
       "opacity": 0.55
@@ -63,47 +118,103 @@
       "type": "text",
       "id": "model",
       "anchor": "bottom-left",
-      "offset": { "x": 0.10, "y": -0.101 },
-      "font": { "family": ["Inter"], "size": 0.016, "color": "#373A40" },
+      "offset": {
+        "x": 0.1,
+        "y": -0.101
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.016,
+        "color": "#373A40"
+      },
       "letterSpacing": 0.04,
       "content": [
-        { "expr": "if_empty(exif.model_pretty, 'Unknown Camera')", "fallback": "Unknown Camera" }
+        {
+          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+          "fallback": "Camera"
+        }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
       "type": "text",
       "id": "params",
       "anchor": "bottom-left",
-      "offset": { "x": 0.10, "y": -0.057 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#6B7280" },
+      "offset": {
+        "x": 0.1,
+        "y": -0.057
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#6B7280"
+      },
       "letterSpacing": 0.04,
       "content": [
-        { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": null }
+        {
+          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": null
+        }
       ]
     },
     {
       "type": "image",
       "id": "brand",
       "anchor": "bottom-right",
-      "offset": { "x": -0.10, "y": -0.10 },
+      "offset": {
+        "x": -0.1,
+        "y": -0.1
+      },
       "asset": "@builtin/brand/{exif.brand_slug}",
-      "size": { "height": 0.022 },
+      "size": {
+        "height": 0.022
+      },
       "tint": "auto"
     },
     {
       "type": "text",
       "id": "slogan",
       "anchor": "bottom-right",
-      "offset": { "x": -0.10, "y": -0.057 },
-      "font": { "family": ["Inter"], "size": 0.0105, "color": "#9AA0A6" },
+      "offset": {
+        "x": -0.1,
+        "y": -0.057
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.0105,
+        "color": "#9AA0A6"
+      },
       "letterSpacing": 0.24,
       "align": "right",
-      "content": [{ "expr": "'LIGHT, HELD STILL'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'LIGHT, HELD STILL'",
+          "fallback": null
+        }
+      ]
     }
   ],
   "fields": {
-    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
-    "params": { "type": "string", "source": "exif" },
-    "date": { "type": "string", "source": "exif" }
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "params": {
+      "type": "string",
+      "source": "exif"
+    },
+    "date": {
+      "type": "string",
+      "source": "exif"
+    }
   }
 }

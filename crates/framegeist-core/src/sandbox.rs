@@ -186,6 +186,12 @@ pub fn validate_expr(expr: &str) -> Result<()> {
 /// Evaluate an expression against EXIF info. Returns None when any
 /// referenced field is missing; the template's `fallback` then applies.
 pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
+    eval_expr_locale(expr, info, "")
+}
+
+/// v0.6.0: locale-aware expression evaluation. `locale` is `"zh"` or `"en"`
+/// (empty = language-neutral ISO-style dates).
+pub fn eval_expr_locale(expr: &str, info: &ExifInfo, locale: &str) -> Option<String> {
     if expr.len() >= 2 && expr.starts_with('\'') && expr.ends_with('\'') {
         return Some(expr[1..expr.len() - 1].to_string());
     }
@@ -212,6 +218,12 @@ pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
             return None;
         }
         let raw = info.get("datetime")?;
+        let format = match format {
+            "LOCAL" if locale == "zh" => "YYYY\u{5e74}M\u{6708}D\u{65e5}",
+            "LOCAL" if locale == "en" => "MMMU D, YYYY",
+            "LOCAL" => "YYYY.MM.DD",
+            other => other,
+        };
         return format_exif_date(&raw, format);
     }
     if expr.starts_with("fmt(") && expr.ends_with(')') {
@@ -287,6 +299,11 @@ fn format_exif_date(raw: &str, format: &str) -> Option<String> {
         match token {
             "YYYY" => format!("{year:04}"),
             "MMMM" => month_name.to_string(),
+            "MMMU" => month_name
+                .chars()
+                .take(3)
+                .collect::<String>()
+                .to_uppercase(),
             "MMM" => month_name.chars().take(3).collect(),
             "MM" => format!("{month:02}"),
             "M" => month.to_string(),
@@ -301,8 +318,8 @@ fn format_exif_date(raw: &str, format: &str) -> Option<String> {
         }
     };
 
-    const TOKENS: [&str; 12] = [
-        "YYYY", "MMMM", "MMM", "MM", "M", "DD", "Do", "D", "HH", "mm", "SS", "WW",
+    const TOKENS: [&str; 13] = [
+        "YYYY", "MMMM", "MMMU", "MMM", "MM", "M", "DD", "Do", "D", "HH", "mm", "SS", "WW",
     ];
     let mut out = String::with_capacity(format.len());
     let mut rest = format;
@@ -324,6 +341,28 @@ fn format_exif_date(raw: &str, format: &str) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn local_date_follows_locale() {
+        let info = ExifInfo {
+            datetime: Some("2026:05:02 15:13:35".into()),
+            ..ExifInfo::default()
+        };
+        let expr = "date('LOCAL', exif.datetime)";
+        assert_eq!(
+            eval_expr_locale(expr, &info, "zh").as_deref(),
+            Some("2026\u{5e74}5\u{6708}2\u{65e5}")
+        );
+        assert_eq!(
+            eval_expr_locale(expr, &info, "en").as_deref(),
+            Some("MAY 2, 2026")
+        );
+        assert_eq!(
+            eval_expr_locale(expr, &info, "").as_deref(),
+            Some("2026.05.02")
+        );
+        assert_eq!(eval_expr(expr, &info).as_deref(), Some("2026.05.02"));
+    }
 
     #[test]
     fn direct_expr_evaluates() {

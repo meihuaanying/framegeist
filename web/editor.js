@@ -51,10 +51,11 @@ function loadStore() {
 }
 function saveUi() { localStorage.setItem(LS_UI, JSON.stringify(S.ui)); }
 function uiOf(id) {
-  if (!S.ui[id]) S.ui[id] = { hidden: [], locked: [], crop: null, frame: null, card: null, labels: {} };
+  if (!S.ui[id]) S.ui[id] = { hidden: [], locked: [], crop: null, frame: null, card: null, labels: {}, exifPreview: null };
   const u = S.ui[id];
   u.hidden ??= []; u.locked ??= []; u.labels ??= {};
   if (u.card === undefined) u.card = null;
+  if (u.exifPreview === undefined) u.exifPreview = null;
   return u;
 }
 function loadEdits() {
@@ -174,6 +175,7 @@ function editorOverrides() {
   const out = {};
   const u = id ? uiOf(id) : null;
   if (u?.crop) out.crop = u.crop;
+  if (u?.exifPreview) out.exif = u.exifPreview;
   const card = u?.card;
   // Card is only sent while enabled (engine defaults otherwise keep template
   // canvas radius/shadow untouched).
@@ -756,6 +758,63 @@ const PRESETS = {
     relief: { mode: "emboss", depth: 0.07, highlight: "#FFE9E9", shadow: "#7A0F1E", opacity: 0.9 },
   },
 };
+const EXIF_CHIPS = [
+  ["model", "exif.model"],
+  ["lens", "exif.lens"],
+  ["focal", "exif.focal"],
+  ["aperture", "exif.aperture"],
+  ["shutter", "exif.shutter"],
+  ["iso", "exif.iso"],
+  ["datetime", "exif.datetime"],
+  ["weekday", "exif.weekday"],
+  ["weekday_cn", "exif.weekday_cn"],
+  ["film_mode", "exif.fuji.film_mode"],
+  ["wb_mode", "exif.fuji.wb_mode"],
+  ["grain", "exif.fuji.grain"],
+  ["dynamic_range", "exif.fuji.dynamic_range"],
+];
+const EXIF_PARAMS_EXPR = "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)";
+function appendExifItem(layerId, expr) {
+  if (!layerId) return;
+  S.selected = new Set([layerId]);
+  edit((tpl) => {
+    const hit = findLayer(layerId, tpl.layers);
+    if (!hit) return;
+    hit.layer.content ??= [];
+    hit.layer.content.push({ expr, fallback: "" });
+  });
+  safeRender();
+}
+function buildExifFieldChips(grid, layer) {
+  const row = document.createElement("div");
+  row.className = "field";
+  const lab = document.createElement("label");
+  lab.innerHTML = `<span>${escapeHtml(t("exif.fieldTitle"))}</span>`;
+  row.appendChild(lab);
+  const chips = document.createElement("div");
+  chips.className = "field-chips";
+  chips.id = "exifFieldChips";
+  for (const [key, labelKey] of EXIF_CHIPS) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "exif-chip";
+    b.dataset.exif = key;
+    b.textContent = t(labelKey);
+    b.onclick = () => appendExifItem(layer.id, `exif.${key}`);
+    chips.appendChild(b);
+  }
+  const params = document.createElement("button");
+  params.type = "button";
+  params.className = "exif-chip primary";
+  params.id = "exifInsertParams";
+  params.dataset.exif = "params";
+  params.textContent = t("exif.insertParams");
+  params.onclick = () => appendExifItem(layer.id, EXIF_PARAMS_EXPR);
+  chips.appendChild(params);
+  row.appendChild(chips);
+  grid.appendChild(row);
+}
+
 function buildTextProps(grid, layer, mutate, cur) {
   addDual(grid, "font.size", layer.font?.size ?? 0.02, 0.002, 0.5, 0.001, (v) => mutate((l) => { l.font.size = v; }));
   addDual(grid, "letterSpacing", layer.letterSpacing ?? 0, -0.05, 0.5, 0.005, (v) => mutate((l) => { l.letterSpacing = v; }));
@@ -809,6 +868,7 @@ function buildTextProps(grid, layer, mutate, cur) {
     if (on) l.effects.shadow = { offsetX: 0.02, offsetY: 0.02, blur: 0.06, color: "#000000", opacity: 0.6 };
     else delete l.effects.shadow;
   }));
+  buildExifFieldChips(grid, layer);
 }
 function buildShapeProps(grid, layer, mutate) {
   addColor(grid, "color", layer.color, (v) => mutate((l) => { l.color = v; }));
@@ -1454,6 +1514,8 @@ function commitCropLive(el) {
 }
 function bindButtons() {
   document.getElementById("editUndo")?.addEventListener("click", undo);
+  document.getElementById("exifFill")?.addEventListener("click", fillExifPreview);
+  document.getElementById("exifClear")?.addEventListener("click", clearExifPreview);
   document.getElementById("editRedo")?.addEventListener("click", redo);
   document.getElementById("tierToggle")?.addEventListener("click", toggleTier);
   document.getElementById("panelTierBtn")?.addEventListener("click", toggleTier);
@@ -2060,6 +2122,53 @@ function selectFirstText() {
 }
 
 /* ------------------------------------------------------------ app hooks */
+/* ------------------------------------------------ v0.6.0 EXIF preview fill */
+let SAMPLE_PROFILES = null;
+function photoHasExif() {
+  const info = fg()?.state?.photos?.[0]?.exif;
+  return !!(info && (info.model || info.datetime || info.lens));
+}
+async function loadSampleProfiles() {
+  if (SAMPLE_PROFILES) return SAMPLE_PROFILES;
+  try {
+    SAMPLE_PROFILES = (await (await fetch("./examples/exif.json")).json()).profiles ?? {};
+  } catch {
+    SAMPLE_PROFILES = {};
+  }
+  return SAMPLE_PROFILES;
+}
+function updateExifHint() {
+  const hint = document.getElementById("exifHint");
+  if (!hint) return;
+  const photo = fg()?.state?.photos?.[0];
+  const id = fg()?.state?.templateId;
+  const u = id ? uiOf(id) : null;
+  const show = !!photo && !photoHasExif();
+  hint.classList.toggle("hidden", !show);
+  const clear = document.getElementById("exifClear");
+  if (clear) clear.disabled = !u?.exifPreview;
+}
+async function fillExifPreview() {
+  const id = fg()?.state?.templateId;
+  if (!id) return;
+  const profiles = await loadSampleProfiles();
+  const portrait = (fg()?.state?.photos?.[0]?.ar ?? 0) > 1;
+  const profile = profiles[portrait ? "sony-a7r3" : "nikon-z6ii"] ?? profiles["sony-a7r3"];
+  if (!profile) return;
+  uiOf(id).exifPreview = { ...profile };
+  saveUi();
+  updateExifHint();
+  safeRender();
+}
+function clearExifPreview() {
+  const id = fg()?.state?.templateId;
+  if (!id) return;
+  uiOf(id).exifPreview = null;
+  saveUi();
+  updateExifHint();
+  safeRender();
+}
+
 window.__fgEditor = {
   applyEdits,
   editorOverrides,
@@ -2091,6 +2200,7 @@ window.__fgEditor = {
     updateCropInfo();
     syncFrameControls();
     buildCardControls();
+    updateExifHint();
     drawOverlay();
   },
   onModeChanged(mode) {
@@ -2108,6 +2218,7 @@ window.__fgEditor = {
   },
   onStage(img) {
     S.img = img;
+    updateExifHint();
     if (!img) return;
     const refresh = async () => {
       await refreshBoxes();

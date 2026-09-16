@@ -90,6 +90,24 @@ enum Cmd {
     },
     /// Print EXIF metadata of a photo as JSON.
     Probe { photo: PathBuf },
+    /// v0.6.0: copy the EXIF block from `from` onto `target` without re-encoding.
+    ExifInject {
+        target: PathBuf,
+        #[arg(long = "from")]
+        from: PathBuf,
+        #[arg(short, long)]
+        output: PathBuf,
+    },
+    /// v0.6.0: resize a photo to a long-edge bound, carrying EXIF/ICC over.
+    PhotoShrink {
+        photo: PathBuf,
+        #[arg(long = "max-edge", default_value_t = 2560)]
+        max_edge: u32,
+        #[arg(long, default_value_t = 92)]
+        quality: u8,
+        #[arg(short, long)]
+        output: PathBuf,
+    },
     /// Print average luminance/saturation of a photo as JSON (showcase matcher).
     PhotoStats { photo: PathBuf },
     /// List built-in templates.
@@ -101,6 +119,9 @@ enum Cmd {
     /// Decode two images and report the ratio of differing RGBA pixels
     /// (PRD N2 gate: ratio <= 0.1% passes).
     PixelDiff { a: PathBuf, b: PathBuf },
+    /// v0.6.0: perceptual fingerprint (dHash 64-bit + mean RGB) as JSON,
+    /// used by tools/visual-regression.mjs.
+    VisualHash { file: PathBuf },
 }
 
 fn find_template_dir() -> PathBuf {
@@ -147,9 +168,24 @@ fn parse_format(s: &str) -> Result<OutputFormat, Error> {
     match s {
         "jpeg" | "jpg" => Ok(OutputFormat::Jpeg),
         "png" => Ok(OutputFormat::Png),
+        // v0.6.0 Q10: image 0.25 encoders (AVIF lossy pure Rust, WebP lossless).
+        "avif" => Ok(OutputFormat::Avif),
+        "webp" => Ok(OutputFormat::Webp),
         other => Err(Error::Encode(format!(
             "unsupported output format {other:?}"
         ))),
+    }
+}
+
+/// Output extension for batch naming. PNG keeps the legacy behaviour of
+/// preserving the source file name (pre-v0.6.0 compat); the new formats get
+/// their real container extension.
+fn format_extension(format: OutputFormat) -> Option<&'static str> {
+    match format {
+        OutputFormat::Jpeg => Some("jpg"),
+        OutputFormat::Avif => Some("avif"),
+        OutputFormat::Webp => Some("webp"),
+        OutputFormat::Png => None,
     }
 }
 
@@ -314,19 +350,19 @@ fn run(args: &Args) -> Result<(), Error> {
                     .ok_or_else(|| Error::UnsupportedFormat("bad file name".into()))?
                     .to_string();
                 let mut out_name = name;
-                if opts.format == OutputFormat::Jpeg {
+                if let Some(ext) = format_extension(opts.format) {
                     let stem = out_name
                         .split_once('.')
                         .map(|(s, _)| s.to_string())
                         .unwrap_or(out_name.clone());
-                    out_name = format!("{stem}.jpg");
+                    out_name = format!("{stem}.{ext}");
                 }
                 let out_path = output.join(&out_name);
                 if out_path.exists() {
                     eprintln!("skip existing {}", out_path.display());
                     continue;
                 }
-                let bytes = std::fs::read(&photo)?;
+                let bytes = std::fs::read(photo)?;
                 let out = render(&bytes, &tpl, &opts)?;
                 std::fs::write(&out_path, out)?;
                 if let Some(r) = framegeist_core::metadata_report(&bytes, opts.keep_gps)? {
@@ -449,6 +485,50 @@ fn run(args: &Args) -> Result<(), Error> {
             );
             Ok(())
         }
+        Cmd::ExifInject {
+            target,
+            from,
+            output,
+        } => {
+            let target_bytes = std::fs::read(target)?;
+            let source_bytes = std::fs::read(from)?;
+            let out = framegeist_core::inject_exif(&target_bytes, &source_bytes)?;
+            std::fs::write(output, &out)?;
+            let info = probe_exif(&out)?;
+            println!(
+                "exif-inject: {} <- {} ({} bytes); model={:?} lens={:?} focal={:?}",
+                output.display(),
+                from.display(),
+                out.len(),
+                info.model,
+                info.lens,
+                info.focal_mm
+            );
+            Ok(())
+        }
+        Cmd::PhotoShrink {
+            photo,
+            max_edge,
+            quality,
+            output,
+        } => {
+            let bytes = std::fs::read(photo)?;
+            let out = framegeist_core::shrink_jpeg(&bytes, *max_edge, *quality)?;
+            std::fs::write(output, &out)?;
+            let dims = image::image_dimensions(output).map_err(|e| Error::Image(e.to_string()))?;
+            let info = probe_exif(&out)?;
+            println!(
+                "photo-shrink: {} -> {} ({}x{}, {} bytes, q{}); model={:?}",
+                photo.display(),
+                output.display(),
+                dims.0,
+                dims.1,
+                out.len(),
+                quality,
+                info.model
+            );
+            Ok(())
+        }
         Cmd::PhotoStats { photo } => {
             let bytes = std::fs::read(photo)?;
             let img = image::load_from_memory(&bytes)
@@ -513,6 +593,47 @@ fn run(args: &Args) -> Result<(), Error> {
                 .to_rgba8();
             let digest = Sha256::digest(img.as_raw());
             println!("{}", hex::encode(digest));
+            Ok(())
+        }
+        Cmd::VisualHash { file } => {
+            let img = image::load_from_memory(&std::fs::read(file)?)
+                .map_err(|e| Error::Image(e.to_string()))?
+                .to_rgba8();
+            // dHash: 9x8 grayscale grid, bit set when the left pixel is darker.
+            let small = image::imageops::resize(&img, 9, 8, image::imageops::FilterType::Triangle);
+            let mut bits: u64 = 0;
+            for y in 0..8u32 {
+                for x in 0..8u32 {
+                    let l = small.get_pixel(x, y).0;
+                    let r = small.get_pixel(x + 1, y).0;
+                    let gl = 299 * l[0] as u32 + 587 * l[1] as u32 + 114 * l[2] as u32;
+                    let gr = 299 * r[0] as u32 + 587 * r[1] as u32 + 114 * r[2] as u32;
+                    if gl > gr {
+                        bits |= 1 << (y * 8 + x);
+                    }
+                }
+            }
+            let n = (img.width() as u64) * (img.height() as u64);
+            let mut sums = [0u64; 3];
+            for px in img.pixels() {
+                sums[0] += px.0[0] as u64;
+                sums[1] += px.0[1] as u64;
+                sums[2] += px.0[2] as u64;
+            }
+            let mean = [
+                sums[0] as f64 / n as f64,
+                sums[1] as f64 / n as f64,
+                sums[2] as f64 / n as f64,
+            ];
+            println!(
+                "{{\"dhash\":\"{:016x}\",\"mean\":[{:.3},{:.3},{:.3}],\"width\":{},\"height\":{}}}",
+                bits,
+                mean[0],
+                mean[1],
+                mean[2],
+                img.width(),
+                img.height()
+            );
             Ok(())
         }
         Cmd::PixelDiff { a, b } => {

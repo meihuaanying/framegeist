@@ -2,17 +2,28 @@
   "meta": {
     "id": "art-gilt-foil",
     "name": "Gilt Foil",
-    "nameI18n": { "zh": "烫金箔", "en": "Gilt Foil" },
+    "nameI18n": {
+      "zh": "烫金箔",
+      "en": "Gilt Foil"
+    },
     "version": "1.0.0",
-    "minEngineVersion": "0.5.0",
+    "minEngineVersion": "0.6.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "effect"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.045, "right": 0.05, "bottom": 0.24, "left": 0.05 },
-    "background": { "type": "solid", "color": "#141414" }
+    "padding": {
+      "top": 0.045,
+      "right": 0.05,
+      "bottom": 0.24,
+      "left": 0.05
+    },
+    "background": {
+      "type": "solid",
+      "color": "#141414"
+    }
   },
   "layers": [
     {
@@ -20,7 +31,10 @@
       "id": "foil-frame",
       "anchor": "middle-center",
       "shape": "rect",
-      "size": { "width": 0.9, "height": 0.9 },
+      "size": {
+        "width": 0.9,
+        "height": 0.9
+      },
       "color": "#8A6E2F",
       "opacity": 0.75,
       "strokeWidth": 0.0011,
@@ -32,20 +46,42 @@
       "type": "text",
       "id": "foil-overline",
       "anchor": "top-center",
-      "offset": { "x": 0, "y": 0.0175 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#7A6A4A" },
+      "offset": {
+        "x": 0,
+        "y": 0.0175
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#7A6A4A"
+      },
       "letterSpacing": 0.3,
       "align": "center",
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "'Fine Art Edition · Number One'", "fallback": null }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "'Fine Art Edition · Number One'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "shape",
       "id": "foil-rule",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.183 },
+      "offset": {
+        "x": 0,
+        "y": -0.183
+      },
       "shape": "line",
-      "size": { "width": 0.36, "height": 0.0012 },
+      "size": {
+        "width": 0.36,
+        "height": 0.0012
+      },
       "color": "#B8860B",
       "opacity": 0.8,
       "double": true,
@@ -55,57 +91,152 @@
       "type": "text",
       "id": "foil-title",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.135 },
-      "font": { "family": ["Cormorant Garamond"], "size": 0.055, "color": "#F5D67B" },
+      "offset": {
+        "x": 0,
+        "y": -0.135
+      },
+      "font": {
+        "family": [
+          "Cormorant Garamond"
+        ],
+        "size": 0.055,
+        "color": "#F5D67B"
+      },
       "letterSpacing": 0.14,
       "effects": {
         "case": "upper",
-        "fill": { "mode": "foil", "colors": ["#F5D67B", "#B8860B", "#FFE9A8"], "angle": 105, "intensity": 0.9 },
-        "shadow": { "offsetX": 0.008, "offsetY": 0.018, "blur": 0.07, "color": "#000000", "opacity": 0.55 }
+        "fill": {
+          "mode": "foil",
+          "colors": [
+            "#F5D67B",
+            "#B8860B",
+            "#FFE9A8"
+          ],
+          "angle": 105,
+          "intensity": 0.9
+        },
+        "shadow": {
+          "offsetX": 0.008,
+          "offsetY": 0.018,
+          "blur": 0.07,
+          "color": "#000000",
+          "opacity": 0.55
+        }
       },
-      "content": [{ "expr": "'Gilded Light'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'Gilded Light'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "foil-title-zh",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.075 },
-      "font": { "family": ["Noto Serif SC"], "size": 0.024, "color": "#C9A24B" },
+      "offset": {
+        "x": 0,
+        "y": -0.075
+      },
+      "font": {
+        "family": [
+          "Noto Serif SC"
+        ],
+        "size": 0.024,
+        "color": "#C9A24B"
+      },
       "letterSpacing": 0.34,
-      "content": [{ "expr": "'鎏金时刻'", "fallback": null }]
+      "content": [
+        {
+          "expr": "'鎏金时刻'",
+          "fallback": null
+        }
+      ]
     },
     {
       "type": "text",
       "id": "foil-model",
       "anchor": "bottom-left",
-      "offset": { "x": 0.055, "y": -0.038 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#B8964A" },
+      "offset": {
+        "x": 0.055,
+        "y": -0.038
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#B8964A"
+      },
       "letterSpacing": 0.2,
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "if_empty(exif.model_pretty, 'Unsigned Print')", "fallback": "Unsigned Print" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "if_empty(exif.model_pretty, 'Unsigned Print')",
+          "fallback": "Unsigned Print"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "foil-date",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.038 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#B8964A" },
+      "offset": {
+        "x": 0,
+        "y": -0.038
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#B8964A"
+      },
       "letterSpacing": 0.2,
       "align": "center",
-      "effects": { "case": "upper" },
-      "content": [{ "expr": "date('YYYY.MM.DD', exif.datetime)", "fallback": "Private Collection" }]
+      "effects": {
+        "case": "upper"
+      },
+      "content": [
+        {
+          "expr": "date('LOCAL', exif.datetime)",
+          "fallback": "Private Collection"
+        }
+      ],
+      "features": [
+        "tnum"
+      ]
     },
     {
       "type": "text",
       "id": "foil-params",
       "anchor": "bottom-right",
-      "offset": { "x": -0.055, "y": -0.038 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.012, "color": "#B8964A" },
+      "offset": {
+        "x": -0.055,
+        "y": -0.038
+      },
+      "font": {
+        "family": [
+          "JetBrains Mono"
+        ],
+        "size": 0.012,
+        "color": "#B8964A"
+      },
       "letterSpacing": 0.2,
       "align": "right",
-      "effects": { "case": "upper" },
+      "effects": {
+        "case": "upper"
+      },
       "content": [
-        { "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)", "fallback": "Archival Pigment · No. 01" }
+        {
+          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
+          "fallback": "Archival Pigment · No. 01"
+        }
       ]
     }
   ]

@@ -77,6 +77,9 @@ pub fn layer_boxes_for_photo(
     let rgba = crate::render::apply_crop_public(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
     let mut info = crate::exif::probe_exif(photo)?;
     crate::render::apply_model_map(&mut info, &opts.model_map);
+    if let Some(map) = opts.overrides.as_ref().and_then(|o| o.exif.as_ref()) {
+        info.apply_overrides(map);
+    }
     layer_boxes_json(template, &info, &rgba, opts)
 }
 
@@ -117,6 +120,9 @@ pub fn layer_boxes_json(
     };
     let mut shaper = Shaper::new(&fonts);
     let mut boxes: Vec<LayerBox> = Vec::new();
+    let locale = overrides
+        .and_then(|o| o.date_locale.as_deref())
+        .unwrap_or("");
     for layer in &template.layers {
         if let Some(b) = layer_box(
             layer,
@@ -127,6 +133,7 @@ pub fn layer_boxes_json(
             ch as f32,
             0.0,
             0.0,
+            locale,
         ) {
             boxes.push(b);
         }
@@ -144,6 +151,7 @@ fn layer_box(
     fh: f32,
     origin_x: f32,
     origin_y: f32,
+    locale: &str,
 ) -> Option<LayerBox> {
     let z = match layer {
         Layer::Text(t) => t.z.unwrap_or(0),
@@ -155,7 +163,7 @@ fn layer_box(
     };
     match layer {
         Layer::Text(text) => {
-            let lines = crate::render::text_lines_public(text, info);
+            let lines = crate::render::text_lines_public(text, info, locale);
             if lines.is_empty() {
                 return None;
             }
@@ -172,6 +180,7 @@ fn layer_box(
                 letter_spacing_em: text.letter_spacing as f32,
                 align: text.align.as_deref().unwrap_or("left"),
                 max_width: wrap,
+                features: &text.features,
             })?;
             let pad = text
                 .effects
@@ -375,7 +384,7 @@ fn layer_box(
             };
             let mut children = Vec::new();
             for child in &g.children {
-                if let Some(b) = layer_box(child, info, shaper, &sub_geo, gw, gh, x, y) {
+                if let Some(b) = layer_box(child, info, shaper, &sub_geo, gw, gh, x, y, locale) {
                     children.push(b);
                 }
             }

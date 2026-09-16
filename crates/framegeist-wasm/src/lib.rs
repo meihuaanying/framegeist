@@ -312,6 +312,9 @@ fn parse_format(format: &str) -> Result<core::OutputFormat, JsError> {
     match format {
         "jpeg" | "jpg" => Ok(core::OutputFormat::Jpeg),
         "png" => Ok(core::OutputFormat::Png),
+        // v0.6.0 Q10: AVIF (lossy) / WebP (lossless) export.
+        "avif" => Ok(core::OutputFormat::Avif),
+        "webp" => Ok(core::OutputFormat::Webp),
         other => Err(JsError::new(&format!(
             r#"{{"code":"encode","message":"unsupported format {other:?}"}}"#
         ))),

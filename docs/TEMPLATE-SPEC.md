@@ -97,7 +97,7 @@
 | `'<literal>'` | 常量文本（C3） |
 | `fmt('<literal>', exif)` | `{key}` 占位替换；**任一 key 缺失 → 整条为 None**（走 `fallback`） |
 | `if_empty(exif.<key>, '<literal>')` | 值为空/缺失时取字面量 |
-| `date('<format>', exif.datetime)` | EXIF 日期（`YYYY:MM:DD HH:MM:SS`）重排 |
+| `date('<format>', exif.datetime)` | EXIF 日期（`YYYY:MM:DD HH:MM:SS`）重排；格式串为 `LOCAL` 时按渲染 locale 输出（zh `2026年5月2日` / en `MAY 2, 2026` / 无 locale 回退 `YYYY.MM.DD`，见 `overrides.dateLocale`，**v0.6**） |
 
 `date()` token（v0.4）：`YYYY MM MMM MMMM M`（年/月补零/月缩写/月全称/月不补零）、`DD Do D`（日补零/英文序数 15th/日不补零）、`HH mm SS`、`WW`（英文星期 Wednesday）。其余字符原样输出；**格式串内的文字避免大写 D/M/S/H 等 token 字母**（如 "Documentary" 中 `Do` 会被拆解），需要英文月/星期一律用 token。
 
@@ -167,6 +167,7 @@
 | 字段 | 取值 | 语义 |
 |---|---|---|
 | `letterSpacing` | -0.05–0.5（em） | 字距，微排版刚需（大写小字 0.06–0.22） |
+| `features` | `["tnum","lnum","onum","pnum","smcp","c2sc","liga","kern","frac","ss01","ss02"]` 子集 | **v0.6**：OpenType 特性（EXIF/参数行启用 `tnum` 表格数字对齐；字体不支持时无副作用） |
 | `rotation` | -360–360（度） | 绕文本块中心旋转（差值为 0.01 度以内不旋转） |
 | `opacity` | 0–1 | 文本层不透明度（水印 0.75–0.95） |
 | `align` | `left/center/right` | 逐行对齐；缺省跟随锚点列 |
@@ -372,6 +373,8 @@
 | `showLogo` | bool | 品牌图片层开关（见 4.5） |
 | `metadata` | bool（默认 true） | **v0.5**：保留输出 EXIF 元数据；false 时输出照片不带 EXIF（GPS 仍受 `keep_gps` 独立控制） |
 | `crop` | `{x, y, w, h}`（归一化 0–1，原点左上） | **v0.5**：渲染前裁切照片（**先于布局**，所有画布尺寸/锚点基于裁后照片）；`w`/`h` 引擎夹取 ≥0.01 |
+| `dateLocale` | `zh` / `en` | **v0.6**：`date('LOCAL', …)` 的语言（编辑器随 UI 语言下发；CLI/桌面缺省输出中性 ISO） |
+| `exif` | `{model, lens, focal, aperture, shutter, iso, datetime, brand_slug, …}` 白名单键 | **v0.6**：预览用 EXIF 覆盖（无 EXIF 照片「填入示例」）；值为 ≤256 字符的字符串/数字/布尔，最多 48 键；不写入照片、不影响导出 |
 
 ## 8. 品牌/镜头/系列映射（v0.2.0+）
 
