@@ -53,3 +53,11 @@
 | 唯一性 + EXIF 门禁 | 全绿（192/192 真实 EXIF，映射正确） |
 | 视觉回归 | 384/384 在阈值内 |
 | E2E | 195/195 |
+
+## M5 — 文档与发布 ✅ (2026-09-16)
+
+- 版本统一 **0.6.0**：`Cargo.toml` workspace / `tauri.conf.json` / `web/app.js APP_VERSION`；SW 缓存 `framegeist-0.6.0`。
+- 文档：`README.md`（本报告）、PRD Discoveries v0.6.0 条目、`CREDITS.md`（示例摄影 + libheif-js LGPL 全文路径）、`TEMPLATE-SPEC.md`（`features` / `date('LOCAL')` / `dateLocale` / `exif` 覆盖）、`schema/template.schema.json`（同上）、`AGENTS.md`（v0.6.0 状态 + `wasm-build.mjs` 环境速查）、`INSTALLATION.md`（wasm 固化管线）。
+- 发布执行：commit `6ea2577` → push `main` → tag `v0.6.0` → CI **success**（main + tag）、release **success**、pages **success**。
+- Release `v0.6.0` 六资产：`framegeist-cli-v0.6.0-win-x64.zip`、`framegeist-desktop-v0.6.0-win-x64.zip`、`framegeist-templates-v0.6.0.fgpkg`、`FrameGeist-v0.6.0-win-x64-setup.exe`、`SHA256SUMS.txt`、`update.json`。
+- Pages 验证：首页 200、`download.html` 200、新增示例照片 `web/examples/sony-a7r3.jpg` 200。
