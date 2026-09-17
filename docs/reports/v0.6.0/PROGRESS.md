@@ -4,7 +4,7 @@
 
 ## M0 — 前置校验 ✅ (2026-09-16)
 
-- 三张原图就位于 `D:\DSH\incoming\`（gitignored，不入仓）：
+- 三张原图就位于 `D:\FrameGeist\incoming\`（gitignored，不入仓）：
   | id | file | 机型 | 镜头 | 参数 | 尺寸/方向 |
   |---|---|---|---|---|---|
   | sony-a7r3 | DSC09556.jpg | SONY ILCE-7RM3 | Viltrox AF 35/1.2 LAB FE | 35mm f/4 1/250s ISO100 · 2026:05:02 15:13:35 | 5304×7952 竖 |

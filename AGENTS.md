@@ -1,5 +1,7 @@
 # AGENTS.md — FrameGeist 执行契约（每次会话开始必读）
 
+> 📂 **仓库位置：`D:\FrameGeist`**（2026-09-16 从 `D:\DSH` 迁入；历史遗留文件已隔离到 `D:\DSH-legacy`，与本项目无关）。所有命令默认在此目录执行。
+
 > 优先级：**PRD 红线 > 本文件 > 保守默认**。遇未预见决策自主推进并记入 PRD Discoveries，不打断用户。
 
 > ✅ **v0.6.1 已发布（2026-09-16）**：v0.6.0 因 `web/app.js` 编码损坏（PowerShell ANSI 往返，桌面端/网页端卡「引擎加载中」）已由 v0.6.1 修复；v0.6.0 Release 已标注「请勿使用」。报告：`docs/reports/v0.6.0/README.md`、进度 `PROGRESS.md`（含事故复盘）。
