@@ -8,6 +8,8 @@
 >
 > 🧭 **当前状态**：主干 `main` = v0.6.1（EXIF 真实化样片 + EXIF 直通导出 + ICC + AVIF/WebP + HEIC + SIMD/wasm-opt + 视觉回归；E2E 195/195）。
 >
+> 🚧 **下一步（已与用户 18 项 grill 确认）**：**`docs/V0.7.0-CONSTRAINTS.md`** —— 品牌徽标系统（官方字标/原创 lockup 可切换、镜头品牌与系列全量、可见性规则）+ 排版现代化（11 组 OFL 新字体、多字重静态实例、DESIGN-LANGUAGE v2、192 套分类化重排）+ UI 与墙/灯箱重做 + v0.7.0 一口气发布。等用户说「开始 v0.7.0」后按该契约执行。
+>
 > 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.6.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；push 代理不可用时加 `-c http.https://github.com/.proxy=`。
 
 ## 项目一句话
