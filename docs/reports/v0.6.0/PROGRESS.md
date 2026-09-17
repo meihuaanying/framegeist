@@ -61,3 +61,15 @@
 - 发布执行：commit `6ea2577` → push `main` → tag `v0.6.0` → CI **success**（main + tag）、release **success**、pages **success**。
 - Release `v0.6.0` 六资产：`framegeist-cli-v0.6.0-win-x64.zip`、`framegeist-desktop-v0.6.0-win-x64.zip`、`framegeist-templates-v0.6.0.fgpkg`、`FrameGeist-v0.6.0-win-x64-setup.exe`、`SHA256SUMS.txt`、`update.json`。
 - Pages 验证：首页 200、`download.html` 200、新增示例照片 `web/examples/sony-a7r3.jpg` 200。
+
+## v0.6.1 补丁 — 桌面端/线上 `app.js` 编码损坏修复 (2026-09-16)
+
+**现象**：桌面端与 PWA 永久停在「引擎加载中」。
+
+**根因**：v0.6.0 收尾时用 `powershell (Get-Content -Raw) -replace ... | Set-Content` 改写 `web/app.js`——Windows PowerShell 5.1 在无 BOM 时按系统 ANSI（CP936）读写，导致全部非 ASCII 字符被重编码、且部分多字节字符吞掉了后续 ASCII 引号；第 131 行主题 emoji 处产生 `SyntaxError: Unexpected identifier 'light'`，模块加载失败，引擎永不初始化。事故已随 v0.6.0 提交并进入 Release 资产与 Pages。
+
+**修复**：字节级定位 12 处受损行（对父版本 `9daff9e` 逐行比对恢复 + 1 处新注释重建），文件统一回 UTF-8/LF；全仓 733 个文本文件 UTF-8 完整性扫描 0 异常。桌面端重建后 `status=就绪、engine=true`；E2E 195/195。
+
+**防复发**：禁止用 PowerShell `Set-Content/Out-File` 改写含非 ASCII 的仓库文件（统一走 Edit 工具或 Node 脚本）；发布前新增 UTF-8 完整性扫描（见下）。
+
+**发布**：v0.6.1 补丁（版本号 Cargo/tauri.conf/app.js/sw.js 统一 0.6.1）；v0.6.0 资产保留并标注警告。

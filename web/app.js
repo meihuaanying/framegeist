@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.6.0";
+const APP_VERSION = "0.6.1";
 
 /* ------------------------------------------------------------------ state */
 
@@ -128,7 +128,7 @@ function applyTheme() {
   const dark = mode === "dark" || (mode === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
   document.documentElement.dataset.theme = dark ? "dark" : "light";
   const btn = $("themeBtn");
-  btn.textContent = mode === "auto" ? "�? : mode === "light" ? "☀" : "�?;
+  btn.textContent = mode === "auto" ? "◐" : mode === "light" ? "☀" : "☾";
   btn.title = t(`theme.${mode}`);
 }
 function cycleTheme() {
@@ -474,7 +474,7 @@ function buildTemplatePicker() {
       : `<div style="display:grid;place-items:center;height:100%;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)));font-family:var(--font-display)">${escapeHtml(tplName(tpl).slice(0, 14))}</div>`) +
       (isUser ? `<span class="badge">${t("chip.mine")}</span>` : "") +
       `<span class="tname">${escapeHtml(tplName(tpl))}</span>` +
-      `<button class="zoom">�?/button>`;
+      `<button class="zoom">⤢</button>`;
     cell.onclick = (e) => {
       if (e.target.classList.contains("zoom")) { e.stopPropagation(); openLightbox(tpl.id); return; }
       if (state.photos.length) selectTemplate(tpl.id);
@@ -488,7 +488,7 @@ function buildTemplatePicker() {
 function updatePinned() {
   const tpl = state.templates.find((x) => x.id === state.templateId)
     || state.userTemplates.find((x) => x.id === state.templateId);
-  $("pinnedName").textContent = tpl ? tplName(tpl) : "�?;
+  $("pinnedName").textContent = tpl ? tplName(tpl) : "—";
   const cat = tpl?.category ?? "";
   $("pinnedCat").textContent = tpl
     ? (t(`cat.${cat}`) !== `cat.${cat}` ? t(`cat.${cat}`) : cat || "user")
@@ -607,7 +607,7 @@ function buildWall() {
       ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
       : `<div style="display:grid;place-items:center;aspect-ratio:3/2;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)))">${escapeHtml(tplName(tpl).slice(0, 16))}</div>`) +
       `<div class="wall-name"><b>${escapeHtml(tplName(tpl))}</b><span class="wall-cat"></span></div>` +
-      `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">�?/button></div>`;
+      `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">⤢</button></div>`;
     cell.querySelector(".wall-cat").textContent = catLabel;
     cell.onclick = (e) => {
       if (e.target.classList.contains("icon")) { e.stopPropagation(); openLightbox(tpl.id); return; }
@@ -865,7 +865,7 @@ function setStage(url, label) {
 
 /* -------------------------------------------------------------- exif panel */
 /* Fuji recipe keys exposed by the engine `exif.get()` (v0.5.0 M2). Rows are
-   only emitted for values that are actually present �?never fabricated. */
+   only emitted for values that are actually present — never fabricated. */
 const FUJI_KEYS = [
   ["film_mode", "exif.fuji.film_mode"],
   ["wb_mode", "exif.fuji.wb_mode"],
@@ -917,7 +917,7 @@ function showExif() {
     const dt = document.createElement("dt");
     dt.textContent = t(key);
     const dd = document.createElement("dd");
-    if (val === null || val === undefined || val === "") { dd.textContent = "�?; dd.className = "none"; }
+    if (val === null || val === undefined || val === "") { dd.textContent = "—"; dd.className = "none"; }
     else dd.textContent = String(val);
     dl.appendChild(dt); dl.appendChild(dd);
   }
@@ -993,9 +993,9 @@ function buildLineEditor() {
         b.onclick = fn;
         row.appendChild(b);
       };
-      mk("�?, () => moveLine(edits, layer.id, items, idx, -1));
-      mk("�?, () => moveLine(edits, layer.id, items, idx, +1));
-      mk("�?, () => {
+      mk("↑", () => moveLine(edits, layer.id, items, idx, -1));
+      mk("↓", () => moveLine(edits, layer.id, items, idx, +1));
+      mk("✕", () => {
         const newItems = items.filter((_, i) => i !== idx);
         setLayerEdits(state.templateId, { ...edits, [layer.id]: newItems });
         buildLineEditor(); renderNow();
@@ -1006,7 +1006,7 @@ function buildLineEditor() {
     add.className = "mini"; add.style.width = "auto"; add.style.padding = "0 8px";
     add.textContent = t("exifEdit.add");
     add.onclick = () => {
-      const newItems = [...items, { expr: "'新文�?", fallback: null }];
+      const newItems = [...items, { expr: "'新文字'", fallback: null }];
       setLayerEdits(state.templateId, { ...edits, [layer.id]: newItems });
       buildLineEditor(); renderNow();
     };
@@ -1085,7 +1085,7 @@ async function ensureFont(family) {
 }
 
 /* ------------------------------------------------------ font warmup (v0.6.0) */
-/* Contract Q10 「引擎字体离线预缓存�? after boot (first paint done) fetch the
+/* Contract Q10 「引擎字体离线预缓存」 after boot (first paint done) fetch the
    engine fonts that are not loaded yet, ONE AT A TIME, so the Service Worker
    fetch handler caches every successful GET for offline use. Deliberately NOT
    part of the SW install-time PRECACHE (~15MB would slow first paint). The
@@ -1144,7 +1144,7 @@ function renderOverridesJson() { return buildOverridesJson(); }
 
 const builtinAssetCache = new Set();
 /// Fetch and register built-in image assets (@builtin/<kind>/<slug>[-light].png)
-/// on demand �?the WASM engine has no filesystem (v0.3.0 T-A fix).
+/// on demand — the WASM engine has no filesystem (v0.3.0 T-A fix).
 async function ensureBuiltinAssets(templateJson) {
   const wanted = new Set();
   for (const m of String(templateJson).matchAll(/@builtin\/([a-z]+)\/([a-z0-9-]+)/g)) {
