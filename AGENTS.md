@@ -2,9 +2,11 @@
 
 > 优先级：**PRD 红线 > 本文件 > 保守默认**。遇未预见决策自主推进并记入 PRD Discoveries，不打断用户。
 
-> ✅ **v0.6.0 已发布（2026-09-16）**：契约 `docs/V0.6.0-CONSTRAINTS.md` 已全部执行完毕。报告：`docs/reports/v0.6.0/README.md`、进度 `PROGRESS.md`（M0–M5）。
+> ✅ **v0.6.1 已发布（2026-09-16）**：v0.6.0 因 `web/app.js` 编码损坏（PowerShell ANSI 往返，桌面端/网页端卡「引擎加载中」）已由 v0.6.1 修复；v0.6.0 Release 已标注「请勿使用」。报告：`docs/reports/v0.6.0/README.md`、进度 `PROGRESS.md`（含事故复盘）。
 >
-> 🧭 **当前状态**：主干 `main` = v0.6.0（EXIF 真实化样片 + EXIF 直通导出 + ICC + AVIF/WebP + HEIC + SIMD/wasm-opt + 视觉回归门禁；E2E 195/195）。
+> ⚠️ **铁律**：禁止用 PowerShell `Set-Content/Out-File/Get-Content|Set-Content` 改写含非 ASCII 的仓库文件（会用 ANSI 编码破坏 UTF-8 并吞引号）；统一用 Edit 工具或 Node 脚本。**发布前必须跑 `node tools/check-utf8.mjs`**。
+>
+> 🧭 **当前状态**：主干 `main` = v0.6.1（EXIF 真实化样片 + EXIF 直通导出 + ICC + AVIF/WebP + HEIC + SIMD/wasm-opt + 视觉回归；E2E 195/195）。
 >
 > 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.6.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；push 代理不可用时加 `-c http.https://github.com/.proxy=`。
 
