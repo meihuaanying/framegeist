@@ -6,8 +6,8 @@
       "zh": "相机界面卡",
       "en": "Camera UI"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -59,10 +59,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -85,12 +86,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -127,10 +129,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.03,
       "content": [
@@ -153,10 +156,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
-        "size": 0.0085,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "content": [
@@ -176,12 +180,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('F{aperture}', exif)",
@@ -199,10 +204,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
-        "size": 0.0085,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "content": [
@@ -222,12 +228,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('ISO{iso}', exif)",
@@ -245,10 +252,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
-        "size": 0.0085,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "content": [
@@ -268,12 +276,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}MM', exif)",
@@ -291,10 +300,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
-        "size": 0.0085,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "content": [

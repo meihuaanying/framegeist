@@ -1,7 +1,7 @@
 // v0.6.0 reproducible WASM pipeline: cargo build (+simd128 via .cargo/config)
 // -> wasm-bindgen -> wasm-opt (-O2) -> wasm-smoke cross-end gate.
 // Usage: node tools/wasm-build.mjs [--no-opt]
-import { execFileSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import { existsSync, renameSync, rmSync, statSync } from "node:fs";
 import { join } from "node:path";
 
@@ -16,7 +16,7 @@ const wasm = join(ROOT, "web/pkg/framegeist_wasm_bg.wasm");
 if (!NO_OPT) {
   const tmp = join(ROOT, "web/pkg/framegeist_wasm_bg.opt.wasm");
   try {
-    run("npx", ["--yes", "--package=binaryen", "--", "wasm-opt", "-O2", "--enable-simd", "--enable-bulk-memory", "-o", tmp, wasm]);
+    execSync(`npx --yes --package=binaryen -- wasm-opt -O2 --enable-simd --enable-bulk-memory -o "${tmp}" "${wasm}"`, { cwd: ROOT, stdio: "inherit", shell: true });
     const before = statSync(wasm).size;
     const after = statSync(tmp).size;
     renameSync(tmp, wasm);

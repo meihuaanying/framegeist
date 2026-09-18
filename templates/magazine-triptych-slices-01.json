@@ -6,8 +6,8 @@
       "zh": "三联切片",
       "en": "Triptych Slices"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -58,10 +58,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#FFFFFF"
+        "color": "#FFFFFF",
+        "weight": 500
       },
       "letterSpacing": 0.45,
       "lineHeight": 1.9,
@@ -91,9 +92,10 @@
           "Inter"
         ],
         "size": 0.016,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -114,12 +116,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -138,12 +141,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -154,6 +158,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

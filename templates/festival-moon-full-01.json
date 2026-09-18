@@ -6,8 +6,8 @@
       "zh": "中秋月满",
       "en": "Full Moon"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "festival"
@@ -39,7 +39,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#9C8A68"
+        "color": "#9C8A68",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -47,6 +48,9 @@
           "expr": "'MID-AUTUMN · 2026'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -89,12 +93,13 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "LXGW WenKai"
         ],
         "size": 0.065,
-        "color": "#E8C66A"
+        "color": "#E8C66A",
+        "weight": 600
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.02,
       "align": "center",
       "content": [
         {
@@ -113,10 +118,11 @@
       },
       "font": {
         "family": [
-          "Noto Serif SC"
+          "LXGW WenKai"
         ],
         "size": 0.014,
-        "color": "#D9C9A8"
+        "color": "#D9C9A8",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "align": "center",
@@ -140,9 +146,10 @@
           "Inter"
         ],
         "size": 0.0115,
-        "color": "#B9A88A"
+        "color": "#B9A88A",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -163,12 +170,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#9C8A68"
+        "color": "#9C8A68",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

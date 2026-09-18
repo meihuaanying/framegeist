@@ -6,8 +6,8 @@
       "zh": "侧栏竖标",
       "en": "Side Rail"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -36,10 +36,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -75,12 +76,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "rotation": 90,
       "align": "left",
       "content": [
@@ -103,12 +105,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.0105,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "rotation": 90,
       "align": "left",
       "content": [
@@ -128,12 +131,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "rotation": 90,
       "align": "left",
       "content": [

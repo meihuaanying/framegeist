@@ -6,8 +6,8 @@
       "zh": "四角逐格",
       "en": "Quad Anchors"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "borderless"
@@ -43,7 +43,8 @@
           "Inter"
         ],
         "size": 0.015,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "opacity": 0.9,
@@ -67,12 +68,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0125,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "lineHeight": 1.6,
       "opacity": 0.85,
       "align": "right",
@@ -108,10 +110,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "opacity": 0.8,
@@ -135,12 +138,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.16,
+      "letterSpacing": 0,
       "opacity": 0.9,
       "align": "right",
       "content": [

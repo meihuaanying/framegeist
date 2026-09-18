@@ -6,8 +6,8 @@
       "zh": "上下细带",
       "en": "Letterbox"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
@@ -39,7 +39,8 @@
           "Inter"
         ],
         "size": 0.013,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "center",
@@ -63,12 +64,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -76,6 +78,20 @@
           "fallback": null
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-right",
+      "corner": "bottom-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

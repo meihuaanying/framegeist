@@ -6,8 +6,8 @@
       "zh": "木刻活字",
       "en": "Woodtype Press"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -70,10 +70,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.02,
-        "color": "#6B5540"
+        "color": "#6B5540",
+        "weight": 500
       },
       "letterSpacing": 0.3,
       "align": "center",
@@ -97,10 +98,10 @@
       },
       "font": {
         "family": [
-          "Playfair Display"
+          "Fraunces"
         ],
         "size": 0.068,
-        "weight": 900,
+        "weight": 600,
         "color": "#241C12"
       },
       "letterSpacing": 0.18,
@@ -147,10 +148,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#4A3D2E"
+        "color": "#4A3D2E",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "effects": {
@@ -176,10 +178,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#4A3D2E"
+        "color": "#4A3D2E",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -192,6 +195,20 @@
           "fallback": "Ink on Cream · Proof"
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-right",
+      "corner": "bottom-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

@@ -6,8 +6,8 @@
       "zh": "配方暗板",
       "en": "Recipe Panel"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -79,10 +79,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -90,6 +91,9 @@
           "expr": "'RECIPE CARD C1'",
           "fallback": "RECIPE"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -102,10 +106,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#C9C5BC"
+        "color": "#C9C5BC",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "align": "right",
@@ -129,10 +134,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#F2EFE9"
+        "color": "#F2EFE9",
+        "weight": 500
       },
       "letterSpacing": 0.05,
       "content": [
@@ -152,10 +158,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -175,10 +182,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#F2EFE9"
+        "color": "#F2EFE9",
+        "weight": 500
       },
       "letterSpacing": 0.05,
       "content": [
@@ -198,10 +206,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -221,10 +230,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#F2EFE9"
+        "color": "#F2EFE9",
+        "weight": 500
       },
       "letterSpacing": 0.05,
       "content": [
@@ -244,10 +254,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -267,10 +278,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#F2EFE9"
+        "color": "#F2EFE9",
+        "weight": 500
       },
       "letterSpacing": 0.05,
       "content": [
@@ -290,10 +302,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -313,10 +326,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#A9A6A0"
+        "color": "#A9A6A0",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -324,6 +338,9 @@
           "expr": "'HIGHLIGHT 0 · SHADOW +1 · COLOR +1 · SHARPNESS -1'",
           "fallback": "HIGHLIGHT 0 · SHADOW +1"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -336,18 +353,22 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.02,
-        "color": "#F2EFE9"
+        "color": "#F2EFE9",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
           "expr": "fmt('ISO {iso}', exif)",
           "fallback": "ISO 200"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -375,12 +396,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)",
@@ -398,12 +420,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8E8B84"
+        "color": "#8E8B84",
+        "weight": 500
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

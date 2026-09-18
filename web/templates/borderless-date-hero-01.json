@@ -6,8 +6,8 @@
       "zh": "日期主角",
       "en": "Date Hero"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "borderless"
@@ -43,7 +43,8 @@
           "Inter"
         ],
         "size": 0.015,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "opacity": 0.85,
@@ -67,10 +68,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "opacity": 0.78,
@@ -91,10 +93,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Inter"
         ],
         "size": 0.095,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
       "letterSpacing": 0.015,
       "opacity": 0.9,

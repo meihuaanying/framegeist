@@ -1025,10 +1025,12 @@ await ev(`(async () => {
     const bmp = await createImageBitmap(new Blob([out], { type: "image/jpeg" }));
     return [bmp.width, bmp.height];
   })()`);
+  const dimsOk = Array.isArray(dims) && typeof dims[0] === "number" && typeof dims[1] === "number";
+  const fullOk = Array.isArray(full) && typeof full[0] === "number" && typeof full[1] === "number";
   check(
     "engine: crop override scales output",
-    dims[0] < full[0] * 0.6 && dims[1] < full[1] * 0.6,
-    `${dims.join("x")} vs ${full.join("x")}`,
+    dimsOk && fullOk && dims[0] < full[0] * 0.6 && dims[1] < full[1] * 0.6,
+    `${JSON.stringify(dims)} vs ${JSON.stringify(full)}`,
   );
 }
 
@@ -2235,6 +2237,177 @@ let EXIF_TEXT_ID = null;
     const p = document.getElementById("preview"); p.checked = true; p.dispatchEvent(new Event("change"));
   })()`);
   await waitLabel(60000);
+}
+
+/* 73. v0.7.0: multi-weight fonts + glyph family coverage */
+{
+  const fonts = await ev(`(async () => {
+    const meta = await (await fetch("./fonts/engine/fonts.json")).json();
+    const fams = {};
+    for (const f of meta.fonts) fams[f.family] = [...(fams[f.family] ?? []), f.weight];
+    return {
+      total: meta.fonts.length,
+      families: Object.keys(fams).length,
+      inter: fams["Inter"] ?? null,
+      unbounded: fams["Unbounded"] ?? null,
+      fraunces: fams["Fraunces"] ?? null,
+      cjkLazy: meta.fonts.filter((f) => f.lazy).length,
+      cjkFamilies: [...new Set(meta.fonts.filter((f) => f.lazy).map((f) => f.family))],
+      engineFamilies: window.__fg.state.engine.font_families(),
+    };
+  })()`);
+  check("v0.7 fonts: manifest has 60+ faces / 20+ families", fonts?.total >= 60 && fonts.families >= 20, JSON.stringify({ total: fonts?.total, families: fonts?.families }));
+  check("v0.7 fonts: Inter ships 400/500/600/700", JSON.stringify(fonts?.inter) === "[400,500,600,700]", JSON.stringify(fonts?.inter));
+  check("v0.7 fonts: new Latin families present (Unbounded/Fraunces)", JSON.stringify(fonts?.unbounded) === "[400,500,600,700]" && JSON.stringify(fonts?.fraunces) === "[400,500,600,700]", JSON.stringify({ u: fonts?.unbounded, f: fonts?.fraunces }));
+  check("v0.7 fonts: CJK faces are lazy (no first-screen preload)", fonts?.cjkLazy >= 10 && fonts.cjkFamilies.length >= 6, JSON.stringify(fonts?.cjkFamilies));
+  check("v0.7 fonts: engine has Inter + JetBrains Mono registered", (fonts?.engineFamilies ?? []).includes("inter") && (fonts?.engineFamilies ?? []).includes("jetbrainsmono"), JSON.stringify(fonts?.engineFamilies));
+}
+
+/* 74. v0.7.0: real font.weight selection changes pixels */
+{
+  const r = await ev(`(() => {
+    const st = window.__fg.state;
+    const mk = (w) => JSON.stringify({
+      meta: { id: "e2e-weight", name: "Weight", version: "1.1.0", minEngineVersion: "0.7.0", author: "FrameGeist", license: "CC0-1.0", category: "minimal" },
+      canvas: { mode: "overlay" },
+      layers: [{ type: "text", id: "t", anchor: "middle-center", font: { family: ["Inter"], size: 0.12, weight: w, color: "#111111" }, content: [{ expr: "fmt('FrameGeist 2026', exif)", fallback: "FrameGeist 2026" }] }],
+    });
+    const sum = (b) => { let s = 0; for (let i = 0; i < b.length; i += 7) s += b[i]; return s; };
+    const a = new Uint8Array(st.engine.render_with_overrides(st.photos[0].bytes, mk(400), "jpeg", false, "", 256, false));
+    const b = new Uint8Array(st.engine.render_with_overrides(st.photos[0].bytes, mk(600), "jpeg", false, "", 256, false));
+    return { a: a.length, b: b.length, sa: sum(a), sb: sum(b) };
+  })()`);
+  check("v0.7 fonts: weight 400 vs 600 renders different pixels", !!r && (r.a !== r.b || r.sa !== r.sb), JSON.stringify(r));
+}
+
+/* 75. v0.7.0: badge style switch + panel controls reach the engine overrides */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const fg = window.__fg;
+    await fg.useTemplate("white-border-centered-lockup");
+    await sleep(1200);
+    const official = fg.effectiveTemplateJson();
+    const hasBrand = official.includes("@builtin/brand/");
+    const style = document.getElementById("brandStyle");
+    style.value = "original"; style.dispatchEvent(new Event("change"));
+    await sleep(300);
+    const original = fg.effectiveTemplateJson();
+    const hasLockup = original.includes("@builtin/lockup/");
+    const ov1 = fg.loadOverrides("white-border-centered-lockup") ?? {};
+    const pos = document.getElementById("brandPos"); pos.value = "top-left"; pos.dispatchEvent(new Event("change"));
+    const size = document.getElementById("brandSize"); size.value = "1.35"; size.dispatchEvent(new Event("change"));
+    const contrast = document.getElementById("brandContrast"); contrast.value = "stroke"; contrast.dispatchEvent(new Event("change"));
+    const op = document.getElementById("brandOpacity"); op.value = "0.7"; op.dispatchEvent(new Event("input"));
+    await sleep(1200);
+    const oj = JSON.parse(fg.buildOverridesJson() || "{}");
+    // restore
+    style.value = "official"; style.dispatchEvent(new Event("change"));
+    pos.value = "anchor"; pos.dispatchEvent(new Event("change"));
+    size.value = "1"; size.dispatchEvent(new Event("change"));
+    contrast.value = "auto"; contrast.dispatchEvent(new Event("change"));
+    op.value = "1"; op.dispatchEvent(new Event("input"));
+    await sleep(600);
+    return { hasBrand, hasLockup, ov1: { style: ov1.brandStyle }, oj };
+  })()`);
+  check("v0.7 badge: official style template references @builtin/brand", r?.hasBrand === true, JSON.stringify(r?.hasBrand));
+  check("v0.7 badge: original style rewrites asset to @builtin/lockup", r?.hasLockup === true, JSON.stringify(r?.hasLockup));
+  check("v0.7 badge: style persists per template", r?.ov1?.style === "original", JSON.stringify(r?.ov1));
+  check(
+    "v0.7 badge: position/size/contrast/opacity reach overrides",
+    r?.oj?.brandPosition === "top-left" && r?.oj?.brandScale === 1.35 && r?.oj?.brandContrast === "stroke" && r?.oj?.brandOpacity === 0.7,
+    JSON.stringify({ p: r?.oj?.brandPosition, s: r?.oj?.brandScale, c: r?.oj?.brandContrast, o: r?.oj?.brandOpacity }),
+  );
+}
+
+/* 76. v0.7.0: badge visibility floor + badgeless template keeps rendering */
+{
+  const r = await ev(`(async () => {
+    const st = window.__fg.state;
+    for (const [name, file] of [["@builtin/brand/sony", "./brand/sony.png"], ["@builtin/brand/sony-light", "./brand/sony-light.png"]]) {
+      const res = await fetch(file);
+      if (res.ok) st.engine.register_asset(name, new Uint8Array(await res.arrayBuffer()));
+    }
+    const mk = (h) => JSON.stringify({
+      meta: { id: "e2e-badge", name: "Badge", version: "1.1.0", minEngineVersion: "0.7.0", author: "FrameGeist", license: "CC0-1.0", category: "minimal" },
+      canvas: { mode: "overlay" },
+      layers: [
+        { type: "image", id: "b", anchor: "middle-center", asset: "@builtin/brand/sony", size: { height: h }, tint: "auto", contrast: "auto" },
+      ],
+    });
+    const sum = (b) => { let s = 0; for (let i = 0; i < b.length; i += 11) s += b[i]; return s; };
+    const render = (h) => new Uint8Array(st.engine.render_with_overrides(st.photos[0].bytes, mk(h), "jpeg", false, "", 256, false));
+    const t1 = render(0.001);
+    const t2 = render(0.005);
+    const big = render(0.2);
+    return { a: t1.length, b: t2.length, c: big.length, sa: sum(t1), sb: sum(t2), sc: sum(big) };
+  })()`);
+  check("v0.7 badge: badge layer renders on the real brand asset", !!r && r.a > 0 && r.c > 0, JSON.stringify(r));
+  check(
+    "v0.7 badge: size floor clamps 0.001 and 0.005 to the same 18px minimum",
+    !!r && r.sa === r.sb && r.a === r.b,
+    JSON.stringify({ sa: r?.sa, sb: r?.sb }),
+  );
+  check(
+    "v0.7 badge: declared 0.2 renders larger than the clamped minimum",
+    !!r && (r.sc !== r.sa || r.c !== r.a),
+    JSON.stringify({ sa: r?.sa, sc: r?.sc }),
+  );
+}
+
+/* 77. v0.7.0: templates are re-typeset (v2) and Inter tabular EXIF rows */
+{
+  const r = await ev(`(async () => {
+    const manifest = await (await fetch("./templates.json")).json();
+    const tpl = await (await fetch("./templates/festival-gold-frame-01.json")).json();
+    const flat = (list, out = []) => { for (const l of list ?? []) { out.push(l); if (l.type === "group") flat(l.children, out); } return out; };
+    const layers = flat(tpl.layers);
+    const dataLayers = layers.filter((l) => l.type === "text" && JSON.stringify(l.content ?? []).includes("exif."));
+    const tnum = dataLayers.filter((l) => (l.features ?? []).includes("tnum"));
+    const weights = new Set(layers.filter((l) => l.type === "text").map((l) => l.font?.weight));
+    return {
+      total: manifest.length,
+      minEngine: tpl.meta.minEngineVersion,
+      version: tpl.meta.version,
+      families: [...new Set(layers.filter((l) => l.type === "text").flatMap((l) => l.font?.family ?? []))],
+      data: dataLayers.length,
+      tnum: tnum.length,
+      weights: [...weights].filter(Boolean),
+    };
+  })()`);
+  check("v0.7 typography: manifest keeps 192 templates", r?.total === 192, String(r?.total));
+  check("v0.7 typography: template upgraded to 1.1.0 / engine 0.7.0", r?.version === "1.1.0" && r?.minEngine === "0.7.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
+  check("v0.7 typography: CJK display template uses Noto/LXGW family", (r?.families ?? []).some((f) => f === "Noto Serif SC" || f === "LXGW WenKai"), JSON.stringify(r?.families));
+  check("v0.7 typography: EXIF data rows enable tnum", r?.data > 0 && r?.tnum === r?.data, JSON.stringify({ data: r?.data, tnum: r?.tnum }));
+  check("v0.7 typography: weight hierarchy present (500 + display 600/700)", (r?.weights ?? []).includes(500) && ((r?.weights ?? []).includes(600) || (r?.weights ?? []).includes(700)), JSON.stringify(r?.weights));
+}
+
+/* 78. v0.7.0: wall / lightbox brand elements + modern UI metrics */
+{
+  const ui = await ev(`(async () => {
+    const body = getComputedStyle(document.body).fontSize;
+    const h2 = getComputedStyle(document.querySelector(".wall-head h2")).fontSize;
+    const grid = document.getElementById("wallBrandStrip");
+    const wallImgs = grid ? grid.querySelectorAll("img").length : -1;
+    const lightboxOpen = typeof window.__fg.showWall === "function";
+    return { body, h2, wallImgs, lightboxOpen, fontUi: document.fonts ? document.fonts.check('600 16px "Geist UI"') : null };
+  })()`);
+  check("v0.7 ui: body font size is 16px", ui?.body === "16px", String(ui?.body));
+  check("v0.7 ui: wall title uses the fluid clamp scale (>=27px)", parseFloat(ui?.h2) >= 27, String(ui?.h2));
+  check("v0.7 ui: wall brand strip shows brand marks", ui?.wallImgs >= 6, String(ui?.wallImgs));
+  check("v0.7 ui: Geist UI variable font available", ui?.fontUi === true, String(ui?.fontUi));
+
+  const lb = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    window.__fg.openLightbox("white-border-centered-lockup");
+    await sleep(700);
+    const el = document.getElementById("lbBrand");
+    const n = el ? el.querySelectorAll("img").length : -1;
+    const src = el?.querySelector("img")?.src ?? "";
+    window.__fg.closeLightbox();
+    return { n, src };
+  })()`);
+  check("v0.7 ui: lightbox brand strip contains marks", (lb?.n ?? 0) >= 1 && /brand\//.test(lb?.src ?? ""), JSON.stringify(lb));
 }
 
 clearTimeout(WATCHDOG);

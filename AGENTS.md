@@ -8,11 +8,13 @@
 >
 > ⚠️ **铁律**：禁止用 PowerShell `Set-Content/Out-File/Get-Content|Set-Content` 改写含非 ASCII 的仓库文件（会用 ANSI 编码破坏 UTF-8 并吞引号）；统一用 Edit 工具或 Node 脚本。**发布前必须跑 `node tools/check-utf8.mjs`**。
 >
-> 🧭 **当前状态**：主干 `main` = v0.6.1（EXIF 真实化样片 + EXIF 直通导出 + ICC + AVIF/WebP + HEIC + SIMD/wasm-opt + 视觉回归；E2E 195/195）。
+> 🧭 **当前状态**：主干 `main` = v0.7.0（品牌徽标系统 v2：官方/原创可切换 + 42 品牌/12 系列 + 可见性规则；排版现代化：11 组 OFL 新字体 + 静态多字重 + DESIGN-LANGUAGE v2 + 192 套分类化重排；UI/墙/灯箱现代化；E2E 218/218；wasm 5,058,173 B）。
 >
-> 🚧 **下一步（已与用户 18 项 grill 确认）**：**`docs/V0.7.0-CONSTRAINTS.md`** —— 品牌徽标系统（官方字标/原创 lockup 可切换、镜头品牌与系列全量、可见性规则）+ 排版现代化（11 组 OFL 新字体、多字重静态实例、DESIGN-LANGUAGE v2、192 套分类化重排）+ UI 与墙/灯箱重做 + v0.7.0 一口气发布。等用户说「开始 v0.7.0」后按该契约执行。
+> 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。
 >
-> 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.6.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；push 代理不可用时加 `-c http.https://github.com/.proxy=`。
+> 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.7.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；字形门禁 `node tools/check-glyph-coverage.mjs`；UI 对比度 `node tools/check-ui-contrast.mjs`；字体管线 `node tools/fetch-fonts.mjs --fetch`（SHA256 pin 在 `tools/font-pins.json`）；push 代理不可用时加 `-c http.https://github.com/.proxy=`。
+>
+> ⚠️ **v0.7.0 工程备注**：字体源（可变字体/发布包，~650MB）在 `templates/assets/fonts/source/`（gitignored、**不入分发**，M5 打包需排除）；模板重排脚本 `tools/apply-v070-typography.mjs`（幂等，`--force` 可重放）；对比图工具 `tools/make-compare-sheets.mjs`（before 快照在 `.cache/v061-samples/`）。
 
 ## 项目一句话
 

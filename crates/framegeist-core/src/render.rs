@@ -2229,8 +2229,166 @@ fn draw_palette_layer(
     }
 }
 
+/// v0.7.0: built-in badge asset paths that obey the visibility and contrast
+/// rules (size floor, contrast protection, max width, fixed corners).
+pub(crate) fn is_badge_path(path: &str) -> bool {
+    path.starts_with("@builtin/brand/")
+        || path.starts_with("@builtin/lockup/")
+        || path.starts_with("@builtin/series/")
+        || path.starts_with("@builtin/lens/")
+}
+
+/// 10th percentile / median / 90th percentile luminance of the background
+/// under a badge (sampled, transparent = white).
+fn region_luminance_stats(img: &RgbaImage, x: i32, y: i32, w: u32, h: u32) -> (f32, f32, f32) {
+    let (iw, ih) = img.dimensions();
+    let x0 = x.max(0).min(iw as i32 - 1);
+    let y0 = y.max(0).min(ih as i32 - 1);
+    let x1 = (x + w as i32).max(0).min(iw as i32);
+    let y1 = (y + h as i32).max(0).min(ih as i32);
+    if x1 <= x0 || y1 <= y0 {
+        return (1.0, 1.0, 1.0);
+    }
+    let total = ((x1 - x0) as usize) * ((y1 - y0) as usize);
+    let step = (total / 4096).max(1);
+    let mut values: Vec<f32> = Vec::with_capacity(4097);
+    let mut i = 0usize;
+    for py in y0..y1 {
+        for px in x0..x1 {
+            if i.is_multiple_of(step) {
+                let p = img.get_pixel(px as u32, py as u32).0;
+                let a = p[3] as f32 / 255.0;
+                let r = p[0] as f32 * a + 255.0 * (1.0 - a);
+                let g = p[1] as f32 * a + 255.0 * (1.0 - a);
+                let b = p[2] as f32 * a + 255.0 * (1.0 - a);
+                values.push(srgb_luminance([r as u8, g as u8, b as u8]));
+            }
+            i += 1;
+        }
+    }
+    if values.is_empty() {
+        return (1.0, 1.0, 1.0);
+    }
+    values.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    let at = |q: f32| values[((values.len() - 1) as f32 * q).round() as usize];
+    (at(0.1), at(0.5), at(0.9))
+}
+
+/// Mean luminance of the opaque pixels of a badge.
+fn ink_luminance(rgba: &RgbaImage) -> f32 {
+    let mut sum = 0f64;
+    let mut n = 0f64;
+    for p in rgba.pixels() {
+        if p[3] > 40 {
+            sum += srgb_luminance([p[0], p[1], p[2]]) as f64;
+            n += 1.0;
+        }
+    }
+    (sum / n.max(1.0)) as f32
+}
+
+/// Translucent rounded plate behind a badge (contrast protection).
+fn draw_badge_plate(
+    canvas: &mut RgbaImage,
+    ix: i32,
+    iy: i32,
+    tw: u32,
+    th: u32,
+    color: [u8; 3],
+    opacity: f32,
+) {
+    let pad = (th as f32 * 0.30).round().max(2.0);
+    let x0 = ix as f32 - pad;
+    let y0 = iy as f32 - pad;
+    let w = tw as f32 + pad * 2.0;
+    let h = th as f32 + pad * 2.0;
+    let radius = (h * 0.28).max(2.0);
+    for py in (y0.floor() as i32)..(y0 + h).ceil() as i32 {
+        for px in (x0.floor() as i32)..(x0 + w).ceil() as i32 {
+            if px < 0 || py < 0 || px >= canvas.width() as i32 || py >= canvas.height() as i32 {
+                continue;
+            }
+            let cov = rounded_rect_coverage(px as f32 + 0.5, py as f32 + 0.5, x0, y0, w, h, radius);
+            if cov <= 0.001 {
+                continue;
+            }
+            let a = cov * 0.55 * opacity;
+            let dst = canvas.get_pixel(px as u32, py as u32).0;
+            let inv = 1.0 - a;
+            let blended = [
+                (color[0] as f32 * a + dst[0] as f32 * inv) as u8,
+                (color[1] as f32 * a + dst[1] as f32 * inv) as u8,
+                (color[2] as f32 * a + dst[2] as f32 * inv) as u8,
+                dst[3],
+            ];
+            canvas.put_pixel(px as u32, py as u32, Rgba(blended));
+        }
+    }
+}
+
+/// 1px-style outline around a badge silhouette (contrast protection on busy
+/// backgrounds), drawn before the badge itself.
+fn draw_badge_stroke(
+    canvas: &mut RgbaImage,
+    fitted: &RgbaImage,
+    ix: i32,
+    iy: i32,
+    color: [u8; 3],
+    opacity: f32,
+) {
+    let (tw, th) = fitted.dimensions();
+    let r = ((th as f32 / 28.0).round() as i32).max(1);
+    let mw = tw as i32 + 2 * r;
+    let mh = th as i32 + 2 * r;
+    let mut mask = vec![false; (mw * mh) as usize];
+    for (x, y, p) in fitted.enumerate_pixels() {
+        if p[3] < 40 {
+            continue;
+        }
+        for dy in -r..=r {
+            for dx in -r..=r {
+                if dx * dx + dy * dy > r * r {
+                    continue;
+                }
+                let mx = x as i32 + dx + r;
+                let my = y as i32 + dy + r;
+                if mx >= 0 && my >= 0 && mx < mw && my < mh {
+                    mask[(my * mw + mx) as usize] = true;
+                }
+            }
+        }
+    }
+    for my in 0..mh {
+        for mx in 0..mw {
+            if !mask[(my * mw + mx) as usize] {
+                continue;
+            }
+            let px = ix + mx - r;
+            let py = iy + my - r;
+            if px < 0 || py < 0 || px >= canvas.width() as i32 || py >= canvas.height() as i32 {
+                continue;
+            }
+            let a = 0.9 * opacity;
+            let dst = canvas.get_pixel(px as u32, py as u32).0;
+            let inv = 1.0 - a;
+            let blended = [
+                (color[0] as f32 * a + dst[0] as f32 * inv) as u8,
+                (color[1] as f32 * a + dst[1] as f32 * inv) as u8,
+                (color[2] as f32 * a + dst[2] as f32 * inv) as u8,
+                dst[3],
+            ];
+            canvas.put_pixel(px as u32, py as u32, Rgba(blended));
+        }
+    }
+}
+
 /// Draw an image layer (brand badge / user asset). Returns silently when the
 /// asset is missing (blank slot, no fake icon — v0.2.0 decision).
+///
+/// v0.7.0 adds the badge visibility rules (Q5): size floor, black/white
+/// contrast protection with optional stroke/plate, max width for long
+/// wordmarks, fixed-corner placement and opacity, all overridable from the
+/// editor brand panel.
 #[allow(clippy::question_mark)]
 fn draw_image_layer(
     canvas: &mut RgbaImage,
@@ -2240,12 +2398,9 @@ fn draw_image_layer(
     opts: &RenderOptions,
     text_layouts: &std::collections::HashMap<String, TextLayout>,
 ) {
-    if opts.overrides.as_ref().and_then(|o| o.show_logo) == Some(false) {
-        let is_brand =
-            layer.asset.starts_with("@builtin/brand/") || layer.asset.starts_with("@builtin/lens/");
-        if is_brand {
-            return;
-        }
+    let ov = opts.overrides.as_ref();
+    if ov.and_then(|o| o.show_logo) == Some(false) && is_badge_path(&layer.asset) {
+        return;
     }
     let Some(path) = crate::template::eval_asset_path(&layer.asset, info) else {
         return;
@@ -2261,21 +2416,61 @@ fn draw_image_layer(
     if iw == 0 || ih == 0 {
         return;
     }
+    let badge = is_badge_path(&path);
     let photo_h = geo.photo_h as f64;
-    let target_h = layer
+    let photo_w = geo.photo_w as f64;
+
+    // ---- size: template size, badge floor (≥3.5% photo h and ≥18px), max width
+    let base_h = layer
         .size
         .height
-        .map(|h| (h * photo_h).round().max(2.0))
+        .map(|h| h * photo_h)
         .or_else(|| {
             layer
                 .size
                 .width
-                .map(|w| (w * geo.photo_h as f64).round().max(2.0) * ih as f64 / iw as f64)
-        });
-    let scale = target_h.unwrap_or(0.03 * photo_h) / ih as f64;
-    let tw = ((iw as f64) * scale).round().max(2.0) as u32;
-    let th = ((ih as f64) * scale).round().max(2.0) as u32;
+                .map(|w| w * photo_h * ih as f64 / iw as f64)
+        })
+        .unwrap_or(0.03 * photo_h)
+        .max(2.0);
+    let mut target_h = base_h;
+    let mut min_h = 2.0f64;
+    if badge {
+        let scale = ov.and_then(|o| o.brand_scale).unwrap_or(1.0);
+        min_h = (layer.min_height.unwrap_or(0.035) * photo_h).max(18.0);
+        target_h = (target_h * scale).max(min_h);
+    } else if let Some(mh) = layer.min_height {
+        min_h = mh * photo_h;
+        target_h = target_h.max(min_h);
+    }
+    let scale = target_h / ih as f64;
+    let mut tw = ((iw as f64) * scale).round().max(2.0) as u32;
+    let mut th = ((ih as f64) * scale).round().max(2.0) as u32;
+    if badge {
+        let max_w = layer.max_width.unwrap_or(0.32) * photo_w;
+        if tw as f64 > max_w {
+            let s = max_w / tw as f64;
+            tw = ((tw as f64 * s).round() as u32).max(2);
+            th = ((th as f64 * s).round() as u32).max(2);
+            if (th as f64) < min_h {
+                let up = min_h / th as f64;
+                th = min_h.round().max(2.0) as u32;
+                tw = ((tw as f64 * up).round() as u32).max(2);
+            }
+        }
+    }
 
+    // ---- placement: attachTo > corner (override or template) > anchor
+    let position_override = if badge {
+        ov.and_then(|o| o.brand_position.as_deref())
+    } else {
+        None
+    };
+    let corner = match position_override {
+        Some("anchor") => None,
+        Some(c) => Some(c.to_string()),
+        None => layer.corner.clone(),
+    };
     let (ix, iy) = if let Some(target_id) = &layer.attach_to {
         let Some(tl) = text_layouts.get(target_id) else {
             return;
@@ -2283,6 +2478,21 @@ fn draw_image_layer(
         let gap = (layer.attach_gap.unwrap_or(0.01) * photo_h) as f32;
         let x = tl.first_line_x - gap - tw as f32;
         let y = tl.first_line_y + (tl.first_line_h - th as f32) / 2.0;
+        (x.round() as i32, y.round() as i32)
+    } else if let Some(c) = corner.as_deref() {
+        let margin = (layer.margin.unwrap_or(0.04) * photo_h).round() as f32;
+        let w = geo.width as f32;
+        let h = geo.height as f32;
+        let x = if c.ends_with("right") {
+            w - margin - tw as f32
+        } else {
+            margin
+        };
+        let y = if c.starts_with("bottom") {
+            h - margin - th as f32
+        } else {
+            margin
+        };
         (x.round() as i32, y.round() as i32)
     } else {
         let w = geo.width as f32;
@@ -2322,27 +2532,103 @@ fn draw_image_layer(
         (x.round() as i32, y.round() as i32)
     };
 
-    // Built-in badges pick their black/white variant by local background
-    // luminance unless the template pins a tint (v0.3.0 autoTint).
+    // ---- contrast protection: pick the best black/white variant, then add a
+    // stroke or plate when the local background is too busy for 4.5:1.
     let mut rgba = rgba;
-    let explicit = layer.tint.as_deref();
-    let is_builtin = path.starts_with("@builtin/") && !path.ends_with("-light");
-    if is_builtin && explicit != Some("light") && explicit != Some("dark") {
-        let bg = region_luminance(canvas, ix, iy, tw, th);
-        let want_light = bg < 0.5;
-        if want_light {
-            let light_path = format!("{path}-light");
-            if let Some(lb) = resolve_asset_bytes(opts, &light_path) {
+    let mode = ov
+        .and_then(|o| o.brand_contrast.as_deref())
+        .or(layer.contrast.as_deref())
+        .unwrap_or("auto");
+    let mut need_stroke = mode == "stroke";
+    let mut need_plate = mode == "plate";
+    let mut chosen_light = path.ends_with("-light");
+    if badge {
+        let (p10, median, p90) = region_luminance_stats(canvas, ix, iy, tw, th);
+        let base_path = path.strip_suffix("-light").unwrap_or(&path).to_string();
+        let load_ink = |p: &str| {
+            resolve_asset_bytes(opts, p)
+                .and_then(|b| image::load_from_memory(&b).ok())
+                .map(|i| ink_luminance(&i.to_rgba8()))
+        };
+        let dark_ink = load_ink(&base_path).unwrap_or(0.02);
+        let light_ink = load_ink(&format!("{base_path}-light")).unwrap_or(0.98);
+        let score = |lum: f32| contrast_ratio(lum, p10).min(contrast_ratio(lum, p90));
+        let (dark_score, light_score) = (score(dark_ink), score(light_ink));
+        let tint_hint = ov
+            .and_then(|o| o.brand_contrast.as_deref())
+            .or(layer.tint.as_deref());
+        // Variant choice stays backward compatible with v0.3 autoTint: the
+        // `-light` face is picked when the local background is dark, judged by
+        // the sampled background (not by the asset colors).
+        let want_light = match mode {
+            "light" => true,
+            "dark" => false,
+            _ => match tint_hint {
+                Some("light") => true,
+                Some("dark") => false,
+                _ => (p10 + p90) / 2.0 < 0.5,
+            },
+        };
+        let best_score = if want_light { light_score } else { dark_score };
+        chosen_light = want_light;
+        if want_light && !path.ends_with("-light") {
+            if let Some(lb) = resolve_asset_bytes(opts, &format!("{path}-light")) {
                 if let Ok(li) = image::load_from_memory(&lb) {
                     rgba = li.to_rgba8();
+                }
+            }
+        } else if !want_light && path.ends_with("-light") {
+            if let Some(db) = resolve_asset_bytes(opts, &base_path) {
+                if let Ok(di) = image::load_from_memory(&db) {
+                    rgba = di.to_rgba8();
+                }
+            }
+        }
+        if best_score < 4.5 && mode == "auto" {
+            need_stroke = true;
+        }
+        if best_score < 4.5 || mode == "stroke" || mode == "plate" {
+            need_stroke = need_stroke || mode == "stroke";
+            need_plate = need_plate || (mode == "plate" && median > 0.05);
+        }
+    } else {
+        // Legacy v0.3.0 autoTint for other built-in assets (game wordmarks).
+        let explicit = layer.tint.as_deref();
+        let is_builtin = path.starts_with("@builtin/") && !path.ends_with("-light");
+        if is_builtin && explicit != Some("light") && explicit != Some("dark") {
+            let bg = region_luminance(canvas, ix, iy, tw, th);
+            if bg < 0.5 {
+                if let Some(lb) = resolve_asset_bytes(opts, &format!("{path}-light")) {
+                    if let Ok(li) = image::load_from_memory(&lb) {
+                        rgba = li.to_rgba8();
+                    }
                 }
             }
         }
     }
 
     let fitted = image::imageops::resize(&rgba, tw, th, image::imageops::FilterType::Lanczos3);
+    let opacity = if badge {
+        ov.and_then(|o| o.brand_opacity).unwrap_or(layer.opacity)
+    } else {
+        layer.opacity
+    }
+    .clamp(0.0, 1.0) as f32;
 
-    let opacity = layer.opacity.clamp(0.0, 1.0) as f32;
+    // Stroke/plate take the opposite of the badge ink so the mark stays
+    // visible even on the half of a busy background that matches it.
+    let guard_color = if chosen_light {
+        [17u8, 17, 17]
+    } else {
+        [255u8, 255, 255]
+    };
+    if need_plate {
+        draw_badge_plate(canvas, ix, iy, tw, th, guard_color, opacity);
+    }
+    if need_stroke {
+        draw_badge_stroke(canvas, &fitted, ix, iy, guard_color, opacity);
+    }
+
     for (x, y, p) in fitted.enumerate_pixels() {
         let dx = ix + x as i32;
         let dy = iy + y as i32;

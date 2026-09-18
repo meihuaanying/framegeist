@@ -24,3 +24,9 @@ debug.log
 
 # v0.6.0 EXIF sample originals (user-provided, not for redistribution until processed)
 /incoming/
+
+# v0.7.0 font sources (large upstream downloads; rebuilt by tools/fetch-fonts.mjs)
+/templates/assets/fonts/source/
+
+# Python bytecode caches
+__pycache__/

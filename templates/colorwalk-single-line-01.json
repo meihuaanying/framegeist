@@ -6,8 +6,8 @@
       "zh": "单行漫步",
       "en": "One Line Walk"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorwalk"
@@ -65,12 +65,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.014,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.32,
+      "letterSpacing": 0,
       "opacity": 0.92,
       "align": "center",
       "content": [
@@ -82,6 +83,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

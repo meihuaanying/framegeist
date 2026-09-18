@@ -82,10 +82,24 @@
 
 ### 4.2 `font`
 
-- `size`：相对**照片高度**的比例 `(0, 0.5]`
-- `family`：回退链（D4），按**字体目录内文件名**解析：`JetBrainsMono-Regular.ttf` → `jetbrainsmono`（小写、去空格/下划线、去 `-权重` 后缀）
+- `size`：相对**照片高度**的比例 `(0, 0.5]`；DESIGN-LANGUAGE v2 要求 ≥0.0095（900px 样张 ≥8.5px）
+- `family`：回退链（D4），按**字体目录内文件名**解析：`JetBrainsMono-600.ttf` → `jetbrainsmono`（小写、去空格/下划线、去 `-字重` 后缀）
 - `color`：`#RRGGBB[A]`，或 `"auto"`（按文字区域背景亮度自动选黑/白）
-- `weight`：100–900；v0.5 起经 cosmic-text 选择对应字重/可变轴字面，无匹配时回退最近字面（v0.4 及以前忽略单字重文件）
+- `weight`：100–900；v0.7.0 起同族多静态字重（400/500/600/700）由 fontdb 按 OS/2 `usWeightClass` 精确选面，
+  无匹配时回退最近字重。**字体角色表（v0.7.0 起模板默认）**：
+
+| 角色 | 字体（family） | 字重 | 字距 | 备注 |
+|---|---|---|---|---|
+| 瑞士 Display | Geist | 600 | −0.02em | classic-watermark / minimal / white-border / borderless |
+| 编辑 Display | Fraunces / Instrument Serif | 600 / 400 | 0~−0.02 | magazine / master / portfolio |
+| 日系 Display | Noto Serif SC / LXGW WenKai | 600 / 500 | 0~+0.02 | personal / calendar / festival |
+| 潮牌 Display | Unbounded / Smiley Sans | 700 / 400 | −0.02 | game / colorful / colorcard / sports |
+| 器材 Display | Geist 600 | 600 | 0 | camera / film / phone / drone / fuji |
+| 副标 Support | Inter 500 / Bricolage Grotesque 500 | 500 | 0 | |
+| EXIF 数值行 | **Inter + `tnum`**（默认）/ Geist Mono（器材类） | 400–500 | 0 | Q13 |
+| 微标签 | Inter / Geist Mono | 500 | +0.08em | 全大写 |
+| 手写签名 | Great Vibes / LXGW WenKai | 400 | 0 | 保留可选 |
+
 
 ### 4.3 `content[]` 与字段表达式（C3）
 

@@ -6,8 +6,8 @@
       "zh": "静默宣言",
       "en": "Quiet Manifesto"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -39,7 +39,8 @@
           "Inter"
         ],
         "size": 0.0105,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "content": [
@@ -47,6 +48,9 @@
           "expr": "'POSTER Nº 09'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -59,12 +63,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 400
       },
-      "letterSpacing": 0.16,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -102,10 +107,11 @@
       },
       "font": {
         "family": [
-          "Playfair Display"
+          "Inter"
         ],
         "size": 0.034,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -128,7 +134,8 @@
           "Noto Serif SC"
         ],
         "size": 0.02,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -151,9 +158,10 @@
           "Inter"
         ],
         "size": 0.015,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -175,12 +183,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0115,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

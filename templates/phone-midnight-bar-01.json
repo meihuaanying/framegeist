@@ -6,8 +6,8 @@
       "zh": "午夜黑条",
       "en": "Midnight Bar"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -51,12 +51,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F5F5F7"
+        "color": "#F5F5F7",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
@@ -77,12 +78,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#8A8F98"
+        "color": "#8A8F98",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -114,12 +116,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.16,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

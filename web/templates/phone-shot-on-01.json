@@ -6,8 +6,8 @@
       "zh": "居中出品",
       "en": "Shot On Center"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -26,10 +26,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.3,
       "opacity": 0.85,
@@ -51,10 +52,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.022,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.06,
       "opacity": 0.95,
@@ -79,10 +81,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "opacity": 0.85,
@@ -93,6 +96,20 @@
           "fallback": null
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

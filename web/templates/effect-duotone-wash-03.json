@@ -6,8 +6,8 @@
       "zh": "双色晕染",
       "en": "Duotone Wash"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "effect"
@@ -75,12 +75,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0125,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -118,9 +119,10 @@
           "Inter"
         ],
         "size": 0.019,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Camera')",
@@ -141,12 +143,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0115,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -167,9 +170,10 @@
           "Inter"
         ],
         "size": 0.0135,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

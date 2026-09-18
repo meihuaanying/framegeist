@@ -1,0 +1,170 @@
+{
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf": {
+    "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+    "bytes": 876576
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt": {
+    "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57",
+    "bytes": 4377
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf": {
+    "sha256": "c40f2293766a503bc70cce9e512ef844a4ccb7cbcde792fe2ea31d191917d8d6",
+    "bytes": 300724
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/playfairdisplay/OFL.txt": {
+    "sha256": "566be814f8e96e93dfa16101331557eb6b5467e9e03f627c0910fe93ca12300e",
+    "bytes": 4449
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/Oswald%5Bwght%5D.ttf": {
+    "sha256": "5b38c246e255a12f5712d640d56bcced0472466fc68983d2d0410ec0457c2817",
+    "bytes": 172088
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/oswald/OFL.txt": {
+    "sha256": "0fd731a904b729a4e02eaf5e8ebd06783edd9abe400e8882760160230675b652",
+    "bytes": 4483
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantgaramond/CormorantGaramond%5Bwght%5D.ttf": {
+    "sha256": "b20b7d9626dd956b2c5e558692ad328b1f19e3275e2782db4fa07670d83f35e0",
+    "bytes": 1195560
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/cormorantgaramond/OFL.txt": {
+    "sha256": "60700d351cac4650c51f3f9db318d2a420f8b45052dba2715eb5fec41f0f6956",
+    "bytes": 4387
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/spacegrotesk/SpaceGrotesk%5Bwght%5D.ttf": {
+    "sha256": "acad6de1fc93436f5c0f1f4137751ef04f1aea3063e7036535970ffcfbd79f72",
+    "bytes": 136676
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/spacegrotesk/OFL.txt": {
+    "sha256": "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72",
+    "bytes": 4495
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/fraunces/Fraunces%5BSOFT%2CWONK%2Copsz%2Cwght%5D.ttf": {
+    "sha256": "177ff6c0f14e5550a3c624247cd1189611d4eb65d000b14944c63d967958abbb",
+    "bytes": 360440
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/fraunces/OFL.txt": {
+    "sha256": "bdf4c22802eaf804f998195871c6b8938aac2ac14b2d78a8bd66a6f1eced833b",
+    "bytes": 4391
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/bricolagegrotesque/BricolageGrotesque%5Bopsz%2Cwdth%2Cwght%5D.ttf": {
+    "sha256": "413e7357809ddd12fd80a96a8a396de0e401638d4acd3cb3e37532f0472ac682",
+    "bytes": 408496
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/bricolagegrotesque/OFL.txt": {
+    "sha256": "4b5a7d8f37f5602621c8a8d7358a6a2e71317e6c231c661e15aef0275d3e07ba",
+    "bytes": 4403
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentsans/InstrumentSans%5Bwdth%2Cwght%5D.ttf": {
+    "sha256": "b24f1812584816958afcf22e22d08e44318c5e51651e25d2438efdde389b33b1",
+    "bytes": 194336
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentsans/OFL.txt": {
+    "sha256": "9e27a72ed30eb49a08678f6a5d6ed98ec7ba5368f541637ee0683ec9134ef966",
+    "bytes": 4403
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/geist/Geist%5Bwght%5D.ttf": {
+    "sha256": "73894e0448cae90a92b6c2f8732b7bb9acb7b94c418bff559dad4a18e1de9659",
+    "bytes": 169056
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/geist/OFL.txt": {
+    "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f",
+    "bytes": 4387
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/geistmono/GeistMono%5Bwght%5D.ttf": {
+    "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+    "bytes": 171948
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/geistmono/OFL.txt": {
+    "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f",
+    "bytes": 4387
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/onest/Onest%5Bwght%5D.ttf": {
+    "sha256": "966c5c29b4755da84b6854d5c21dd4eaa2420225d0e9874de602de176d4a9f31",
+    "bytes": 193056
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/onest/OFL.txt": {
+    "sha256": "071195d8806e226faeee60259c28ca67b458227af5195a73f5cfcab06e3003bc",
+    "bytes": 4384
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/unbounded/Unbounded%5Bwght%5D.ttf": {
+    "sha256": "323b511be380c8d474ef030686b71aedde501f8d9cd46da558b7c40454372c3f",
+    "bytes": 778272
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/unbounded/OFL.txt": {
+    "sha256": "31e5d4e83955e7103c34570dd49b0570ef490800bd65b42923c0dd02445263b3",
+    "bytes": 4392
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/bebasneue/BebasNeue-Regular.ttf": {
+    "sha256": "08e4623805102d819f58601e46e345648846075e363b2ceb23313c2d1c83ec73",
+    "bytes": 61400
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/greatvibes/GreatVibes-Regular.ttf": {
+    "sha256": "8d509802186f1b51572531ecf313e8098f9a5bfdfaca93f0c9b34467f9982d15",
+    "bytes": 457588
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/mashanzheng/MaShanZheng-Regular.ttf": {
+    "sha256": "6d2546bb189c732a8ca29af9e22457b152387d158aa459e4ac2ce1e51788b7fb",
+    "bytes": 5857936
+  },
+  "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/fonts/ttf/JetBrainsMono-Regular.ttf": {
+    "sha256": "e6fd0d7e91550b3ed2b735d4312474362c4716edc4fc0577a0f61ed782d5aed1",
+    "bytes": 270224
+  },
+  "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/fonts/ttf/JetBrainsMono-Medium.ttf": {
+    "sha256": "d16e6dc99672734698d629705f617c79f6eb6040f5113efe3a145204dc988109",
+    "bytes": 270316
+  },
+  "https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/fonts/ttf/JetBrainsMono-Bold.ttf": {
+    "sha256": "d22c4f3821d725eb01210d278d95dfcfcaadc34699a06658d47c8a5cc5830ada",
+    "bytes": 274096
+  },
+  "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf": {
+    "sha256": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b",
+    "bytes": 16437364
+  },
+  "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Medium.otf": {
+    "sha256": "ca094f6b0001fb048ca39ddd797a0cdb0179e1e55c6561e111c49c3e6a61d7b7",
+    "bytes": 16523632
+  },
+  "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Bold.otf": {
+    "sha256": "b5f0d1a190a7f9b43c310a8850630af12553df32c4c050543f9059732d9b4c0a",
+    "bytes": 17002248
+  },
+  "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/OTF/SimplifiedChinese/NotoSerifCJKsc-Regular.otf": {
+    "sha256": "2a2eae2628df83556c54018c41e20fa532c1b862c5256ae8b3f23feb918d12ca",
+    "bytes": 24543080
+  },
+  "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/OTF/SimplifiedChinese/NotoSerifCJKsc-SemiBold.otf": {
+    "sha256": "d627b53dbcde61e07de1498d2623a8b287f78585ffbc90cc0618d0caaa2ed6b0",
+    "bytes": 24700256
+  },
+  "https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/OTF/SimplifiedChinese/NotoSerifCJKsc-Bold.otf": {
+    "sha256": "8af07d4b6c2e82bcc72a30e066eaf295f11b9424f4aad2eaa9fe0e9c3b38fc73",
+    "bytes": 25521460
+  },
+  "atelier-anchor/smiley-sans@v2.0.1/smiley-sans-v2.0.1.zip": {
+    "sha256": "299c0be6c960ae37361762eca76f7d0cd516615435bb96c0d4b98a1e70178a07",
+    "bytes": 5781344
+  },
+  "https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/fonts/TTF/LXGWWenKai-Regular.ttf": {
+    "sha256": "39ad71264b588165b469e35e6afb162a378dacd1f95348160240ba9038ac3009",
+    "bytes": 25575676
+  },
+  "https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/fonts/TTF/LXGWWenKai-Medium.ttf": {
+    "sha256": "d4bdeb38a39151d74d084cba5090f8cb7d20bf83eedb78c35939ae70b9f4e3f6",
+    "bytes": 25379848
+  },
+  "welai/glow-sans@v0.93/GlowSansSC-Normal-v0.93.zip": {
+    "sha256": "aa2e1fdb20337113a1d2670b695bfee83910eefa2e48f51c704e5f4a9f8ec9f1",
+    "bytes": 67419594
+  },
+  "be5invis/Sarasa-Gothic@v1.0.41/SarasaGothicSC-TTF-1.0.41.7z": {
+    "sha256": "c8c5209fbd6faf572634f4d4ef70af28ccfe2f7f18d8fdb564a8b114743af740",
+    "bytes": 62859796
+  },
+  "https://raw.githubusercontent.com/be5invis/Sarasa-Gothic/v1.0.41/LICENSE": {
+    "sha256": "32c932e0dbae4f6e6386964bbc2d04178707665a05ca65cf636241af13d50a53",
+    "bytes": 4702
+  }
+}

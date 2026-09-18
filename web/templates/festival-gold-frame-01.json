@@ -6,8 +6,8 @@
       "zh": "庆典金框",
       "en": "Gold Frame"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "festival"
@@ -68,12 +68,13 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "LXGW WenKai"
         ],
         "size": 0.052,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 600
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.02,
       "align": "center",
       "content": [
         {
@@ -95,7 +96,8 @@
           "Inter"
         ],
         "size": 0.0105,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -118,10 +120,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "align": "right",
@@ -142,10 +145,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Inter"
         ],
         "size": 0.045,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 400
       },
       "letterSpacing": 0.04,
       "align": "center",
@@ -172,7 +176,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "opacity": 0.9,

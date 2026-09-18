@@ -6,8 +6,8 @@
       "zh": "日期右置",
       "en": "Date Right"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
@@ -39,9 +39,10 @@
           "Inter"
         ],
         "size": 0.015,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -62,12 +63,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.014,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -89,12 +91,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -102,6 +105,20 @@
           "fallback": null
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

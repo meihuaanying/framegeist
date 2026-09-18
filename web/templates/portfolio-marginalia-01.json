@@ -6,8 +6,8 @@
       "zh": "左右侧注",
       "en": "Marginal Notes"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
@@ -69,7 +69,8 @@
           "Noto Serif SC"
         ],
         "size": 0.015,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
@@ -92,7 +93,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -112,10 +114,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -123,6 +126,9 @@
           "expr": "'2026'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -138,7 +144,8 @@
           "Noto Serif SC"
         ],
         "size": 0.012,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
       "letterSpacing": 0.06,
       "content": [
@@ -158,10 +165,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "content": [
@@ -169,6 +177,9 @@
           "expr": "'EDITION 1/8'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -184,7 +195,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -208,9 +220,10 @@
           "Inter"
         ],
         "size": 0.013,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -235,9 +248,10 @@
           "Inter"
         ],
         "size": 0.0105,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -259,12 +273,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -272,6 +287,20 @@
           "fallback": null
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

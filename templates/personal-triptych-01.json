@@ -6,8 +6,8 @@
       "zh": "三联卡",
       "en": "Triptych Card"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "personal"
@@ -76,7 +76,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -98,7 +99,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -120,7 +122,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -139,12 +142,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "lineHeight": 1.6,
       "content": [
         {
@@ -170,14 +174,16 @@
           "Great Vibes"
         ],
         "size": 0.036,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "content": [
         {
           "expr": "'YOUR NAME'",
           "fallback": "YOUR NAME"
         }
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -189,12 +195,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "lineHeight": 1.6,
       "content": [
         {

@@ -26,6 +26,23 @@ const MAKE_MAP: &[(&str, &str)] = &[
     ("epson", "epson"),
     ("insta360", "insta360"),
     ("tamron", "tamron"),
+    ("phase one", "phaseone"),
+    ("phaseone", "phaseone"),
+    ("blackmagic", "blackmagicdesign"),
+    ("gopro", "gopro"),
+    ("samsung", "samsung"),
+    ("vivo", "vivo"),
+    ("oppo", "oppo"),
+    ("oneplus", "oneplus"),
+    ("one plus", "oneplus"),
+    ("huawei", "huawei"),
+    ("honor", "honor"),
+    ("google", "google"),
+    ("pixel", "google"),
+    ("motorola", "motorola"),
+    ("nokia", "nokia"),
+    ("nothing", "nothing"),
+    ("sandisk", "sandisk"),
 ];
 
 /// Ordered (needle, slug) pairs matched case-insensitively as a prefix or
@@ -54,6 +71,21 @@ const LENS_MAP: &[(&str, &str)] = &[
     ("zuiko", "olympus"),
     ("tamron", "tamron"),
     ("hasselblad", "hasselblad"),
+    ("viltrox", "viltrox"),
+    ("laowa", "laowa"),
+    ("ttartisan", "ttartisan"),
+    ("tt artisans", "ttartisan"),
+    ("tokina", "tokina"),
+    ("samyang", "samyang"),
+    ("rokinon", "samyang"),
+    ("meike", "meike"),
+    ("7artisans", "7artisans"),
+    ("7 artisans", "7artisans"),
+    ("sirui", "sirui"),
+    ("yongnuo", "yongnuo"),
+    ("voigtlander", "voigtlander"),
+    ("nokton", "voigtlander"),
+    ("heliar", "voigtlander"),
 ];
 
 fn lookup(haystack: &str, table: &[(&str, &str)]) -> Option<String> {
@@ -85,6 +117,15 @@ pub fn lens_series(lens: Option<&str>) -> Option<String> {
     if has("dg dn") {
         return Some("sigma-dgdn".into());
     }
+    if has("batis") {
+        return Some("zeiss-batis".into());
+    }
+    if has("apo") && has("summi") {
+        return Some("leica-apo".into());
+    }
+    if has("apo") && has("sigma") {
+        return Some("sigma-apo".into());
+    }
     if has(" art") || l.contains("art ") {
         return Some("sigma-art".into());
     }
@@ -94,11 +135,20 @@ pub fn lens_series(lens: Option<&str>) -> Option<String> {
     if has("xf") || has("xc") {
         return Some("fujifilm-xf".into());
     }
+    if has("rf") && (has("l is") || has("l usm") || has(" l ")) {
+        return Some("canon-rf-l".into());
+    }
     if has("l is") || has("l usm") || has(" l ") {
         return Some("canon-l".into());
     }
     if l.ends_with(" s") || has(" s line") {
         return Some("nikon-s".into());
+    }
+    if l.ends_with(" g") || has(" g oss") {
+        return Some("sony-g".into());
+    }
+    if l.starts_with("sp ") || has(" sp ") {
+        return Some("tamron-sp".into());
     }
     None
 }
@@ -159,11 +209,31 @@ mod tests {
         );
         assert_eq!(
             lens_series(Some("RF24-70mm F2.8 L IS USM")).as_deref(),
+            Some("canon-rf-l")
+        );
+        assert_eq!(
+            lens_series(Some("EF 70-200mm f/2.8L IS II USM")).as_deref(),
             Some("canon-l")
         );
         assert_eq!(
             lens_series(Some("NIKKOR Z 24-70mm f/2.8 S")).as_deref(),
             Some("nikon-s")
+        );
+        assert_eq!(
+            lens_series(Some("FE 70-200mm F4 G OSS")).as_deref(),
+            Some("sony-g")
+        );
+        assert_eq!(
+            lens_series(Some("Batis 40mm F2 CF")).as_deref(),
+            Some("zeiss-batis")
+        );
+        assert_eq!(
+            lens_series(Some("APO-Summicron-M 35mm")).as_deref(),
+            Some("leica-apo")
+        );
+        assert_eq!(
+            lens_series(Some("SP 35mm F1.4 Di USD")).as_deref(),
+            Some("tamron-sp")
         );
         assert_eq!(
             lens_series(Some("35mm F1.4 DG DN")).as_deref(),

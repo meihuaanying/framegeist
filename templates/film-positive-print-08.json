@@ -6,8 +6,8 @@
       "zh": "黑白正片",
       "en": "Positive Print"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -66,10 +66,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.02,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -77,6 +78,9 @@
           "expr": "'FG 100'",
           "fallback": "FILM"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -89,12 +93,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -116,10 +121,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
@@ -157,12 +163,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -180,12 +187,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

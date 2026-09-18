@@ -6,8 +6,8 @@
       "zh": "骑行数据行",
       "en": "Ride Stats"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "sports"
@@ -39,7 +39,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -73,10 +74,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 400
       },
       "letterSpacing": 0.06,
       "content": [
@@ -114,17 +116,21 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'AVG 32.6 KM/H'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -152,17 +158,21 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'CLIMB 1250 M'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -175,12 +185,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

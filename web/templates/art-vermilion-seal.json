@@ -6,8 +6,8 @@
       "zh": "朱文印章",
       "en": "Vermilion Seal"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -85,12 +85,13 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "Noto Serif SC"
         ],
         "size": 0.055,
-        "color": "#FFF7F0"
+        "color": "#FFF7F0",
+        "weight": 600
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0.02,
       "align": "center",
       "effects": {
         "stroke": {
@@ -122,10 +123,11 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "Noto Serif SC"
         ],
         "size": 0.048,
-        "color": "#23201B"
+        "color": "#23201B",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -145,10 +147,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0125,
-        "color": "#6B5F52"
+        "color": "#6B5F52",
+        "weight": 500
       },
       "letterSpacing": 0.28,
       "align": "right",
@@ -172,10 +175,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0125,
-        "color": "#6B5F52"
+        "color": "#6B5F52",
+        "weight": 500
       },
       "letterSpacing": 0.28,
       "align": "right",
@@ -202,12 +206,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6B5F52"
+        "color": "#6B5F52",
+        "weight": 400
       },
-      "letterSpacing": 0.24,
+      "letterSpacing": 0,
       "effects": {
         "case": "upper"
       },
@@ -231,10 +236,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6B5F52"
+        "color": "#6B5F52",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "align": "right",
@@ -247,6 +253,20 @@
           "fallback": "Imprint · Hand-Finished"
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-right",
+      "corner": "bottom-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

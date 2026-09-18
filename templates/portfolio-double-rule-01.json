@@ -6,8 +6,8 @@
       "zh": "双线题签",
       "en": "Double Rule"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
@@ -36,10 +36,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Inter"
         ],
         "size": 0.03,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "letterSpacing": 0.02,
       "align": "right",
@@ -96,7 +97,8 @@
           "Noto Serif SC"
         ],
         "size": 0.045,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "align": "center",
@@ -120,7 +122,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "align": "center",
@@ -144,9 +147,10 @@
           "Inter"
         ],
         "size": 0.012,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -167,12 +171,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
@@ -193,7 +198,8 @@
           "Inter"
         ],
         "size": 0.0105,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "align": "right",
@@ -202,7 +208,24 @@
           "expr": "'NO. 07'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-left",
+      "corner": "top-left",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

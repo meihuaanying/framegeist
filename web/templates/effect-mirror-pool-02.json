@@ -6,8 +6,8 @@
       "zh": "镜池倒影",
       "en": "Mirror Pool"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "effect"
@@ -82,9 +82,10 @@
           "Inter"
         ],
         "size": 0.017,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -106,12 +107,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0115,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -130,12 +132,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.16,
+      "letterSpacing": 0,
       "align": "center",
       "content": [
         {
@@ -146,6 +149,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

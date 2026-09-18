@@ -6,8 +6,8 @@
       "zh": "侧栏竖排",
       "en": "Trail Rail"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "sports"
@@ -38,8 +38,9 @@
         "family": [
           "Inter"
         ],
-        "size": 0.009,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -59,10 +60,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Inter"
         ],
         "size": 0.026,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "letterSpacing": 0.06,
       "rotation": -90,
@@ -87,12 +89,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "rotation": -90,
       "align": "left",
       "content": [
@@ -112,12 +115,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "rotation": -90,
       "align": "left",
       "content": [

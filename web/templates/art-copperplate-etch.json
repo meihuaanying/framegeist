@@ -6,8 +6,8 @@
       "zh": "铜版雕刻",
       "en": "Copperplate Etch"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
@@ -189,10 +189,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#5A4632"
+        "color": "#5A4632",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "effects": {
@@ -222,10 +223,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#5A4632"
+        "color": "#5A4632",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "align": "right",
@@ -252,10 +254,11 @@
       },
       "font": {
         "family": [
-          "Noto Serif SC"
+          "Glow Sans SC"
         ],
         "size": 0.028,
-        "color": "#4A3A28"
+        "color": "#4A3A28",
+        "weight": 500
       },
       "letterSpacing": 0.26,
       "effects": {
@@ -284,10 +287,11 @@
       },
       "font": {
         "family": [
-          "Cormorant Garamond"
+          "Inter"
         ],
         "size": 0.042,
-        "color": "#2C2318"
+        "color": "#2C2318",
+        "weight": 500
       },
       "letterSpacing": 0.13,
       "effects": {
@@ -317,10 +321,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6B5136"
+        "color": "#6B5136",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "effects": {
@@ -343,12 +348,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6B5136"
+        "color": "#6B5136",
+        "weight": 400
       },
-      "letterSpacing": 0.16,
+      "letterSpacing": 0,
       "align": "right",
       "effects": {
         "case": "upper"
@@ -362,6 +368,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

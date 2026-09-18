@@ -2,26 +2,47 @@
   "meta": {
     "id": "minimal-portrait-line",
     "name": "Portrait Line",
-    "nameI18n": { "zh": "竖构图单行", "en": "Portrait Line" },
-    "version": "1.0.0",
-    "minEngineVersion": "0.4.0",
+    "nameI18n": {
+      "zh": "竖构图单行",
+      "en": "Portrait Line"
+    },
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
   },
   "canvas": {
     "mode": "extend",
-    "padding": { "top": 0.05, "right": 0.05, "bottom": 0.075, "left": 0.05 },
-    "background": { "type": "solid", "color": "#FFFFFF" }
+    "padding": {
+      "top": 0.05,
+      "right": 0.05,
+      "bottom": 0.075,
+      "left": 0.05
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
   },
   "layers": [
     {
       "type": "text",
       "id": "line",
       "anchor": "bottom-center",
-      "offset": { "x": 0, "y": -0.026 },
-      "font": { "family": ["JetBrains Mono"], "size": 0.0135, "color": "#373A40" },
-      "letterSpacing": 0.05,
+      "offset": {
+        "x": 0,
+        "y": -0.026
+      },
+      "font": {
+        "family": [
+          "Inter"
+        ],
+        "size": 0.0135,
+        "color": "#373A40",
+        "weight": 500
+      },
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -29,10 +50,31 @@
           "fallback": null
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {
-    "model": { "type": "string", "source": "exif", "transform": "model_pretty" },
-    "params": { "type": "string", "source": "exif" }
+    "model": {
+      "type": "string",
+      "source": "exif",
+      "transform": "model_pretty"
+    },
+    "params": {
+      "type": "string",
+      "source": "exif"
+    }
   }
 }

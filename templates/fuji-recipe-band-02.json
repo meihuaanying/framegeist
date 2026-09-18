@@ -6,8 +6,8 @@
       "zh": "奶白配方格",
       "en": "Recipe Band"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -66,10 +66,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.014,
-        "color": "#EDE8DE"
+        "color": "#EDE8DE",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
@@ -107,10 +108,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#B9B5AC"
+        "color": "#B9B5AC",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "align": "right",
@@ -119,6 +121,9 @@
           "expr": "fmt('RECIPE CARD C2 · ISO {iso}', exif)",
           "fallback": "RECIPE CARD C2 · ISO 200"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -131,10 +136,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.032,
-        "color": "#1B1C1E"
+        "color": "#1B1C1E",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -154,10 +160,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -177,10 +184,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.032,
-        "color": "#1B1C1E"
+        "color": "#1B1C1E",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -200,10 +208,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -223,10 +232,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.032,
-        "color": "#1B1C1E"
+        "color": "#1B1C1E",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -246,10 +256,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -269,10 +280,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.032,
-        "color": "#1B1C1E"
+        "color": "#1B1C1E",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -292,10 +304,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -315,10 +328,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.032,
-        "color": "#1B1C1E"
+        "color": "#1B1C1E",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -338,10 +352,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -361,10 +376,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.032,
-        "color": "#1B1C1E"
+        "color": "#1B1C1E",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "content": [
@@ -384,10 +400,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -407,12 +424,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -430,12 +448,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877C"
+        "color": "#8C877C",
+        "weight": 500
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

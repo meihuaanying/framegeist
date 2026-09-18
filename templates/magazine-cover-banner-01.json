@@ -7,7 +7,7 @@
       "en": "Midnight Cover"
     },
     "version": "1.1.0",
-    "minEngineVersion": "0.6.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -36,10 +36,11 @@
       },
       "font": {
         "family": [
-          "Playfair Display"
+          "Fraunces"
         ],
         "size": 0.055,
-        "color": "#FFFFFF"
+        "color": "#FFFFFF",
+        "weight": 600
       },
       "letterSpacing": 0.06,
       "effects": {
@@ -71,7 +72,8 @@
           "Inter"
         ],
         "size": 0.0105,
-        "color": "#B9BDC4"
+        "color": "#B9BDC4",
+        "weight": 500
       },
       "letterSpacing": 0.26,
       "content": [
@@ -91,12 +93,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#B9BDC4"
+        "color": "#B9BDC4",
+        "weight": 400
       },
-      "letterSpacing": 0.18,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -136,9 +139,10 @@
           "Inter"
         ],
         "size": 0.016,
-        "color": "#F5F5F7"
+        "color": "#F5F5F7",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -162,9 +166,10 @@
           "Inter"
         ],
         "size": 0.0115,
-        "color": "#8A8F98"
+        "color": "#8A8F98",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "exif.lens",
@@ -185,12 +190,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#8A8F98"
+        "color": "#8A8F98",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

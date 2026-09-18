@@ -6,8 +6,8 @@
       "zh": "无缝色延",
       "en": "Seamless Walk"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorwalk"
@@ -35,12 +35,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.18,
+      "letterSpacing": 0,
       "opacity": 0.9,
       "content": [
         {
@@ -79,9 +80,10 @@
           "Inter"
         ],
         "size": 0.02,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -102,12 +104,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0125,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "opacity": 0.85,
       "content": [
         {

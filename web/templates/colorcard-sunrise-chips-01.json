@@ -6,8 +6,8 @@
       "zh": "暖阳色卡",
       "en": "Sunrise Chips"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorcard"
@@ -44,12 +44,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#7A6A5D"
+        "color": "#7A6A5D",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -70,12 +71,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#9A8B7E"
+        "color": "#9A8B7E",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -97,9 +99,10 @@
           "Inter"
         ],
         "size": 0.017,
-        "color": "#4A4038"
+        "color": "#4A4038",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -132,6 +135,20 @@
           "JetBrains Mono"
         ]
       }
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-right",
+      "corner": "bottom-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

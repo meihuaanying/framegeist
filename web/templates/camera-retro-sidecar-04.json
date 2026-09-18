@@ -6,8 +6,8 @@
       "zh": "复古侧挂机身",
       "en": "Retro Sidecar"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "camera"
@@ -65,10 +65,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.022,
-        "color": "#2A2118"
+        "color": "#2A2118",
+        "weight": 500
       },
       "letterSpacing": 0.03,
       "content": [
@@ -91,12 +92,13 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#4A3F32"
+        "color": "#4A3F32",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "exif.lens",
@@ -117,12 +119,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.0115,
-        "color": "#6B6255"
+        "color": "#6B6255",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -155,12 +158,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#8C8272"
+        "color": "#8C8272",
+        "weight": 500
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -181,12 +185,13 @@
       },
       "font": {
         "family": [
-          "Playfair Display"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#A08B66"
+        "color": "#A08B66",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'Analogue Notes'",

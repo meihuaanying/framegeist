@@ -6,8 +6,8 @@
       "zh": "暗房立柱",
       "en": "Darkroom Pillar"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -140,10 +140,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#9A938A"
+        "color": "#9A938A",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -163,12 +164,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -190,12 +192,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#8F897C"
+        "color": "#8F897C",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -213,10 +216,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#CFC8BA"
+        "color": "#CFC8BA",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -239,10 +243,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Geist Mono"
         ],
         "size": 0.034,
-        "color": "#F1ECDF"
+        "color": "#F1ECDF",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [

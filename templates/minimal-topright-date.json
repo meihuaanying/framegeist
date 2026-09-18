@@ -6,8 +6,8 @@
       "zh": "右上日期",
       "en": "Top Right Date"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
@@ -43,12 +43,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "auto"
+        "color": "auto",
+        "weight": 400
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "opacity": 0.9,
       "align": "right",
       "content": [
@@ -74,9 +75,10 @@
           "Inter"
         ],
         "size": 0.013,
-        "color": "auto"
+        "color": "auto",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "opacity": 0.8,
       "content": [
         {

@@ -6,8 +6,8 @@
       "zh": "奶油居中字标",
       "en": "Cream Brand Center"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
@@ -53,9 +53,10 @@
           "Inter"
         ],
         "size": 0.015,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -76,12 +77,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

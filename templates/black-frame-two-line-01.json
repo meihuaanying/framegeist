@@ -6,8 +6,8 @@
       "zh": "黑框双行",
       "en": "Two Lines"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "black-frame"
@@ -38,8 +38,9 @@
         "family": [
           "Inter"
         ],
-        "size": 0.009,
-        "color": "#6E6E6E"
+        "size": 0.0095,
+        "color": "#6E6E6E",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -48,6 +49,9 @@
           "expr": "'BLACK FRAME · 2026'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -77,9 +81,10 @@
           "Inter"
         ],
         "size": 0.018,
-        "color": "#F2F2F2"
+        "color": "#F2F2F2",
+        "weight": 500
       },
-      "letterSpacing": 0.02,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -100,12 +105,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0115,
-        "color": "#A0A0A0"
+        "color": "#A0A0A0",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)",
@@ -123,12 +129,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#8A8A8A"
+        "color": "#8A8A8A",
+        "weight": 400
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

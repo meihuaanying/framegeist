@@ -6,8 +6,8 @@
       "zh": "象牙衬板",
       "en": "Ivory Plate"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -53,7 +53,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "align": "center",
@@ -91,9 +92,10 @@
           "Inter"
         ],
         "size": 0.013,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -115,17 +117,19 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "content": [
         {
           "expr": "fmt('{focal}MM', exif)",
           "fallback": "--"
         }
-      ]
+      ],
+      "letterSpacing": 0.08
     },
     {
       "type": "text",
@@ -137,17 +141,19 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "content": [
         {
           "expr": "fmt('F{aperture}', exif)",
           "fallback": "--"
         }
-      ]
+      ],
+      "letterSpacing": 0.08
     },
     {
       "type": "text",
@@ -159,10 +165,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "content": [
         {
@@ -172,7 +179,8 @@
       ],
       "features": [
         "tnum"
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -184,10 +192,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "content": [
         {
@@ -197,7 +206,8 @@
       ],
       "features": [
         "tnum"
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -212,7 +222,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -234,7 +245,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -256,7 +268,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -278,7 +291,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [

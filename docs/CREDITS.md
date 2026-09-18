@@ -9,33 +9,50 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 
 用途：模板缩略图（240px）/ 应用内预览（640px）/ 样张（900px）的分分类演示素材。
 
-## 品牌图标（`templates/assets/brand/`、`web/brand/`）
+## 品牌图标（`templates/assets/brand/`、`lockup/`、`series/`、`web/brand/` 等，v0.7.0 扩展）
 
-- [Simple Icons](https://simpleicons.org)（CC0-1.0）：sony、nikon、fujifilm、leica、
-  hasselblad、panasonic、ricoh、sigma、zeiss、dji、xiaomi、apple、epson、insta360。
-- **文字字标**（由 FrameGeist 使用 OFL 字体自行渲染，非官方 Logo 图形）：
-  canon、ricoh、sigma、zeiss、hasselblad、olympus、pentax、tamron。
-- **镜头系列徽章**（原创字标）：GM、L、S、ART、DG DN、XCD、XF。
+- **官方字标**：[Simple Icons](https://simpleicons.org)（CC0-1.0）——sony、canon、nikon、
+  fujifilm、leica、hasselblad、panasonic、ricoh、sigma、zeiss、dji、apple、tamron、epson、
+  olympus、pentax、gopro、insta360、sandisk、phaseone、profoto、smallrig、samsung、vivo、
+  oppo、oneplus、huawei、honor、google、motorola、nokia、blackmagicdesign 等（以实际下载成功者为准，
+  清单见 `templates/assets/brand/CREDITS.json` 的 `officialIcons`）。
+- **原创排版字标/ Lockup**（由 FrameGeist 使用 OFL 字体排版渲染，**非官方 Logo 图形**）：
+  canon、ricoh、sigma、zeiss、hasselblad、olympus、pentax、tamron、viltrox、laowa、ttartisan、
+  tokina、samyang、meike、7artisans、sirui、yongnuo、voigtlander、phaseone、blackmagicdesign 等；
+  `lockup/` 为全品牌（42 slug）的原创排版款，供编辑器「官方/原创」风格切换。
+- **镜头系列徽章**（原创字标）：GM、G、L、RF L、S、ART、DG DN、APO、XCD、XF、BATIS、SP。
 - **游戏主题字标**（原创文字渲染，非官方素材；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
 - **相框线稿**（`templates/assets/frame/`）：camera-body / phone-frame / film-strip，FrameGeist 原创矢量（`tools/gen-frame-assets.mjs`）。
-- 商标声明：品牌名称与标识归各自权利人所有；本软件仅将其用于标注照片 EXIF
-  中的相机/镜头品牌，不构成任何背书。详见 `templates/assets/brand/CREDITS.json`。
+- **商标声明**：各品牌字标/商标归其权利人所有，本项目仅作**器材信息识别展示**用途，
+  不表示隶属、赞助或背书；原创 lockup 不复制官方图形徽记。详见 `templates/assets/brand/CREDITS.json`。
 
-## 引擎字体（`templates/assets/fonts/`）
+## 引擎字体（`templates/assets/fonts/`，v0.7.0：68 faces / 22 families）
 
-OFL-1.1（SIL Open Font License），许可原文见 `templates/assets/fonts/licenses/`：
+全部 **OFL-1.1**（SIL Open Font License）；许可原文：`templates/assets/fonts/licenses/`，
+副本与来源/版本/SHA256 清单：`docs/licenses/fonts/`（`SOURCES.md`）。
 
-| 字体 | 来源 |
-|---|---|
-| Inter / Playfair Display / Bebas Neue / Oswald / Cormorant Garamond / Space Grotesk | Google Fonts（google/fonts，OFL） |
-| Noto Sans SC / Noto Serif SC / Ma Shan Zheng | notofonts/noto-cjk、google/fonts（OFL；GB2312 一级常用字子集） |
-| JetBrains Mono | JetBrains（OFL） |
-| Great Vibes | google/fonts（OFL） |
+| 字体（family） | 字重 | 来源/版本 | 说明 |
+|---|---|---|---|
+| Inter、Playfair Display、Oswald、Cormorant Garamond、Space Grotesk | 400/500/600/700 | google/fonts（可变字体实例化） | 由 `tools/instance-fonts.py` 钉轴生成静态实例并子集化 |
+| Fraunces、Bricolage Grotesque、Instrument Sans、Instrument Serif、Geist、Geist Mono、Onest、Unbounded | 400/500/600/700（Instrument Serif 400） | google/fonts（v0.7.0 新引入） | 同上；Unbounded/Instrument Serif 仅 400 |
+| Bebas Neue、Great Vibes | 400 | google/fonts | 静态 |
+| JetBrains Mono | 400/500/700 | JetBrains/JetBrainsMono | 静态（可选项） |
+| Ma Shan Zheng | 400 | google/fonts | CJK，GB2312 一级 + 仓库用字子集 |
+| Noto Sans SC | 400/500/700 | notofonts/noto-cjk | CJK 子集 |
+| Noto Serif SC | 400/600/700 | notofonts/noto-cjk | CJK 子集 |
+| LXGW WenKai 霞鹜文楷 | 400/500 | lxgw/LxgwWenKai v1.522 | CJK 子集 |
+| Smiley Sans 得意黑 | 400（Oblique） | atelier-anchor/smiley-sans v2.0.1 | CJK 子集 |
+| Glow Sans SC 未来荧黑 | 400/500/700 | welai/glow-sans v0.93 | CJK 子集 |
+| Sarasa Gothic SC 更纱黑体 | 400/700 | be5invis/Sarasa-Gothic v1.0.41 | CJK 子集 |
+
+字体源文件（大体积原始可变字体/发布包）在 `templates/assets/fonts/source/`（**不随包分发**，
+由 `node tools/fetch-fonts.mjs --fetch` 按 SHA256 重建）。
 
 ## 界面字体（`web/fonts/`、`site/fonts/`）
 
-Host Grotesk、DM Sans（OFL-1.1，自托管 latin 子集）。
+Host Grotesk、DM Sans（OFL-1.1，自托管 latin 子集）；v0.7.0 新增 **Geist VF**（可变字体，
+latin 子集，`web/fonts/ui/Geist-VF.woff2`，来自 google/fonts，OFL-1.1）用于 UI 标题。
 
 ## HEIC 解码（`web/vendor/libheif/`，v0.6.0）
 

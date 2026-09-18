@@ -6,8 +6,8 @@
       "zh": "主色卡片",
       "en": "Chromatic Edge"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorcard"
@@ -43,12 +43,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.016,
-        "color": "#FFFFFF"
+        "color": "#FFFFFF",
+        "weight": 400
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "opacity": 0.92,
       "content": [
         {
@@ -73,9 +74,10 @@
           "Inter"
         ],
         "size": 0.014,
-        "color": "#FFFFFF"
+        "color": "#FFFFFF",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "opacity": 0.85,
       "align": "right",
       "content": [
@@ -98,12 +100,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#FFFFFF"
+        "color": "#FFFFFF",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "opacity": 0.9,
       "align": "right",
       "content": [
@@ -134,6 +137,20 @@
           "JetBrains Mono"
         ]
       }
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-left",
+      "corner": "bottom-left",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.6.1";
+const APP_VERSION = "0.7.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -179,6 +179,12 @@ function buildOverridesJson() {
   if (settings.flipH) out.flipHorizontal = true;
   if (settings.flipV) out.flipVertical = true;
   out.showLogo = settings.showLogo && state.brandOverride !== "none";
+  // v0.7.0 Q6: badge style / position / size / contrast / opacity.
+  out.brandStyle = o.brandStyle ?? "official";
+  if (o.brandPosition && o.brandPosition !== "anchor") out.brandPosition = o.brandPosition;
+  if (o.brandScale && o.brandScale !== 1) out.brandScale = o.brandScale;
+  if (o.brandContrast && o.brandContrast !== "auto") out.brandContrast = o.brandContrast;
+  if (o.brandOpacity && o.brandOpacity < 1) out.brandOpacity = o.brandOpacity;
   if (settings.keepMetadata === false) out.metadata = false;
   // v0.6.0: localize `date('LOCAL', ...)` captions to the UI language.
   out.dateLocale = currentLang();
@@ -383,6 +389,15 @@ function effectiveTemplateJson() {
       }
     }
   }
+  // v0.7.0 Q2: "original" style switches official marks to typographic lockups.
+  const brandStyle = loadOverrides(state.templateId).brandStyle ?? "official";
+  if (brandStyle === "original" && state.brandOverride !== "custom") {
+    for (const layer of clone.layers ?? []) {
+      if (layer.type === "image" && layer.asset.includes("@builtin/brand/")) {
+        layer.asset = layer.asset.replace("@builtin/brand/", "@builtin/lockup/");
+      }
+    }
+  }
   return JSON.stringify(clone);
 }
 
@@ -505,6 +520,7 @@ async function selectTemplate(id) {
   updateWatermarkUI();
   buildLineEditor();
   updateBrandDetected();
+  syncBrandUI();
   renderNow();
 }
 
@@ -563,9 +579,37 @@ async function useTemplate(id) {
   updateWatermarkUI();
   buildLineEditor();
   updateBrandDetected();
+  syncBrandUI();
   if (state.photos.length) renderNow();
   else showTemplatePreview();
 }
+/* v0.7.0 Q1: brand elements on the UI display surfaces (wall + lightbox). */
+const DEMO_BRAND_STRIP = ["sony", "canon", "nikon", "fujifilm", "leica", "hasselblad", "dji", "apple"];
+function renderBrandStrip(el, slugs) {
+  if (!el) return;
+  el.innerHTML = "";
+  for (const slug of (slugs ?? []).slice(0, 8)) {
+    const img = document.createElement("img");
+    img.src = `./brand/${slug}.png`;
+    img.alt = slug;
+    img.title = slug;
+    img.loading = "lazy";
+    el.appendChild(img);
+  }
+  el.classList.toggle("hidden", !slugs?.length);
+}
+function templateBrandSlugs(id) {
+  const obj = state.templateCache.get(id);
+  if (!obj) return DEMO_BRAND_STRIP;
+  const slugs = new Set();
+  for (const layer of obj.layers ?? []) {
+    if (layer.type !== "image") continue;
+    const m = /@builtin\/(?:brand|lockup)\/([a-z0-9-]+)/.exec(layer.asset ?? "");
+    if (m) slugs.add(m[1]);
+  }
+  return slugs.size ? [...slugs] : DEMO_BRAND_STRIP;
+}
+
 function buildWall() {
   const tabs = $("wallCats");
   tabs.innerHTML = "";
@@ -584,6 +628,7 @@ function buildWall() {
 
   const list = filteredTemplates();
   $("wallCount").textContent = t("wall.count", { n: list.length });
+  renderBrandStrip($("wallBrandStrip"), DEMO_BRAND_STRIP);
 
   const grid = $("wallGrid");
   grid.innerHTML = "";
@@ -1055,7 +1100,10 @@ function updateTweakUI() {
   const def = document.createElement("option");
   def.value = ""; def.textContent = t("tweak.fontDefault");
   sel.appendChild(def);
+  const seenFamilies = new Set();
   for (const f of state.fonts) {
+    if (seenFamilies.has(f.family)) continue;
+    seenFamilies.add(f.family);
     const opt = document.createElement("option");
     opt.value = f.family; opt.textContent = f.family;
     sel.appendChild(opt);
@@ -1065,23 +1113,37 @@ function updateTweakUI() {
 
 async function ensureFont(family) {
   if (!family || state.loadedFonts.has(family)) return;
-  const meta = state.fonts.find((f) => f.family === family)
-    || state.userFonts?.find((f) => f.family === family);
-  if (!meta) return;
+  // v0.7.0: one family can ship several weight files; register every face so
+  // the engine can pick by `font.weight`.
+  const metas = state.fonts.filter((f) => f.family === family);
+  const user = state.userFonts?.find((f) => f.family === family);
+  if (!metas.length && !user) return;
   try {
-    let bytes;
-    if (meta.file) {
-      const res = await fetch(`${BASE}fonts/engine/${meta.file}`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      bytes = new Uint8Array(await res.arrayBuffer());
-    } else {
-      bytes = meta.bytes instanceof Uint8Array ? meta.bytes : new Uint8Array(meta.bytes);
+    for (const meta of metas.length ? metas : [user]) {
+      let bytes;
+      if (meta.file) {
+        const res = await fetch(`${BASE}fonts/engine/${meta.file}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        bytes = new Uint8Array(await res.arrayBuffer());
+      } else {
+        bytes = meta.bytes instanceof Uint8Array ? meta.bytes : new Uint8Array(meta.bytes);
+      }
+      state.engine.add_font(family, bytes);
     }
-    state.engine.add_font(family, bytes);
     state.loadedFonts.add(family);
   } catch (e) {
     toast("error", `${t("err.font")}: ${family} (${e.message || e})`);
   }
+}
+
+/// v0.7.0: make sure every font family referenced by the template JSON is
+/// registered before rendering (CJK faces are lazy and not warmed at boot).
+async function ensureTemplateFonts(jsonText) {
+  const families = new Set();
+  for (const m of String(jsonText).matchAll(/"(?:family|fontFamily)"\s*:\s*\[([^\]]*)\]/g)) {
+    for (const q of m[1].matchAll(/"([^"]+)"/g)) families.add(q[1]);
+  }
+  for (const family of families) await ensureFont(family);
 }
 
 /* ------------------------------------------------------ font warmup (v0.6.0) */
@@ -1104,9 +1166,10 @@ function warmEngineFonts() {
   fontWarmPromise = (async () => {
     fontWarm.status = "running";
     fontWarm.startedAt = Date.now();
-    fontWarm.engineFonts = state.fonts.length;
+    fontWarm.engineFonts = new Set(state.fonts.filter((f) => !f.lazy).map((f) => f.family)).size;
     fontWarm.loaded = state.loadedFonts.size;
-    const candidates = state.fonts.filter((f) => f.file && !state.loadedFonts.has(f.family));
+    const candidates = [...new Set(state.fonts.filter((f) => !f.lazy).map((f) => f.family))]
+      .filter((family) => !state.loadedFonts.has(family));
     fontWarm.total = candidates.length;
     let cache = null;
     try {
@@ -1115,16 +1178,18 @@ function warmEngineFonts() {
       cache = await caches.open(key);
       fontWarm.cache = key;
     } catch { /* CacheStorage unavailable: still warm the HTTP cache */ }
-    for (const f of candidates) {
+    for (const family of candidates) {
       fontWarm.maxInflight = Math.max(fontWarm.maxInflight, 1);
-      try {
-        const url = new URL(`fonts/engine/${f.file}`, document.baseURI).href;
-        const res = await fetch(url);
-        if (res?.ok && cache) {
-          await cache.put(new Request(url), res.clone());
-          fontWarm.cached++;
-        }
-      } catch { /* offline: retried on a later visit */ }
+      for (const f of state.fonts.filter((x) => x.family === family && x.file)) {
+        try {
+          const url = new URL(`fonts/engine/${f.file}`, document.baseURI).href;
+          const res = await fetch(url);
+          if (res?.ok && cache) {
+            await cache.put(new Request(url), res.clone());
+            fontWarm.cached++;
+          }
+        } catch { /* offline: retried on a later visit */ }
+      }
       fontWarm.done++;
       await sleep(60); // idle gap: keeps exactly one request in flight
     }
@@ -1202,6 +1267,7 @@ async function renderNow() {
     if (state.mode === "frame") {
       await ensureFont(loadOverrides(state.templateId).fontFamily || settings.fontFamily);
       const tpl = effectiveTemplateJson();
+      await ensureTemplateFonts(tpl);
       await ensureBuiltinAssets(tpl);
       const ojson = renderOverridesJson();
       if ($("preview").checked) {
@@ -1614,6 +1680,7 @@ function syncCanvasUI() {
   $("flipH").classList.toggle("on", settings.flipH);
   $("flipV").classList.toggle("on", settings.flipV);
   $("brandShow").checked = settings.showLogo;
+  syncBrandUI();
   $("exportSize").value = settings.exportSize;
   $("exportFormat").value = exportFormat();
   $("exportBtn").textContent = `${t("btn.export")} ${exportFormat().toUpperCase()}`;
@@ -1622,6 +1689,17 @@ function syncCanvasUI() {
   $("exportCustom").value = settings.exportCustom;
   $("pickerCompact").classList.toggle("on", pickerMode === "compact");
   $("pickerLarge").classList.toggle("on", pickerMode === "large");
+}
+
+/// v0.7.0 Q6: sync the enhanced brand panel from per-template overrides.
+function syncBrandUI() {
+  const o = state.mode === "frame" && state.templateId ? loadOverrides(state.templateId) : {};
+  $("brandStyle").value = o.brandStyle ?? "official";
+  $("brandPos").value = o.brandPosition ?? "anchor";
+  $("brandSize").value = String(o.brandScale ?? 1);
+  $("brandContrast").value = o.brandContrast ?? "auto";
+  $("brandOpacity").value = String(o.brandOpacity ?? 1);
+  $("brandOpacityVal").textContent = `${Math.round((o.brandOpacity ?? 1) * 100)}%`;
 }
 
 /* ------------------------------------------------------------------ status */
@@ -1799,6 +1877,16 @@ function wire() {
   $("brandShow").onchange = (e) => { settings.showLogo = e.target.checked; saveSettings(); renderNow(); };
   $("brandAuto").onclick = () => { state.brandOverride = "auto"; buildBrandGrid(); renderNow(); };
   $("brandNone").onclick = () => { state.brandOverride = "none"; buildBrandGrid(); renderNow(); };
+  const brandPatch = (patch) => { pushOverride(patch); syncBrandUI(); renderNow(); };
+  $("brandStyle").onchange = (e) => brandPatch({ brandStyle: e.target.value });
+  $("brandPos").onchange = (e) => brandPatch({ brandPosition: e.target.value });
+  $("brandSize").onchange = (e) => brandPatch({ brandScale: Number(e.target.value) });
+  $("brandContrast").onchange = (e) => brandPatch({ brandContrast: e.target.value });
+  $("brandOpacity").oninput = (e) => {
+    pushOverride({ brandOpacity: Number(e.target.value) });
+    $("brandOpacityVal").textContent = `${Math.round(Number(e.target.value) * 100)}%`;
+    renderNow();
+  };
   $("uploadLogo").onclick = () => $("logoFile").click();
   $("logoFile").onchange = async (e) => {
     const f = e.target.files?.[0];
@@ -1963,6 +2051,7 @@ function openLightbox(id) {
       }
     }
   })();
+  renderBrandStrip(document.getElementById("lbBrand"), templateBrandSlugs(id));
   withViewTransition(() => document.getElementById("lightbox").classList.remove("hidden"));
 }
 function closeLightbox() {
@@ -2067,6 +2156,8 @@ async function clearScope(name) {
 window.__fg = {
   state, renderNow, fitStage, showWall, showEditor, useTemplate, buildWall, toast, t,
   currentTemplateObject, effectiveTemplateJson, buildOverridesJson,
+  loadOverrides, pushOverride, syncBrandUI, syncCanvasUI,
+  openLightbox, closeLightbox,
   freeActive: () => state.freeCollage,
   freeSpec: () => state.freeSpec,
   updateFreeSpec,

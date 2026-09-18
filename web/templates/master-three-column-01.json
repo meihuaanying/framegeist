@@ -6,8 +6,8 @@
       "zh": "三列数值格",
       "en": "Three Columns"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -50,12 +50,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -108,9 +109,10 @@
           "Inter"
         ],
         "size": 0.013,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -132,10 +134,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "align": "center",
@@ -186,10 +189,11 @@
       },
       "font": {
         "family": [
-          "Oswald"
+          "Inter"
         ],
         "size": 0.028,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.01,
       "content": [
@@ -209,10 +213,11 @@
       },
       "font": {
         "family": [
-          "Oswald"
+          "Inter"
         ],
         "size": 0.028,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.01,
       "content": [
@@ -232,10 +237,11 @@
       },
       "font": {
         "family": [
-          "Oswald"
+          "Inter"
         ],
         "size": 0.028,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "letterSpacing": 0.01,
       "content": [
@@ -261,7 +267,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -283,7 +290,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -305,7 +313,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [

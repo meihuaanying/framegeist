@@ -6,8 +6,8 @@
       "zh": "双联细线",
       "en": "Diptych Hairline"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -50,10 +50,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "align": "right",
@@ -92,10 +93,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "align": "center",
@@ -116,10 +118,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -154,12 +157,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
-      "letterSpacing": 0.16,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

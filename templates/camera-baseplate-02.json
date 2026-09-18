@@ -6,8 +6,8 @@
       "zh": "底盖机身",
       "en": "Base Plate"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "camera"
@@ -64,12 +64,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.0115,
-        "color": "#A7ABB3"
+        "color": "#A7ABB3",
+        "weight": 500
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -106,12 +107,13 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F4F4F2"
+        "color": "#F4F4F2",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Camera')",
@@ -132,12 +134,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.0125,
-        "color": "#C3C7CE"
+        "color": "#C3C7CE",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

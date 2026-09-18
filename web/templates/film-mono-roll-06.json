@@ -6,8 +6,8 @@
       "zh": "机型卷轴",
       "en": "Mono Roll"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -49,10 +49,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -60,6 +61,9 @@
           "expr": "'ROLL 06 · SAFETY FILM'",
           "fallback": "ROLL"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -72,10 +76,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Geist Mono"
         ],
         "size": 0.04,
-        "color": "#EFE9DC"
+        "color": "#EFE9DC",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -95,10 +100,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#57534B"
+        "color": "#57534B",
+        "weight": 500
       },
       "letterSpacing": 0.3,
       "rotation": -90,
@@ -119,10 +125,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#B9B3A8"
+        "color": "#B9B3A8",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
@@ -145,12 +152,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "exif.lens",
@@ -171,12 +179,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
@@ -209,12 +218,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",

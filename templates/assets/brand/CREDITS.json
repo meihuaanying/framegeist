@@ -1,154 +1,168 @@
 {
-  "source": "Simple Icons (https://simpleicons.org) + framegeist-rendered wordmarks (OFL fonts)",
-  "license": "CC0-1.0 (icon files); wordmarks rendered from OFL fonts; brand names remain trademarks of their owners",
-  "disclaimer": "Icons/wordmarks indicate the camera/lens brand from EXIF metadata. No endorsement implied.",
-  "icons": [
-    {
-      "slug": "sony",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/sony.svg"
-    },
-    {
-      "slug": "nikon",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/nikon.svg"
-    },
-    {
-      "slug": "fujifilm",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/fujifilm.svg"
-    },
-    {
-      "slug": "leica",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/leica.svg"
-    },
-    {
-      "slug": "panasonic",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/panasonic.svg"
-    },
-    {
-      "slug": "dji",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/dji.svg"
-    },
-    {
-      "slug": "xiaomi",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/xiaomi.svg"
-    },
-    {
-      "slug": "apple",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/apple.svg"
-    },
-    {
-      "slug": "epson",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/epson.svg"
-    },
-    {
-      "slug": "insta360",
-      "source": "https://github.com/simple-icons/simple-icons/blob/develop/icons/insta360.svg"
-    }
+  "source": "Simple Icons (https://simpleicons.org) + original FrameGeist typographic wordmarks/lockups (OFL fonts)",
+  "license": "CC0-1.0 (icon files); wordmarks/lockups rendered from OFL fonts by this project; brand names and logos remain trademarks of their owners",
+  "disclaimer": "Icons/wordmarks/lockups are used to indicate the camera/lens/device brand from EXIF metadata. No endorsement or affiliation is implied.",
+  "officialIcons": [
+    "sony",
+    "nikon",
+    "fujifilm",
+    "leica",
+    "panasonic",
+    "dji",
+    "apple",
+    "epson",
+    "insta360",
+    "samsung",
+    "vivo",
+    "oppo",
+    "oneplus",
+    "huawei",
+    "honor",
+    "google",
+    "motorola",
+    "nokia",
+    "blackmagicdesign"
   ],
   "wordmarks": [
     {
       "slug": "canon",
       "kind": "brand",
-      "font": "CormorantGaramond-Regular.ttf"
+      "font": "CormorantGaramond-600.ttf"
     },
     {
       "slug": "ricoh",
       "kind": "brand",
-      "font": "Inter-Regular.ttf"
+      "font": "Inter-700.ttf"
     },
     {
       "slug": "sigma",
       "kind": "brand",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "font": "SpaceGrotesk-700.ttf"
     },
     {
       "slug": "zeiss",
       "kind": "brand",
-      "font": "Inter-Regular.ttf"
+      "font": "Inter-400.ttf"
     },
     {
       "slug": "hasselblad",
       "kind": "brand",
-      "font": "CormorantGaramond-Regular.ttf"
+      "font": "InstrumentSans-600.ttf"
     },
     {
       "slug": "olympus",
       "kind": "brand",
-      "font": "CormorantGaramond-Regular.ttf"
+      "font": "Inter-500.ttf"
     },
     {
       "slug": "pentax",
       "kind": "brand",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "font": "SpaceGrotesk-600.ttf"
     },
     {
       "slug": "tamron",
       "kind": "brand",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "font": "SpaceGrotesk-700.ttf"
     },
     {
-      "slug": "sony-gm",
-      "kind": "series",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "slug": "viltrox",
+      "kind": "brand",
+      "font": "Geist-700.ttf"
     },
     {
-      "slug": "canon-l",
-      "kind": "series",
-      "font": "CormorantGaramond-Regular.ttf"
+      "slug": "laowa",
+      "kind": "brand",
+      "font": "Geist-600.ttf"
     },
     {
-      "slug": "nikon-s",
-      "kind": "series",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "slug": "ttartisan",
+      "kind": "brand",
+      "font": "Geist-600.ttf"
     },
     {
-      "slug": "sigma-art",
-      "kind": "series",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "slug": "tokina",
+      "kind": "brand",
+      "font": "Geist-700.ttf"
     },
     {
-      "slug": "sigma-dgdn",
-      "kind": "series",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "slug": "samyang",
+      "kind": "brand",
+      "font": "Geist-600.ttf"
     },
     {
-      "slug": "hasselblad-xcd",
-      "kind": "series",
-      "font": "Inter-Regular.ttf"
+      "slug": "meike",
+      "kind": "brand",
+      "font": "Geist-700.ttf"
     },
     {
-      "slug": "fujifilm-xf",
-      "kind": "series",
-      "font": "Inter-Regular.ttf"
+      "slug": "7artisans",
+      "kind": "brand",
+      "font": "Geist-600.ttf"
     },
     {
-      "slug": "genshin",
-      "kind": "game",
-      "font": "CormorantGaramond-Regular.ttf"
+      "slug": "sirui",
+      "kind": "brand",
+      "font": "Geist-700.ttf"
     },
     {
-      "slug": "zzz",
-      "kind": "game",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "slug": "yongnuo",
+      "kind": "brand",
+      "font": "Geist-600.ttf"
     },
     {
-      "slug": "honkai",
-      "kind": "game",
-      "font": "SpaceGrotesk-Regular.ttf"
+      "slug": "phaseone",
+      "kind": "brand",
+      "font": "Geist-600.ttf"
     },
     {
-      "slug": "arknights",
-      "kind": "game",
-      "font": "Oswald-Regular.ttf"
-    },
-    {
-      "slug": "wwmeet",
-      "kind": "game",
-      "font": "MaShanZheng-Regular.ttf"
-    },
-    {
-      "slug": "wukong",
-      "kind": "game",
-      "font": "Oswald-Regular.ttf"
+      "slug": "blackmagicdesign",
+      "kind": "brand",
+      "font": "Geist-700.ttf",
+      "note": "official icon preferred"
     }
+  ],
+  "lockups": [
+    "sony",
+    "canon",
+    "nikon",
+    "fujifilm",
+    "leica",
+    "hasselblad",
+    "panasonic",
+    "ricoh",
+    "sigma",
+    "zeiss",
+    "dji",
+    "apple",
+    "tamron",
+    "epson",
+    "olympus",
+    "pentax",
+    "gopro",
+    "insta360",
+    "sandisk",
+    "phaseone",
+    "profoto",
+    "smallrig",
+    "samsung",
+    "vivo",
+    "oppo",
+    "oneplus",
+    "huawei",
+    "honor",
+    "google",
+    "motorola",
+    "nokia",
+    "blackmagicdesign",
+    "viltrox",
+    "laowa",
+    "ttartisan",
+    "tokina",
+    "samyang",
+    "meike",
+    "7artisans",
+    "sirui",
+    "yongnuo",
+    "voigtlander"
   ]
 }

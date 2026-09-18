@@ -6,8 +6,8 @@
       "zh": "Art Deco 双线",
       "en": "Deco Double Line"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
@@ -116,10 +116,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.048,
-        "color": "#17150F"
+        "color": "#17150F",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "effects": {
@@ -145,7 +146,8 @@
           "Noto Serif SC"
         ],
         "size": 0.022,
-        "color": "#8A6E2F"
+        "color": "#8A6E2F",
+        "weight": 500
       },
       "letterSpacing": 0.32,
       "content": [
@@ -165,10 +167,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#55524A"
+        "color": "#55524A",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "effects": {
@@ -194,12 +197,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#55524A"
+        "color": "#55524A",
+        "weight": 400
       },
-      "letterSpacing": 0.2,
+      "letterSpacing": 0,
       "align": "center",
       "effects": {
         "case": "upper"
@@ -224,10 +228,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#55524A"
+        "color": "#55524A",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -240,6 +245,20 @@
           "fallback": "Geometry · Light · Order"
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-right",
+      "corner": "bottom-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

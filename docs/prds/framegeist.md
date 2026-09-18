@@ -502,3 +502,15 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
   7. **回归防线**：新增 dHash+均色视觉回归门禁（384 图基线）与 EXIF 真实性门禁；E2E 195 条（含 HEIC 降级路径、AVIF/WebP magic、字体预热）。
   8. **Tauri**：crates.io 最新稳定 = 2.11.5 = 当前锁定；3.x 为 alpha，不升级并记录。
   9. **Q8 失效说明**：三张原图均无 GPS 标签，样片“保留 GPS”条款自然失效。
+
+- **2026-09-18 ｜ v0.7.0 发布（品牌徽标系统 v2 + 排版现代化） ｜** 按 `docs/V0.7.0-CONSTRAINTS.md`（18 项 grill 确认）执行到发布。发现与决策：
+  1. **多字重字体架构**：FontBook 从「一族一 face」改为「一族多 face（Vec）」并按 OS/2 `usWeightClass` 选面；`family_key` 去 `-权重` 后缀的设计正好让 `<Stem>-<weight>.ttf` 归入同族；fontdb 0.23 的 CSS 字重匹配直接可用。legacy ab_glyph 路径按「最接近 400」取面保持旧行为。
+  2. **实例化要点**：fontTools `varLib.instancer` 必须显式钉住**所有**轴（含 opsz/SOFT/WONK）才产出静态字面；实例后须手写 name ID 1/2/4/6/16/17 与 OS/2 usWeightClass（`--update-name-table` 会改族名、破坏同族聚合）。
+  3. **CJK 子集按 face cmap 过滤**：Ma Shan Zheng 一度被归入拉丁字体管线只剩 ASCII（字形门禁抓出），已移入 CJK 管线；子集脚本现在会报告「charset 中缺字形数」。
+  4. **下载/构建陷阱**：GitHub `github.com` 直连/大文件不稳（raw 与 api 正常）→ jsDelivr 镜像回退 + `gh release download`（校验 API 声明大小）；py7zr 对 Sarasa 7z 报错 → Windows bsdtar 回退；`npx` 在 Windows 必须 `shell:true`。
+  5. **Q13 与 Q18 的取舍**：数值行默认 Inter `tnum`（Q13）；器材类 `camera/film/phone/drone/fuji` 的数据行用 Geist Mono（Q18）；CJK 日期等数据行使用分类 CJK 字体（否则豆腐块，由门禁兜底）。
+  6. **徽标对比保护兼容旧 autoTint**：变体选择仍按背景亮度（保持 v0.3 语义与旧测试），仅当局部背景明暗跨度大、黑白变体都不到 4.5:1 时才追加**反色**描边/底板（花底可见性用「同时出现深/浅像素」断言）。
+  7. **CLI/WASM 字节一致的前提**：smoke 必须向 WASM 注册**全部**字体 face（与 CLI 扫描字体目录一致），否则 `weight:600` 在 CLI 命中 600、WASM 只有 400 而分叉。
+  8. **APCA 实测**：暗色模式 `--text-muted/#a6a6ad`、`--text-faint/#6e6e76` 不达标（Lc −53.7/−26.1），提亮到 `#b8b8c0`/`#82828b`（Lc −63.7/−35.4）。
+  9. **字形/排版门禁固化**：`check-glyph-coverage.mjs`（模板字面量 ⊆ 字体子集）、`check-ui-contrast.mjs`（APCA）、视觉/金标基线「有意重生成」并记录原因（多字重与排版换代）。
+  10. **UI 展示面品牌元素**：模板墙头与灯箱品牌条按模板静态 slug 取用，否则回退演示品牌组。

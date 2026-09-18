@@ -432,6 +432,28 @@ pub struct ImageLayer {
     /// default) | "light" | "dark".
     #[serde(default)]
     pub tint: Option<String>,
+    /// v0.7.0: fixed corner placement ("top-left" | "top-right" |
+    /// "bottom-left" | "bottom-right"); overrides `anchor`/`offset`.
+    #[serde(default)]
+    pub corner: Option<String>,
+    /// v0.7.0: margin for corner placement, relative to photo height
+    /// (0–0.3, default 0.04).
+    #[serde(default)]
+    pub margin: Option<f64>,
+    /// v0.7.0: badge contrast protection ("auto" | "light" | "dark" |
+    /// "stroke" | "plate"). `auto`/`light`/`dark` switch between the black and
+    /// white asset variants; `stroke`/`plate` add an outline or a translucent
+    /// plate when a busy background would swallow the mark.
+    #[serde(default)]
+    pub contrast: Option<String>,
+    /// v0.7.0: max width for `@builtin` badges, relative to photo width
+    /// (0.02–1, badge default 0.32). Keeps long wordmarks inside the frame.
+    #[serde(rename = "maxWidth", default)]
+    pub max_width: Option<f64>,
+    /// v0.7.0: min height for `@builtin` badges, relative to photo height
+    /// (0–0.5, badge default 0.035 — never below 18px).
+    #[serde(rename = "minHeight", default)]
+    pub min_height: Option<f64>,
     /// v0.5.0: explicit stacking order (lower paints first).
     #[serde(default)]
     pub z: Option<i32>,
@@ -755,6 +777,24 @@ pub struct TemplateOverrides {
     /// Whitelisted scalar keys; never persisted into the photo.
     #[serde(default)]
     pub exif: Option<serde_json::Map<String, serde_json::Value>>,
+    /// v0.7.0: badge style ("official" keeps `@builtin/brand/...`,
+    /// "original" switches to the typographic `@builtin/lockup/...`).
+    #[serde(default)]
+    pub brand_style: Option<String>,
+    /// v0.7.0: badge placement override
+    /// ("anchor" | "top-left" | "top-right" | "bottom-left" | "bottom-right").
+    #[serde(default)]
+    pub brand_position: Option<String>,
+    /// v0.7.0: badge size multiplier (0.5–2.0).
+    #[serde(default)]
+    pub brand_scale: Option<f64>,
+    /// v0.7.0: badge contrast protection override
+    /// ("auto" | "light" | "dark" | "stroke" | "plate").
+    #[serde(default)]
+    pub brand_contrast: Option<String>,
+    /// v0.7.0: badge opacity override (0.7–1.0).
+    #[serde(default)]
+    pub brand_opacity: Option<f64>,
 }
 
 /// v0.5.0 card effect overrides: rounded corners, outer shadow, edge border and
@@ -906,6 +946,37 @@ impl TemplateOverrides {
                     "overrides.margin must be within [0.0, 0.5]".into(),
                 ));
             }
+        }
+        if let Some(style) = &self.brand_style {
+            if !matches!(style.as_str(), "official" | "original") {
+                return Err(Error::SchemaViolation(
+                    "overrides.brandStyle must be \"official\" or \"original\"".into(),
+                ));
+            }
+        }
+        if let Some(pos) = &self.brand_position {
+            if !matches!(
+                pos.as_str(),
+                "anchor" | "top-left" | "top-right" | "bottom-left" | "bottom-right"
+            ) {
+                return Err(Error::SchemaViolation(
+                    "overrides.brandPosition must be anchor|top-left|top-right|bottom-left|bottom-right"
+                        .into(),
+                ));
+            }
+        }
+        if let Some(s) = self.brand_scale {
+            range_check("overrides.brandScale", s, 0.5, 2.0)?;
+        }
+        if let Some(c) = &self.brand_contrast {
+            if !matches!(c.as_str(), "auto" | "light" | "dark" | "stroke" | "plate") {
+                return Err(Error::SchemaViolation(
+                    "overrides.brandContrast must be auto|light|dark|stroke|plate".into(),
+                ));
+            }
+        }
+        if let Some(o) = self.brand_opacity {
+            range_check("overrides.brandOpacity", o, 0.7, 1.0)?;
         }
         if let Some(card) = &self.card {
             if let Some(r) = card.radius {
@@ -1367,6 +1438,32 @@ fn validate_layer(layer: &Layer, i: usize) -> Result<()> {
                 }
             }
             range_check(&format!("layers[{i}].opacity"), image.opacity, 0.0, 1.0)?;
+            if let Some(c) = &image.corner {
+                if !matches!(
+                    c.as_str(),
+                    "top-left" | "top-right" | "bottom-left" | "bottom-right"
+                ) {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].corner must be top-left|top-right|bottom-left|bottom-right"
+                    )));
+                }
+            }
+            if let Some(m) = image.margin {
+                range_check(&format!("layers[{i}].margin"), m, 0.0, 0.3)?;
+            }
+            if let Some(c) = &image.contrast {
+                if !matches!(c.as_str(), "auto" | "light" | "dark" | "stroke" | "plate") {
+                    return Err(Error::SchemaViolation(format!(
+                        "layers[{i}].contrast must be auto|light|dark|stroke|plate"
+                    )));
+                }
+            }
+            if let Some(w) = image.max_width {
+                range_check(&format!("layers[{i}].maxWidth"), w, 0.02, 1.0)?;
+            }
+            if let Some(h) = image.min_height {
+                range_check(&format!("layers[{i}].minHeight"), h, 0.0, 0.5)?;
+            }
         }
         Layer::Shape(shape) => {
             parse_hex_color(&shape.color)?;

@@ -7,7 +7,7 @@
       "en": "Big Trail"
     },
     "version": "1.1.0",
-    "minEngineVersion": "0.6.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "sports"
@@ -39,7 +39,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -47,6 +48,9 @@
           "expr": "'MOUNTAIN RIDE · 2026'",
           "fallback": null
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -59,10 +63,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Unbounded"
         ],
         "size": 0.115,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 700
       },
       "letterSpacing": 0.03,
       "effects": {
@@ -105,12 +110,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -128,12 +134,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 400
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

@@ -6,8 +6,8 @@
       "zh": "奶白配方卡",
       "en": "Recipe Hero"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -64,10 +64,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "align": "right",
@@ -76,6 +77,9 @@
           "expr": "'RECIPE CARD C4 · VELVIA'",
           "fallback": "RECIPE CARD"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -88,10 +92,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -111,10 +116,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist"
         ],
         "size": 0.055,
-        "color": "#17181A"
+        "color": "#17181A",
+        "weight": 600
       },
       "letterSpacing": 0.02,
       "content": [
@@ -134,10 +140,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -145,6 +152,9 @@
           "expr": "'WB AUTO · DR100 · GRAIN OFF · H+1 S-1'",
           "fallback": "WB AUTO · DR100"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -157,10 +167,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#17181A"
+        "color": "#17181A",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
@@ -183,12 +194,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -207,10 +219,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -230,10 +243,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.04,
-        "color": "#17181A"
+        "color": "#17181A",
+        "weight": 500
       },
       "letterSpacing": 0.02,
       "content": [
@@ -256,12 +270,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",

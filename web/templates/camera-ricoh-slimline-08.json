@@ -6,8 +6,8 @@
       "zh": "顶置细条参数",
       "en": "Slimline Bar"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "camera"
@@ -67,10 +67,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "letterSpacing": 0.14,
       "content": [
@@ -93,12 +94,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.0115,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -131,10 +133,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#B4B8BE"
+        "color": "#B4B8BE",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "align": "center",
@@ -155,12 +158,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.0115,
-        "color": "#8E9298"
+        "color": "#8E9298",
+        "weight": 500
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

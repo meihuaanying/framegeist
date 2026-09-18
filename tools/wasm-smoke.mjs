@@ -1,6 +1,6 @@
 // Smoke test: WASM engine renders identically to the CLI (PRD N2 mini-gate).
 // Usage: node tools/wasm-smoke.mjs
-import { readFile, rm, writeFile, stat } from "node:fs/promises";
+import { readFile, readdir, rm, writeFile, stat } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
@@ -13,14 +13,19 @@ const cliName = process.platform === "win32" ? "framegeist.exe" : "framegeist";
 const engineCli = join(ROOT, "target/release", cliName);
 const photo = await readFile(join(ROOT, "templates/assets/test-photos/sample-landscape.jpg"));
 const wasmBytes = await readFile(join(ROOT, "web/pkg/framegeist_wasm_bg.wasm"));
-const font = await readFile(join(ROOT, "templates/assets/fonts/JetBrainsMono-Regular.ttf"));
+// v0.7.0: register the full engine font set (68 faces / 22 families) so the
+// WASM side matches the CLI's font directory scan, including per-weight faces.
+const fontDir = join(ROOT, "templates/assets/fonts");
+const fontFiles = (await readdir(fontDir)).filter((f) => /\.(ttf|otf)$/i.test(f)).sort();
+const fontNames = fontFiles.map((f) => f.replace(/\.[^.]+$/, ""));
+const fontList = await Promise.all(fontFiles.map((f) => readFile(join(fontDir, f))));
 
 const glueUrl = new URL("../web/pkg/framegeist_wasm.js", import.meta.url).href;
 const init = (await import(glueUrl)).default;
 const { Engine } = await import(glueUrl);
 await init(wasmBytes);
 
-const engine = new Engine(["JetBrains Mono"], [font]);
+const engine = new Engine(fontNames, fontList);
 
 const fixtureDir = join(ROOT, "crates/framegeist-cli/tests/fixtures");
 const templateIds = ["classic-white-bottom-param", "polaroid-caption", "minimal-corner-iso"];

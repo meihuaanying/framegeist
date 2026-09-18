@@ -6,8 +6,8 @@
       "zh": "菱形色列",
       "en": "Diamond Row"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorcard"
@@ -44,12 +44,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -87,9 +88,10 @@
           "Inter"
         ],
         "size": 0.017,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -133,12 +135,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0105,
-        "color": "#B9BEC6"
+        "color": "#B9BEC6",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {

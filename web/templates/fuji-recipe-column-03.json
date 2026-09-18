@@ -6,8 +6,8 @@
       "zh": "左侧配方栏",
       "en": "Recipe Column"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -79,10 +79,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "content": [
@@ -90,6 +91,9 @@
           "expr": "'RECIPE CARD C3'",
           "fallback": "RECIPE"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -102,10 +106,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -125,12 +130,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'ACROS'",
@@ -148,10 +154,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -171,17 +178,21 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'5600K'",
           "fallback": "WB"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -194,10 +205,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -217,17 +229,21 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'DR400'",
           "fallback": "DR"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -240,10 +256,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -263,12 +280,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'STRONG LARGE'",
@@ -286,10 +304,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -309,17 +328,21 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'-1'",
           "fallback": "-1"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -332,10 +355,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -355,17 +379,21 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.018,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.03,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'+1'",
           "fallback": "+1"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -378,10 +406,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#2E2F33"
+        "color": "#2E2F33",
+        "weight": 500
       },
       "letterSpacing": 0.4,
       "rotation": -90,
@@ -390,6 +419,9 @@
           "expr": "'FUJIFILM · RECIPE CARD C3'",
           "fallback": "FUJIFILM"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -402,10 +434,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
@@ -428,12 +461,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('ISO {iso} · {focal}mm f/{aperture} · {shutter}', exif)",
@@ -451,12 +485,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",

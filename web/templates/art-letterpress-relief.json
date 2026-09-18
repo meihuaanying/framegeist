@@ -6,8 +6,8 @@
       "zh": "压印浮雕",
       "en": "Letterpress Relief"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
@@ -83,10 +83,11 @@
       },
       "font": {
         "family": [
-          "Playfair Display"
+          "Geist"
         ],
         "size": 0.052,
-        "color": "#373A40"
+        "color": "#373A40",
+        "weight": 600
       },
       "letterSpacing": 0.1,
       "effects": {
@@ -115,10 +116,11 @@
       },
       "font": {
         "family": [
-          "Noto Serif SC"
+          "Glow Sans SC"
         ],
         "size": 0.026,
-        "color": "#4A4E55"
+        "color": "#4A4E55",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "effects": {
@@ -147,10 +149,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6E6A61"
+        "color": "#6E6A61",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "effects": {
@@ -183,10 +186,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6E6A61"
+        "color": "#6E6A61",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -210,12 +214,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6E6A61"
+        "color": "#6E6A61",
+        "weight": 400
       },
-      "letterSpacing": 0.2,
+      "letterSpacing": 0,
       "align": "center",
       "effects": {
         "case": "upper"
@@ -229,6 +234,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "bottom-right",
+      "corner": "bottom-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

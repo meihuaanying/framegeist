@@ -6,8 +6,8 @@
       "zh": "新春金岁",
       "en": "Spring Gold"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "festival"
@@ -39,7 +39,8 @@
           "Inter"
         ],
         "size": 0.0095,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "opacity": 0.9,
@@ -116,12 +117,13 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "LXGW WenKai"
         ],
         "size": 0.075,
-        "color": "#F2C94C"
+        "color": "#F2C94C",
+        "weight": 600
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.02,
       "align": "center",
       "content": [
         {
@@ -140,10 +142,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Inter"
         ],
         "size": 0.055,
-        "color": "#F7E6C4"
+        "color": "#F7E6C4",
+        "weight": 400
       },
       "letterSpacing": 0.06,
       "align": "center",
@@ -169,8 +172,9 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0085,
-        "color": "#F2C94C"
+        "size": 0.0095,
+        "color": "#F2C94C",
+        "weight": 500
       },
       "letterSpacing": 0.25,
       "opacity": 0.9,

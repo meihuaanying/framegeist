@@ -6,8 +6,8 @@
       "zh": "齿孔边码",
       "en": "Sprocket Classic"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -76,10 +76,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#A8A298"
+        "color": "#A8A298",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -102,12 +103,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -125,10 +127,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#EFE9DC"
+        "color": "#EFE9DC",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -163,12 +166,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

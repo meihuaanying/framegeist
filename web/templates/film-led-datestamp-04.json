@@ -6,8 +6,8 @@
       "zh": "橙红日期章",
       "en": "LED Datestamp"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -49,10 +49,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.011,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "align": "right",
@@ -88,10 +89,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Geist Mono"
         ],
         "size": 0.085,
-        "color": "#FF5A2D"
+        "color": "#FF5A2D",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "lineHeight": 0.92,
@@ -120,12 +122,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.012,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
@@ -143,10 +146,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#B9B3A8"
+        "color": "#B9B3A8",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -169,10 +173,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Geist Mono"
         ],
         "size": 0.03,
-        "color": "#EFE9DC"
+        "color": "#EFE9DC",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [

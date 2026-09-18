@@ -6,8 +6,8 @@
       "zh": "夜行票·斜卡",
       "en": "Night Tilt"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "ticket"
@@ -53,10 +53,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C828B"
+        "color": "#7C828B",
+        "weight": 500
       },
       "letterSpacing": 0.22,
       "rotation": -6,
@@ -77,10 +78,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Bricolage Grotesque"
         ],
         "size": 0.044,
-        "color": "#1C1F23"
+        "color": "#1C1F23",
+        "weight": 500
       },
       "letterSpacing": 0.04,
       "rotation": -6,
@@ -101,12 +103,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#4A5057"
+        "color": "#4A5057",
+        "weight": 400
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "rotation": -6,
       "content": [
         {
@@ -128,10 +131,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C828B"
+        "color": "#7C828B",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "rotation": -6,
@@ -165,10 +169,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Bricolage Grotesque"
         ],
         "size": 0.034,
-        "color": "#D8D5CE"
+        "color": "#D8D5CE",
+        "weight": 500
       },
       "letterSpacing": 0.06,
       "content": [
@@ -201,12 +206,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#CFCCC6"
+        "color": "#CFCCC6",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
@@ -242,10 +248,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#6E737C"
+        "color": "#6E737C",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "align": "right",

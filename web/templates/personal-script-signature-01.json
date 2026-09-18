@@ -6,8 +6,8 @@
       "zh": "手写签名",
       "en": "Script Signature"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "personal"
@@ -61,7 +61,8 @@
           "Inter"
         ],
         "size": 0.012,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
       "letterSpacing": 0.1,
       "content": [
@@ -87,14 +88,16 @@
           "Great Vibes"
         ],
         "size": 0.045,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
       "content": [
         {
           "expr": "'YOUR NAME'",
           "fallback": "YOUR NAME"
         }
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -106,12 +109,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 400
       },
-      "letterSpacing": 0.18,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('© YYYY COPYRIGHT', exif.datetime)",

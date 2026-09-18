@@ -6,8 +6,8 @@
       "zh": "细线黑框",
       "en": "Inner Rule"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "black-frame"
@@ -54,8 +54,9 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0085,
-        "color": "#5E5E5E"
+        "size": 0.0095,
+        "color": "#5E5E5E",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "content": [
@@ -78,7 +79,8 @@
           "Inter"
         ],
         "size": 0.0115,
-        "color": "#D6D6D6"
+        "color": "#D6D6D6",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "align": "center",
@@ -102,12 +104,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0095,
-        "color": "#8A8A8A"
+        "color": "#8A8A8A",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "center",
       "content": [
         {
@@ -118,6 +121,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

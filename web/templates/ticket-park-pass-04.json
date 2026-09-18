@@ -6,8 +6,8 @@
       "zh": "公园通行证",
       "en": "Park Pass"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "ticket"
@@ -65,10 +65,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Bricolage Grotesque"
         ],
         "size": 0.04,
-        "color": "#2A2E2A"
+        "color": "#2A2E2A",
+        "weight": 500
       },
       "letterSpacing": 0.06,
       "content": [
@@ -88,10 +89,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C8278"
+        "color": "#7C8278",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "content": [
@@ -124,10 +126,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Bricolage Grotesque"
         ],
         "size": 0.034,
-        "color": "#2A2E2A"
+        "color": "#2A2E2A",
+        "weight": 500
       },
       "letterSpacing": 0.06,
       "align": "right",
@@ -148,12 +151,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C8278"
+        "color": "#7C8278",
+        "weight": 400
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -175,10 +179,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
-        "size": 0.009,
-        "color": "#7C8278"
+        "size": 0.0095,
+        "color": "#7C8278",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "align": "right",
@@ -199,12 +204,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#3A3F46"
+        "color": "#3A3F46",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
@@ -240,10 +246,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C8278"
+        "color": "#7C8278",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -263,12 +270,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C8278"
+        "color": "#7C8278",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {

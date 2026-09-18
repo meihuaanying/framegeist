@@ -6,8 +6,8 @@
       "zh": "烫金箔",
       "en": "Gilt Foil"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "effect"
@@ -52,10 +52,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#7A6A4A"
+        "color": "#7A6A4A",
+        "weight": 500
       },
       "letterSpacing": 0.3,
       "align": "center",
@@ -97,10 +98,11 @@
       },
       "font": {
         "family": [
-          "Cormorant Garamond"
+          "Fraunces"
         ],
         "size": 0.055,
-        "color": "#F5D67B"
+        "color": "#F5D67B",
+        "weight": 600
       },
       "letterSpacing": 0.14,
       "effects": {
@@ -140,10 +142,11 @@
       },
       "font": {
         "family": [
-          "Noto Serif SC"
+          "Glow Sans SC"
         ],
         "size": 0.024,
-        "color": "#C9A24B"
+        "color": "#C9A24B",
+        "weight": 500
       },
       "letterSpacing": 0.34,
       "content": [
@@ -163,10 +166,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#B8964A"
+        "color": "#B8964A",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "effects": {
@@ -192,12 +196,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#B8964A"
+        "color": "#B8964A",
+        "weight": 400
       },
-      "letterSpacing": 0.2,
+      "letterSpacing": 0,
       "align": "center",
       "effects": {
         "case": "upper"
@@ -222,10 +227,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#B8964A"
+        "color": "#B8964A",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -237,7 +243,24 @@
           "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
           "fallback": "Archival Pigment · No. 01"
         }
+      ],
+      "features": [
+        "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

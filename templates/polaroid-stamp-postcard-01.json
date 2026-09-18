@@ -6,8 +6,8 @@
       "zh": "邮票明信片",
       "en": "Stamp Postcard"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "polaroid"
@@ -49,10 +49,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "content": [
@@ -72,12 +73,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
@@ -113,12 +115,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -137,10 +140,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Inter"
         ],
         "size": 0.075,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "letterSpacing": 0.04,
       "content": [
@@ -163,10 +167,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.016,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 400
       },
       "letterSpacing": 0.04,
       "content": [
@@ -189,10 +194,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#6E6A62"
+        "color": "#6E6A62",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -212,12 +218,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#8C877D"
+        "color": "#8C877D",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",

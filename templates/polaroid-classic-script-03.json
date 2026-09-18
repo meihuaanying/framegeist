@@ -6,8 +6,8 @@
       "zh": "经典手写白框",
       "en": "Classic Script"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "polaroid"
@@ -36,10 +36,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#9A9A9A"
+        "color": "#9A9A9A",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "content": [
@@ -59,10 +60,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#9A9A9A"
+        "color": "#9A9A9A",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "align": "right",
@@ -71,6 +73,9 @@
           "expr": "fmt('{focal}mm · f/{aperture} · ISO{iso}', exif)",
           "fallback": "35mm · f/2.8"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -86,9 +91,10 @@
           "Great Vibes"
         ],
         "size": 0.085,
-        "color": "#2A2A2A"
+        "color": "#2A2A2A",
+        "weight": 600
       },
-      "letterSpacing": 0,
+      "letterSpacing": -0.02,
       "content": [
         {
           "expr": "'with love'",
@@ -106,12 +112,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.016,
-        "color": "#2A2A2A"
+        "color": "#2A2A2A",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "'SEASIDE'",
@@ -129,12 +136,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#8A8A8A"
+        "color": "#8A8A8A",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -156,12 +164,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#8A8A8A"
+        "color": "#8A8A8A",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
@@ -197,12 +206,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#A6A6A6"
+        "color": "#A6A6A6",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",

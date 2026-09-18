@@ -6,8 +6,8 @@
       "zh": "原神 · 极简角标",
       "en": "Genshin · Corner Mark"
     },
-    "version": "0.3.0",
-    "minEngineVersion": "0.1.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "framegeist",
     "license": "CC0-1.0",
     "category": "game",
@@ -40,7 +40,7 @@
       "anchor": "bottom-right",
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.016,
         "weight": 500,
@@ -55,7 +55,8 @@
       "offset": {
         "x": -0.025,
         "y": -0.095
-      }
+      },
+      "letterSpacing": 0.08
     }
   ]
 }

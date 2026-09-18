@@ -1,58 +1,426 @@
 {
   "fonts": [
     {
-      "family": "Inter",
-      "file": "Inter-Regular.ttf",
-      "license": "OFL-1.1"
-    },
-    {
-      "family": "Playfair Display",
-      "file": "PlayfairDisplay-Regular.ttf",
-      "license": "OFL-1.1"
-    },
-    {
       "family": "Bebas Neue",
-      "file": "BebasNeue-Regular.ttf",
+      "file": "BebasNeue-400.ttf",
+      "weight": 400,
       "license": "OFL-1.1"
     },
     {
-      "family": "Oswald",
-      "file": "Oswald-Regular.ttf",
+      "family": "Bricolage Grotesque",
+      "file": "BricolageGrotesque-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Bricolage Grotesque",
+      "file": "BricolageGrotesque-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Bricolage Grotesque",
+      "file": "BricolageGrotesque-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Bricolage Grotesque",
+      "file": "BricolageGrotesque-700.ttf",
+      "weight": 700,
       "license": "OFL-1.1"
     },
     {
       "family": "Cormorant Garamond",
-      "file": "CormorantGaramond-Regular.ttf",
+      "file": "CormorantGaramond-400.ttf",
+      "weight": 400,
       "license": "OFL-1.1"
     },
     {
-      "family": "Space Grotesk",
-      "file": "SpaceGrotesk-Regular.ttf",
+      "family": "Cormorant Garamond",
+      "file": "CormorantGaramond-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Cormorant Garamond",
+      "file": "CormorantGaramond-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Cormorant Garamond",
+      "file": "CormorantGaramond-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Fraunces",
+      "file": "Fraunces-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Fraunces",
+      "file": "Fraunces-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Fraunces",
+      "file": "Fraunces-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Fraunces",
+      "file": "Fraunces-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist",
+      "file": "Geist-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist",
+      "file": "Geist-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist",
+      "file": "Geist-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist",
+      "file": "Geist-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist Mono",
+      "file": "GeistMono-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist Mono",
+      "file": "GeistMono-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist Mono",
+      "file": "GeistMono-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Geist Mono",
+      "file": "GeistMono-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Glow Sans SC",
+      "file": "GlowSansSC-400.otf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Glow Sans SC",
+      "file": "GlowSansSC-500.otf",
+      "weight": 500,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Glow Sans SC",
+      "file": "GlowSansSC-700.otf",
+      "weight": 700,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Great Vibes",
+      "file": "GreatVibes-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Instrument Sans",
+      "file": "InstrumentSans-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Instrument Sans",
+      "file": "InstrumentSans-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Instrument Sans",
+      "file": "InstrumentSans-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Instrument Sans",
+      "file": "InstrumentSans-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Inter",
+      "file": "Inter-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Inter",
+      "file": "Inter-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Inter",
+      "file": "Inter-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Inter",
+      "file": "Inter-700.ttf",
+      "weight": 700,
       "license": "OFL-1.1"
     },
     {
       "family": "JetBrains Mono",
-      "file": "JetBrainsMono-Regular.ttf",
+      "file": "JetBrainsMono-400.ttf",
+      "weight": 400,
       "license": "OFL-1.1"
     },
     {
-      "family": "Noto Sans SC",
-      "file": "NotoSansSC-Regular.otf",
+      "family": "JetBrains Mono",
+      "file": "JetBrainsMono-500.ttf",
+      "weight": 500,
       "license": "OFL-1.1"
     },
     {
-      "family": "Great Vibes",
-      "file": "GreatVibes-Regular.ttf",
+      "family": "JetBrains Mono",
+      "file": "JetBrainsMono-700.ttf",
+      "weight": 700,
       "license": "OFL-1.1"
+    },
+    {
+      "family": "LXGW WenKai",
+      "file": "LXGWWenKai-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "LXGW WenKai",
+      "file": "LXGWWenKai-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1",
+      "lazy": true
     },
     {
       "family": "Ma Shan Zheng",
-      "file": "MaShanZheng-Regular.ttf",
-      "license": "OFL-1.1"
+      "file": "MaShanZheng-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "NotoSansSC-400.otf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "NotoSansSC-500.otf",
+      "weight": 500,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Noto Sans SC",
+      "file": "NotoSansSC-700.otf",
+      "weight": 700,
+      "license": "OFL-1.1",
+      "lazy": true
     },
     {
       "family": "Noto Serif SC",
-      "file": "NotoSerifSC-Regular.otf",
+      "file": "NotoSerifSC-400.otf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Noto Serif SC",
+      "file": "NotoSerifSC-600.otf",
+      "weight": 600,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Noto Serif SC",
+      "file": "NotoSerifSC-700.otf",
+      "weight": 700,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Onest",
+      "file": "Onest-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Onest",
+      "file": "Onest-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Onest",
+      "file": "Onest-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Onest",
+      "file": "Onest-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Oswald",
+      "file": "Oswald-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Oswald",
+      "file": "Oswald-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Oswald",
+      "file": "Oswald-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Oswald",
+      "file": "Oswald-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Playfair Display",
+      "file": "PlayfairDisplay-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Playfair Display",
+      "file": "PlayfairDisplay-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Playfair Display",
+      "file": "PlayfairDisplay-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Playfair Display",
+      "file": "PlayfairDisplay-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Sarasa Gothic SC",
+      "file": "SarasaGothicSC-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Sarasa Gothic SC",
+      "file": "SarasaGothicSC-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Smiley Sans",
+      "file": "SmileySans-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1",
+      "lazy": true
+    },
+    {
+      "family": "Space Grotesk",
+      "file": "SpaceGrotesk-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Space Grotesk",
+      "file": "SpaceGrotesk-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Space Grotesk",
+      "file": "SpaceGrotesk-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Space Grotesk",
+      "file": "SpaceGrotesk-700.ttf",
+      "weight": 700,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Unbounded",
+      "file": "Unbounded-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Unbounded",
+      "file": "Unbounded-500.ttf",
+      "weight": 500,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Unbounded",
+      "file": "Unbounded-600.ttf",
+      "weight": 600,
+      "license": "OFL-1.1"
+    },
+    {
+      "family": "Unbounded",
+      "file": "Unbounded-700.ttf",
+      "weight": 700,
       "license": "OFL-1.1"
     }
   ]

@@ -6,8 +6,8 @@
       "zh": "民国杂志铅字",
       "en": "Republican Letterpress"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -52,10 +52,11 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "Noto Serif SC"
         ],
         "size": 0.048,
-        "color": "#23201B"
+        "color": "#23201B",
+        "weight": 500
       },
       "letterSpacing": 0.12,
       "content": [
@@ -75,10 +76,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0125,
-        "color": "#6B655C"
+        "color": "#6B655C",
+        "weight": 500
       },
       "letterSpacing": 0.3,
       "align": "right",
@@ -138,7 +140,8 @@
           "Noto Serif SC"
         ],
         "size": 0.0155,
-        "color": "#3A3630"
+        "color": "#3A3630",
+        "weight": 500
       },
       "lineHeight": 1.7,
       "letterSpacing": 0.05,
@@ -160,13 +163,14 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#555046"
+        "color": "#555046",
+        "weight": 500
       },
       "lineHeight": 1.9,
-      "letterSpacing": 0.02,
+      "letterSpacing": 0.08,
       "width": 0.28,
       "content": [
         {
@@ -185,10 +189,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#555046"
+        "color": "#555046",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "effects": {
@@ -214,12 +219,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#555046"
+        "color": "#555046",
+        "weight": 400
       },
-      "letterSpacing": 0.2,
+      "letterSpacing": 0,
       "align": "center",
       "effects": {
         "case": "upper"
@@ -244,10 +250,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#555046"
+        "color": "#555046",
+        "weight": 500
       },
       "letterSpacing": 0.2,
       "align": "right",
@@ -260,6 +267,20 @@
           "fallback": "Letterpress · Two Columns"
         }
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ]
 }

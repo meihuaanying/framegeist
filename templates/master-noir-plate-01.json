@@ -6,8 +6,8 @@
       "zh": "夜墨衬板",
       "en": "Noir Plate"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -50,17 +50,19 @@
       },
       "font": {
         "family": [
-          "Great Vibes"
+          "Inter"
         ],
         "size": 0.024,
-        "color": "#F2F0EC"
+        "color": "#F2F0EC",
+        "weight": 500
       },
       "align": "center",
       "content": [
         {
           "expr": "'Atelier'"
         }
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "shape",
@@ -90,9 +92,10 @@
           "Inter"
         ],
         "size": 0.013,
-        "color": "#F2F0EC"
+        "color": "#F2F0EC",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "align": "center",
       "content": [
         {
@@ -114,17 +117,19 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#F2F0EC"
+        "color": "#F2F0EC",
+        "weight": 500
       },
       "content": [
         {
           "expr": "fmt('{focal}MM', exif)",
           "fallback": "--"
         }
-      ]
+      ],
+      "letterSpacing": 0.08
     },
     {
       "type": "text",
@@ -136,17 +141,19 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#F2F0EC"
+        "color": "#F2F0EC",
+        "weight": 500
       },
       "content": [
         {
           "expr": "fmt('F{aperture}', exif)",
           "fallback": "--"
         }
-      ]
+      ],
+      "letterSpacing": 0.08
     },
     {
       "type": "text",
@@ -158,10 +165,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#F2F0EC"
+        "color": "#F2F0EC",
+        "weight": 400
       },
       "content": [
         {
@@ -171,7 +179,8 @@
       ],
       "features": [
         "tnum"
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -183,10 +192,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.019,
-        "color": "#F2F0EC"
+        "color": "#F2F0EC",
+        "weight": 400
       },
       "content": [
         {
@@ -196,7 +206,8 @@
       ],
       "features": [
         "tnum"
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -211,7 +222,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -233,7 +245,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -255,7 +268,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [
@@ -277,7 +291,8 @@
           "Inter"
         ],
         "size": 0.011,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "content": [

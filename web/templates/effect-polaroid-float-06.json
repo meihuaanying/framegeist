@@ -6,8 +6,8 @@
       "zh": "拍立得悬浮",
       "en": "Polaroid Float"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "effect"
@@ -163,17 +163,19 @@
       },
       "font": {
         "family": [
-          "Great Vibes"
+          "Inter"
         ],
         "size": 0.034,
-        "color": "#3A3A3A"
+        "color": "#3A3A3A",
+        "weight": 500
       },
       "content": [
         {
           "expr": "'Memento'",
           "fallback": null
         }
-      ]
+      ],
+      "letterSpacing": 0
     },
     {
       "type": "text",
@@ -185,12 +187,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0115,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 400
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {
@@ -215,9 +218,10 @@
           "Inter"
         ],
         "size": 0.0125,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -228,6 +232,20 @@
       "features": [
         "tnum"
       ]
+    },
+    {
+      "type": "image",
+      "id": "v7-brand-badge",
+      "anchor": "top-right",
+      "corner": "top-right",
+      "margin": 0.035,
+      "asset": "@builtin/brand/{exif.brand_slug}",
+      "size": {
+        "height": 0.04
+      },
+      "tint": "auto",
+      "contrast": "auto",
+      "z": 100
     }
   ],
   "fields": {

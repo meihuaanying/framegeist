@@ -6,8 +6,8 @@
       "zh": "双色分割",
       "en": "Duo Split"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorful"
@@ -54,7 +54,8 @@
           "Inter"
         ],
         "size": 0.016,
-        "color": "#E63946"
+        "color": "#E63946",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "align": "right",
@@ -75,12 +76,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.0115,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 400
       },
-      "letterSpacing": 0.14,
+      "letterSpacing": 0,
       "lineHeight": 1.55,
       "opacity": 0.95,
       "align": "right",
@@ -111,9 +113,10 @@
           "Inter"
         ],
         "size": 0.018,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
@@ -134,12 +137,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.012,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",

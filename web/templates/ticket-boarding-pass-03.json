@@ -6,8 +6,8 @@
       "zh": "登机牌·双站",
       "en": "Boarding Pass"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "ticket"
@@ -219,10 +219,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#82868C"
+        "color": "#82868C",
+        "weight": 500
       },
       "letterSpacing": 0.24,
       "content": [
@@ -242,10 +243,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
-        "size": 0.009,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -265,10 +267,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Unbounded"
         ],
         "size": 0.052,
-        "color": "#1F2226"
+        "color": "#1F2226",
+        "weight": 700
       },
       "letterSpacing": 0.04,
       "content": [
@@ -288,10 +291,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
-        "size": 0.009,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -311,10 +315,11 @@
       },
       "font": {
         "family": [
-          "Bebas Neue"
+          "Unbounded"
         ],
         "size": 0.052,
-        "color": "#1F2226"
+        "color": "#1F2226",
+        "weight": 700
       },
       "letterSpacing": 0.04,
       "content": [
@@ -334,12 +339,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#30343A"
+        "color": "#30343A",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -360,12 +366,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
-        "size": 0.009,
-        "color": "#82868C"
+        "size": 0.0095,
+        "color": "#82868C",
+        "weight": 500
       },
-      "letterSpacing": 0.05,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)",
@@ -383,10 +390,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
-        "size": 0.009,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -406,12 +414,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#30343A"
+        "color": "#30343A",
+        "weight": 400
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('LOCAL', exif.datetime)",
@@ -432,10 +441,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
-        "size": 0.009,
-        "color": "#9AA0A6"
+        "size": 0.0095,
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -455,12 +465,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.011,
-        "color": "#30343A"
+        "color": "#30343A",
+        "weight": 400
       },
-      "letterSpacing": 0.08,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('HH:mm', exif.datetime)",
@@ -494,12 +505,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Inter"
         ],
         "size": 0.013,
-        "color": "#3A3F46"
+        "color": "#3A3F46",
+        "weight": 500
       },
-      "letterSpacing": 0.06,
+      "letterSpacing": 0.08,
       "content": [
         {
           "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
@@ -535,12 +547,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Inter"
         ],
         "size": 0.01,
-        "color": "#7C828B"
+        "color": "#7C828B",
+        "weight": 400
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

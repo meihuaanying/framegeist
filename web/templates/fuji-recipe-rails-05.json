@@ -6,8 +6,8 @@
       "zh": "右侧配方栏",
       "en": "Recipe Rails"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -94,10 +94,11 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.18,
       "align": "right",
@@ -106,6 +107,9 @@
           "expr": "'RECIPE CARD C5'",
           "fallback": "RECIPE"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -118,10 +122,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -141,12 +146,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -165,10 +171,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -188,18 +195,22 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
           "expr": "'5200K'",
           "fallback": "WB"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -212,10 +223,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -235,18 +247,22 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
           "expr": "'DR200'",
           "fallback": "DR"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -259,10 +275,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -282,12 +299,13 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -306,10 +324,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -329,18 +348,22 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
           "expr": "'0'",
           "fallback": "0"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -353,10 +376,11 @@
       },
       "font": {
         "family": [
-          "Inter"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
       "letterSpacing": 0.16,
       "content": [
@@ -376,18 +400,22 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.016,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
           "expr": "'0'",
           "fallback": "0"
         }
+      ],
+      "features": [
+        "tnum"
       ]
     },
     {
@@ -400,10 +428,11 @@
       },
       "font": {
         "family": [
-          "Space Grotesk"
+          "Geist Mono"
         ],
         "size": 0.013,
-        "color": "#F1EDE6"
+        "color": "#F1EDE6",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "align": "right",
@@ -427,12 +456,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
-      "letterSpacing": 0.04,
+      "letterSpacing": 0.08,
       "align": "right",
       "content": [
         {
@@ -451,12 +481,13 @@
       },
       "font": {
         "family": [
-          "JetBrains Mono"
+          "Geist Mono"
         ],
         "size": 0.01,
-        "color": "#8D8A84"
+        "color": "#8D8A84",
+        "weight": 500
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "align": "right",
       "content": [
         {

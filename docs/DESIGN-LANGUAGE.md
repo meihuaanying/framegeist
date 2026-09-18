@@ -1,4 +1,4 @@
-# FrameGeist 设计语言规范 v0.4.0
+# FrameGeist 设计语言规范 v0.7.0（排版现代化 / DESIGN-LANGUAGE v2）
 
 > 来源：2026-09 对 frameelf Web 编辑器 22 分类 217 套边框水印的逐类研究（研究语料仅存于临时目录，**不入仓、不复制**）。
 > 本文件蒸馏的是**设计语言**（网格/字阶/层级/间距/点缀系统），不是具体版式。所有 FrameGeist 模板必须是**原创构图**：
@@ -103,18 +103,51 @@
 - 模糊自身铺底（`background: blur`）+ 圆角投影照片（canvas radius/shadow）；或色域渐变延伸（tint）。
 - 变体：镜像倒影/双色渐变/暗角卡片。
 
-## 3. 字阶系统（相对照片高度比例）
+## 3. 排版系统 v2（v0.7.0 起强制执行）
 
-| 角色 | 字体 | 字号 | 字距 | 颜色 |
+> 字体全部 OFL，`templates/assets/fonts/fonts.json`（68 faces / 22 families）；`font.weight` 400–700
+> 由引擎按 OS/2 精确选面。EXIF 数值行默认 **Inter tabular（OpenType `tnum`）**；JetBrains Mono
+> 为可选项（不再作为默认数据行）。
+
+### 3.1 字号阶梯（以照片高度为基准的相对字号）
+
+- 每套模板至少 3 级：**Display**（≥0.05）／**Support**（0.022–0.05）／**Detail**（<0.022）。
+- 相邻级字号比 1.25–1.5（瑞士系 1.25 / 编辑系 1.333）；小号不得低于 900px 样张 8px。
+- 数据/参数行 0.012–0.018；微标签 0.008–0.012。
+
+### 3.2 字距与行高
+
+- Display（≥0.05 照片高）：拉丁紧字距 −0.02~−0.04em；CJK 标题 0~+0.02em。
+- 小号大写 label/kicker：+0.06~+0.12em；正文/数字 0；中文标题行高 ≥1.15。
+- 行高：Display 1.0–1.15；副标 1.2–1.35；参数/正文 1.4–1.6。
+
+### 3.3 字重层次
+
+- Display 600/700；副标 500；参数/标签 400–500；弱化信息用透明度而非更细字重（无 Hairline）。
+- 同族多字重必须真实命中（像素断言：400 < 600 < 700 墨量递增）。
+
+### 3.4 中英混排
+
+- 中文与拉丁/数字间不强制空格；中文标点全角；参数行半角；冒号/间隔统一 `·`（U+00B7）。
+- 中文标题按分类选字（Q14）：节庆/传统 → 思源宋 + 霞鹜文楷；潮流/游戏 → 得意黑；日常 → 未来荧黑。
+
+### 3.5 分类风格映射（Q18）
+
+| 分类 | 风格 | Display | Support/参数 | 标签 |
 |---|---|---|---|---|
-| 品牌字标 | Inter / Space Grotesk | 0.020–0.028 | 0.10–0.20em | 墨黑 #1A1A1A |
-| 机型 | Inter / Noto Sans SC | 0.013–0.018 | 0.02–0.06em | 墨黑/次级 #373A40 |
-| 参数行 | JetBrains Mono / Inter | 0.012–0.016 | 0.02–0.08em | 次级 #6B7280 |
-| 微标签 | Inter | 0.008–0.011 | 0.10–0.22em | 浅灰 #9AA0A6 |
-| 衬线大标 | Playfair / Cormorant / Noto Serif SC | 0.05–0.16 | 0.02–0.08em | 墨黑/纸白 |
-| 大数字 | Bebas Neue / Oswald | 0.10–0.24 | 0.00–0.04em | 墨黑/强调 |
-| 手写印章 | Great Vibes / Ma Shan Zheng | 0.020–0.040 | 0 | 墨黑/红 |
-| 中文标题 | Noto Serif SC / Ma Shan Zheng | 0.030–0.080 | 0.05–0.15em | 墨黑/纸白 |
+| `classic-watermark` `minimal` `white-border` `borderless` | 瑞士国际主义 | Geist 600 | Inter 500 | Inter 500 +0.08em |
+| `magazine` `master` `portfolio` | 编辑杂志 | Fraunces 600 / Instrument Serif 400 | Inter 400–500 | Inter 500 +0.08em |
+| `personal` `calendar` `festival` | 日系排版 | 思源宋 600 / 霞鹜文楷 500 | Inter 400 | Inter 400 +0.08–0.12em |
+| `game` `colorful` `colorcard` `sports` | 潮牌海报 | Unbounded 700 / 得意黑 | Bricolage Grotesque 500 | Inter 600 +0.08em |
+| `camera` `film` `phone` `drone` `fuji` | 器材说明书 | Geist 600 | Geist Mono 400–500 | Geist Mono 500 +0.08em |
+| `effect` `blur-bg` `colorwalk` `polaroid` `ticket` | 混合（按模板气质择一） | 依原版式对应风格 | Inter/Geist Mono | Inter +0.08em |
+
+### 3.6 徽标规范（Q2/Q5）
+
+- 尺寸：照片高 ≥3.5% 且 ≥18px（引擎强制）；长名最大宽度 ≤32% 照片宽（超宽缩放/截断由引擎处理）。
+- 对比：黑/白变体按背景 p10/p90 亮度自动选择；纯色底必达 4.5:1；花底自动加反向 1px 描边或半透明底板。
+- 数量：同模板内 1 个相机徽标 + 可选 1 个系列徽标；与文本最小间距 0.8×徽标高；透明度 0.7–1.0（编辑器可调）。
+- 位置：跟随模板锚点，编辑器可切四角固定；提供「官方字标（Simple Icons CC0）/ 原创排版 lockup（OFL 字型）」两种风格。
 
 ## 4. 色彩体系
 
@@ -140,9 +173,9 @@
 
 格式惯例：参数用 `·` 或固定宽间隔（`16mm · F2.8 · 1/1000s · ISO200`）；日期三种风格（点分 `2026.08.19` / 连字符 `2026-08-19` / 英文长写 July 15th, 2026）。
 
-## 6. 原创资产清单（gen-frame-assets.mjs 扩展）
+## 6. 原创资产清单（gen-brand-assets.mjs / gen-frame-assets.mjs）
 
-- `brand/*.png`（现有 63 + 扩展）与 `-light` 变体；`series/*`；`game/*`。
+- `brand/*.png`（官方 Simple Icons CC0 优先 + 原创字标兜底）与 `-light` 变体；`lockup/*.png`（全品牌原创排版 lockup，官方/原创风格切换用）；`series/*`（GM/G/L/RF L/Art/DG DN/APO/XCD/XF/Z S-Line/Batis/SP）；`game/*`。
 - `frame/` 新增：`film-strip-35`（横/竖齿孔）、`film-edge`（边码条）、`stamp-perforation`（邮票齿孔）、`ticket-notch`（票卡缺口，用于叠加）、`barcode`（原创 EAN 风条码）、`seal-red`（朱文方印/圆印）、`icon-*`（龙舟/灯笼/山/相机/无人机自创线性图标）、`rule-*`（细线/双线装饰）。
 - `texture/` 可选：纸纹（极淡噪点）。
 
@@ -152,7 +185,8 @@
 2. 无意外重叠；信息带同一基线；留白在 5–15%。
 3. 浅底/深底两张照片下 `auto` 对比度均通过。
 4. 表达式全部过白名单；`validate` 无错。
-5. id 唯一、name/nameI18n 双语、category 正确、author="FrameGeist"、license="CC0-1.0"、version="1.0.0"、minEngineVersion="0.5.0"（用到 v0.5 能力必须；纯 v0.4 能力可 0.4.0）。
+5. id 唯一、name/nameI18n 双语、category 正确、author="FrameGeist"、license="CC0-1.0"、version="1.1.0"、minEngineVersion="0.7.0"。
+   水印/参数类分类必须带品牌徽标层（`@builtin/brand/{exif.brand_slug}` 或 lockup/series），并通过字形覆盖门禁 `node tools/check-glyph-coverage.mjs`。
 6. 与同分类相邻模板至少 2 处显著差异（自动缩略图差异断言 >3%）。
 7. 无 frameelf 文案/资产复刻；无第三方商标图形描摹（品牌字标走 Simple Icons 既有管线）。
 

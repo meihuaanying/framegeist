@@ -6,8 +6,8 @@
       "zh": "墨色题记",
       "en": "Ink Inscription"
     },
-    "version": "1.0.0",
-    "minEngineVersion": "0.6.0",
+    "version": "1.1.0",
+    "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "personal"
@@ -44,12 +44,13 @@
       },
       "font": {
         "family": [
-          "Ma Shan Zheng"
+          "LXGW WenKai"
         ],
         "size": 0.055,
-        "color": "#1A1A1A"
+        "color": "#1A1A1A",
+        "weight": 600
       },
-      "letterSpacing": 0.1,
+      "letterSpacing": 0.02,
       "content": [
         {
           "expr": "'光影手记'",
@@ -67,12 +68,13 @@
       },
       "font": {
         "family": [
-          "Noto Sans SC"
+          "LXGW WenKai"
         ],
         "size": 0.013,
-        "color": "#6B7280"
+        "color": "#6B7280",
+        "weight": 400
       },
-      "letterSpacing": 0.12,
+      "letterSpacing": 0,
       "content": [
         {
           "expr": "date('YYYY年MM月DD日', exif.datetime)",
@@ -96,7 +98,8 @@
           "Inter"
         ],
         "size": 0.0115,
-        "color": "#9AA0A6"
+        "color": "#9AA0A6",
+        "weight": 500
       },
       "letterSpacing": 0.08,
       "content": [
