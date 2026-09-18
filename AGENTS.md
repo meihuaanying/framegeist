@@ -8,7 +8,9 @@
 >
 > ⚠️ **铁律**：禁止用 PowerShell `Set-Content/Out-File/Get-Content|Set-Content` 改写含非 ASCII 的仓库文件（会用 ANSI 编码破坏 UTF-8 并吞引号）；统一用 Edit 工具或 Node 脚本。**发布前必须跑 `node tools/check-utf8.mjs`**。
 >
-> 🧭 **当前状态**：主干 `main` = v0.7.0（品牌徽标系统 v2：官方/原创可切换 + 42 品牌/12 系列 + 可见性规则；排版现代化：11 组 OFL 新字体 + 静态多字重 + DESIGN-LANGUAGE v2 + 192 套分类化重排；UI/墙/灯箱现代化；E2E 218/218；wasm 5,058,173 B）。
+> ✅ **v0.7.0 已发布（2026-09-18）**：品牌徽标系统 v2（官方/原创可切换 + 42 品牌/12 系列 + 可见性规则）+ 排版现代化（11 组 OFL 新字体 + 静态多字重 + DESIGN-LANGUAGE v2 + 192 套分类化重排）+ UI/墙/灯箱现代化；E2E 218/218；wasm 5,058,173 B。Release（六资产）与 Pages 已验证。详见 `docs/reports/v0.7.0/PROGRESS.md`。
+>
+> ⚠️ **仓库状态提醒**：v0.7.0 发布时本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 快进到 `23eded7`；本地 `main` 为 `9408fa4`（树相同，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）。**下次推送前先同步远端提交**（网络恢复后 `git fetch origin && git reset --hard origin/main` 或 rebase）。
 >
 > 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。
 >

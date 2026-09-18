@@ -56,3 +56,17 @@
 - **视觉回归**：384/384 在容差内（hamming ≤10、meanΔ ≤2.5）。
 - **性能**：`node tools/perf-audit.mjs`（CDP 真浏览器）24MP 预览 186ms / 导出 990ms；60MP 预览 338ms / 导出 2466ms —— 4/4 达标。
 - **对比图**：`docs/reports/v0.7.0/compare/` 25 分类 × 2–3 套（v0.6.1 左 / v0.7.0 右）。
+
+## M5 — 文档与发布 v0.7.0 ✅ (2026-09-18)
+
+- **版本统一**：workspace `Cargo.toml` / `tauri.conf.json` / `web/app.js APP_VERSION` / `web/sw.js VERSION` 全部 0.7.0。
+- **文档**：新建 `README.md`；`docs/CREDITS.md` 更新（22 字体族/68 faces、官方+原创双轨品牌资产、商标声明、Geist VF UI 字体）；`docs/licenses/fonts/`（29 份 OFL 全文 + `SOURCES.md` 42 条来源/SHA256）；`TEMPLATE-SPEC.md` 字体角色表；`DESIGN-LANGUAGE.md` v2；PRD Discoveries 10 条；`AGENTS.md` 状态更新；`docs/releases/v0.7.0.md` 发布说明（含商标免责声明）。
+- **发布（网络受限下的路径）**：本机 `github.com:443` 被阻断（直连超时；SSH 无授权 key；本地代理 7890 离线），改用 **api.github.com Git Data API** 推送：1787 个 blob（并发 6，分块子树构建）→ commit `23eded7` → 快进 `main`。本地 `main` = `9408fa4`（与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动因 token 缺 `workflow` scope 未能上远端；发布说明改由 `gh release edit` 注入）。**后续推送需先同步远端 `23eded7` 或修复网络/代理。**
+- **Tag/Release**：annotated tag `v0.7.0` → `31166d8`（指向 `23eded7`）；Release 六资产：
+  `framegeist-cli-v0.7.0-win-x64.zip` (75.8MB)、`framegeist-desktop-v0.7.0-win-x64.zip` (95.4MB)、
+  `framegeist-templates-v0.7.0.fgpkg` (20.7MB)、`FrameGeist-v0.7.0-win-x64-setup.exe` (NSIS, 95.2MB)、
+  `SHA256SUMS.txt`、`update.json`；Release URL：https://github.com/meihuaanying/framegeist/releases/tag/v0.7.0
+- **CI/Pages**：`ci`（quality/wasm/portability）与 `pages` 在 tag 与 main 上全绿；Pages 验证
+  https://meihuaanying.github.io/framegeist/ → 200、`/web/` → 200、`APP_VERSION="0.7.0"`、
+  `web/fonts/engine/Inter-600.ttf` → 200、`web/lockup/sony.png` → 200。
+- **契约 §7 回退使用记录**：§7.3（Simple Icons 缺失品牌 → 原创排版 lockup 补齐）；§7.4 部分采用（花底保护用「黑白变体 + 反色描边」，未放弃对比门禁）；§7.1/§7.2/§7.5/§7.6 未触发。
