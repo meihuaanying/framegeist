@@ -55,5 +55,12 @@
 - **版本统一**：workspace `Cargo.toml` / `tauri.conf.json` / `web/app.js APP_VERSION` / `web/sw.js VERSION` 全部 **0.8.0**。
 - **文档**：`README.md`（徽标库/中文化/新尺寸）；`docs/CREDITS.md`（96px 缩略图、中性 EXIF 标、voigtlander/leica-apo、Instrument Serif、69 faces / 23 families）；`docs/TEMPLATE-SPEC.md`（图片层默认 0.045 + 徽标 5%/4.5%/38%）；`docs/DESIGN-LANGUAGE.md`（§3 尺寸提升 + 徽标规范新数值 + QA version 1.2.0）；PRD Discoveries 8 条；`docs/releases/v0.8.0.md`（含商标免责声明）。
 - **契约 §5 回退使用记录**：§5.1（6 套 12 层徽标/字号新冲突 → 逐级回退并记录）；其余回退条款未触发。已知近似：`boxes` 盒不含 `corner` 定位与旋转外接盒，守卫跳过旋转层（属约定内的近似）。
-- **发布**：commit → Git Data API 推送（远端 base `ac24ffa`，本地 diff 基准 `664cc20`；排除 workflow 文件）→ annotated tag `v0.8.0` → Release 六资产（CI `release.yml` 自动：CLI / 桌面 / 模板包 / NSIS / SHA256SUMS / update.json；说明用 `gh release edit --notes-file` 注入）→ Pages 200 验证。
+- **发布**：本地 commit `f6731d6` → **Git Data API** 推送（1675 个 blob；本地 diff 基准 `664cc20`，远端父提交 `ac24ffa`，排除 workflow 文件）→ 远端 `main` = **`4357e00`**；annotated tag `v0.8.0` → tag object `870f802`（`refs/tags/v0.8.0`）。
+- **CI/Release（tag 触发，全绿）**：`ci`（windows test+clippy/golden、wasm 字节一致、三 target）✓、`pages` ✓、`release` ✓。Release 六资产：
+  `framegeist-cli-v0.8.0-win-x64.zip`（72.9 MB）、`framegeist-desktop-v0.8.0-win-x64.zip`（93.7 MB）、
+  `framegeist-templates-v0.8.0.fgpkg`（19.7 MB）、`FrameGeist-v0.8.0-win-x64-setup.exe`（NSIS，93.6 MB）、
+  `SHA256SUMS.txt`、`update.json`；Release URL：https://github.com/meihuaanying/framegeist/releases/tag/v0.8.0
+  （CI 用 `--notes-file docs/releases/v0.8.0.md` 创建，远端 workflow 旧版本未带 notes-file，按 v0.7 惯例用 `gh release edit` 注入说明）。
+- **Pages 验证**：`/` → 200、`/web/` → 200、`APP_VERSION="0.8.0"`、`sw.js` 缓存 `framegeist-0.8.0`、
+  `web/brand/index.json` v2、`web/brand/thumbs/canon.png` → 200、`web/brand/exif-auto.png` → 200、`web/previews/camera-baseplate-02.jpg` → 200。
 - **交付**：本地桌面端 0.8.0 构建并启动（CDP 9333 探针可用）。

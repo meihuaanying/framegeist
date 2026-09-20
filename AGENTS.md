@@ -14,7 +14,7 @@
 >
 > ✅ **v0.8.0 已发布（2026-09-20）**：UI 全量中文化（zh/en 380 键对齐 + E2E 可见文本零英文残留）+ 徽标库（四组 85 项、96px 缩略图、图层级替换、EXIF 自动识别恢复、收藏/最近、墙入口与卡片标记）+ 默认尺寸提升（引擎徽标下限 5%/默认 4.5%/最大宽 38%；模板 Data/Label ×1.2、Support ×1.1）+ content-visibility 性能与首启骨架。门禁：cargo test/clippy/fmt、四 target、wasm 5,058,426 B、E2E **235/235**、性能 4/4、视觉基线 384 项有意重生成、192/192 校验、对比图 25 分类。详见 `docs/reports/v0.8.0/PROGRESS.md`。
 >
-> ⚠️ **仓库状态提醒**：v0.8.0 与 v0.7.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（base = 远端 `ac24ffa`）；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
+> ⚠️ **仓库状态提醒**：v0.8.0 与 v0.7.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.8.0 发布时 base = 远端 `ac24ffa` → 远端 `main` `4357e00`；本地 `f6731d6` 与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端，发布说明由 `gh release edit` 注入）；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
 >
 > 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。
 >
