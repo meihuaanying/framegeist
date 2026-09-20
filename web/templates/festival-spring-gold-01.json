@@ -6,7 +6,7 @@
       "zh": "新春金岁",
       "en": "Spring Gold"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#F2C94C",
         "weight": 500
       },
@@ -144,7 +144,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.055,
+        "size": 0.066,
         "color": "#F7E6C4",
         "weight": 400
       },
@@ -172,7 +172,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#F2C94C",
         "weight": 500
       },

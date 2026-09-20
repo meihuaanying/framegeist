@@ -6,7 +6,7 @@
       "zh": "右上日期",
       "en": "Top Right Date"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -29,7 +29,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.024
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -45,7 +45,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "auto",
         "weight": 400
       },
@@ -74,7 +74,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "auto",
         "weight": 500
       },

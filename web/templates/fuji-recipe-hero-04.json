@@ -6,7 +6,7 @@
       "zh": "奶白配方卡",
       "en": "Recipe Hero"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -51,7 +51,7 @@
       },
       "asset": "@builtin/brand/fujifilm",
       "size": {
-        "height": 0.026
+        "height": 0.045
       }
     },
     {
@@ -66,7 +66,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#6E6A62",
         "weight": 500
       },
@@ -94,7 +94,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8C877D",
         "weight": 500
       },
@@ -142,7 +142,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#6E6A62",
         "weight": 500
       },
@@ -169,7 +169,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#17181A",
         "weight": 500
       },
@@ -196,7 +196,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#6E6A62",
         "weight": 500
       },
@@ -221,7 +221,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8C877D",
         "weight": 500
       },
@@ -245,7 +245,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.04,
+        "size": 0.048,
         "color": "#17181A",
         "weight": 500
       },
@@ -272,7 +272,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#6E6A62",
         "weight": 500
       },

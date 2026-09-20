@@ -6,7 +6,7 @@
       "zh": "夜行票·斜卡",
       "en": "Night Tilt"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -55,7 +55,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#7C828B",
         "weight": 500
       },
@@ -80,7 +80,7 @@
         "family": [
           "Bricolage Grotesque"
         ],
-        "size": 0.044,
+        "size": 0.0484,
         "color": "#1C1F23",
         "weight": 500
       },
@@ -105,7 +105,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#4A5057",
         "weight": 400
       },
@@ -133,7 +133,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#7C828B",
         "weight": 500
       },
@@ -171,7 +171,7 @@
         "family": [
           "Bricolage Grotesque"
         ],
-        "size": 0.034,
+        "size": 0.0374,
         "color": "#D8D5CE",
         "weight": 500
       },
@@ -208,7 +208,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#CFCCC6",
         "weight": 500
       },
@@ -233,7 +233,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.018
+        "height": 0.045
       },
       "attachTo": "model",
       "attachGap": 0.012
@@ -250,7 +250,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#6E737C",
         "weight": 500
       },

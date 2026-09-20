@@ -6,7 +6,7 @@
       "zh": "右下单行",
       "en": "One Liner"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -28,7 +28,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "auto",
         "weight": 500
       },
@@ -52,7 +52,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.018
+        "height": 0.045
       },
       "tint": "auto",
       "attachTo": "oneliner",

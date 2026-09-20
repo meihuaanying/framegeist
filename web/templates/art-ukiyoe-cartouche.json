@@ -6,7 +6,7 @@
       "zh": "浮世绘题签",
       "en": "Ukiyo-e Cartouche"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -109,7 +109,7 @@
         "family": [
           "Noto Serif SC"
         ],
-        "size": 0.032,
+        "size": 0.0352,
         "color": "#2B241C",
         "weight": 500
       },
@@ -147,7 +147,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#7A6A55",
         "weight": 500
       },
@@ -190,7 +190,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#5C5245",
         "weight": 500
       },
@@ -220,7 +220,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#5C5245",
         "weight": 400
       },
@@ -251,7 +251,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#5C5245",
         "weight": 500
       },
@@ -275,7 +275,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

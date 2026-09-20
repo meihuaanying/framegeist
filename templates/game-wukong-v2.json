@@ -6,7 +6,7 @@
       "zh": "黑神话悟空 · 极简角标",
       "en": "Black Myth Wukong · Corner Mark"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "framegeist",
     "license": "CC0-1.0",
@@ -25,7 +25,7 @@
       "id": "game-mark",
       "asset": "@builtin/game/wukong",
       "size": {
-        "height": 0.035
+        "height": 0.045
       },
       "anchor": "bottom-right",
       "offset": {
@@ -42,7 +42,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "weight": 500,
         "color": "auto"
       },

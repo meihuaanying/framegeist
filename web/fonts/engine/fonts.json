@@ -178,6 +178,12 @@
       "license": "OFL-1.1"
     },
     {
+      "family": "Instrument Serif",
+      "file": "InstrumentSerif-400.ttf",
+      "weight": 400,
+      "license": "OFL-1.1"
+    },
+    {
       "family": "Inter",
       "file": "Inter-400.ttf",
       "weight": 400,

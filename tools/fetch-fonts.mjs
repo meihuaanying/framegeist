@@ -263,6 +263,7 @@ const LATIN_VARIABLE = [
 // Latin static fonts: copied through unchanged (weight fixed by the file).
 const LATIN_STATIC = [
   { family: "Bebas Neue", stem: "BebasNeue", weight: 400, url: `${GF}/ofl/bebasneue/BebasNeue-Regular.ttf`, lic: "OFL-1.1", licUrl: `${GF}/ofl/bebasneue/OFL.txt` },
+  { family: "Instrument Serif", stem: "InstrumentSerif", weight: 400, url: `${GF}/ofl/instrumentserif/InstrumentSerif-Regular.ttf`, lic: "OFL-1.1", licUrl: `${GF}/ofl/instrumentserif/OFL.txt` },
   { family: "Great Vibes", stem: "GreatVibes", weight: 400, url: `${GF}/ofl/greatvibes/GreatVibes-Regular.ttf`, lic: "OFL-1.1", licUrl: `${GF}/ofl/greatvibes/OFL.txt` },
 
   { family: "JetBrains Mono", stem: "JetBrainsMono", weight: 400, url: `${GH}/JetBrains/JetBrainsMono/master/fonts/ttf/JetBrainsMono-Regular.ttf`, lic: "OFL-1.1", licUrl: `${GH}/JetBrains/JetBrainsMono/master/OFL.txt` },

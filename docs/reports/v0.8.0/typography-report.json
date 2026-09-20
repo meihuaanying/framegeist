@@ -1,0 +1,7559 @@
+{
+  "generatedAt": "2026-09-20T05:10:01.485Z",
+  "templates": [
+    {
+      "id": "art-copperplate-etch",
+      "changes": [
+        {
+          "id": "etch-eyebrow",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "etch-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "etch-title-zh",
+          "role": "support",
+          "from": 0.028,
+          "to": 0.0308
+        },
+        {
+          "id": "etch-title-en",
+          "role": "support",
+          "from": 0.042,
+          "to": 0.0462
+        },
+        {
+          "id": "etch-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "etch-plate",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-deco-double",
+      "changes": [
+        {
+          "id": "deco-title",
+          "role": "support",
+          "from": 0.048,
+          "to": 0.0528
+        },
+        {
+          "id": "deco-title-zh",
+          "role": "support",
+          "from": 0.022,
+          "to": 0.0242
+        },
+        {
+          "id": "deco-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "deco-date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "deco-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-gilt-foil",
+      "changes": [
+        {
+          "id": "foil-overline",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "foil-title-zh",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "foil-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "foil-date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "foil-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-letterpress-relief",
+      "changes": [
+        {
+          "id": "press-title-zh",
+          "role": "support",
+          "from": 0.026,
+          "to": 0.0286
+        },
+        {
+          "id": "press-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "press-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "press-date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-republican-press",
+      "changes": [
+        {
+          "id": "rep-masthead",
+          "role": "support",
+          "from": 0.048,
+          "to": 0.0528
+        },
+        {
+          "id": "rep-masthead-en",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "rep-column-zh",
+          "role": "label",
+          "from": 0.0155,
+          "to": 0.0186
+        },
+        {
+          "id": "rep-column-en",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "rep-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "rep-date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "rep-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-ukiyoe-cartouche",
+      "changes": [
+        {
+          "id": "ukiyo-title",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "ukiyo-side",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "ukiyo-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "ukiyo-date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "ukiyo-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-vermilion-seal",
+      "changes": [
+        {
+          "id": "seal-heading-zh",
+          "role": "support",
+          "from": 0.048,
+          "to": 0.0528
+        },
+        {
+          "id": "seal-heading-en",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "seal-model",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "seal-date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "seal-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "art-woodtype-press",
+      "changes": [
+        {
+          "id": "wood-kicker",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "wood-model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "wood-params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "black-frame-charcoal-split-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.028,
+          "to": 0.0336
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "black-frame-gold-line-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.045,
+          "to": 0.054
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "black-frame-inner-rule-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "black-frame-mono-slate-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "black-frame-side-stack-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "paramstack",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "black-frame-two-line-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "blur-bg-brandbar-02",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.03,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "blur-bg-card-03",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "blur-bg-center-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "blur-bg-topcap-04",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-center-caption-01",
+      "changes": [
+        {
+          "id": "shotline",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-corner-stack-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.024,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "paramstack",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-date-hero-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "daynumber",
+          "role": "data",
+          "from": 0.095,
+          "to": 0.114
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-dot-corners-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "parex",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-geo-pin-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "geoline",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "altline",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-lowleft-pair-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-one-liner-01",
+      "changes": [
+        {
+          "id": "oneliner",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-quad-anchors-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-right-roll-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "roll",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-signoff-block-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "borderless-vertical-spine-01",
+      "changes": [
+        {
+          "id": "spine",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "tail",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "calendar-center-rule-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "bigday",
+          "role": "data",
+          "from": 0.15,
+          "to": 0.18
+        },
+        {
+          "id": "dateweek",
+          "role": "data",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "calendar-corner-day-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "bigday",
+          "role": "data",
+          "from": 0.155,
+          "to": 0.186
+        },
+        {
+          "id": "month",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "cndate",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "calendar-portrait-stack-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "calendar-rail-date-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "bigday",
+          "role": "data",
+          "from": 0.2,
+          "to": 0.24
+        },
+        {
+          "id": "cndate",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "calendar-split-columns-01",
+      "changes": [
+        {
+          "id": "cndate",
+          "role": "data",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "calendar-strip-date-01",
+      "changes": [
+        {
+          "id": "bigday",
+          "role": "data",
+          "from": 0.14,
+          "to": 0.168
+        },
+        {
+          "id": "yearmonth",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.0135,
+          "to": 0.0162
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-baseplate-02",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-corner-body-03",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0135,
+          "to": 0.0162
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-lens-dial-06",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-retro-sidecar-04",
+      "changes": [
+        {
+          "id": "model",
+          "role": "support",
+          "from": 0.022,
+          "to": 0.0242
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "motto",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-ricoh-slimline-08",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "slimline",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-series-emblem-07",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "series-label",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-stencil-mono-05",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "stencil",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "camera-topdeck-bar-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.017,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-black-bar",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-brand-center",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-date-right",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-double-row",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-hairline-thin",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-mono-stack",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.024,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-red-dot",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "classic-watermark-single-row",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorcard-column-02",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorcard-cream-date-04",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "bigdate",
+          "role": "data",
+          "from": 0.09,
+          "to": 0.108
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorcard-diamonds-03",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.015,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorcard-index-05",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "index",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorcard-sunrise-chips-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorcard-tint-chips-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "place",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-chip-strip-01",
+      "changes": [
+        {
+          "id": "kicker",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0135,
+          "to": 0.0162
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "caption",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-corner-blocks-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "camera",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-dot-cluster-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-frame-quad-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-pastel-card-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "kicker",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-rainbow-lines-01",
+      "changes": [
+        {
+          "id": "kicker",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-split-duo-01",
+      "changes": [
+        {
+          "id": "title",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "issue",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorful-sticker-date-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-blur-stage-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-ribbon-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "day",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-round-card-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "series",
+          "role": "badge",
+          "from": 0.019,
+          "to": 0.045
+        }
+      ],
+      "badges": 2,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-single-line-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-tint-seam-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-top-field-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-vbar-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "paramstack",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "colorwalk-verse-01",
+      "changes": [
+        {
+          "id": "verse",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "drone-aerial-editorial-01",
+      "changes": [
+        {
+          "id": "bigword",
+          "role": "support",
+          "from": 0.045,
+          "to": 0.0495
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "eyebrow",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "geotag",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "drone-altitude-hero-01",
+      "changes": [
+        {
+          "id": "caption",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "alt",
+          "role": "data",
+          "from": 0.16,
+          "to": 0.192
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "drone-geoblock-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "topdate",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "footdate",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "geoblock",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "geomicro",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "drone-skybar-01",
+      "changes": [
+        {
+          "id": "eyebrow",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "params1",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params2",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.019,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "geotag",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "drone-topline-01",
+      "changes": [
+        {
+          "id": "eyebrow",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "topmodel",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "geotag",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-duotone-wash-03",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0135,
+          "to": 0.0162
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-float-card-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-minimal-shadow-08",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.015,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-mirror-pool-02",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-paper-stack-05",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-polaroid-float-06",
+      "changes": [
+        {
+          "id": "script",
+          "role": "support",
+          "from": 0.034,
+          "to": 0.0374
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-top-gradient-band-07",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "effect-vignette-card-04",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "festival-dragon-boat-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "vertical-phrase",
+          "role": "support",
+          "from": 0.045,
+          "to": 0.0495
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "festival-gold-frame-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.045,
+          "to": 0.054
+        },
+        {
+          "id": "micro",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "festival-lantern-night-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.038,
+          "to": 0.0456
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "festival-lantern-warm-01",
+      "changes": [
+        {
+          "id": "phrase",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "festival-moon-full-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "phrase",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "festival-spring-gold-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "year",
+          "role": "data",
+          "from": 0.055,
+          "to": 0.066
+        },
+        {
+          "id": "micro",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-darkroom-pillar-03",
+      "changes": [
+        {
+          "id": "micro-top",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date-top",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "stock",
+          "role": "support",
+          "from": 0.034,
+          "to": 0.0374
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-diptych-hairline-07",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "stock",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "frameindex",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-led-datestamp-04",
+      "changes": [
+        {
+          "id": "micro-top",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "datestamp",
+          "role": "data",
+          "from": 0.085,
+          "to": 0.102
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "stock",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-mono-roll-06",
+      "changes": [
+        {
+          "id": "roll",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "stock",
+          "role": "support",
+          "from": 0.04,
+          "to": 0.044
+        },
+        {
+          "id": "spine",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-positive-print-08",
+      "changes": [
+        {
+          "id": "stock",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.021,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-serif-stock-05",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "stockline",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-sprocket-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "stock",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "film-sprocket-02",
+      "changes": [
+        {
+          "id": "safety",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "stock",
+          "role": "support",
+          "from": 0.028,
+          "to": 0.0308
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "fuji-recipe-band-02",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "codeline",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "r1c1v",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "r1c1l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "r1c2v",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "r1c2l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "r1c3v",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "r1c3l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "r2c1v",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "r2c1l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "r2c2v",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "r2c2l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "r2c3v",
+          "role": "support",
+          "from": 0.032,
+          "to": 0.0352
+        },
+        {
+          "id": "r2c3l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "fuji-recipe-column-03",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "l1",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v1",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "l2",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v2",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "l3",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v3",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "l4",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v4",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "l5",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v5",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "l6",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v6",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "spine",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "fuji-recipe-hero-04",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "codeline",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "label",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "secondary",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "isolabel",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "isovalue",
+          "role": "data",
+          "from": 0.04,
+          "to": 0.048
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "fuji-recipe-panel-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.03,
+          "to": 0.045
+        },
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "cell1v",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "cell1l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "cell2v",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "cell2l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "cell3v",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "cell3l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "cell4v",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "cell4l",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "secondary",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "iso",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "fuji-recipe-rails-05",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "l1",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v1",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "l2",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v2",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "l3",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v3",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "l4",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v4",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "l5",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v5",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "l6",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "v6",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-arknights-v1",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 1
+    },
+    {
+      "id": "game-arknights-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "role": "badge",
+          "from": 0.035,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-arknights-v3",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-genshin-v1",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 1
+    },
+    {
+      "id": "game-genshin-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "role": "badge",
+          "from": 0.035,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-genshin-v3",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-honkai-v1",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 1
+    },
+    {
+      "id": "game-honkai-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "role": "badge",
+          "from": 0.035,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-honkai-v3",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-wukong-v1",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 1
+    },
+    {
+      "id": "game-wukong-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "role": "badge",
+          "from": 0.035,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-wukong-v3",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-wwmeet-v1",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 1
+    },
+    {
+      "id": "game-wwmeet-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "role": "badge",
+          "from": 0.035,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-wwmeet-v3",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-zzz-v1",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 1
+    },
+    {
+      "id": "game-zzz-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "role": "badge",
+          "from": 0.035,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "game-zzz-v3",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "magazine-cover-banner-01",
+      "changes": [
+        {
+          "id": "sub",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "magazine-double-rule-01",
+      "changes": [
+        {
+          "id": "issue",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "slogan",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "magazine-gallery-left-01",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.042,
+          "to": 0.0462
+        },
+        {
+          "id": "intro",
+          "role": "label",
+          "from": 0.0125,
+          "to": 0.015
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "magazine-index-column-01",
+      "changes": [
+        {
+          "id": "masthead",
+          "role": "support",
+          "from": 0.026,
+          "to": 0.0286
+        },
+        {
+          "id": "entries",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "magazine-poster-manifesto-01",
+      "changes": [
+        {
+          "id": "kicker",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "slogan-en",
+          "role": "support",
+          "from": 0.034,
+          "to": 0.0374
+        },
+        {
+          "id": "slogan-cn",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "magazine-triptych-slices-01",
+      "changes": [
+        {
+          "id": "head",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "master-cream-dot-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "script",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "val-focal",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-aperture",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-shutter",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-iso",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lab-focal",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-aperture",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-shutter",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-iso",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "master-crown-wordmark-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "script",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "wordmark",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "master-ivory-plate-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "subtitle",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "val-focal",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-aperture",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-shutter",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-iso",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lab-focal",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-aperture",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-shutter",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-iso",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "master-noir-plate-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "script",
+          "role": "support",
+          "from": 0.024,
+          "to": 0.0264
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "val-focal",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-aperture",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-shutter",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-iso",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lab-focal",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-aperture",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-shutter",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-iso",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "master-seal-frame-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "script",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "val-focal",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-aperture",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-shutter",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "val-iso",
+          "role": "data",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lab-focal",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-aperture",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-shutter",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-iso",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "master-three-column-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "iso",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "val-focal",
+          "role": "support",
+          "from": 0.028,
+          "to": 0.0308
+        },
+        {
+          "id": "val-aperture",
+          "role": "support",
+          "from": 0.028,
+          "to": 0.0308
+        },
+        {
+          "id": "val-shutter",
+          "role": "data",
+          "from": 0.028,
+          "to": 0.0336
+        },
+        {
+          "id": "lab-focal",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-aperture",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "lab-shutter",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-brand-right",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-center-line",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-copyright",
+      "changes": [
+        {
+          "id": "copyright",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-corner-mono",
+      "changes": [
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-letterbox",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-model-stack",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-portrait-line",
+      "changes": [
+        {
+          "id": "line",
+          "role": "label",
+          "from": 0.0135,
+          "to": 0.0162
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "minimal-topright-date",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.024,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-avatar-ring-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "name",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-cn-inscription-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-credit-social-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "credit",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "stamp",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-micro-copyright-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "copyright",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-name-columns-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "label-name",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "label-machine",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "label-date",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "value-name",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "value-machine",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "value-date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-polaroid-script-01",
+      "changes": [
+        {
+          "id": "signature",
+          "role": "support",
+          "from": 0.042,
+          "to": 0.0462
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-script-signature-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "signature",
+          "role": "support",
+          "from": 0.045,
+          "to": 0.0495
+        },
+        {
+          "id": "copyright",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "personal-triptych-01",
+      "changes": [
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "label-params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "label-signature",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "label-social",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "col-params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "col-signature",
+          "role": "support",
+          "from": 0.036,
+          "to": 0.0396
+        },
+        {
+          "id": "col-social",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-accent-dots-01",
+      "changes": [
+        {
+          "id": "dotnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params1",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params2",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-camera-ui-01",
+      "changes": [
+        {
+          "id": "statusmodel",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "statusdate",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "shutval",
+          "role": "data",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "shutlabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "apval",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "aplabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "isoval",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "isolabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "focalval",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "focallabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-dual-optics-01",
+      "changes": [
+        {
+          "id": "leftlabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "rightlabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "series",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0135,
+          "to": 0.0162
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "bottomnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        }
+      ],
+      "badges": 2,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-midnight-bar-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.019,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-minimal-line-01",
+      "changes": [
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-paper-spec-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "tdate",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v1",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "v2",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "v3",
+          "role": "data",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "v4",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "l1",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "l2",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "l3",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "l4",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-shot-on-01",
+      "changes": [
+        {
+          "id": "shoton",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "support",
+          "from": 0.022,
+          "to": 0.0242
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-side-rail-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "railmodel",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "railparams",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "railmeta",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-studio-card-01",
+      "changes": [
+        {
+          "id": "brandtop",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "camera",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brandfoot",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "copyright",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        }
+      ],
+      "badges": 2,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "phone-vendor-bar-01",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.016,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "polaroid-classic-script-03",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "index",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "place",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "polaroid-duo-stamps-05",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "year",
+          "role": "data",
+          "from": 0.055,
+          "to": 0.066
+        },
+        {
+          "id": "place",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "polaroid-pastel-ring-04",
+      "changes": [
+        {
+          "id": "day",
+          "role": "data",
+          "from": 0.06,
+          "to": 0.072
+        },
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "monthyear",
+          "role": "data",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "place",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "polaroid-stamp-postcard-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "day",
+          "role": "data",
+          "from": 0.075,
+          "to": 0.09
+        },
+        {
+          "id": "monthyear",
+          "role": "data",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "place",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "polaroid-tilt-plate-02",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "dateblock",
+          "role": "data",
+          "from": 0.045,
+          "to": 0.054
+        },
+        {
+          "id": "place",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-atelier-plate-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "plateno",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "author",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.016,
+          "to": 0.0192
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-credit-still-01",
+      "changes": [
+        {
+          "id": "stillno",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "credit-main",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "credit-sub",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-double-rule-01",
+      "changes": [
+        {
+          "id": "corner-date",
+          "role": "data",
+          "from": 0.03,
+          "to": 0.036
+        },
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.045,
+          "to": 0.0495
+        },
+        {
+          "id": "tagline",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "edition",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-marginalia-01",
+      "changes": [
+        {
+          "id": "series-cn",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "series-en",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "year",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "author",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "edition",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "wordmark",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-noir-matte-01",
+      "changes": [
+        {
+          "id": "kicker",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-vertical-scroll-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "portfolio-wall-label-01",
+      "changes": [
+        {
+          "id": "label-head",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.042,
+          "to": 0.0462
+        },
+        {
+          "id": "year",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "author",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "medium",
+          "role": "label",
+          "from": 0.0115,
+          "to": 0.0138
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "v7-brand-badge",
+          "role": "badge",
+          "from": 0.04,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "sports-alt-badge-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "topweekday",
+          "role": "data",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "alt",
+          "role": "data",
+          "from": 0.055,
+          "to": 0.066
+        },
+        {
+          "id": "altnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.019,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "sports-big-trail-01",
+      "changes": [
+        {
+          "id": "eyebrow",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.024,
+          "to": 0.045
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.012,
+          "to": 0.0144
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "sports-finish-line-01",
+      "changes": [
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "place",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "alt",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "weekday",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 0,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "sports-ride-stats-01",
+      "changes": [
+        {
+          "id": "eyebrow",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "stat1",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "stat2",
+          "role": "label",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "sports-side-rail-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "railalt",
+          "role": "data",
+          "from": 0.026,
+          "to": 0.0312
+        },
+        {
+          "id": "railparams",
+          "role": "label",
+          "from": 0.0105,
+          "to": 0.0126
+        },
+        {
+          "id": "raildate",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "ticket-boarding-pass-03",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "fromlabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "tolabel",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "stubdate-label",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "stubdate",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "stubtime-label",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "stubtime",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "topright",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "ticket-night-tilt-05",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "route",
+          "role": "support",
+          "from": 0.044,
+          "to": 0.0484
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "station",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "serial",
+          "role": "support",
+          "from": 0.034,
+          "to": 0.0374
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.018,
+          "to": 0.045
+        },
+        {
+          "id": "topright",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "ticket-park-pass-04",
+      "changes": [
+        {
+          "id": "title",
+          "role": "support",
+          "from": 0.04,
+          "to": 0.044
+        },
+        {
+          "id": "subtitle",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "serial",
+          "role": "support",
+          "from": 0.034,
+          "to": 0.0374
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "admit",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "bottomcenter",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "ticket-stub-horizontal-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "route",
+          "role": "support",
+          "from": 0.048,
+          "to": 0.0528
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "serial",
+          "role": "support",
+          "from": 0.03,
+          "to": 0.033
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "topright",
+          "role": "data",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "ticket-vertical-rail-02",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "serial",
+          "role": "support",
+          "from": 0.028,
+          "to": 0.0308
+        },
+        {
+          "id": "stubdate",
+          "role": "data",
+          "from": 0.011,
+          "to": 0.0132
+        },
+        {
+          "id": "route",
+          "role": "support",
+          "from": 0.046,
+          "to": 0.0506
+        },
+        {
+          "id": "station",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        },
+        {
+          "id": "terms",
+          "role": "label",
+          "from": 0.0095,
+          "to": 0.0114
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brand",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "topright",
+          "role": "label",
+          "from": 0.01,
+          "to": 0.012
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-centered-lockup",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.024,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-editorial-01",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.02,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.02,
+          "to": 0.024
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.015,
+          "to": 0.018
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-letterhead",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.026,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "lens",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-linen-dot",
+      "changes": [
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.019,
+          "to": 0.0228
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-passport-mono",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "camline",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "dateline",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "lensline",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "paramline",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-quiet-stack",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-ruled-band",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.017,
+          "to": 0.0204
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-top-note",
+      "changes": [
+        {
+          "id": "topnote",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    },
+    {
+      "id": "white-border-twin-columns",
+      "changes": [
+        {
+          "id": "brandmark",
+          "role": "badge",
+          "from": 0.022,
+          "to": 0.045
+        },
+        {
+          "id": "model",
+          "role": "label",
+          "from": 0.018,
+          "to": 0.0216
+        },
+        {
+          "id": "date",
+          "role": "data",
+          "from": 0.013,
+          "to": 0.0156
+        },
+        {
+          "id": "params",
+          "role": "label",
+          "from": 0.014,
+          "to": 0.0168
+        }
+      ],
+      "badges": 1,
+      "conflicts": [],
+      "guardPasses": 0
+    }
+  ]
+}

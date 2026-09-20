@@ -12,9 +12,13 @@
 >
 > ⚠️ **仓库状态提醒**：v0.7.0 发布时本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 快进到 `23eded7`；本地 `main` 为 `9408fa4`（树相同，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）。**下次推送前先同步远端提交**（网络恢复后 `git fetch origin && git reset --hard origin/main` 或 rebase）。
 >
+> ✅ **v0.8.0 已发布（2026-09-20）**：UI 全量中文化（zh/en 380 键对齐 + E2E 可见文本零英文残留）+ 徽标库（四组 85 项、96px 缩略图、图层级替换、EXIF 自动识别恢复、收藏/最近、墙入口与卡片标记）+ 默认尺寸提升（引擎徽标下限 5%/默认 4.5%/最大宽 38%；模板 Data/Label ×1.2、Support ×1.1）+ content-visibility 性能与首启骨架。门禁：cargo test/clippy/fmt、四 target、wasm 5,058,426 B、E2E **235/235**、性能 4/4、视觉基线 384 项有意重生成、192/192 校验、对比图 25 分类。详见 `docs/reports/v0.8.0/PROGRESS.md`。
+>
+> ⚠️ **仓库状态提醒**：v0.8.0 与 v0.7.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（base = 远端 `ac24ffa`）；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
+>
 > 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。
 >
-> 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.7.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；字形门禁 `node tools/check-glyph-coverage.mjs`；UI 对比度 `node tools/check-ui-contrast.mjs`；字体管线 `node tools/fetch-fonts.mjs --fetch`（SHA256 pin 在 `tools/font-pins.json`）；push 代理不可用时加 `-c http.https://github.com/.proxy=`。
+> 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.8.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；字形门禁 `node tools/check-glyph-coverage.mjs`；UI 对比度 `node tools/check-ui-contrast.mjs`；i18n 门禁 `node tools/check-i18n.mjs`；字体管线 `node tools/fetch-fonts.mjs --fetch`（SHA256 pin 在 `tools/font-pins.json`）；push 代理不可用时加 `-c "http.https://github.com/.proxy="`。
 >
 > ⚠️ **v0.7.0 工程备注**：字体源（可变字体/发布包，~650MB）在 `templates/assets/fonts/source/`（gitignored、**不入分发**，M5 打包需排除）；模板重排脚本 `tools/apply-v070-typography.mjs`（幂等，`--force` 可重放）；对比图工具 `tools/make-compare-sheets.mjs`（before 快照在 `.cache/v061-samples/`）。
 

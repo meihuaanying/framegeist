@@ -6,7 +6,7 @@
       "zh": "经典双行水印",
       "en": "Classic Double Row"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -36,7 +36,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "tint": "auto",
       "attachTo": "model",
@@ -54,7 +54,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.015,
+        "size": 0.018,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -81,7 +81,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#9AA0A6",
         "weight": 400
       },
@@ -109,7 +109,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#6B7280",
         "weight": 500
       },
@@ -136,7 +136,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#6B7280",
         "weight": 500
       },

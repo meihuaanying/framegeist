@@ -6,7 +6,7 @@
       "zh": "复古侧挂机身",
       "en": "Retro Sidecar"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -67,7 +67,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.022,
+        "size": 0.0242,
         "color": "#2A2118",
         "weight": 500
       },
@@ -94,7 +94,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#4A3F32",
         "weight": 500
       },
@@ -121,7 +121,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#6B6255",
         "weight": 500
       },
@@ -160,7 +160,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#8C8272",
         "weight": 500
       },
@@ -187,7 +187,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#A08B66",
         "weight": 500
       },
@@ -209,7 +209,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.018
+        "height": 0.045
       },
       "tint": "auto"
     }

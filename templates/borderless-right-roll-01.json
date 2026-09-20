@@ -6,7 +6,7 @@
       "zh": "右列参数",
       "en": "Right Roll"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -28,7 +28,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "auto",
         "weight": 500
       },
@@ -54,7 +54,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "tint": "auto",
       "attachTo": "model",
@@ -72,7 +72,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "auto",
         "weight": 400
       },
@@ -114,7 +114,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "auto",
         "weight": 400
       },

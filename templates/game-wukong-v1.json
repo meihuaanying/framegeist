@@ -6,7 +6,7 @@
       "zh": "黑神话悟空 · 主题边框",
       "en": "Black Myth Wukong · Hero Frame"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "framegeist",
     "license": "CC0-1.0",
@@ -76,7 +76,7 @@
       "id": "brand",
       "asset": "@builtin/brand/{exif.brand_slug}-light",
       "size": {
-        "height": 0.022
+        "height": 0.045
       },
       "anchor": "bottom-left",
       "attachTo": "title",
@@ -90,7 +90,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.017,
+        "size": 0.0204,
         "weight": 500,
         "color": "#D4A017"
       },

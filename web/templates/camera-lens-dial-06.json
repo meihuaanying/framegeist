@@ -6,7 +6,7 @@
       "zh": "镜头圈刻度",
       "en": "Lens Dial"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -44,7 +44,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.016
+        "height": 0.045
       },
       "tint": "light"
     },
@@ -60,7 +60,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#A7ABB3",
         "weight": 500
       },
@@ -291,7 +291,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.019,
+        "size": 0.0228,
         "color": "#F0EFEA",
         "weight": 500
       },
@@ -318,7 +318,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#9BA0A8",
         "weight": 500
       },
@@ -345,7 +345,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0125,
+        "size": 0.015,
         "color": "#C6CAD1",
         "weight": 500
       },

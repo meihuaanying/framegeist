@@ -166,5 +166,13 @@
   "https://raw.githubusercontent.com/be5invis/Sarasa-Gothic/v1.0.41/LICENSE": {
     "sha256": "32c932e0dbae4f6e6386964bbc2d04178707665a05ca65cf636241af13d50a53",
     "bytes": 4702
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/InstrumentSerif-Regular.ttf": {
+    "sha256": "498efd461f6ddfcb7a111bf9a565709d2085d48201d501ead960d93e84ffbb88",
+    "bytes": 70012
+  },
+  "https://raw.githubusercontent.com/google/fonts/main/ofl/instrumentserif/OFL.txt": {
+    "sha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521",
+    "bytes": 4405
   }
 }

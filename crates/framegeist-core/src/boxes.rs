@@ -83,6 +83,18 @@ pub fn layer_boxes_for_photo(
     layer_boxes_json(template, &info, &rgba, opts)
 }
 
+/// Canvas size (px) for a photo + template + overrides (v0.8 QA helper).
+pub fn canvas_size_for_photo(
+    photo: &[u8],
+    template: &Template,
+    opts: &RenderOptions,
+) -> Result<(u32, u32), crate::Error> {
+    let rgba = crate::render::decode_oriented(photo, opts.max_edge, false, false)?;
+    let rgba = crate::render::apply_crop_public(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
+    let geo = crate::render::compute_geometry(template, &rgba, opts.overrides.as_ref());
+    Ok((geo.width, geo.height))
+}
+
 /// Compute editor boxes for a decoded photo + template + overrides.
 pub fn layer_boxes_json(
     template: &Template,

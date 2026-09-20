@@ -1,44 +1,440 @@
-[
-  "7artisans",
-  "apple",
-  "blackmagicdesign",
-  "canon",
-  "dji",
-  "epson",
-  "fujifilm",
-  "google",
-  "gopro",
-  "hasselblad",
-  "honor",
-  "huawei",
-  "insta360",
-  "laowa",
-  "leica",
-  "meike",
-  "motorola",
-  "nikon",
-  "nokia",
-  "olympus",
-  "oneplus",
-  "oppo",
-  "panasonic",
-  "pentax",
-  "phaseone",
-  "profoto",
-  "ricoh",
-  "samsung",
-  "samyang",
-  "sandisk",
-  "sigma",
-  "sirui",
-  "smallrig",
-  "sony",
-  "tamron",
-  "tokina",
-  "ttartisan",
-  "viltrox",
-  "vivo",
-  "voigtlander",
-  "yongnuo",
-  "zeiss"
-]
+{
+  "version": 2,
+  "generatedAt": "2026-09-20T05:12:48.027Z",
+  "neutral": "exif-auto",
+  "groups": {
+    "camera": [
+      {
+        "slug": "apple",
+        "label": "Apple",
+        "official": true
+      },
+      {
+        "slug": "blackmagicdesign",
+        "label": "Blackmagic",
+        "official": true
+      },
+      {
+        "slug": "canon",
+        "label": "Canon",
+        "official": false
+      },
+      {
+        "slug": "dji",
+        "label": "DJI",
+        "official": true
+      },
+      {
+        "slug": "epson",
+        "label": "Epson",
+        "official": true
+      },
+      {
+        "slug": "fujifilm",
+        "label": "Fujifilm",
+        "official": true
+      },
+      {
+        "slug": "google",
+        "label": "Google",
+        "official": true
+      },
+      {
+        "slug": "hasselblad",
+        "label": "Hasselblad",
+        "official": false
+      },
+      {
+        "slug": "honor",
+        "label": "HONOR",
+        "official": true
+      },
+      {
+        "slug": "huawei",
+        "label": "Huawei",
+        "official": true
+      },
+      {
+        "slug": "insta360",
+        "label": "Insta360",
+        "official": true
+      },
+      {
+        "slug": "leica",
+        "label": "Leica",
+        "official": true
+      },
+      {
+        "slug": "motorola",
+        "label": "Motorola",
+        "official": true
+      },
+      {
+        "slug": "nikon",
+        "label": "Nikon",
+        "official": true
+      },
+      {
+        "slug": "nokia",
+        "label": "Nokia",
+        "official": true
+      },
+      {
+        "slug": "olympus",
+        "label": "OM System",
+        "official": false
+      },
+      {
+        "slug": "oneplus",
+        "label": "OnePlus",
+        "official": true
+      },
+      {
+        "slug": "oppo",
+        "label": "OPPO",
+        "official": true
+      },
+      {
+        "slug": "panasonic",
+        "label": "Lumix",
+        "official": true
+      },
+      {
+        "slug": "pentax",
+        "label": "Pentax",
+        "official": false
+      },
+      {
+        "slug": "phaseone",
+        "label": "Phase One",
+        "official": false
+      },
+      {
+        "slug": "ricoh",
+        "label": "Ricoh",
+        "official": false
+      },
+      {
+        "slug": "samsung",
+        "label": "Samsung",
+        "official": true
+      },
+      {
+        "slug": "sigma",
+        "label": "Sigma",
+        "official": false
+      },
+      {
+        "slug": "sony",
+        "label": "Sony",
+        "official": true
+      },
+      {
+        "slug": "tamron",
+        "label": "Tamron",
+        "official": false
+      },
+      {
+        "slug": "vivo",
+        "label": "vivo",
+        "official": true
+      },
+      {
+        "slug": "zeiss",
+        "label": "Zeiss",
+        "official": false
+      }
+    ],
+    "lens": [
+      {
+        "slug": "7artisans",
+        "label": "7Artisans",
+        "official": false
+      },
+      {
+        "slug": "apple",
+        "label": "Apple",
+        "official": true
+      },
+      {
+        "slug": "blackmagicdesign",
+        "label": "Blackmagic",
+        "official": true
+      },
+      {
+        "slug": "canon",
+        "label": "Canon",
+        "official": false
+      },
+      {
+        "slug": "dji",
+        "label": "DJI",
+        "official": true
+      },
+      {
+        "slug": "epson",
+        "label": "Epson",
+        "official": true
+      },
+      {
+        "slug": "fujifilm",
+        "label": "Fujifilm",
+        "official": true
+      },
+      {
+        "slug": "google",
+        "label": "Google",
+        "official": true
+      },
+      {
+        "slug": "hasselblad",
+        "label": "Hasselblad",
+        "official": false
+      },
+      {
+        "slug": "honor",
+        "label": "HONOR",
+        "official": true
+      },
+      {
+        "slug": "huawei",
+        "label": "Huawei",
+        "official": true
+      },
+      {
+        "slug": "insta360",
+        "label": "Insta360",
+        "official": true
+      },
+      {
+        "slug": "laowa",
+        "label": "Laowa",
+        "official": false
+      },
+      {
+        "slug": "leica",
+        "label": "Leica",
+        "official": true
+      },
+      {
+        "slug": "meike",
+        "label": "Meike",
+        "official": false
+      },
+      {
+        "slug": "motorola",
+        "label": "Motorola",
+        "official": true
+      },
+      {
+        "slug": "nikon",
+        "label": "Nikon",
+        "official": true
+      },
+      {
+        "slug": "nokia",
+        "label": "Nokia",
+        "official": true
+      },
+      {
+        "slug": "olympus",
+        "label": "OM System",
+        "official": false
+      },
+      {
+        "slug": "oneplus",
+        "label": "OnePlus",
+        "official": true
+      },
+      {
+        "slug": "oppo",
+        "label": "OPPO",
+        "official": true
+      },
+      {
+        "slug": "panasonic",
+        "label": "Lumix",
+        "official": true
+      },
+      {
+        "slug": "pentax",
+        "label": "Pentax",
+        "official": false
+      },
+      {
+        "slug": "phaseone",
+        "label": "Phase One",
+        "official": false
+      },
+      {
+        "slug": "ricoh",
+        "label": "Ricoh",
+        "official": false
+      },
+      {
+        "slug": "samsung",
+        "label": "Samsung",
+        "official": true
+      },
+      {
+        "slug": "samyang",
+        "label": "Samyang",
+        "official": false
+      },
+      {
+        "slug": "sigma",
+        "label": "Sigma",
+        "official": false
+      },
+      {
+        "slug": "sirui",
+        "label": "Sirui",
+        "official": false
+      },
+      {
+        "slug": "sony",
+        "label": "Sony",
+        "official": true
+      },
+      {
+        "slug": "tamron",
+        "label": "Tamron",
+        "official": false
+      },
+      {
+        "slug": "tokina",
+        "label": "Tokina",
+        "official": false
+      },
+      {
+        "slug": "ttartisan",
+        "label": "TTArtisan",
+        "official": false
+      },
+      {
+        "slug": "viltrox",
+        "label": "Viltrox",
+        "official": false
+      },
+      {
+        "slug": "vivo",
+        "label": "vivo",
+        "official": true
+      },
+      {
+        "slug": "voigtlander",
+        "label": "Voigtlander",
+        "official": false
+      },
+      {
+        "slug": "yongnuo",
+        "label": "Yongnuo",
+        "official": false
+      },
+      {
+        "slug": "zeiss",
+        "label": "Zeiss",
+        "official": false
+      }
+    ],
+    "series": [
+      {
+        "slug": "sony-gm",
+        "label": "GM",
+        "official": false
+      },
+      {
+        "slug": "sony-g",
+        "label": "G",
+        "official": false
+      },
+      {
+        "slug": "canon-l",
+        "label": "L",
+        "official": false
+      },
+      {
+        "slug": "canon-rf-l",
+        "label": "RF L",
+        "official": false
+      },
+      {
+        "slug": "nikon-s",
+        "label": "S",
+        "official": false
+      },
+      {
+        "slug": "sigma-art",
+        "label": "ART",
+        "official": false
+      },
+      {
+        "slug": "sigma-dgdn",
+        "label": "DG DN",
+        "official": false
+      },
+      {
+        "slug": "sigma-apo",
+        "label": "APO",
+        "official": false
+      },
+      {
+        "slug": "hasselblad-xcd",
+        "label": "XCD",
+        "official": false
+      },
+      {
+        "slug": "fujifilm-xf",
+        "label": "XF",
+        "official": false
+      },
+      {
+        "slug": "zeiss-batis",
+        "label": "BATIS",
+        "official": false
+      },
+      {
+        "slug": "leica-apo",
+        "label": "APO",
+        "official": false
+      },
+      {
+        "slug": "tamron-sp",
+        "label": "SP",
+        "official": false
+      }
+    ],
+    "game": [
+      {
+        "slug": "genshin",
+        "label": "GENSHIN",
+        "official": false
+      },
+      {
+        "slug": "zzz",
+        "label": "ZZZ",
+        "official": false
+      },
+      {
+        "slug": "honkai",
+        "label": "HONKAI",
+        "official": false
+      },
+      {
+        "slug": "arknights",
+        "label": "ARKNIGHTS",
+        "official": false
+      },
+      {
+        "slug": "wwmeet",
+        "label": "WWMEET",
+        "official": false
+      },
+      {
+        "slug": "wukong",
+        "label": "WUKONG",
+        "official": false
+      }
+    ]
+  }
+}

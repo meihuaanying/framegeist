@@ -6,7 +6,7 @@
       "zh": "右上机身",
       "en": "Corner Body"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -52,7 +52,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.02,
+        "size": 0.024,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -79,7 +79,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0125,
+        "size": 0.015,
         "color": "#6B7280",
         "weight": 500
       },
@@ -101,7 +101,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.018
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -117,7 +117,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0135,
+        "size": 0.0162,
         "color": "#373A40",
         "weight": 500
       },
@@ -145,7 +145,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#8E9298",
         "weight": 500
       },

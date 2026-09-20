@@ -6,7 +6,7 @@
       "zh": "厂商圆点白条",
       "en": "Vendor Dot Bar"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -68,7 +68,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.017,
+        "size": 0.0204,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -95,7 +95,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B7280",
         "weight": 500
       },
@@ -117,7 +117,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.016
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -133,7 +133,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#9AA0A6",
         "weight": 500
       },

@@ -6,7 +6,7 @@
       "zh": "双色分割",
       "en": "Duo Split"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -53,7 +53,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#E63946",
         "weight": 500
       },
@@ -78,7 +78,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#6B7280",
         "weight": 400
       },
@@ -112,7 +112,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.018,
+        "size": 0.0216,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -139,7 +139,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B7280",
         "weight": 500
       },
@@ -161,7 +161,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.022
+        "height": 0.045
       },
       "tint": "light"
     }

@@ -6,7 +6,7 @@
       "zh": "高度主角",
       "en": "Altitude Hero"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -89,7 +89,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.16,
+        "size": 0.192,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -123,7 +123,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.022
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -139,7 +139,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#6B7280",
         "weight": 500
       },
@@ -166,7 +166,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#9AA0A6",
         "weight": 500
       },

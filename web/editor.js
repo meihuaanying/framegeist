@@ -226,6 +226,68 @@ function allLayers(layers, out = [], depth = 0) {
   }
   return out;
 }
+/* ------------------------------------------------ badge library hooks (v0.8) */
+const BADGE_ASSET_RE = /@(?:builtin\/(?:brand|lockup|series|game)|user)\//;
+function isBadgeLayer(layer) {
+  return layer?.type === "image" && BADGE_ASSET_RE.test(layer.asset ?? "");
+}
+/** Target layer for library replacement: selected badge layer, else the first
+ *  badge layer of the template. Returns null when the template has none. */
+function badgeTarget() {
+  const tpl = baseTemplate();
+  if (!tpl) return null;
+  const all = allLayers(tpl.layers ?? []).map((x) => x.layer);
+  const selected = all.find((l) => S.selected.has(l.id) && isBadgeLayer(l));
+  const first = all.find(isBadgeLayer);
+  const layer = selected ?? first;
+  if (!layer) return null;
+  const label = isBadgeLayer(layer) ? t("brandLib.targetBadge") : layerLabel(layer);
+  return { id: layer.id, asset: layer.asset, label, selected: layer === selected };
+}
+/** Replace the target badge layer asset. `asset === "auto"` restores the
+ *  original asset from the unedited template (expression form). */
+function setBadgeAsset(asset) {
+  const target = badgeTarget();
+  if (!target) return false;
+  let next = asset;
+  if (asset === "auto") {
+    const orig = fg()?.currentTemplateObject?.();
+    const origLayer = orig ? allLayers(orig.layers ?? []).map((x) => x.layer).find((l) => l.id === target.id) : null;
+    next = origLayer?.asset ?? target.asset;
+  }
+  edit((tpl) => {
+    const hit = allLayers(tpl.layers ?? []).map((x) => x.layer).find((l) => l.id === target.id);
+    if (hit) hit.asset = next;
+  });
+  return true;
+}
+/** Rewrite concrete badge assets between brand and lockup when the global
+ *  style switches (expressions are rewritten at render time by app.js). */
+function swapBadgeStyle(style) {
+  const tpl = baseTemplate();
+  if (!tpl) return false;
+  let changed = false;
+  for (const { layer } of allLayers(tpl.layers ?? [])) {
+    if (layer.type !== "image" || !layer.asset) continue;
+    if (style === "original" && layer.asset.startsWith("@builtin/brand/")) {
+      layer.asset = layer.asset.replace("@builtin/brand/", "@builtin/lockup/");
+      changed = true;
+    } else if (style === "official" && layer.asset.startsWith("@builtin/lockup/")) {
+      layer.asset = layer.asset.replace("@builtin/lockup/", "@builtin/brand/");
+      changed = true;
+    }
+  }
+  if (changed) {
+    const json = JSON.stringify(tpl);
+    const store = loadEdits();
+    store[fg().state.templateId] = json;
+    saveEdits(store);
+    buildLayersPanel();
+    buildPropsPanel();
+    safeRender();
+  }
+  return changed;
+}
 function findLayer(id, layers = null, parent = null) {
   const list = layers ?? baseTemplate()?.layers ?? [];
   for (const l of list) {
@@ -248,10 +310,12 @@ function buildLayersPanel() {
     const row = document.createElement("div");
     row.className = "layer-row" + (S.selected.has(layer.id) ? " on" : "") + (u.hidden.includes(layer.id) ? " hidden-layer" : "");
     row.dataset.id = layer.id;
+    row.dataset.type = layer.type;
     const indent = depth ? `<span class="indent" style="margin-left:${depth * 10}px"></span>` : "";
-    row.innerHTML = `${indent}<span class="lname">${escapeHtml(layerLabel(layer))}</span><span class="ltag">${escapeHtml(layer.type)}</span>
-      <button data-act="eye" title="显示/隐藏">${u.hidden.includes(layer.id) ? "◌" : "◉"}</button>
-      <button data-act="lock" title="锁定">${u.locked.includes(layer.id) ? "🔒" : "🔓"}</button>`;
+    const typeLabel = t(`layer.type.${layer.type}`) !== `layer.type.${layer.type}` ? t(`layer.type.${layer.type}`) : layer.type;
+    row.innerHTML = `${indent}<span class="lname">${escapeHtml(layerLabel(layer))}</span><span class="ltag">${escapeHtml(typeLabel)}</span>
+      <button data-act="eye" title="${escapeHtml(t("layer.toggleVisible"))}">${u.hidden.includes(layer.id) ? "◌" : "◉"}</button>
+      <button data-act="lock" title="${escapeHtml(t("layer.lock"))}">${u.locked.includes(layer.id) ? "🔒" : "🔓"}</button>`;
     row.onclick = (e) => {
       trace("rowclick", layer.id, "target=" + (e.target?.tagName ?? "?"));
       const act = e.target?.dataset?.act;
@@ -2238,5 +2302,10 @@ window.__fgEditor = {
     cropMode: S.cropMode,
     history: Object.fromEntries(Object.entries(S.history).map(([k, v]) => [k, { len: v.stack.length, index: v.index }])),
   }),
+  // v0.8.0 badge library: layer-level asset replacement.
+  badgeTarget,
+  setBadgeAsset,
+  swapBadgeStyle,
+  isBadgeLayer,
 };
 init();

@@ -6,7 +6,7 @@
       "zh": "黑金一线",
       "en": "Gold Line"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#D4A017",
         "weight": 500
       },
@@ -78,7 +78,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.045,
+        "size": 0.054,
         "color": "#D4A017",
         "weight": 400
       },
@@ -105,7 +105,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0125,
+        "size": 0.015,
         "color": "#E6E6E6",
         "weight": 500
       },
@@ -133,7 +133,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0105,
+        "size": 0.0126,
         "color": "#9A9A9A",
         "weight": 500
       },
@@ -154,7 +154,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

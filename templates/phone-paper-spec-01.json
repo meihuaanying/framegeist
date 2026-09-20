@@ -6,7 +6,7 @@
       "zh": "纸感规格",
       "en": "Paper Spec"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -62,7 +62,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -120,7 +120,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.018,
+        "size": 0.0216,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -147,7 +147,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B7280",
         "weight": 500
       },
@@ -216,7 +216,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -240,7 +240,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -264,7 +264,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -291,7 +291,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -315,7 +315,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -339,7 +339,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -363,7 +363,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -387,7 +387,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -407,7 +407,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

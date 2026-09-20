@@ -6,7 +6,7 @@
       "zh": "压印浮雕",
       "en": "Letterpress Relief"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -118,7 +118,7 @@
         "family": [
           "Glow Sans SC"
         ],
-        "size": 0.026,
+        "size": 0.0286,
         "color": "#4A4E55",
         "weight": 500
       },
@@ -151,7 +151,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6E6A61",
         "weight": 500
       },
@@ -188,7 +188,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6E6A61",
         "weight": 500
       },
@@ -216,7 +216,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6E6A61",
         "weight": 400
       },
@@ -243,7 +243,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

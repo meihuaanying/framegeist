@@ -53,6 +53,12 @@ enum Cmd {
         #[arg(long)]
         font: Option<String>,
     },
+    /// Print editor layer bounding boxes as JSON (v0.8 typography QA).
+    Boxes {
+        photo: PathBuf,
+        #[arg(long = "template")]
+        template: String,
+    },
     /// Render a directory of photos; existing outputs are never overwritten.
     Batch {
         dir: PathBuf,
@@ -329,6 +335,24 @@ fn run(args: &Args) -> Result<(), Error> {
                     r.serial_stripped
                 );
             }
+            Ok(())
+        }
+        Cmd::Boxes { photo, template } => {
+            let (tpl, _src) = resolve_template(template)?;
+            let bytes = std::fs::read(photo)?;
+            let opts = build_opts(args, OutputFormat::Jpeg, false)?;
+            let boxes = framegeist_core::boxes::layer_boxes_for_photo(&bytes, &tpl, &opts)?;
+            let (w, h) = framegeist_core::boxes::canvas_size_for_photo(&bytes, &tpl, &opts)?;
+            let out = serde_json::json!({
+                "canvas": { "w": w, "h": h },
+                "boxes": serde_json::from_str::<serde_json::Value>(&boxes)
+                    .map_err(|e| Error::TemplateJson(e.to_string()))?,
+            });
+            println!(
+                "{}",
+                serde_json::to_string_pretty(&out)
+                    .map_err(|e| Error::TemplateJson(e.to_string()))?
+            );
             Ok(())
         }
         Cmd::Batch {

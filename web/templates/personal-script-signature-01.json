@@ -6,7 +6,7 @@
       "zh": "手写签名",
       "en": "Script Signature"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -44,7 +44,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -60,7 +60,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B7280",
         "weight": 500
       },
@@ -87,7 +87,7 @@
         "family": [
           "Great Vibes"
         ],
-        "size": 0.045,
+        "size": 0.0495,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -111,7 +111,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#9AA0A6",
         "weight": 400
       },

@@ -6,7 +6,7 @@
       "zh": "底栏日历",
       "en": "Bottom Strip Date"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -54,7 +54,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.14,
+        "size": 0.168,
         "color": "#1A1A1A",
         "weight": 400
       },
@@ -81,7 +81,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#9AA0A6",
         "weight": 400
       },
@@ -129,7 +129,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0135,
+        "size": 0.0162,
         "color": "#6B7280",
         "weight": 400
       },
@@ -157,7 +157,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#373A40",
         "weight": 500
       },
@@ -185,7 +185,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#6B7280",
         "weight": 500
       },

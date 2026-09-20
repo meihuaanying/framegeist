@@ -6,7 +6,7 @@
       "zh": "右侧配方栏",
       "en": "Recipe Rails"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -81,7 +81,7 @@
       },
       "asset": "@builtin/brand/fujifilm",
       "size": {
-        "height": 0.026
+        "height": 0.045
       }
     },
     {
@@ -96,7 +96,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -124,7 +124,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -148,7 +148,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -173,7 +173,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -197,7 +197,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -225,7 +225,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -249,7 +249,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -277,7 +277,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -301,7 +301,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -326,7 +326,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -350,7 +350,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -378,7 +378,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -402,7 +402,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -430,7 +430,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#F1EDE6",
         "weight": 500
       },
@@ -458,7 +458,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },
@@ -483,7 +483,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8D8A84",
         "weight": 500
       },

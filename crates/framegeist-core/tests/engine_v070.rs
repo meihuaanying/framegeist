@@ -168,8 +168,33 @@ fn badge_size_floor_applies() {
     assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
     let h = (b.y1 - b.y0 + 1) as f64;
     assert!(
-        h >= 52.0,
-        "badge height {h} must respect the 3.5% floor (56px)"
+        h >= 76.0,
+        "badge height {h} must respect the 5% floor (80px on a 1600px photo)"
+    );
+}
+
+#[test]
+fn badge_default_height_is_4_5_percent_when_floor_relaxed() {
+    // v0.8.0: without an explicit size the badge defaults to 4.5% of the photo
+    // height (a template may relax minHeight to let that default through).
+    let mut layer = badge_layer(0.0, None);
+    layer["size"] = json!({});
+    layer["minHeight"] = json!(0.01);
+    let tpl = image_template(layer);
+    let p = photo(600, 1000, 235);
+    let base = render(
+        &image_template(
+            json!({"type":"image","id":"none","anchor":"middle-center","asset":"@builtin/brand/missing","size":{}}),
+        ),
+        &p,
+    );
+    let img = render_assets(&tpl, &p, &badge_assets());
+    let b = badge_pixels(&base, &img);
+    assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
+    let h = (b.y1 - b.y0 + 1) as f64;
+    assert!(
+        (40.0..=50.0).contains(&h),
+        "default badge height {h} should be ~45px (4.5% of 1000px)"
     );
 }
 
@@ -228,8 +253,8 @@ fn badge_max_width_and_corner_placement() {
     assert!(b.count > 100, "badge must be drawn");
     let w = (b.x1 - b.x0 + 1) as f64;
     assert!(
-        w <= 360.0,
-        "max width must clamp the 8:1 wordmark to <= 32% (got {w})"
+        w <= 420.0,
+        "max width must clamp the 8:1 wordmark to <= 38% (got {w})"
     );
     assert!(
         b.x0 <= 50,

@@ -6,7 +6,7 @@
       "zh": "展览标签",
       "en": "Wall Label"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Noto Serif SC"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -62,7 +62,7 @@
         "family": [
           "Noto Serif SC"
         ],
-        "size": 0.042,
+        "size": 0.0462,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -86,7 +86,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.03,
+        "size": 0.033,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -110,7 +110,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "#373A40",
         "weight": 500
       },
@@ -134,7 +134,7 @@
         "family": [
           "Noto Serif SC"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#6B7280",
         "weight": 500
       },
@@ -173,7 +173,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "#373A40",
         "weight": 500
       },
@@ -200,7 +200,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#6B7280",
         "weight": 500
       },
@@ -224,7 +224,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#9AA0A6",
         "weight": 400
       },
@@ -248,7 +248,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

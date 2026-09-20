@@ -6,7 +6,7 @@
       "zh": "齿孔边码",
       "en": "Sprocket Classic"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -78,7 +78,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#A8A298",
         "weight": 500
       },
@@ -105,7 +105,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6E6A62",
         "weight": 500
       },
@@ -129,7 +129,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.03,
+        "size": 0.033,
         "color": "#EFE9DC",
         "weight": 500
       },
@@ -151,7 +151,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.022
+        "height": 0.045
       },
       "attachTo": "stock",
       "attachGap": 0.012
@@ -168,7 +168,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6E6A62",
         "weight": 500
       },

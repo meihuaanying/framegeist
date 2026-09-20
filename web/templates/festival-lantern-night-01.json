@@ -6,7 +6,7 @@
       "zh": "灯会之夜",
       "en": "Night Lanterns"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -86,7 +86,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "auto",
         "weight": 500
       },
@@ -151,7 +151,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.038,
+        "size": 0.0456,
         "color": "auto",
         "weight": 400
       },

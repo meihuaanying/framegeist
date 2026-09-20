@@ -6,7 +6,7 @@
       "zh": "双线题签",
       "en": "Double Rule"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.03,
+        "size": 0.036,
         "color": "#1A1A1A",
         "weight": 400
       },
@@ -96,7 +96,7 @@
         "family": [
           "Noto Serif SC"
         ],
-        "size": 0.045,
+        "size": 0.0495,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -121,7 +121,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -146,7 +146,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#373A40",
         "weight": 500
       },
@@ -173,7 +173,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0105,
+        "size": 0.0126,
         "color": "#6B7280",
         "weight": 500
       },
@@ -197,7 +197,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0105,
+        "size": 0.0126,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -221,7 +221,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

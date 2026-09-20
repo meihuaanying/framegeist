@@ -6,7 +6,7 @@
       "zh": "黑神话悟空 · 海报卡",
       "en": "Black Myth Wukong · Poster Card"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "framegeist",
     "license": "CC0-1.0",
@@ -48,7 +48,7 @@
         "family": [
           "Bricolage Grotesque"
         ],
-        "size": 0.024,
+        "size": 0.0264,
         "weight": 500,
         "color": "#D4A017"
       },
@@ -76,7 +76,7 @@
       "id": "brand",
       "asset": "@builtin/brand/{exif.brand_slug}-light",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "anchor": "bottom-center",
       "offset": {
@@ -92,7 +92,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.015,
+        "size": 0.018,
         "weight": 500,
         "color": "#8C2F22"
       },

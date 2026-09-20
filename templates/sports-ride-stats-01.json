@@ -6,7 +6,7 @@
       "zh": "骑行数据行",
       "en": "Ride Stats"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#9AA0A6",
         "weight": 500
       },
@@ -60,7 +60,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.018
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -76,7 +76,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#373A40",
         "weight": 400
       },
@@ -118,7 +118,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#373A40",
         "weight": 500
       },
@@ -160,7 +160,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#373A40",
         "weight": 500
       },
@@ -187,7 +187,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0105,
+        "size": 0.0126,
         "color": "#6B7280",
         "weight": 500
       },

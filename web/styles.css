@@ -299,6 +299,8 @@ label.row .spacer { flex: 1; }
 .thumb.in { opacity: 1; transform: none; transition: opacity var(--t-slower) var(--ease), transform var(--t-slower) var(--ease), border-color var(--t-base), box-shadow var(--t-base); }
 .thumb:hover { transform: translateY(-2px); border-color: var(--border-strong); box-shadow: var(--shadow); }
 .thumb.on { border-color: var(--accent-a); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 35%, transparent); }
+/* v0.8.0: skip layout/paint for off-screen picker thumbs */
+.thumb { content-visibility: auto; contain-intrinsic-size: auto 170px; }
 .thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .thumb .tname {
   position: absolute; left: 0; right: 0; bottom: 0;
@@ -427,12 +429,54 @@ input[type="color"] {
 .brand-cell img { width: 100%; height: 100%; object-fit: contain; }
 html[data-theme="dark"] .brand-cell img { filter: invert(1); }
 
+/* ---------- badge library v2 (v0.8.0) ---------- */
+.brand-lib-head { display: grid; gap: 8px; margin: 8px 0 0; }
+.brand-lib-head input[type="search"] { width: 100%; }
+.brand-lib-groups, .brand-lib-quick { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.brand-chip {
+  height: 26px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--bg-elev); color: var(--text-muted); font-size: var(--fs-xs); cursor: pointer;
+  transition: border-color var(--t-base) var(--ease), color var(--t-base), background var(--t-base);
+}
+.brand-chip:hover { border-color: var(--border-strong); color: var(--text); }
+.brand-chip.on { background: var(--chip-on); color: var(--chip-on-text); border-color: var(--chip-on); }
+.brand-chip.ghost { opacity: .85; }
+.brand-lib-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 6px;
+  max-height: 268px; overflow-y: auto; margin-top: 8px;
+  scrollbar-width: thin; scrollbar-color: var(--scroll) transparent;
+}
+.brand-lib-grid.modal { max-height: 50vh; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); }
+.brand-lib-cell {
+  position: relative; display: grid; place-items: center; aspect-ratio: 1;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--bg-soft); cursor: pointer;
+  content-visibility: auto; contain-intrinsic-size: auto 56px;
+  transition: border-color var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+}
+.brand-lib-cell:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+.brand-lib-cell.on { border-color: var(--accent-a); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 30%, transparent); }
+.brand-lib-cell img { max-width: 78%; max-height: 60%; object-fit: contain; }
+.brand-lib-cell .fav {
+  position: absolute; top: 1px; right: 4px; font-size: 10px; line-height: 1;
+  color: var(--text-faint); opacity: 0; transition: opacity var(--t-fast);
+}
+.brand-lib-cell:hover .fav, .brand-lib-cell .fav.on { opacity: 1; }
+.brand-lib-cell .fav.on { color: #E8B23A; }
+.brand-lib-empty { grid-column: 1 / -1; text-align: center; padding: 18px 0; font-size: var(--fs-sm); }
+.brand-lib-hint { font-size: var(--fs-2xs); margin-top: 6px; line-height: 1.5; }
+.brandlib-modal { position: fixed; inset: 0; z-index: 62; display: grid; place-items: center; }
+.brandlib-modal-body { padding: 14px 18px 18px; display: grid; gap: 10px; max-height: 70vh; overflow-y: auto; }
+.brandlib-modal-body input[type="search"] { width: 100%; }
+
 /* v0.7.0: brand elements on the wall / lightbox surfaces */
 .brand-strip { display: flex; align-items: center; gap: 8px; }
 .brand-strip img { height: 13px; width: auto; max-width: 44px; object-fit: contain; opacity: .5; transition: opacity var(--t-base) var(--ease); }
 .brand-strip img:hover { opacity: .9; }
-.brand-strip.lightbox { gap: 12px; margin-bottom: 2px; }
-.brand-strip.lightbox img { height: 16px; max-width: 52px; opacity: .6; }
+/* NOTE: do not use the bare `.lightbox` class here — it is the full-screen
+   modal overlay (position:fixed; inset:0; display:grid; z-index:60) and would
+   swallow every click. Keep a dedicated `.lb-brand` variant name. */
+.brand-strip.lb-brand { gap: 12px; margin-bottom: 2px; }
+.brand-strip.lb-brand img { height: 16px; max-width: 52px; opacity: .6; }
 html[data-theme="dark"] .brand-strip img { filter: invert(1); }
 .brand-opts { display: grid; gap: 6px; margin-bottom: 8px; }
 .brand-opts .row { justify-content: space-between; }
@@ -625,6 +669,13 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
 }
 .wall-card:hover { transform: translateY(-3px); border-color: var(--border-strong); box-shadow: var(--shadow); }
 .wall-card.on { border-color: var(--accent-a); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 35%, transparent); }
+/* v0.8.0: skip layout/paint for off-screen cards (keep DOM for Ctrl+F/a11y) */
+.wall-card { content-visibility: auto; contain-intrinsic-size: auto 320px; }
+.wall-card.skeleton-card {
+  aspect-ratio: 3 / 2; pointer-events: none;
+  background: var(--skeleton); background-size: 300% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
 .wall-card img {
   display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover;
   background: var(--bg-soft);
@@ -655,6 +706,12 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
 }
 .wall-card .wall-actions button:hover { background: rgba(0, 0, 0, .8); }
 .wall-card .wall-actions button.icon { padding: 0 9px; font-size: 13px; }
+.wall-marks {
+  position: absolute; left: 10px; bottom: 46px; display: flex; gap: 5px; align-items: center;
+  padding: 3px 7px; border-radius: 6px; max-width: calc(100% - 20px);
+  background: color-mix(in srgb, #000 45%, transparent); backdrop-filter: blur(6px);
+}
+.wall-marks img { height: 12px; max-width: 36px; object-fit: contain; opacity: .92; }
 .wall-empty { grid-column: 1 / -1; text-align: center; color: var(--text-faint); padding: 70px 0; }
 
 /* keyboard focus visibility for the card grids */

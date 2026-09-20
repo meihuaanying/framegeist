@@ -103,17 +103,18 @@
 - 模糊自身铺底（`background: blur`）+ 圆角投影照片（canvas radius/shadow）；或色域渐变延伸（tint）。
 - 变体：镜像倒影/双色渐变/暗角卡片。
 
-## 3. 排版系统 v2（v0.7.0 起强制执行）
+## 3. 排版系统 v2（v0.7.0 起强制执行，v0.8.0 尺寸上调）
 
-> 字体全部 OFL，`templates/assets/fonts/fonts.json`（68 faces / 22 families）；`font.weight` 400–700
+> 字体全部 OFL，`templates/assets/fonts/fonts.json`（69 faces / 23 families）；`font.weight` 400–700
 > 由引擎按 OS/2 精确选面。EXIF 数值行默认 **Inter tabular（OpenType `tnum`）**；JetBrains Mono
 > 为可选项（不再作为默认数据行）。
+> **v0.8.0 尺寸提升**：Data/Label ×1.2、Support ×1.1（Display 不变），乘后仍 ≥0.0095；越界/重叠自动逐级回退。
 
 ### 3.1 字号阶梯（以照片高度为基准的相对字号）
 
 - 每套模板至少 3 级：**Display**（≥0.05）／**Support**（0.022–0.05）／**Detail**（<0.022）。
 - 相邻级字号比 1.25–1.5（瑞士系 1.25 / 编辑系 1.333）；小号不得低于 900px 样张 8px。
-- 数据/参数行 0.012–0.018；微标签 0.008–0.012。
+- 数据/参数行 0.012–0.018（v0.8 乘 1.2）；微标签 0.008–0.012（v0.8 乘 1.2，下限 0.0095）。
 
 ### 3.2 字距与行高
 
@@ -144,7 +145,7 @@
 
 ### 3.6 徽标规范（Q2/Q5）
 
-- 尺寸：照片高 ≥3.5% 且 ≥18px（引擎强制）；长名最大宽度 ≤32% 照片宽（超宽缩放/截断由引擎处理）。
+- 尺寸（v0.8 上调）：照片高 ≥5% 且 ≥18px（引擎强制）；默认层高 4.5%；长名最大宽度 ≤38% 照片宽（超宽缩放/截断由引擎处理）。
 - 对比：黑/白变体按背景 p10/p90 亮度自动选择；纯色底必达 4.5:1；花底自动加反向 1px 描边或半透明底板。
 - 数量：同模板内 1 个相机徽标 + 可选 1 个系列徽标；与文本最小间距 0.8×徽标高；透明度 0.7–1.0（编辑器可调）。
 - 位置：跟随模板锚点，编辑器可切四角固定；提供「官方字标（Simple Icons CC0）/ 原创排版 lockup（OFL 字型）」两种风格。
@@ -185,7 +186,7 @@
 2. 无意外重叠；信息带同一基线；留白在 5–15%。
 3. 浅底/深底两张照片下 `auto` 对比度均通过。
 4. 表达式全部过白名单；`validate` 无错。
-5. id 唯一、name/nameI18n 双语、category 正确、author="FrameGeist"、license="CC0-1.0"、version="1.1.0"、minEngineVersion="0.7.0"。
+5. id 唯一、name/nameI18n 双语、category 正确、author="FrameGeist"、license="CC0-1.0"、version="1.2.0"、minEngineVersion="0.7.0"。
    水印/参数类分类必须带品牌徽标层（`@builtin/brand/{exif.brand_slug}` 或 lockup/series），并通过字形覆盖门禁 `node tools/check-glyph-coverage.mjs`。
 6. 与同分类相邻模板至少 2 处显著差异（自动缩略图差异断言 >3%）。
 7. 无 frameelf 文案/资产复刻；无第三方商标图形描摹（品牌字标走 Simple Icons 既有管线）。

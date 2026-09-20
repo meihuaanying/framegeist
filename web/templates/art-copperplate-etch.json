@@ -6,7 +6,7 @@
       "zh": "铜版雕刻",
       "en": "Copperplate Etch"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -191,7 +191,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#5A4632",
         "weight": 500
       },
@@ -225,7 +225,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#5A4632",
         "weight": 500
       },
@@ -256,7 +256,7 @@
         "family": [
           "Glow Sans SC"
         ],
-        "size": 0.028,
+        "size": 0.0308,
         "color": "#4A3A28",
         "weight": 500
       },
@@ -289,7 +289,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.042,
+        "size": 0.0462,
         "color": "#2C2318",
         "weight": 500
       },
@@ -323,7 +323,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B5136",
         "weight": 500
       },
@@ -350,7 +350,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B5136",
         "weight": 400
       },
@@ -377,7 +377,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

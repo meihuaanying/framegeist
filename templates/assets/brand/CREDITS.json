@@ -110,6 +110,11 @@
       "font": "Geist-600.ttf"
     },
     {
+      "slug": "voigtlander",
+      "kind": "brand",
+      "font": "InstrumentSerif-400.ttf"
+    },
+    {
       "slug": "phaseone",
       "kind": "brand",
       "font": "Geist-600.ttf"
@@ -119,6 +124,11 @@
       "kind": "brand",
       "font": "Geist-700.ttf",
       "note": "official icon preferred"
+    },
+    {
+      "slug": "exif-auto",
+      "kind": "brand",
+      "font": "GeistMono-500.ttf"
     }
   ],
   "lockups": [
@@ -164,5 +174,7 @@
     "sirui",
     "yongnuo",
     "voigtlander"
-  ]
+  ],
+  "variants": "512px (assets) + 96px thumbs (web library)",
+  "neutral": "brand/exif-auto (original EXIF marker for expression-based templates)"
 }

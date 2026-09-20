@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.7.0";
+const APP_VERSION = "0.8.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -14,7 +14,8 @@ const state = {
   engine: null,
   view: "wall",            // wall | editor
   fonts: [],              // [{family,file,license}] from fonts.json
-  loadedFonts: new Set(),
+  loadedFonts: new Set(), // families whose FULL weight set is registered
+  loadedFiles: new Set(), // "family:file" pairs already registered (partial loads)
   templates: [],
   layouts: [],
   userTemplates: [],      // [{id,name,category,json}]
@@ -28,7 +29,6 @@ const state = {
   lastRender: null,
   lastRenderName: null,
   sourceUrl: null,
-  brandOverride: "auto",   // auto | none | brand:<slug> | custom
   zoom: { scale: 1, tx: 0, ty: 0, autoFit: true },
   customAssets: {},        // "@user/logo" / "@user/background" -> Uint8Array
   usedNames: new Set(),
@@ -108,6 +108,21 @@ const b64encode = (bytes) => {
 const b64decode = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
 const stem = (name) => name.replace(/\.[^.]+$/, "");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/// v0.7.1: never let a single stalled fetch hang boot/render (Tauri asset
+/// protocol hiccups, flaky network for remote assets).
+const fetchWithTimeout = (url, ms = 15000) => fetch(url, { signal: AbortSignal.timeout(ms) });
+const withTimeout = (promise, ms, fallback = null) =>
+  Promise.race([promise, sleep(ms).then(() => fallback)]);
+/// Surface otherwise-silent failures (a stuck renderer is indistinguishable
+/// from a frozen app, so at least the toast/log tells the user what happened).
+let appErrorCount = 0;
+function surfaceError(where, e) {
+  appErrorCount += 1;
+  try { console.error(`[fg] ${where}:`, e); } catch { /* ignore */ }
+  try { if (typeof toast === "function") toast("error", `${where}: ${e?.message || e}`); } catch { /* ignore */ }
+}
+window.addEventListener("unhandledrejection", (e) => surfaceError("unhandled", e.reason));
+window.addEventListener("error", (e) => { if (!e.defaultPrevented) surfaceError("error", e.error ?? e.message); });
 const withViewTransition = (fn) => {
   if (!document.startViewTransition) return fn();
   try {
@@ -178,7 +193,7 @@ function buildOverridesJson() {
   if (settings.margin && settings.margin > 0) out.margin = settings.margin;
   if (settings.flipH) out.flipHorizontal = true;
   if (settings.flipV) out.flipVertical = true;
-  out.showLogo = settings.showLogo && state.brandOverride !== "none";
+  out.showLogo = settings.showLogo;
   // v0.7.0 Q6: badge style / position / size / contrast / opacity.
   out.brandStyle = o.brandStyle ?? "official";
   if (o.brandPosition && o.brandPosition !== "anchor") out.brandPosition = o.brandPosition;
@@ -378,20 +393,10 @@ function effectiveTemplateJson() {
   const edits = getLayerEdits(state.templateId);
   for (const layer of clone.layers ?? []) {
     if (layer.type === "text" && edits[layer.id]) layer.content = edits[layer.id];
-    if (layer.type === "image") {
-      if (state.brandOverride === "none") {
-        // keep asset but engine skips via showLogo=false (handled in overrides)
-      } else if (state.brandOverride === "custom" && layer.asset.includes("@builtin/brand/")) {
-        layer.asset = "@user/logo";
-      } else if (state.brandOverride.startsWith("brand:")) {
-        const slug = state.brandOverride.slice("brand:".length);
-        layer.asset = layer.asset.replace(/\{exif\.(brand|lens)_slug\}/g, slug);
-      }
-    }
   }
   // v0.7.0 Q2: "original" style switches official marks to typographic lockups.
   const brandStyle = loadOverrides(state.templateId).brandStyle ?? "official";
-  if (brandStyle === "original" && state.brandOverride !== "custom") {
+  if (brandStyle === "original") {
     for (const layer of clone.layers ?? []) {
       if (layer.type === "image" && layer.asset.includes("@builtin/brand/")) {
         layer.asset = layer.asset.replace("@builtin/brand/", "@builtin/lockup/");
@@ -610,6 +615,14 @@ function templateBrandSlugs(id) {
   return slugs.size ? [...slugs] : DEMO_BRAND_STRIP;
 }
 
+/* v0.8.0: first-paint skeleton for the wall grid (cleared by buildWall). */
+function showWallSkeleton() {
+  const grid = $("wallGrid");
+  if (!grid || grid.dataset.skeleton === "1") return;
+  grid.dataset.skeleton = "1";
+  grid.innerHTML = Array.from({ length: 8 }, () => '<div class="wall-card skeleton-card"></div>').join("");
+  window.__wallSkeleton = { shown: true, at: Math.round(performance.now()), clearedAt: null };
+}
 function buildWall() {
   const tabs = $("wallCats");
   tabs.innerHTML = "";
@@ -631,6 +644,10 @@ function buildWall() {
   renderBrandStrip($("wallBrandStrip"), DEMO_BRAND_STRIP);
 
   const grid = $("wallGrid");
+  if (grid.dataset.skeleton === "1" && window.__wallSkeleton) {
+    window.__wallSkeleton.clearedAt = Math.round(performance.now());
+  }
+  grid.dataset.skeleton = "0";
   grid.innerHTML = "";
   if (!list.length) {
     const empty = document.createElement("div");
@@ -648,9 +665,14 @@ function buildWall() {
     cell.tabIndex = 0;
     const src = thumbSrc(tpl) ? `./previews/${tpl.id}.jpg` : null;
     const catLabel = t("cat." + tpl.category) !== `cat.${tpl.category}` ? t("cat." + tpl.category) : (tpl.category ?? "");
+    const marks = Array.isArray(tpl.marks) ? tpl.marks.slice(0, 3) : [];
+    const marksHtml = marks.length
+      ? `<div class="wall-marks">${marks.map((m) => `<img loading="lazy" decoding="async" src="./${m.kind}/thumbs/${m.slug}-light.png" alt="">`).join("")}</div>`
+      : "";
     cell.innerHTML = (src
       ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
       : `<div style="display:grid;place-items:center;aspect-ratio:3/2;background:linear-gradient(135deg,color-mix(in srgb,var(--accent-a) 22%,var(--bg-soft)),color-mix(in srgb,var(--accent-b) 22%,var(--bg-soft)))">${escapeHtml(tplName(tpl).slice(0, 16))}</div>`) +
+      marksHtml +
       `<div class="wall-name"><b>${escapeHtml(tplName(tpl))}</b><span class="wall-cat"></span></div>` +
       `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">⤢</button></div>`;
     cell.querySelector(".wall-cat").textContent = catLabel;
@@ -682,28 +704,172 @@ function buildLayoutPicker() {
   }
 }
 
-/* ------------------------------------------------------------- brand UI */
-let brandList = [];
-function buildBrandGrid() {
-  const grid = $("brandGrid");
+/* ------------------------------------------------------ badge library (v2) */
+const BRAND_LIB_FALLBACK = { version: 1, groups: { camera: [], lens: [], series: [], game: [] } };
+let brandLibData = BRAND_LIB_FALLBACK;
+const brandLibState = {
+  group: localStorage.getItem("fg-brand-group") || "camera",
+  query: "",
+  fav: new Set(JSON.parse(localStorage.getItem("fg-brand-fav-v1") || "[]")),
+  recent: JSON.parse(localStorage.getItem("fg-brand-recent-v1") || "[]"),
+};
+function saveBrandLib() {
+  localStorage.setItem("fg-brand-fav-v1", JSON.stringify([...brandLibState.fav]));
+  localStorage.setItem("fg-brand-recent-v1", JSON.stringify(brandLibState.recent.slice(0, 12)));
+  localStorage.setItem("fg-brand-group", brandLibState.group);
+}
+async function loadBrandLibrary() {
+  try {
+    const data = await (await fetch(BASE + "brand/index.json")).json();
+    if (Array.isArray(data)) {
+      const items = data.map((slug) => ({ slug, label: slug, official: false }));
+      brandLibData = { version: 1, groups: { camera: items, lens: items, series: [], game: [] } };
+    } else {
+      brandLibData = data;
+    }
+  } catch { brandLibData = BRAND_LIB_FALLBACK; }
+}
+function brandStyleNow() {
+  return (state.templateId ? loadOverrides(state.templateId).brandStyle : null) ?? "official";
+}
+function badgeGroupsFor(target) {
+  const asset = target?.asset ?? "";
+  if (asset.includes("@builtin/series/")) return ["series"];
+  if (asset.includes("@builtin/game/")) return ["game"];
+  if (asset.includes("@builtin/brand/") || asset.includes("@builtin/lockup/") || asset.includes("@user/")) return ["camera", "lens"];
+  return ["camera", "lens", "series", "game"];
+}
+function libThumb(item, group, style) {
+  const light = document.documentElement.dataset.theme === "dark" ? "-light" : "";
+  const dir = group === "series" ? "series" : group === "game" ? "game"
+    : (item.official && style === "official" ? "brand" : "lockup");
+  return `./${dir}/thumbs/${item.slug}${light}.png`;
+}
+function libDir(item, group, style) {
+  if (group === "series") return "series";
+  if (group === "game") return "game";
+  return item.official && style === "official" ? "brand" : "lockup";
+}
+function currentBadgeSlug(target) {
+  const m = /@(?:builtin\/(?:brand|lockup|series|game)|user)\/([a-z0-9-]+)/.exec(target?.asset ?? "");
+  return m ? m[1] : null;
+}
+/// Render a library grid into `grid` for the given groups/query/style.
+function renderLibGrid(grid, available, { readOnly = false } = {}) {
+  const style = brandStyleNow();
+  const groups = brandLibData.groups ?? {};
+  const all = available.flatMap((g) => (groups[g] ?? []).map((i) => ({ ...i, group: g })));
+  const q = brandLibState.query.trim().toLowerCase();
+  const items = q ? all.filter((i) => i.slug.includes(q) || String(i.label).toLowerCase().includes(q)) : all;
+  const target = badgeTarget();
+  const activeSlug = readOnly ? null : currentBadgeSlug(target);
   grid.innerHTML = "";
-  for (const slug of brandList) {
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "brand-lib-empty muted";
+    empty.textContent = t("brandLib.empty");
+    grid.appendChild(empty);
+    return;
+  }
+  for (const item of items) {
     const cell = document.createElement("div");
-    const active = state.brandOverride === `brand:${slug}` || (state.brandOverride === "custom" && slug === "__custom");
-    cell.className = `brand-cell${active ? " on" : ""}`;
-    cell.title = slug;
-    cell.innerHTML = slug === "__custom"
-      ? `<span style="font-size:10px">${t("brand.custom")}</span>`
-      : `<img loading="lazy" src="./brand/${slug}.png" alt="">`;
-    cell.onclick = () => {
-      state.brandOverride = slug === "__custom" ? "custom" : `brand:${slug}`;
-      buildBrandGrid();
-      renderNow();
+    cell.className = `brand-lib-cell${item.slug === activeSlug ? " on" : ""}`;
+    cell.title = item.label ?? item.slug;
+    cell.innerHTML = `<img loading="lazy" decoding="async" src="${libThumb(item, item.group, style)}" alt="${escapeHtml(String(item.label ?? item.slug))}">` +
+      `<span class="fav${brandLibState.fav.has(item.slug) ? " on" : ""}">★</span>`;
+    cell.querySelector(".fav").onclick = (e) => {
+      e.stopPropagation();
+      if (brandLibState.fav.has(item.slug)) brandLibState.fav.delete(item.slug);
+      else brandLibState.fav.add(item.slug);
+      saveBrandLib();
+      renderBrandLibrary();
+      renderLibGrid($("brandLibModalGrid"), availableForModal(), { readOnly: true });
     };
+    if (!readOnly) {
+      cell.onclick = () => applyBrandChoice(item, item.group);
+    } else {
+      cell.onclick = () => toast("info", t("brandLib.wallHint"));
+    }
     grid.appendChild(cell);
   }
-  $("brandAuto").classList.toggle("on", state.brandOverride === "auto");
-  $("brandNone").classList.toggle("on", state.brandOverride === "none");
+}
+function availableForModal() {
+  return ["camera", "lens", "series", "game"];
+}
+/// Wall-side read-only library dialog (browse + style preview only).
+function renderModalLibrary() {
+  const groups = brandLibData.groups ?? {};
+  const chipBox = $("brandLibModalGroups");
+  chipBox.innerHTML = "";
+  for (const g of availableForModal()) {
+    const b = document.createElement("button");
+    b.className = `brand-chip${brandLibState.group === g ? " on" : ""}`;
+    b.textContent = `${t("brandLib.groups." + g)} ${(groups[g] ?? []).length}`;
+    b.onclick = () => { brandLibState.group = g; saveBrandLib(); renderBrandLibrary(); renderModalLibrary(); };
+    chipBox.appendChild(b);
+  }
+  $("brandLibModalSearch").value = brandLibState.query;
+  $("brandLibModalCount").textContent = String(availableForModal().reduce((n, g) => n + (groups[g] ?? []).length, 0));
+  renderLibGrid($("brandLibModalGrid"), availableForModal(), { readOnly: true });
+}
+function renderBrandLibrary() {
+  const target = badgeTarget();
+  const groups = brandLibData.groups ?? {};
+  const available = badgeGroupsFor(target);
+  if (!available.includes(brandLibState.group)) brandLibState.group = available[0];
+  const chipBox = $("brandGroups");
+  chipBox.innerHTML = "";
+  for (const g of available) {
+    const b = document.createElement("button");
+    b.className = `brand-chip${brandLibState.group === g ? " on" : ""}`;
+    b.textContent = `${t("brandLib.groups." + g)} ${(groups[g] ?? []).length}`;
+    b.onclick = () => { brandLibState.group = g; saveBrandLib(); renderBrandLibrary(); };
+    chipBox.appendChild(b);
+  }
+  $("brandSearch").value = brandLibState.query;
+  // quick picks: recent + favorites inside the available groups
+  const quick = $("brandQuick");
+  quick.innerHTML = "";
+  const all = available.flatMap((g) => (groups[g] ?? []).map((i) => ({ ...i, group: g })));
+  const picks = [...brandLibState.recent, ...brandLibState.fav]
+    .map((slug) => all.find((i) => i.slug === slug))
+    .filter((v, i, a) => v && a.findIndex((x) => x && x.slug === v.slug) === i)
+    .slice(0, 8);
+  if (picks.length) {
+    const label = document.createElement("span");
+    label.className = "muted";
+    label.textContent = `${t("brandLib.recent")}/${t("brandLib.fav")}`;
+    quick.appendChild(label);
+    for (const item of picks) {
+      const b = document.createElement("button");
+      b.className = "brand-chip ghost";
+      b.textContent = item.label ?? item.slug;
+      b.onclick = () => applyBrandChoice(item, item.group);
+      quick.appendChild(b);
+    }
+  }
+  renderLibGrid($("brandLibGrid"), available);
+  const tgt = $("brandLibTarget");
+  if (tgt) tgt.textContent = target ? (target.label || target.id) : t("brandLib.noLayer");
+  const hint = $("brandLibHint");
+  if (hint) hint.textContent = target ? t("brandLib.hint") : t("brandLib.noLayerHint");
+  $("brandAuto").classList.toggle("on", !!target && !currentBadgeSlug(target) && /@builtin\/(brand|lockup|series)\//.test(target.asset ?? ""));
+}
+function applyBrandChoice(item, group) {
+  const style = brandStyleNow();
+  const asset = `@builtin/${libDir(item, group, style)}/${item.slug}`;
+  if (!window.__fgEditor?.setBadgeAsset?.(asset)) return;
+  brandLibState.recent = [item.slug, ...brandLibState.recent.filter((s) => s !== item.slug)];
+  saveBrandLib();
+  toast("ok", t("brandLib.applied", { name: item.label ?? item.slug }));
+  rebuildBrandViews();
+}
+function rebuildBrandViews() {
+  renderBrandLibrary();
+  renderNow();
+}
+function badgeTarget() {
+  return window.__fgEditor?.badgeTarget?.() ?? null;
 }
 function updateBrandDetected() {
   const info = state.photos[0]?.exif;
@@ -1111,39 +1277,49 @@ function updateTweakUI() {
   sel.value = o.fontFamily || (state.fonts.some((f) => f.family === settings.fontFamily) ? settings.fontFamily : "");
 }
 
-async function ensureFont(family) {
-  if (!family || state.loadedFonts.has(family)) return;
+async function ensureFont(family, { primary = false } = {}) {
+  if (!family) return;
+  if (!primary && state.loadedFonts.has(family)) return;
   // v0.7.0: one family can ship several weight files; register every face so
-  // the engine can pick by `font.weight`.
-  const metas = state.fonts.filter((f) => f.family === family);
+  // the engine can pick by `font.weight`. `primary` limits the fetch to the
+  // Regular face (fast boot); a later full call still registers the rest.
+  let metas = state.fonts.filter((f) => f.family === family && f.file);
+  if (primary && metas.length > 1) {
+    const regular = metas.find((f) => f.weight === 400) ?? metas[0];
+    metas = [regular];
+  }
   const user = state.userFonts?.find((f) => f.family === family);
   if (!metas.length && !user) return;
   try {
     for (const meta of metas.length ? metas : [user]) {
+      const key = `${family}:${meta.file ?? "user"}`;
+      if (state.loadedFiles.has(key)) continue;
       let bytes;
       if (meta.file) {
-        const res = await fetch(`${BASE}fonts/engine/${meta.file}`);
+        const res = await fetchWithTimeout(`${BASE}fonts/engine/${meta.file}`);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         bytes = new Uint8Array(await res.arrayBuffer());
       } else {
         bytes = meta.bytes instanceof Uint8Array ? meta.bytes : new Uint8Array(meta.bytes);
       }
       state.engine.add_font(family, bytes);
+      state.loadedFiles.add(key);
     }
-    state.loadedFonts.add(family);
+    if (!primary) state.loadedFonts.add(family);
   } catch (e) {
-    toast("error", `${t("err.font")}: ${family} (${e.message || e})`);
+    surfaceError(`${t("err.font")} ${family}`, e);
   }
 }
 
 /// v0.7.0: make sure every font family referenced by the template JSON is
 /// registered before rendering (CJK faces are lazy and not warmed at boot).
+/// Bounded: a stalled font fetch must not hang the render forever.
 async function ensureTemplateFonts(jsonText) {
   const families = new Set();
   for (const m of String(jsonText).matchAll(/"(?:family|fontFamily)"\s*:\s*\[([^\]]*)\]/g)) {
     for (const q of m[1].matchAll(/"([^"]+)"/g)) families.add(q[1]);
   }
-  for (const family of families) await ensureFont(family);
+  await withTimeout(Promise.all([...families].map((f) => ensureFont(f))), 12000);
 }
 
 /* ------------------------------------------------------ font warmup (v0.6.0) */
@@ -1183,7 +1359,7 @@ function warmEngineFonts() {
       for (const f of state.fonts.filter((x) => x.family === family && x.file)) {
         try {
           const url = new URL(`fonts/engine/${f.file}`, document.baseURI).href;
-          const res = await fetch(url);
+          const res = await fetchWithTimeout(url, 20000);
           if (res?.ok && cache) {
             await cache.put(new Request(url), res.clone());
             fontWarm.cached++;
@@ -1219,9 +1395,6 @@ async function ensureBuiltinAssets(templateJson) {
   if (info?.brand_slug) wanted.add(`brand/${info.brand_slug}`);
   if (info?.lens_slug) wanted.add(`brand/${info.lens_slug}`);
   if (info?.lens_series) wanted.add(`series/${info.lens_series}`);
-  if (state.brandOverride.startsWith("brand:")) {
-    wanted.add(`brand/${state.brandOverride.slice("brand:".length)}`);
-  }
   for (const key of wanted) {
     if (builtinAssetCache.has(key)) continue;
     builtinAssetCache.add(key);
@@ -1618,19 +1791,31 @@ async function boot() {
   initI18n();
   applyTheme();
   setStatus("busy", t("status.boot"));
+  showWallSkeleton();
+  const bootT0 = performance.now();
+  // v0.7.1: keep the user informed and never look dead while the first paint
+  // is busy (cold WebView2 profile + Defender scan of the 100MB binary).
+  const slowTimer = setTimeout(() => setStatus("busy", t("status.bootSlow")), 8000);
+  const verySlowTimer = setTimeout(() => surfaceError(t("status.bootSlow"), new Error(t("err.bootHint"))), 25000);
 
   try {
     await init({ module_or_path: "./pkg/framegeist_wasm_bg.wasm" });
   } catch (e) {
+    clearTimeout(slowTimer);
+    clearTimeout(verySlowTimer);
     setStatus("error", `${t("err.wasm")}: ${e.message || e}`);
     return;
   }
   state.engine = new Engine([], []);
+  console.info(`[boot] wasm ready in ${Math.round(performance.now() - bootT0)}ms`);
 
-  // boot fonts: JetBrains Mono (template default) + Inter (small UI-facing)
+  // boot fonts: JetBrains Mono (template default) + Inter (small UI-facing).
+  // Only the Regular face here (fast); other weights load on demand. Bounded
+  // so a stalled fetch can never block the first paint.
   try {
-    state.fonts = (await (await fetch(BASE + "fonts/engine/fonts.json")).json()).fonts ?? [];
-    for (const family of ["JetBrains Mono", "Inter"]) await ensureFont(family);
+    const metaRes = await withTimeout(fetchWithTimeout(BASE + "fonts/engine/fonts.json"), 10000);
+    state.fonts = metaRes ? (await metaRes.json()).fonts ?? [] : [];
+    await withTimeout(Promise.all(["JetBrains Mono", "Inter"].map((f) => ensureFont(f, { primary: true }))), 8000);
   } catch { /* templates fall back gracefully */ }
 
   // user assets from IndexedDB
@@ -1647,7 +1832,7 @@ async function boot() {
   state.templates = await (await fetch(BASE + "templates.json")).json();
   state.layouts = await (await fetch(BASE + "layouts.json")).json();
   try { state.userTemplates = JSON.parse(localStorage.getItem(LS.userTpl) ?? "[]"); } catch { state.userTemplates = []; }
-  try { brandList = [...(await (await fetch(BASE + "brand/index.json")).json()), "__custom"]; } catch { brandList = ["__custom"]; }
+  await loadBrandLibrary();
   state.templateId = state.templates[0]?.id ?? null;
   state.layoutId = state.layouts[0]?.id ?? null;
   await fetchTemplateJson(state.templateId);
@@ -1655,7 +1840,7 @@ async function boot() {
 
   buildTemplatePicker();
   buildLayoutPicker();
-  buildBrandGrid();
+  renderBrandLibrary();
   buildBgSwatches();
   buildSampleRow();
   updateTweakUI();
@@ -1666,6 +1851,9 @@ async function boot() {
   showWall();
   setStatus("ready", t("status.ready"));
   window.__bootMs = Math.round(performance.now());
+  console.info(`[boot] ready in ${window.__bootMs}ms`);
+  clearTimeout(slowTimer);
+  clearTimeout(verySlowTimer);
   requestFontWarmup();
 }
 
@@ -1700,6 +1888,7 @@ function syncBrandUI() {
   $("brandContrast").value = o.brandContrast ?? "auto";
   $("brandOpacity").value = String(o.brandOpacity ?? 1);
   $("brandOpacityVal").textContent = `${Math.round((o.brandOpacity ?? 1) * 100)}%`;
+  if (typeof renderBrandLibrary === "function" && brandLibData) renderBrandLibrary();
 }
 
 /* ------------------------------------------------------------------ status */
@@ -1875,10 +2064,18 @@ function wire() {
   };
 
   $("brandShow").onchange = (e) => { settings.showLogo = e.target.checked; saveSettings(); renderNow(); };
-  $("brandAuto").onclick = () => { state.brandOverride = "auto"; buildBrandGrid(); renderNow(); };
-  $("brandNone").onclick = () => { state.brandOverride = "none"; buildBrandGrid(); renderNow(); };
+  $("brandAuto").onclick = () => {
+    if (!window.__fgEditor?.setBadgeAsset?.("auto")) { toast("error", t("brandLib.noLayer")); return; }
+    toast("ok", t("brandLib.autoDone"));
+    rebuildBrandViews();
+  };
   const brandPatch = (patch) => { pushOverride(patch); syncBrandUI(); renderNow(); };
-  $("brandStyle").onchange = (e) => brandPatch({ brandStyle: e.target.value });
+  $("brandStyle").onchange = (e) => {
+    window.__fgEditor?.swapBadgeStyle?.(e.target.value);
+    brandPatch({ brandStyle: e.target.value });
+    renderBrandLibrary();
+    if (!$("brandLibModal").classList.contains("hidden")) renderModalLibrary();
+  };
   $("brandPos").onchange = (e) => brandPatch({ brandPosition: e.target.value });
   $("brandSize").onchange = (e) => brandPatch({ brandScale: Number(e.target.value) });
   $("brandContrast").onchange = (e) => brandPatch({ brandContrast: e.target.value });
@@ -1887,6 +2084,7 @@ function wire() {
     $("brandOpacityVal").textContent = `${Math.round(Number(e.target.value) * 100)}%`;
     renderNow();
   };
+  $("brandSearch").oninput = (e) => { brandLibState.query = e.target.value; renderBrandLibrary(); };
   $("uploadLogo").onclick = () => $("logoFile").click();
   $("logoFile").onchange = async (e) => {
     const f = e.target.files?.[0];
@@ -1895,15 +2093,43 @@ function wire() {
     state.customAssets["@user/logo"] = bytes;
     state.engine.register_asset("@user/logo", bytes);
     await idbPut("assets", "logo", bytes.buffer);
-    state.brandOverride = "custom";
-    buildBrandGrid(); renderNow();
+    if (!window.__fgEditor?.setBadgeAsset?.("@user/logo")) { toast("error", t("brandLib.noLayer")); return; }
+    toast("ok", t("brandLib.applied", { name: t("brandLib.custom") }));
+    rebuildBrandViews();
   };
   $("clearLogo").onclick = async () => {
     delete state.customAssets["@user/logo"];
     await idbDelete("assets", "logo");
-    if (state.brandOverride === "custom") state.brandOverride = "auto";
-    buildBrandGrid(); renderNow();
+    window.__fgEditor?.setBadgeAsset?.("auto");
+    rebuildBrandViews();
   };
+
+  /* wall-side read-only library modal */
+  const openBrandLibModal = () => {
+    $("brandLibModalStyle").value = brandStyleNow();
+    $("brandLibModal").classList.remove("hidden");
+    renderModalLibrary();
+  };
+  const closeBrandLibModal = () => $("brandLibModal").classList.add("hidden");
+  $("wallBrandLib").onclick = openBrandLibModal;
+  $("brandLibClose").onclick = closeBrandLibModal;
+  $("brandLibBackdrop").onclick = closeBrandLibModal;
+  $("brandLibModalSearch").oninput = (e) => { brandLibState.query = e.target.value; renderModalLibrary(); };
+  $("brandLibModalStyle").onchange = (e) => {
+    const style = e.target.value;
+    const tpl = state.templateId ?? state.templates[0]?.id;
+    if (tpl) saveOverrides(tpl, { ...loadOverrides(tpl), brandStyle: style });
+    $("brandStyle").value = style;
+    renderModalLibrary();
+  };
+  $("brandLibEnter").onclick = async () => {
+    closeBrandLibModal();
+    const tpl = state.templateId ?? state.templates[0]?.id;
+    if (tpl) { await useTemplate(tpl); $("brandCard").open = true; $("brandCard").scrollIntoView(); }
+  };
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !$("brandLibModal").classList.contains("hidden")) closeBrandLibModal();
+  });
 
   $("exportSize").onchange = (e) => { settings.exportSize = e.target.value; saveSettings(); syncCanvasUI(); };
   // Q10: re-render so the next export uses the selected container.
@@ -2157,7 +2383,7 @@ window.__fg = {
   state, renderNow, fitStage, showWall, showEditor, useTemplate, buildWall, toast, t,
   currentTemplateObject, effectiveTemplateJson, buildOverridesJson,
   loadOverrides, pushOverride, syncBrandUI, syncCanvasUI,
-  openLightbox, closeLightbox,
+  openLightbox, closeLightbox, ensureFont,
   freeActive: () => state.freeCollage,
   freeSpec: () => state.freeSpec,
   updateFreeSpec,

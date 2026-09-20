@@ -6,7 +6,7 @@
       "zh": "居中出品",
       "en": "Shot On Center"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -28,7 +28,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "auto",
         "weight": 500
       },
@@ -54,7 +54,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.022,
+        "size": 0.0242,
         "color": "auto",
         "weight": 500
       },
@@ -83,7 +83,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "auto",
         "weight": 500
       },
@@ -105,7 +105,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

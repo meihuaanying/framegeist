@@ -6,7 +6,7 @@
       "zh": "Art Deco 双线",
       "en": "Deco Double Line"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -118,7 +118,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.048,
+        "size": 0.0528,
         "color": "#17150F",
         "weight": 500
       },
@@ -145,7 +145,7 @@
         "family": [
           "Noto Serif SC"
         ],
-        "size": 0.022,
+        "size": 0.0242,
         "color": "#8A6E2F",
         "weight": 500
       },
@@ -169,7 +169,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#55524A",
         "weight": 500
       },
@@ -199,7 +199,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#55524A",
         "weight": 400
       },
@@ -230,7 +230,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#55524A",
         "weight": 500
       },
@@ -254,7 +254,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

@@ -6,7 +6,7 @@
       "zh": "三联切片",
       "en": "Triptych Slices"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -60,7 +60,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#FFFFFF",
         "weight": 500
       },
@@ -91,7 +91,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "auto",
         "weight": 500
       },
@@ -118,7 +118,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "auto",
         "weight": 500
       },
@@ -143,7 +143,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "auto",
         "weight": 400
       },
@@ -167,7 +167,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

@@ -25,7 +25,7 @@
   <span class="spacer"></span>
   <span class="pill busy" id="statusPill"><span class="dot"></span><span id="statusText" aria-live="polite" data-i18n="status.boot">引擎加载中…</span></span>
   <button class="icon-btn" id="settingsBtn" data-i18n-title="settings.title" title="设置">⚙</button>
-  <button class="icon-btn" id="themeBtn" title="主题">◐</button>
+        <button class="icon-btn" id="themeBtn" data-i18n-title="theme.auto" title="跟随系统">◐</button>
   <button class="icon-btn" id="langBtn">EN</button>
 </header>
 
@@ -35,7 +35,8 @@
       <h2 data-i18n="wall.title">模板墙</h2>
       <span class="muted" id="wallCount"></span>
       <span class="spacer" style="flex:1"></span>
-      <div class="brand-strip" id="wallBrandStrip" aria-label="brands"></div>
+      <div class="brand-strip" id="wallBrandStrip" data-i18n-aria-label="brand.aria" aria-label="支持品牌"></div>
+      <button class="btn small ghost" id="wallBrandLib" style="width:auto;padding:0 14px" data-i18n="brandLib.title">徽标库</button>
       <button class="btn small ghost" id="wallImport" style="width:auto;padding:0 14px" data-i18n="wall.import">导入照片</button>
       <div class="search-wrap wall-search">
         <input type="search" id="wallSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…">
@@ -268,14 +269,14 @@
           <label><span data-i18n="insert.preset">文字样式预设</span></label>
           <select id="presetSelect">
             <option value="" data-i18n="insert.presetNone">选择预设并应用</option>
-            <option value="copperplate">铜版雕刻</option>
-            <option value="gilt">烫金箔</option>
-            <option value="letterpress">压印浮雕</option>
-            <option value="woodtype">木刻活字</option>
-            <option value="ukiyoe">浮世绘题签</option>
-            <option value="deco">Art Deco 双线</option>
-            <option value="republican">民国杂志铅字</option>
-            <option value="seal">朱文印章</option>
+            <option value="copperplate" data-i18n="insert.presetCopperplate">铜版雕刻</option>
+            <option value="gilt" data-i18n="insert.presetGilt">烫金箔</option>
+            <option value="letterpress" data-i18n="insert.presetLetterpress">压印浮雕</option>
+            <option value="woodtype" data-i18n="insert.presetWoodtype">木刻活字</option>
+            <option value="ukiyoe" data-i18n="insert.presetUkiyoe">浮世绘题签</option>
+            <option value="deco" data-i18n="insert.presetDeco">Art Deco 双线</option>
+            <option value="republican" data-i18n="insert.presetRepublican">民国杂志铅字</option>
+            <option value="seal" data-i18n="insert.presetSeal">朱文印章</option>
           </select>
         </div>
         <div class="btn-row">
@@ -449,14 +450,17 @@
             <b class="muted" id="brandOpacityVal">100%</b>
           </label>
         </div>
-        <label class="row"><span data-i18n="brand.source">来源</span></label>
-        <div class="btn-row">
-          <button class="btn small" id="brandAuto" data-i18n="brand.auto">自动识别</button>
-          <button class="btn small" id="brandNone" data-i18n="brand.none">不显示</button>
+        <div class="brand-lib-head">
+          <label class="row"><span data-i18n="brandLib.target">作用图层</span><b class="muted" id="brandLibTarget">—</b></label>
+          <input type="search" id="brandSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…">
+          <div class="brand-lib-groups" id="brandGroups"></div>
+          <div class="brand-lib-quick" id="brandQuick"></div>
         </div>
-        <div class="brand-grid" id="brandGrid"></div>
+        <div class="brand-lib-grid" id="brandLibGrid"></div>
+        <div class="muted brand-lib-hint" id="brandLibHint"></div>
         <div class="btn-row" style="margin-top:8px">
-          <button class="btn small" id="uploadLogo" data-i18n="brand.uploadCustom">上传 Logo</button>
+          <button class="btn small" id="brandAuto" data-i18n="brandLib.auto">自动识别（EXIF）</button>
+          <button class="btn small" id="uploadLogo" data-i18n="brand.uploadCustom">上传自定义</button>
           <button class="btn small ghost" id="clearLogo" data-i18n="canvas.clearBg">清除</button>
         </div>
         <input type="file" id="logoFile" accept="image/*" hidden>
@@ -477,7 +481,7 @@
           <input type="text" id="saveName" data-i18n-placeholder="exifEdit.namePrompt" placeholder="模板名称">
           <div class="btn-row" style="margin-top:6px">
             <button class="btn small primary" id="confirmSave" data-i18n="exifEdit.save">保存为模板</button>
-            <button class="btn small ghost" id="cancelSave" data-i18n-title="btn.cancel" aria-label="取消">✕</button>
+            <button class="btn small ghost" id="cancelSave" data-i18n-title="btn.cancel" data-i18n-aria-label="btn.cancel" aria-label="取消">✕</button>
           </div>
         </div>
         <button class="btn small ghost" id="importTemplate" style="margin-top:6px" data-i18n="exifEdit.import">导入 .fgt</button>
@@ -572,10 +576,35 @@
     <div class="lb-stage"><img id="lbImg" alt=""></div>
     <div class="lb-foot">
       <div style="display:flex;flex-direction:column;gap:8px;align-items:center">
-        <div class="brand-strip lightbox" id="lbBrand" aria-label="brands"></div>
+        <div class="brand-strip lb-brand" id="lbBrand" data-i18n-aria-label="brand.aria" aria-label="支持品牌"></div>
         <button class="btn primary" id="lbApply" data-i18n="lightbox.apply">应用此模板</button>
         <p class="muted hidden" id="lbNotice" style="margin:0;max-width:640px;text-align:center;font-size:11.5px"></p>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="brandlib-modal hidden" id="brandLibModal" role="dialog" aria-modal="true" aria-labelledby="brandLibModalTitle">
+  <div class="lb-backdrop" id="brandLibBackdrop"></div>
+  <div class="lb-body">
+    <div class="lb-head">
+      <b id="brandLibModalTitle" data-i18n="brandLib.title">徽标库</b>
+      <span class="muted" id="brandLibModalCount"></span>
+      <span class="spacer" style="flex:1"></span>
+      <select id="brandLibModalStyle">
+        <option value="official" data-i18n="brand.styleOfficial">官方字标</option>
+        <option value="original" data-i18n="brand.styleOriginal">原创排版</option>
+      </select>
+      <button class="icon-btn" id="brandLibClose" data-i18n-title="btn.close">✕</button>
+    </div>
+    <div class="brandlib-modal-body">
+      <input type="search" id="brandLibModalSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…">
+      <div class="brand-lib-groups" id="brandLibModalGroups"></div>
+      <div class="brand-lib-grid modal" id="brandLibModalGrid"></div>
+      <p class="muted" data-i18n="brandLib.wallHint">在编辑器中选择图层后即可替换徽标</p>
+    </div>
+    <div class="lb-foot">
+      <button class="btn primary" id="brandLibEnter" data-i18n="brandLib.enterEditor">进入编辑器替换</button>
     </div>
   </div>
 </div>

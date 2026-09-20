@@ -514,3 +514,13 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
   8. **APCA 实测**：暗色模式 `--text-muted/#a6a6ad`、`--text-faint/#6e6e76` 不达标（Lc −53.7/−26.1），提亮到 `#b8b8c0`/`#82828b`（Lc −63.7/−35.4）。
   9. **字形/排版门禁固化**：`check-glyph-coverage.mjs`（模板字面量 ⊆ 字体子集）、`check-ui-contrast.mjs`（APCA）、视觉/金标基线「有意重生成」并记录原因（多字重与排版换代）。
   10. **UI 展示面品牌元素**：模板墙头与灯箱品牌条按模板静态 slug 取用，否则回退演示品牌组。
+
+- **2026-09-20 ｜ v0.8.0 发布（UI 中文化 + 徽标库 + 默认尺寸提升） ｜** 按 `docs/V0.8.0-CONSTRAINTS.md`（18 项 grill 确认）执行到发布。发现与决策：
+  1. **对比基线来源**：`templates/samples` 为 gitignore 派生物且重渲前未快照 → 直接从 v0.7.0 线上 Pages 下载 192 张样片到 `.cache/v070-samples` 作为 before 基线（比 v0.6.1 快照更贴近当前版式）。
+  2. **排版脚本幂等**：`apply-v080-typography.mjs --force` 会在 1.2.0 模板上**叠加放大**，重放必须先回退模板；`meta.version` 1.2.0 作为唯一幂等标记（`minEngineVersion` 保持 0.7.0，尺寸变更不依赖新引擎能力）。
+  3. **盒守卫为近似**：`framegeist boxes` 的盒计算不含 v0.7 四角定位（`corner`）与旋转的精确外接盒；越界/重叠守卫跳过旋转层（6 套 12 层因新冲突回退，记录在 `typography-report.json`）。
+  4. **E2E 选择器与 i18n**：M0 本地化后，旧 E2E 靠 `.ltag` 英文类型名找行（text/image/group）的探针全部失效 → 图层行增加 `data-type` 稳定属性，探针改用数据集选择器（中英通用）；`innerText` 会反映 `text-transform: uppercase`，「品牌 Logo」标题在扫描中呈现为 `LOGO`（改为「徽标库」后消除）。
+  5. **字体清单被回退**：`git checkout -- templates` 曾把已跟踪的 `fonts.json` 回退到 v0.7 早态（22 族），用临时脚本重建；`fetch-fonts.mjs` 补上遗漏的 **Instrument Serif**（静态 400），管线 69 faces / 23 families。
+  6. **徽标库性能**：170+ 张 96px 缩略图 + 墙卡 175 个品牌标记全部走 `loading="lazy"` + `content-visibility: auto`；库/弹层/墙标记复用同一分组清单（`web/brand/index.json` v2），不重复请求 512px 资产。
+  7. **默认尺寸提升的回归面**：引擎下限 5%/默认 4.5%/最大宽 38% 改变输出像素 → 视觉基线 **有意重生成**（384 项，原因：字号与徽标默认变化），金标未受影响（CLI 金标用例显式声明尺寸）。
+  8. **发布通道延续 API 路径**：本机 `github.com:443` 仍被阻断；`main` 经 Git Data API 以远端 `ac24ffa` 为父提交推送（本地 diff 基准用内容等价的 `664cc20` 计算条目），tag/Release 由 CI 六资产流水线产出，说明用 `gh release edit --notes-file` 注入。

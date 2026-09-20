@@ -843,7 +843,7 @@ await ev(`(async () => {
     const tpl0 = window.__fg.effectiveTemplateJson();
     const ov0 = window.__fg.buildOverridesJson();
     const before = fnv(st.engine.render_with_overrides(st.photos[0].bytes, tpl0, "jpeg", true, ov0, 640, false));
-    const textRow = [...document.querySelectorAll("#layerList .layer-row")].find((r) => r.querySelector(".ltag")?.textContent === "text");
+    const textRow = [...document.querySelectorAll("#layerList .layer-row")].find((r) => r.dataset.type === "text");
     if (!textRow) return { error: "no text layer" };
     textRow.click();
     const sel = document.getElementById("presetSelect");
@@ -1216,7 +1216,7 @@ await ev(`(async () => {
   await waitLabel(30000);
   const r = await ev(`(async () => {
     const rows = [...document.querySelectorAll("#layerList .layer-row")];
-    const row = rows.find((x) => x.querySelector(".ltag")?.textContent === "text");
+    const row = rows.find((x) => x.dataset.type === "text");
     if (!row) return { error: "no text row" };
     row.click();
     await new Promise((r) => setTimeout(r, 120));
@@ -1272,7 +1272,7 @@ await ev(`(async () => {
     document.getElementById("layerUngroup").click();
     await new Promise((r) => setTimeout(r, 300));
     const after = { n: document.querySelectorAll("#layerList .layer-row").length, a: boxOf(getBoxes(), idA), b: boxOf(getBoxes(), idB) };
-    const groupGone = ![...document.querySelectorAll("#layerList .layer-row")].some((x) => x.querySelector(".ltag")?.textContent === "group");
+    const groupGone = ![...document.querySelectorAll("#layerList .layer-row")].some((x) => x.dataset.type === "group");
     const drift = (p, q) => (p && q) ? Math.max(Math.abs(p.x - q.x), Math.abs(p.y - q.y)) : 999;
     return { beforeN: before.n, groupedN: grouped.n, afterN: after.n, enabled: grouped.enabled, groupGone, driftA: drift(before.a, after.a), driftB: drift(before.b, after.b) };
   })()`);
@@ -1294,7 +1294,7 @@ await ev(`(async () => {
     await sleep(200);
     document.getElementById("addText").click();
     await sleep(200);
-    const textRows = [...document.querySelectorAll("#layerList .layer-row")].filter((x) => x.querySelector(".ltag")?.textContent === "text");
+    const textRows = [...document.querySelectorAll("#layerList .layer-row")].filter((x) => x.dataset.type === "text");
     const pair = textRows.slice(-2);
     if (pair.length < 2) return { error: "no pair" };
     const idA = pair[0].dataset.id, idB = pair[1].dataset.id;
@@ -1310,7 +1310,7 @@ await ev(`(async () => {
     await sleep(200);
     for (let i = 0; i < 4; i++) document.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowRight", shiftKey: true, bubbles: true }));
     await sleep(200);
-    const tri = [...document.querySelectorAll("#layerList .layer-row")].filter((x) => x.querySelector(".ltag")?.textContent === "text").slice(-3);
+    const tri = [...document.querySelectorAll("#layerList .layer-row")].filter((x) => x.dataset.type === "text").slice(-3);
     tri[0].click();
     tri[1].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
     tri[2].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
@@ -1754,7 +1754,7 @@ const hexRgb = (h) => {
     document.getElementById("wmSelectFirst").click();
     await sleep(200);
     const onRow = document.querySelector("#layerList .layer-row.on");
-    return { size: ov.fontSizeScale, pad: ov.paddingScale, text, selectedType: onRow?.querySelector(".ltag")?.textContent ?? null };
+    return { size: ov.fontSizeScale, pad: ov.paddingScale, text, selectedType: onRow?.dataset.type ?? null };
   })()`);
   check("watermark: height + padding sliders reach overrides", r?.size === 1.5 && r?.pad === 1.4, JSON.stringify({ size: r?.size, pad: r?.pad }));
   check(
@@ -1779,7 +1779,7 @@ const hexRgb = (h) => {
     const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
     let row = null;
     for (let i = 0; i < 50; i++) {
-      row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.querySelector(".ltag")?.textContent === "image");
+      row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.dataset.type === "image");
       if (row) break;
       await sleep(100);
     }
@@ -1797,7 +1797,7 @@ const hexRgb = (h) => {
   const drag = await ev(`(async () => {
     const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
     const st = window.__fg.state;
-    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.querySelector(".ltag")?.textContent === "image");
+    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.dataset.type === "image");
     if (!row) return { error: "no image row" };
     row.click();
     const id = row.dataset.id;
@@ -2050,7 +2050,7 @@ let EXIF_TEXT_ID = null;
     const storedJson = () => JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
     let id = null;
     const readLayer = (json) => flat(JSON.parse(json || "{}").layers ?? []).find((l) => l.id === id);
-    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.querySelector(".ltag")?.textContent === "text");
+    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "text");
     if (!row) return { error: "no text layer row" };
     row.click();
     await sleep(200);
@@ -2265,8 +2265,9 @@ let EXIF_TEXT_ID = null;
 
 /* 74. v0.7.0: real font.weight selection changes pixels */
 {
-  const r = await ev(`(() => {
+  const r = await ev(`(async () => {
     const st = window.__fg.state;
+    await window.__fg.ensureFont("Inter");
     const mk = (w) => JSON.stringify({
       meta: { id: "e2e-weight", name: "Weight", version: "1.1.0", minEngineVersion: "0.7.0", author: "FrameGeist", license: "CC0-1.0", category: "minimal" },
       canvas: { mode: "overlay" },
@@ -2376,7 +2377,7 @@ let EXIF_TEXT_ID = null;
     };
   })()`);
   check("v0.7 typography: manifest keeps 192 templates", r?.total === 192, String(r?.total));
-  check("v0.7 typography: template upgraded to 1.1.0 / engine 0.7.0", r?.version === "1.1.0" && r?.minEngine === "0.7.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
+  check("v0.8 typography: template upgraded to 1.2.0 / engine 0.7.0", r?.version === "1.2.0" && r?.minEngine === "0.7.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
   check("v0.7 typography: CJK display template uses Noto/LXGW family", (r?.families ?? []).some((f) => f === "Noto Serif SC" || f === "LXGW WenKai"), JSON.stringify(r?.families));
   check("v0.7 typography: EXIF data rows enable tnum", r?.data > 0 && r?.tnum === r?.data, JSON.stringify({ data: r?.data, tnum: r?.tnum }));
   check("v0.7 typography: weight hierarchy present (500 + display 600/700)", (r?.weights ?? []).includes(500) && ((r?.weights ?? []).includes(600) || (r?.weights ?? []).includes(700)), JSON.stringify(r?.weights));
@@ -2404,10 +2405,128 @@ let EXIF_TEXT_ID = null;
     const el = document.getElementById("lbBrand");
     const n = el ? el.querySelectorAll("img").length : -1;
     const src = el?.querySelector("img")?.src ?? "";
+    const close = document.getElementById("lbClose");
+    const cr = close.getBoundingClientRect();
+    const hit = document.elementFromPoint(cr.x + cr.width / 2, cr.y + cr.height / 2);
+    const br = el.getBoundingClientRect();
+    const out = {
+      n, src,
+      hitClose: hit === close || close.contains(hit),
+      brandPos: getComputedStyle(el).position,
+      brandW: Math.round(br.width),
+      brandH: Math.round(br.height),
+      vw: innerWidth, vh: innerHeight,
+    };
     window.__fg.closeLightbox();
-    return { n, src };
+    return out;
   })()`);
   check("v0.7 ui: lightbox brand strip contains marks", (lb?.n ?? 0) >= 1 && /brand\//.test(lb?.src ?? ""), JSON.stringify(lb));
+  check(
+    "v0.7 ui: brand strip must not cover the viewport (click-swallow regression)",
+    lb?.brandPos !== "fixed" && (lb?.brandW ?? 1e9) < (lb?.vw ?? 0) * 0.9 && (lb?.brandH ?? 1e9) < (lb?.vh ?? 0) * 0.9,
+    JSON.stringify({ pos: lb?.brandPos, w: lb?.brandW, h: lb?.brandH, vw: lb?.vw, vh: lb?.vh }),
+  );
+  check("v0.7 ui: lightbox close button is hit-testable", lb?.hitClose === true, JSON.stringify(lb));
+}
+
+/* 79. v0.8.0: badge library + zh UI + wall performance polish */
+{
+  const lib = await ev(`(async () => {
+    const data = await (await fetch("./brand/index.json")).json();
+    return { v: data.version, camera: data.groups?.camera?.length ?? 0, lens: data.groups?.lens?.length ?? 0, series: data.groups?.series?.length ?? 0, game: data.groups?.game?.length ?? 0, neutral: data.neutral };
+  })()`);
+  check("v0.8 badge lib: manifest v2 with four groups", lib?.v === 2 && lib.camera > 20 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
+  check("v0.8 badge lib: neutral EXIF marker present", lib?.neutral === "exif-auto", String(lib?.neutral));
+
+  const ed = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    await window.__fg.useTemplate("camera-baseplate-02");
+    await sleep(900);
+    const cells = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")];
+    const thumbs96 = cells.filter((c) => /\\/thumbs\\//.test(c.querySelector("img")?.src ?? "")).length;
+    const chips = [...document.querySelectorAll("#brandGroups .brand-chip")].map((b) => b.textContent);
+    const canon = cells.find((c) => (c.title || "").toLowerCase() === "canon");
+    canon?.click();
+    await sleep(700);
+    const afterApply = window.__fgEditor.badgeTarget()?.asset ?? null;
+    const json = window.__fg.effectiveTemplateJson();
+    document.getElementById("brandAuto").click();
+    await sleep(600);
+    const afterAuto = window.__fgEditor.badgeTarget()?.asset ?? null;
+    const fav = document.querySelector("#brandLibGrid .brand-lib-cell .fav");
+    fav?.click();
+    await sleep(200);
+    const favs = JSON.parse(localStorage.getItem("fg-brand-fav-v1") || "[]").length;
+    const search = document.getElementById("brandSearch");
+    search.value = "nik";
+    search.dispatchEvent(new Event("input"));
+    await sleep(300);
+    const filtered = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")].map((c) => c.title);
+    search.value = "";
+    search.dispatchEvent(new Event("input"));
+    await sleep(200);
+    return { cells: cells.length, thumbs96, chips, afterApply, hasApplied: /@builtin\\/(brand|lockup)\\/canon/.test(json), afterAuto, favs, filtered };
+  })()`);
+  check("v0.8 badge lib: grid renders 96px-thumb cells", (ed?.cells ?? 0) > 20 && ed.thumbs96 === ed.cells, JSON.stringify({ cells: ed?.cells, thumbs96: ed?.thumbs96 }));
+  check("v0.8 badge lib: group chips follow the target layer", ed?.chips?.length === 2, JSON.stringify(ed?.chips));
+  check("v0.8 badge lib: click applies the brand to the target layer", /@builtin\/(brand|lockup)\/canon/.test(ed?.afterApply ?? "") && ed.hasApplied === true, JSON.stringify({ a: ed?.afterApply, j: ed?.hasApplied }));
+  check("v0.8 badge lib: auto restores the EXIF expression", /@builtin\/(brand|lockup)\/\{exif\./.test(ed?.afterAuto ?? ""), String(ed?.afterAuto));
+  check("v0.8 badge lib: favorites persist", (ed?.favs ?? 0) >= 1, String(ed?.favs));
+  check("v0.8 badge lib: search filters cells", Array.isArray(ed?.filtered) && ed.filtered.length > 0 && ed.filtered.every((t) => /nikon/i.test(t)), JSON.stringify(ed?.filtered?.slice(0, 5)));
+
+  const style = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const canon = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")].find((c) => (c.title || "").toLowerCase() === "canon");
+    canon?.click();
+    await sleep(600);
+    const sel = document.getElementById("brandStyle");
+    sel.value = "original"; sel.dispatchEvent(new Event("change"));
+    await sleep(700);
+    const lockup = window.__fgEditor.badgeTarget()?.asset ?? null;
+    const rendered = window.__fg.effectiveTemplateJson();
+    sel.value = "official"; sel.dispatchEvent(new Event("change"));
+    await sleep(600);
+    const official = window.__fgEditor.badgeTarget()?.asset ?? null;
+    return { lockup, rendersLockup: rendered.includes("@builtin/lockup/"), official };
+  })()`);
+  check("v0.8 badge lib: style switch swaps concrete assets", /lockup\/canon/.test(style?.lockup ?? "") && /brand\/canon/.test(style?.official ?? ""), JSON.stringify(style));
+
+  const wall = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    window.__fg.showWall();
+    await sleep(500);
+    const cards = [...document.querySelectorAll(".wall-card")];
+    const withMarks = cards.filter((c) => c.querySelector(".wall-marks img")).length;
+    const cv = getComputedStyle(cards[0]).contentVisibility;
+    document.getElementById("wallBrandLib").click();
+    await sleep(500);
+    const open = !document.getElementById("brandLibModal").classList.contains("hidden");
+    const modalCells = document.querySelectorAll("#brandLibModalGrid .brand-lib-cell").length;
+    document.getElementById("brandLibClose").click();
+    return { total: cards.length, withMarks, cv, open, modalCells, skeleton: window.__wallSkeleton ?? null };
+  })()`);
+  check("v0.8 wall: cards show badge marks", (wall?.withMarks ?? 0) > 100, JSON.stringify({ with: wall?.withMarks, total: wall?.total }));
+  check("v0.8 wall: badge library modal opens with cells", wall?.open === true && (wall?.modalCells ?? 0) > 50, JSON.stringify({ open: wall?.open, cells: wall?.modalCells }));
+  check("v0.8 perf: wall cards use content-visibility", wall?.cv === "auto", String(wall?.cv));
+  check("v0.8 boot: wall skeleton shown before first paint", wall?.skeleton?.shown === true && wall.skeleton.clearedAt != null, JSON.stringify(wall?.skeleton));
+
+  const zh = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    if (document.documentElement.lang !== "zh-CN") document.getElementById("langBtn").click();
+    await sleep(500);
+    await window.__fg.useTemplate("camera-baseplate-02");
+    await sleep(700);
+    const tags = [...document.querySelectorAll("#layerList .ltag")].map((e) => e.textContent.trim());
+    const zhTags = tags.filter((tx) => /[\\u4e00-\\u9fff]/.test(tx)).length;
+    const roots = ["#topbar", ".topbar", ".wall-head", "#brandCard", "#tweakCard"];
+    const text = roots.map((s) => document.querySelector(s)?.innerText ?? "").join(" ");
+    const words = text.match(/[A-Za-z]{3,}/g) ?? [];
+    const ALLOW = /^(frameg|frameg|framegeist|exif|iso|jpeg|jpg|png|avif|webp|heic|wasm|canon|sony|nikon|fujifilm|leica|hasselblad|panasonic|lumix|ricoh|sigma|zeiss|dji|apple|tamron|epson|olympus|pentax|gopro|insta360|sandisk|samsung|vivo|oppo|oneplus|huawei|honor|google|motorola|nokia|blackmagic|viltrox|laowa|ttartisan|tokina|samyang|meike|sirui|yongnuo|voigtlander|eos|ilce|nikkor|zuiko|gm|art|apo|sp|xf|xcd|batis|rf|ef|url|api|dpi|raw|tiff|mm|mp|kb|mb|gb|px|auto|official|original|light|dark|inter|jetbrains|playfair|oswald|cormorant|space|grotesk|bebas|great|vibes|noto|sans|serif|sc|ma|shan|zheng|fraunces|bricolage|instrument|geist|mono|onest|unbounded|smiley|lxgw|wenkai|glow|sarasa|gothic)$/i;
+    const leftovers = [...new Set(words.filter((w) => !ALLOW.test(w)))];
+    return { tags, zhTags, total: tags.length, leftovers };
+  })()`);
+  check("v0.8 i18n: layer type tags localized in zh", zh?.total > 0 && zh?.zhTags === zh?.total, JSON.stringify(zh?.tags));
+  check("v0.8 i18n: no English leftovers in visible chrome (zh)", Array.isArray(zh?.leftovers) && zh.leftovers.length === 0, JSON.stringify(zh?.leftovers));
 }
 
 clearTimeout(WATCHDOG);

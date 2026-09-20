@@ -6,7 +6,7 @@
       "zh": "橙红日期章",
       "en": "LED Datestamp"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -51,7 +51,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#8C877D",
         "weight": 500
       },
@@ -91,7 +91,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.085,
+        "size": 0.102,
         "color": "#FF5A2D",
         "weight": 500
       },
@@ -124,7 +124,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#8C877D",
         "weight": 500
       },
@@ -148,7 +148,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#B9B3A8",
         "weight": 500
       },
@@ -175,7 +175,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.03,
+        "size": 0.033,
         "color": "#EFE9DC",
         "weight": 500
       },
@@ -197,7 +197,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "attachTo": "stock",
       "attachGap": 0.012

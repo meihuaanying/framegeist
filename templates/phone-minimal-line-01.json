@@ -6,7 +6,7 @@
       "zh": "极简单行",
       "en": "Minimal Line"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Geist Mono"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B7280",
         "weight": 500
       },
@@ -57,7 +57,7 @@
       "anchor": "bottom-left",
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.016
+        "height": 0.045
       },
       "tint": "auto",
       "attachTo": "params",

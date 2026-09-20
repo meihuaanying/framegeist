@@ -2420,7 +2420,9 @@ fn draw_image_layer(
     let photo_h = geo.photo_h as f64;
     let photo_w = geo.photo_w as f64;
 
-    // ---- size: template size, badge floor (≥3.5% photo h and ≥18px), max width
+    // ---- size: template size, badge floor (≥5% photo h and ≥18px, v0.8.0),
+    // default badge height 4.5% vs 3% for other image layers, max width.
+    let default_h = if badge { 0.045 } else { 0.03 };
     let base_h = layer
         .size
         .height
@@ -2431,13 +2433,13 @@ fn draw_image_layer(
                 .width
                 .map(|w| w * photo_h * ih as f64 / iw as f64)
         })
-        .unwrap_or(0.03 * photo_h)
+        .unwrap_or(default_h * photo_h)
         .max(2.0);
     let mut target_h = base_h;
     let mut min_h = 2.0f64;
     if badge {
         let scale = ov.and_then(|o| o.brand_scale).unwrap_or(1.0);
-        min_h = (layer.min_height.unwrap_or(0.035) * photo_h).max(18.0);
+        min_h = (layer.min_height.unwrap_or(0.05) * photo_h).max(18.0);
         target_h = (target_h * scale).max(min_h);
     } else if let Some(mh) = layer.min_height {
         min_h = mh * photo_h;
@@ -2447,7 +2449,7 @@ fn draw_image_layer(
     let mut tw = ((iw as f64) * scale).round().max(2.0) as u32;
     let mut th = ((ih as f64) * scale).round().max(2.0) as u32;
     if badge {
-        let max_w = layer.max_width.unwrap_or(0.32) * photo_w;
+        let max_w = layer.max_width.unwrap_or(0.38) * photo_w;
         if tw as f64 > max_w {
             let s = max_w / tw as f64;
             tw = ((tw as f64 * s).round() as u32).max(2);

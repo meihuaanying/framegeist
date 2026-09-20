@@ -1,12 +1,13 @@
-// Generates the v0.7.0 badge asset set:
+// Generates the v0.8.0 badge asset library:
 //  - brand/   official Simple Icons (CC0) when available, otherwise an
 //             original typographic wordmark (never official logo artwork)
-//  - lockup/  original typographic lockups for EVERY brand slug (the editor
-//             "original" style; free of official graphical elements)
-//  - series/  lens-series emblems (GM/G, L/RF L, Art/DG DN, XCD/XF, Z S-Line,
-//             Batis, APO, SP)
+//  - lockup/  original typographic lockups for EVERY brand slug ("original" style)
+//  - series/  lens-series emblems (GM/G, L/RF L, Art/DG DN, XCD/XF, Batis, APO, SP)
 //  - game/    original game wordmarks (no official assets)
-// All variants are rendered black + white at 512px height with @resvg/resvg-js.
+//  - brand/exif-auto  neutral "EXIF" marker for expression-based template cards
+// Each item is rendered black + white at 512px (templates/CLI) and 96px thumbs
+// (web library grid) with @resvg/resvg-js. Also writes web/brand/index.json v2
+// with the camera/lens/series/game groups used by the editor badge library.
 // Usage: node tools/gen-brand-assets.mjs
 import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
@@ -14,6 +15,7 @@ import { Resvg } from "@resvg/resvg-js";
 
 const FONT_DIR = "templates/assets/fonts";
 const SIZE = 512;
+const THUMB = 96;
 
 const OFFICIAL_SLUGS = [
   // cameras / lenses / accessories
@@ -25,8 +27,26 @@ const OFFICIAL_SLUGS = [
   "motorola", "nokia", "blackmagicdesign",
 ];
 
-// Original typographic wordmarks (OFL fonts) for brands without an official
-// Simple Icons glyph, plus all lens brands that never ship vector marks.
+// Lens-first brands (no camera make in EXIF Make) — wordmarks only.
+const LENS_ONLY = [
+  "viltrox", "laowa", "ttartisan", "tokina", "samyang", "meike",
+  "7artisans", "sirui", "yongnuo", "voigtlander",
+];
+
+// Human-readable labels for the library grid (proper nouns stay as-is).
+const LABELS = {
+  sony: "Sony", canon: "Canon", nikon: "Nikon", fujifilm: "Fujifilm", leica: "Leica",
+  hasselblad: "Hasselblad", panasonic: "Lumix", ricoh: "Ricoh", sigma: "Sigma",
+  zeiss: "Zeiss", dji: "DJI", apple: "Apple", tamron: "Tamron", epson: "Epson",
+  olympus: "OM System", pentax: "Pentax", gopro: "GoPro", insta360: "Insta360",
+  sandisk: "SanDisk", phaseone: "Phase One", profoto: "Profoto", smallrig: "SmallRig",
+  samsung: "Samsung", vivo: "vivo", oppo: "OPPO", oneplus: "OnePlus", huawei: "Huawei",
+  honor: "HONOR", google: "Google", motorola: "Motorola", nokia: "Nokia",
+  blackmagicdesign: "Blackmagic", viltrox: "Viltrox", laowa: "Laowa",
+  ttartisan: "TTArtisan", tokina: "Tokina", samyang: "Samyang", meike: "Meike",
+  "7artisans": "7Artisans", sirui: "Sirui", yongnuo: "Yongnuo", voigtlander: "Voigtlander",
+};
+
 const WORDMARKS = [
   { slug: "canon", text: "Canon", font: "CormorantGaramond-600.ttf", weight: 600, spacing: 0 },
   { slug: "ricoh", text: "RICOH", font: "Inter-700.ttf", weight: 700, spacing: 6 },
@@ -48,11 +68,13 @@ const WORDMARKS = [
   { slug: "voigtlander", text: "VOIGTLANDER", font: "InstrumentSerif-400.ttf", weight: 400, spacing: 6 },
   { slug: "phaseone", text: "PHASE ONE", font: "Geist-600.ttf", weight: 600, spacing: 8 },
   { slug: "blackmagicdesign", text: "BLACKMAGIC", font: "Geist-700.ttf", weight: 700, spacing: 6 },
+  // neutral marker shown on wall cards for expression-based templates
+  { slug: "exif-auto", text: "EXIF", font: "GeistMono-500.ttf", weight: 500, spacing: 10 },
 ];
 
 // Lockups: typographic render for every brand (Q2 "原创 lockup 可切换").
 const LOCKUPS = [
-  ...new Set([...OFFICIAL_SLUGS, ...WORDMARKS.map((w) => w.slug)]),
+  ...new Set([...OFFICIAL_SLUGS, ...WORDMARKS.filter((w) => w.slug !== "exif-auto").map((w) => w.slug)]),
 ].map((slug) => ({ slug, text: slug === "7artisans" ? "7Artisans" : slug.toUpperCase(), font: "Geist-600.ttf", weight: 600, spacing: 8 }));
 
 const SERIES = [
@@ -88,30 +110,41 @@ const DIRS = {
 };
 for (const [a, b] of Object.values(DIRS)) {
   mkdirSync(a, { recursive: true });
+  mkdirSync(join(a, "thumbs"), { recursive: true });
   mkdirSync(b, { recursive: true });
+  mkdirSync(join(b, "thumbs"), { recursive: true });
 }
 
-function renderVariants(entry, svgFor) {
+function writeVariants(entry, render, label) {
+  let ok = false;
+  for (const [variant, color] of [["", "#000000"], ["-light", "#ffffff"]]) {
+    for (const [size, sub] of [[SIZE, ""], [THUMB, "thumbs/"]]) {
+      try {
+        const png = render(color, size);
+        for (const dir of DIRS[entry.kind]) writeFileSync(join(dir, `${sub}${entry.slug}${variant}.png`), png);
+        ok = true;
+      } catch (e) {
+        console.log(`${label ?? entry.slug}${variant}@${size}: ${e.message}`);
+      }
+    }
+  }
+  return ok;
+}
+
+function renderWordmark(entry) {
   const fontPath = join(FONT_DIR, entry.font);
   if (!existsSync(fontPath)) {
     console.log(`${entry.slug}: font ${entry.font} missing, skip`);
     return false;
   }
-  let ok = false;
-  for (const [variant, color] of [["", "#000000"], ["-light", "#ffffff"]]) {
-    try {
-      const resvg = new Resvg(svgFor(color, fontPath), {
-        fitTo: { mode: "height", value: SIZE },
-        font: { fontFiles: [fontPath], loadSystemFonts: false, defaultFontFamily: "Wordmark" },
-      });
-      const png = resvg.render().asPng();
-      for (const dir of DIRS[entry.kind]) writeFileSync(join(dir, `${entry.slug}${variant}.png`), png);
-      ok = true;
-    } catch (e) {
-      console.log(`${entry.slug}${variant}: ${e.message}`);
-    }
-  }
-  return ok;
+  const svgFor = wordmarkSvg(entry);
+  return writeVariants(entry, (color, size) => {
+    const resvg = new Resvg(svgFor(color), {
+      fitTo: { mode: "height", value: size },
+      font: { fontFiles: [fontPath], loadSystemFonts: false, defaultFontFamily: "Wordmark" },
+    });
+    return resvg.render().asPng();
+  });
 }
 
 function wordmarkSvg(entry) {
@@ -133,7 +166,7 @@ const iconSlugs = [];
 for (const slug of OFFICIAL_SLUGS) {
   let svg;
   try {
-    const res = await fetch(`${RAW}/${slug}.svg`, { headers: { "user-agent": "FrameGeist/0.7" } });
+    const res = await fetch(`${RAW}/${slug}.svg`, { headers: { "user-agent": "FrameGeist/0.8" } });
     if (!res.ok) { console.log(`brand ${slug}: HTTP ${res.status} (fallback to wordmark)`); continue; }
     svg = await res.text();
   } catch (e) {
@@ -142,17 +175,10 @@ for (const slug of OFFICIAL_SLUGS) {
   }
   const withFill = (color) =>
     svg.replace("<svg ", `<svg fill="${color}" `).replace(/fill="currentColor"/g, `fill="${color}"`);
-  let ok = false;
-  for (const [variant, color] of [["", "#000000"], ["-light", "#ffffff"]]) {
-    try {
-      const resvg = new Resvg(withFill(color), { fitTo: { mode: "height", value: SIZE } });
-      const png = resvg.render().asPng();
-      for (const dir of DIRS.brand) writeFileSync(join(dir, `${slug}${variant}.png`), png);
-      ok = true;
-    } catch (e) {
-      console.log(`brand ${slug}${variant}: ${e.message}`);
-    }
-  }
+  const ok = writeVariants({ kind: "brand", slug }, (color, size) => {
+    const resvg = new Resvg(withFill(color), { fitTo: { mode: "height", value: size } });
+    return resvg.render().asPng();
+  });
   if (ok) iconSlugs.push(slug);
 }
 console.log(`official icons: ${iconSlugs.length}/${OFFICIAL_SLUGS.length}`);
@@ -166,7 +192,7 @@ for (const w of WORDMARKS) {
     wordCredits.push({ slug: w.slug, kind, font: w.font, note: "official icon preferred" });
     continue;
   }
-  if (renderVariants({ ...w, kind }, wordmarkSvg(w))) {
+  if (renderWordmark({ ...w, kind })) {
     wordCredits.push({ slug: w.slug, kind, font: w.font });
     console.log(`brand wordmark ${w.slug}.png`);
   }
@@ -175,16 +201,14 @@ for (const w of WORDMARKS) {
 // ------------------------------------------------------------------- lockups
 const lockupCredits = [];
 for (const l of LOCKUPS) {
-  if (renderVariants({ ...l, kind: "lockup" }, wordmarkSvg(l))) {
-    lockupCredits.push({ slug: l.slug, font: l.font });
-  }
+  if (renderWordmark({ ...l, kind: "lockup" })) lockupCredits.push({ slug: l.slug, font: l.font });
 }
 console.log(`lockups: ${lockupCredits.length}`);
 
 // --------------------------------------------------------------- series/game
 for (const [kind, items] of [["series", SERIES], ["game", GAMES]]) {
   for (const item of items) {
-    if (renderVariants({ ...item, kind }, wordmarkSvg(item))) console.log(`${kind} ${item.slug}.png`);
+    if (renderWordmark({ ...item, kind })) console.log(`${kind} ${item.slug}.png`);
   }
 }
 
@@ -201,14 +225,33 @@ writeFileSync(
       officialIcons: iconSlugs,
       wordmarks: wordCredits,
       lockups: lockupCredits.map((l) => l.slug),
+      variants: "512px (assets) + 96px thumbs (web library)",
+      neutral: "brand/exif-auto (original EXIF marker for expression-based templates)",
     },
     null,
     2,
   ) + "\n",
 );
 
-const allSlugs = Array.from(new Set([...iconSlugs, ...wordCredits.map((w) => w.slug), ...lockupCredits.map((l) => l.slug)])).sort();
-writeFileSync(join(DIRS.brand[1], "index.json"), JSON.stringify(allSlugs, null, 2) + "\n");
-writeFileSync(join(DIRS.lockup[1], "index.json"), JSON.stringify(allSlugs, null, 2) + "\n");
-console.log(`brand index: ${allSlugs.length} slugs`);
+// -------------------------------------------------------- library manifest v2
+const allSlugs = Array.from(new Set([...iconSlugs, ...WORDMARKS.map((w) => w.slug)])).sort()
+  .filter((s) => s !== "exif-auto");
+const cameraGroup = allSlugs.filter((s) => !LENS_ONLY.includes(s));
+const lensGroup = allSlugs;
+const label = (slug) => LABELS[slug] ?? slug.replace(/(^|-)([a-z])/g, (_, p, c) => `${p ? " " : ""}${c.toUpperCase()}`);
+const item = (slug) => ({ slug, label: label(slug), official: iconSlugs.includes(slug) });
+const manifest = {
+  version: 2,
+  generatedAt: new Date().toISOString(),
+  neutral: "exif-auto",
+  groups: {
+    camera: cameraGroup.map(item),
+    lens: lensGroup.map(item),
+    series: SERIES.map((s) => ({ slug: s.slug, label: s.text, official: false })),
+    game: GAMES.map((g) => ({ slug: g.slug, label: g.slug.toUpperCase(), official: false })),
+  },
+};
+writeFileSync(join(DIRS.brand[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
+writeFileSync(join(DIRS.lockup[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
+console.log(`library manifest: camera ${manifest.groups.camera.length}, lens ${manifest.groups.lens.length}, series ${manifest.groups.series.length}, game ${manifest.groups.game.length}`);
 console.log("all brand assets done");

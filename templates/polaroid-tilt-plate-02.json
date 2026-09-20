@@ -6,7 +6,7 @@
       "zh": "斜置日期卡",
       "en": "Tilt Plate"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -68,7 +68,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8C877D",
         "weight": 500
       },
@@ -92,7 +92,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.013,
+        "size": 0.0156,
         "color": "#2A2723",
         "weight": 500
       },
@@ -117,7 +117,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "attachTo": "model",
       "attachGap": 0.012
@@ -134,7 +134,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.01,
+        "size": 0.012,
         "color": "#8C877D",
         "weight": 500
       },
@@ -159,7 +159,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.045,
+        "size": 0.054,
         "color": "#1A1A1A",
         "weight": 400
       },
@@ -192,7 +192,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.011,
+        "size": 0.0132,
         "color": "#6E6A62",
         "weight": 500
       },

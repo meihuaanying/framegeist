@@ -6,7 +6,7 @@
       "zh": "竖构图单行",
       "en": "Portrait Line"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0135,
+        "size": 0.0162,
         "color": "#373A40",
         "weight": 500
       },
@@ -59,7 +59,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

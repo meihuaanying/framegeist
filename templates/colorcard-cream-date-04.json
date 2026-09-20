@@ -6,7 +6,7 @@
       "zh": "奶油大日期",
       "en": "Cream Date"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -46,7 +46,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.016,
+        "size": 0.0192,
         "color": "#1A1A1A",
         "weight": 500
       },
@@ -73,7 +73,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#9A9288",
         "weight": 400
       },
@@ -101,7 +101,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.09,
+        "size": 0.108,
         "color": "#1A1A1A",
         "weight": 400
       },
@@ -128,7 +128,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "#6B7280",
         "weight": 500
       },
@@ -170,7 +170,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

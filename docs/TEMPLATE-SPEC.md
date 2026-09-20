@@ -164,7 +164,7 @@
   "anchor": "bottom-left",
   "offset": { "x": 0.02, "y": -0.05 },
   "asset": "@builtin/brand/{exif.brand_slug}",   // 支持 {exif.<key>} 占位
-  "size": { "height": 0.03 },                     // 相对照片高度（优先）；或 width
+  "size": { "height": 0.045 },                    // 相对照片高度（优先）；或 width；v0.8 默认 4.5%（下限 5% 且 ≥18px）
   "opacity": 1.0,
   "attachTo": "primary",                          // 贴附到文本层首行左侧（水印行前置图标）
   "attachGap": 0.01                               // 贴附间距（相对照片高度）
@@ -172,6 +172,7 @@
 ```
 
 - **asset 解析顺序**：调用方内存资产表（`@user/logo`、`@user/background` 等）→ `@builtin/*`（`brand/<slug>.png`）→ `assets/*`（模板包内相对路径）。**解析失败 = 留白，不显示替代图标**（v0.2.0 决策）。
+- **v0.8 徽标尺寸**：引擎下限 5%（且 ≥18px）、默认层高 4.5%、最大宽 38%（模板内既有徽标层高 <0.045 已批量抬到 ≥0.045）。
 - **占位表达式**：`{exif.brand_slug}` / `{exif.lens_slug}`（品牌/镜头映射见 §8）。
 - `attachTo` 必须在同一模板内引用存在的文本层 id（加载时校验）；贴附位置 = 文本首行左侧，垂直居中。
 - `showLogo=false` 覆盖时，`@builtin/brand/`、`@builtin/lens/` 资产层整体跳过。

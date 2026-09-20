@@ -6,7 +6,7 @@
       "zh": "细点四角",
       "en": "Dot Corners"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -90,7 +90,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.02
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -106,7 +106,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.014,
+        "size": 0.0168,
         "color": "auto",
         "weight": 500
       },
@@ -134,7 +134,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "auto",
         "weight": 500
       },
@@ -165,7 +165,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "auto",
         "weight": 500
       },
@@ -193,7 +193,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.012,
+        "size": 0.0144,
         "color": "auto",
         "weight": 400
       },

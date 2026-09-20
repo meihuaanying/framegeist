@@ -7,7 +7,13 @@
       "en": "Centered Lockup"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-editorial-01",
@@ -17,7 +23,13 @@
       "en": "Editorial White"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-letterhead",
@@ -27,7 +39,13 @@
       "en": "Letterhead"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-linen-dot",
@@ -37,7 +55,13 @@
       "en": "Linen Dot"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-passport-mono",
@@ -47,7 +71,13 @@
       "en": "Passport Mono"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-quiet-stack",
@@ -57,7 +87,13 @@
       "en": "Quiet Stack"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-ruled-band",
@@ -67,7 +103,13 @@
       "en": "Ruled Band"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-top-note",
@@ -77,7 +119,13 @@
       "en": "Top Note"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "white-border-twin-columns",
@@ -87,7 +135,13 @@
       "en": "Twin Columns"
     },
     "notice": null,
-    "category": "white-border"
+    "category": "white-border",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-baseplate-02",
@@ -97,7 +151,13 @@
       "en": "Base Plate"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-corner-body-03",
@@ -107,7 +167,13 @@
       "en": "Corner Body"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-lens-dial-06",
@@ -117,7 +183,13 @@
       "en": "Lens Dial"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-retro-sidecar-04",
@@ -127,7 +199,13 @@
       "en": "Retro Sidecar"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-series-emblem-07",
@@ -137,7 +215,13 @@
       "en": "Series Emblem"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-ricoh-slimline-08",
@@ -147,7 +231,13 @@
       "en": "Slimline Bar"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-stencil-mono-05",
@@ -157,7 +247,13 @@
       "en": "Stencil Mono"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "camera-topdeck-bar-01",
@@ -167,7 +263,13 @@
       "en": "Top Deck Plate"
     },
     "notice": null,
-    "category": "camera"
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-accent-dots-01",
@@ -177,7 +279,13 @@
       "en": "Accent Dots"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-camera-ui-01",
@@ -187,7 +295,13 @@
       "en": "Camera UI"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-dual-optics-01",
@@ -197,7 +311,13 @@
       "en": "Dual Optics"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-midnight-bar-01",
@@ -207,7 +327,13 @@
       "en": "Midnight Bar"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-minimal-line-01",
@@ -217,7 +343,13 @@
       "en": "Minimal Line"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-paper-spec-01",
@@ -227,7 +359,13 @@
       "en": "Paper Spec"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-shot-on-01",
@@ -237,7 +375,13 @@
       "en": "Shot On Center"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-side-rail-01",
@@ -247,7 +391,13 @@
       "en": "Side Rail"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-studio-card-01",
@@ -257,7 +407,13 @@
       "en": "Studio Card"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "phone-vendor-bar-01",
@@ -267,7 +423,13 @@
       "en": "Vendor Dot Bar"
     },
     "notice": null,
-    "category": "phone"
+    "category": "phone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "drone-aerial-editorial-01",
@@ -277,7 +439,13 @@
       "en": "Aerial Editorial"
     },
     "notice": null,
-    "category": "drone"
+    "category": "drone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "drone-altitude-hero-01",
@@ -287,7 +455,13 @@
       "en": "Altitude Hero"
     },
     "notice": null,
-    "category": "drone"
+    "category": "drone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "drone-geoblock-01",
@@ -297,7 +471,13 @@
       "en": "Drone Geo Block"
     },
     "notice": null,
-    "category": "drone"
+    "category": "drone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "drone-skybar-01",
@@ -307,7 +487,13 @@
       "en": "Drone Sky Bar"
     },
     "notice": null,
-    "category": "drone"
+    "category": "drone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "drone-topline-01",
@@ -317,7 +503,13 @@
       "en": "Drone Topline"
     },
     "notice": null,
-    "category": "drone"
+    "category": "drone",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "fuji-recipe-band-02",
@@ -327,7 +519,13 @@
       "en": "Recipe Band"
     },
     "notice": null,
-    "category": "fuji"
+    "category": "fuji",
+    "marks": [
+      {
+        "slug": "fujifilm",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "fuji-recipe-column-03",
@@ -337,7 +535,13 @@
       "en": "Recipe Column"
     },
     "notice": null,
-    "category": "fuji"
+    "category": "fuji",
+    "marks": [
+      {
+        "slug": "fujifilm",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "fuji-recipe-hero-04",
@@ -347,7 +551,13 @@
       "en": "Recipe Hero"
     },
     "notice": null,
-    "category": "fuji"
+    "category": "fuji",
+    "marks": [
+      {
+        "slug": "fujifilm",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "fuji-recipe-panel-01",
@@ -357,7 +567,13 @@
       "en": "Recipe Panel"
     },
     "notice": null,
-    "category": "fuji"
+    "category": "fuji",
+    "marks": [
+      {
+        "slug": "fujifilm",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "fuji-recipe-rails-05",
@@ -367,7 +583,13 @@
       "en": "Recipe Rails"
     },
     "notice": null,
-    "category": "fuji"
+    "category": "fuji",
+    "marks": [
+      {
+        "slug": "fujifilm",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-darkroom-pillar-03",
@@ -377,7 +599,13 @@
       "en": "Darkroom Pillar"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-diptych-hairline-07",
@@ -387,7 +615,13 @@
       "en": "Diptych Hairline"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-led-datestamp-04",
@@ -397,7 +631,13 @@
       "en": "LED Datestamp"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-mono-roll-06",
@@ -407,7 +647,13 @@
       "en": "Mono Roll"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-positive-print-08",
@@ -417,7 +663,13 @@
       "en": "Positive Print"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-serif-stock-05",
@@ -427,7 +679,13 @@
       "en": "Serif Silvergrain"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-sprocket-01",
@@ -437,7 +695,13 @@
       "en": "Sprocket Classic"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "film-sprocket-02",
@@ -447,7 +711,13 @@
       "en": "Vertical Perfs"
     },
     "notice": null,
-    "category": "film"
+    "category": "film",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-blur-stage-01",
@@ -457,7 +727,13 @@
       "en": "Blur Stage"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-ribbon-01",
@@ -467,7 +743,13 @@
       "en": "Ink Ribbon"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-verse-01",
@@ -477,7 +759,13 @@
       "en": "Light Verse"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-single-line-01",
@@ -487,7 +775,13 @@
       "en": "One Line Walk"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-round-card-01",
@@ -497,7 +791,13 @@
       "en": "Round Card"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-tint-seam-01",
@@ -507,7 +807,13 @@
       "en": "Seamless Walk"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-vbar-01",
@@ -517,7 +823,13 @@
       "en": "Side Column"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorwalk-top-field-01",
@@ -527,7 +839,13 @@
       "en": "Top Field"
     },
     "notice": null,
-    "category": "colorwalk"
+    "category": "colorwalk",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-chip-strip-01",
@@ -537,7 +855,8 @@
       "en": "Chip Strip"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": []
   },
   {
     "id": "colorful-corner-blocks-01",
@@ -547,7 +866,13 @@
       "en": "Corner Blocks"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-dot-cluster-01",
@@ -557,7 +882,13 @@
       "en": "Dot Cluster"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-split-duo-01",
@@ -567,7 +898,13 @@
       "en": "Duo Split"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-pastel-card-01",
@@ -577,7 +914,13 @@
       "en": "Pastel Card"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-frame-quad-01",
@@ -587,7 +930,13 @@
       "en": "Quad Frame"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-rainbow-lines-01",
@@ -597,7 +946,13 @@
       "en": "Spectrum Rules"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorful-sticker-date-01",
@@ -607,7 +962,13 @@
       "en": "Sticker Date"
     },
     "notice": null,
-    "category": "colorful"
+    "category": "colorful",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-black-bar",
@@ -617,7 +978,13 @@
       "en": "Black Bar White Type"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-double-row",
@@ -627,7 +994,13 @@
       "en": "Classic Double Row"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-single-row",
@@ -637,7 +1010,13 @@
       "en": "Classic Single Row"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-copperplate-etch",
@@ -647,7 +1026,13 @@
       "en": "Copperplate Etch"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-brand-center",
@@ -657,7 +1042,13 @@
       "en": "Cream Brand Center"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-date-right",
@@ -667,7 +1058,13 @@
       "en": "Date Right"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-mono-stack",
@@ -677,7 +1074,13 @@
       "en": "Grey Mono Stack"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-hairline-thin",
@@ -687,7 +1090,13 @@
       "en": "Thin Bar Hairline"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "classic-watermark-red-dot",
@@ -697,7 +1106,13 @@
       "en": "Vermilion Dot Bar"
     },
     "notice": null,
-    "category": "classic-watermark"
+    "category": "classic-watermark",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-atelier-plate-01",
@@ -707,7 +1122,13 @@
       "en": "Atelier Plate"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-deco-double",
@@ -717,7 +1138,13 @@
       "en": "Deco Double Line"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-double-rule-01",
@@ -727,7 +1154,13 @@
       "en": "Double Rule"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-marginalia-01",
@@ -737,7 +1170,13 @@
       "en": "Marginal Notes"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-noir-matte-01",
@@ -747,7 +1186,13 @@
       "en": "Noir Matte"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-credit-still-01",
@@ -757,7 +1202,13 @@
       "en": "Still Credits"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-ukiyoe-cartouche",
@@ -767,7 +1218,13 @@
       "en": "Ukiyo-e Cartouche"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-vertical-scroll-01",
@@ -777,7 +1234,13 @@
       "en": "Vertical Scroll"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "portfolio-wall-label-01",
@@ -787,7 +1250,13 @@
       "en": "Wall Label"
     },
     "notice": null,
-    "category": "portfolio"
+    "category": "portfolio",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "black-frame-charcoal-split-01",
@@ -797,7 +1266,13 @@
       "en": "Charcoal Split"
     },
     "notice": null,
-    "category": "black-frame"
+    "category": "black-frame",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "black-frame-gold-line-01",
@@ -807,7 +1282,13 @@
       "en": "Gold Line"
     },
     "notice": null,
-    "category": "black-frame"
+    "category": "black-frame",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "black-frame-inner-rule-01",
@@ -817,7 +1298,13 @@
       "en": "Inner Rule"
     },
     "notice": null,
-    "category": "black-frame"
+    "category": "black-frame",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "black-frame-mono-slate-01",
@@ -827,7 +1314,13 @@
       "en": "Mono Slate"
     },
     "notice": null,
-    "category": "black-frame"
+    "category": "black-frame",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "black-frame-side-stack-01",
@@ -837,7 +1330,13 @@
       "en": "Side Stack"
     },
     "notice": null,
-    "category": "black-frame"
+    "category": "black-frame",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "black-frame-two-line-01",
@@ -847,7 +1346,13 @@
       "en": "Two Lines"
     },
     "notice": null,
-    "category": "black-frame"
+    "category": "black-frame",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "sports-alt-badge-01",
@@ -857,7 +1362,13 @@
       "en": "Altitude Badge"
     },
     "notice": null,
-    "category": "sports"
+    "category": "sports",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "sports-big-trail-01",
@@ -867,7 +1378,13 @@
       "en": "Big Trail"
     },
     "notice": null,
-    "category": "sports"
+    "category": "sports",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "sports-finish-line-01",
@@ -877,7 +1394,8 @@
       "en": "Finish Line"
     },
     "notice": null,
-    "category": "sports"
+    "category": "sports",
+    "marks": []
   },
   {
     "id": "sports-ride-stats-01",
@@ -887,7 +1405,13 @@
       "en": "Ride Stats"
     },
     "notice": null,
-    "category": "sports"
+    "category": "sports",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "sports-side-rail-01",
@@ -897,7 +1421,13 @@
       "en": "Trail Rail"
     },
     "notice": null,
-    "category": "sports"
+    "category": "sports",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "calendar-strip-date-01",
@@ -907,7 +1437,8 @@
       "en": "Bottom Strip Date"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "calendar",
+    "marks": []
   },
   {
     "id": "calendar-center-rule-01",
@@ -917,7 +1448,8 @@
       "en": "Center Day Rules"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "calendar",
+    "marks": []
   },
   {
     "id": "calendar-corner-day-01",
@@ -927,7 +1459,8 @@
       "en": "Corner Day"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "calendar",
+    "marks": []
   },
   {
     "id": "calendar-portrait-stack-01",
@@ -937,7 +1470,8 @@
       "en": "Portrait Stack"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "calendar",
+    "marks": []
   },
   {
     "id": "calendar-rail-date-01",
@@ -947,7 +1481,8 @@
       "en": "Side Rail Date"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "calendar",
+    "marks": []
   },
   {
     "id": "calendar-split-columns-01",
@@ -957,7 +1492,8 @@
       "en": "Split Calendar"
     },
     "notice": null,
-    "category": "calendar"
+    "category": "calendar",
+    "marks": []
   },
   {
     "id": "magazine-double-rule-01",
@@ -967,7 +1503,13 @@
       "en": "Double Rule"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "magazine-gallery-left-01",
@@ -977,7 +1519,13 @@
       "en": "Gallery Column"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "magazine-index-column-01",
@@ -987,7 +1535,13 @@
       "en": "Lumen Index"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "magazine-cover-banner-01",
@@ -997,7 +1551,13 @@
       "en": "Midnight Cover"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "magazine-poster-manifesto-01",
@@ -1007,7 +1567,13 @@
       "en": "Quiet Manifesto"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-republican-press",
@@ -1017,7 +1583,13 @@
       "en": "Republican Letterpress"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "magazine-triptych-slices-01",
@@ -1027,7 +1599,13 @@
       "en": "Triptych Slices"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-woodtype-press",
@@ -1037,7 +1615,13 @@
       "en": "Woodtype Press"
     },
     "notice": null,
-    "category": "magazine"
+    "category": "magazine",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-brand-right",
@@ -1047,7 +1631,13 @@
       "en": "Brand Right"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-center-line",
@@ -1057,7 +1647,13 @@
       "en": "Center Line"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-corner-mono",
@@ -1067,7 +1663,13 @@
       "en": "Corner Mono"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-letterbox",
@@ -1077,7 +1679,13 @@
       "en": "Letterbox"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-letterpress-relief",
@@ -1087,7 +1695,13 @@
       "en": "Letterpress Relief"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-model-stack",
@@ -1097,7 +1711,13 @@
       "en": "Model Stack"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-portrait-line",
@@ -1107,7 +1727,13 @@
       "en": "Portrait Line"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-copyright",
@@ -1117,7 +1743,13 @@
       "en": "Quiet Copyright"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "minimal-topright-date",
@@ -1127,7 +1759,13 @@
       "en": "Top Right Date"
     },
     "notice": null,
-    "category": "minimal"
+    "category": "minimal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-center-caption-01",
@@ -1137,7 +1775,13 @@
       "en": "Center Caption"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-corner-stack-01",
@@ -1147,7 +1791,13 @@
       "en": "Corner Stack"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-date-hero-01",
@@ -1157,7 +1807,13 @@
       "en": "Date Hero"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-dot-corners-01",
@@ -1167,7 +1823,13 @@
       "en": "Dot Corners"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-geo-pin-01",
@@ -1177,7 +1839,13 @@
       "en": "Geo Pin"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-lowleft-pair-01",
@@ -1187,7 +1855,13 @@
       "en": "Low Left Pair"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-one-liner-01",
@@ -1197,7 +1871,13 @@
       "en": "One Liner"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-quad-anchors-01",
@@ -1207,7 +1887,13 @@
       "en": "Quad Anchors"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-right-roll-01",
@@ -1217,7 +1903,13 @@
       "en": "Right Roll"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-signoff-block-01",
@@ -1227,7 +1919,13 @@
       "en": "Sign-off Block"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "borderless-vertical-spine-01",
@@ -1237,7 +1935,13 @@
       "en": "Vertical Spine"
     },
     "notice": null,
-    "category": "borderless"
+    "category": "borderless",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "master-cream-dot-01",
@@ -1247,7 +1951,13 @@
       "en": "Cream Dot"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "master-crown-wordmark-01",
@@ -1257,7 +1967,13 @@
       "en": "Crown Wordmark"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "master-ivory-plate-01",
@@ -1267,7 +1983,13 @@
       "en": "Ivory Plate"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "master-noir-plate-01",
@@ -1277,7 +1999,13 @@
       "en": "Noir Plate"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "master-seal-frame-01",
@@ -1287,7 +2015,13 @@
       "en": "Seal Frame"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "master-three-column-01",
@@ -1297,7 +2031,13 @@
       "en": "Three Columns"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-vermilion-seal",
@@ -1307,7 +2047,13 @@
       "en": "Vermilion Seal"
     },
     "notice": null,
-    "category": "master"
+    "category": "master",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "personal-avatar-ring-01",
@@ -1317,7 +2063,13 @@
       "en": "Avatar Ring"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "personal-credit-social-01",
@@ -1327,7 +2079,13 @@
       "en": "Credit Social"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "personal-cn-inscription-01",
@@ -1337,7 +2095,8 @@
       "en": "Ink Inscription"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": []
   },
   {
     "id": "personal-micro-copyright-01",
@@ -1347,7 +2106,8 @@
       "en": "Micro Copyright"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": []
   },
   {
     "id": "personal-name-columns-01",
@@ -1357,7 +2117,13 @@
       "en": "Name Columns"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "personal-polaroid-script-01",
@@ -1367,7 +2133,8 @@
       "en": "Polaroid Script"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": []
   },
   {
     "id": "personal-script-signature-01",
@@ -1377,7 +2144,13 @@
       "en": "Script Signature"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "personal-triptych-01",
@@ -1387,7 +2160,13 @@
       "en": "Triptych Card"
     },
     "notice": null,
-    "category": "personal"
+    "category": "personal",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "polaroid-classic-script-03",
@@ -1397,7 +2176,13 @@
       "en": "Classic Script"
     },
     "notice": null,
-    "category": "polaroid"
+    "category": "polaroid",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "polaroid-duo-stamps-05",
@@ -1407,7 +2192,13 @@
       "en": "Duo Stamps"
     },
     "notice": null,
-    "category": "polaroid"
+    "category": "polaroid",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "polaroid-pastel-ring-04",
@@ -1417,7 +2208,13 @@
       "en": "Pastel Ring"
     },
     "notice": null,
-    "category": "polaroid"
+    "category": "polaroid",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "polaroid-stamp-postcard-01",
@@ -1427,7 +2224,13 @@
       "en": "Stamp Postcard"
     },
     "notice": null,
-    "category": "polaroid"
+    "category": "polaroid",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "polaroid-tilt-plate-02",
@@ -1437,7 +2240,13 @@
       "en": "Tilt Plate"
     },
     "notice": null,
-    "category": "polaroid"
+    "category": "polaroid",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "festival-dragon-boat-01",
@@ -1447,7 +2256,8 @@
       "en": "Dragon Boat Seal"
     },
     "notice": null,
-    "category": "festival"
+    "category": "festival",
+    "marks": []
   },
   {
     "id": "festival-moon-full-01",
@@ -1457,7 +2267,8 @@
       "en": "Full Moon"
     },
     "notice": null,
-    "category": "festival"
+    "category": "festival",
+    "marks": []
   },
   {
     "id": "festival-gold-frame-01",
@@ -1467,7 +2278,8 @@
       "en": "Gold Frame"
     },
     "notice": null,
-    "category": "festival"
+    "category": "festival",
+    "marks": []
   },
   {
     "id": "festival-lantern-warm-01",
@@ -1477,7 +2289,8 @@
       "en": "Lantern Warmth"
     },
     "notice": null,
-    "category": "festival"
+    "category": "festival",
+    "marks": []
   },
   {
     "id": "festival-lantern-night-01",
@@ -1487,7 +2300,8 @@
       "en": "Night Lanterns"
     },
     "notice": null,
-    "category": "festival"
+    "category": "festival",
+    "marks": []
   },
   {
     "id": "festival-spring-gold-01",
@@ -1497,7 +2311,8 @@
       "en": "Spring Gold"
     },
     "notice": null,
-    "category": "festival"
+    "category": "festival",
+    "marks": []
   },
   {
     "id": "effect-duotone-wash-03",
@@ -1507,7 +2322,13 @@
       "en": "Duotone Wash"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-float-card-01",
@@ -1517,7 +2338,13 @@
       "en": "Float Card"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "art-gilt-foil",
@@ -1527,7 +2354,13 @@
       "en": "Gilt Foil"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-minimal-shadow-08",
@@ -1537,7 +2370,13 @@
       "en": "Minimal Shadow"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-mirror-pool-02",
@@ -1547,7 +2386,13 @@
       "en": "Mirror Pool"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-paper-stack-05",
@@ -1557,7 +2402,13 @@
       "en": "Paper Stack"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-polaroid-float-06",
@@ -1567,7 +2418,13 @@
       "en": "Polaroid Float"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-top-gradient-band-07",
@@ -1577,7 +2434,13 @@
       "en": "Top Gradient Band"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "effect-vignette-card-04",
@@ -1587,7 +2450,13 @@
       "en": "Vignette Card"
     },
     "notice": null,
-    "category": "effect"
+    "category": "effect",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorcard-tint-chips-01",
@@ -1597,7 +2466,13 @@
       "en": "Chromatic Edge"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "colorcard",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorcard-cream-date-04",
@@ -1607,7 +2482,13 @@
       "en": "Cream Date"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "colorcard",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorcard-diamonds-03",
@@ -1617,7 +2498,13 @@
       "en": "Diamond Row"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "colorcard",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorcard-index-05",
@@ -1627,7 +2514,13 @@
       "en": "Index Row"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "colorcard",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorcard-column-02",
@@ -1637,7 +2530,13 @@
       "en": "Night Column"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "colorcard",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "colorcard-sunrise-chips-01",
@@ -1647,7 +2546,13 @@
       "en": "Sunrise Chips"
     },
     "notice": null,
-    "category": "colorcard"
+    "category": "colorcard",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "blur-bg-brandbar-02",
@@ -1657,7 +2562,13 @@
       "en": "Brand Bar"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "blur-bg",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "blur-bg-center-01",
@@ -1667,7 +2578,13 @@
       "en": "Center Bloom"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "blur-bg",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "blur-bg-card-03",
@@ -1677,7 +2594,13 @@
       "en": "Soft Card"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "blur-bg",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "blur-bg-topcap-04",
@@ -1687,7 +2610,13 @@
       "en": "Top Cap"
     },
     "notice": null,
-    "category": "blur-bg"
+    "category": "blur-bg",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "ticket-boarding-pass-03",
@@ -1697,7 +2626,13 @@
       "en": "Boarding Pass"
     },
     "notice": null,
-    "category": "ticket"
+    "category": "ticket",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "ticket-stub-horizontal-01",
@@ -1707,7 +2642,13 @@
       "en": "Horizontal Stub"
     },
     "notice": null,
-    "category": "ticket"
+    "category": "ticket",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "ticket-night-tilt-05",
@@ -1717,7 +2658,13 @@
       "en": "Night Tilt"
     },
     "notice": null,
-    "category": "ticket"
+    "category": "ticket",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "ticket-park-pass-04",
@@ -1727,7 +2674,13 @@
       "en": "Park Pass"
     },
     "notice": null,
-    "category": "ticket"
+    "category": "ticket",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "ticket-vertical-rail-02",
@@ -1737,7 +2690,13 @@
       "en": "Vertical Rail"
     },
     "notice": null,
-    "category": "ticket"
+    "category": "ticket",
+    "marks": [
+      {
+        "slug": "exif-auto",
+        "kind": "brand"
+      }
+    ]
   },
   {
     "id": "game-arknights-v2",
@@ -1747,7 +2706,13 @@
       "en": "Arknights · Corner Mark"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "arknights",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-arknights-v1",
@@ -1757,7 +2722,13 @@
       "en": "Arknights · Hero Frame"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "arknights",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-arknights-v3",
@@ -1767,7 +2738,13 @@
       "en": "Arknights · Poster Card"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "arknights",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-wukong-v2",
@@ -1777,7 +2754,13 @@
       "en": "Black Myth Wukong · Corner Mark"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "wukong",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-wukong-v1",
@@ -1787,7 +2770,13 @@
       "en": "Black Myth Wukong · Hero Frame"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "wukong",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-wukong-v3",
@@ -1797,7 +2786,13 @@
       "en": "Black Myth Wukong · Poster Card"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "wukong",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-genshin-v2",
@@ -1807,7 +2802,13 @@
       "en": "Genshin · Corner Mark"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "genshin",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-genshin-v1",
@@ -1817,7 +2818,13 @@
       "en": "Genshin · Hero Frame"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "genshin",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-genshin-v3",
@@ -1827,7 +2834,13 @@
       "en": "Genshin · Poster Card"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "genshin",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-honkai-v2",
@@ -1837,7 +2850,13 @@
       "en": "Honkai · Corner Mark"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "honkai",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-honkai-v1",
@@ -1847,7 +2866,13 @@
       "en": "Honkai · Hero Frame"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "honkai",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-honkai-v3",
@@ -1857,7 +2882,13 @@
       "en": "Honkai · Poster Card"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "honkai",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-wwmeet-v2",
@@ -1867,7 +2898,13 @@
       "en": "Where Winds Meet · Corner Mark"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "wwmeet",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-wwmeet-v1",
@@ -1877,7 +2914,13 @@
       "en": "Where Winds Meet · Hero Frame"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "wwmeet",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-wwmeet-v3",
@@ -1887,7 +2930,13 @@
       "en": "Where Winds Meet · Poster Card"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "wwmeet",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-zzz-v2",
@@ -1897,7 +2946,13 @@
       "en": "Zenless Zone Zero · Corner Mark"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "zzz",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-zzz-v1",
@@ -1907,7 +2962,13 @@
       "en": "Zenless Zone Zero · Hero Frame"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "zzz",
+        "kind": "game"
+      }
+    ]
   },
   {
     "id": "game-zzz-v3",
@@ -1917,6 +2978,12 @@
       "en": "Zenless Zone Zero · Poster Card"
     },
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners.",
-    "category": "game"
+    "category": "game",
+    "marks": [
+      {
+        "slug": "zzz",
+        "kind": "game"
+      }
+    ]
   }
 ]

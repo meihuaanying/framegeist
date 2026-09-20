@@ -6,7 +6,7 @@
       "zh": "黑框双行",
       "en": "Two Lines"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -38,7 +38,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0095,
+        "size": 0.0114,
         "color": "#6E6E6E",
         "weight": 500
       },
@@ -64,7 +64,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.022
+        "height": 0.045
       },
       "tint": "auto"
     },
@@ -80,7 +80,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.018,
+        "size": 0.0216,
         "color": "#F2F2F2",
         "weight": 500
       },
@@ -107,7 +107,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0115,
+        "size": 0.0138,
         "color": "#A0A0A0",
         "weight": 500
       },
@@ -131,7 +131,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0105,
+        "size": 0.0126,
         "color": "#8A8A8A",
         "weight": 400
       },

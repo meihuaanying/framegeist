@@ -6,7 +6,7 @@
       "zh": "居中铭牌",
       "en": "Center Caption"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -28,7 +28,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.018,
+        "size": 0.0216,
         "color": "auto",
         "weight": 500
       },
@@ -70,7 +70,7 @@
         "family": [
           "Inter"
         ],
-        "size": 0.0125,
+        "size": 0.015,
         "color": "auto",
         "weight": 500
       },
@@ -92,7 +92,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.04
+        "height": 0.045
       },
       "tint": "auto",
       "contrast": "auto",

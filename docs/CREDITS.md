@@ -9,7 +9,7 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 
 用途：模板缩略图（240px）/ 应用内预览（640px）/ 样张（900px）的分分类演示素材。
 
-## 品牌图标（`templates/assets/brand/`、`lockup/`、`series/`、`web/brand/` 等，v0.7.0 扩展）
+## 品牌图标（`templates/assets/brand/`、`lockup/`、`series/`、`web/brand/` 等，v0.7.0/v0.8.0 扩展）
 
 - **官方字标**：[Simple Icons](https://simpleicons.org)（CC0-1.0）——sony、canon、nikon、
   fujifilm、leica、hasselblad、panasonic、ricoh、sigma、zeiss、dji、apple、tamron、epson、
@@ -23,11 +23,14 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 - **镜头系列徽章**（原创字标）：GM、G、L、RF L、S、ART、DG DN、APO、XCD、XF、BATIS、SP。
 - **游戏主题字标**（原创文字渲染，非官方素材；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
+- **中性「EXIF」标**（v0.8.0）：`brand/exif-auto` 与 `-light` 变体，FrameGeist 原创排版，用于表达式徽标层的占位/卡片标记。
+- **徽标 96px 缩略图**（v0.8.0）：`brand|lockup|series|game/thumbs/*` 由 `tools/gen-brand-assets.mjs` 与 512px 同源渲染，随主题反色。
+- **v0.8.0 补充资产**：`series/leica-apo`（LEICA APO 系列徽章）、`brand|lockup/voigtlander`（福伦达）。
 - **相框线稿**（`templates/assets/frame/`）：camera-body / phone-frame / film-strip，FrameGeist 原创矢量（`tools/gen-frame-assets.mjs`）。
 - **商标声明**：各品牌字标/商标归其权利人所有，本项目仅作**器材信息识别展示**用途，
   不表示隶属、赞助或背书；原创 lockup 不复制官方图形徽记。详见 `templates/assets/brand/CREDITS.json`。
 
-## 引擎字体（`templates/assets/fonts/`，v0.7.0：68 faces / 22 families）
+## 引擎字体（`templates/assets/fonts/`，v0.8.0：69 faces / 23 families）
 
 全部 **OFL-1.1**（SIL Open Font License）；许可原文：`templates/assets/fonts/licenses/`，
 副本与来源/版本/SHA256 清单：`docs/licenses/fonts/`（`SOURCES.md`）。
@@ -35,7 +38,8 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 | 字体（family） | 字重 | 来源/版本 | 说明 |
 |---|---|---|---|
 | Inter、Playfair Display、Oswald、Cormorant Garamond、Space Grotesk | 400/500/600/700 | google/fonts（可变字体实例化） | 由 `tools/instance-fonts.py` 钉轴生成静态实例并子集化 |
-| Fraunces、Bricolage Grotesque、Instrument Sans、Instrument Serif、Geist、Geist Mono、Onest、Unbounded | 400/500/600/700（Instrument Serif 400） | google/fonts（v0.7.0 新引入） | 同上；Unbounded/Instrument Serif 仅 400 |
+| Fraunces、Bricolage Grotesque、Instrument Sans、Geist、Geist Mono、Onest、Unbounded | 400/500/600/700 | google/fonts（v0.7.0 新引入） | 同上；Unbounded 仅 400 |
+| Instrument Serif | 400 | google/fonts（v0.8.0 补齐） | 静态 400；编辑杂志类 Display 行使用 |
 | Bebas Neue、Great Vibes | 400 | google/fonts | 静态 |
 | JetBrains Mono | 400/500/700 | JetBrains/JetBrainsMono | 静态（可选项） |
 | Ma Shan Zheng | 400 | google/fonts | CJK，GB2312 一级 + 仓库用字子集 |
