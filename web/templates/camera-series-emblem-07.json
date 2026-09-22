@@ -6,7 +6,7 @@
       "zh": "机身系列徽章",
       "en": "Series Emblem"
     },
-    "version": "1.2.0",
+    "version": "1.3.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -134,7 +134,7 @@
       },
       "asset": "@builtin/series/{exif.lens_series}",
       "size": {
-        "height": 0.06
+        "height": 0.078
       },
       "tint": "auto"
     },
@@ -172,7 +172,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.045
+        "height": 0.06
       },
       "tint": "auto"
     },

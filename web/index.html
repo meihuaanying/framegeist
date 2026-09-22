@@ -36,7 +36,6 @@
       <span class="muted" id="wallCount"></span>
       <span class="spacer" style="flex:1"></span>
       <div class="brand-strip" id="wallBrandStrip" data-i18n-aria-label="brand.aria" aria-label="支持品牌"></div>
-      <button class="btn small ghost" id="wallBrandLib" style="width:auto;padding:0 14px" data-i18n="brandLib.title">徽标库</button>
       <button class="btn small ghost" id="wallImport" style="width:auto;padding:0 14px" data-i18n="wall.import">导入照片</button>
       <div class="search-wrap wall-search">
         <input type="search" id="wallSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…">
@@ -49,6 +48,15 @@
 
 <main class="shell hidden" id="editor">
   <aside class="sidebar">
+      <div class="side-tabs" role="tablist" data-i18n-aria-label="side.aria" aria-label="侧栏分区">
+        <button class="side-tab on" data-tab="templates" role="tab" aria-selected="true" data-i18n="side.templates">模板</button>
+        <button class="side-tab" data-tab="photo" role="tab" aria-selected="false" data-i18n="side.photo">照片</button>
+        <button class="side-tab" data-tab="elements" role="tab" aria-selected="false" data-i18n="side.elements">元素</button>
+        <button class="side-tab" data-tab="canvas" role="tab" aria-selected="false" data-i18n="side.canvas">画布</button>
+        <button class="side-tab" data-tab="export" role="tab" aria-selected="false" data-i18n="side.export">导出</button>
+      </div>
+      <div class="side-panels">
+    <section class="side-panel" data-tab-panel="photo">
     <div class="card">
       <div class="seg">
         <button id="modeFrame" class="on" data-i18n="mode.frame">边框模板</button>
@@ -63,7 +71,9 @@
       <div class="file-meta" id="fileMeta"></div>
       <div class="sample-row" id="sampleRow"></div>
     </div>
+    </section>
 
+    <section class="side-panel on" data-tab-panel="templates">
     <details class="card" id="templateCard" open>
       <summary data-i18n="panel.template">模板</summary>
       <div class="body">
@@ -143,6 +153,7 @@
       </div>
     </details>
 
+    <section class="side-panel" data-tab-panel="canvas">
     <details class="card hidden" id="canvasCard">
       <summary data-i18n="panel.canvas">画布</summary>
       <div class="body">
@@ -183,7 +194,7 @@
       </div>
     </details>
 
-    <details class="card hidden advanced-only" id="cardFxCard">
+    <details class="card hidden" id="cardFxCard">
       <summary data-i18n="panel.cardFx">卡片特效</summary>
       <div class="body">
         <label class="row"><input type="checkbox" id="cardOn"><span data-i18n="card.enable">启用卡片特效</span></label>
@@ -235,8 +246,6 @@
         <div class="btn-row" style="margin-bottom:6px">
           <button class="btn small" id="editUndo" data-i18n-title="layers.undo" title="撤销">↶</button>
           <button class="btn small" id="editRedo" data-i18n-title="layers.redo" title="重做">↷</button>
-          <span class="spacer" style="flex:1"></span>
-          <button class="btn small" id="tierToggle" data-i18n="layers.tier">高级</button>
         </div>
         <div class="layer-list" id="layerList"></div>
         <div class="btn-row" style="margin-top:6px">
@@ -262,10 +271,40 @@
       </div>
     </details>
 
-    <details class="card hidden advanced-only" id="insertCard">
+    <details class="card hidden" id="insertCard">
       <summary data-i18n="insert.title">添加元素</summary>
       <div class="body">
-        <div class="field">
+        <div class="insert-grid">
+          <button class="btn small" id="addText" data-i18n="insert.text">文字</button>
+          <button class="btn small" id="addImage" data-i18n="insert.image">图片</button>
+          <button class="btn small" id="addBadge" data-i18n="insert.badge">徽标</button>
+          <button class="btn small" id="addCalendar" data-i18n="insert.calendar">日历</button>
+          <button class="btn small" id="addDivider" data-i18n="insert.divider">分割线</button>
+          <button class="btn small" id="addShape" data-i18n="insert.shape">线框</button>
+          <button class="btn small" id="addPalette" data-i18n="insert.palette">色卡</button>
+        </div>
+        <div id="badgeLibPanel" class="badge-lib-panel hidden">
+          <label class="row"><span data-i18n="brand.style">徽标风格</span>
+            <select id="brandStyle">
+              <option value="official" data-i18n="brand.styleOfficial">官方字标</option>
+              <option value="original" data-i18n="brand.styleOriginal">原创排版</option>
+            </select>
+          </label>
+          <div class="muted" id="brandDetected" style="margin:4px 0 8px"></div>
+          <label class="row"><span data-i18n="brandLib.target">作用图层</span><b class="muted" id="brandLibTarget">—</b></label>
+          <input type="search" id="brandSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…">
+          <div class="brand-lib-groups" id="brandGroups"></div>
+          <div class="brand-lib-quick" id="brandQuick"></div>
+          <div class="brand-lib-grid" id="brandLibGrid"></div>
+          <div class="muted brand-lib-hint" id="brandLibHint"></div>
+          <div class="btn-row" style="margin-top:8px">
+            <button class="btn small" id="brandAuto" data-i18n="brandLib.auto">自动识别（EXIF）</button>
+            <button class="btn small" id="uploadLogo" data-i18n="brand.uploadCustom">上传自定义</button>
+            <button class="btn small ghost" id="clearLogo" data-i18n="canvas.clearBg">清除</button>
+          </div>
+          <input type="file" id="logoFile" accept="image/*" hidden>
+        </div>
+        <div class="field" style="margin-top:10px">
           <label><span data-i18n="insert.preset">文字样式预设</span></label>
           <select id="presetSelect">
             <option value="" data-i18n="insert.presetNone">选择预设并应用</option>
@@ -279,26 +318,18 @@
             <option value="seal" data-i18n="insert.presetSeal">朱文印章</option>
           </select>
         </div>
-        <div class="btn-row">
-          <button class="btn small" id="addText" data-i18n="insert.text">文字</button>
-          <button class="btn small" id="addImage" data-i18n="insert.image">图片</button>
-          <button class="btn small" id="addCalendar" data-i18n="insert.calendar">日历</button>
-          <button class="btn small" id="addDivider" data-i18n="insert.divider">分割线</button>
-          <button class="btn small" id="addShape" data-i18n="insert.shape">线框</button>
-          <button class="btn small" id="addPalette" data-i18n="insert.palette">色卡</button>
-        </div>
         <input type="file" id="imgInsertFile" accept="image/*" hidden>
       </div>
     </details>
 
-    <details class="card hidden advanced-only" id="propsCard">
+    <details class="card hidden" id="propsCard">
       <summary data-i18n="props.title">元素属性</summary>
       <div class="body" id="propsBody">
         <div class="muted" data-i18n="props.none">在画布或图层列表中选择元素</div>
       </div>
     </details>
 
-    <details class="card hidden advanced-only" id="frameCard">
+    <details class="card hidden" id="frameCard">
       <summary data-i18n="frame.title">相框</summary>
       <div class="body">
         <label class="row"><input type="checkbox" id="frameOn"><span data-i18n="frame.enable">启用相框</span></label>
@@ -333,7 +364,7 @@
       </div>
     </details>
 
-    <details class="card hidden advanced-only" id="cropCard">
+    <details class="card hidden" id="cropCard">
       <summary data-i18n="crop.title">裁切</summary>
       <div class="body">
         <div class="btn-row">
@@ -359,6 +390,7 @@
       </div>
     </details>
 
+    <section class="side-panel" data-tab-panel="elements">
     <details class="card" id="tweakCard">
       <summary data-i18n="panel.tweaks">微调</summary>
       <div class="body">
@@ -408,65 +440,9 @@
       </div>
     </details>
 
-    <details class="card hidden" id="brandCard">
-      <summary data-i18n="panel.brand">品牌 Logo</summary>
-      <div class="body">
-        <label class="row"><input type="checkbox" id="brandShow" checked><span data-i18n="brand.show">显示品牌 Logo</span></label>
-        <div class="muted" id="brandDetected" style="margin:4px 0 8px"></div>
-        <div class="brand-opts">
-          <label class="row"><span data-i18n="brand.style">徽标风格</span>
-            <select id="brandStyle">
-              <option value="official" data-i18n="brand.styleOfficial">官方字标</option>
-              <option value="original" data-i18n="brand.styleOriginal">原创排版</option>
-            </select>
-          </label>
-          <label class="row"><span data-i18n="brand.position">位置</span>
-            <select id="brandPos">
-              <option value="anchor" data-i18n="brand.posAnchor">跟随模板</option>
-              <option value="top-left" data-i18n="brand.posTopLeft">左上</option>
-              <option value="top-right" data-i18n="brand.posTopRight">右上</option>
-              <option value="bottom-left" data-i18n="brand.posBottomLeft">左下</option>
-              <option value="bottom-right" data-i18n="brand.posBottomRight">右下</option>
-            </select>
-          </label>
-          <label class="row"><span data-i18n="brand.size">大小</span>
-            <select id="brandSize">
-              <option value="0.8">S</option>
-              <option value="1" selected>M</option>
-              <option value="1.35">L</option>
-            </select>
-          </label>
-          <label class="row"><span data-i18n="brand.contrast">对比保护</span>
-            <select id="brandContrast">
-              <option value="auto" data-i18n="brand.contrastAuto">自动</option>
-              <option value="light" data-i18n="brand.contrastLight">浅色</option>
-              <option value="dark" data-i18n="brand.contrastDark">深色</option>
-              <option value="stroke" data-i18n="brand.contrastStroke">描边</option>
-              <option value="plate" data-i18n="brand.contrastPlate">底板</option>
-            </select>
-          </label>
-          <label class="row"><span data-i18n="brand.opacity">不透明度</span>
-            <input type="range" id="brandOpacity" min="0.7" max="1" step="0.05" value="1">
-            <b class="muted" id="brandOpacityVal">100%</b>
-          </label>
-        </div>
-        <div class="brand-lib-head">
-          <label class="row"><span data-i18n="brandLib.target">作用图层</span><b class="muted" id="brandLibTarget">—</b></label>
-          <input type="search" id="brandSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…">
-          <div class="brand-lib-groups" id="brandGroups"></div>
-          <div class="brand-lib-quick" id="brandQuick"></div>
-        </div>
-        <div class="brand-lib-grid" id="brandLibGrid"></div>
-        <div class="muted brand-lib-hint" id="brandLibHint"></div>
-        <div class="btn-row" style="margin-top:8px">
-          <button class="btn small" id="brandAuto" data-i18n="brandLib.auto">自动识别（EXIF）</button>
-          <button class="btn small" id="uploadLogo" data-i18n="brand.uploadCustom">上传自定义</button>
-          <button class="btn small ghost" id="clearLogo" data-i18n="canvas.clearBg">清除</button>
-        </div>
-        <input type="file" id="logoFile" accept="image/*" hidden>
-      </div>
-    </details>
+    </section>
 
+    <section class="side-panel" data-tab-panel="photo">
     <details class="card hidden" id="exifEditCard">
       <summary data-i18n="panel.exifEdit">EXIF 文字</summary>
       <div class="body">
@@ -507,37 +483,47 @@
         </div>
       </div>
     </details>
+    </section>
 
-    <div class="actionbar">
-      <label class="muted"><input type="checkbox" id="preview" checked> <span data-i18n="btn.preview">快速预览采样</span></label>
-      <label class="row" style="margin:0"><span data-i18n="export.size">输出尺寸</span>
-        <select id="exportSize" style="width:auto">
-          <option value="0" data-i18n="export.original">原图</option>
-          <option value="6144">6K · 6144</option>
-          <option value="3840">4K · 3840</option>
-          <option value="2048">2K · 2048</option>
-          <option value="1280">720P · 1280</option>
-          <option value="custom" data-i18n="export.custom">自定义长边</option>
-        </select>
-      </label>
-      <label class="row" style="margin:0"><span data-i18n="export.format">格式</span>
-        <select id="exportFormat" style="width:auto">
-          <option value="jpeg">JPEG</option>
-          <option value="png">PNG</option>
-          <option value="avif">AVIF</option>
-          <option value="webp">WebP</option>
-        </select>
-      </label>
-      <input type="number" id="exportCustom" class="hidden" min="256" max="30000" step="16" value="3000" data-i18n-placeholder="export.customPx">
-      <button class="btn primary" id="renderBtn" data-i18n="btn.render">渲染预览</button>
-      <div class="btn-row">
-        <button class="btn" id="exportBtn" disabled data-i18n="btn.export">导出 JPEG</button>
-        <button class="btn hidden" id="exportBatchBtn" data-i18n="btn.exportBatch">批量导出</button>
+    <section class="side-panel" data-tab-panel="export">
+    <details class="card" open>
+      <summary data-i18n="side.export">导出</summary>
+      <div class="body">
+        <label class="muted"><input type="checkbox" id="preview" checked> <span data-i18n="btn.preview">快速预览采样</span></label>
+        <label class="row" style="margin:0"><span data-i18n="export.size">输出尺寸</span>
+          <select id="exportSize" style="width:auto">
+            <option value="0" data-i18n="export.original">原图</option>
+            <option value="6144">6K · 6144</option>
+            <option value="3840">4K · 3840</option>
+            <option value="2048">2K · 2048</option>
+            <option value="1280">720P · 1280</option>
+            <option value="custom" data-i18n="export.custom">自定义长边</option>
+          </select>
+        </label>
+        <label class="row" style="margin:0"><span data-i18n="export.format">格式</span>
+          <select id="exportFormat" style="width:auto">
+            <option value="jpeg">JPEG</option>
+            <option value="png">PNG</option>
+            <option value="avif">AVIF</option>
+            <option value="webp">WebP</option>
+          </select>
+        </label>
+        <input type="number" id="exportCustom" class="hidden" min="256" max="30000" step="16" value="3000" data-i18n-placeholder="export.customPx">
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn" id="exportBatchBtn" data-i18n="btn.exportBatch">批量导出</button>
+          <button class="btn small ghost" id="updateBtn" data-i18n="btn.update">检查更新</button>
+        </div>
+        <div class="progress hidden" id="progressWrap"><i id="progressBar"></i></div>
+        <div id="updateBox" class="muted hidden"></div>
       </div>
-      <div class="progress hidden" id="progressWrap"><i id="progressBar"></i></div>
-      <button class="btn ghost small" id="updateBtn" data-i18n="btn.update">检查更新</button>
-      <div id="updateBox" class="muted hidden"></div>
-    </div>
+    </details>
+    </section>
+      </div>
+      <div class="export-bar">
+        <button class="btn primary small" id="renderBtn" data-i18n="btn.render">渲染预览</button>
+        <button class="btn small" id="exportBtn" disabled data-i18n="btn.export">导出 JPEG</button>
+        <button class="btn ghost small" id="exportBarInfo" data-i18n-title="side.export">原图 · JPEG</button>
+      </div>
   </aside>
 
   <section class="workspace">
@@ -546,12 +532,20 @@
         <button class="icon-btn" id="backToWall" data-i18n-title="editor.back" title="返回模板墙">←</button>
         <span id="stageLabel" data-i18n="stage.placeholder">拖入一张照片开始</span>
         <span class="spacer"></span>
-        <button class="icon-btn" id="panelTierBtn" data-i18n-title="layers.tier" title="高级/简洁">⊞</button>
+        <span class="stage-size muted" id="stageSize"></span>
         <button class="icon-btn" id="zoomOut" data-i18n-title="stage.zoomOut">−</button>
         <span class="zoom-label" id="zoomLabel">100%</span>
         <button class="icon-btn" id="zoomIn" data-i18n-title="stage.zoomIn">＋</button>
         <button class="icon-btn" id="zoomFit" data-i18n-title="stage.fit">⤢</button>
         <button class="icon-btn" id="zoomReset" data-i18n-title="stage.reset">↺</button>
+        <select id="zoomSelect" class="zoom-select" data-i18n-aria-label="stage.zoom" aria-label="缩放">
+          <option value="fit" data-i18n="stage.fit">适应窗口</option>
+          <option value="0.5">50%</option>
+          <option value="0.75">75%</option>
+          <option value="1">100%</option>
+          <option value="1.5">150%</option>
+          <option value="2">200%</option>
+        </select>
       </div>
       <div class="viewport" id="viewport">
         <div class="canvas-wrap" id="canvasWrap"></div>
@@ -580,31 +574,6 @@
         <button class="btn primary" id="lbApply" data-i18n="lightbox.apply">应用此模板</button>
         <p class="muted hidden" id="lbNotice" style="margin:0;max-width:640px;text-align:center;font-size:11.5px"></p>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="brandlib-modal hidden" id="brandLibModal" role="dialog" aria-modal="true" aria-labelledby="brandLibModalTitle">
-  <div class="lb-backdrop" id="brandLibBackdrop"></div>
-  <div class="lb-body">
-    <div class="lb-head">
-      <b id="brandLibModalTitle" data-i18n="brandLib.title">徽标库</b>
-      <span class="muted" id="brandLibModalCount"></span>
-      <span class="spacer" style="flex:1"></span>
-      <select id="brandLibModalStyle">
-        <option value="official" data-i18n="brand.styleOfficial">官方字标</option>
-        <option value="original" data-i18n="brand.styleOriginal">原创排版</option>
-      </select>
-      <button class="icon-btn" id="brandLibClose" data-i18n-title="btn.close">✕</button>
-    </div>
-    <div class="brandlib-modal-body">
-      <input type="search" id="brandLibModalSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…">
-      <div class="brand-lib-groups" id="brandLibModalGroups"></div>
-      <div class="brand-lib-grid modal" id="brandLibModalGrid"></div>
-      <p class="muted" data-i18n="brandLib.wallHint">在编辑器中选择图层后即可替换徽标</p>
-    </div>
-    <div class="lb-foot">
-      <button class="btn primary" id="brandLibEnter" data-i18n="brandLib.enterEditor">进入编辑器替换</button>
     </div>
   </div>
 </div>

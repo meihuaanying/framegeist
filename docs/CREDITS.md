@@ -9,13 +9,21 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 
 用途：模板缩略图（240px）/ 应用内预览（640px）/ 样张（900px）的分分类演示素材。
 
-## 品牌图标（`templates/assets/brand/`、`lockup/`、`series/`、`web/brand/` 等，v0.7.0/v0.8.0 扩展）
+## 品牌图标（`templates/assets/brand/`、`lockup/`、`series/`、`game/`、`web/brand/` 等，v0.7.0–v0.9.0 扩展）
 
-- **官方字标**：[Simple Icons](https://simpleicons.org)（CC0-1.0）——sony、canon、nikon、
-  fujifilm、leica、hasselblad、panasonic、ricoh、sigma、zeiss、dji、apple、tamron、epson、
-  olympus、pentax、gopro、insta360、sandisk、phaseone、profoto、smallrig、samsung、vivo、
-  oppo、oneplus、huawei、honor、google、motorola、nokia、blackmagicdesign 等（以实际下载成功者为准，
-  清单见 `templates/assets/brand/CREDITS.json` 的 `officialIcons`）。
+- **官方字标**：[Simple Icons](https://simpleicons.org)（CC0-1.0）。v0.9.0 起仅保留官方仍在维护的
+  **19 个图标**（15 彩色 / 4 单色）：nikon、fujifilm、leica、panasonic、epson、insta360、samsung、
+  vivo、oppo、oneplus、huawei、google、motorola、nokia、blackmagicdesign 为彩色；sony、dji、apple、honor
+  官方色即黑/白，保持单色。Simple Icons 已下架的品牌（canon、hasselblad、ricoh、sigma、zeiss、tamron、
+  olympus、pentax、gopro、sandisk、phaseone、profoto、smallrig 等）**不臆造官方色**，一律使用本项目原创排版 mono。
+  清单与官方 hex 锁定于 `tools/brand-colors.json`（`officialColors` 快照同步在
+  `templates/assets/brand/CREDITS.json`）。
+- **彩色判定阈值规则**（v0.9.0）：hex→HSL，`s ≥ 0.18 且 0.10 ≤ l ≤ 0.90` 判为彩色品牌（其主变体直接用官方 hex 绘制）；
+  其余保持黑/白。允许通过 `tools/brand-colors.json` 的 `monoOverride` 名单人工覆盖（当前为空）。
+- **变体矩阵**（v0.9.0）：`brand/<slug>.png` 主变体（彩色品牌=官方色，单色品牌=黑）· `brand/<slug>-mono.png`
+  黑色单色（新增）· `brand/<slug>-light.png` 白色；`lockup/` 同品牌同色；`series/`、`game/` 仅黑/白两版。
+  96px 缩略图 `*/thumbs/<slug>[-mono|-light].png` 与 512px 同源渲染。像素级校验门禁：
+  `node tools/check-brand-colors.mjs`（128/128）。
 - **原创排版字标/ Lockup**（由 FrameGeist 使用 OFL 字体排版渲染，**非官方 Logo 图形**）：
   canon、ricoh、sigma、zeiss、hasselblad、olympus、pentax、tamron、viltrox、laowa、ttartisan、
   tokina、samyang、meike、7artisans、sirui、yongnuo、voigtlander、phaseone、blackmagicdesign 等；
@@ -24,11 +32,11 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 - **游戏主题字标**（原创文字渲染，非官方素材；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
 - **中性「EXIF」标**（v0.8.0）：`brand/exif-auto` 与 `-light` 变体，FrameGeist 原创排版，用于表达式徽标层的占位/卡片标记。
-- **徽标 96px 缩略图**（v0.8.0）：`brand|lockup|series|game/thumbs/*` 由 `tools/gen-brand-assets.mjs` 与 512px 同源渲染，随主题反色。
 - **v0.8.0 补充资产**：`series/leica-apo`（LEICA APO 系列徽章）、`brand|lockup/voigtlander`（福伦达）。
 - **相框线稿**（`templates/assets/frame/`）：camera-body / phone-frame / film-strip，FrameGeist 原创矢量（`tools/gen-frame-assets.mjs`）。
 - **商标声明**：各品牌字标/商标归其权利人所有，本项目仅作**器材信息识别展示**用途，
-  不表示隶属、赞助或背书；原创 lockup 不复制官方图形徽记。详见 `templates/assets/brand/CREDITS.json`。
+  不表示隶属、赞助或背书；原创 lockup 不复制官方图形徽记。彩色化仅使用 Simple Icons 的 hex 元数据与该库单色路径重绘，
+  不引入多色官方插画。详见 `templates/assets/brand/CREDITS.json`。
 
 ## 引擎字体（`templates/assets/fonts/`，v0.8.0：69 faces / 23 families）
 

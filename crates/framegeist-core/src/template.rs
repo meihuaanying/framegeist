@@ -428,22 +428,26 @@ pub struct ImageLayer {
     /// Gap between the attached image and the text (fraction of photo height).
     #[serde(rename = "attachGap", default)]
     pub attach_gap: Option<f64>,
-    /// Badge tint strategy: "auto" (pick black/white by background luminance,
-    /// default) | "light" | "dark".
+    /// Badge tint strategy: "auto" (official color when it has enough
+    /// contrast, otherwise black/white by background luminance; default) |
+    /// "color" (force the official color variant) | "light" | "dark".
     #[serde(default)]
     pub tint: Option<String>,
     /// v0.7.0: fixed corner placement ("top-left" | "top-right" |
     /// "bottom-left" | "bottom-right"); overrides `anchor`/`offset`.
+    /// v0.9.0: "anchor" explicitly pins the layer to its anchor placement,
+    /// overriding any template-level `brandPosition` override.
     #[serde(default)]
     pub corner: Option<String>,
     /// v0.7.0: margin for corner placement, relative to photo height
     /// (0–0.3, default 0.04).
     #[serde(default)]
     pub margin: Option<f64>,
-    /// v0.7.0: badge contrast protection ("auto" | "light" | "dark" |
-    /// "stroke" | "plate"). `auto`/`light`/`dark` switch between the black and
-    /// white asset variants; `stroke`/`plate` add an outline or a translucent
-    /// plate when a busy background would swallow the mark.
+    /// v0.7.0: badge contrast protection ("auto" | "color" | "light" |
+    /// "dark" | "stroke" | "plate"). `auto`/`light`/`dark` switch between the
+    /// official-color/black/white asset variants; `color` keeps the official
+    /// color; `stroke`/`plate` add an outline or a translucent plate when a
+    /// busy background would swallow the mark.
     #[serde(default)]
     pub contrast: Option<String>,
     /// v0.7.0: max width for `@builtin` badges, relative to photo width
@@ -969,9 +973,12 @@ impl TemplateOverrides {
             range_check("overrides.brandScale", s, 0.5, 2.0)?;
         }
         if let Some(c) = &self.brand_contrast {
-            if !matches!(c.as_str(), "auto" | "light" | "dark" | "stroke" | "plate") {
+            if !matches!(
+                c.as_str(),
+                "auto" | "color" | "light" | "dark" | "stroke" | "plate"
+            ) {
                 return Err(Error::SchemaViolation(
-                    "overrides.brandContrast must be auto|light|dark|stroke|plate".into(),
+                    "overrides.brandContrast must be auto|color|light|dark|stroke|plate".into(),
                 ));
             }
         }
@@ -1441,10 +1448,10 @@ fn validate_layer(layer: &Layer, i: usize) -> Result<()> {
             if let Some(c) = &image.corner {
                 if !matches!(
                     c.as_str(),
-                    "top-left" | "top-right" | "bottom-left" | "bottom-right"
+                    "anchor" | "top-left" | "top-right" | "bottom-left" | "bottom-right"
                 ) {
                     return Err(Error::SchemaViolation(format!(
-                        "layers[{i}].corner must be top-left|top-right|bottom-left|bottom-right"
+                        "layers[{i}].corner must be anchor|top-left|top-right|bottom-left|bottom-right"
                     )));
                 }
             }
@@ -1452,9 +1459,12 @@ fn validate_layer(layer: &Layer, i: usize) -> Result<()> {
                 range_check(&format!("layers[{i}].margin"), m, 0.0, 0.3)?;
             }
             if let Some(c) = &image.contrast {
-                if !matches!(c.as_str(), "auto" | "light" | "dark" | "stroke" | "plate") {
+                if !matches!(
+                    c.as_str(),
+                    "auto" | "color" | "light" | "dark" | "stroke" | "plate"
+                ) {
                     return Err(Error::SchemaViolation(format!(
-                        "layers[{i}].contrast must be auto|light|dark|stroke|plate"
+                        "layers[{i}].contrast must be auto|color|light|dark|stroke|plate"
                     )));
                 }
             }
@@ -1629,9 +1639,9 @@ fn validate_image_attach(
         }
     }
     if let Some(tint) = &image.tint {
-        if !matches!(tint.as_str(), "auto" | "light" | "dark") {
+        if !matches!(tint.as_str(), "auto" | "color" | "light" | "dark") {
             return Err(Error::SchemaViolation(format!(
-                "layers[{}].tint must be auto|light|dark",
+                "layers[{}].tint must be auto|color|light|dark",
                 image.id
             )));
         }

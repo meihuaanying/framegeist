@@ -524,3 +524,12 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
   6. **徽标库性能**：170+ 张 96px 缩略图 + 墙卡 175 个品牌标记全部走 `loading="lazy"` + `content-visibility: auto`；库/弹层/墙标记复用同一分组清单（`web/brand/index.json` v2），不重复请求 512px 资产。
   7. **默认尺寸提升的回归面**：引擎下限 5%/默认 4.5%/最大宽 38% 改变输出像素 → 视觉基线 **有意重生成**（384 项，原因：字号与徽标默认变化），金标未受影响（CLI 金标用例显式声明尺寸）。
   8. **发布通道延续 API 路径**：本机 `github.com:443` 仍被阻断；`main` 经 Git Data API 以远端 `ac24ffa` 为父提交推送（本地 diff 基准用内容等价的 `664cc20` 计算条目），tag/Release 由 CI 六资产流水线产出，说明用 `gh release edit --notes-file` 注入。
+
+- **2026-09-22 ｜ v0.9.0 发布（彩色徽标 + 画布直操 + 五 Tab 侧边栏 + 徽标库集成） ｜** 按 `docs/V0.9.0-CONSTRAINTS.md`（三轮 grill，24 项决策）执行到发布。发现与决策：
+  1. **Simple Icons 大幅下架**：Canon/Hasselblad/Ricoh/Sigma/Zeiss/Tamron/Olympus/Pentax/GoPro/SanDisk/Phase One/Profoto/SmallRig 均不在库中 → 官方图标缩至 **19 个（15 彩 / 4 单）**；已下架品牌不臆造官方色，继续原创排版 mono。抓取仅 `api.github.com` Contents API 可用（`raw.githubusercontent` 本机 000）。
+  2. **彩色保留与旧 autoTint 的兼容口径**：官方彩色在局部对比 ≥3:1 时保留，低于则按背景亮度回退黑白变体；CLI 的 v0.2 autoTint 测试按新语义重写（保留「低对比暗底回退 `-light`」断言并新增「≥3:1 暗底保留官方色」断言），不动旧用例名以免丢失回归覆盖。
+  3. **图层字段优先实现口径**：`layer.contrast > override.brandContrast`；`corner:"anchor"` 哨兵显式压过模板级 `brandPosition`；`opacity` 仅显式非 1.0 优先；`size.height` 仍叠加模板级 `brandScale`（契约 §3.6 已记录，改语义需同步引擎）。
+  4. **M1 守卫的一个盲点**：`apply-v090-typography.mjs` 的 1.15/1.0 回退会被 6% 下限重新钳回 0.06 → `borderless-lowleft-pair-01` 不可解、按守卫语义保留原 0.045（与 lens 文本重叠 2.3%，为既有近似）；报告原本只收录有最终变更的模板，已在 `typography-report.json` 的 `summary.exceptions` 显式补记全量分布与唯一例外。
+  5. **穿透点击 E2E 的两处竞态**：① 模板切换后 24MP 重渲未完成时 `S.boxes` 仍是上一模板（固定 sleep 900ms 不够）→ `__fgEditor.debug()` 增 `boxes`/`stageReady` 只读字段并轮询；② 首次选中触发 `panIntoView()`（设计行为）改变坐标映射 → 第二次点击按同一 canvas 坐标重算 client 点。两处修复均在探针侧，断言数不减。
+  6. **自动平移的既有坐标口径**：`panIntoView()` 已含舞台内偏移的完整模型（本轮未改实现）；实测选中大幅超出视口的图层时会居中，属「选中移入视野」的预期行为。
+  7. **发布通道延续**：`github.com` 仍阻断，`main` 经 Git Data API 推送（排除 workflow），tag/Release/Pages 由 CI 产出；桌面端本地重建交付。

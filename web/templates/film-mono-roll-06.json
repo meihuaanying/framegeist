@@ -6,7 +6,7 @@
       "zh": "机型卷轴",
       "en": "Mono Roll"
     },
-    "version": "1.2.0",
+    "version": "1.3.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -203,7 +203,7 @@
       },
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.045
+        "height": 0.06
       },
       "attachTo": "model",
       "attachGap": 0.012

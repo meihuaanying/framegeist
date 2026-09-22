@@ -23,6 +23,103 @@
     "nokia",
     "blackmagicdesign"
   ],
+  "officialColors": {
+    "sony": {
+      "hex": "#FFFFFF",
+      "colorful": false,
+      "title": "Sony"
+    },
+    "nikon": {
+      "hex": "#FFE100",
+      "colorful": true,
+      "title": "Nikon"
+    },
+    "fujifilm": {
+      "hex": "#FB0020",
+      "colorful": true,
+      "title": "Fujifilm"
+    },
+    "leica": {
+      "hex": "#E20612",
+      "colorful": true,
+      "title": "Leica"
+    },
+    "panasonic": {
+      "hex": "#0049AB",
+      "colorful": true,
+      "title": "Panasonic"
+    },
+    "dji": {
+      "hex": "#000000",
+      "colorful": false,
+      "title": "DJI"
+    },
+    "apple": {
+      "hex": "#000000",
+      "colorful": false,
+      "title": "Apple"
+    },
+    "epson": {
+      "hex": "#003399",
+      "colorful": true,
+      "title": "Epson"
+    },
+    "insta360": {
+      "hex": "#FFEE00",
+      "colorful": true,
+      "title": "Insta360"
+    },
+    "samsung": {
+      "hex": "#1428A0",
+      "colorful": true,
+      "title": "Samsung"
+    },
+    "vivo": {
+      "hex": "#415FFF",
+      "colorful": true,
+      "title": "vivo"
+    },
+    "oppo": {
+      "hex": "#2D683D",
+      "colorful": true,
+      "title": "OPPO"
+    },
+    "oneplus": {
+      "hex": "#F5010C",
+      "colorful": true,
+      "title": "OnePlus"
+    },
+    "huawei": {
+      "hex": "#FF0000",
+      "colorful": true,
+      "title": "Huawei"
+    },
+    "honor": {
+      "hex": "#000000",
+      "colorful": false,
+      "title": "Honor"
+    },
+    "google": {
+      "hex": "#4285F4",
+      "colorful": true,
+      "title": "Google"
+    },
+    "motorola": {
+      "hex": "#E1140A",
+      "colorful": true,
+      "title": "Motorola"
+    },
+    "nokia": {
+      "hex": "#005AFF",
+      "colorful": true,
+      "title": "Nokia"
+    },
+    "blackmagicdesign": {
+      "hex": "#FFA200",
+      "colorful": true,
+      "title": "Blackmagic Design"
+    }
+  },
   "wordmarks": [
     {
       "slug": "canon",
@@ -175,6 +272,8 @@
     "yongnuo",
     "voigtlander"
   ],
-  "variants": "512px (assets) + 96px thumbs (web library)",
+  "variants": "primary (official color when colorful) + -mono + -light; 512px + 96px thumbs",
+  "colorRule": "isColorful: s >= 0.18 && 0.10 <= l <= 0.90 (hex->HSL)",
+  "colorSource": "simple-icons/simple-icons/data/simple-icons.json@develop",
   "neutral": "brand/exif-auto (original EXIF marker for expression-based templates)"
 }

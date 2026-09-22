@@ -164,7 +164,7 @@
   "anchor": "bottom-left",
   "offset": { "x": 0.02, "y": -0.05 },
   "asset": "@builtin/brand/{exif.brand_slug}",   // 支持 {exif.<key>} 占位
-  "size": { "height": 0.045 },                    // 相对照片高度（优先）；或 width；v0.8 默认 4.5%（下限 5% 且 ≥18px）
+  "size": { "height": 0.065 },                    // 相对照片高度（优先）；或 width；v0.9 默认 6.5%（下限 6% 且 ≥18px）
   "opacity": 1.0,
   "attachTo": "primary",                          // 贴附到文本层首行左侧（水印行前置图标）
   "attachGap": 0.01                               // 贴附间距（相对照片高度）
@@ -172,7 +172,9 @@
 ```
 
 - **asset 解析顺序**：调用方内存资产表（`@user/logo`、`@user/background` 等）→ `@builtin/*`（`brand/<slug>.png`）→ `assets/*`（模板包内相对路径）。**解析失败 = 留白，不显示替代图标**（v0.2.0 决策）。
-- **v0.8 徽标尺寸**：引擎下限 5%（且 ≥18px）、默认层高 4.5%、最大宽 38%（模板内既有徽标层高 <0.045 已批量抬到 ≥0.045）。
+- **v0.9 徽标尺寸**：引擎下限 6%（且 ≥18px）、默认层高 6.5%、最大宽 44%（模板内既有徽标层已批量 ×1.3，上限 0.12，<0.06 抬到 0.06）。
+- **变体与回退链（v0.9）**：`@builtin/brand/<slug>` 主变体（彩色品牌=官方 hex 彩色，单色品牌=黑）；`tint:"auto"`（默认）在局部背景对比不足以 3:1（WCAG 1.4.11 非文本对比）时回退 `-mono`/`-light`（按背景亮度选择），仍不足追加描边/底板；`tint:"color"` **强制官方彩色**；`tint:"light"|"dark"` 固定黑白变体。`@builtin/lockup/*` 同链同色；`@builtin/series|game/*` 仅黑白。
+- **图层字段**：`corner`（`top-left|top-right|bottom-left|bottom-right` 固定角位，覆盖 `anchor`/`offset`；v0.9 新增 `"anchor"` 哨兵——显式回到锚点定位并压过模板级 `brandPosition`）、`margin`（角位边距，相对照片高，0–0.3，默认 0.04）、`contrast`（`auto|color|light|dark|stroke|plate` 对比保护策略）、`maxWidth`/`minHeight`（内置徽标宽/高钳制）、`z`（显式叠放层级，低者先绘）。**优先级：图层字段 > 模板级 override > 模板 JSON**。
 - **占位表达式**：`{exif.brand_slug}` / `{exif.lens_slug}`（品牌/镜头映射见 §8）。
 - `attachTo` 必须在同一模板内引用存在的文本层 id（加载时校验）；贴附位置 = 文本首行左侧，垂直居中。
 - `showLogo=false` 覆盖时，`@builtin/brand/`、`@builtin/lens/` 资产层整体跳过。
@@ -397,13 +399,13 @@
 
 **自动对比度（v0.3.0）**：所有文本层在绘制前采样文字区域背景平均亮度（WCAG 相对亮度）；模板色对比度 < 2.5:1 时自动切换为黑/白较优者；`color:"auto"` 强制自动；用户手动覆盖色不受自动修改（UI 提示对比风险）。
 
-**徽章自适应（v0.3.0）**：`@builtin/brand|series|game/*` 图片层默认 `tint:"auto"`——按落点区域背景亮度自动选用 `-light` 或深色变体；`tint:"light"|"dark"` 可固定。
+**徽章自适应（v0.3.0 起，v0.9.0 彩色化）**：`@builtin/brand|lockup/*` 图片层默认 `tint:"auto"`——局部背景足以支撑官方彩色（对比 ≥3:1，WCAG 1.4.11）时保留官方色；否则按背景亮度回退 `-mono`/`-light` 黑白变体；花底两条都不到 4.5:1 时追加描边/底板。`tint:"color"` 强制官方彩色；`tint:"light"|"dark"` 可固定黑白。`@builtin/series|game/*` 保持单色。
 
 **@builtin/frame/\***：内置原创线稿素材（camera-body / phone-frame / film-strip，黑/浅两版，由 `tools/gen-frame-assets.mjs` 生成）。
 
 `exif.brand_slug`：Make 优先、Model 兜底，忽略大小写的子串匹配（sony/nikon/canon/fujifilm/leica/hasselblad/panasonic/ricoh/sigma/zeiss/dji/xiaomi/apple/olympus/pentax/epson/insta360/tamron）。
 `exif.lens_slug`：LensModel 前缀/子串（`FE `→sony、`XF/XC`→fujifilm、`RF/EF`→canon、`NIKKOR`→nikon、`DG DN`→sigma、`SUMMILUX/SUMMICRON/NOCTILUX/ELMAR`→leica、`LUMIX`→panasonic、`BATIS/TOUIT`→zeiss、`ZUIKO`→olympus、`TAMRON`、`HASSELBLAD`）。
-内置图标：`templates/assets/brand/<slug>.png`（Simple Icons CC0 + 自绘字标，见 `brand/CREDITS.json`），暗色背景用 `<slug>-light.png`。
+内置图标：`templates/assets/brand/<slug>.png`（主变体：彩色品牌为官方 hex 彩色、单色品牌为黑；Simple Icons CC0 + 自绘字标，见 `brand/CREDITS.json`），`<slug>-mono.png`（黑）/`<slug>-light.png`（白）为回退变体；官方色与判定清单锁在 `tools/brand-colors.json`。
 
 ## 5. `fields`
 

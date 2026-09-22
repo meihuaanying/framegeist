@@ -1,439 +1,525 @@
 {
-  "version": 2,
-  "generatedAt": "2026-09-20T05:12:48.027Z",
+  "version": 3,
+  "generatedAt": "2026-09-21T02:58:21.749Z",
   "neutral": "exif-auto",
+  "colorRule": "isColorful: s >= 0.18 && 0.10 <= l <= 0.90 (hex->HSL)",
   "groups": {
     "camera": [
       {
         "slug": "apple",
         "label": "Apple",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "blackmagicdesign",
         "label": "Blackmagic",
-        "official": true
+        "official": true,
+        "color": "#FFA200"
       },
       {
         "slug": "canon",
         "label": "Canon",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "dji",
         "label": "DJI",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "epson",
         "label": "Epson",
-        "official": true
+        "official": true,
+        "color": "#003399"
       },
       {
         "slug": "fujifilm",
         "label": "Fujifilm",
-        "official": true
+        "official": true,
+        "color": "#FB0020"
       },
       {
         "slug": "google",
         "label": "Google",
-        "official": true
+        "official": true,
+        "color": "#4285F4"
       },
       {
         "slug": "hasselblad",
         "label": "Hasselblad",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "honor",
         "label": "HONOR",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "huawei",
         "label": "Huawei",
-        "official": true
+        "official": true,
+        "color": "#FF0000"
       },
       {
         "slug": "insta360",
         "label": "Insta360",
-        "official": true
+        "official": true,
+        "color": "#FFEE00"
       },
       {
         "slug": "leica",
         "label": "Leica",
-        "official": true
+        "official": true,
+        "color": "#E20612"
       },
       {
         "slug": "motorola",
         "label": "Motorola",
-        "official": true
+        "official": true,
+        "color": "#E1140A"
       },
       {
         "slug": "nikon",
         "label": "Nikon",
-        "official": true
+        "official": true,
+        "color": "#FFE100"
       },
       {
         "slug": "nokia",
         "label": "Nokia",
-        "official": true
+        "official": true,
+        "color": "#005AFF"
       },
       {
         "slug": "olympus",
         "label": "OM System",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "oneplus",
         "label": "OnePlus",
-        "official": true
+        "official": true,
+        "color": "#F5010C"
       },
       {
         "slug": "oppo",
         "label": "OPPO",
-        "official": true
+        "official": true,
+        "color": "#2D683D"
       },
       {
         "slug": "panasonic",
         "label": "Lumix",
-        "official": true
+        "official": true,
+        "color": "#0049AB"
       },
       {
         "slug": "pentax",
         "label": "Pentax",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "phaseone",
         "label": "Phase One",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "ricoh",
         "label": "Ricoh",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "samsung",
         "label": "Samsung",
-        "official": true
+        "official": true,
+        "color": "#1428A0"
       },
       {
         "slug": "sigma",
         "label": "Sigma",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sony",
         "label": "Sony",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "tamron",
         "label": "Tamron",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "vivo",
         "label": "vivo",
-        "official": true
+        "official": true,
+        "color": "#415FFF"
       },
       {
         "slug": "zeiss",
         "label": "Zeiss",
-        "official": false
+        "official": false,
+        "color": null
       }
     ],
     "lens": [
       {
         "slug": "7artisans",
         "label": "7Artisans",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "apple",
         "label": "Apple",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "blackmagicdesign",
         "label": "Blackmagic",
-        "official": true
+        "official": true,
+        "color": "#FFA200"
       },
       {
         "slug": "canon",
         "label": "Canon",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "dji",
         "label": "DJI",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "epson",
         "label": "Epson",
-        "official": true
+        "official": true,
+        "color": "#003399"
       },
       {
         "slug": "fujifilm",
         "label": "Fujifilm",
-        "official": true
+        "official": true,
+        "color": "#FB0020"
       },
       {
         "slug": "google",
         "label": "Google",
-        "official": true
+        "official": true,
+        "color": "#4285F4"
       },
       {
         "slug": "hasselblad",
         "label": "Hasselblad",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "honor",
         "label": "HONOR",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "huawei",
         "label": "Huawei",
-        "official": true
+        "official": true,
+        "color": "#FF0000"
       },
       {
         "slug": "insta360",
         "label": "Insta360",
-        "official": true
+        "official": true,
+        "color": "#FFEE00"
       },
       {
         "slug": "laowa",
         "label": "Laowa",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "leica",
         "label": "Leica",
-        "official": true
+        "official": true,
+        "color": "#E20612"
       },
       {
         "slug": "meike",
         "label": "Meike",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "motorola",
         "label": "Motorola",
-        "official": true
+        "official": true,
+        "color": "#E1140A"
       },
       {
         "slug": "nikon",
         "label": "Nikon",
-        "official": true
+        "official": true,
+        "color": "#FFE100"
       },
       {
         "slug": "nokia",
         "label": "Nokia",
-        "official": true
+        "official": true,
+        "color": "#005AFF"
       },
       {
         "slug": "olympus",
         "label": "OM System",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "oneplus",
         "label": "OnePlus",
-        "official": true
+        "official": true,
+        "color": "#F5010C"
       },
       {
         "slug": "oppo",
         "label": "OPPO",
-        "official": true
+        "official": true,
+        "color": "#2D683D"
       },
       {
         "slug": "panasonic",
         "label": "Lumix",
-        "official": true
+        "official": true,
+        "color": "#0049AB"
       },
       {
         "slug": "pentax",
         "label": "Pentax",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "phaseone",
         "label": "Phase One",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "ricoh",
         "label": "Ricoh",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "samsung",
         "label": "Samsung",
-        "official": true
+        "official": true,
+        "color": "#1428A0"
       },
       {
         "slug": "samyang",
         "label": "Samyang",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sigma",
         "label": "Sigma",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sirui",
         "label": "Sirui",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sony",
         "label": "Sony",
-        "official": true
+        "official": true,
+        "color": null
       },
       {
         "slug": "tamron",
         "label": "Tamron",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "tokina",
         "label": "Tokina",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "ttartisan",
         "label": "TTArtisan",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "viltrox",
         "label": "Viltrox",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "vivo",
         "label": "vivo",
-        "official": true
+        "official": true,
+        "color": "#415FFF"
       },
       {
         "slug": "voigtlander",
         "label": "Voigtlander",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "yongnuo",
         "label": "Yongnuo",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "zeiss",
         "label": "Zeiss",
-        "official": false
+        "official": false,
+        "color": null
       }
     ],
     "series": [
       {
         "slug": "sony-gm",
         "label": "GM",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sony-g",
         "label": "G",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "canon-l",
         "label": "L",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "canon-rf-l",
         "label": "RF L",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "nikon-s",
         "label": "S",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sigma-art",
         "label": "ART",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sigma-dgdn",
         "label": "DG DN",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "sigma-apo",
         "label": "APO",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "hasselblad-xcd",
         "label": "XCD",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "fujifilm-xf",
         "label": "XF",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "zeiss-batis",
         "label": "BATIS",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "leica-apo",
         "label": "APO",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "tamron-sp",
         "label": "SP",
-        "official": false
+        "official": false,
+        "color": null
       }
     ],
     "game": [
       {
         "slug": "genshin",
         "label": "GENSHIN",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "zzz",
         "label": "ZZZ",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "honkai",
         "label": "HONKAI",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "arknights",
         "label": "ARKNIGHTS",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "wwmeet",
         "label": "WWMEET",
-        "official": false
+        "official": false,
+        "color": null
       },
       {
         "slug": "wukong",
         "label": "WUKONG",
-        "official": false
+        "official": false,
+        "color": null
       }
     ]
   }

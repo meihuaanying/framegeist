@@ -4,7 +4,6 @@
 // reaches the app through window.__fg (assigned by app.js before boot).
 const LS_TPLEDITS = "fg-tpl-edits-v1";
 const LS_UI = "fg-tpl-ui-v1";
-const LS_TIER = "fg-panel-tier";
 const MAX_HISTORY = 60;
 const COALESCE_MS = 700;
 
@@ -16,7 +15,6 @@ const S = {
   cropAspect: "free",
   cropTarget: "frame",   // frame (overrides.crop) | free (item.crop)
   cropContainer: null,   // local crop coordinate box (px) while cropping
-  tier: localStorage.getItem(LS_TIER) || "simple",
   drag: null,
   freeSel: null,
   freeSelB: null,        // shift-click second free item (swap)
@@ -211,13 +209,37 @@ function layerLabel(layer) {
   // template structure (and the layer id) stays untouched.
   const tid = fg()?.state?.templateId;
   if (tid && uiOf(tid).labels[layer.id]) return uiOf(tid).labels[layer.id];
-  if (layer.type === "text" && layer.content?.[0]?.expr) {
-    const e = layer.content[0].expr;
-    const m = e.match(/^'([^']{1,20})'/);
-    if (m) return m[1];
-    return e.slice(0, 22);
+  if (layer.type === "image" && BADGE_ASSET_RE.test(layer.asset ?? "")) {
+    const m = /@(?:builtin\/(?:brand|lockup|series|game)|user)\/([a-z0-9-]+)/.exec(layer.asset ?? "");
+    if (m && !m[1].startsWith("{")) {
+      const label = fg()?.brandLabel?.(m[1]) ?? m[1];
+      return `${t("layer.role.badge")} · ${label}`;
+    }
+    return t("layer.role.badge");
   }
-  return layer.id;
+  return layerRoleName(layer) ?? layer.id;
+}
+/// v0.9.0: localized role-based display name (raw content stays in the title).
+function layerRoleName(layer) {
+  switch (layer.type) {
+    case "group": return t("layer.role.group");
+    case "shape": return layer.shape === "line" ? t("layer.role.divider") : t("layer.role.shape");
+    case "palette": return t("layer.role.palette");
+    case "calendar": return t("layer.role.calendar");
+    case "image": return t("layer.role.image");
+    case "text": return textRoleName(layer);
+    default: return null;
+  }
+}
+function textRoleName(layer) {
+  const text = (layer.content ?? []).map((i) => `${i.expr ?? ""} ${i.fallback ?? ""}`).join(" ");
+  if (/exif\.fuji/.test(text)) return t("layer.role.fuji");
+  if (/\bexif\.(model|model_pretty)\b/.test(text)) return t("layer.role.model");
+  if (/\bexif\.lens\b/.test(text)) return t("layer.role.lens");
+  if (/date\(|\bexif\.datetime\b/.test(text)) return t("layer.role.date");
+  if (/\bexif\.(focal|aperture|shutter|iso)\b|fmt\(/.test(text)) return t("layer.role.params");
+  if (/\bexif\.(gps|weekday)/.test(text)) return t("layer.role.info");
+  return t("layer.role.text");
 }
 function allLayers(layers, out = [], depth = 0) {
   for (const l of layers) {
@@ -324,7 +346,7 @@ function buildLayersPanel() {
       select(layer.id, e.shiftKey);
     };
     const nameEl = row.querySelector(".lname");
-    nameEl.title = t("layers.rename");
+    nameEl.title = `${t("layers.rename")} · ${layer.id}`;
     nameEl.ondblclick = (e) => { e.stopPropagation(); beginRename(layer, nameEl); };
     box.appendChild(row);
   }
@@ -401,6 +423,11 @@ function select(id, additive = false) {
   buildLayersPanel();
   buildPropsPanel();
   drawOverlay();
+  // v0.9.0: bring the selected box into view so handles are reachable.
+  if (S.selected.has(id)) {
+    const b = S.boxes.find((x) => x.id === id);
+    if (b) fg()?.panIntoView?.(b);
+  }
 }
 function selectedLayers() {
   return [...S.selected].map((id) => findLayer(id)).filter(Boolean);
@@ -503,6 +530,7 @@ function drawOverlay() {
       if (b.rotation) box.style.transform = `rotate(${b.rotation}deg)`;
       ov.appendChild(box);
       addHandles(ov, b, c);
+      if (S.selected.size === 1) drawSelToolbar(ov, c);
     } else if (!S.cropMode) {
       const dim = document.createElement("div");
       dim.className = "box dim";
@@ -514,17 +542,69 @@ function drawOverlay() {
   if (S.cropMode) drawCropRect(ov, 0, 0, r.width, r.height);
 }
 function addHandles(ov, box, c) {
-  const mk = (hx, hy, kind) => {
+  const hit = findLayer(box.id);
+  const rotatable = hit && (hit.layer.type === "text" || hit.layer.type === "shape");
+  const mk = (hx, hy, kind, corner) => {
     const h = document.createElement("div");
-    h.className = "handle" + (kind === "rot" ? " rot" : "");
+    h.className = "handle" + (kind === "rot" ? " rot" : "") + (corner ? ` h-${corner}` : "");
     h.style.left = `${hx}px`; h.style.top = `${hy}px`;
     h.dataset.id = box.id; h.dataset.kind = kind;
-    h.style.pointerEvents = "auto";
+    if (corner) h.dataset.corner = corner;
+    h.title = kind === "rot" ? t("layers.rotate") : t("layers.scale");
     ov.appendChild(h);
     return h;
   };
-  mk(c.x + c.w, c.y + c.h, "scale");
-  mk(c.x + c.w / 2, c.y, "rot");
+  // v0.9.0: four corner scale handles (proportional) + a rotation handle.
+  mk(c.x, c.y, "scale", "nw");
+  mk(c.x + c.w, c.y, "scale", "ne");
+  mk(c.x, c.y + c.h, "scale", "sw");
+  mk(c.x + c.w, c.y + c.h, "scale", "se");
+  if (rotatable) mk(c.x + c.w / 2, c.y - 26, "rot", "n");
+}
+/// v0.9.0: floating selection toolbar (delete/duplicate/lock/z-order).
+function drawSelToolbar(ov, c) {
+  const tb = document.createElement("div");
+  tb.className = "sel-toolbar";
+  const top = `${Math.max(4, c.y - 40)}px`;
+  const below = c.y - 40 < 4;
+  tb.style.left = `${c.x + c.w / 2}px`;
+  tb.style.top = below ? `${c.y + c.h + 40}px` : top;
+  const btn = (act, key, glyph) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.act = act;
+    b.title = t(key);
+    b.setAttribute("aria-label", t(key));
+    b.textContent = glyph;
+    return b;
+  };
+  tb.appendChild(btn("delete", "layers.delete", "✕"));
+  tb.appendChild(btn("dup", "layers.duplicate", "⧉"));
+  tb.appendChild(btn("top", "layers.top", "⤒"));
+  tb.appendChild(btn("bottom", "layers.bottom", "⤓"));
+  const locked = uiOf(fg().state.templateId).locked;
+  const id = [...S.selected][0];
+  tb.appendChild(btn("lock", "layers.lock", locked.includes(id) ? "🔒" : "🔓"));
+  tb.addEventListener("pointerdown", (e) => e.stopPropagation());
+  tb.addEventListener("click", (e) => {
+    const act = e.target?.dataset?.act;
+    if (!act) return;
+    e.stopPropagation();
+    if (act === "delete") {
+      edit((tpl) => { for (const sid of S.selected) removeLayer(tpl.layers, sid); });
+      S.selected.clear();
+    } else if (act === "dup") {
+      duplicateSelected();
+    } else if (act === "top") {
+      reorder(-1, true);
+    } else if (act === "bottom") {
+      reorder(1, true);
+    } else if (act === "lock") {
+      toggleLocked(id);
+    }
+    buildLayersPanel(); buildPropsPanel(); drawOverlay();
+  });
+  ov.appendChild(tb);
 }
 function drawCropRect(ov, x0, y0, w0, h0) {
   const c = S.crop ?? { x: 0.08, y: 0.08, w: 0.84, h: 0.84 };
@@ -570,6 +650,12 @@ function beginDrag(kind, id, ev) {
   };
   d.scaleX = d.visibleW / r.nw;
   d.scaleY = d.visibleH / r.nh;
+  // v0.9.0: proportional corner scaling measures the pointer distance from the
+  // box centre in screen space, so all four corners behave the same way.
+  const cx = visible.left + ((b.x + b.w / 2) / r.nw) * visible.width;
+  const cy = visible.top + ((b.y + b.h / 2) / r.nh) * visible.height;
+  d.centerClient = { x: cx, y: cy };
+  d.startDist = Math.max(8, Math.hypot(ev.clientX - cx, ev.clientY - cy));
   S.drag = d;
   window.addEventListener("pointermove", onDragMove);
   window.addEventListener("pointerup", endDrag, { once: true });
@@ -596,19 +682,19 @@ function onDragMove(ev) {
     return;
   }
   if (d.kind === "scale") {
-    const nx = (ev.clientX - d.startX) / d.scaleX + d.startW;
-    const ny = (ev.clientY - d.startY) / d.scaleY + d.startH;
-    const factor = Math.max(nx / Math.max(1, d.startW), ny / Math.max(1, d.startH));
+    const dist = Math.hypot(ev.clientX - d.centerClient.x, ev.clientY - d.centerClient.y);
+    const factor = Math.max(0.05, dist / d.startDist);
+    const s = d.startSize;
     edit((tpl) => {
       const hit = findLayer(d.id, tpl.layers);
       if (!hit) return;
       const l = hit.layer;
-      if (l.type === "text") l.font.size = clamp(l.font.size * factor, 0.002, 0.5);
-      else if (l.type === "calendar") l.size = clamp(l.size * factor, 0.05, 0.6);
+      if (l.type === "text") l.font.size = clamp((s.font ?? l.font.size) * factor, 0.002, 0.5);
+      else if (l.type === "calendar") l.size = clamp((s.size ?? l.size) * factor, 0.05, 0.6);
       else if (l.type === "shape" || l.type === "image" || l.type === "palette") {
         l.size ??= {};
-        const w = l.size.width ?? (d.startW / refW);
-        const h = l.size.height ?? (d.startH / refH);
+        const w = s.width ?? (d.startW / r.nw);
+        const h = s.height ?? (d.startH / r.nh);
         l.size.width = clamp(w * factor, 0.001, 1);
         l.size.height = clamp(h * factor, 0.0005, 1);
       }
@@ -622,7 +708,9 @@ function onDragMove(ev) {
     const snapped = Math.abs(((ang % 90) + 90) % 90) < 4 ? Math.round(ang / 90) * 90 : ang;
     edit((tpl) => {
       const hit = findLayer(d.id, tpl.layers);
-      if (hit && "rotation" in hit.layer) hit.layer.rotation = Math.round(snapped * 10) / 10;
+      if (hit && (hit.layer.type === "text" || hit.layer.type === "shape")) {
+        hit.layer.rotation = Math.round(snapped * 10) / 10;
+      }
     }, { history: false });
   }
 }
@@ -667,9 +755,17 @@ function endDrag() {
   window.removeEventListener("pointermove", onDragMove);
   const ov = ensureOverlay();
   if (ov) guidesClear(ov);
-  const wasDragging = S.drag && S.drag.kind;
+  const drag = S.drag;
   S.drag = null;
-  if (wasDragging) commitNow();
+  if (drag?.kind) {
+    commitNow();
+    // v0.9.0: keep the (re)sized selection reachable — pan it back into view.
+    const id = drag.id;
+    setTimeout(() => {
+      const b = S.boxes.find((x) => x.id === id);
+      if (b) fg()?.panIntoView?.(b);
+    }, 250);
+  }
 }
 
 /* ---------------------------------------------------------- property panel */
@@ -686,7 +782,7 @@ function buildPropsPanel() {
   grid.className = "props-grid";
   body.appendChild(grid);
   if (sel.length > 1) {
-    addDual(grid, "offset.x", sel[0].layer.offset?.x ?? 0, -1, 1, 0.005, (v) => {
+    addDual(grid, "props.offsetX", sel[0].layer.offset?.x ?? 0, -1, 1, 0.005, (v) => {
       edit((tpl) => sel.forEach(({ layer }) => {
         const hit = findLayer(layer.id, tpl.layers);
         if (hit) hit.layer.offset = { ...(hit.layer.offset ?? {}), x: v };
@@ -703,17 +799,22 @@ function buildPropsPanel() {
     const hit = findLayer(layer.id, tpl.layers);
     if (hit) fn(hit.layer);
   });
-  addDual(grid, "offset.x", layer.offset?.x ?? 0, -1, 1, 0.005, (v) => mutate((l) => { l.offset = { ...(l.offset ?? {}), x: v }; }));
-  addDual(grid, "offset.y", layer.offset?.y ?? 0, -1, 1, 0.005, (v) => mutate((l) => { l.offset = { ...(l.offset ?? {}), y: v }; }));
-  addDual(grid, "z", layer.z ?? 0, -20, 20, 1, (v) => mutate((l) => { l.z = Math.round(v); }), true);
+    addDual(grid, "props.offsetX", layer.offset?.x ?? 0, -1, 1, 0.005, (v) => mutate((l) => { l.offset = { ...(l.offset ?? {}), x: v }; }));
+  addDual(grid, "props.offsetY", layer.offset?.y ?? 0, -1, 1, 0.005, (v) => mutate((l) => { l.offset = { ...(l.offset ?? {}), y: v }; }));
+  addDual(grid, "props.z", layer.z ?? 0, -20, 20, 1, (v) => mutate((l) => { l.z = Math.round(v); }), true);
   if (layer.type === "text" || layer.type === "shape") {
-    addDual(grid, "rotation", layer.rotation ?? 0, -180, 180, 0.5, (v) => mutate((l) => { l.rotation = v; }));
+    addDual(grid, "props.rotation", layer.rotation ?? 0, -180, 180, 0.5, (v) => mutate((l) => { l.rotation = v; }));
   }
-  addDual(grid, "opacity", layer.opacity ?? 1, 0, 1, 0.01, (v) => mutate((l) => { l.opacity = v; }));
+  if (!(layer.type === "image" && isBadgeLayer(layer))) {
+    addDual(grid, "props.opacity", layer.opacity ?? 1, 0, 1, 0.01, (v) => mutate((l) => { l.opacity = v; }));
+  }
   if (layer.type === "text") buildTextProps(grid, layer, mutate, cur);
   if (layer.type === "shape") buildShapeProps(grid, layer, mutate);
   if (layer.type === "calendar") buildCalendarProps(grid, layer, mutate);
-  if (layer.type === "image") buildImageProps(grid, layer, mutate);
+  if (layer.type === "image") {
+    if (isBadgeLayer(layer)) buildBadgeProps(grid, layer, mutate);
+    else buildImageProps(grid, layer, mutate);
+  }
   if (layer.type === "palette") buildPaletteProps(grid, layer, mutate);
 }
 
@@ -721,7 +822,7 @@ function propRow(grid, label) {
   const row = document.createElement("div");
   row.className = "field";
   const lab = document.createElement("label");
-  lab.innerHTML = `<span>${escapeHtml(label)}</span>`;
+  lab.innerHTML = `<span>${escapeHtml(t(label))}</span>`;
   const holder = document.createElement("div");
   holder.className = "dual";
   row.appendChild(lab);
@@ -781,7 +882,7 @@ function addCheck(grid, label, checked, onChange) {
   inp.checked = checked;
   inp.onchange = () => { onChange(inp.checked); };
   const span = document.createElement("span");
-  span.textContent = label;
+  span.textContent = t(label);
   row.appendChild(inp); row.appendChild(span);
   grid.appendChild(row);
   return inp;
@@ -880,32 +981,32 @@ function buildExifFieldChips(grid, layer) {
 }
 
 function buildTextProps(grid, layer, mutate, cur) {
-  addDual(grid, "font.size", layer.font?.size ?? 0.02, 0.002, 0.5, 0.001, (v) => mutate((l) => { l.font.size = v; }));
-  addDual(grid, "letterSpacing", layer.letterSpacing ?? 0, -0.05, 0.5, 0.005, (v) => mutate((l) => { l.letterSpacing = v; }));
-  addDual(grid, "lineHeight", layer.lineHeight ?? 1.3, 0.5, 4, 0.05, (v) => mutate((l) => { l.lineHeight = v; }));
-  addSelect(grid, "align", layer.align ?? "left", [["left", "居左"], ["center", "居中"], ["right", "居右"]], (v) => mutate((l) => { l.align = v; }));
-  addColor(grid, "font.color", layer.font?.color, (v) => mutate((l) => { l.font.color = v; }));
-  addSelect(grid, "effects.case", layer.effects?.case ?? "", [["", "默认"], ["upper", "全大写"], ["lower", "全小写"], ["title", "首字母大写"]], (v) => mutate((l) => {
+  addDual(grid, "props.fontSize", layer.font?.size ?? 0.02, 0.002, 0.5, 0.001, (v) => mutate((l) => { l.font.size = v; }));
+  addDual(grid, "props.letterSpacing", layer.letterSpacing ?? 0, -0.05, 0.5, 0.005, (v) => mutate((l) => { l.letterSpacing = v; }));
+  addDual(grid, "props.lineHeight", layer.lineHeight ?? 1.3, 0.5, 4, 0.05, (v) => mutate((l) => { l.lineHeight = v; }));
+  addSelect(grid, "props.align", layer.align ?? "left", [["left", t("opt.left")], ["center", t("opt.center")], ["right", t("opt.right")]], (v) => mutate((l) => { l.align = v; }));
+  addColor(grid, "props.fontColor", layer.font?.color, (v) => mutate((l) => { l.font.color = v; }));
+  addSelect(grid, "props.case", layer.effects?.case ?? "", [["", t("opt.default")], ["upper", t("opt.upper")], ["lower", t("opt.lower")], ["title", t("opt.titleCase")]], (v) => mutate((l) => {
     l.effects ??= {};
     if (v) l.effects.case = v; else delete l.effects.case;
   }));
   // Preset picker inside panel too.
-  addSelect(grid, "insert.preset", "", [["", "选择预设并应用"], ...Object.keys(PRESETS).map((k) => [k, k])], (v) => {
+  addSelect(grid, "props.preset", "", [["", t("opt.presetNone")], ...Object.keys(PRESETS).map((k) => [k, t("insert.preset" + k[0].toUpperCase() + k.slice(1))])], (v) => {
     if (v && PRESETS[v]) applyPreset(v);
   });
-  addCheck(grid, "描边", !!layer.effects?.stroke, (on) => mutate((l) => {
+  addCheck(grid, "props.stroke", !!layer.effects?.stroke, (on) => mutate((l) => {
     l.effects ??= {};
     if (on) l.effects.stroke = { width: 0.02, color: "#FFFFFF" };
     else delete l.effects.stroke;
   }));
   if (layer.effects?.stroke) {
-    addDual(grid, "stroke.width", layer.effects.stroke.width, 0.005, 0.3, 0.001, (v) => mutate((l) => { l.effects.stroke.width = v; }));
-    addColor(grid, "stroke.color", layer.effects.stroke.color, (v) => mutate((l) => { l.effects.stroke.color = v; }));
-    addCheck(grid, "双线", !!layer.effects.stroke.double, (on) => mutate((l) => {
+    addDual(grid, "props.strokeWidth", layer.effects.stroke.width, 0.005, 0.3, 0.001, (v) => mutate((l) => { l.effects.stroke.width = v; }));
+    addColor(grid, "props.strokeColor", layer.effects.stroke.color, (v) => mutate((l) => { l.effects.stroke.color = v; }));
+    addCheck(grid, "props.double", !!layer.effects.stroke.double, (on) => mutate((l) => {
       if (on) l.effects.stroke.double = true; else delete l.effects.stroke.double;
     }));
   }
-  addSelect(grid, "填充", layer.effects?.fill?.mode ?? "", [["", "纯色"], ["gradient", "渐变"], ["foil", "烫金"], ["texture", "纹理"]], (v) => mutate((l) => {
+  addSelect(grid, "props.fill", layer.effects?.fill?.mode ?? "", [["", t("opt.fillSolid")], ["gradient", t("opt.fillGradient")], ["foil", t("opt.fillFoil")], ["texture", t("opt.fillTexture")]], (v) => mutate((l) => {
     l.effects ??= {};
     if (v) {
       const colors = v === "foil" ? ["#F7E7A9", "#C9A227", "#FFF3C4"] : ["#FFFFFF", "#B8B8B8"];
@@ -914,20 +1015,20 @@ function buildTextProps(grid, layer, mutate, cur) {
   }));
   if (layer.effects?.fill?.mode && (layer.effects.fill.colors?.length ?? 0) >= 2) {
     const stops = layer.effects.fill.colors;
-    addColor(grid, "渐变起点", stops[0], (v) => mutate((l) => {
+    addColor(grid, "props.fillFrom", stops[0], (v) => mutate((l) => {
       if (l.effects?.fill?.colors?.length) l.effects.fill.colors[0] = v;
     }));
-    addColor(grid, "渐变终点", stops[stops.length - 1], (v) => mutate((l) => {
+    addColor(grid, "props.fillTo", stops[stops.length - 1], (v) => mutate((l) => {
       const arr = l.effects?.fill?.colors;
       if (arr?.length) arr[arr.length - 1] = v;
     }));
   }
-  addSelect(grid, "立体", layer.effects?.relief?.mode ?? "", [["", "无"], ["emboss", "浮雕"], ["engrave", "阴刻"], ["letterpress", "压印"], ["inner-shadow", "内阴影"]], (v) => mutate((l) => {
+  addSelect(grid, "props.relief", layer.effects?.relief?.mode ?? "", [["", t("opt.reliefNone")], ["emboss", t("opt.reliefEmboss")], ["engrave", t("opt.reliefEngrave")], ["letterpress", t("opt.reliefLetterpress")], ["inner-shadow", t("opt.reliefInner")]], (v) => mutate((l) => {
     l.effects ??= {};
     if (v) l.effects.relief = { mode: v, depth: 0.06, highlight: "#FFFFFF", shadow: "#000000", opacity: 0.8 };
     else delete l.effects.relief;
   }));
-  addCheck(grid, "外阴影", !!layer.effects?.shadow, (on) => mutate((l) => {
+  addCheck(grid, "props.shadow", !!layer.effects?.shadow, (on) => mutate((l) => {
     l.effects ??= {};
     if (on) l.effects.shadow = { offsetX: 0.02, offsetY: 0.02, blur: 0.06, color: "#000000", opacity: 0.6 };
     else delete l.effects.shadow;
@@ -935,12 +1036,12 @@ function buildTextProps(grid, layer, mutate, cur) {
   buildExifFieldChips(grid, layer);
 }
 function buildShapeProps(grid, layer, mutate) {
-  addColor(grid, "color", layer.color, (v) => mutate((l) => { l.color = v; }));
-  addDual(grid, "size.width", layer.size?.width ?? 0.2, 0.001, 1, 0.005, (v) => mutate((l) => { l.size = { ...(l.size ?? {}), width: v }; }));
-  addDual(grid, "size.height", layer.size?.height ?? 0.002, 0.0005, 1, 0.001, (v) => mutate((l) => { l.size = { ...(l.size ?? {}), height: v }; }));
-  addCheck(grid, "双线", !!layer.double, (on) => mutate((l) => { if (on) l.double = true; else delete l.double; }));
-  addCheck(grid, "autoHide", !!layer.auto_hide, (on) => mutate((l) => { if (on) l.autoHide = true; else delete l.autoHide; }));
-  addSelect(grid, "布局框", layer.frame ?? "", [["", "无"], ["outer", "外边框"], ["opposite-h", "上下双线"], ["opposite-v", "左右双线"]], (v) => mutate((l) => {
+  addColor(grid, "props.color", layer.color, (v) => mutate((l) => { l.color = v; }));
+  addDual(grid, "props.sizeWidth", layer.size?.width ?? 0.2, 0.001, 1, 0.005, (v) => mutate((l) => { l.size = { ...(l.size ?? {}), width: v }; }));
+  addDual(grid, "props.sizeHeight", layer.size?.height ?? 0.002, 0.0005, 1, 0.001, (v) => mutate((l) => { l.size = { ...(l.size ?? {}), height: v }; }));
+  addCheck(grid, "props.double", !!layer.double, (on) => mutate((l) => { if (on) l.double = true; else delete l.double; }));
+  addCheck(grid, "props.autoHide", !!layer.auto_hide, (on) => mutate((l) => { if (on) l.autoHide = true; else delete l.autoHide; }));
+  addSelect(grid, "props.frame", layer.frame ?? "", [["", t("opt.frameNone")], ["outer", t("opt.frameOuter")], ["opposite-h", t("opt.frameOppH")], ["opposite-v", t("opt.frameOppV")]], (v) => mutate((l) => {
     if (v) { l.frame = v; l.margin ??= 0.04; l.strokeWidth ??= 0.002; } else delete l.frame;
   }));
 }
@@ -952,8 +1053,8 @@ const CAL_PRESETS = [
 ];
 const CAL_ACCENTS = ["#E10600", "#C8102E", "#B08D2E", "#1772F6", "#2E7D32", "#1A1A1A"];
 function buildCalendarProps(grid, layer, mutate) {
-  addDual(grid, "size", layer.size ?? 0.3, 0.05, 0.6, 0.005, (v) => mutate((l) => { l.size = v; }));
-  addSelect(grid, "view", layer.view ?? "month", [["month", t("calendar.viewMonth")], ["day", t("calendar.viewDay")], ["strip", t("calendar.viewStrip")], ["week", t("calendar.viewWeek")]], (v) => mutate((l) => { l.view = v; }));
+  addDual(grid, "props.size", layer.size ?? 0.3, 0.05, 0.6, 0.005, (v) => mutate((l) => { l.size = v; }));
+  addSelect(grid, "props.view", layer.view ?? "month", [["month", t("calendar.viewMonth")], ["day", t("calendar.viewDay")], ["strip", t("calendar.viewStrip")], ["week", t("calendar.viewWeek")]], (v) => mutate((l) => { l.view = v; }));
   // Quick layout presets (v0.5.0 M6).
   const presets = document.createElement("div");
   presets.className = "btn-row cal-presets";
@@ -967,9 +1068,9 @@ function buildCalendarProps(grid, layer, mutate) {
     presets.appendChild(b);
   }
   grid.appendChild(presets);
-  addCheck(grid, "农历", layer.showLunar !== false, (on) => mutate((l) => { l.showLunar = on; }));
-  addCheck(grid, "星期表头", layer.showWeekdays !== false, (on) => mutate((l) => { l.showWeekdays = on; }));
-  addColor(grid, "color", layer.color ?? "#1A1A1A", (v) => mutate((l) => { l.color = v; }));
+  addCheck(grid, "props.lunar", layer.showLunar !== false, (on) => mutate((l) => { l.showLunar = on; }));
+  addCheck(grid, "props.weekdays", layer.showWeekdays !== false, (on) => mutate((l) => { l.showWeekdays = on; }));
+  addColor(grid, "props.color", layer.color ?? "#1A1A1A", (v) => mutate((l) => { l.color = v; }));
   const accents = document.createElement("div");
   accents.className = "swatches cal-accents";
   for (const color of CAL_ACCENTS) {
@@ -983,19 +1084,117 @@ function buildCalendarProps(grid, layer, mutate) {
     accents.appendChild(b);
   }
   grid.appendChild(accents);
-  addColor(grid, "accent", layer.accent ?? "#E10600", (v) => mutate((l) => { l.accent = v; }));
+  addColor(grid, "props.accent", layer.accent ?? "#E10600", (v) => mutate((l) => { l.accent = v; }));
 }
 function buildImageProps(grid, layer, mutate) {
-  addDual(grid, "size.height", layer.size?.height ?? 0.03, 0.005, 0.5, 0.001, (v) => mutate((l) => { l.size = { ...(l.size ?? {}), height: v }; }));
+  addDual(grid, "props.sizeHeight", layer.size?.height ?? 0.03, 0.005, 0.5, 0.001, (v) => mutate((l) => { l.size = { ...(l.size ?? {}), height: v }; }));
+}
+/// v0.9.0: badge controls. Template-level by default (shared overrides); with
+/// "override this layer only" they write the layer fields, backed up in the UI
+/// store and restored when the override is switched off.
+function buildBadgeProps(grid, layer, mutate) {
+  const tid = fg()?.state?.templateId;
+  const u = tid ? uiOf(tid) : { hidden: [], locked: [], labels: {} };
+  const override = !!(u.badgeOverride ?? {})[layer.id];
+  const ov = tid ? (fg()?.loadOverrides?.(tid) ?? {}) : {};
+  addCheck(grid, "props.badgeShow", fg()?.getShowLogo?.() ?? true, (on) => {
+    fg()?.setShowLogo?.(on);
+    buildPropsPanel();
+  });
+  addCheck(grid, "props.override", override, (on) => {
+    if (!tid) return;
+    u.badgeOverride ??= {};
+    u.badgeBackup ??= {};
+    if (on) {
+      u.badgeBackup[layer.id] = {
+        size: layer.size?.height ?? null,
+        corner: layer.corner ?? null,
+        margin: layer.margin ?? null,
+        contrast: layer.contrast ?? null,
+        opacity: layer.opacity ?? null,
+      };
+      u.badgeOverride[layer.id] = true;
+    } else {
+      const b = u.badgeBackup[layer.id];
+      if (b) {
+        mutate((l) => {
+          if (l.size && b.size == null) delete l.size.height;
+          else if (b.size != null) l.size = { ...(l.size ?? {}), height: b.size };
+          if (b.corner == null) delete l.corner; else l.corner = b.corner;
+          if (b.margin == null) delete l.margin; else l.margin = b.margin;
+          if (b.contrast == null) delete l.contrast; else l.contrast = b.contrast;
+          l.opacity = b.opacity ?? 1;
+        });
+      }
+      delete u.badgeBackup[layer.id];
+      delete u.badgeOverride[layer.id];
+    }
+    saveUi();
+    buildPropsPanel();
+    fg()?.renderNow?.();
+  });
+  const contrastOpts = [
+    ["auto", t("opt.contrastAuto")],
+    ["color", t("opt.contrastColor")],
+    ["light", t("opt.contrastLight")],
+    ["dark", t("opt.contrastDark")],
+    ["stroke", t("opt.contrastStroke")],
+    ["plate", t("opt.contrastPlate")],
+  ];
+  const posOpts = [
+    ["anchor", t("opt.posAnchor")],
+    ["top-left", t("opt.posTopLeft")],
+    ["top-right", t("opt.posTopRight")],
+    ["bottom-left", t("opt.posBottomLeft")],
+    ["bottom-right", t("opt.posBottomRight")],
+  ];
+  if (override) {
+    addSelect(grid, "props.badgePos", layer.corner ?? "anchor", posOpts, (v) => {
+      mutate((l) => {
+        if (v === "anchor") l.corner = "anchor";
+        else { l.corner = v; l.margin ??= 0.04; }
+      });
+      fg()?.renderNow?.();
+    });
+    addDual(grid, "props.badgeSize", layer.size?.height ?? 0.065, 0.02, 0.3, 0.005, (v) => {
+      mutate((l) => { l.size = { ...(l.size ?? {}), height: v }; });
+      fg()?.renderNow?.();
+    });
+    addSelect(grid, "props.badgeContrast", layer.contrast ?? "auto", contrastOpts, (v) => {
+      mutate((l) => { l.contrast = v; delete l.tint; });
+      fg()?.renderNow?.();
+    });
+    addDual(grid, "props.badgeOpacity", layer.opacity ?? 1, 0.7, 1, 0.05, (v) => {
+      mutate((l) => { l.opacity = v; });
+      fg()?.renderNow?.();
+    });
+  } else {
+    addSelect(grid, "props.badgePos", ov.brandPosition ?? "anchor", posOpts, (v) => {
+      fg()?.pushOverride?.({ brandPosition: v });
+      fg()?.renderNow?.();
+    });
+    addDual(grid, "props.badgeSize", ov.brandScale ?? 1, 0.5, 2, 0.05, (v) => {
+      fg()?.pushOverride?.({ brandScale: v });
+      fg()?.renderNow?.();
+    });
+    addSelect(grid, "props.badgeContrast", ov.brandContrast ?? "auto", contrastOpts, (v) => {
+      fg()?.pushOverride?.({ brandContrast: v });
+      fg()?.renderNow?.();
+    });
+    addDual(grid, "props.badgeOpacity", ov.brandOpacity ?? 1, 0.7, 1, 0.05, (v) => {
+      fg()?.pushOverride?.({ brandOpacity: v });
+      fg()?.renderNow?.();
+    });
+  }
 }
 function buildPaletteProps(grid, layer, mutate) {
-  addDual(grid, "count", layer.count ?? 5, 2, 8, 1, (v) => mutate((l) => { l.count = Math.round(v); }), true);
-  addSelect(grid, "shape", layer.shape ?? "circle", [["circle", "圆"], ["square", "方"], ["diamond", "菱"], ["hexagon", "六边"], ["strip", "条"]], (v) => mutate((l) => { l.shape = v; }));
-  addDual(grid, "size", layer.size ?? 0.035, 0.005, 0.3, 0.001, (v) => mutate((l) => { l.size = v; }));
+  addDual(grid, "props.count", layer.count ?? 5, 2, 8, 1, (v) => mutate((l) => { l.count = Math.round(v); }), true);
+  addSelect(grid, "props.shape", layer.shape ?? "circle", [["circle", t("opt.shapeCircle")], ["square", t("opt.shapeSquare")], ["diamond", t("opt.shapeDiamond")], ["hexagon", t("opt.shapeHexagon")], ["strip", t("opt.shapeStrip")]], (v) => mutate((l) => { l.shape = v; }));
+  addDual(grid, "props.size", layer.size ?? 0.035, 0.005, 0.3, 0.001, (v) => mutate((l) => { l.size = v; }));
 }
 function applyPreset(key) {
   const sel = selectedLayers();
-  if (!sel.length || sel[0].layer.type !== "text") { fg()?.toast?.("error", "先选择一个文字图层"); return; }
+  if (!sel.length || sel[0].layer.type !== "text") { fg()?.toast?.("error", t("tweak.needTextLayer")); return; }
   const preset = PRESETS[key];
   if (!preset) return;
   edit((tpl) => {
@@ -1042,6 +1241,41 @@ function insertCalendar() {
       color: "#111111", accent: "#E10600", fontFamily: ["Inter"],
     };
   });
+}
+/* v0.9.0: badge insertion + library panel (integrated into the insert card). */
+function firstBadgeLayer() {
+  let hit = null;
+  const walk = (ls) => {
+    for (const l of ls ?? []) {
+      if (!hit && isBadgeLayer(l)) hit = l;
+      if (l.type === "group") walk(l.children);
+    }
+  };
+  walk(baseTemplate()?.layers ?? []);
+  return hit;
+}
+function insertBadge() {
+  const panel = document.getElementById("badgeLibPanel");
+  const existing = firstBadgeLayer();
+  if (!existing) {
+    const slug = fg()?.state?.photos?.[0]?.exif?.brand_slug;
+    const asset = slug ? `@builtin/brand/${slug}` : "@builtin/brand/{exif.brand_slug}";
+    insertLayer((tpl) => ({
+      type: "image",
+      id: newId("badge", tpl),
+      anchor: "bottom-right",
+      offset: { x: -0.03, y: -0.03 },
+      asset,
+      size: { height: 0.065 },
+    }));
+  } else {
+    S.selected = new Set([existing.id]);
+    buildLayersPanel();
+    buildPropsPanel();
+    drawOverlay();
+  }
+  panel?.classList.remove("hidden");
+  window.__fg?.renderBrandLibrary?.();
 }
 function insertDivider() {
   insertLayer((tpl) => {
@@ -1382,18 +1616,6 @@ function buildCardControls() {
   updateCardLabels(c);
 }
 
-/* ----------------------------------------------------------------- tier */
-function setTier(tier) {
-  S.tier = tier;
-  localStorage.setItem(LS_TIER, tier);
-  document.body.dataset.tier = tier;
-  const btn = document.getElementById("tierToggle");
-  if (btn) btn.textContent = tier === "advanced" ? "简洁" : "高级";
-  const stageBtn = document.getElementById("panelTierBtn");
-  if (stageBtn) stageBtn.classList.toggle("on", tier === "advanced");
-}
-function toggleTier() { setTier(S.tier === "advanced" ? "simple" : "advanced"); }
-
 /* -------------------------------------------------------------- keyboard */
 function onKey(ev) {
   const st = fg()?.state;
@@ -1467,7 +1689,6 @@ function init() {
   const f = fg();
   if (!f) { setTimeout(init, 60); return; }
   loadStore();
-  setTier(S.tier);
   ensureOverlay();
 
   // Stage pointer events for selection: clicking empty canvas deselects.
@@ -1507,9 +1728,27 @@ function init() {
       drawOverlay();
       return;
     }
-    const box = S.boxes.find((b) => b.type !== "group" && hitTest(b, e));
-    if (box) { select(box.id, e.shiftKey); beginDrag("move", box.id, e); }
-    else if (!S.cropMode) { S.selected.clear(); buildLayersPanel(); buildPropsPanel(); drawOverlay(); }
+    // v0.9.0: click selects the topmost hit and drags it. A press on the
+    // current selection drags THAT layer; a click without movement cycles to
+    // the next overlapping layer (overlap pass-through).
+    const hits = S.boxes.filter((b) => b.type !== "group" && hitTest(b, e));
+    const selectedHit = hits.find((b) => S.selected.has(b.id));
+    const target = selectedHit ?? hits[0];
+    if (target) {
+      if (!S.selected.has(target.id)) select(target.id, e.shiftKey);
+      beginDrag("move", target.id, e);
+      if (selectedHit && hits.length > 1 && !e.shiftKey) {
+        const startX = e.clientX, startY = e.clientY;
+        const ids = hits.map((b) => b.id);
+        const cycle = (up) => {
+          window.removeEventListener("pointerup", cycle);
+          if (Math.hypot(up.clientX - startX, up.clientY - startY) > 4) return;
+          const next = ids[(ids.indexOf(target.id) + 1) % ids.length];
+          select(next, false);
+        };
+        window.addEventListener("pointerup", cycle, { once: true });
+      }
+    } else if (!S.cropMode) { S.selected.clear(); buildLayersPanel(); buildPropsPanel(); drawOverlay(); }
   }, true);
   window.addEventListener("keydown", onKey);
   bindButtons();
@@ -1581,8 +1820,6 @@ function bindButtons() {
   document.getElementById("exifFill")?.addEventListener("click", fillExifPreview);
   document.getElementById("exifClear")?.addEventListener("click", clearExifPreview);
   document.getElementById("editRedo")?.addEventListener("click", redo);
-  document.getElementById("tierToggle")?.addEventListener("click", toggleTier);
-  document.getElementById("panelTierBtn")?.addEventListener("click", toggleTier);
   document.getElementById("layerUp")?.addEventListener("click", () => reorder(-1, false));
   document.getElementById("layerDown")?.addEventListener("click", () => reorder(1, false));
   document.getElementById("layerTop")?.addEventListener("click", () => reorder(-1, true));
@@ -1605,6 +1842,7 @@ function bindButtons() {
   document.getElementById("distributeH")?.addEventListener("click", () => distributeSelected("h"));
   document.getElementById("distributeV")?.addEventListener("click", () => distributeSelected("v"));
   document.getElementById("addText")?.addEventListener("click", insertText);
+  document.getElementById("addBadge")?.addEventListener("click", insertBadge);
   document.getElementById("addCalendar")?.addEventListener("click", insertCalendar);
   document.getElementById("addDivider")?.addEventListener("click", insertDivider);
   document.getElementById("addShape")?.addEventListener("click", insertShape);
@@ -1742,7 +1980,7 @@ function duplicateSelected() {
 }
 function groupSelected() {
   const ids = [...S.selected];
-  if (ids.length < 2) { fg()?.toast?.("error", "至少选择两个顶层图层"); return; }
+  if (ids.length < 2) { fg()?.toast?.("error", t("layers.needTwo")); return; }
   let gid = null;
   edit((tpl) => {
     const moved = [];
@@ -2297,8 +2535,9 @@ window.__fgEditor = {
     tplId: fg()?.state?.templateId ?? null,
     cached: !!fg()?.currentTemplateObject?.(),
     base: (() => { try { return !!baseTemplate(); } catch (e) { return "ERR " + (e && e.message); } })(),
+    boxes: S.boxes.map((b) => b.id),
+    stageReady: !!(S.img && S.img.isConnected && S.img === document.querySelector("#canvasWrap img")),
     selected: [...S.selected],
-    tier: S.tier,
     cropMode: S.cropMode,
     history: Object.fromEntries(Object.entries(S.history).map(([k, v]) => [k, { len: v.stack.length, index: v.index }])),
   }),

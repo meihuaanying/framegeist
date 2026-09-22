@@ -170,12 +170,39 @@ body {
 .sidebar { order: 2; }
 .workspace { order: 1; }
 .sidebar {
+  overflow: hidden;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+}
+.side-panels {
   overflow-y: auto; overflow-x: hidden;
   padding-right: 4px;
   scrollbar-width: thin; scrollbar-color: var(--scroll) transparent;
-  display: flex; flex-direction: column; gap: 12px;
-  padding-bottom: 20px;
+  padding-bottom: 4px;
 }
+.side-panel { display: none; flex-direction: column; gap: 12px; }
+.side-panel.on { display: flex; }
+.side-tabs {
+  display: flex; gap: 4px; padding: 4px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.side-tab {
+  flex: 1; border: 0; border-radius: 9px; padding: 8px 0;
+  background: transparent; color: var(--text-muted);
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all var(--t-base) var(--ease);
+}
+.side-tab:hover { color: var(--text); }
+.side-tab.on { background: var(--bg-elev); color: var(--text); box-shadow: var(--shadow); }
+.export-bar {
+  display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px;
+  align-items: center; padding: 8px;
+  background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow);
+}
+.export-bar .btn { width: 100%; }
+.export-bar #exportBarInfo { width: auto; padding: 0 10px; font-size: 11.5px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .workspace { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
 
 .card {
@@ -364,17 +391,6 @@ input[type="color"] {
 .btn.small { height: 30px; font-size: 12.5px; }
 .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-/* sticky action bar at the bottom of the sidebar */
-.actionbar {
-  position: sticky; bottom: -1px; z-index: 5;
-  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  padding: 12px;
-  display: flex; flex-direction: column; gap: 8px;
-}
 .progress { height: 4px; border-radius: 2px; background: var(--bg-soft); overflow: hidden; }
 .progress > i {
   display: block; height: 100%; width: 0%;
@@ -442,10 +458,12 @@ html[data-theme="dark"] .brand-cell img { filter: invert(1); }
 .brand-chip.on { background: var(--chip-on); color: var(--chip-on-text); border-color: var(--chip-on); }
 .brand-chip.ghost { opacity: .85; }
 .brand-lib-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 6px;
-  max-height: 268px; overflow-y: auto; margin-top: 8px;
-  scrollbar-width: thin; scrollbar-color: var(--scroll) transparent;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px;
+  max-height: 260px; overflow-y: auto; padding: 2px;
 }
+/* v0.9.0: element insert grid + integrated badge library panel */
+.insert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.badge-lib-panel { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .brand-lib-grid.modal { max-height: 50vh; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); }
 .brand-lib-cell {
   position: relative; display: grid; place-items: center; aspect-ratio: 1;
@@ -498,6 +516,8 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
 }
 .stage-head .spacer { flex: 1; }
 .zoom-label { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); min-width: 44px; text-align: right; }
+.zoom-select { width: auto; height: 26px; padding: 0 6px; font-size: 11.5px; }
+.stage-size { font-size: 11.5px; font-family: var(--font-mono); }
 .viewport {
   position: relative; flex: 1; min-height: 0; overflow: hidden;
   background: var(--stage-bg);
@@ -737,12 +757,42 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
   border-radius: 3px; pointer-events: none;
 }
 .edit-overlay .box.dim { border-color: color-mix(in srgb, var(--accent-a) 40%, transparent); }
+/* v0.9.0: 10px visual dot inside a 24x24 screen-space hit area (WCAG 2.2 AA
+   target size); --inv-zoom counters the stage zoom transform. */
 .edit-overlay .handle {
-  position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px;
-  border: 1.5px solid #fff; border-radius: 3px; background: var(--accent-a);
-  pointer-events: auto; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.35);
+  position: absolute; width: 24px; height: 24px; margin: -12px 0 0 -12px;
+  pointer-events: auto; cursor: pointer; touch-action: none;
+  transform: scale(var(--inv-zoom, 1)); transform-origin: center;
+  display: grid; place-items: center;
 }
-.edit-overlay .handle.rot { border-radius: 50%; cursor: grab; }
+.edit-overlay .handle::after {
+  content: ""; width: 10px; height: 10px; border-radius: 3px;
+  border: 1.5px solid #fff; background: var(--accent-a);
+  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.edit-overlay .handle.h-nw { cursor: nwse-resize; }
+.edit-overlay .handle.h-ne { cursor: nesw-resize; }
+.edit-overlay .handle.h-sw { cursor: nesw-resize; }
+.edit-overlay .handle.h-se { cursor: nwse-resize; }
+.edit-overlay .handle.rot::after { border-radius: 50%; }
+.edit-overlay .handle.rot { cursor: grab; }
+.edit-overlay .handle.rot::after { background: var(--accent-b); }
+@media (pointer: coarse) {
+  .edit-overlay .handle { width: 32px; height: 32px; margin: -16px 0 0 -16px; }
+  .edit-overlay .handle::after { width: 14px; height: 14px; }
+}
+.sel-toolbar {
+  position: absolute; transform: translate(-50%, -100%) scale(var(--inv-zoom, 1));
+  transform-origin: center bottom; display: flex; gap: 2px; padding: 3px;
+  background: color-mix(in srgb, #000 72%, transparent); border-radius: 8px;
+  backdrop-filter: blur(6px); pointer-events: auto; z-index: 6;
+}
+.sel-toolbar button {
+  border: 0; background: transparent; color: #fff; width: 26px; height: 26px;
+  border-radius: 6px; cursor: pointer; font-size: 13px; line-height: 1;
+  display: grid; place-items: center;
+}
+.sel-toolbar button:hover { background: rgba(255,255,255,.16); }
 .edit-overlay .guide {
   position: absolute; background: #ff3b7b; pointer-events: none;
   box-shadow: 0 0 4px rgba(255,59,123,.6);
@@ -785,8 +835,7 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
 .dual input[type="number"] { width: 62px; }
 .preset-note { color: var(--text-faint); font-size: 11px; margin-top: 4px; }
 
-/* v0.5.0 panel tiers */
-body[data-tier="simple"] .advanced-only { display: none !important; }
+/* v0.5.0 panel tiers (v0.9.0: tier removed, cards live in sidebar tabs) */
 .icon-btn.on { background: var(--chip-on); color: var(--chip-on-text); }
 
 /* v0.5.0 M6: background swatches, eyedropper, card + built-in frame grids */

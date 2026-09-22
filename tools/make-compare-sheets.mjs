@@ -14,6 +14,8 @@ const argOf = (name, fallback) => {
 };
 const BEFORE = argOf("--before", ".cache/v061-samples");
 const OUT = argOf("--out", "docs/reports/v0.7.0/compare");
+const BEFORE_LABEL = argOf("--before-label", "v0.6.1");
+const AFTER_LABEL = argOf("--after-label", "v0.7.0");
 const THUMB = 520;
 const GAP = 26;
 const PAD = 22;
@@ -83,8 +85,8 @@ for (const [cat, list] of [...byCat.entries()].sort()) {
     svg += `<image x="${PAD}" y="${y}" width="${THUMB}" height="${h1}" href="data:image/jpeg;base64,${r.before.toString("base64")}"/>`;
     svg += `<image x="${PAD + THUMB + GAP}" y="${y}" width="${THUMB}" height="${h2}" href="data:image/jpeg;base64,${r.after.toString("base64")}"/>`;
     y += Math.max(h1, h2) + 2;
-    svg += `<text x="${PAD}" y="${y + 16}" font-family="Inter" font-size="13" fill="#6B7280">v0.6.1</text>`;
-    svg += `<text x="${PAD + THUMB + GAP}" y="${y + 16}" font-family="Inter" font-size="13" fill="#6B7280">v0.7.0</text>`;
+  svg += `<text x="${PAD}" y="${y + 16}" font-family="Inter" font-size="13" fill="#6B7280">${BEFORE_LABEL}</text>`;
+  svg += `<text x="${PAD + THUMB + GAP}" y="${y + 16}" font-family="Inter" font-size="13" fill="#6B7280">${AFTER_LABEL}</text>`;
     y += LABEL_H;
     images += 2;
   }

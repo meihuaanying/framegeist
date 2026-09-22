@@ -380,7 +380,7 @@ await inject([PHOTO_A]);
 await waitLabel(30000);
 const brandText = await ev(`document.getElementById("brandDetected").textContent`);
 check("brand: detected from EXIF", /sony/i.test(brandText), brandText);
-const brandLayer = await ev(`document.getElementById("brandShow").checked`);
+const brandLayer = await ev(`window.__fg.getShowLogo()`);
 check("brand: show toggle on by default", brandLayer === true);
 
 /* ---- 10. EXIF editor ---- */
@@ -576,11 +576,11 @@ function makeFgt(jsonBuf) {
   await waitLabel(30000);
   const hash = () => ev(`(() => { const b = window.__fg.state.lastRender; let h = 0; for (let i = 0; i < b.length; i += 97) h = (h * 31 + b[i]) >>> 0; return h; })()`);
   const withLogo = await hash();
-  await ev(`document.getElementById("brandShow").checked = false; document.getElementById("brandShow").dispatchEvent(new Event("change"))`);
+  await ev(`window.__fg.setShowLogo(false)`);
   await waitLabel(30000);
   const withoutLogo = await hash();
   check("brand: logo toggles real pixels", withLogo !== withoutLogo, `${withLogo} vs ${withoutLogo}`);
-  await ev(`document.getElementById("brandShow").checked = true; document.getElementById("brandShow").dispatchEvent(new Event("change"))`);
+  await ev(`window.__fg.setShowLogo(true)`);
   await waitLabel(30000);
 }
 
@@ -727,19 +727,33 @@ await ev(`(async () => {
   await new Promise((r) => setTimeout(r, 900));
 })()`);
 
-/* 25. v0.5 editor: panel tiers */
+/* 25. v0.9 editor: sidebar tabs (tier removed) */
 {
-  const before = await ev(`({
-    tier: document.body.dataset.tier,
-    insertHidden: getComputedStyle(document.getElementById("insertCard")).display === "none",
-  })`);
-  check("editor: simple tier hides advanced cards", before.tier === "simple" && before.insertHidden, JSON.stringify(before));
-  const after = await ev(`(async () => {
-    document.getElementById("tierToggle").click();
-    await new Promise((r) => setTimeout(r, 60));
-    return { tier: document.body.dataset.tier, visible: getComputedStyle(document.getElementById("insertCard")).display !== "none" };
+  const tabs = await ev(`[...document.querySelectorAll(".side-tab")].map((b) => b.dataset.tab)`);
+  check("v0.9 sidebar: five tabs present", Array.isArray(tabs) && tabs.join(",") === "templates,photo,elements,canvas,export", JSON.stringify(tabs));
+  const noTier = await ev(`({ tier: document.body.dataset.tier ?? null, tierBtn: !!document.getElementById("tierToggle"), adv: document.querySelectorAll(".advanced-only").length })`);
+  check("v0.9 sidebar: tier UI removed", noTier.tier === null && noTier.tierBtn === false && noTier.adv === 0, JSON.stringify(noTier));
+  const sw = await ev(`(async () => {
+    window.__fg.setSideTab("elements");
+    await new Promise((r) => setTimeout(r, 100));
+    const panels = [...document.querySelectorAll('[data-tab-panel="elements"]')];
+    const others = [...document.querySelectorAll(".side-panel:not(.on)")].every((p) => getComputedStyle(p).display === "none");
+    return {
+      els: panels.length,
+      visible: panels.length > 0 && panels.every((p) => p.classList.contains("on")),
+      others,
+      insertVisible: getComputedStyle(document.getElementById("insertCard")).display !== "none",
+      propVisible: getComputedStyle(document.getElementById("propsCard")).display !== "none",
+    };
   })()`);
-  check("editor: advanced tier shows insert card", after.tier === "advanced" && after.visible, JSON.stringify(after));
+  check("v0.9 sidebar: tabs switch panels", sw.els > 0 && sw.visible && sw.others && sw.insertVisible && sw.propVisible, JSON.stringify(sw));
+  const persist = await ev(`(async () => {
+    window.__fg.setSideTab("canvas");
+    await new Promise((r) => setTimeout(r, 80));
+    return localStorage.getItem("fg-sidebar-tab");
+  })()`);
+  check("v0.9 sidebar: tab choice persists", persist === "canvas", String(persist));
+  await ev(`window.__fg.setSideTab("elements")`);
 }
 
 /* 26. v0.5 editor: layer rows + selection */
@@ -2296,29 +2310,77 @@ let EXIF_TEXT_ID = null;
     const original = fg.effectiveTemplateJson();
     const hasLockup = original.includes("@builtin/lockup/");
     const ov1 = fg.loadOverrides("white-border-centered-lockup") ?? {};
-    const pos = document.getElementById("brandPos"); pos.value = "top-left"; pos.dispatchEvent(new Event("change"));
-    const size = document.getElementById("brandSize"); size.value = "1.35"; size.dispatchEvent(new Event("change"));
-    const contrast = document.getElementById("brandContrast"); contrast.value = "stroke"; contrast.dispatchEvent(new Event("change"));
-    const op = document.getElementById("brandOpacity"); op.value = "0.7"; op.dispatchEvent(new Event("input"));
+    // v0.9.0: badge controls live in the element properties panel.
+    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "image")?.click();
+    await sleep(400);
+    const fields = [...document.querySelectorAll("#propsBody .field")];
+    const labelOf = (f) => f.querySelector("label span")?.textContent ?? "";
+    const badges = {
+      pos: [...document.querySelectorAll("#propsBody select")].find((s) => [...s.options].some((o) => o.value === "top-left")),
+      size: fields.find((f) => labelOf(f) === fg.t("props.badgeSize"))?.querySelector('input[type="range"]'),
+      contrast: [...document.querySelectorAll("#propsBody select")].find((s) => [...s.options].some((o) => o.value === "plate")),
+      opacity: fields.find((f) => labelOf(f) === fg.t("props.badgeOpacity"))?.querySelector('input[type="range"]'),
+    };
+    badges.pos.value = "top-left"; badges.pos.dispatchEvent(new Event("change"));
+    badges.size.value = "1.35"; badges.size.dispatchEvent(new Event("input")); badges.size.dispatchEvent(new Event("change"));
+    badges.contrast.value = "stroke"; badges.contrast.dispatchEvent(new Event("change"));
+    badges.opacity.value = "0.7"; badges.opacity.dispatchEvent(new Event("input"));
     await sleep(1200);
     const oj = JSON.parse(fg.buildOverridesJson() || "{}");
     // restore
     style.value = "official"; style.dispatchEvent(new Event("change"));
-    pos.value = "anchor"; pos.dispatchEvent(new Event("change"));
-    size.value = "1"; size.dispatchEvent(new Event("change"));
-    contrast.value = "auto"; contrast.dispatchEvent(new Event("change"));
-    op.value = "1"; op.dispatchEvent(new Event("input"));
+    badges.pos.value = "anchor"; badges.pos.dispatchEvent(new Event("change"));
+    badges.size.value = "1"; badges.size.dispatchEvent(new Event("input")); badges.size.dispatchEvent(new Event("change"));
+    badges.contrast.value = "auto"; badges.contrast.dispatchEvent(new Event("change"));
+    badges.opacity.value = "1"; badges.opacity.dispatchEvent(new Event("input"));
     await sleep(600);
-    return { hasBrand, hasLockup, ov1: { style: ov1.brandStyle }, oj };
+    return { hasBrand, hasLockup, ov1: { style: ov1.brandStyle }, oj, hasBadgeFields: !!badges.pos && !!badges.size && !!badges.contrast && !!badges.opacity };
   })()`);
   check("v0.7 badge: official style template references @builtin/brand", r?.hasBrand === true, JSON.stringify(r?.hasBrand));
   check("v0.7 badge: original style rewrites asset to @builtin/lockup", r?.hasLockup === true, JSON.stringify(r?.hasLockup));
   check("v0.7 badge: style persists per template", r?.ov1?.style === "original", JSON.stringify(r?.ov1));
+  check("v0.9 badge: properties panel exposes badge controls", r?.hasBadgeFields === true, JSON.stringify(r?.hasBadgeFields));
   check(
     "v0.7 badge: position/size/contrast/opacity reach overrides",
     r?.oj?.brandPosition === "top-left" && r?.oj?.brandScale === 1.35 && r?.oj?.brandContrast === "stroke" && r?.oj?.brandOpacity === 0.7,
     JSON.stringify({ p: r?.oj?.brandPosition, s: r?.oj?.brandScale, c: r?.oj?.brandContrast, o: r?.oj?.brandOpacity }),
   );
+}
+
+/* 75b. v0.9.0: per-layer badge override writes/restores layer fields */
+{
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    const fg = window.__fg;
+    await fg.useTemplate("classic-watermark-single-row");
+    await sleep(900);
+    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "image")?.click();
+    await sleep(400);
+    const clickOverride = () => {
+      const row = [...document.querySelectorAll("#propsBody label.row")].find((l) => l.textContent.includes(fg.t("props.override")));
+      const box = row?.querySelector('input[type="checkbox"]');
+      box?.click();
+      return !!box;
+    };
+    const toggled = clickOverride();
+    await sleep(500);
+    const contrast = [...document.querySelectorAll("#propsBody select")].find((s) => [...s.options].some((o) => o.value === "plate"));
+    contrast.value = "color"; contrast.dispatchEvent(new Event("change"));
+    await sleep(700);
+    const readLayer = () => {
+      const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"];
+      const t = raw ? JSON.parse(raw) : null;
+      const find = (ls) => { for (const l of ls ?? []) { if (l.type === "image") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } };
+      return t ? find(t.layers) : null;
+    };
+    const on = readLayer()?.contrast ?? null;
+    clickOverride();
+    await sleep(700);
+    const off = readLayer()?.contrast ?? null;
+    return { on, off, toggled };
+  })()`);
+  check("v0.9 badge override: ON writes the layer contrast", r?.toggled === true && r?.on === "color", JSON.stringify(r));
+  check("v0.9 badge override: OFF restores the layer", r?.off === null, JSON.stringify(r));
 }
 
 /* 76. v0.7.0: badge visibility floor + badgeless template keeps rendering */
@@ -2377,7 +2439,7 @@ let EXIF_TEXT_ID = null;
     };
   })()`);
   check("v0.7 typography: manifest keeps 192 templates", r?.total === 192, String(r?.total));
-  check("v0.8 typography: template upgraded to 1.2.0 / engine 0.7.0", r?.version === "1.2.0" && r?.minEngine === "0.7.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
+  check("v0.9 typography: template upgraded to 1.3.0 / engine 0.7.0", r?.version === "1.3.0" && r?.minEngine === "0.7.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
   check("v0.7 typography: CJK display template uses Noto/LXGW family", (r?.families ?? []).some((f) => f === "Noto Serif SC" || f === "LXGW WenKai"), JSON.stringify(r?.families));
   check("v0.7 typography: EXIF data rows enable tnum", r?.data > 0 && r?.tnum === r?.data, JSON.stringify({ data: r?.data, tnum: r?.tnum }));
   check("v0.7 typography: weight hierarchy present (500 + display 600/700)", (r?.weights ?? []).includes(500) && ((r?.weights ?? []).includes(600) || (r?.weights ?? []).includes(700)), JSON.stringify(r?.weights));
@@ -2429,22 +2491,39 @@ let EXIF_TEXT_ID = null;
   check("v0.7 ui: lightbox close button is hit-testable", lb?.hitClose === true, JSON.stringify(lb));
 }
 
-/* 79. v0.8.0: badge library + zh UI + wall performance polish */
+/* 79. v0.9.0: badge library (integrated) + wall polish */
 {
   const lib = await ev(`(async () => {
     const data = await (await fetch("./brand/index.json")).json();
-    return { v: data.version, camera: data.groups?.camera?.length ?? 0, lens: data.groups?.lens?.length ?? 0, series: data.groups?.series?.length ?? 0, game: data.groups?.game?.length ?? 0, neutral: data.neutral };
+    const all = ["camera", "lens", "series", "game"].flatMap((g) => data.groups?.[g] ?? []);
+    return {
+      v: data.version,
+      camera: data.groups?.camera?.length ?? 0,
+      lens: data.groups?.lens?.length ?? 0,
+      series: data.groups?.series?.length ?? 0,
+      game: data.groups?.game?.length ?? 0,
+      neutral: data.neutral,
+      colorful: all.filter((i) => i.color).map((i) => i.slug),
+    };
   })()`);
-  check("v0.8 badge lib: manifest v2 with four groups", lib?.v === 2 && lib.camera > 20 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
-  check("v0.8 badge lib: neutral EXIF marker present", lib?.neutral === "exif-auto", String(lib?.neutral));
+  check("v0.9 badge lib: manifest v3 with four groups", lib?.v === 3 && lib.camera > 20 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
+  check("v0.9 badge lib: neutral EXIF marker present", lib?.neutral === "exif-auto", String(lib?.neutral));
+  check("v0.9 badge lib: colorful brands carry official hex", Array.isArray(lib?.colorful) && lib.colorful.length >= 10 && lib.colorful.includes("nikon"), JSON.stringify(lib?.colorful?.slice(0, 6)));
+  check("v0.9 badge lib: mono brands carry no color", !(lib?.colorful ?? []).includes("sony"), JSON.stringify(lib?.colorful));
 
   const ed = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     await window.__fg.useTemplate("camera-baseplate-02");
     await sleep(900);
+    document.getElementById("addBadge")?.click();
+    await sleep(600);
+    const panelOpen = !document.getElementById("badgeLibPanel").classList.contains("hidden");
+    const chips = [...document.querySelectorAll("#brandGroups .brand-chip")];
+    const cameraChip = chips.find((c) => c.textContent.startsWith("相机品牌"));
+    cameraChip?.click();
+    await sleep(400);
     const cells = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")];
     const thumbs96 = cells.filter((c) => /\\/thumbs\\//.test(c.querySelector("img")?.src ?? "")).length;
-    const chips = [...document.querySelectorAll("#brandGroups .brand-chip")].map((b) => b.textContent);
     const canon = cells.find((c) => (c.title || "").toLowerCase() === "canon");
     canon?.click();
     await sleep(700);
@@ -2465,14 +2544,33 @@ let EXIF_TEXT_ID = null;
     search.value = "";
     search.dispatchEvent(new Event("input"));
     await sleep(200);
-    return { cells: cells.length, thumbs96, chips, afterApply, hasApplied: /@builtin\\/(brand|lockup)\\/canon/.test(json), afterAuto, favs, filtered };
+    return { panelOpen, cells: cells.length, thumbs96, chips: chips.map((c) => c.textContent), afterApply, hasApplied: /@builtin\\/(brand|lockup)\\/canon/.test(json), afterAuto, favs, filtered };
   })()`);
-  check("v0.8 badge lib: grid renders 96px-thumb cells", (ed?.cells ?? 0) > 20 && ed.thumbs96 === ed.cells, JSON.stringify({ cells: ed?.cells, thumbs96: ed?.thumbs96 }));
-  check("v0.8 badge lib: group chips follow the target layer", ed?.chips?.length === 2, JSON.stringify(ed?.chips));
-  check("v0.8 badge lib: click applies the brand to the target layer", /@builtin\/(brand|lockup)\/canon/.test(ed?.afterApply ?? "") && ed.hasApplied === true, JSON.stringify({ a: ed?.afterApply, j: ed?.hasApplied }));
-  check("v0.8 badge lib: auto restores the EXIF expression", /@builtin\/(brand|lockup)\/\{exif\./.test(ed?.afterAuto ?? ""), String(ed?.afterAuto));
-  check("v0.8 badge lib: favorites persist", (ed?.favs ?? 0) >= 1, String(ed?.favs));
-  check("v0.8 badge lib: search filters cells", Array.isArray(ed?.filtered) && ed.filtered.length > 0 && ed.filtered.every((t) => /nikon/i.test(t)), JSON.stringify(ed?.filtered?.slice(0, 5)));
+  check("v0.9 badge lib: addBadge opens the integrated library", ed?.panelOpen === true, JSON.stringify(ed?.panelOpen));
+  check("v0.9 badge lib: grid renders 96px-thumb cells", (ed?.cells ?? 0) > 20 && ed.thumbs96 === ed.cells, JSON.stringify({ cells: ed?.cells, thumbs96: ed?.thumbs96 }));
+  check("v0.9 badge lib: five group chips (all + four)", ed?.chips?.length === 5, JSON.stringify(ed?.chips));
+  check("v0.9 badge lib: click applies the brand to the target layer", /@builtin\/(brand|lockup)\/canon/.test(ed?.afterApply ?? "") && ed.hasApplied === true, JSON.stringify({ a: ed?.afterApply, j: ed?.hasApplied }));
+  check("v0.9 badge lib: auto restores the EXIF expression", /@builtin\/(brand|lockup)\/\{exif\./.test(ed?.afterAuto ?? ""), String(ed?.afterAuto));
+  check("v0.9 badge lib: favorites persist", (ed?.favs ?? 0) >= 1, String(ed?.favs));
+  check("v0.9 badge lib: search filters within the group", Array.isArray(ed?.filtered) && ed.filtered.length > 0 && ed.filtered.every((t) => /nikon/i.test(t)), JSON.stringify(ed?.filtered?.slice(0, 5)));
+
+  const filter = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const chips = [...document.querySelectorAll("#brandGroups .brand-chip")];
+    const out = {};
+    for (const label of ["系列徽章", "游戏字标", "全部", "镜头品牌", "相机品牌"]) {
+      chips.find((c) => c.textContent.startsWith(label))?.click();
+      await sleep(250);
+      out[label] = document.querySelectorAll("#brandLibGrid .brand-lib-cell").length;
+    }
+    return out;
+  })()`);
+  const counts = await ev(`(async () => { const d = await (await fetch("./brand/index.json")).json(); return { series: d.groups.series.length, game: d.groups.game.length, camera: d.groups.camera.length, lens: d.groups.lens.length, all: ["camera","lens","series","game"].reduce((n,g)=>n+d.groups[g].length,0) }; })()`);
+  check(
+    "v0.9 badge lib: group chips filter the grid",
+    filter?.["系列徽章"] === counts.series && filter?.["游戏字标"] === counts.game && filter?.["全部"] === counts.all && filter?.["镜头品牌"] === counts.lens && filter?.["相机品牌"] === counts.camera,
+    JSON.stringify({ filter, counts }),
+  );
 
   const style = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -2489,7 +2587,7 @@ let EXIF_TEXT_ID = null;
     const official = window.__fgEditor.badgeTarget()?.asset ?? null;
     return { lockup, rendersLockup: rendered.includes("@builtin/lockup/"), official };
   })()`);
-  check("v0.8 badge lib: style switch swaps concrete assets", /lockup\/canon/.test(style?.lockup ?? "") && /brand\/canon/.test(style?.official ?? ""), JSON.stringify(style));
+  check("v0.9 badge lib: style switch swaps concrete assets", /lockup\/canon/.test(style?.lockup ?? "") && /brand\/canon/.test(style?.official ?? ""), JSON.stringify(style));
 
   const wall = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -2497,36 +2595,391 @@ let EXIF_TEXT_ID = null;
     await sleep(500);
     const cards = [...document.querySelectorAll(".wall-card")];
     const withMarks = cards.filter((c) => c.querySelector(".wall-marks img")).length;
+    const markSrc = cards.map((c) => c.querySelector(".wall-marks img")?.getAttribute("src") ?? "").find((s) => s.includes("/brand/") || s.includes("/lockup/")) ?? "";
     const cv = getComputedStyle(cards[0]).contentVisibility;
-    document.getElementById("wallBrandLib").click();
-    await sleep(500);
-    const open = !document.getElementById("brandLibModal").classList.contains("hidden");
-    const modalCells = document.querySelectorAll("#brandLibModalGrid .brand-lib-cell").length;
-    document.getElementById("brandLibClose").click();
-    return { total: cards.length, withMarks, cv, open, modalCells, skeleton: window.__wallSkeleton ?? null };
+    return {
+      total: cards.length, withMarks, cv, markSrc,
+      wallBtn: !!document.getElementById("wallBrandLib"),
+      modal: !!document.getElementById("brandLibModal"),
+      skeleton: window.__wallSkeleton ?? null,
+    };
   })()`);
-  check("v0.8 wall: cards show badge marks", (wall?.withMarks ?? 0) > 100, JSON.stringify({ with: wall?.withMarks, total: wall?.total }));
-  check("v0.8 wall: badge library modal opens with cells", wall?.open === true && (wall?.modalCells ?? 0) > 50, JSON.stringify({ open: wall?.open, cells: wall?.modalCells }));
-  check("v0.8 perf: wall cards use content-visibility", wall?.cv === "auto", String(wall?.cv));
-  check("v0.8 boot: wall skeleton shown before first paint", wall?.skeleton?.shown === true && wall.skeleton.clearedAt != null, JSON.stringify(wall?.skeleton));
+  check("v0.9 wall: cards show badge marks", (wall?.withMarks ?? 0) > 100, JSON.stringify({ with: wall?.withMarks, total: wall?.total }));
+  check("v0.9 wall: badge library entry + modal removed", wall?.wallBtn === false && wall?.modal === false, JSON.stringify({ btn: wall?.wallBtn, modal: wall?.modal }));
+  check("v0.9 wall: mark thumbs use the color matrix", /thumbs\//.test(wall?.markSrc ?? ""), String(wall?.markSrc));
+  check("v0.9 perf: wall cards use content-visibility", wall?.cv === "auto", String(wall?.cv));
+  check("v0.9 boot: wall skeleton shown before first paint", wall?.skeleton?.shown === true && wall.skeleton.clearedAt != null, JSON.stringify(wall?.skeleton));
+}
+
+/* 80. v0.9.0: official colors + badge size + direct manipulation + zh UI */
+{
+  const color = await ev(`(async () => {
+    const sample = async (url) => {
+      const img = new Image();
+      img.src = url;
+      await img.decode();
+      const c = document.createElement("canvas");
+      c.width = img.naturalWidth; c.height = img.naturalHeight;
+      const g = c.getContext("2d");
+      g.drawImage(img, 0, 0);
+      const d = g.getImageData(0, 0, c.width, c.height).data;
+      let sat = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i + 3] < 128) continue;
+        const mx = Math.max(d[i], d[i + 1], d[i + 2]), mn = Math.min(d[i], d[i + 1], d[i + 2]);
+        if (mx - mn > 40) sat += 1;
+      }
+      return sat;
+    };
+    return {
+      nikon: await sample("./brand/thumbs/nikon.png"),
+      nikonMono: await sample("./brand/thumbs/nikon-mono.png"),
+      sony: await sample("./brand/thumbs/sony.png"),
+      nikonLockup: await sample("./lockup/thumbs/nikon.png"),
+      series: await sample("./series/thumbs/sony-gm.png"),
+    };
+  })()`);
+  check("v0.9 color: colorful brand thumb carries official color", (color?.nikon ?? 0) > 50, JSON.stringify(color));
+  check("v0.9 color: mono variant stays monochrome", color?.nikonMono === 0, String(color?.nikonMono));
+  check("v0.9 color: mono brand thumb stays monochrome", color?.sony === 0, String(color?.sony));
+  check("v0.9 color: lockup follows the brand color", (color?.nikonLockup ?? 0) > 50, String(color?.nikonLockup));
+  check("v0.9 color: series emblems stay monochrome", color?.series === 0, String(color?.series));
+
+  const ed = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    await fg.useTemplate("classic-watermark-single-row");
+    await sleep(800);
+    const st = fg.state;
+    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson()));
+    const bmp = await createImageBitmap(new Blob([st.photos[0].bytes]));
+    const badge = boxes.find((b) => b.id === "brandmark");
+    const ratio = badge ? badge.h / bmp.height : 0;
+    const idx = new Int8Array(4);
+    void idx;
+    return { ratio, canvasW: bmp.width, canvasH: bmp.height, badgeH: badge?.h ?? 0 };
+  })()`);
+  check("v0.9 size: badge layers render at >= 6% photo height", (ed?.ratio ?? 0) >= 0.057, JSON.stringify(ed));
+
+  const inter = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    const layerFont = () => {
+      const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"];
+      const t = raw ? JSON.parse(raw) : fg.currentTemplateObject();
+      const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } };
+      return find(t.layers)?.font?.size ?? null;
+    };
+    // select via the layer list (auto-pan should bring it into view)
+    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
+    await sleep(500);
+    const handles = [...document.querySelectorAll(".edit-overlay .handle")].map((h) => { const r = h.getBoundingClientRect(); return { kind: h.dataset.kind, corner: h.dataset.corner ?? null, w: Math.round(r.width), h: Math.round(r.height), x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
+    const corners = handles.filter((h) => h.kind === "scale").map((h) => h.corner).sort().join(",");
+    const toolbar = [...document.querySelectorAll(".sel-toolbar button")].map((b) => b.dataset.act).join(",");
+    const handleHit = handles.every((h) => h.w >= 24 && h.h >= 24);
+    const inView = handles.every((h) => h.x > 0 && h.y > 0 && h.x < window.innerWidth && h.y < window.innerHeight);
+    // drag move
+    const boxOf = () => { const st = fg.state; return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson())).find((b) => b.id === "model"); };
+    const b0 = boxOf();
+    const img = document.querySelector("#canvasWrap img");
+    const r = img.getBoundingClientRect();
+    const toClient = (b) => ({ x: r.left + ((b.x + b.w / 2) / img.naturalWidth) * r.width, y: r.top + ((b.y + b.h / 2) / img.naturalHeight) * r.height });
+    const c0 = toClient(b0);
+    const vp = document.getElementById("viewport");
+    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 71, isPrimary: true });
+    const pm = (x, y) => new PointerEvent("pointermove", { clientX: x, clientY: y, bubbles: true, buttons: 1, pointerId: 71, isPrimary: true });
+    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 71, isPrimary: true });
+    vp.dispatchEvent(pd(c0.x, c0.y));
+    window.dispatchEvent(pm(c0.x + 40, c0.y - 20));
+    window.dispatchEvent(pu(c0.x + 40, c0.y - 20));
+    await sleep(700);
+    const b1 = boxOf();
+    const moved = Math.hypot(b1.x - b0.x, b1.y - b0.y) > 5;
+    // corner scale changes the font size (dispatch on the handle itself)
+    const font0 = layerFont();
+    const waitHandle = async (sel, ms = 8000) => {
+      for (let i = 0; i < Math.ceil(ms / 100); i++) {
+        const el = document.querySelector(sel);
+        if (el) return el;
+        await sleep(100);
+      }
+      return null;
+    };
+    const seEl = await waitHandle(".edit-overlay .handle.h-se");
+    const h2 = seEl?.getBoundingClientRect();
+    const se2 = h2 ? { x: h2.x + h2.width / 2, y: h2.y + h2.height / 2 } : handles.find((h) => h.corner === "se");
+    const diag = { seRect: h2 ? { x: Math.round(h2.x), y: Math.round(h2.y) } : null, selected: window.__fgEditor.debug().selected, at: null };
+    if (h2) diag.at = (() => { const el = document.elementFromPoint(se2.x, se2.y); return el ? String(el.className || el.tagName).slice(0, 40) : null; })();
+    try {
+      seEl?.dispatchEvent(pd(se2.x, se2.y));
+      window.dispatchEvent(pm(se2.x + 50, se2.y + 30));
+      window.dispatchEvent(pu(se2.x + 50, se2.y + 30));
+    } catch (err) {
+      diag.err = String(err).slice(0, 80);
+    }
+    await sleep(900);
+    const font1 = layerFont();
+    // rotate
+    const rot0 = (() => { const t = fg.currentTemplateObject(); const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return find(t.layers)?.rotation ?? 0; })();
+    const rotEl = await waitHandle(".edit-overlay .handle.rot");
+    if (rotEl) {
+      const rr = rotEl.getBoundingClientRect();
+      const rx = rr.x + rr.width / 2, ry = rr.y + rr.height / 2;
+      rotEl.dispatchEvent(pd(rx, ry));
+      window.dispatchEvent(pm(rx + 30, ry + 20));
+      window.dispatchEvent(pu(rx + 30, ry + 20));
+      await sleep(900);
+    }
+    const readRot = () => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.rotation ?? 0 : 0; };
+    const rot1 = readRot();
+    // shift multi-select
+    const rows = [...document.querySelectorAll("#layerList .layer-row")];
+    rows[0]?.click();
+    rows[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    await sleep(200);
+    const multi = window.__fgEditor.debug().selected.length;
+    // back to a single selection, then toolbar delete + undo
+    rows[0]?.click();
+    await sleep(200);
+    const before = document.querySelectorAll("#layerList .layer-row").length;
+    document.querySelector(".sel-toolbar button[data-act=delete]")?.click();
+    await sleep(600);
+    const afterDel = document.querySelectorAll("#layerList .layer-row").length;
+    document.getElementById("editUndo")?.click();
+    await sleep(700);
+    const afterUndo = document.querySelectorAll("#layerList .layer-row").length;
+    // zoom controls + canvas size
+    fg.state.zoom.autoFit = false;
+    const zs = document.getElementById("zoomSelect");
+    const zoomDiag = { before: fg.state.zoom.scale, value: zs.value, opts: zs.options.length };
+    window.__zoomChanged = false;
+    zs.addEventListener("change", () => { window.__zoomChanged = true; }, { once: true });
+    zs.value = "1"; zs.dispatchEvent(new Event("change"));
+    await sleep(400);
+    const zoomLabel = document.getElementById("zoomLabel").textContent;
+    const stageSize = document.getElementById("stageSize").textContent;
+    zoomDiag.after = fg.state.zoom.scale;
+    zoomDiag.fired = window.__zoomChanged;
+    zoomDiag.label = zoomLabel;
+    document.getElementById("zoomFit")?.click();
+    await sleep(300);
+    return { corners, toolbar, handleHit, inView, moved, font0, font1, rot0, rot1, multi, before, afterDel, afterUndo, zoomLabel, stageSize, diag, zoomDiag };
+  })()`);
+  check("v0.9 canvas: four corner handles + rotation handle", inter?.corners === "ne,nw,se,sw" && (inter?.toolbar ?? "").includes("delete"), JSON.stringify({ corners: inter?.corners, toolbar: inter?.toolbar }));
+  check("v0.9 canvas: handle hit areas are >= 24px", inter?.handleHit === true, JSON.stringify({ hit: inter?.handleHit }));
+  check("v0.9 canvas: selected handles are inside the viewport (auto-pan)", inter?.inView === true, JSON.stringify({ inView: inter?.inView }));
+  check("v0.9 canvas: drag moves the layer", inter?.moved === true, JSON.stringify({ moved: inter?.moved }));
+  check("v0.9 canvas: corner drag scales the text size", (inter?.font1 ?? 0) > (inter?.font0 ?? 0), JSON.stringify({ f0: inter?.font0, f1: inter?.font1, diag: inter?.diag }));
+  check("v0.9 canvas: rotation handle changes rotation", Math.abs(inter?.rot1 ?? 0) > 0.5, JSON.stringify({ r0: inter?.rot0, r1: inter?.rot1 }));
+  check("v0.9 canvas: shift multi-select selects two layers", inter?.multi === 2, String(inter?.multi));
+  check("v0.9 canvas: toolbar delete + undo work", inter?.afterDel === inter?.before - 1 && inter?.afterUndo === inter?.before, JSON.stringify({ before: inter?.before, del: inter?.afterDel, undo: inter?.afterUndo }));
+  check("v0.9 canvas: zoom select + canvas size indicator", inter?.zoomLabel === "100%" && /\d+ × \d+ px/.test(inter?.stageSize ?? ""), JSON.stringify({ z: inter?.zoomLabel, s: inter?.stageSize, d: inter?.zoomDiag }));
+
+  const layout = await ev(`(() => {
+    const side = document.querySelector(".sidebar");
+    const nodes = [...side.children].filter((n) => !n.classList.contains("hidden"));
+    const rects = nodes.map((n) => { const r = n.getBoundingClientRect(); return { id: n.id || n.className.split(" ")[0], top: Math.round(r.top), bottom: Math.round(r.bottom), left: Math.round(r.left), right: Math.round(r.right) }; });
+    const overlaps = [];
+    for (let i = 0; i < rects.length; i++) for (let j = i + 1; j < rects.length; j++) {
+      const a = rects[i], b = rects[j];
+      const y = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+      const x = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+      if (y > 2 && x > 2) overlaps.push({ a: a.id, b: b.id });
+    }
+    const bar = document.querySelector(".export-bar");
+    return { overlaps, barH: bar ? Math.round(bar.getBoundingClientRect().height) : 0, tabsH: Math.round(document.querySelector(".side-tabs").getBoundingClientRect().height) };
+  })()`);
+  check("v0.9 layout: sidebar blocks do not overlap", Array.isArray(layout?.overlaps) && layout.overlaps.length === 0, JSON.stringify(layout?.overlaps));
+  check("v0.9 layout: compact export bar (<= 56px)", (layout?.barH ?? 999) <= 56, String(layout?.barH));
 
   const zh = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     if (document.documentElement.lang !== "zh-CN") document.getElementById("langBtn").click();
     await sleep(500);
+    window.__fg.setSideTab("elements");
     await window.__fg.useTemplate("camera-baseplate-02");
     await sleep(700);
+    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "text")?.click();
+    await sleep(400);
     const tags = [...document.querySelectorAll("#layerList .ltag")].map((e) => e.textContent.trim());
     const zhTags = tags.filter((tx) => /[\\u4e00-\\u9fff]/.test(tx)).length;
-    const roots = ["#topbar", ".topbar", ".wall-head", "#brandCard", "#tweakCard"];
-    const text = roots.map((s) => document.querySelector(s)?.innerText ?? "").join(" ");
+    const names = [...document.querySelectorAll("#layerList .lname")].map((e) => e.textContent.trim());
+    const propLabels = [...document.querySelectorAll("#propsBody .field label span")].map((e) => e.textContent.trim());
+    const roots = ["#topbar", ".side-tabs", ...Array.from(document.querySelectorAll(".side-panel")).map((_, i) => \`.side-panel:nth-of-type(\${i + 1})\`)];
+    const text = [document.getElementById("topbar")?.innerText ?? "", ...Array.from(document.querySelectorAll(".side-tabs, .side-panels")).map((e) => e.innerText ?? "")].join(" ");
     const words = text.match(/[A-Za-z]{3,}/g) ?? [];
-    const ALLOW = /^(frameg|frameg|framegeist|exif|iso|jpeg|jpg|png|avif|webp|heic|wasm|canon|sony|nikon|fujifilm|leica|hasselblad|panasonic|lumix|ricoh|sigma|zeiss|dji|apple|tamron|epson|olympus|pentax|gopro|insta360|sandisk|samsung|vivo|oppo|oneplus|huawei|honor|google|motorola|nokia|blackmagic|viltrox|laowa|ttartisan|tokina|samyang|meike|sirui|yongnuo|voigtlander|eos|ilce|nikkor|zuiko|gm|art|apo|sp|xf|xcd|batis|rf|ef|url|api|dpi|raw|tiff|mm|mp|kb|mb|gb|px|auto|official|original|light|dark|inter|jetbrains|playfair|oswald|cormorant|space|grotesk|bebas|great|vibes|noto|sans|serif|sc|ma|shan|zheng|fraunces|bricolage|instrument|geist|mono|onest|unbounded|smiley|lxgw|wenkai|glow|sarasa|gothic)$/i;
+    const ALLOW = /^(frameg|frameg|framegeist|exif|iso|jpeg|jpg|png|avif|webp|heic|wasm|canon|sony|nikon|fujifilm|leica|hasselblad|panasonic|lumix|ricoh|sigma|zeiss|dji|apple|tamron|epson|olympus|pentax|gopro|insta360|sandisk|samsung|vivo|oppo|oneplus|huawei|honor|google|motorola|nokia|blackmagic|viltrox|laowa|ttartisan|tokina|samyang|meike|sirui|yongnuo|voigtlander|eos|ilce|nikkor|zuiko|gm|art|deco|apo|sp|xf|xcd|batis|rf|ef|url|api|dpi|raw|tiff|mm|mp|kb|mb|gb|px|auto|official|original|light|dark|inter|jetbrains|playfair|oswald|cormorant|space|grotesk|bebas|great|vibes|noto|sans|serif|sc|ma|shan|zheng|fraunces|bricolage|instrument|geist|mono|onest|unbounded|smiley|lxgw|wenkai|glow|sarasa|gothic)$/i;
     const leftovers = [...new Set(words.filter((w) => !ALLOW.test(w)))];
-    return { tags, zhTags, total: tags.length, leftovers };
+    return { tags, zhTags, total: tags.length, names, propLabels, leftovers };
   })()`);
-  check("v0.8 i18n: layer type tags localized in zh", zh?.total > 0 && zh?.zhTags === zh?.total, JSON.stringify(zh?.tags));
-  check("v0.8 i18n: no English leftovers in visible chrome (zh)", Array.isArray(zh?.leftovers) && zh.leftovers.length === 0, JSON.stringify(zh?.leftovers));
+  check("v0.9 i18n: layer type tags localized in zh", zh?.total > 0 && zh?.zhTags === zh?.total, JSON.stringify(zh?.tags));
+  check("v0.9 i18n: layer names localized (no raw ids)", Array.isArray(zh?.names) && zh.names.length > 0 && zh.names.every((n) => /[\u4e00-\u9fff]/.test(n)), JSON.stringify(zh?.names));
+  check("v0.9 i18n: property labels localized", Array.isArray(zh?.propLabels) && zh.propLabels.length > 0 && zh.propLabels.every((l) => /[\u4e00-\u9fff]/.test(l) && !/[a-z]{3,}/i.test(l.replace(/EXIF|ISO|JPEG|PNG|AVIF|WebP|GPS|HEIC|ICC|DPI/g, ""))), JSON.stringify(zh?.propLabels?.slice(0, 8)));
+  check("v0.9 i18n: no English leftovers across all sidebar panels (zh)", Array.isArray(zh?.leftovers) && zh.leftovers.length === 0, JSON.stringify(zh?.leftovers));
+}
+
+/* 81. v0.9.0: pass-through, lock, export bar, badge insertion, dark thumbs */
+{
+  const pass = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    await fg.useTemplate("classic-watermark-single-row");
+    await sleep(900);
+    const st = fg.state;
+    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson()));
+    // v0.9.0: the 24MP re-render is async; wait until the editor overlay tracks
+    // the effective template and S.img is the live stage element (no fixed sleep).
+    const expected = boxes.map((b) => b.id).sort().join("|");
+    for (let i = 0; i < 80; i++) {
+      const dbg = window.__fgEditor.debug();
+      if ((dbg.boxes ?? []).slice().sort().join("|") === expected && dbg.stageReady) break;
+      await sleep(100);
+    }
+    const img = document.querySelector("#canvasWrap img");
+    const r = img.getBoundingClientRect();
+    const others = boxes.filter((b) => b.type !== "group");
+    const inside = (b, x, y) => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h;
+    let pt = null;
+    let ids = null;
+    for (const a of others) {
+      for (const b of others) {
+        if (a.id === b.id) continue;
+        const x = Math.max(a.x, b.x) + 4;
+        const y = Math.max(a.y, b.y) + 2;
+        if (inside(a, x, y) && inside(b, x, y)) { pt = { x, y }; ids = [a.id, b.id]; break; }
+      }
+      if (pt) break;
+    }
+    if (!pt) return { skip: true };
+    const cx = r.left + (pt.x / img.naturalWidth) * r.width;
+    const cy = r.top + (pt.y / img.naturalHeight) * r.height;
+    const vp = document.getElementById("viewport");
+    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 81, isPrimary: true });
+    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 81, isPrimary: true });
+    vp.dispatchEvent(pd(cx, cy));
+    window.dispatchEvent(pu(cx, cy));
+    await sleep(400);
+    const first = window.__fgEditor.debug().selected[0];
+    // v0.9.0 auto-pan may shift the stage after the first selection; re-derive
+    // the client point from the same canvas coordinate for the second click.
+    const img2 = document.querySelector("#canvasWrap img");
+    const r2 = img2.getBoundingClientRect();
+    const cx2 = r2.left + (pt.x / img2.naturalWidth) * r2.width;
+    const cy2 = r2.top + (pt.y / img2.naturalHeight) * r2.height;
+    vp.dispatchEvent(pd(cx2, cy2));
+    window.dispatchEvent(pu(cx2, cy2));
+    await sleep(400);
+    const second = window.__fgEditor.debug().selected[0];
+    return { ids, first, second, cycled: first !== second && ids.includes(first) && ids.includes(second) };
+  })()`);
+  check("v0.9 canvas: click pass-through cycles overlapping layers", pass?.skip === true || pass?.cycled === true, JSON.stringify(pass));
+
+  const lock = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
+    await sleep(400);
+    const before = document.querySelector('#layerList .layer-row[data-id="model"]');
+    const off = before?.querySelector('button[data-act="lock"]');
+    off?.click();
+    await sleep(400);
+    const box = (() => { const st = fg.state; return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson())).find((b) => b.id === "model"); })();
+    const img = document.querySelector("#canvasWrap img");
+    const r = img.getBoundingClientRect();
+    const cx = r.left + ((box.x + box.w / 2) / img.naturalWidth) * r.width;
+    const cy = r.top + ((box.y + box.h / 2) / img.naturalHeight) * r.height;
+    const vp = document.getElementById("viewport");
+    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 82, isPrimary: true });
+    const pm = (x, y) => new PointerEvent("pointermove", { clientX: x, clientY: y, bubbles: true, buttons: 1, pointerId: 82, isPrimary: true });
+    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 82, isPrimary: true });
+    const b0 = { x: box.x, y: box.y };
+    vp.dispatchEvent(pd(cx, cy)); window.dispatchEvent(pm(cx + 60, cy + 40)); window.dispatchEvent(pu(cx + 60, cy + 40));
+    await sleep(700);
+    const b1 = (() => { const st = fg.state; return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson())).find((b) => b.id === "model"); })();
+    const lockedNoMove = Math.hypot(b1.x - b0.x, b1.y - b0.y) < 2;
+    document.querySelector('#layerList .layer-row[data-id="model"] button[data-act="lock"]')?.click();
+    await sleep(300);
+    return { lockedNoMove };
+  })()`);
+  check("v0.9 canvas: locked layer resists dragging", lock?.lockedNoMove === true, JSON.stringify(lock));
+
+  const bar = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const info = document.getElementById("exportBarInfo");
+    const before = info.textContent;
+    const sel = document.getElementById("exportFormat");
+    sel.value = "webp"; sel.dispatchEvent(new Event("change"));
+    await sleep(300);
+    const after = info.textContent;
+    info.click();
+    await sleep(200);
+    const exportTab = document.querySelector('.side-tab[data-tab="export"]').classList.contains("on");
+    sel.value = "jpeg"; sel.dispatchEvent(new Event("change"));
+    await sleep(200);
+    return { before, after, exportTab };
+  })()`);
+  check("v0.9 export bar: mirrors size/format and opens the export tab", /·\s*WEBP/i.test(bar?.after ?? "") && bar?.exportTab === true, JSON.stringify(bar));
+
+  const insert = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    const candidates = ["minimal-corner-mono", "minimal-center-line", "borderless-one-liner-01", "white-border-top-note"];
+    let target = null;
+    for (const id of candidates) {
+      await fg.useTemplate(id);
+      await sleep(500);
+      if (!/@builtin\\/(brand|lockup|series|game)\\//.test(fg.effectiveTemplateJson())) { target = id; break; }
+    }
+    if (!target) return { skip: true };
+    const before = document.querySelectorAll("#layerList .layer-row").length;
+    document.getElementById("addBadge")?.click();
+    await sleep(900);
+    const after = document.querySelectorAll("#layerList .layer-row").length;
+    const json = fg.effectiveTemplateJson();
+    const panelOpen = !document.getElementById("badgeLibPanel").classList.contains("hidden");
+    return { target, before, after, inserted: after === before + 1 && /@builtin\\/brand\\//.test(json), panelOpen };
+  })()`);
+  check("v0.9 badge lib: addBadge inserts a badge layer when missing", insert?.skip === true || (insert?.inserted === true && insert?.panelOpen === true), JSON.stringify(insert));
+
+  const dark = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    document.documentElement.dataset.theme = "dark";
+    await sleep(100);
+    document.getElementById("addBadge")?.click();
+    await sleep(500);
+    [...document.querySelectorAll("#brandGroups .brand-chip")].find((c) => c.textContent.startsWith("相机品牌"))?.click();
+    await sleep(400);
+    const nikon = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")].find((c) => (c.title || "").toLowerCase() === "nikon");
+    const sony = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")].find((c) => (c.title || "").toLowerCase() === "sony");
+    const src = { nikon: nikon?.querySelector("img")?.getAttribute("src") ?? "", sony: sony?.querySelector("img")?.getAttribute("src") ?? "" };
+    document.documentElement.dataset.theme = "light";
+    return src;
+  })()`);
+  check("v0.9 color: dark theme keeps color thumbs, mono switches to -light", /thumbs\/nikon\.png$/.test(dark?.nikon ?? "") && /thumbs\/sony-light\.png$/.test(dark?.sony ?? ""), JSON.stringify(dark));
+
+  const quick = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    document.getElementById("addBadge")?.click();
+    await sleep(400);
+    const chips = [...document.querySelectorAll("#brandQuick .brand-chip")].map((c) => c.textContent);
+    return { chips };
+  })()`);
+  check("v0.9 badge lib: favorites/recent quick row exists", (quick?.chips?.length ?? 0) >= 1, JSON.stringify(quick?.chips));
+
+  const pan = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    const vp = document.getElementById("viewport");
+    const before = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty };
+    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 84, isPrimary: true });
+    const pm = (x, y) => new PointerEvent("pointermove", { clientX: x, clientY: y, bubbles: true, buttons: 1, pointerId: 84, isPrimary: true });
+    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 84, isPrimary: true });
+    vp.dispatchEvent(pd(60, 200)); window.dispatchEvent(pm(120, 260)); window.dispatchEvent(pu(120, 260));
+    await sleep(400);
+    const after = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty };
+    return { moved: Math.hypot(after.tx - before.tx, after.ty - before.ty) > 10 };
+  })()`);
+  check("v0.9 canvas: plain left drag on empty canvas does not pan", pan?.moved === false, JSON.stringify(pan));
 }
 
 clearTimeout(WATCHDOG);

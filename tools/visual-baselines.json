@@ -1,252 +1,252 @@
 {
-  "generatedAt": "2026-09-20T09:43:54.485Z",
+  "generatedAt": "2026-09-22T03:20:29.373Z",
   "items": {
     "templates/samples/art-copperplate-etch.jpg": {
       "dhash": "8f71794941616561",
       "mean": [
-        132.686,
-        138.897,
-        135.191
+        132.666,
+        138.878,
+        135.173
       ]
     },
     "templates/samples/art-deco-double.jpg": {
       "dhash": "4f61392163410141",
       "mean": [
-        163.727,
-        163.347,
-        158.253
+        163.718,
+        163.339,
+        158.244
       ]
     },
     "templates/samples/art-gilt-foil.jpg": {
       "dhash": "3163e1f0f0f8f8f8",
       "mean": [
-        104.79,
-        95.954,
-        87.602
+        104.807,
+        95.965,
+        87.559
       ]
     },
     "templates/samples/art-letterpress-relief.jpg": {
-      "dhash": "4f73737171e1e268",
+      "dhash": "cf73737171e1e268",
       "mean": [
-        192.36,
-        191.734,
-        186.743
+        192.351,
+        191.725,
+        186.734
       ]
     },
     "templates/samples/art-republican-press.jpg": {
       "dhash": "0f0f4f4f7f7f7f99",
       "mean": [
-        145.431,
-        165.355,
-        166.03
+        145.411,
+        165.335,
+        166.011
       ]
     },
     "templates/samples/art-ukiyoe-cartouche.jpg": {
       "dhash": "0d0f051531232313",
       "mean": [
-        139.94,
-        139.489,
-        130.351
+        139.931,
+        139.481,
+        130.343
       ]
     },
     "templates/samples/art-vermilion-seal.jpg": {
       "dhash": "971f1d7d79797939",
       "mean": [
-        148.607,
-        127.699,
-        123.429
+        148.587,
+        127.68,
+        123.41
       ]
     },
     "templates/samples/art-woodtype-press.jpg": {
       "dhash": "0f1f4f4f77737171",
       "mean": [
-        135.368,
-        135.43,
-        128.336
+        135.359,
+        135.421,
+        128.328
       ]
     },
     "templates/samples/black-frame-charcoal-split-01.jpg": {
       "dhash": "033c3c723c3cbc1e",
       "mean": [
-        52.936,
-        46.858,
-        54.5
+        52.951,
+        46.868,
+        54.457
       ]
     },
     "templates/samples/black-frame-gold-line-01.jpg": {
       "dhash": "06f0f4f0f0e8e8d0",
       "mean": [
-        57.377,
-        59.255,
-        39.966
+        57.384,
+        59.261,
+        39.973
       ]
     },
     "templates/samples/black-frame-inner-rule-01.jpg": {
       "dhash": "d26efe9ebefefe7e",
       "mean": [
-        17.29,
-        33.323,
-        39.961
+        17.307,
+        33.335,
+        39.92
       ]
     },
     "templates/samples/black-frame-mono-slate-01.jpg": {
       "dhash": "93d0c8e0e0f0f0d0",
       "mean": [
-        47.503,
-        46.374,
-        29.726
+        47.51,
+        46.381,
+        29.734
       ]
     },
     "templates/samples/black-frame-side-stack-01.jpg": {
       "dhash": "3130b8f8f8faf2d6",
       "mean": [
-        55.515,
-        55.516,
-        55.519
+        55.531,
+        55.526,
+        55.48
       ]
     },
     "templates/samples/black-frame-two-line-01.jpg": {
       "dhash": "02e2f8f0f0f0f0e0",
       "mean": [
-        48.855,
-        43.925,
-        44.149
+        48.861,
+        43.932,
+        44.156
       ]
     },
     "templates/samples/blur-bg-brandbar-02.jpg": {
       "dhash": "30b07173c799e9d9",
       "mean": [
-        26.27,
-        25.769,
-        29.863
+        26.285,
+        25.779,
+        29.828
       ]
     },
     "templates/samples/blur-bg-card-03.jpg": {
       "dhash": "d3f3e4ecb860fc73",
       "mean": [
-        16.32,
-        10.745,
-        12.861
+        16.326,
+        10.751,
+        12.867
       ]
     },
     "templates/samples/blur-bg-center-01.jpg": {
       "dhash": "617527664e1e9e3e",
       "mean": [
-        48.192,
-        48.192,
-        48.191
+        48.209,
+        48.204,
+        48.152
       ]
     },
     "templates/samples/blur-bg-topcap-04.jpg": {
       "dhash": "f372f0f07171b0b0",
       "mean": [
-        69.709,
-        65.231,
-        47.112
+        69.713,
+        65.236,
+        47.117
       ]
     },
     "templates/samples/borderless-center-caption-01.jpg": {
       "dhash": "e18332e56547fffc",
       "mean": [
         141.403,
-        125.078,
-        96.993
+        125.088,
+        97.01
       ]
     },
     "templates/samples/borderless-corner-stack-01.jpg": {
       "dhash": "773a98e9e166ecec",
       "mean": [
-        94.123,
-        133.467,
-        109.486
+        94.13,
+        133.473,
+        109.492
       ]
     },
     "templates/samples/borderless-date-hero-01.jpg": {
       "dhash": "5a9d8d0fcccccccc",
       "mean": [
-        143.121,
-        147.526,
-        150.991
+        143.095,
+        147.499,
+        150.963
       ]
     },
     "templates/samples/borderless-dot-corners-01.jpg": {
       "dhash": "58e8f0f0b03022e3",
       "mean": [
-        159.013,
-        140.969,
-        133.438
+        159.006,
+        140.965,
+        133.436
       ]
     },
     "templates/samples/borderless-geo-pin-01.jpg": {
       "dhash": "c0c8d8d2c3dbdaf0",
       "mean": [
-        107.838,
-        133.528,
-        127.203
+        107.813,
+        133.505,
+        127.179
       ]
     },
     "templates/samples/borderless-lowleft-pair-01.jpg": {
       "dhash": "c8ccec99b9f0f8f0",
       "mean": [
-        115.095,
-        122.112,
-        108.147
+        115.103,
+        122.118,
+        108.154
       ]
     },
     "templates/samples/borderless-one-liner-01.jpg": {
       "dhash": "e0308ce1c8ccccd9",
       "mean": [
         145.776,
-        147.094,
-        142.156
+        147.086,
+        142.073
       ]
     },
     "templates/samples/borderless-quad-anchors-01.jpg": {
       "dhash": "7070b192ccc8f0f0",
       "mean": [
-        147.995,
-        104.898,
-        77.802
+        148,
+        104.905,
+        77.809
       ]
     },
     "templates/samples/borderless-right-roll-01.jpg": {
       "dhash": "fcfcf46e3e393436",
       "mean": [
-        142.95,
-        122.658,
-        109.272
+        142.955,
+        122.66,
+        109.237
       ]
     },
     "templates/samples/borderless-signoff-block-01.jpg": {
       "dhash": "b030a8e0e0c08000",
       "mean": [
-        142.274,
-        123.476,
-        97.687
+        142.278,
+        123.481,
+        97.695
       ]
     },
     "templates/samples/borderless-vertical-spine-01.jpg": {
       "dhash": "0d090909010141c0",
       "mean": [
-        155.612,
-        154.02,
-        146.668
+        155.586,
+        153.994,
+        146.643
       ]
     },
     "templates/samples/calendar-center-rule-01.jpg": {
       "dhash": "4c1d393371717979",
       "mean": [
-        175.729,
-        175.961,
-        175.564
+        175.728,
+        175.96,
+        175.563
       ]
     },
     "templates/samples/calendar-corner-day-01.jpg": {
       "dhash": "c4cc8ccccfcfefea",
       "mean": [
-        136.64,
-        132.433,
-        142.422
+        136.639,
+        132.432,
+        142.421
       ]
     },
     "templates/samples/calendar-portrait-stack-01.jpg": {
@@ -260,7 +260,7 @@
     "templates/samples/calendar-rail-date-01.jpg": {
       "dhash": "3d33332305253939",
       "mean": [
-        174.069,
+        174.07,
         172.022,
         153.618
       ]
@@ -268,9 +268,9 @@
     "templates/samples/calendar-split-columns-01.jpg": {
       "dhash": "3333636161614149",
       "mean": [
-        153.867,
-        151.592,
-        150.283
+        153.869,
+        151.593,
+        150.284
       ]
     },
     "templates/samples/calendar-strip-date-01.jpg": {
@@ -284,177 +284,177 @@
     "templates/samples/camera-baseplate-02.jpg": {
       "dhash": "088aa2b2e0e0e0e0",
       "mean": [
-        91.57,
-        92.02,
-        95.28
+        91.568,
+        92.018,
+        95.278
       ]
     },
     "templates/samples/camera-corner-body-03.jpg": {
       "dhash": "41070113030f4b61",
       "mean": [
-        156.4,
-        172.984,
-        189.059
+        156.383,
+        172.966,
+        189.043
       ]
     },
     "templates/samples/camera-lens-dial-06.jpg": {
       "dhash": "33b2f0f0f0c8b2f2",
       "mean": [
-        74.216,
-        75.075,
-        72.243
+        74.222,
+        75.08,
+        72.249
       ]
     },
     "templates/samples/camera-retro-sidecar-04.jpg": {
       "dhash": "767373777773f1f1",
       "mean": [
-        194.116,
-        180.533,
-        149.853
+        194.1,
+        180.518,
+        149.839
       ]
     },
     "templates/samples/camera-ricoh-slimline-08.jpg": {
       "dhash": "0b1f377f373d3c3d",
       "mean": [
-        154.312,
-        141.618,
-        122.392
+        154.303,
+        141.609,
+        122.383
       ]
     },
     "templates/samples/camera-series-emblem-07.jpg": {
       "dhash": "e07171717d3d3de1",
       "mean": [
-        180.071,
-        173.695,
-        163.284
+        180.054,
+        173.678,
+        163.268
       ]
     },
     "templates/samples/camera-stencil-mono-05.jpg": {
       "dhash": "4961010989131919",
       "mean": [
-        177.2,
-        172.037,
-        133.893
+        177.19,
+        172.027,
+        133.883
       ]
     },
     "templates/samples/camera-topdeck-bar-01.jpg": {
       "dhash": "4f597b79596d4d8c",
       "mean": [
-        172.13,
-        167.01,
-        163.73
+        172.112,
+        166.993,
+        163.713
       ]
     },
     "templates/samples/classic-watermark-black-bar.jpg": {
       "dhash": "e3dcb5e1f3dacece",
       "mean": [
-        131.504,
-        100.456,
-        83.831
+        131.513,
+        100.465,
+        83.84
       ]
     },
     "templates/samples/classic-watermark-brand-center.jpg": {
       "dhash": "ccccccc8e8e0e2e2",
       "mean": [
-        152.969,
-        145.045,
-        110.084
+        152.943,
+        145.019,
+        110.058
       ]
     },
     "templates/samples/classic-watermark-date-right.jpg": {
       "dhash": "0f674319b9b1a7cc",
       "mean": [
-        134.524,
-        123.349,
-        116.368
+        134.522,
+        123.35,
+        116.369
       ]
     },
     "templates/samples/classic-watermark-double-row.jpg": {
       "dhash": "a46080f898f8f8e0",
       "mean": [
-        122.671,
-        124.95,
-        125.133
+        122.645,
+        124.924,
+        125.106
       ]
     },
     "templates/samples/classic-watermark-hairline-thin.jpg": {
       "dhash": "8c9c8edcf0f0ccf0",
       "mean": [
-        173.554,
-        155.332,
-        140.108
+        173.541,
+        155.319,
+        140.095
       ]
     },
     "templates/samples/classic-watermark-mono-stack.jpg": {
       "dhash": "dc9f8745c9635ada",
       "mean": [
-        149.435,
-        147.465,
-        136.82
+        149.409,
+        147.44,
+        136.795
       ]
     },
     "templates/samples/classic-watermark-red-dot.jpg": {
       "dhash": "569edccec0e0e0e0",
       "mean": [
-        115.055,
-        119.599,
-        116.212
+        115.062,
+        119.605,
+        116.219
       ]
     },
     "templates/samples/classic-watermark-single-row.jpg": {
       "dhash": "d8dada50d8d8d8f8",
       "mean": [
-        145.213,
-        135.336,
-        123.295
+        145.185,
+        135.309,
+        123.268
       ]
     },
     "templates/samples/colorcard-column-02.jpg": {
       "dhash": "e3e3e3d3f1f1e1e1",
       "mean": [
-        64.155,
-        52.123,
-        40.965
+        64.16,
+        52.129,
+        40.97
       ]
     },
     "templates/samples/colorcard-cream-date-04.jpg": {
       "dhash": "c1717d6925217139",
       "mean": [
-        121.17,
-        157.782,
-        186.525
+        121.153,
+        157.766,
+        186.509
       ]
     },
     "templates/samples/colorcard-diamonds-03.jpg": {
       "dhash": "0f0f1f3d1f5f7f3f",
       "mean": [
-        138.633,
-        155.85,
-        167.2
+        138.625,
+        155.842,
+        167.192
       ]
     },
     "templates/samples/colorcard-index-05.jpg": {
       "dhash": "8d45455959012121",
       "mean": [
-        161.712,
-        122.077,
-        98.308
+        161.695,
+        122.059,
+        98.29
       ]
     },
     "templates/samples/colorcard-sunrise-chips-01.jpg": {
       "dhash": "0f73636367657979",
       "mean": [
-        136.054,
-        145.008,
-        154.803
+        136.046,
+        145,
+        154.795
       ]
     },
     "templates/samples/colorcard-tint-chips-01.jpg": {
       "dhash": "031373c6c6c885c7",
       "mean": [
-        95.555,
-        62.544,
-        43.47
+        95.564,
+        62.551,
+        43.433
       ]
     },
     "templates/samples/colorful-chip-strip-01.jpg": {
@@ -468,225 +468,225 @@
     "templates/samples/colorful-corner-blocks-01.jpg": {
       "dhash": "faf1707070707060",
       "mean": [
-        70.84,
-        90.433,
-        70.912
+        70.865,
+        90.445,
+        70.852
       ]
     },
     "templates/samples/colorful-dot-cluster-01.jpg": {
       "dhash": "f8fcbefcb8b07078",
       "mean": [
-        31.098,
-        75.445,
-        131.392
+        31.109,
+        75.453,
+        131.396
       ]
     },
     "templates/samples/colorful-frame-quad-01.jpg": {
       "dhash": "c9c8c8d9b9393939",
       "mean": [
-        10.251,
-        75.566,
-        33.746
+        10.277,
+        75.584,
+        33.691
       ]
     },
     "templates/samples/colorful-pastel-card-01.jpg": {
       "dhash": "09231b7979793b33",
       "mean": [
-        133.002,
-        130.804,
-        130.539
+        132.967,
+        130.773,
+        130.512
       ]
     },
     "templates/samples/colorful-rainbow-lines-01.jpg": {
       "dhash": "c54d4f4746657171",
       "mean": [
-        124.814,
-        147.489,
-        154.497
+        124.794,
+        147.468,
+        154.477
       ]
     },
     "templates/samples/colorful-split-duo-01.jpg": {
       "dhash": "c0f070f07062cc4c",
       "mean": [
-        137.132,
-        103.776,
-        85.677
+        137.117,
+        103.779,
+        85.679
       ]
     },
     "templates/samples/colorful-sticker-date-01.jpg": {
       "dhash": "e0eee4e0e0e0e0e0",
       "mean": [
-        86.956,
-        69.886,
-        51.358
+        86.979,
+        69.902,
+        51.3
       ]
     },
     "templates/samples/colorwalk-blur-stage-01.jpg": {
       "dhash": "60a1217d6574f879",
       "mean": [
-        96.865,
-        111.776,
-        110.378
+        96.871,
+        111.781,
+        110.383
       ]
     },
     "templates/samples/colorwalk-ribbon-01.jpg": {
-      "dhash": "4b7f7f57f4f0c0c2",
+      "dhash": "497f7f57f4f0c0c2",
       "mean": [
-        110.218,
-        150.236,
-        139.175
+        110.234,
+        150.247,
+        139.135
       ]
     },
     "templates/samples/colorwalk-round-card-01.jpg": {
       "dhash": "03f1f0f0f0717171",
       "mean": [
         94.264,
-        135.737,
-        134.291
+        135.734,
+        134.288
       ]
     },
     "templates/samples/colorwalk-single-line-01.jpg": {
       "dhash": "9998d8f170f0e44e",
       "mean": [
-        108.823,
-        118.094,
-        125.053
+        108.811,
+        118.082,
+        124.981
       ]
     },
     "templates/samples/colorwalk-tint-seam-01.jpg": {
       "dhash": "5405074f7372fcfc",
       "mean": [
-        147.655,
-        142.535,
-        131.585
+        147.649,
+        142.53,
+        131.58
       ]
     },
     "templates/samples/colorwalk-top-field-01.jpg": {
       "dhash": "59797971f1f9b8b8",
       "mean": [
-        126.021,
-        115.807,
-        95.529
+        126.008,
+        115.792,
+        95.471
       ]
     },
     "templates/samples/colorwalk-vbar-01.jpg": {
       "dhash": "6371b386822e3c30",
       "mean": [
-        125.254,
-        113.784,
-        89.821
+        125.256,
+        113.787,
+        89.825
       ]
     },
     "templates/samples/colorwalk-verse-01.jpg": {
       "dhash": "836f617171f2f0e0",
       "mean": [
-        104.496,
-        105.268,
-        106.262
+        104.489,
+        105.256,
+        106.202
       ]
     },
     "templates/samples/drone-aerial-editorial-01.jpg": {
       "dhash": "393b3d3f35272141",
       "mean": [
-        155.786,
-        183.331,
-        205.952
+        155.779,
+        183.323,
+        205.945
       ]
     },
     "templates/samples/drone-altitude-hero-01.jpg": {
-      "dhash": "8d49797971717171",
+      "dhash": "4d49797971717171",
       "mean": [
-        140.817,
-        171.384,
-        190.504
+        140.799,
+        171.367,
+        190.486
       ]
     },
     "templates/samples/drone-geoblock-01.jpg": {
       "dhash": "4179192169717979",
       "mean": [
-        158.781,
-        154.121,
-        148.437
+        158.776,
+        154.116,
+        148.432
       ]
     },
     "templates/samples/drone-skybar-01.jpg": {
       "dhash": "c1154951094d6d7b",
       "mean": [
-        155.487,
-        157.567,
-        162.186
+        155.467,
+        157.546,
+        162.165
       ]
     },
     "templates/samples/drone-topline-01.jpg": {
       "dhash": "09094d5d53737359",
       "mean": [
-        146.313,
-        161.625,
-        161.72
+        146.304,
+        161.616,
+        161.711
       ]
     },
     "templates/samples/effect-duotone-wash-03.jpg": {
       "dhash": "03c6bcdc9ced5117",
       "mean": [
-        83.55,
-        73.697,
-        56.204
+        83.561,
+        73.704,
+        56.164
       ]
     },
     "templates/samples/effect-float-card-01.jpg": {
-      "dhash": "e7f6fcfcde96e5e6",
+      "dhash": "e7f6fcfcde96e566",
       "mean": [
-        56.993,
-        64.54,
-        61.982
+        56.999,
+        64.545,
+        61.987
       ]
     },
     "templates/samples/effect-minimal-shadow-08.jpg": {
       "dhash": "0f33717171716123",
       "mean": [
-        120.071,
-        108.837,
-        102.031
+        120.053,
+        108.819,
+        102.013
       ]
     },
     "templates/samples/effect-mirror-pool-02.jpg": {
       "dhash": "737771ddb8f071e0",
       "mean": [
-        67.808,
-        69.075,
-        65.028
+        67.813,
+        69.079,
+        65.033
       ]
     },
     "templates/samples/effect-paper-stack-05.jpg": {
       "dhash": "0b4d497131717173",
       "mean": [
-        126.339,
-        60.996,
-        41.549
+        126.316,
+        60.99,
+        41.503
       ]
     },
     "templates/samples/effect-polaroid-float-06.jpg": {
       "dhash": "c03939393b3b3b23",
       "mean": [
-        150.191,
-        147.187,
-        140.954
+        150.184,
+        147.18,
+        140.948
       ]
     },
     "templates/samples/effect-top-gradient-band-07.jpg": {
       "dhash": "23737161e8f8e1c1",
       "mean": [
-        68.639,
-        68.505,
-        63.08
+        68.651,
+        68.512,
+        63.039
       ]
     },
     "templates/samples/effect-vignette-card-04.jpg": {
       "dhash": "0fe4e66671717123",
       "mean": [
-        15.666,
-        13.189,
-        26.176
+        15.672,
+        13.195,
+        26.182
       ]
     },
     "templates/samples/festival-dragon-boat-01.jpg": {
@@ -740,417 +740,417 @@
     "templates/samples/film-darkroom-pillar-03.jpg": {
       "dhash": "46f090c8e0f0e0c0",
       "mean": [
-        37.021,
-        40.334,
-        38.344
+        37.037,
+        40.346,
+        38.305
       ]
     },
     "templates/samples/film-diptych-hairline-07.jpg": {
       "dhash": "0d35616d65536b2b",
       "mean": [
-        130.517,
-        115.391,
-        116.611
+        130.508,
+        115.383,
+        116.603
       ]
     },
     "templates/samples/film-led-datestamp-04.jpg": {
       "dhash": "0321b8e8e0e4f0f8",
       "mean": [
-        55.781,
-        53.397,
-        52.95
+        55.796,
+        53.408,
+        52.913
       ]
     },
     "templates/samples/film-mono-roll-06.jpg": {
       "dhash": "031ab0c0c0c04143",
       "mean": [
-        46.595,
-        41.71,
-        50.99
+        46.601,
+        41.716,
+        50.996
       ]
     },
     "templates/samples/film-positive-print-08.jpg": {
       "dhash": "4123216373030525",
       "mean": [
-        126.43,
-        134.448,
-        136.11
+        126.411,
+        134.429,
+        136.091
       ]
     },
     "templates/samples/film-serif-stock-05.jpg": {
       "dhash": "8e4d4f7531736b6b",
       "mean": [
-        124.968,
-        125.73,
-        123.643
+        124.96,
+        125.722,
+        123.635
       ]
     },
     "templates/samples/film-sprocket-01.jpg": {
       "dhash": "e0f7f7e2e2fafeee",
       "mean": [
-        59.888,
-        49.562,
-        41.923
+        59.904,
+        49.573,
+        41.886
       ]
     },
     "templates/samples/film-sprocket-02.jpg": {
       "dhash": "4741716969497921",
       "mean": [
-        55.071,
-        51.449,
-        41.494
+        55.076,
+        51.454,
+        41.499
       ]
     },
     "templates/samples/fuji-recipe-band-02.jpg": {
       "dhash": "1131616373716171",
       "mean": [
-        137.206,
-        115.416,
-        98.011
+        137.253,
+        115.441,
+        98.038
       ]
     },
     "templates/samples/fuji-recipe-column-03.jpg": {
       "dhash": "6041404148494140",
       "mean": [
-        108.288,
-        100.212,
-        93.972
+        108.336,
+        100.237,
+        94
       ]
     },
     "templates/samples/fuji-recipe-hero-04.jpg": {
       "dhash": "e05d39391f1f1c38",
       "mean": [
-        184.633,
-        186.412,
-        185.862
+        184.648,
+        186.406,
+        185.861
       ]
     },
     "templates/samples/fuji-recipe-panel-01.jpg": {
       "dhash": "04d6f0f89a8682ca",
       "mean": [
-        106.601,
-        99.484,
-        102.995
+        106.65,
+        99.511,
+        103.024
       ]
     },
     "templates/samples/fuji-recipe-rails-05.jpg": {
       "dhash": "fddbdbf3dbdbf7f2",
       "mean": [
-        133.98,
-        127.726,
-        113.77
+        134.029,
+        127.752,
+        113.798
       ]
     },
     "templates/samples/game-arknights-v1.jpg": {
       "dhash": "9ed4c5e4fefefcbc",
       "mean": [
-        80.546,
-        83.111,
-        81.763
+        80.597,
+        83.153,
+        81.799
       ]
     },
     "templates/samples/game-arknights-v2.jpg": {
       "dhash": "0000071000000000",
       "mean": [
-        102.693,
-        101.649,
-        99.662
+        102.748,
+        101.706,
+        99.722
       ]
     },
     "templates/samples/game-arknights-v3.jpg": {
       "dhash": "f09a8eeedcd0c4d4",
       "mean": [
-        117.481,
-        84.303,
-        66.96
+        117.545,
+        84.367,
+        67.024
       ]
     },
     "templates/samples/game-genshin-v1.jpg": {
       "dhash": "6021717171f17171",
       "mean": [
-        167.041,
-        162.52,
-        143.773
+        167.012,
+        162.49,
+        143.743
       ]
     },
     "templates/samples/game-genshin-v2.jpg": {
       "dhash": "830202e2e6060800",
       "mean": [
-        142.841,
-        135.799,
-        133.912
+        142.851,
+        135.808,
+        133.924
       ]
     },
     "templates/samples/game-genshin-v3.jpg": {
       "dhash": "0f2727150505050d",
       "mean": [
-        170.526,
-        178.551,
-        176.954
+        170.482,
+        178.508,
+        176.913
       ]
     },
     "templates/samples/game-honkai-v1.jpg": {
       "dhash": "b9b898ecececfcec",
       "mean": [
-        114.414,
-        120.782,
-        114.748
+        114.441,
+        120.807,
+        114.772
       ]
     },
     "templates/samples/game-honkai-v2.jpg": {
       "dhash": "909091d756078c20",
       "mean": [
-        105.277,
-        110.572,
-        115.969
+        105.295,
+        110.592,
+        115.991
       ]
     },
     "templates/samples/game-honkai-v3.jpg": {
       "dhash": "f0fefefcfefefcf4",
       "mean": [
-        78.986,
-        87.395,
-        97.641
+        79.026,
+        87.434,
+        97.676
       ]
     },
     "templates/samples/game-wukong-v1.jpg": {
       "dhash": "abf8b0b0a4a4e6a4",
       "mean": [
-        86.781,
-        86.757,
-        61.383
+        86.832,
+        86.808,
+        61.435
       ]
     },
     "templates/samples/game-wukong-v2.jpg": {
       "dhash": "f0f0b070f071e8cc",
       "mean": [
-        110.655,
-        100.864,
-        79.774
+        110.707,
+        100.918,
+        79.832
       ]
     },
     "templates/samples/game-wukong-v3.jpg": {
       "dhash": "b0bcd0f0f0f0b0b0",
       "mean": [
-        74.438,
-        69.202,
-        54.739
+        74.503,
+        69.267,
+        54.806
       ]
     },
     "templates/samples/game-wwmeet-v1.jpg": {
       "dhash": "7171611194416161",
       "mean": [
-        144.683,
-        156.663,
-        156.791
+        144.641,
+        156.618,
+        156.745
       ]
     },
     "templates/samples/game-wwmeet-v2.jpg": {
       "dhash": "70f0e0603e3b8ec4",
       "mean": [
-        125.417,
-        122.711,
-        124.677
+        125.474,
+        122.773,
+        124.738
       ]
     },
     "templates/samples/game-wwmeet-v3.jpg": {
-      "dhash": "0d55573333717179",
+      "dhash": "0d55573333717169",
       "mean": [
-        155.76,
-        157.434,
-        152.365
+        155.696,
+        157.371,
+        152.305
       ]
     },
     "templates/samples/game-zzz-v1.jpg": {
       "dhash": "33f0f2b2969ef0e6",
       "mean": [
-        97.731,
-        82.407,
-        63.161
+        97.754,
+        82.43,
+        63.186
       ]
     },
     "templates/samples/game-zzz-v2.jpg": {
       "dhash": "ff7f8fe7fa1f07e2",
       "mean": [
-        164.768,
-        150.964,
-        135.697
+        164.78,
+        150.983,
+        135.72
       ]
     },
     "templates/samples/game-zzz-v3.jpg": {
       "dhash": "b0908c848080c090",
       "mean": [
-        115.963,
-        93.574,
-        79.415
+        116.006,
+        93.617,
+        79.457
       ]
     },
     "templates/samples/magazine-cover-banner-01.jpg": {
       "dhash": "96defcfcfcfcfcde",
       "mean": [
-        68.466,
-        58.191,
-        58.975
+        68.473,
+        58.198,
+        58.981
       ]
     },
     "templates/samples/magazine-double-rule-01.jpg": {
       "dhash": "414f2f372343714f",
       "mean": [
-        186.946,
-        189.859,
-        189.887
+        186.929,
+        189.843,
+        189.871
       ]
     },
     "templates/samples/magazine-gallery-left-01.jpg": {
       "dhash": "7677777767477f7e",
       "mean": [
-        158.521,
-        187.644,
-        203.547
+        158.514,
+        187.637,
+        203.54
       ]
     },
     "templates/samples/magazine-index-column-01.jpg": {
       "dhash": "171f1b1b3d3d3f33",
       "mean": [
-        194.916,
-        189.312,
-        181.913
+        194.9,
+        189.296,
+        181.897
       ]
     },
     "templates/samples/magazine-poster-manifesto-01.jpg": {
       "dhash": "4133332303070343",
       "mean": [
-        199.039,
-        193.732,
-        173.122
+        199.032,
+        193.725,
+        173.114
       ]
     },
     "templates/samples/magazine-triptych-slices-01.jpg": {
       "dhash": "3186c85d7cf8ff8f",
       "mean": [
-        124.464,
-        124.682,
-        122.887
+        124.437,
+        124.655,
+        122.861
       ]
     },
     "templates/samples/master-cream-dot-01.jpg": {
       "dhash": "ea0b011111010103",
       "mean": [
-        187.542,
-        152.909,
-        146.59
+        187.534,
+        152.901,
+        146.582
       ]
     },
     "templates/samples/master-crown-wordmark-01.jpg": {
-      "dhash": "0c7d4f7f7f7d7159",
+      "dhash": "0c7d4f7f7f7d7149",
       "mean": [
-        156.394,
-        181.196,
-        209.745
+        156.376,
+        181.178,
+        209.727
       ]
     },
     "templates/samples/master-ivory-plate-01.jpg": {
       "dhash": "c8096b0f47430008",
       "mean": [
-        193.473,
-        192.862,
-        192.098
+        193.464,
+        192.854,
+        192.09
       ]
     },
     "templates/samples/master-noir-plate-01.jpg": {
       "dhash": "15d6fef0c0808090",
       "mean": [
-        99.357,
-        96.939,
-        85.188
+        99.371,
+        96.949,
+        85.154
       ]
     },
     "templates/samples/master-seal-frame-01.jpg": {
       "dhash": "eac34349675d1f2f",
       "mean": [
-        172.417,
-        191.566,
-        214.526
+        172.409,
+        191.558,
+        214.518
       ]
     },
     "templates/samples/master-three-column-01.jpg": {
       "dhash": "2401116141757173",
       "mean": [
-        177.038,
-        174.337,
-        163.539
+        177.021,
+        174.32,
+        163.522
       ]
     },
     "templates/samples/minimal-brand-right.jpg": {
       "dhash": "3122332334e06627",
       "mean": [
-        178.178,
-        166.313,
-        161.1
+        178.127,
+        166.273,
+        161.07
       ]
     },
     "templates/samples/minimal-center-line.jpg": {
       "dhash": "4f570f0f4d4d4d61",
       "mean": [
-        195.225,
-        188.362,
-        187.066
+        195.223,
+        188.365,
+        187.073
       ]
     },
     "templates/samples/minimal-copyright.jpg": {
       "dhash": "e8f8d89090b8b0f0",
       "mean": [
-        187.422,
-        170.269,
-        140.836
+        187.43,
+        170.279,
+        140.846
       ]
     },
     "templates/samples/minimal-corner-mono.jpg": {
       "dhash": "f1f1f1e9e8e0f4f4",
       "mean": [
-        182.848,
-        174.244,
-        166.028
+        182.869,
+        174.261,
+        165.964
       ]
     },
     "templates/samples/minimal-letterbox.jpg": {
       "dhash": "5b716167117b7f6d",
       "mean": [
-        191.613,
-        197.93,
-        200.929
+        191.602,
+        197.919,
+        200.918
       ]
     },
     "templates/samples/minimal-model-stack.jpg": {
       "dhash": "707971793f5cfcf8",
       "mean": [
-        228.172,
-        226.258,
-        228.452
+        228.148,
+        226.234,
+        228.429
       ]
     },
     "templates/samples/minimal-portrait-line.jpg": {
       "dhash": "5d1d4d4d49491080",
       "mean": [
-        197.808,
-        191.835,
-        164.794
+        197.797,
+        191.824,
+        164.783
       ]
     },
     "templates/samples/minimal-topright-date.jpg": {
       "dhash": "ecccc8c1c0e4e0e0",
       "mean": [
-        186.596,
-        196.085,
-        200.089
+        186.574,
+        196.062,
+        200.064
       ]
     },
     "templates/samples/personal-avatar-ring-01.jpg": {
       "dhash": "434949537377777d",
       "mean": [
-        150.451,
-        144.993,
-        140.682
+        150.432,
+        144.974,
+        140.663
       ]
     },
     "templates/samples/personal-cn-inscription-01.jpg": {
@@ -1164,9 +1164,9 @@
     "templates/samples/personal-credit-social-01.jpg": {
       "dhash": "01792d2b3d232129",
       "mean": [
-        135.806,
-        139.846,
-        161.078
+        135.788,
+        139.828,
+        161.06
       ]
     },
     "templates/samples/personal-micro-copyright-01.jpg": {
@@ -1180,9 +1180,9 @@
     "templates/samples/personal-name-columns-01.jpg": {
       "dhash": "2d21233101010101",
       "mean": [
-        147.431,
-        160.91,
-        167.416
+        147.414,
+        160.892,
+        167.398
       ]
     },
     "templates/samples/personal-polaroid-script-01.jpg": {
@@ -1196,209 +1196,209 @@
     "templates/samples/personal-script-signature-01.jpg": {
       "dhash": "c109115151193367",
       "mean": [
-        143.958,
-        142.777,
-        138.773
+        143.94,
+        142.759,
+        138.755
       ]
     },
     "templates/samples/personal-triptych-01.jpg": {
       "dhash": "2d3b7b7979696975",
       "mean": [
-        161.593,
-        163.968,
-        171.759
+        161.575,
+        163.95,
+        171.74
       ]
     },
     "templates/samples/phone-accent-dots-01.jpg": {
       "dhash": "7971732f369698f0",
       "mean": [
-        174.77,
-        171.776,
-        168.231
+        174.748,
+        171.755,
+        168.211
       ]
     },
     "templates/samples/phone-camera-ui-01.jpg": {
       "dhash": "592d295961617909",
       "mean": [
-        147.015,
-        142.912,
-        145.125
+        146.996,
+        142.893,
+        145.105
       ]
     },
     "templates/samples/phone-dual-optics-01.jpg": {
       "dhash": "7171371737333171",
       "mean": [
-        173.068,
-        157.167,
-        147.832
+        173.047,
+        157.146,
+        147.811
       ]
     },
     "templates/samples/phone-midnight-bar-01.jpg": {
       "dhash": "1eb6b4868e9ededa",
       "mean": [
-        102.001,
-        113.124,
-        95.511
+        102.018,
+        113.141,
+        95.528
       ]
     },
     "templates/samples/phone-minimal-line-01.jpg": {
       "dhash": "573f0f2737373701",
       "mean": [
-        137.595,
-        147.019,
-        164.48
+        137.569,
+        146.994,
+        164.455
       ]
     },
     "templates/samples/phone-paper-spec-01.jpg": {
-      "dhash": "39694f6f6f676f5f",
+      "dhash": "79694f6f6f676f5f",
       "mean": [
-        130.054,
-        156.915,
-        177.094
+        130.035,
+        156.895,
+        177.075
       ]
     },
     "templates/samples/phone-shot-on-01.jpg": {
       "dhash": "a9c0a13470103031",
       "mean": [
-        108.872,
-        106.544,
-        106.842
+        108.849,
+        106.52,
+        106.816
       ]
     },
     "templates/samples/phone-side-rail-01.jpg": {
       "dhash": "61793d6171786131",
       "mean": [
-        149.066,
-        149.052,
-        149.055
+        149.137,
+        149.123,
+        149.126
       ]
     },
     "templates/samples/phone-studio-card-01.jpg": {
-      "dhash": "4149490b390f0f07",
+      "dhash": "4149490b390f0f05",
       "mean": [
-        143.193,
-        160.745,
-        168.264
+        143.156,
+        160.708,
+        168.227
       ]
     },
     "templates/samples/phone-vendor-bar-01.jpg": {
       "dhash": "415f637101010101",
       "mean": [
-        154.353,
-        177.009,
-        190.084
+        154.331,
+        176.988,
+        190.063
       ]
     },
     "templates/samples/polaroid-classic-script-03.jpg": {
       "dhash": "4171713b1b1b533b",
       "mean": [
-        171.587,
-        157.987,
-        154.598
+        171.579,
+        157.98,
+        154.591
       ]
     },
     "templates/samples/polaroid-duo-stamps-05.jpg": {
       "dhash": "8101617971717175",
       "mean": [
-        116.423,
-        131.564,
-        157.228
+        116.417,
+        131.558,
+        157.223
       ]
     },
     "templates/samples/polaroid-pastel-ring-04.jpg": {
       "dhash": "c043476749797901",
       "mean": [
-        139.333,
-        152.445,
-        160.62
+        139.328,
+        152.44,
+        160.615
       ]
     },
     "templates/samples/polaroid-stamp-postcard-01.jpg": {
       "dhash": "81696569392d2d69",
       "mean": [
-        184.244,
-        169.12,
-        154.169
+        184.238,
+        169.115,
+        154.164
       ]
     },
     "templates/samples/polaroid-tilt-plate-02.jpg": {
       "dhash": "90ba6e7e7f7f1b19",
       "mean": [
-        183.506,
-        185.01,
-        189.301
+        183.502,
+        185.006,
+        189.297
       ]
     },
     "templates/samples/portfolio-atelier-plate-01.jpg": {
       "dhash": "e039317175757175",
       "mean": [
-        153.636,
-        153.218,
-        151.109
+        153.628,
+        153.21,
+        151.101
       ]
     },
     "templates/samples/portfolio-credit-still-01.jpg": {
       "dhash": "1b0f0f68e82f6542",
       "mean": [
-        185.257,
-        175.449,
-        169.312
+        185.258,
+        175.453,
+        169.319
       ]
     },
     "templates/samples/portfolio-double-rule-01.jpg": {
       "dhash": "886f7f5f5f777777",
       "mean": [
-        207.932,
-        211.73,
-        182.168
+        207.924,
+        211.723,
+        182.16
       ]
     },
     "templates/samples/portfolio-marginalia-01.jpg": {
       "dhash": "33332f0f3323191b",
       "mean": [
-        211.998,
-        213.997,
-        216.271
+        211.981,
+        213.98,
+        216.254
       ]
     },
     "templates/samples/portfolio-noir-matte-01.jpg": {
       "dhash": "882d371737171717",
       "mean": [
-        229.483,
-        229.852,
-        231.021
+        229.476,
+        229.845,
+        231.014
       ]
     },
     "templates/samples/portfolio-vertical-scroll-01.jpg": {
-      "dhash": "3139393d39393939",
+      "dhash": "3139393d393939b9",
       "mean": [
-        220.093,
-        231.675,
-        239.407
+        220.076,
+        231.659,
+        239.391
       ]
     },
     "templates/samples/portfolio-wall-label-01.jpg": {
       "dhash": "2f0f1f0f47667373",
       "mean": [
-        209.327,
-        212.852,
-        222.625
+        209.319,
+        212.844,
+        222.617
       ]
     },
     "templates/samples/sports-alt-badge-01.jpg": {
       "dhash": "c361471f69697f7f",
       "mean": [
-        172.981,
-        181.278,
-        199.481
+        172.961,
+        181.258,
+        199.461
       ]
     },
     "templates/samples/sports-big-trail-01.jpg": {
       "dhash": "c161737333476371",
       "mean": [
-        150.175,
-        159.568,
-        162.826
+        150.166,
+        159.56,
+        162.818
       ]
     },
     "templates/samples/sports-finish-line-01.jpg": {
@@ -1412,89 +1412,89 @@
     "templates/samples/sports-ride-stats-01.jpg": {
       "dhash": "43733313090b0f0f",
       "mean": [
-        176.02,
-        179.11,
-        180.986
+        176.012,
+        179.102,
+        180.977
       ]
     },
     "templates/samples/sports-side-rail-01.jpg": {
       "dhash": "7979716363434707",
       "mean": [
-        119.138,
-        154.697,
-        155.113
+        119.115,
+        154.675,
+        155.09
       ]
     },
     "templates/samples/ticket-boarding-pass-03.jpg": {
       "dhash": "642d0d0f09098080",
       "mean": [
-        160.277,
-        156.126,
-        159.741
+        160.271,
+        156.12,
+        159.736
       ]
     },
     "templates/samples/ticket-night-tilt-05.jpg": {
       "dhash": "84bcf0e6c6ccecae",
       "mean": [
-        120.503,
-        109.851,
-        105.1
+        120.508,
+        109.856,
+        105.106
       ]
     },
     "templates/samples/ticket-park-pass-04.jpg": {
       "dhash": "4d29313c383819a9",
       "mean": [
-        179.047,
-        179.088,
-        175.199
+        179.042,
+        179.083,
+        175.195
       ]
     },
     "templates/samples/ticket-stub-horizontal-01.jpg": {
       "dhash": "7071296fcf6b0141",
       "mean": [
-        138.605,
-        138.666,
-        142.734
+        138.6,
+        138.66,
+        142.729
       ]
     },
     "templates/samples/ticket-vertical-rail-02.jpg": {
       "dhash": "8181898181818181",
       "mean": [
-        155.823,
-        176.891,
-        188.199
+        155.817,
+        176.885,
+        188.193
       ]
     },
     "templates/samples/white-border-centered-lockup.jpg": {
       "dhash": "0c4f0f3323437371",
       "mean": [
-        185.304,
-        188.929,
-        191.318
+        185.296,
+        188.921,
+        191.309
       ]
     },
     "templates/samples/white-border-editorial-01.jpg": {
       "dhash": "4079783c3e3e7f79",
       "mean": [
-        233.714,
-        232.716,
-        226.099
+        233.696,
+        232.698,
+        226.082
       ]
     },
     "templates/samples/white-border-letterhead.jpg": {
       "dhash": "793f07634d4d7979",
       "mean": [
-        212.692,
-        199.399,
-        192.625
+        212.684,
+        199.39,
+        192.617
       ]
     },
     "templates/samples/white-border-linen-dot.jpg": {
       "dhash": "c00d09038d897171",
       "mean": [
-        199.03,
-        198.577,
-        196.981
+        199.012,
+        198.558,
+        196.963
       ]
     },
     "templates/samples/white-border-passport-mono.jpg": {
@@ -1502,279 +1502,279 @@
       "mean": [
         224.637,
         225.086,
-        226.862
+        226.861
       ]
     },
     "templates/samples/white-border-quiet-stack.jpg": {
       "dhash": "00717967676f7949",
       "mean": [
-        215.046,
-        199.923,
-        189.029
+        215.027,
+        199.904,
+        189.01
       ]
     },
     "templates/samples/white-border-ruled-band.jpg": {
       "dhash": "c01d0d1d0d4d7979",
       "mean": [
-        209.468,
-        203.951,
-        197.741
+        209.459,
+        203.942,
+        197.733
       ]
     },
     "templates/samples/white-border-top-note.jpg": {
       "dhash": "6553537381e05910",
       "mean": [
-        202.654,
-        207.371,
-        215.221
+        202.636,
+        207.353,
+        215.203
       ]
     },
     "templates/samples/white-border-twin-columns.jpg": {
       "dhash": "c087878787878786",
       "mean": [
-        218.843,
-        213.484,
-        202.39
+        218.835,
+        213.475,
+        202.382
       ]
     },
     "web/previews/art-copperplate-etch.jpg": {
       "dhash": "8e71794941616561",
       "mean": [
-        132.297,
-        138.51,
-        134.801
+        132.274,
+        138.488,
+        134.781
       ]
     },
     "web/previews/art-deco-double.jpg": {
       "dhash": "4f61392163410141",
       "mean": [
-        163.548,
-        163.15,
-        158.014
+        163.539,
+        163.141,
+        158.005
       ]
     },
     "web/previews/art-gilt-foil.jpg": {
       "dhash": "3363e1f0f0f8f8f8",
       "mean": [
-        105.036,
-        96.162,
-        87.696
+        105.053,
+        96.173,
+        87.656
       ]
     },
     "web/previews/art-letterpress-relief.jpg": {
-      "dhash": "4f73737171e1e268",
+      "dhash": "cf73737171e1e268",
       "mean": [
-        192.445,
-        191.809,
-        186.809
+        192.436,
+        191.799,
+        186.8
       ]
     },
     "web/previews/art-republican-press.jpg": {
       "dhash": "0d0f4f0f7f7f7f99",
       "mean": [
-        145.282,
-        165.233,
-        165.923
+        145.26,
+        165.211,
+        165.903
       ]
     },
     "web/previews/art-ukiyoe-cartouche.jpg": {
       "dhash": "0d0f051531232313",
       "mean": [
-        140.083,
-        139.634,
-        130.482
+        140.074,
+        139.625,
+        130.473
       ]
     },
     "web/previews/art-vermilion-seal.jpg": {
       "dhash": "971f1d7d79797939",
       "mean": [
-        148.559,
-        127.674,
-        123.395
+        148.538,
+        127.653,
+        123.375
       ]
     },
     "web/previews/art-woodtype-press.jpg": {
       "dhash": "0f5f4f4f77737171",
       "mean": [
-        135.042,
-        135.117,
-        128.062
+        135.032,
+        135.107,
+        128.054
       ]
     },
     "web/previews/black-frame-charcoal-split-01.jpg": {
       "dhash": "033c3c723c3cbc1e",
       "mean": [
-        52.952,
-        46.866,
-        54.508
+        52.967,
+        46.877,
+        54.467
       ]
     },
     "web/previews/black-frame-gold-line-01.jpg": {
       "dhash": "06f0f4f0f0e8e8d0",
       "mean": [
-        57.317,
-        59.198,
-        39.944
+        57.324,
+        59.204,
+        39.951
       ]
     },
     "web/previews/black-frame-inner-rule-01.jpg": {
       "dhash": "f24efe9ebefefe7e",
       "mean": [
-        17.353,
-        33.399,
-        40.04
+        17.37,
+        33.412,
+        40.002
       ]
     },
     "web/previews/black-frame-mono-slate-01.jpg": {
       "dhash": "93d0c8e0e0f0f0d0",
       "mean": [
-        47.506,
-        46.382,
-        29.717
+        47.514,
+        46.39,
+        29.726
       ]
     },
     "web/previews/black-frame-side-stack-01.jpg": {
       "dhash": "3130b8f8f8faf2d6",
       "mean": [
-        55.465,
-        55.466,
-        55.469
+        55.481,
+        55.478,
+        55.432
       ]
     },
     "web/previews/black-frame-two-line-01.jpg": {
       "dhash": "03e2f8f0f0f0f0e0",
       "mean": [
-        48.817,
-        43.898,
-        44.122
+        48.824,
+        43.905,
+        44.129
       ]
     },
     "web/previews/blur-bg-brandbar-02.jpg": {
       "dhash": "30b07173c799e9d8",
       "mean": [
-        26.226,
-        25.723,
-        29.815
+        26.241,
+        25.734,
+        29.783
       ]
     },
     "web/previews/blur-bg-card-03.jpg": {
       "dhash": "d3f3e4ecb8607cb3",
       "mean": [
-        16.198,
-        10.722,
-        12.799
+        16.205,
+        10.728,
+        12.805
       ]
     },
     "web/previews/blur-bg-center-01.jpg": {
       "dhash": "617527e64e1e9e3e",
       "mean": [
-        48.172,
-        48.172,
-        48.171
+        48.189,
+        48.184,
+        48.135
       ]
     },
     "web/previews/blur-bg-topcap-04.jpg": {
       "dhash": "f3f2f1f07171b0b0",
       "mean": [
-        69.809,
-        65.345,
-        47.244
+        69.813,
+        65.35,
+        47.249
       ]
     },
     "web/previews/borderless-center-caption-01.jpg": {
       "dhash": "e18332e56547fffc",
       "mean": [
-        141.39,
-        125.077,
-        97
+        141.387,
+        125.085,
+        97.016
       ]
     },
     "web/previews/borderless-corner-stack-01.jpg": {
       "dhash": "773a98e9e166ecec",
       "mean": [
-        94.125,
-        133.471,
-        109.488
+        94.133,
+        133.478,
+        109.494
       ]
     },
     "web/previews/borderless-date-hero-01.jpg": {
       "dhash": "5a9d8d0fcccccccc",
       "mean": [
-        143.113,
-        147.526,
-        150.978
+        143.084,
+        147.495,
+        150.946
       ]
     },
     "web/previews/borderless-dot-corners-01.jpg": {
       "dhash": "58e8f0f0b0302263",
       "mean": [
-        158.991,
-        140.959,
-        133.412
+        158.982,
+        140.954,
+        133.409
       ]
     },
     "web/previews/borderless-geo-pin-01.jpg": {
       "dhash": "c0c8d8d2c3dbdaf0",
       "mean": [
-        107.831,
-        133.529,
-        127.199
+        107.803,
+        133.502,
+        127.172
       ]
     },
     "web/previews/borderless-lowleft-pair-01.jpg": {
       "dhash": "c8ccec99b9f0f8f0",
       "mean": [
-        115.112,
-        122.134,
-        108.164
+        115.12,
+        122.141,
+        108.171
       ]
     },
     "web/previews/borderless-one-liner-01.jpg": {
       "dhash": "e0308ce1c8ccccd9",
       "mean": [
-        145.772,
-        147.096,
-        142.155
+        145.764,
+        147.08,
+        142.069
       ]
     },
     "web/previews/borderless-quad-anchors-01.jpg": {
       "dhash": "7070b192ccc8f0f0",
       "mean": [
-        147.986,
-        104.892,
-        77.793
+        147.992,
+        104.9,
+        77.8
       ]
     },
     "web/previews/borderless-right-roll-01.jpg": {
       "dhash": "fcfcf46e3e393436",
       "mean": [
-        142.951,
-        122.67,
-        109.276
+        142.955,
+        122.671,
+        109.243
       ]
     },
     "web/previews/borderless-signoff-block-01.jpg": {
       "dhash": "b030a8e0e0c08000",
       "mean": [
-        142.277,
-        123.482,
-        97.684
+        142.28,
+        123.488,
+        97.692
       ]
     },
     "web/previews/borderless-vertical-spine-01.jpg": {
       "dhash": "0d090909010141c0",
       "mean": [
-        155.61,
-        154.029,
-        146.667
+        155.582,
+        154.001,
+        146.638
       ]
     },
     "web/previews/calendar-center-rule-01.jpg": {
       "dhash": "4c1d393371717979",
       "mean": [
-        175.628,
-        175.864,
-        175.48
+        175.626,
+        175.862,
+        175.478
       ]
     },
     "web/previews/calendar-corner-day-01.jpg": {
@@ -1782,7 +1782,7 @@
       "mean": [
         136.645,
         132.44,
-        142.432
+        142.433
       ]
     },
     "web/previews/calendar-portrait-stack-01.jpg": {
@@ -1796,9 +1796,9 @@
     "web/previews/calendar-rail-date-01.jpg": {
       "dhash": "3d33332305253939",
       "mean": [
-        174.046,
-        172.001,
-        153.609
+        174.045,
+        172,
+        153.608
       ]
     },
     "web/previews/calendar-split-columns-01.jpg": {
@@ -1812,185 +1812,185 @@
     "web/previews/calendar-strip-date-01.jpg": {
       "dhash": "4911010911111101",
       "mean": [
-        171.321,
-        168.864,
-        167.351
+        171.32,
+        168.862,
+        167.349
       ]
     },
     "web/previews/camera-baseplate-02.jpg": {
       "dhash": "088aa2b2e0e0e0e0",
       "mean": [
-        91.509,
-        91.955,
-        95.223
+        91.503,
+        91.948,
+        95.216
       ]
     },
     "web/previews/camera-corner-body-03.jpg": {
       "dhash": "41070113030f4b61",
       "mean": [
-        156.279,
-        172.886,
-        188.993
+        156.259,
+        172.866,
+        188.974
       ]
     },
     "web/previews/camera-lens-dial-06.jpg": {
       "dhash": "32b2f0f0f0c8b2f2",
       "mean": [
-        74.17,
-        75.031,
-        72.199
+        74.176,
+        75.037,
+        72.205
       ]
     },
     "web/previews/camera-retro-sidecar-04.jpg": {
       "dhash": "767373777773f1f1",
       "mean": [
-        194.048,
-        180.467,
-        149.776
+        194.03,
+        180.45,
+        149.761
       ]
     },
     "web/previews/camera-ricoh-slimline-08.jpg": {
       "dhash": "0b1f377f373d3c39",
       "mean": [
-        154.176,
-        141.478,
-        122.238
+        154.166,
+        141.468,
+        122.229
       ]
     },
     "web/previews/camera-series-emblem-07.jpg": {
       "dhash": "e07171717d3d3d61",
       "mean": [
-        180.135,
-        173.769,
-        163.355
+        180.116,
+        173.75,
+        163.337
       ]
     },
     "web/previews/camera-stencil-mono-05.jpg": {
       "dhash": "4961010989131919",
       "mean": [
-        177.09,
-        171.922,
-        133.721
+        177.081,
+        171.912,
+        133.712
       ]
     },
     "web/previews/camera-topdeck-bar-01.jpg": {
       "dhash": "4f597b79596d4d8c",
       "mean": [
-        172.208,
-        167.099,
-        163.806
+        172.189,
+        167.08,
+        163.787
       ]
     },
     "web/previews/classic-watermark-black-bar.jpg": {
       "dhash": "e3dcb5e1f3dacece",
       "mean": [
-        131.538,
-        100.483,
-        83.844
+        131.547,
+        100.493,
+        83.854
       ]
     },
     "web/previews/classic-watermark-brand-center.jpg": {
       "dhash": "4cccccc8e8e0e2e2",
       "mean": [
-        153.041,
-        145.125,
-        110.185
+        153.012,
+        145.096,
+        110.157
       ]
     },
     "web/previews/classic-watermark-date-right.jpg": {
       "dhash": "0f674319b9b1a7cc",
       "mean": [
         134.536,
-        123.364,
-        116.384
+        123.367,
+        116.386
       ]
     },
     "web/previews/classic-watermark-double-row.jpg": {
       "dhash": "a42080f898f8f8e0",
       "mean": [
-        122.819,
-        125.103,
-        125.284
+        122.79,
+        125.073,
+        125.254
       ]
     },
     "web/previews/classic-watermark-hairline-thin.jpg": {
       "dhash": "8c9c8edcf0f0ccf0",
       "mean": [
-        173.512,
-        155.198,
-        139.962
+        173.499,
+        155.185,
+        139.949
       ]
     },
     "web/previews/classic-watermark-mono-stack.jpg": {
       "dhash": "dc9f8745c9635ada",
       "mean": [
-        149.4,
-        147.436,
-        136.786
+        149.372,
+        147.408,
+        136.758
       ]
     },
     "web/previews/classic-watermark-red-dot.jpg": {
       "dhash": "569edccec0e0e0e0",
       "mean": [
-        115.016,
-        119.563,
-        116.174
+        115.023,
+        119.57,
+        116.182
       ]
     },
     "web/previews/classic-watermark-single-row.jpg": {
       "dhash": "d8dada50d8d8d8f8",
       "mean": [
-        145.159,
-        135.282,
-        123.227
+        145.128,
+        135.252,
+        123.197
       ]
     },
     "web/previews/colorcard-column-02.jpg": {
       "dhash": "e3e3e3d3f1f1e1e1",
       "mean": [
-        64.116,
-        52.102,
-        40.952
+        64.122,
+        52.108,
+        40.957
       ]
     },
     "web/previews/colorcard-cream-date-04.jpg": {
       "dhash": "c1717d6925217139",
       "mean": [
-        121.042,
-        157.681,
-        186.455
+        121.024,
+        157.662,
+        186.437
       ]
     },
     "web/previews/colorcard-diamonds-03.jpg": {
       "dhash": "0f0f1f3d1f5f7f3f",
       "mean": [
-        138.622,
-        155.837,
-        167.185
+        138.613,
+        155.828,
+        167.177
       ]
     },
     "web/previews/colorcard-index-05.jpg": {
       "dhash": "8d45455959012121",
       "mean": [
-        161.799,
-        122.18,
-        98.419
+        161.779,
+        122.16,
+        98.399
       ]
     },
     "web/previews/colorcard-sunrise-chips-01.jpg": {
       "dhash": "0f73636367657979",
       "mean": [
-        135.971,
-        144.922,
-        154.719
+        135.962,
+        144.914,
+        154.711
       ]
     },
     "web/previews/colorcard-tint-chips-01.jpg": {
       "dhash": "073373c6c6c885c7",
       "mean": [
-        95.062,
-        62.454,
-        43.443
+        95.071,
+        62.462,
+        43.409
       ]
     },
     "web/previews/colorful-chip-strip-01.jpg": {
@@ -2004,225 +2004,225 @@
     "web/previews/colorful-corner-blocks-01.jpg": {
       "dhash": "faf1707070707060",
       "mean": [
-        70.846,
-        90.442,
-        70.924
+        70.871,
+        90.454,
+        70.868
       ]
     },
     "web/previews/colorful-dot-cluster-01.jpg": {
       "dhash": "f8fcbefcb8b07078",
       "mean": [
-        31.101,
-        75.447,
-        131.386
+        31.112,
+        75.455,
+        131.39
       ]
     },
     "web/previews/colorful-frame-quad-01.jpg": {
       "dhash": "c9c8c8d9b9393939",
       "mean": [
-        10.117,
-        75.496,
-        33.652
+        10.144,
+        75.516,
+        33.601
       ]
     },
     "web/previews/colorful-pastel-card-01.jpg": {
       "dhash": "0b131b7979793b33",
       "mean": [
-        132.831,
-        130.657,
-        130.406
+        132.778,
+        130.609,
+        130.362
       ]
     },
     "web/previews/colorful-rainbow-lines-01.jpg": {
       "dhash": "c54d4f4746657171",
       "mean": [
-        124.606,
-        147.299,
-        154.316
+        124.583,
+        147.276,
+        154.294
       ]
     },
     "web/previews/colorful-split-duo-01.jpg": {
       "dhash": "c0f070f07062cc4c",
       "mean": [
-        137.056,
-        103.695,
-        85.584
+        137.038,
+        103.699,
+        85.586
       ]
     },
     "web/previews/colorful-sticker-date-01.jpg": {
       "dhash": "e2eee4e0e0e0e0e0",
       "mean": [
-        87.04,
-        69.988,
-        51.4
+        87.062,
+        70.004,
+        51.344
       ]
     },
     "web/previews/colorwalk-blur-stage-01.jpg": {
       "dhash": "60a1217d6574f879",
       "mean": [
-        96.837,
-        111.745,
-        110.351
+        96.843,
+        111.751,
+        110.357
       ]
     },
     "web/previews/colorwalk-ribbon-01.jpg": {
       "dhash": "4b7f7f57f4f0c0c2",
       "mean": [
-        109.973,
-        149.995,
-        138.938
+        109.989,
+        150.006,
+        138.901
       ]
     },
     "web/previews/colorwalk-round-card-01.jpg": {
       "dhash": "03f1f0f0f0717171",
       "mean": [
-        94.597,
-        135.616,
-        133.945
+        94.596,
+        135.611,
+        133.941
       ]
     },
     "web/previews/colorwalk-single-line-01.jpg": {
       "dhash": "9998d8f170f0e44e",
       "mean": [
-        108.814,
-        118.09,
-        125.047
+        108.793,
+        118.07,
+        124.97
       ]
     },
     "web/previews/colorwalk-tint-seam-01.jpg": {
       "dhash": "5405074f7372fcfc",
       "mean": [
-        147.637,
-        142.517,
-        131.567
+        147.629,
+        142.509,
+        131.561
       ]
     },
     "web/previews/colorwalk-top-field-01.jpg": {
       "dhash": "59797171f1f9b8b8",
       "mean": [
-        125.686,
-        115.441,
-        95.141
+        125.665,
+        115.419,
+        95.079
       ]
     },
     "web/previews/colorwalk-vbar-01.jpg": {
       "dhash": "6371b386822e3c30",
       "mean": [
-        124.864,
-        114.151,
-        89.813
+        124.867,
+        114.154,
+        89.817
       ]
     },
     "web/previews/colorwalk-verse-01.jpg": {
       "dhash": "8267617171f2f0e0",
       "mean": [
-        104.124,
-        104.896,
-        105.89
+        104.11,
+        104.878,
+        105.826
       ]
     },
     "web/previews/drone-aerial-editorial-01.jpg": {
       "dhash": "393b3d3f35272141",
       "mean": [
-        155.598,
-        183.186,
-        205.838
+        155.591,
+        183.178,
+        205.83
       ]
     },
     "web/previews/drone-altitude-hero-01.jpg": {
-      "dhash": "8d49797971717171",
+      "dhash": "4d49797971717171",
       "mean": [
-        140.931,
-        171.472,
-        190.569
+        140.911,
+        171.453,
+        190.549
       ]
     },
     "web/previews/drone-geoblock-01.jpg": {
       "dhash": "4179192169717979",
       "mean": [
-        158.768,
-        154.107,
-        148.42
+        158.763,
+        154.102,
+        148.415
       ]
     },
     "web/previews/drone-skybar-01.jpg": {
       "dhash": "c0154951094d6d79",
       "mean": [
-        155.495,
-        157.578,
-        162.2
+        155.472,
+        157.555,
+        162.177
       ]
     },
     "web/previews/drone-topline-01.jpg": {
       "dhash": "09094d5d53737349",
       "mean": [
-        146.194,
-        161.521,
-        161.614
+        146.184,
+        161.511,
+        161.605
       ]
     },
     "web/previews/effect-duotone-wash-03.jpg": {
       "dhash": "0bc6bcdc9ced5117",
       "mean": [
-        83.523,
-        73.673,
-        56.176
+        83.534,
+        73.68,
+        56.138
       ]
     },
     "web/previews/effect-float-card-01.jpg": {
       "dhash": "e7f6fcfcde96e5e6",
       "mean": [
-        56.976,
-        64.52,
-        61.995
+        56.982,
+        64.526,
+        62.001
       ]
     },
     "web/previews/effect-minimal-shadow-08.jpg": {
       "dhash": "0f3b717171716123",
       "mean": [
-        120.259,
-        109.043,
-        102.239
+        120.238,
+        109.023,
+        102.219
       ]
     },
     "web/previews/effect-mirror-pool-02.jpg": {
       "dhash": "737771ddb8f071e0",
       "mean": [
-        67.868,
-        69.142,
-        65.104
+        67.873,
+        69.147,
+        65.109
       ]
     },
     "web/previews/effect-paper-stack-05.jpg": {
       "dhash": "0b4d497131717173",
       "mean": [
-        126.292,
-        60.962,
-        41.518
+        126.257,
+        60.951,
+        41.471
       ]
     },
     "web/previews/effect-polaroid-float-06.jpg": {
       "dhash": "c03939393b3b3b23",
       "mean": [
-        150.057,
-        147.053,
-        140.806
+        150.05,
+        147.046,
+        140.8
       ]
     },
     "web/previews/effect-top-gradient-band-07.jpg": {
       "dhash": "23737161e8f8e1e1",
       "mean": [
-        68.642,
-        68.509,
-        63.081
+        68.654,
+        68.516,
+        63.043
       ]
     },
     "web/previews/effect-vignette-card-04.jpg": {
       "dhash": "8fe4e66671717123",
       "mean": [
-        15.635,
-        13.156,
-        26.159
+        15.642,
+        13.163,
+        26.166
       ]
     },
     "web/previews/festival-dragon-boat-01.jpg": {
@@ -2276,417 +2276,417 @@
     "web/previews/film-darkroom-pillar-03.jpg": {
       "dhash": "46e080c8e0f0e0c0",
       "mean": [
-        36.918,
-        40.246,
-        38.255
+        36.935,
+        40.258,
+        38.219
       ]
     },
     "web/previews/film-diptych-hairline-07.jpg": {
       "dhash": "0d3d616d65536b2b",
       "mean": [
-        130.432,
-        115.301,
-        116.518
+        130.423,
+        115.292,
+        116.509
       ]
     },
     "web/previews/film-led-datestamp-04.jpg": {
       "dhash": "0321b8e8e0e4f0f8",
       "mean": [
-        55.732,
-        53.342,
-        52.876
+        55.748,
+        53.354,
+        52.842
       ]
     },
     "web/previews/film-mono-roll-06.jpg": {
       "dhash": "031ab0c0c0c04143",
       "mean": [
-        46.453,
-        41.572,
-        50.84
+        46.459,
+        41.579,
+        50.847
       ]
     },
     "web/previews/film-positive-print-08.jpg": {
       "dhash": "4123216373030535",
       "mean": [
-        126.493,
-        134.504,
-        136.165
+        126.472,
+        134.484,
+        136.144
       ]
     },
     "web/previews/film-serif-stock-05.jpg": {
       "dhash": "8e4d4f7531736b6b",
       "mean": [
-        124.992,
-        125.753,
-        123.669
+        124.983,
+        125.745,
+        123.661
       ]
     },
     "web/previews/film-sprocket-01.jpg": {
       "dhash": "e0f7f7e2e2fafeee",
       "mean": [
-        59.673,
-        49.365,
-        41.734
+        59.689,
+        49.377,
+        41.701
       ]
     },
     "web/previews/film-sprocket-02.jpg": {
       "dhash": "0741716969497921",
       "mean": [
-        54.933,
-        51.314,
-        41.359
+        54.939,
+        51.319,
+        41.364
       ]
     },
     "web/previews/fuji-recipe-band-02.jpg": {
       "dhash": "1111616373716171",
       "mean": [
-        137.274,
-        115.488,
-        98.076
+        137.337,
+        115.53,
+        98.121
       ]
     },
     "web/previews/fuji-recipe-column-03.jpg": {
-      "dhash": "6041404148494140",
+      "dhash": "6041404148494141",
       "mean": [
-        108.351,
-        100.28,
-        94.026
+        108.415,
+        100.323,
+        94.071
       ]
     },
     "web/previews/fuji-recipe-hero-04.jpg": {
       "dhash": "e06d39391f1f1c38",
       "mean": [
-        184.514,
-        186.305,
-        185.76
+        184.527,
+        186.299,
+        185.759
       ]
     },
     "web/previews/fuji-recipe-panel-01.jpg": {
       "dhash": "04d6f0f89a8682ca",
       "mean": [
-        106.607,
-        99.494,
-        103
+        106.672,
+        99.539,
+        103.048
       ]
     },
     "web/previews/fuji-recipe-rails-05.jpg": {
       "dhash": "fddbdbf3dbdbf7f2",
       "mean": [
-        134.075,
-        127.821,
-        113.862
+        134.14,
+        127.865,
+        113.908
       ]
     },
     "web/previews/game-arknights-v1.jpg": {
       "dhash": "9ed4c5e4fefefcbc",
       "mean": [
-        80.555,
-        83.122,
-        81.77
+        80.606,
+        83.159,
+        81.798
       ]
     },
     "web/previews/game-arknights-v2.jpg": {
       "dhash": "0000071000000000",
       "mean": [
-        102.707,
-        101.671,
-        99.676
+        102.764,
+        101.73,
+        99.739
       ]
     },
     "web/previews/game-arknights-v3.jpg": {
       "dhash": "f09a8eeedcd0c4d4",
       "mean": [
-        117.413,
-        84.252,
-        66.915
+        117.477,
+        84.316,
+        66.979
       ]
     },
     "web/previews/game-genshin-v1.jpg": {
-      "dhash": "6921717171f17171",
+      "dhash": "6821717171f17171",
       "mean": [
-        166.996,
-        162.474,
-        143.721
+        166.967,
+        162.442,
+        143.686
       ]
     },
     "web/previews/game-genshin-v2.jpg": {
       "dhash": "830202e2e6060800",
       "mean": [
-        142.862,
-        135.825,
-        133.931
+        142.87,
+        135.834,
+        133.942
       ]
     },
     "web/previews/game-genshin-v3.jpg": {
       "dhash": "0d2727150505050d",
       "mean": [
-        170.564,
-        178.582,
-        176.983
+        170.516,
+        178.534,
+        176.937
       ]
     },
     "web/previews/game-honkai-v1.jpg": {
       "dhash": "b9b898ecececfcec",
       "mean": [
-        114.453,
-        120.813,
-        114.772
+        114.481,
+        120.84,
+        114.798
       ]
     },
     "web/previews/game-honkai-v2.jpg": {
       "dhash": "909091d756078c20",
       "mean": [
-        105.247,
-        110.549,
-        115.938
+        105.269,
+        110.574,
+        115.965
       ]
     },
     "web/previews/game-honkai-v3.jpg": {
       "dhash": "f0fcfefcfefefcf4",
       "mean": [
-        78.938,
-        87.343,
-        97.585
+        78.979,
+        87.382,
+        97.622
       ]
     },
     "web/previews/game-wukong-v1.jpg": {
       "dhash": "a3f0b0b0a4a4e6a4",
       "mean": [
-        86.809,
-        86.788,
-        61.41
+        86.856,
+        86.836,
+        61.46
       ]
     },
     "web/previews/game-wukong-v2.jpg": {
       "dhash": "f0f0b070f071e8cc",
       "mean": [
-        110.671,
-        100.89,
-        79.793
+        110.723,
+        100.943,
+        79.851
       ]
     },
     "web/previews/game-wukong-v3.jpg": {
       "dhash": "b0bcd0f0f0f0b0b0",
       "mean": [
-        74.393,
-        69.164,
-        54.701
+        74.456,
+        69.227,
+        54.766
       ]
     },
     "web/previews/game-wwmeet-v1.jpg": {
       "dhash": "5171611194416161",
       "mean": [
-        144.644,
-        156.629,
-        156.764
+        144.602,
+        156.583,
+        156.716
       ]
     },
     "web/previews/game-wwmeet-v2.jpg": {
       "dhash": "70f0e0603e3b8ec4",
       "mean": [
-        125.415,
-        122.718,
-        124.678
+        125.474,
+        122.781,
+        124.741
       ]
     },
     "web/previews/game-wwmeet-v3.jpg": {
-      "dhash": "0d55573333717179",
+      "dhash": "0d55573333717169",
       "mean": [
-        155.803,
-        157.481,
-        152.411
+        155.735,
+        157.414,
+        152.347
       ]
     },
     "web/previews/game-zzz-v1.jpg": {
       "dhash": "33f0f2b2969ef0e6",
       "mean": [
-        97.767,
-        82.436,
-        63.176
+        97.787,
+        82.456,
+        63.199
       ]
     },
     "web/previews/game-zzz-v2.jpg": {
       "dhash": "ff7f8fe7fa1f07e2",
       "mean": [
-        164.731,
-        150.941,
-        135.672
+        164.743,
+        150.959,
+        135.695
       ]
     },
     "web/previews/game-zzz-v3.jpg": {
       "dhash": "b0908c848080c090",
       "mean": [
-        115.916,
-        93.535,
-        79.385
+        115.953,
+        93.571,
+        79.421
       ]
     },
     "web/previews/magazine-cover-banner-01.jpg": {
       "dhash": "96defcfcfcfcfcde",
       "mean": [
-        68.391,
-        58.128,
-        58.91
+        68.399,
+        58.136,
+        58.918
       ]
     },
     "web/previews/magazine-double-rule-01.jpg": {
       "dhash": "414f2f332343754d",
       "mean": [
-        186.912,
-        189.82,
-        189.845
+        186.894,
+        189.802,
+        189.827
       ]
     },
     "web/previews/magazine-gallery-left-01.jpg": {
       "dhash": "7677777767477f7e",
       "mean": [
-        158.487,
-        187.608,
-        203.514
+        158.479,
+        187.601,
+        203.507
       ]
     },
     "web/previews/magazine-index-column-01.jpg": {
       "dhash": "171f1b1b3d3d3f33",
       "mean": [
-        194.956,
-        189.361,
-        181.959
+        194.938,
+        189.343,
+        181.941
       ]
     },
     "web/previews/magazine-poster-manifesto-01.jpg": {
       "dhash": "4133332303070343",
       "mean": [
-        199.085,
-        193.783,
-        173.185
+        199.078,
+        193.776,
+        173.177
       ]
     },
     "web/previews/magazine-triptych-slices-01.jpg": {
       "dhash": "b386c85d7cf8ff8f",
       "mean": [
-        124.486,
-        124.706,
-        122.901
+        124.457,
+        124.677,
+        122.872
       ]
     },
     "web/previews/master-cream-dot-01.jpg": {
       "dhash": "ea0b011111010103",
       "mean": [
-        187.414,
-        152.719,
-        146.396
+        187.405,
+        152.71,
+        146.388
       ]
     },
     "web/previews/master-crown-wordmark-01.jpg": {
-      "dhash": "0c7d4f7f7f7d7159",
+      "dhash": "0c7d4f7f7f7d7149",
       "mean": [
-        156.195,
-        181.05,
-        209.661
+        156.175,
+        181.029,
+        209.641
       ]
     },
     "web/previews/master-ivory-plate-01.jpg": {
       "dhash": "c8096b0f47430008",
       "mean": [
-        193.338,
-        192.733,
-        191.964
+        193.329,
+        192.724,
+        191.955
       ]
     },
     "web/previews/master-noir-plate-01.jpg": {
       "dhash": "15d6fef0c0808090",
       "mean": [
-        99.519,
-        97.103,
-        85.326
+        99.534,
+        97.114,
+        85.293
       ]
     },
     "web/previews/master-seal-frame-01.jpg": {
       "dhash": "e8c34349675d1f2f",
       "mean": [
-        172.234,
-        191.419,
-        214.431
+        172.226,
+        191.41,
+        214.422
       ]
     },
     "web/previews/master-three-column-01.jpg": {
       "dhash": "2401116141757171",
       "mean": [
-        176.902,
-        174.203,
-        163.383
+        176.883,
+        174.184,
+        163.364
       ]
     },
     "web/previews/minimal-brand-right.jpg": {
       "dhash": "3122332334e06627",
       "mean": [
-        178.174,
-        166.316,
-        161.092
+        178.093,
+        166.25,
+        161.039
       ]
     },
     "web/previews/minimal-center-line.jpg": {
       "dhash": "4f570f0f4d4d4d61",
       "mean": [
-        195.17,
-        188.302,
-        187.008
+        195.174,
+        188.314,
+        187.025
       ]
     },
     "web/previews/minimal-copyright.jpg": {
       "dhash": "e8f8d89090b8b0f0",
       "mean": [
-        187.41,
-        170.256,
-        140.828
+        187.419,
+        170.266,
+        140.839
       ]
     },
     "web/previews/minimal-corner-mono.jpg": {
       "dhash": "f1f1f1e9e8e0f4f4",
       "mean": [
-        182.842,
-        174.24,
-        166.022
+        182.863,
+        174.257,
+        165.96
       ]
     },
     "web/previews/minimal-letterbox.jpg": {
       "dhash": "5f716167117b7f69",
       "mean": [
-        191.58,
-        197.904,
-        200.909
+        191.569,
+        197.893,
+        200.897
       ]
     },
     "web/previews/minimal-model-stack.jpg": {
       "dhash": "707971793f5cfcf8",
       "mean": [
-        228.216,
-        226.308,
-        228.496
+        228.19,
+        226.282,
+        228.469
       ]
     },
     "web/previews/minimal-portrait-line.jpg": {
       "dhash": "5d1d4d4d4d491080",
       "mean": [
-        197.765,
-        191.79,
-        164.727
+        197.753,
+        191.779,
+        164.716
       ]
     },
     "web/previews/minimal-topright-date.jpg": {
       "dhash": "ecccc8c1c0e4e0e0",
       "mean": [
-        186.593,
-        196.085,
-        200.093
+        186.569,
+        196.058,
+        200.065
       ]
     },
     "web/previews/personal-avatar-ring-01.jpg": {
       "dhash": "434949537377777d",
       "mean": [
-        150.317,
-        144.858,
-        140.528
+        150.299,
+        144.841,
+        140.511
       ]
     },
     "web/previews/personal-cn-inscription-01.jpg": {
@@ -2700,9 +2700,9 @@
     "web/previews/personal-credit-social-01.jpg": {
       "dhash": "01792d2b3d232129",
       "mean": [
-        135.598,
-        139.648,
-        160.925
+        135.582,
+        139.631,
+        160.909
       ]
     },
     "web/previews/personal-micro-copyright-01.jpg": {
@@ -2716,9 +2716,9 @@
     "web/previews/personal-name-columns-01.jpg": {
       "dhash": "2d21233101010101",
       "mean": [
-        147.289,
-        160.786,
-        167.306
+        147.273,
+        160.769,
+        167.29
       ]
     },
     "web/previews/personal-polaroid-script-01.jpg": {
@@ -2732,65 +2732,65 @@
     "web/previews/personal-script-signature-01.jpg": {
       "dhash": "c109115151193367",
       "mean": [
-        143.789,
-        142.618,
-        138.608
+        143.772,
+        142.601,
+        138.592
       ]
     },
     "web/previews/personal-triptych-01.jpg": {
       "dhash": "2d3b7b7979696975",
       "mean": [
-        161.445,
-        163.824,
-        171.623
+        161.428,
+        163.806,
+        171.606
       ]
     },
     "web/previews/phone-accent-dots-01.jpg": {
       "dhash": "7971732f369698f0",
       "mean": [
-        174.821,
-        171.834,
-        168.292
+        174.802,
+        171.815,
+        168.274
       ]
     },
     "web/previews/phone-camera-ui-01.jpg": {
       "dhash": "5b2d295961617909",
       "mean": [
-        147.227,
-        143.14,
-        145.35
+        147.209,
+        143.123,
+        145.332
       ]
     },
     "web/previews/phone-dual-optics-01.jpg": {
       "dhash": "7171371737333171",
       "mean": [
-        173.044,
-        157.144,
-        147.8
+        173.025,
+        157.124,
+        147.78
       ]
     },
     "web/previews/phone-midnight-bar-01.jpg": {
-      "dhash": "9eb6b4868e9ededa",
+      "dhash": "1eb6b4868e9ededa",
       "mean": [
-        102.088,
-        113.22,
-        95.587
+        102.106,
+        113.237,
+        95.604
       ]
     },
     "web/previews/phone-minimal-line-01.jpg": {
       "dhash": "573f0f2737373701",
       "mean": [
-        137.372,
-        146.814,
-        164.306
+        137.349,
+        146.791,
+        164.282
       ]
     },
     "web/previews/phone-paper-spec-01.jpg": {
-      "dhash": "39694f6f6f676f7f",
+      "dhash": "79694f6f6f676f7f",
       "mean": [
-        129.983,
-        156.865,
-        177.054
+        129.965,
+        156.846,
+        177.036
       ]
     },
     "web/previews/phone-shot-on-01.jpg": {
@@ -2798,143 +2798,143 @@
       "mean": [
         108.887,
         106.567,
-        106.851
+        106.85
       ]
     },
     "web/previews/phone-side-rail-01.jpg": {
       "dhash": "61793d6171786131",
       "mean": [
-        148.97,
-        148.954,
-        148.955
+        149.022,
+        149.006,
+        149.007
       ]
     },
     "web/previews/phone-studio-card-01.jpg": {
-      "dhash": "4149490b390f070b",
+      "dhash": "4149490b390f0709",
       "mean": [
-        143.459,
-        160.964,
-        168.468
+        143.426,
+        160.931,
+        168.434
       ]
     },
     "web/previews/phone-vendor-bar-01.jpg": {
       "dhash": "415f637101010101",
       "mean": [
-        154.31,
-        176.977,
-        190.054
+        154.29,
+        176.958,
+        190.035
       ]
     },
     "web/previews/polaroid-classic-script-03.jpg": {
       "dhash": "4171713b1b1b533b",
       "mean": [
-        171.73,
-        158.159,
-        154.772
+        171.724,
+        158.153,
+        154.767
       ]
     },
     "web/previews/polaroid-duo-stamps-05.jpg": {
       "dhash": "8101617971717171",
       "mean": [
-        116.431,
-        131.566,
-        157.225
+        116.427,
+        131.561,
+        157.221
       ]
     },
     "web/previews/polaroid-pastel-ring-04.jpg": {
       "dhash": "c043676749797901",
       "mean": [
-        139.302,
-        152.416,
-        160.601
+        139.298,
+        152.411,
+        160.596
       ]
     },
     "web/previews/polaroid-stamp-postcard-01.jpg": {
       "dhash": "81696569392d2d6b",
       "mean": [
-        184.23,
-        169.107,
-        154.156
+        184.225,
+        169.102,
+        154.151
       ]
     },
     "web/previews/polaroid-tilt-plate-02.jpg": {
       "dhash": "90ba6e7e7f7f1b59",
       "mean": [
-        183.416,
-        184.942,
-        189.263
+        183.413,
+        184.939,
+        189.26
       ]
     },
     "web/previews/portfolio-atelier-plate-01.jpg": {
       "dhash": "e039317175757175",
       "mean": [
-        153.609,
-        153.188,
-        151.079
+        153.601,
+        153.18,
+        151.071
       ]
     },
     "web/previews/portfolio-credit-still-01.jpg": {
       "dhash": "1b0f0f68e82f6542",
       "mean": [
-        185.24,
-        175.442,
-        169.3
+        185.236,
+        175.443,
+        169.304
       ]
     },
     "web/previews/portfolio-double-rule-01.jpg": {
       "dhash": "886f7f5f5f777777",
       "mean": [
-        208.007,
-        211.797,
-        182.29
+        207.999,
+        211.788,
+        182.282
       ]
     },
     "web/previews/portfolio-marginalia-01.jpg": {
       "dhash": "233b2f0f33231b1b",
       "mean": [
-        212.018,
-        214.022,
-        216.291
+        211.999,
+        214.002,
+        216.272
       ]
     },
     "web/previews/portfolio-noir-matte-01.jpg": {
       "dhash": "882d37173717171f",
       "mean": [
-        229.464,
-        229.838,
-        230.998
+        229.457,
+        229.83,
+        230.99
       ]
     },
     "web/previews/portfolio-vertical-scroll-01.jpg": {
-      "dhash": "3139393d39393939",
+      "dhash": "3139393d393939b9",
       "mean": [
-        220.122,
-        231.694,
-        239.424
+        220.103,
+        231.675,
+        239.406
       ]
     },
     "web/previews/portfolio-wall-label-01.jpg": {
       "dhash": "2f0f1f0f47667373",
       "mean": [
-        209.359,
-        212.884,
-        222.65
+        209.351,
+        212.875,
+        222.641
       ]
     },
     "web/previews/sports-alt-badge-01.jpg": {
       "dhash": "c361471f69697f7f",
       "mean": [
-        173.068,
-        181.359,
-        199.545
+        173.045,
+        181.337,
+        199.523
       ]
     },
     "web/previews/sports-big-trail-01.jpg": {
       "dhash": "c161337333476371",
       "mean": [
-        150.421,
-        159.791,
-        163.027
+        150.412,
+        159.783,
+        163.019
       ]
     },
     "web/previews/sports-finish-line-01.jpg": {
@@ -2948,129 +2948,129 @@
     "web/previews/sports-ride-stats-01.jpg": {
       "dhash": "47733313090b0f0f",
       "mean": [
-        176.043,
-        179.134,
-        181.008
+        176.035,
+        179.126,
+        180.999
       ]
     },
     "web/previews/sports-side-rail-01.jpg": {
       "dhash": "7979716363474707",
       "mean": [
-        119.337,
-        154.844,
-        155.26
+        119.312,
+        154.819,
+        155.235
       ]
     },
     "web/previews/ticket-boarding-pass-03.jpg": {
       "dhash": "642d0d0f09098080",
       "mean": [
-        160.288,
-        156.146,
-        159.747
+        160.284,
+        156.141,
+        159.742
       ]
     },
     "web/previews/ticket-night-tilt-05.jpg": {
       "dhash": "84bcf0e6c6ccecae",
       "mean": [
-        120.445,
-        109.819,
-        105.07
+        120.451,
+        109.825,
+        105.076
       ]
     },
     "web/previews/ticket-park-pass-04.jpg": {
       "dhash": "0d23313d383819a9",
       "mean": [
-        179.153,
-        179.189,
-        175.286
+        179.149,
+        179.185,
+        175.282
       ]
     },
     "web/previews/ticket-stub-horizontal-01.jpg": {
       "dhash": "7071296f4f6b0145",
       "mean": [
-        138.735,
-        138.801,
-        142.871
+        138.73,
+        138.797,
+        142.866
       ]
     },
     "web/previews/ticket-vertical-rail-02.jpg": {
       "dhash": "8181898181818181",
       "mean": [
-        155.987,
-        177.012,
-        188.273
+        155.982,
+        177.007,
+        188.268
       ]
     },
     "web/previews/white-border-centered-lockup.jpg": {
       "dhash": "0c4f0f3323437779",
       "mean": [
-        185.298,
-        188.921,
-        191.311
+        185.289,
+        188.912,
+        191.303
       ]
     },
     "web/previews/white-border-editorial-01.jpg": {
-      "dhash": "4079783c3e3e7f79",
+      "dhash": "4078783c3e3e7f79",
       "mean": [
-        233.698,
-        232.703,
-        226.079
+        233.679,
+        232.683,
+        226.06
       ]
     },
     "web/previews/white-border-letterhead.jpg": {
       "dhash": "793f07634d4d7979",
       "mean": [
-        212.614,
-        199.3,
-        192.513
+        212.605,
+        199.291,
+        192.504
       ]
     },
     "web/previews/white-border-linen-dot.jpg": {
       "dhash": "c00d09038d897171",
       "mean": [
-        199.039,
-        198.586,
-        196.989
+        199.019,
+        198.566,
+        196.969
       ]
     },
     "web/previews/white-border-passport-mono.jpg": {
       "dhash": "6141011111010101",
       "mean": [
-        224.578,
-        225.029,
-        226.815
+        224.563,
+        225.012,
+        226.795
       ]
     },
     "web/previews/white-border-quiet-stack.jpg": {
       "dhash": "00717967676f7949",
       "mean": [
-        215.088,
-        199.989,
-        189.102
+        215.068,
+        199.968,
+        189.081
       ]
     },
     "web/previews/white-border-ruled-band.jpg": {
       "dhash": "c01d0d1d0d4d7979",
       "mean": [
-        209.483,
-        203.976,
-        197.753
+        209.474,
+        203.966,
+        197.744
       ]
     },
     "web/previews/white-border-top-note.jpg": {
-      "dhash": "6553537381e04900",
+      "dhash": "6453537381e04900",
       "mean": [
-        202.671,
-        207.381,
-        215.233
+        202.651,
+        207.36,
+        215.213
       ]
     },
     "web/previews/white-border-twin-columns.jpg": {
       "dhash": "c087878787878786",
       "mean": [
-        218.853,
-        213.496,
-        202.4
+        218.844,
+        213.487,
+        202.391
       ]
     }
   }

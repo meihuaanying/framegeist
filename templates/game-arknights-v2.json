@@ -6,7 +6,7 @@
       "zh": "明日方舟 · 极简角标",
       "en": "Arknights · Corner Mark"
     },
-    "version": "1.2.0",
+    "version": "1.3.0",
     "minEngineVersion": "0.7.0",
     "author": "framegeist",
     "license": "CC0-1.0",
@@ -25,7 +25,7 @@
       "id": "game-mark",
       "asset": "@builtin/game/arknights",
       "size": {
-        "height": 0.045
+        "height": 0.06
       },
       "anchor": "bottom-right",
       "offset": {

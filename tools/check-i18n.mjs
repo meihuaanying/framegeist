@@ -47,6 +47,19 @@ for (const entry of keysUsed) {
   if (!(key in zh)) fail(`unknown i18n key "${key}" (${entry.split(":")[0]})`);
 }
 
+/* --------------------------------------- property label keys (v0.9.0) */
+// Labels passed to the property-panel builders must be i18n keys, never raw
+// display copy (the row renders t(label)).
+const LABEL_CALL = /(?:add(?:Dual|Select|Check|Color)|propRow)\(\s*(?:grid|holder)?,?\s*"([^"]+)"/g;
+for (const f of JS_FILES) {
+  const src = readFileSync(resolve(ROOT, f), "utf8");
+  for (const m of src.matchAll(LABEL_CALL)) {
+    if (!m[1].includes(".") || !(m[1] in zh)) {
+      fail(`property label must be an i18n key: "${m[1]}" (${f})`);
+    }
+  }
+}
+
 /* ------------------------------------------------------ hardcoded strings */
 // Brands / technical acronyms / expression previews / symbols are allowed.
 const BRAND_RE = /\b(canon|sony|nikon|fujifilm|leica|hasselblad|panasonic|lumix|ricoh|sigma|zeiss|dji|apple|tamron|epson|olympus|pentax|gopro|insta360|sandisk|phaseone|profoto|smallrig|samsung|vivo|oppo|oneplus|huawei|honor|google|motorola|nokia|blackmagic|viltrox|laowa|ttartisan|tokina|samyang|meike|7artisans|sirui|yongnuo|voigtlander|eos|ilce|nikkor|zuiko|gm|art|apo|sp|xf|xcd|batis|rf|ef)\b/i;

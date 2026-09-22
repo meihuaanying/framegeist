@@ -403,12 +403,12 @@ fn badge_autotint_picks_light_variant_on_dark_bg() {
     let mut assets = HashMap::new();
     assets.insert(
         "@builtin/brand/test".to_string(),
-        solid_png([255, 0, 0], 64),
-    ); // dark-variant red
+        solid_png([150, 20, 20], 64),
+    ); // colorful but low contrast on dark
     assets.insert(
         "@builtin/brand/test-light".to_string(),
-        solid_png([0, 0, 255], 64),
-    ); // light-variant blue
+        solid_png([245, 245, 245], 64),
+    ); // light-variant
     let count =
         |img: &image::RgbaImage, c: [u8; 4]| img.pixels().filter(|p| p.0 == c).count() as u32;
 
@@ -423,10 +423,10 @@ fn badge_autotint_picks_light_variant_on_dark_bg() {
     )
     .unwrap();
     assert!(
-        count(&img, [255, 0, 0, 255]) > 100,
-        "light bg must use dark (red) badge"
+        count(&img, [150, 20, 20, 255]) > 100,
+        "light bg must keep the colorful badge when contrast is sufficient"
     );
-    assert_eq!(count(&img, [0, 0, 255, 255]), 0);
+    assert_eq!(count(&img, [245, 245, 245, 255]), 0);
 
     let dark_src = TINT_TEMPLATE.replace("#FFFFFF", "#0B0B0B");
     let on_dark = RenderOptions {
@@ -440,10 +440,45 @@ fn badge_autotint_picks_light_variant_on_dark_bg() {
     )
     .unwrap();
     assert!(
-        count(&img2, [0, 0, 255, 255]) > 100,
-        "dark bg must auto-pick light (blue) badge"
+        count(&img2, [245, 245, 245, 255]) > 100,
+        "dark bg with sub-3.0 contrast must auto-pick the light variant"
     );
-    assert_eq!(count(&img2, [255, 0, 0, 255]), 0);
+    assert_eq!(count(&img2, [150, 20, 20, 255]), 0);
+}
+
+#[test]
+fn badge_autotint_keeps_colorful_variant_on_dark_when_contrast_ok() {
+    // v0.9.0: a colorful main variant that clears WCAG 1.4.11 (3:1) against
+    // the local background keeps its official color even on a dark canvas.
+    let photo = gradient_jpeg(800, 600);
+    let mut assets = HashMap::new();
+    assets.insert(
+        "@builtin/brand/test".to_string(),
+        solid_png([255, 0, 0], 64),
+    ); // pure red, contrast ~4.9 on #0B0B0B
+    assets.insert(
+        "@builtin/brand/test-light".to_string(),
+        solid_png([0, 0, 255], 64),
+    );
+    let count =
+        |img: &image::RgbaImage, c: [u8; 4]| img.pixels().filter(|p| p.0 == c).count() as u32;
+
+    let dark_src = TINT_TEMPLATE.replace("#FFFFFF", "#0B0B0B");
+    let on_dark = RenderOptions {
+        assets: Some(assets),
+        ..opts()
+    };
+    let img = render_rgba(
+        &photo,
+        &load_template(dark_src.as_bytes()).unwrap(),
+        &on_dark,
+    )
+    .unwrap();
+    assert!(
+        count(&img, [255, 0, 0, 255]) > 100,
+        "dark bg with >=3.0 contrast must keep the official color"
+    );
+    assert_eq!(count(&img, [0, 0, 255, 255]), 0);
 }
 
 #[test]

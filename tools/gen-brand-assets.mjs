@@ -1,16 +1,27 @@
-// Generates the v0.8.0 badge asset library:
+// Generates the v0.9.0 badge asset library:
 //  - brand/   official Simple Icons (CC0) when available, otherwise an
 //             original typographic wordmark (never official logo artwork)
 //  - lockup/  original typographic lockups for EVERY brand slug ("original" style)
 //  - series/  lens-series emblems (GM/G, L/RF L, Art/DG DN, XCD/XF, Batis, APO, SP)
 //  - game/    original game wordmarks (no official assets)
 //  - brand/exif-auto  neutral "EXIF" marker for expression-based template cards
-// Each item is rendered black + white at 512px (templates/CLI) and 96px thumbs
-// (web library grid) with @resvg/resvg-js. Also writes web/brand/index.json v2
-// with the camera/lens/series/game groups used by the editor badge library.
+//
+// v0.9.0 variant matrix (docs/V0.9.0-CONSTRAINTS.md §3.1):
+//   brand/lockup : <slug>.png (primary: official hex when the brand color is
+//                  "colorful" per tools/brand-colors.json, else black),
+//                  <slug>-mono.png (black), <slug>-light.png (white)
+//   series/game  : <slug>.png (black), <slug>-light.png (white)
+//   all          : 512px (assets) + 96px thumbs (web library grid)
+// Primary color lands on the SAME file path as before (brand/<slug>.png), so
+// existing template references keep working.
+//
+// Icons are fetched through the GitHub Contents API (api.github.com) because
+// raw.githubusercontent.com is not always reachable; see tools/brand-colors.json
+// for the locked official hex snapshot.
 // Usage: node tools/gen-brand-assets.mjs
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { execFileSync } from "node:child_process";
 import { Resvg } from "@resvg/resvg-js";
 
 const FONT_DIR = "templates/assets/fonts";
@@ -115,9 +126,26 @@ for (const [a, b] of Object.values(DIRS)) {
   mkdirSync(join(b, "thumbs"), { recursive: true });
 }
 
+// ------------------------------------------------------------ brand colors
+const COLORS = JSON.parse(readFileSync("tools/brand-colors.json", "utf8"));
+const colorFor = (slug) => {
+  const entry = COLORS.icons?.[slug];
+  if (entry?.colorful && !(COLORS.monoOverride ?? []).includes(slug)) return entry.hex;
+  return "#000000";
+};
+const hasColor = (slug) => colorFor(slug) !== "#000000";
+
+// Variants per kind: [suffix, color, creditKey]
+const variantsFor = (kind, slug) => {
+  if (kind === "series" || kind === "game") {
+    return [["", "#000000"], ["-light", "#ffffff"]];
+  }
+  return [["", colorFor(slug)], ["-mono", "#000000"], ["-light", "#ffffff"]];
+};
+
 function writeVariants(entry, render, label) {
   let ok = false;
-  for (const [variant, color] of [["", "#000000"], ["-light", "#ffffff"]]) {
+  for (const [variant, color] of variantsFor(entry.kind, entry.slug)) {
     for (const [size, sub] of [[SIZE, ""], [THUMB, "thumbs/"]]) {
       try {
         const png = render(color, size);
@@ -161,16 +189,46 @@ function wordmarkSvg(entry) {
 }
 
 // ---------------------------------------------------------------- official
-const RAW = "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons";
+const SI_REPO = "simple-icons/simple-icons";
+const SI_REF = "develop";
+let siToken = null;
+try {
+  siToken = execFileSync("gh", ["auth", "token"], { encoding: "utf8" }).trim();
+} catch {
+  /* tokenless fallback below */
+}
+async function fetchIcon(slug) {
+  const api = `https://api.github.com/repos/${SI_REPO}/contents/icons/${slug}.svg?ref=${SI_REF}`;
+  const raw = `https://raw.githubusercontent.com/${SI_REPO}/${SI_REF}/icons/${slug}.svg`;
+  const attempts = [];
+  if (siToken) {
+    attempts.push(() =>
+      fetch(api, {
+        headers: { authorization: `Bearer ${siToken}`, accept: "application/vnd.github.raw", "user-agent": "FrameGeist/0.9" },
+      })
+    );
+  }
+  attempts.push(() => fetch(raw, { headers: { "user-agent": "FrameGeist/0.9" } }));
+  for (const attempt of attempts) {
+    for (let retry = 1; retry <= 2; retry++) {
+      try {
+        const res = await attempt();
+        if (res.ok) return await res.text();
+        if (res.status === 404) break;
+      } catch {
+        if (retry < 2) await new Promise((r) => setTimeout(r, 800));
+      }
+    }
+  }
+  return null;
+}
+
 const iconSlugs = [];
+const iconCredits = {};
 for (const slug of OFFICIAL_SLUGS) {
-  let svg;
-  try {
-    const res = await fetch(`${RAW}/${slug}.svg`, { headers: { "user-agent": "FrameGeist/0.8" } });
-    if (!res.ok) { console.log(`brand ${slug}: HTTP ${res.status} (fallback to wordmark)`); continue; }
-    svg = await res.text();
-  } catch (e) {
-    console.log(`brand ${slug}: fetch ${e.message} (fallback to wordmark)`);
+  const svg = await fetchIcon(slug);
+  if (!svg) {
+    console.log(`brand ${slug}: icon fetch failed (fallback to wordmark)`);
     continue;
   }
   const withFill = (color) =>
@@ -179,9 +237,12 @@ for (const slug of OFFICIAL_SLUGS) {
     const resvg = new Resvg(withFill(color), { fitTo: { mode: "height", value: size } });
     return resvg.render().asPng();
   });
-  if (ok) iconSlugs.push(slug);
+  if (ok) {
+    iconSlugs.push(slug);
+    iconCredits[slug] = { hex: COLORS.icons?.[slug]?.hex ?? "#000000", colorful: hasColor(slug), title: COLORS.icons?.[slug]?.title ?? slug };
+  }
 }
-console.log(`official icons: ${iconSlugs.length}/${OFFICIAL_SLUGS.length}`);
+console.log(`official icons: ${iconSlugs.length}/${OFFICIAL_SLUGS.length} (${iconSlugs.filter(hasColor).length} colorful)`);
 
 // ------------------------------------------------- wordmarks (brand fallback)
 const wordCredits = [];
@@ -201,9 +262,10 @@ for (const w of WORDMARKS) {
 // ------------------------------------------------------------------- lockups
 const lockupCredits = [];
 for (const l of LOCKUPS) {
-  if (renderWordmark({ ...l, kind: "lockup" })) lockupCredits.push({ slug: l.slug, font: l.font });
+  const entry = { ...l, kind: "lockup" };
+  if (renderWordmark(entry)) lockupCredits.push({ slug: l.slug, font: l.font, colorful: hasColor(l.slug), hex: hasColor(l.slug) ? colorFor(l.slug) : null });
 }
-console.log(`lockups: ${lockupCredits.length}`);
+console.log(`lockups: ${lockupCredits.length} (${lockupCredits.filter((l) => l.colorful).length} colorful)`);
 
 // --------------------------------------------------------------- series/game
 for (const [kind, items] of [["series", SERIES], ["game", GAMES]]) {
@@ -223,9 +285,12 @@ writeFileSync(
       disclaimer:
         "Icons/wordmarks/lockups are used to indicate the camera/lens/device brand from EXIF metadata. No endorsement or affiliation is implied.",
       officialIcons: iconSlugs,
+      officialColors: iconCredits,
       wordmarks: wordCredits,
       lockups: lockupCredits.map((l) => l.slug),
-      variants: "512px (assets) + 96px thumbs (web library)",
+      variants: "primary (official color when colorful) + -mono + -light; 512px + 96px thumbs",
+      colorRule: COLORS.rule,
+      colorSource: COLORS.source,
       neutral: "brand/exif-auto (original EXIF marker for expression-based templates)",
     },
     null,
@@ -233,25 +298,32 @@ writeFileSync(
   ) + "\n",
 );
 
-// -------------------------------------------------------- library manifest v2
+// -------------------------------------------------------- library manifest v3
 const allSlugs = Array.from(new Set([...iconSlugs, ...WORDMARKS.map((w) => w.slug)])).sort()
   .filter((s) => s !== "exif-auto");
 const cameraGroup = allSlugs.filter((s) => !LENS_ONLY.includes(s));
 const lensGroup = allSlugs;
 const label = (slug) => LABELS[slug] ?? slug.replace(/(^|-)([a-z])/g, (_, p, c) => `${p ? " " : ""}${c.toUpperCase()}`);
-const item = (slug) => ({ slug, label: label(slug), official: iconSlugs.includes(slug) });
+const item = (slug) => ({
+  slug,
+  label: label(slug),
+  official: iconSlugs.includes(slug),
+  color: hasColor(slug) ? colorFor(slug) : null,
+});
 const manifest = {
-  version: 2,
+  version: 3,
   generatedAt: new Date().toISOString(),
   neutral: "exif-auto",
+  colorRule: COLORS.rule,
   groups: {
     camera: cameraGroup.map(item),
     lens: lensGroup.map(item),
-    series: SERIES.map((s) => ({ slug: s.slug, label: s.text, official: false })),
-    game: GAMES.map((g) => ({ slug: g.slug, label: g.slug.toUpperCase(), official: false })),
+    series: SERIES.map((s) => ({ slug: s.slug, label: s.text, official: false, color: null })),
+    game: GAMES.map((g) => ({ slug: g.slug, label: g.slug.toUpperCase(), official: false, color: null })),
   },
 };
 writeFileSync(join(DIRS.brand[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
 writeFileSync(join(DIRS.lockup[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
-console.log(`library manifest: camera ${manifest.groups.camera.length}, lens ${manifest.groups.lens.length}, series ${manifest.groups.series.length}, game ${manifest.groups.game.length}`);
+console.log(`library manifest v3: camera ${manifest.groups.camera.length}, lens ${manifest.groups.lens.length}, series ${manifest.groups.series.length}, game ${manifest.groups.game.length}`);
+console.log(`colorful brands: ${cameraGroup.filter(hasColor).join(", ")}`);
 console.log("all brand assets done");

@@ -2274,17 +2274,34 @@ fn region_luminance_stats(img: &RgbaImage, x: i32, y: i32, w: u32, h: u32) -> (f
     (at(0.1), at(0.5), at(0.9))
 }
 
-/// Mean luminance of the opaque pixels of a badge.
-fn ink_luminance(rgba: &RgbaImage) -> f32 {
-    let mut sum = 0f64;
+/// Mean luminance and mean saturation of the opaque pixels of a badge.
+/// v0.9.0: the saturation average tells whether the loaded variant carries the
+/// official brand color (primary) or is a monochrome fallback.
+fn ink_stats(rgba: &RgbaImage) -> (f32, f32) {
+    let mut lum = 0f64;
+    let mut chroma = 0f64;
     let mut n = 0f64;
     for p in rgba.pixels() {
         if p[3] > 40 {
-            sum += srgb_luminance([p[0], p[1], p[2]]) as f64;
+            let r = p[0] as f32 / 255.0;
+            let g = p[1] as f32 / 255.0;
+            let b = p[2] as f32 / 255.0;
+            let max = r.max(g).max(b);
+            let min = r.min(g).min(b);
+            let l = (max + min) / 2.0;
+            let s = if max == min {
+                0.0
+            } else if l > 0.5 {
+                (max - min) / (2.0 - max - min)
+            } else {
+                (max - min) / (max + min)
+            };
+            lum += srgb_luminance([p[0], p[1], p[2]]) as f64;
+            chroma += s as f64;
             n += 1.0;
         }
     }
-    (sum / n.max(1.0)) as f32
+    ((lum / n.max(1.0)) as f32, (chroma / n.max(1.0)) as f32)
 }
 
 /// Translucent rounded plate behind a badge (contrast protection).
@@ -2420,9 +2437,9 @@ fn draw_image_layer(
     let photo_h = geo.photo_h as f64;
     let photo_w = geo.photo_w as f64;
 
-    // ---- size: template size, badge floor (≥5% photo h and ≥18px, v0.8.0),
-    // default badge height 4.5% vs 3% for other image layers, max width.
-    let default_h = if badge { 0.045 } else { 0.03 };
+    // ---- size: template size, badge floor (≥6% photo h and ≥18px, v0.9.0),
+    // default badge height 6.5% vs 3% for other image layers, max width.
+    let default_h = if badge { 0.065 } else { 0.03 };
     let base_h = layer
         .size
         .height
@@ -2439,7 +2456,7 @@ fn draw_image_layer(
     let mut min_h = 2.0f64;
     if badge {
         let scale = ov.and_then(|o| o.brand_scale).unwrap_or(1.0);
-        min_h = (layer.min_height.unwrap_or(0.05) * photo_h).max(18.0);
+        min_h = (layer.min_height.unwrap_or(0.06) * photo_h).max(18.0);
         target_h = (target_h * scale).max(min_h);
     } else if let Some(mh) = layer.min_height {
         min_h = mh * photo_h;
@@ -2449,7 +2466,7 @@ fn draw_image_layer(
     let mut tw = ((iw as f64) * scale).round().max(2.0) as u32;
     let mut th = ((ih as f64) * scale).round().max(2.0) as u32;
     if badge {
-        let max_w = layer.max_width.unwrap_or(0.38) * photo_w;
+        let max_w = layer.max_width.unwrap_or(0.44) * photo_w;
         if tw as f64 > max_w {
             let s = max_w / tw as f64;
             tw = ((tw as f64 * s).round() as u32).max(2);
@@ -2462,16 +2479,24 @@ fn draw_image_layer(
         }
     }
 
-    // ---- placement: attachTo > corner (override or template) > anchor
+    // ---- placement: attachTo > corner (layer > override > template) > anchor
+    // v0.9.0: an explicit layer corner wins, and "anchor" pins the anchor
+    // placement for this layer (per-layer override in the editor).
     let position_override = if badge {
         ov.and_then(|o| o.brand_position.as_deref())
     } else {
         None
     };
-    let corner = match position_override {
-        Some("anchor") => None,
-        Some(c) => Some(c.to_string()),
-        None => layer.corner.clone(),
+    let corner = if layer.corner.as_deref() == Some("anchor") {
+        None
+    } else if layer.corner.is_some() {
+        layer.corner.clone()
+    } else {
+        match position_override {
+            Some("anchor") => None,
+            Some(c) => Some(c.to_string()),
+            None => None,
+        }
     };
     let (ix, iy) = if let Some(target_id) = &layer.attach_to {
         let Some(tl) = text_layouts.get(target_id) else {
@@ -2536,26 +2561,37 @@ fn draw_image_layer(
 
     // ---- contrast protection: pick the best black/white variant, then add a
     // stroke or plate when the local background is too busy for 4.5:1.
+    // v0.9.0: an explicit per-layer contrast wins over the template override.
     let mut rgba = rgba;
-    let mode = ov
-        .and_then(|o| o.brand_contrast.as_deref())
-        .or(layer.contrast.as_deref())
+    let mode = layer
+        .contrast
+        .as_deref()
+        .or_else(|| ov.and_then(|o| o.brand_contrast.as_deref()))
         .unwrap_or("auto");
     let mut need_stroke = mode == "stroke";
     let mut need_plate = mode == "plate";
     let mut chosen_light = path.ends_with("-light");
+    let mut chosen_ink: Option<f32> = None;
     if badge {
         let (p10, median, p90) = region_luminance_stats(canvas, ix, iy, tw, th);
         let base_path = path.strip_suffix("-light").unwrap_or(&path).to_string();
-        let load_ink = |p: &str| {
+        // v0.9.0 variant matrix: `<slug>.png` (official color for colorful
+        // brands), `<slug>-mono.png` (black), `<slug>-light.png` (white).
+        let mono_path = format!("{base_path}-mono");
+        let load_stats = |p: &str| {
             resolve_asset_bytes(opts, p)
                 .and_then(|b| image::load_from_memory(&b).ok())
-                .map(|i| ink_luminance(&i.to_rgba8()))
+                .map(|i| ink_stats(&i.to_rgba8()))
         };
-        let dark_ink = load_ink(&base_path).unwrap_or(0.02);
-        let light_ink = load_ink(&format!("{base_path}-light")).unwrap_or(0.98);
+        let (dark_ink, _) = load_stats(&mono_path)
+            .or_else(|| load_stats(&base_path))
+            .unwrap_or((0.02, 0.0));
+        let (light_ink, _) = load_stats(&format!("{base_path}-light")).unwrap_or((0.98, 0.0));
+        let (primary_ink, primary_chroma) = ink_stats(&rgba);
+        let primary_colorful = primary_chroma >= 0.25;
         let score = |lum: f32| contrast_ratio(lum, p10).min(contrast_ratio(lum, p90));
-        let (dark_score, light_score) = (score(dark_ink), score(light_ink));
+        let (color_score, dark_score, light_score) =
+            (score(primary_ink), score(dark_ink), score(light_ink));
         let tint_hint = ov
             .and_then(|o| o.brand_contrast.as_deref())
             .or(layer.tint.as_deref());
@@ -2571,22 +2607,40 @@ fn draw_image_layer(
                 _ => (p10 + p90) / 2.0 < 0.5,
             },
         };
-        let best_score = if want_light { light_score } else { dark_score };
-        chosen_light = want_light;
-        if want_light && !path.ends_with("-light") {
-            if let Some(lb) = resolve_asset_bytes(opts, &format!("{path}-light")) {
-                if let Ok(li) = image::load_from_memory(&lb) {
+        // v0.9.0: keep the official color when it is requested explicitly or
+        // when it clears the WCAG 1.4.11 non-text contrast floor (3:1) against
+        // the local background; otherwise fall back to the black/white
+        // variants (old behaviour).
+        let color_requested = mode == "color" || tint_hint == Some("color");
+        let use_color = primary_colorful && (color_requested || color_score >= 3.0);
+        let best_score;
+        if use_color {
+            best_score = color_score;
+            chosen_ink = Some(primary_ink);
+            chosen_light = primary_ink > 0.55;
+        } else {
+            let target = if want_light {
+                format!("{base_path}-light")
+            } else {
+                mono_path.clone()
+            };
+            if let Some(bytes) = resolve_asset_bytes(opts, &target) {
+                if let Ok(li) = image::load_from_memory(&bytes) {
                     rgba = li.to_rgba8();
                 }
-            }
-        } else if !want_light && path.ends_with("-light") {
-            if let Some(db) = resolve_asset_bytes(opts, &base_path) {
-                if let Ok(di) = image::load_from_memory(&db) {
-                    rgba = di.to_rgba8();
+            } else if !want_light {
+                // No -mono file (pre-v0.9 asset set): fall back to the primary.
+                if let Some(db) = resolve_asset_bytes(opts, &base_path) {
+                    if let Ok(di) = image::load_from_memory(&db) {
+                        rgba = di.to_rgba8();
+                    }
                 }
             }
+            best_score = if want_light { light_score } else { dark_score };
+            chosen_light = want_light;
+            chosen_ink = Some(if want_light { light_ink } else { dark_ink });
         }
-        if best_score < 4.5 && mode == "auto" {
+        if best_score < 4.5 && (mode == "auto" || mode == "color") && !color_requested {
             need_stroke = true;
         }
         if best_score < 4.5 || mode == "stroke" || mode == "plate" {
@@ -2610,8 +2664,14 @@ fn draw_image_layer(
     }
 
     let fitted = image::imageops::resize(&rgba, tw, th, image::imageops::FilterType::Lanczos3);
+    // v0.9.0: an explicit non-default per-layer opacity wins; otherwise the
+    // template-level override applies (v0.7 behaviour).
     let opacity = if badge {
-        ov.and_then(|o| o.brand_opacity).unwrap_or(layer.opacity)
+        if (layer.opacity - 1.0).abs() > f64::EPSILON {
+            layer.opacity
+        } else {
+            ov.and_then(|o| o.brand_opacity).unwrap_or(layer.opacity)
+        }
     } else {
         layer.opacity
     }
@@ -2619,10 +2679,11 @@ fn draw_image_layer(
 
     // Stroke/plate take the opposite of the badge ink so the mark stays
     // visible even on the half of a busy background that matches it.
-    let guard_color = if chosen_light {
-        [17u8, 17, 17]
-    } else {
+    let guard_ink = chosen_ink.unwrap_or(if chosen_light { 0.98 } else { 0.02 });
+    let guard_color = if guard_ink < 0.5 {
         [255u8, 255, 255]
+    } else {
+        [17u8, 17, 17]
     };
     if need_plate {
         draw_badge_plate(canvas, ix, iy, tw, th, guard_color, opacity);

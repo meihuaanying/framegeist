@@ -1,0 +1,2384 @@
+{
+  "generatedAt": "2026-09-21T07:28:17.049Z",
+  "templates": [
+    {
+      "id": "art-copperplate-etch",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-deco-double",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-gilt-foil",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-letterpress-relief",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-republican-press",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-ukiyoe-cartouche",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-vermilion-seal",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "art-woodtype-press",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "black-frame-charcoal-split-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "black-frame-gold-line-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "black-frame-inner-rule-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "black-frame-mono-slate-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "black-frame-side-stack-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "black-frame-two-line-01",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "blur-bg-brandbar-02",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "blur-bg-card-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "blur-bg-center-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "blur-bg-topcap-04",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-center-caption-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-corner-stack-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-date-hero-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-dot-corners-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-geo-pin-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-one-liner-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-quad-anchors-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-right-roll-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-signoff-block-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "borderless-vertical-spine-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-baseplate-02",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-corner-body-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-lens-dial-06",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-retro-sidecar-04",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-ricoh-slimline-08",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-series-emblem-07",
+      "changes": [
+        {
+          "id": "series",
+          "from": 0.06,
+          "to": 0.078,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "camera-stencil-mono-05",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "camera-topdeck-bar-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-black-bar",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-brand-center",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-date-right",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-double-row",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-hairline-thin",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-mono-stack",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-red-dot",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "classic-watermark-single-row",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorcard-column-02",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorcard-cream-date-04",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorcard-diamonds-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorcard-index-05",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorcard-sunrise-chips-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorcard-tint-chips-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-corner-blocks-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-dot-cluster-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-frame-quad-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-pastel-card-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-rainbow-lines-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-split-duo-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorful-sticker-date-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-blur-stage-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-ribbon-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-round-card-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "series",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "colorwalk-single-line-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-tint-seam-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-top-field-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-vbar-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "colorwalk-verse-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "drone-aerial-editorial-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "drone-altitude-hero-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "drone-geoblock-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "drone-skybar-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "drone-topline-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-duotone-wash-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-float-card-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-minimal-shadow-08",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-mirror-pool-02",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-paper-stack-05",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-polaroid-float-06",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-top-gradient-band-07",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "effect-vignette-card-04",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-darkroom-pillar-03",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-diptych-hairline-07",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-led-datestamp-04",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-mono-roll-06",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-positive-print-08",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-serif-stock-05",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-sprocket-01",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "film-sprocket-02",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "fuji-recipe-band-02",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "fuji-recipe-column-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "fuji-recipe-hero-04",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "fuji-recipe-panel-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "fuji-recipe-rails-05",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-arknights-v1",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-arknights-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-arknights-v3",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.05,
+          "to": 0.065,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-genshin-v1",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-genshin-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-genshin-v3",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.05,
+          "to": 0.065,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-honkai-v1",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-honkai-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-honkai-v3",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.05,
+          "to": 0.065,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-wukong-v1",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-wukong-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-wukong-v3",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.05,
+          "to": 0.065,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-wwmeet-v1",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-wwmeet-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-wwmeet-v3",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.05,
+          "to": 0.065,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-zzz-v1",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "game-zzz-v2",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "game-zzz-v3",
+      "changes": [
+        {
+          "id": "game-mark",
+          "from": 0.05,
+          "to": 0.065,
+          "factor": 1.3
+        },
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "magazine-cover-banner-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "magazine-double-rule-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "magazine-gallery-left-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "magazine-index-column-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "magazine-poster-manifesto-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "magazine-triptych-slices-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "master-cream-dot-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "master-crown-wordmark-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "master-ivory-plate-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "master-noir-plate-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "master-seal-frame-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "master-three-column-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-brand-right",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-center-line",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-copyright",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-corner-mono",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-letterbox",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-model-stack",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-portrait-line",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "minimal-topright-date",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "personal-avatar-ring-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "personal-credit-social-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "personal-name-columns-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "personal-script-signature-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "personal-triptych-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-accent-dots-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-camera-ui-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-dual-optics-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "series",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "phone-midnight-bar-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-minimal-line-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-paper-spec-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-shot-on-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-side-rail-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "phone-studio-card-01",
+      "changes": [
+        {
+          "id": "brandtop",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        },
+        {
+          "id": "brandfoot",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 2
+    },
+    {
+      "id": "phone-vendor-bar-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "polaroid-classic-script-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "polaroid-duo-stamps-05",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "polaroid-pastel-ring-04",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "polaroid-stamp-postcard-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "polaroid-tilt-plate-02",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-atelier-plate-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-credit-still-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-double-rule-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-marginalia-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-noir-matte-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-vertical-scroll-01",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "portfolio-wall-label-01",
+      "changes": [
+        {
+          "id": "v7-brand-badge",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "sports-alt-badge-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "sports-big-trail-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "sports-ride-stats-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "sports-side-rail-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "ticket-boarding-pass-03",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "ticket-night-tilt-05",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "ticket-park-pass-04",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "ticket-stub-horizontal-01",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "ticket-vertical-rail-02",
+      "changes": [
+        {
+          "id": "brand",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-centered-lockup",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-editorial-01",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-letterhead",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-linen-dot",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-passport-mono",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-quiet-stack",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-ruled-band",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-top-note",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    },
+    {
+      "id": "white-border-twin-columns",
+      "changes": [
+        {
+          "id": "brandmark",
+          "from": 0.045,
+          "to": 0.06,
+          "factor": 1.3
+        }
+      ],
+      "conflicts": [],
+      "badges": 1
+    }
+  ],
+  "summary": {
+    "processed": 192,
+    "version": "1.3.0",
+    "badgeLayers": 191,
+    "atLeast6Percent": 190,
+    "distribution": {
+      "0.06": 183,
+      "0.065": 6,
+      "0.078": 1,
+      "0.045": 1
+    },
+    "exceptions": [
+      {
+        "id": "borderless-lowleft-pair-01",
+        "layer": "brand",
+        "height": 0.045,
+        "reason": "守卫不可解：0.06 时与 lens 文本重叠 >25%；1.15/1.0 回退被 6% 下限钳制，脚本按守卫语义保留原值（当前重叠 2.3% 为可接受的基线既有近似）。"
+      }
+    ],
+    "note": "本报告仅列出有最终变更/剩余冲突的模板（脚本行为）；全量 192 套徽标层分布与唯一例外由该 summary 记录。"
+  }
+}

@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.8.0";
+const APP_VERSION = "0.9.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -667,7 +667,7 @@ function buildWall() {
     const catLabel = t("cat." + tpl.category) !== `cat.${tpl.category}` ? t("cat." + tpl.category) : (tpl.category ?? "");
     const marks = Array.isArray(tpl.marks) ? tpl.marks.slice(0, 3) : [];
     const marksHtml = marks.length
-      ? `<div class="wall-marks">${marks.map((m) => `<img loading="lazy" decoding="async" src="./${m.kind}/thumbs/${m.slug}-light.png" alt="">`).join("")}</div>`
+      ? `<div class="wall-marks">${marks.map((m) => `<img loading="lazy" decoding="async" src="./${m.kind}/thumbs/${markSlugVariant(m.slug)}.png" alt="">`).join("")}</div>`
       : "";
     cell.innerHTML = (src
       ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
@@ -740,10 +740,22 @@ function badgeGroupsFor(target) {
   return ["camera", "lens", "series", "game"];
 }
 function libThumb(item, group, style) {
-  const light = document.documentElement.dataset.theme === "dark" ? "-light" : "";
   const dir = group === "series" ? "series" : group === "game" ? "game"
     : (item.official && style === "official" ? "brand" : "lockup");
+  // v0.9.0: official color brands keep the color thumb in both themes; mono
+  // brands follow the theme (-light on dark).
+  if (item.color) return `./${dir}/thumbs/${item.slug}.png`;
+  const light = document.documentElement.dataset.theme === "dark" ? "-light" : "";
   return `./${dir}/thumbs/${item.slug}${light}.png`;
+}
+/// v0.9.0: wall card marks use the official color thumb when available.
+function markSlugVariant(slug) {
+  const groups = brandLibData?.groups ?? {};
+  for (const g of Object.keys(groups)) {
+    const item = (groups[g] ?? []).find((i) => i.slug === slug);
+    if (item) return item.color ? slug : `${slug}-light`;
+  }
+  return `${slug}-light`;
 }
 function libDir(item, group, style) {
   if (group === "series") return "series";
@@ -754,15 +766,16 @@ function currentBadgeSlug(target) {
   const m = /@(?:builtin\/(?:brand|lockup|series|game)|user)\/([a-z0-9-]+)/.exec(target?.asset ?? "");
   return m ? m[1] : null;
 }
-/// Render a library grid into `grid` for the given groups/query/style.
-function renderLibGrid(grid, available, { readOnly = false } = {}) {
-  const style = brandStyleNow();
+const BRAND_GROUPS = ["camera", "lens", "series", "game"];
+function brandGroupItems(group) {
   const groups = brandLibData.groups ?? {};
-  const all = available.flatMap((g) => (groups[g] ?? []).map((i) => ({ ...i, group: g })));
-  const q = brandLibState.query.trim().toLowerCase();
-  const items = q ? all.filter((i) => i.slug.includes(q) || String(i.label).toLowerCase().includes(q)) : all;
-  const target = badgeTarget();
-  const activeSlug = readOnly ? null : currentBadgeSlug(target);
+  const list = group === "all" ? BRAND_GROUPS : [group];
+  return list.flatMap((g) => (groups[g] ?? []).map((i) => ({ ...i, group: g })));
+}
+/// v0.9.0: render a library grid from ALREADY filtered items (group + query).
+function renderLibGrid(grid, items) {
+  const style = brandStyleNow();
+  const activeSlug = currentBadgeSlug(badgeTarget());
   grid.innerHTML = "";
   if (!items.length) {
     const empty = document.createElement("div");
@@ -783,54 +796,34 @@ function renderLibGrid(grid, available, { readOnly = false } = {}) {
       else brandLibState.fav.add(item.slug);
       saveBrandLib();
       renderBrandLibrary();
-      renderLibGrid($("brandLibModalGrid"), availableForModal(), { readOnly: true });
     };
-    if (!readOnly) {
-      cell.onclick = () => applyBrandChoice(item, item.group);
-    } else {
-      cell.onclick = () => toast("info", t("brandLib.wallHint"));
-    }
+    cell.onclick = () => applyBrandChoice(item, item.group);
     grid.appendChild(cell);
   }
-}
-function availableForModal() {
-  return ["camera", "lens", "series", "game"];
-}
-/// Wall-side read-only library dialog (browse + style preview only).
-function renderModalLibrary() {
-  const groups = brandLibData.groups ?? {};
-  const chipBox = $("brandLibModalGroups");
-  chipBox.innerHTML = "";
-  for (const g of availableForModal()) {
-    const b = document.createElement("button");
-    b.className = `brand-chip${brandLibState.group === g ? " on" : ""}`;
-    b.textContent = `${t("brandLib.groups." + g)} ${(groups[g] ?? []).length}`;
-    b.onclick = () => { brandLibState.group = g; saveBrandLib(); renderBrandLibrary(); renderModalLibrary(); };
-    chipBox.appendChild(b);
-  }
-  $("brandLibModalSearch").value = brandLibState.query;
-  $("brandLibModalCount").textContent = String(availableForModal().reduce((n, g) => n + (groups[g] ?? []).length, 0));
-  renderLibGrid($("brandLibModalGrid"), availableForModal(), { readOnly: true });
 }
 function renderBrandLibrary() {
   const target = badgeTarget();
   const groups = brandLibData.groups ?? {};
-  const available = badgeGroupsFor(target);
-  if (!available.includes(brandLibState.group)) brandLibState.group = available[0];
   const chipBox = $("brandGroups");
+  if (!chipBox) return;
+  const available = ["all", ...BRAND_GROUPS];
+  if (!available.includes(brandLibState.group)) brandLibState.group = badgeGroupsFor(target)[0] ?? "camera";
   chipBox.innerHTML = "";
   for (const g of available) {
     const b = document.createElement("button");
     b.className = `brand-chip${brandLibState.group === g ? " on" : ""}`;
-    b.textContent = `${t("brandLib.groups." + g)} ${(groups[g] ?? []).length}`;
+    const count = g === "all"
+      ? BRAND_GROUPS.reduce((n, x) => n + (groups[x] ?? []).length, 0)
+      : (groups[g] ?? []).length;
+    b.textContent = `${g === "all" ? t("chip.all") : t("brandLib.groups." + g)} ${count}`;
     b.onclick = () => { brandLibState.group = g; saveBrandLib(); renderBrandLibrary(); };
     chipBox.appendChild(b);
   }
   $("brandSearch").value = brandLibState.query;
-  // quick picks: recent + favorites inside the available groups
+  // quick picks: recent + favorites across all groups
   const quick = $("brandQuick");
   quick.innerHTML = "";
-  const all = available.flatMap((g) => (groups[g] ?? []).map((i) => ({ ...i, group: g })));
+  const all = brandGroupItems("all");
   const picks = [...brandLibState.recent, ...brandLibState.fav]
     .map((slug) => all.find((i) => i.slug === slug))
     .filter((v, i, a) => v && a.findIndex((x) => x && x.slug === v.slug) === i)
@@ -848,12 +841,18 @@ function renderBrandLibrary() {
       quick.appendChild(b);
     }
   }
-  renderLibGrid($("brandLibGrid"), available);
+  // v0.9.0 filter fix: group chips + search both apply to the grid.
+  const pool = brandGroupItems(brandLibState.group);
+  const q = brandLibState.query.trim().toLowerCase();
+  const items = q ? pool.filter((i) => i.slug.includes(q) || String(i.label).toLowerCase().includes(q)) : pool;
+  renderLibGrid($("brandLibGrid"), items);
   const tgt = $("brandLibTarget");
   if (tgt) tgt.textContent = target ? (target.label || target.id) : t("brandLib.noLayer");
   const hint = $("brandLibHint");
   if (hint) hint.textContent = target ? t("brandLib.hint") : t("brandLib.noLayerHint");
   $("brandAuto").classList.toggle("on", !!target && !currentBadgeSlug(target) && /@builtin\/(brand|lockup|series)\//.test(target.asset ?? ""));
+  const styleSel = $("brandStyle");
+  if (styleSel) styleSel.value = brandStyleNow();
 }
 function applyBrandChoice(item, group) {
   const style = brandStyleNow();
@@ -1066,7 +1065,7 @@ function setStage(url, label) {
   const wrap = $("canvasWrap");
   wrap.innerHTML = "";
   const img = new Image();
-  img.onload = () => { img.classList.add("shown"); if (state.view === "editor") fitStage(); };
+    img.onload = () => { img.classList.add("shown"); updateStageSize(); if (state.view === "editor" && state.zoom.autoFit) fitStage(); };
   img.src = url;
   wrap.appendChild(img);
   window.__fgEditor?.onStage?.(img);
@@ -1506,8 +1505,23 @@ function fitStage() {
 }
 function applyZoom() {
   const z = state.zoom;
-  $("canvasWrap").style.transform = `translate(${z.tx}px, ${z.ty}px) scale(${z.scale})`;
+  const wrap = $("canvasWrap");
+  wrap.style.transform = `translate(${z.tx}px, ${z.ty}px) scale(${z.scale})`;
+  // v0.9.0: keep handle/toolbar hit areas at screen size under zoom.
+  wrap.style.setProperty("--inv-zoom", String(1 / (z.scale || 1)));
   $("zoomLabel").textContent = `${Math.round(z.scale * 100)}%`;
+  const sel = $("zoomSelect");
+  if (sel) {
+    const pct = String(Math.round(z.scale * 100) / 100);
+    sel.value = ["0.5", "0.75", "1", "1.5", "2"].includes(pct) ? pct : "fit";
+  }
+  updateStageSize();
+}
+/// v0.9.0: canvas pixel size indicator (kept fresh on zoom and image load).
+function updateStageSize() {
+  const img = $("canvasWrap").querySelector("img");
+  const size = $("stageSize");
+  if (size) size.textContent = img?.naturalWidth ? `${img.naturalWidth} × ${img.naturalHeight} px` : "";
 }
 function zoomBy(factor, cx, cy) {
   const vp = $("viewport").getBoundingClientRect();
@@ -1522,6 +1536,9 @@ function zoomBy(factor, cx, cy) {
 }
 function wireViewport() {
   const vp = $("viewport");
+  let spaceDown = false;
+  window.addEventListener("keydown", (e) => { if (e.code === "Space" && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName ?? "")) { spaceDown = true; vp.classList.add("space-ready"); } });
+  window.addEventListener("keyup", (e) => { if (e.code === "Space") { spaceDown = false; vp.classList.remove("space-ready"); } });
   vp.addEventListener("wheel", (e) => {
     e.preventDefault();
     const r = vp.getBoundingClientRect();
@@ -1529,6 +1546,10 @@ function wireViewport() {
   }, { passive: false });
   let dragging = null;
   vp.addEventListener("pointerdown", (e) => {
+    // v0.9.0: pan only with middle mouse or held Space, so plain drags stay
+    // available for element move/resize (WCAG 2.5.7 alternative kept).
+    if (e.button !== 1 && !spaceDown) return;
+    e.preventDefault();
     dragging = { x: e.clientX, y: e.clientY, tx: state.zoom.tx, ty: state.zoom.ty };
     vp.classList.add("dragging");
     try { vp.setPointerCapture(e.pointerId); } catch { /* synthetic/stale pointer */ }
@@ -1552,7 +1573,31 @@ function wireViewport() {
   $("zoomOut").onclick = () => zoomBy(1 / 1.25);
   $("zoomFit").onclick = fitStage;
   $("zoomReset").onclick = () => { state.zoom = { scale: 1, tx: 0, ty: 0, autoFit: false }; applyZoom(); };
+  $("zoomSelect")?.addEventListener("change", (e) => {
+    if (e.target.value === "fit") { fitStage(); return; }
+    const scale = Number(e.target.value) || 1;
+    const r = vp.getBoundingClientRect();
+    const z = state.zoom;
+    const px = (r.width / 2 - z.tx) / z.scale;
+    const py = (r.height / 2 - z.ty) / z.scale;
+    state.zoom = { scale, tx: r.width / 2 - px * scale, ty: r.height / 2 - py * scale, autoFit: false };
+    applyZoom();
+  });
   new ResizeObserver(() => { if (state.zoom.autoFit) fitStage(); }).observe(vp);
+}
+/// v0.9.0: pan the stage so a canvas box becomes visible (selection feedback).
+function panIntoView(box, margin = 60) {
+  if (!box) return;
+  const vp = $("viewport").getBoundingClientRect();
+  const z = state.zoom;
+  const sx = vp.width / 2 - (box.x + box.w / 2) * z.scale;
+  const sy = vp.height / 2 - (box.y + box.h / 2) * z.scale;
+  const visible = box.x * z.scale + z.tx > -margin && box.y * z.scale + z.ty > -margin
+    && (box.x + box.w) * z.scale + z.tx < vp.width + margin
+    && (box.y + box.h) * z.scale + z.ty < vp.height + margin;
+  if (visible) return;
+  state.zoom = { ...z, tx: sx, ty: sy, autoFit: false };
+  applyZoom();
 }
 
 /* --------------------------------------------------------- download/save */
@@ -1843,6 +1888,7 @@ async function boot() {
   renderBrandLibrary();
   buildBgSwatches();
   buildSampleRow();
+  initSideTabs();
   updateTweakUI();
   buildLineEditor();
   showExif();
@@ -1867,7 +1913,6 @@ function syncCanvasUI() {
   syncBgSwatches();
   $("flipH").classList.toggle("on", settings.flipH);
   $("flipV").classList.toggle("on", settings.flipV);
-  $("brandShow").checked = settings.showLogo;
   syncBrandUI();
   $("exportSize").value = settings.exportSize;
   $("exportFormat").value = exportFormat();
@@ -1877,17 +1922,45 @@ function syncCanvasUI() {
   $("exportCustom").value = settings.exportCustom;
   $("pickerCompact").classList.toggle("on", pickerMode === "compact");
   $("pickerLarge").classList.toggle("on", pickerMode === "large");
+  updateExportBarInfo();
 }
 
-/// v0.7.0 Q6: sync the enhanced brand panel from per-template overrides.
+/* ------------------------------------------------- v0.9.0 sidebar tabs */
+const SIDE_TABS = ["templates", "photo", "elements", "canvas", "export"];
+function setSideTab(name) {
+  if (!SIDE_TABS.includes(name)) name = "templates";
+  localStorage.setItem("fg-sidebar-tab", name);
+  for (const b of document.querySelectorAll(".side-tab")) {
+    const on = b.dataset.tab === name;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-selected", String(on));
+  }
+  for (const p of document.querySelectorAll(".side-panel")) {
+    p.classList.toggle("on", p.dataset.tabPanel === name);
+  }
+  if (name === "export") updateExportBarInfo();
+}
+function initSideTabs() {
+  for (const b of document.querySelectorAll(".side-tab")) b.onclick = () => setSideTab(b.dataset.tab);
+  document.getElementById("exportBarInfo")?.addEventListener("click", () => setSideTab("export"));
+  setSideTab(localStorage.getItem("fg-sidebar-tab") || "templates");
+}
+/// v0.9.0: compact bar mirrors the current export size + format.
+function updateExportBarInfo() {
+  const el = document.getElementById("exportBarInfo");
+  if (!el) return;
+  const sizeSel = document.getElementById("exportSize");
+  const sizeText = sizeSel?.selectedOptions?.[0]?.textContent?.trim() ?? "";
+  el.textContent = `${sizeText} · ${exportFormat().toUpperCase()}`;
+  el.title = `${t("export.size")} / ${t("export.format")}`;
+}
+
+/// v0.9.0: the badge library lives in the insert card; the per-layer badge
+/// controls live in the element properties panel (editor.js). This keeps the
+/// library panel synced with the current style/selection.
 function syncBrandUI() {
-  const o = state.mode === "frame" && state.templateId ? loadOverrides(state.templateId) : {};
-  $("brandStyle").value = o.brandStyle ?? "official";
-  $("brandPos").value = o.brandPosition ?? "anchor";
-  $("brandSize").value = String(o.brandScale ?? 1);
-  $("brandContrast").value = o.brandContrast ?? "auto";
-  $("brandOpacity").value = String(o.brandOpacity ?? 1);
-  $("brandOpacityVal").textContent = `${Math.round((o.brandOpacity ?? 1) * 100)}%`;
+  const sel = $("brandStyle");
+  if (sel) sel.value = brandStyleNow();
   if (typeof renderBrandLibrary === "function" && brandLibData) renderBrandLibrary();
 }
 
@@ -2063,25 +2136,16 @@ function wire() {
     saveSettings(); syncCanvasUI(); renderNow();
   };
 
-  $("brandShow").onchange = (e) => { settings.showLogo = e.target.checked; saveSettings(); renderNow(); };
   $("brandAuto").onclick = () => {
     if (!window.__fgEditor?.setBadgeAsset?.("auto")) { toast("error", t("brandLib.noLayer")); return; }
     toast("ok", t("brandLib.autoDone"));
     rebuildBrandViews();
   };
-  const brandPatch = (patch) => { pushOverride(patch); syncBrandUI(); renderNow(); };
   $("brandStyle").onchange = (e) => {
     window.__fgEditor?.swapBadgeStyle?.(e.target.value);
-    brandPatch({ brandStyle: e.target.value });
+    pushOverride({ brandStyle: e.target.value });
+    syncBrandUI();
     renderBrandLibrary();
-    if (!$("brandLibModal").classList.contains("hidden")) renderModalLibrary();
-  };
-  $("brandPos").onchange = (e) => brandPatch({ brandPosition: e.target.value });
-  $("brandSize").onchange = (e) => brandPatch({ brandScale: Number(e.target.value) });
-  $("brandContrast").onchange = (e) => brandPatch({ brandContrast: e.target.value });
-  $("brandOpacity").oninput = (e) => {
-    pushOverride({ brandOpacity: Number(e.target.value) });
-    $("brandOpacityVal").textContent = `${Math.round(Number(e.target.value) * 100)}%`;
     renderNow();
   };
   $("brandSearch").oninput = (e) => { brandLibState.query = e.target.value; renderBrandLibrary(); };
@@ -2103,33 +2167,6 @@ function wire() {
     window.__fgEditor?.setBadgeAsset?.("auto");
     rebuildBrandViews();
   };
-
-  /* wall-side read-only library modal */
-  const openBrandLibModal = () => {
-    $("brandLibModalStyle").value = brandStyleNow();
-    $("brandLibModal").classList.remove("hidden");
-    renderModalLibrary();
-  };
-  const closeBrandLibModal = () => $("brandLibModal").classList.add("hidden");
-  $("wallBrandLib").onclick = openBrandLibModal;
-  $("brandLibClose").onclick = closeBrandLibModal;
-  $("brandLibBackdrop").onclick = closeBrandLibModal;
-  $("brandLibModalSearch").oninput = (e) => { brandLibState.query = e.target.value; renderModalLibrary(); };
-  $("brandLibModalStyle").onchange = (e) => {
-    const style = e.target.value;
-    const tpl = state.templateId ?? state.templates[0]?.id;
-    if (tpl) saveOverrides(tpl, { ...loadOverrides(tpl), brandStyle: style });
-    $("brandStyle").value = style;
-    renderModalLibrary();
-  };
-  $("brandLibEnter").onclick = async () => {
-    closeBrandLibModal();
-    const tpl = state.templateId ?? state.templates[0]?.id;
-    if (tpl) { await useTemplate(tpl); $("brandCard").open = true; $("brandCard").scrollIntoView(); }
-  };
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !$("brandLibModal").classList.contains("hidden")) closeBrandLibModal();
-  });
 
   $("exportSize").onchange = (e) => { settings.exportSize = e.target.value; saveSettings(); syncCanvasUI(); };
   // Q10: re-render so the next export uses the selected container.
@@ -2391,6 +2428,29 @@ window.__fg = {
   recentIds,
   fujiRows,
   templateCategory,
+  setSideTab,
+  panIntoView,
+  // v0.9.0 badge properties panel bridge (global switch + color info).
+  getShowLogo: () => settings.showLogo,
+  setShowLogo: (v) => { settings.showLogo = !!v; saveSettings(); renderNow(); },
+  brandColor: (slug) => {
+    const groups = brandLibData?.groups ?? {};
+    for (const g of Object.keys(groups)) {
+      const it = (groups[g] ?? []).find((i) => i.slug === slug);
+      if (it) return it.color ?? null;
+    }
+    return null;
+  },
+  renderBrandLibrary,
+  // v0.9.0: badge library lookup for localized layer names.
+  brandLabel: (slug) => {
+    const groups = brandLibData?.groups ?? {};
+    for (const g of Object.keys(groups)) {
+      const it = (groups[g] ?? []).find((i) => i.slug === slug);
+      if (it) return it.label ?? slug;
+    }
+    return slug;
+  },
   get engine() { return state.engine; },
   // v0.6.0: HEIC lazy decoder + engine font offline warmup probes.
   loadHeifModule,

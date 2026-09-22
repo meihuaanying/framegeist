@@ -6,7 +6,7 @@
       "zh": "主色卡片",
       "en": "Chromatic Edge"
     },
-    "version": "1.2.0",
+    "version": "1.3.0",
     "minEngineVersion": "0.7.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
@@ -146,7 +146,7 @@
       "margin": 0.035,
       "asset": "@builtin/brand/{exif.brand_slug}",
       "size": {
-        "height": 0.045
+        "height": 0.06
       },
       "tint": "auto",
       "contrast": "auto",

@@ -57,9 +57,13 @@ fn busy_photo(w: u32, h: u32) -> Vec<u8> {
 }
 
 fn asset_bytes(w: u32, h: u32, lum: u8) -> Vec<u8> {
+    asset_bytes_solid(w, h, [lum, lum, lum])
+}
+
+fn asset_bytes_solid(w: u32, h: u32, rgb: [u8; 3]) -> Vec<u8> {
     let mut img = RgbaImage::new(w, h);
     for (_, _, p) in img.enumerate_pixels_mut() {
-        *p = Rgba([lum, lum, lum, 255]);
+        *p = Rgba([rgb[0], rgb[1], rgb[2], 255]);
     }
     let mut out = std::io::Cursor::new(Vec::new());
     image::DynamicImage::ImageRgba8(img)
@@ -168,14 +172,14 @@ fn badge_size_floor_applies() {
     assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
     let h = (b.y1 - b.y0 + 1) as f64;
     assert!(
-        h >= 76.0,
-        "badge height {h} must respect the 5% floor (80px on a 1600px photo)"
+        h >= 95.0,
+        "badge height {h} must respect the 6% floor (96px on a 1600px photo)"
     );
 }
 
 #[test]
-fn badge_default_height_is_4_5_percent_when_floor_relaxed() {
-    // v0.8.0: without an explicit size the badge defaults to 4.5% of the photo
+fn badge_default_height_is_6_5_percent_when_floor_relaxed() {
+    // v0.9.0: without an explicit size the badge defaults to 6.5% of the photo
     // height (a template may relax minHeight to let that default through).
     let mut layer = badge_layer(0.0, None);
     layer["size"] = json!({});
@@ -193,8 +197,8 @@ fn badge_default_height_is_4_5_percent_when_floor_relaxed() {
     assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
     let h = (b.y1 - b.y0 + 1) as f64;
     assert!(
-        (40.0..=50.0).contains(&h),
-        "default badge height {h} should be ~45px (4.5% of 1000px)"
+        (58.0..=72.0).contains(&h),
+        "default badge height {h} should be ~65px (6.5% of 1000px)"
     );
 }
 
@@ -253,13 +257,115 @@ fn badge_max_width_and_corner_placement() {
     assert!(b.count > 100, "badge must be drawn");
     let w = (b.x1 - b.x0 + 1) as f64;
     assert!(
-        w <= 420.0,
-        "max width must clamp the 8:1 wordmark to <= 38% (got {w})"
+        w <= 440.0,
+        "max width must clamp the 8:1 wordmark to <= 44% (got {w})"
     );
     assert!(
         b.x0 <= 50,
         "corner top-left margin must be respected (x0 {})",
         b.x0
+    );
+}
+
+/// Pixels of `img` that differ from `base` AND carry saturated color (v0.9.0).
+fn badge_saturated_pixels(base: &RgbaImage, img: &RgbaImage) -> usize {
+    let mut n = 0;
+    for (x, y, p) in img.enumerate_pixels() {
+        let a = base.get_pixel(x, y).0;
+        let differs = (0..3).any(|i| (a[i] as i32 - p[i] as i32).abs() > 14);
+        if !differs {
+            continue;
+        }
+        let max = p[0].max(p[1]).max(p[2]) as i32;
+        let min = p[0].min(p[1]).min(p[2]) as i32;
+        if max - min > 40 {
+            n += 1;
+        }
+    }
+    n
+}
+
+fn color_assets(primary: [u8; 3]) -> Vec<(&'static str, Vec<u8>)> {
+    vec![
+        ("@builtin/brand/fake", asset_bytes_solid(512, 512, primary)),
+        ("@builtin/brand/fake-mono", asset_bytes(512, 512, 10)),
+        ("@builtin/brand/fake-light", asset_bytes(512, 512, 245)),
+    ]
+}
+
+fn missing_badge_template() -> Template {
+    image_template(
+        json!({"type":"image","id":"none","anchor":"middle-center","asset":"@builtin/brand/missing","size":{"height":0.08}}),
+    )
+}
+
+#[test]
+fn badge_keeps_official_color_on_good_contrast() {
+    let tpl = image_template(badge_layer(0.08, None));
+    let white = photo(600, 400, 247);
+    let base = render(&missing_badge_template(), &white);
+    let img = render_assets(&tpl, &white, &color_assets([150, 20, 20]));
+    let b = badge_pixels(&base, &img);
+    let sat = badge_saturated_pixels(&base, &img);
+    assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
+    assert!(
+        sat > 50,
+        "official color must be kept on a high-contrast background (sat {sat})"
+    );
+}
+
+#[test]
+fn badge_falls_back_to_mono_when_color_lacks_contrast() {
+    let tpl = image_template(badge_layer(0.08, None));
+    let white = photo(600, 400, 247);
+    let base = render(&missing_badge_template(), &white);
+    let img = render_assets(&tpl, &white, &color_assets([250, 245, 200]));
+    let b = badge_pixels(&base, &img);
+    let sat = badge_saturated_pixels(&base, &img);
+    assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
+    assert_eq!(
+        sat, 0,
+        "pale color must fall back to the mono variant (sat {sat})"
+    );
+    assert!(
+        b.min_lum < 60,
+        "black -mono variant must be used on white (min {})",
+        b.min_lum
+    );
+}
+
+#[test]
+fn badge_tint_color_forces_official_color() {
+    let mut layer = badge_layer(0.08, None);
+    layer["tint"] = json!("color");
+    let tpl = image_template(layer);
+    let white = photo(600, 400, 247);
+    let base = render(&missing_badge_template(), &white);
+    let img = render_assets(&tpl, &white, &color_assets([250, 245, 200]));
+    let sat = badge_saturated_pixels(&base, &img);
+    assert!(
+        sat > 50,
+        "tint:color must keep the official color even on low contrast (sat {sat})"
+    );
+}
+
+#[test]
+fn badge_color_falls_back_to_light_on_dark_background() {
+    let tpl = image_template(badge_layer(0.08, None));
+    let black = photo(600, 400, 6);
+    let base = render(&missing_badge_template(), &black);
+    let img = render_assets(&tpl, &black, &color_assets([20, 20, 150]));
+    let b = badge_pixels(&base, &img);
+    let sat = badge_saturated_pixels(&base, &img);
+    assert!(b.count > 100, "badge must be drawn ({} px)", b.count);
+    assert!(
+        b.max_lum > 200,
+        "white -light variant must be used on black (max {})",
+        b.max_lum
+    );
+    assert_eq!(
+        sat, 0,
+        "dark blue on black must fall back to mono (sat {sat})"
     );
 }
 
