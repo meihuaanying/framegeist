@@ -533,3 +533,10 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
   5. **穿透点击 E2E 的两处竞态**：① 模板切换后 24MP 重渲未完成时 `S.boxes` 仍是上一模板（固定 sleep 900ms 不够）→ `__fgEditor.debug()` 增 `boxes`/`stageReady` 只读字段并轮询；② 首次选中触发 `panIntoView()`（设计行为）改变坐标映射 → 第二次点击按同一 canvas 坐标重算 client 点。两处修复均在探针侧，断言数不减。
   6. **自动平移的既有坐标口径**：`panIntoView()` 已含舞台内偏移的完整模型（本轮未改实现）；实测选中大幅超出视口的图层时会居中，属「选中移入视野」的预期行为。
   7. **发布通道延续**：`github.com` 仍阻断，`main` 经 Git Data API 推送（排除 workflow），tag/Release/Pages 由 CI 产出；桌面端本地重建交付。
+
+
+- **2026-09-22 ｜ v0.9.1 热修复（侧栏面板 + 墙顶品牌条） ｜** 用户反馈 v0.9.0 侧栏三个 Tab 空白、墙顶品牌条需移除。发现与决策：
+  1. **空白根因是 HTML 闭合与分组，不是 JS 切换**：`index.html` 的 templates/canvas 两个 `.side-panel` 漏 `</section>` → 浏览器把后续面板解析为嵌套；且 insert/layers/props 三张卡被误放画布面板。旧 E2E 只看 `.on` 类与卡片自身 `display`（嵌套祖先隐藏不改变卡片 computed display），故未拦截 → 新增「每个 Tab 的面板必须 `offsetParent !== null` 且高度 > 0、面板必须是 `.side-panels` 直接子元素」断言。
+  2. **墙顶品牌条移除**：删除 `#wallBrandStrip` 与 `buildWall()` 填充；灯箱 `#lbBrand` 与卡片标记保留。
+  3. **ungroup 偶发假失败**：探针选「前两行顶层图层」会受跨次运行 localStorage 累积改动影响 → 改为稳定 id（brandmark/model）选层，产品逻辑未改。
+  4. **补丁发布口径**：引擎/模板/资产零改动，wasm 字节与视觉基线不变；版本 0.9.1，重跑门禁 + E2E 271/271 后走同一 API 推送与 CI 发布链路。

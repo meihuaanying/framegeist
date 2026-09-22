@@ -35,7 +35,6 @@
       <h2 data-i18n="wall.title">模板墙</h2>
       <span class="muted" id="wallCount"></span>
       <span class="spacer" style="flex:1"></span>
-      <div class="brand-strip" id="wallBrandStrip" data-i18n-aria-label="brand.aria" aria-label="支持品牌"></div>
       <button class="btn small ghost" id="wallImport" style="width:auto;padding:0 14px" data-i18n="wall.import">导入照片</button>
       <div class="search-wrap wall-search">
         <input type="search" id="wallSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…">
@@ -152,6 +151,7 @@
         </div>
       </div>
     </details>
+    </section>
 
     <section class="side-panel" data-tab-panel="canvas">
     <details class="card hidden" id="canvasCard">
@@ -240,6 +240,69 @@
       </div>
     </details>
 
+    <details class="card hidden" id="frameCard">
+      <summary data-i18n="frame.title">相框</summary>
+      <div class="body">
+        <label class="row"><input type="checkbox" id="frameOn"><span data-i18n="frame.enable">启用相框</span></label>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn small" id="uploadFrame" data-i18n="frame.upload">上传相框 PNG</button>
+          <button class="btn small ghost" id="clearFrame" data-i18n="canvas.clearBg">清除</button>
+        </div>
+        <label class="row" style="margin-top:6px"><input type="checkbox" id="frameAuto" checked><span data-i18n="frame.auto">自动检测透明窗口</span></label>
+        <label class="row" style="margin-top:8px"><span data-i18n="frame.builtin">内置相框</span></label>
+        <div class="frame-grid" id="frameGrid"></div>
+        <div class="field">
+          <label><span data-i18n="frame.scale">相框缩放</span><b id="frameScaleVal">100%</b></label>
+          <input type="range" id="frameScale" min="0.5" max="1.5" step="0.01" value="1">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.inset">窗口内缩</span><b id="frameInsetVal">0%</b></label>
+          <input type="range" id="frameInset" min="0" max="0.2" step="0.005" value="0">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.offsetX">水平偏移</span><b id="frameOffsetXVal">0%</b></label>
+          <input type="range" id="frameOffsetX" min="-1" max="1" step="0.01" value="0">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.offsetY">垂直偏移</span><b id="frameOffsetYVal">0%</b></label>
+          <input type="range" id="frameOffsetY" min="-1" max="1" step="0.01" value="0">
+        </div>
+        <div class="field">
+          <label><span data-i18n="frame.rotation">旋转</span><b id="frameRotationVal">0°</b></label>
+          <input type="range" id="frameRotation" min="-180" max="180" step="1" value="0">
+        </div>
+        <input type="file" id="frameFile" accept="image/png" hidden>
+      </div>
+    </details>
+
+    <details class="card hidden" id="cropCard">
+      <summary data-i18n="crop.title">裁切</summary>
+      <div class="body">
+        <div class="btn-row">
+          <button class="btn small" id="cropToggle" data-i18n="crop.enter">进入裁切</button>
+          <button class="btn small ghost" id="cropReset" data-i18n="crop.reset">重置裁切</button>
+        </div>
+        <div class="btn-row" style="margin-top:6px">
+          <button class="btn small" id="cropFillW" data-i18n="crop.fillW">填满宽度</button>
+          <button class="btn small" id="cropFillH" data-i18n="crop.fillH">填满高度</button>
+        </div>
+        <div class="field" style="margin-top:6px">
+          <label><span data-i18n="crop.aspect">比例锁定</span></label>
+          <select id="cropAspect">
+            <option value="free" data-i18n="crop.free">自由</option>
+            <option value="1:1">1:1</option>
+            <option value="4:3">4:3</option>
+            <option value="3:2">3:2</option>
+            <option value="16:9">16:9</option>
+            <option value="9:16">9:16</option>
+          </select>
+        </div>
+        <div class="muted" id="cropInfo"></div>
+      </div>
+    </details>
+    </section>
+
+    <section class="side-panel" data-tab-panel="elements">
     <details class="card hidden" id="layersCard">
       <summary data-i18n="layers.title">图层</summary>
       <div class="body">
@@ -329,68 +392,6 @@
       </div>
     </details>
 
-    <details class="card hidden" id="frameCard">
-      <summary data-i18n="frame.title">相框</summary>
-      <div class="body">
-        <label class="row"><input type="checkbox" id="frameOn"><span data-i18n="frame.enable">启用相框</span></label>
-        <div class="btn-row" style="margin-top:6px">
-          <button class="btn small" id="uploadFrame" data-i18n="frame.upload">上传相框 PNG</button>
-          <button class="btn small ghost" id="clearFrame" data-i18n="canvas.clearBg">清除</button>
-        </div>
-        <label class="row" style="margin-top:6px"><input type="checkbox" id="frameAuto" checked><span data-i18n="frame.auto">自动检测透明窗口</span></label>
-        <label class="row" style="margin-top:8px"><span data-i18n="frame.builtin">内置相框</span></label>
-        <div class="frame-grid" id="frameGrid"></div>
-        <div class="field">
-          <label><span data-i18n="frame.scale">相框缩放</span><b id="frameScaleVal">100%</b></label>
-          <input type="range" id="frameScale" min="0.5" max="1.5" step="0.01" value="1">
-        </div>
-        <div class="field">
-          <label><span data-i18n="frame.inset">窗口内缩</span><b id="frameInsetVal">0%</b></label>
-          <input type="range" id="frameInset" min="0" max="0.2" step="0.005" value="0">
-        </div>
-        <div class="field">
-          <label><span data-i18n="frame.offsetX">水平偏移</span><b id="frameOffsetXVal">0%</b></label>
-          <input type="range" id="frameOffsetX" min="-1" max="1" step="0.01" value="0">
-        </div>
-        <div class="field">
-          <label><span data-i18n="frame.offsetY">垂直偏移</span><b id="frameOffsetYVal">0%</b></label>
-          <input type="range" id="frameOffsetY" min="-1" max="1" step="0.01" value="0">
-        </div>
-        <div class="field">
-          <label><span data-i18n="frame.rotation">旋转</span><b id="frameRotationVal">0°</b></label>
-          <input type="range" id="frameRotation" min="-180" max="180" step="1" value="0">
-        </div>
-        <input type="file" id="frameFile" accept="image/png" hidden>
-      </div>
-    </details>
-
-    <details class="card hidden" id="cropCard">
-      <summary data-i18n="crop.title">裁切</summary>
-      <div class="body">
-        <div class="btn-row">
-          <button class="btn small" id="cropToggle" data-i18n="crop.enter">进入裁切</button>
-          <button class="btn small ghost" id="cropReset" data-i18n="crop.reset">重置裁切</button>
-        </div>
-        <div class="btn-row" style="margin-top:6px">
-          <button class="btn small" id="cropFillW" data-i18n="crop.fillW">填满宽度</button>
-          <button class="btn small" id="cropFillH" data-i18n="crop.fillH">填满高度</button>
-        </div>
-        <div class="field" style="margin-top:6px">
-          <label><span data-i18n="crop.aspect">比例锁定</span></label>
-          <select id="cropAspect">
-            <option value="free" data-i18n="crop.free">自由</option>
-            <option value="1:1">1:1</option>
-            <option value="4:3">4:3</option>
-            <option value="3:2">3:2</option>
-            <option value="16:9">16:9</option>
-            <option value="9:16">9:16</option>
-          </select>
-        </div>
-        <div class="muted" id="cropInfo"></div>
-      </div>
-    </details>
-
-    <section class="side-panel" data-tab-panel="elements">
     <details class="card" id="tweakCard">
       <summary data-i18n="panel.tweaks">微调</summary>
       <div class="body">

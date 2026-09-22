@@ -734,19 +734,31 @@ await ev(`(async () => {
   const noTier = await ev(`({ tier: document.body.dataset.tier ?? null, tierBtn: !!document.getElementById("tierToggle"), adv: document.querySelectorAll(".advanced-only").length })`);
   check("v0.9 sidebar: tier UI removed", noTier.tier === null && noTier.tierBtn === false && noTier.adv === 0, JSON.stringify(noTier));
   const sw = await ev(`(async () => {
-    window.__fg.setSideTab("elements");
-    await new Promise((r) => setTimeout(r, 100));
-    const panels = [...document.querySelectorAll('[data-tab-panel="elements"]')];
-    const others = [...document.querySelectorAll(".side-panel:not(.on)")].every((p) => getComputedStyle(p).display === "none");
+    const fg = window.__fg;
+    const out = {};
+    for (const tab of ["templates", "photo", "elements", "canvas", "export"]) {
+      fg.setSideTab(tab);
+      await new Promise((r) => setTimeout(r, 120));
+      const panels = [...document.querySelectorAll('[data-tab-panel="' + tab + '"]')];
+      out[tab] = {
+        n: panels.length,
+        visible: panels.length > 0 && panels.every((p) => p.offsetParent !== null && p.getBoundingClientRect().height > 0),
+        stray: [...document.querySelectorAll(".side-panel")].filter((p) => p.dataset.tabPanel !== tab && p.offsetParent !== null).length,
+      };
+    }
+    fg.setSideTab("elements");
+    const nested = [...document.querySelectorAll(".side-panel")].filter((p) => !p.parentElement.classList.contains("side-panels")).length;
     return {
-      els: panels.length,
-      visible: panels.length > 0 && panels.every((p) => p.classList.contains("on")),
-      others,
-      insertVisible: getComputedStyle(document.getElementById("insertCard")).display !== "none",
-      propVisible: getComputedStyle(document.getElementById("propsCard")).display !== "none",
+      out, nested,
+      insertVisible: document.getElementById("insertCard").offsetParent !== null,
+      propVisible: document.getElementById("propsCard").offsetParent !== null,
     };
   })()`);
-  check("v0.9 sidebar: tabs switch panels", sw.els > 0 && sw.visible && sw.others && sw.insertVisible && sw.propVisible, JSON.stringify(sw));
+  check(
+    "v0.9 sidebar: every tab shows its panel",
+    Object.values(sw?.out ?? {}).every((v) => v.visible && v.stray === 0) && sw?.nested === 0 && sw?.insertVisible && sw?.propVisible,
+    JSON.stringify(sw),
+  );
   const persist = await ev(`(async () => {
     window.__fg.setSideTab("canvas");
     await new Promise((r) => setTimeout(r, 80));
@@ -1272,9 +1284,13 @@ await ev(`(async () => {
     const rows = [...document.querySelectorAll("#layerList .layer-row")];
     const top = rows.filter((x) => !x.querySelector(".indent"));
     if (top.length < 2) return { error: "need 2 top-level layers" };
-    const idA = top[0].dataset.id, idB = top[1].dataset.id;
-    top[0].click();
-    top[1].dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
+    const pick = (id) => document.querySelector('#layerList .layer-row[data-id="' + id + '"]');
+    const rowA = pick("brandmark") ?? top[0];
+    const rowB = pick("model") ?? top[1];
+    if (!rowA || !rowB || rowA === rowB) return { error: "need 2 stable layers" };
+    const idA = rowA.dataset.id, idB = rowB.dataset.id;
+    rowA.click();
+    rowB.dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
     await new Promise((r) => setTimeout(r, 120));
     const before = { n: rows.length, a: boxOf(getBoxes(), idA), b: boxOf(getBoxes(), idB) };
     document.getElementById("layerGroup").click();
@@ -2450,14 +2466,13 @@ let EXIF_TEXT_ID = null;
   const ui = await ev(`(async () => {
     const body = getComputedStyle(document.body).fontSize;
     const h2 = getComputedStyle(document.querySelector(".wall-head h2")).fontSize;
-    const grid = document.getElementById("wallBrandStrip");
-    const wallImgs = grid ? grid.querySelectorAll("img").length : -1;
+    const wallStrip = document.getElementById("wallBrandStrip");
     const lightboxOpen = typeof window.__fg.showWall === "function";
-    return { body, h2, wallImgs, lightboxOpen, fontUi: document.fonts ? document.fonts.check('600 16px "Geist UI"') : null };
+    return { body, h2, wallStrip: !!wallStrip, lightboxOpen, fontUi: document.fonts ? document.fonts.check('600 16px "Geist UI"') : null };
   })()`);
   check("v0.7 ui: body font size is 16px", ui?.body === "16px", String(ui?.body));
   check("v0.7 ui: wall title uses the fluid clamp scale (>=27px)", parseFloat(ui?.h2) >= 27, String(ui?.h2));
-  check("v0.7 ui: wall brand strip shows brand marks", ui?.wallImgs >= 6, String(ui?.wallImgs));
+  check("v0.9.1 ui: wall top brand strip removed", ui?.wallStrip === false, String(ui?.wallStrip));
   check("v0.7 ui: Geist UI variable font available", ui?.fontUi === true, String(ui?.fontUi));
 
   const lb = await ev(`(async () => {
