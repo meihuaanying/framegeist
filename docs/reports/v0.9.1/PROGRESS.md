@@ -35,3 +35,17 @@
 - 复测（修复后）：E2E **271/271**（`docs/reports/v0.9.1/` 截图归档）；卡组/穿透/锁层/导出条等全部 v0.9 断言不回归。
 - `check-utf8` 0 损坏；`check-i18n` 485/485（`brand.aria` 仍被灯箱使用）；引擎/模板/资产零改动（wasm 字节与视觉基线不受影响）。
 - 本地桌面端重建（0.9.1）并启动验证。
+
+## 发布与验证 ✅ (2026-09-22)
+
+- **版本统一**：`Cargo.toml` / `tauri.conf.json` / `web/app.js APP_VERSION` / `web/sw.js VERSION` 全部 **0.9.1**（模板 1.3.0 不变）。
+- **本地提交** `92c1ac5` → **Git Data API** 推送（25 条目；本地 diff 基准 `41b9fca`，远端父提交 `2f2c726`，排除 workflow）→ 远端 `main` = **`70f3b38`**；annotated tag `v0.9.1` → tag object `1200705f`（`refs/tags/v0.9.1`）。
+- **CI/Release/Pages（全绿）**：`ci`（windows test+clippy/golden、wasm 字节一致、三 target）✓、`pages` ✓、`release` ✓。Release 六资产：
+  `framegeist-cli-v0.9.1-win-x64.zip`（77,594,499 B）、`framegeist-desktop-v0.9.1-win-x64.zip`（98,845,046 B）、
+  `framegeist-templates-v0.9.1.fgpkg`（20,708,665 B）、`FrameGeist-v0.9.1-win-x64-setup.exe`（98,617,548 B）、
+  `SHA256SUMS.txt`、`update.json`（`latest.version = v0.9.1`，192 模板）；说明经 `gh release edit --notes-file docs/releases/v0.9.1.md` 注入。
+  Release URL：https://github.com/meihuaanying/framegeist/releases/tag/v0.9.1
+- **Pages 验证**：`/web/` 200 且 HTML 中 `wallBrandStrip` 已不存在；`APP_VERSION="0.9.1"`；`sw.js` 缓存 `framegeist-0.9.1`；
+  `web/brand/index.json` v3。
+- **交付**：本地桌面端 0.9.1 重建（4m20s）并启动（CDP 9333；就绪、192 套模板、五 Tab 面板齐全、无品牌条）。
+
