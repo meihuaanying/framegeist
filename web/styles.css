@@ -526,7 +526,6 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
 .viewport.dragging { cursor: grabbing; }
 .canvas-wrap {
   position: absolute; inset: 0;
-  display: grid; place-items: center;
   transform-origin: 0 0;
   will-change: transform;
 }

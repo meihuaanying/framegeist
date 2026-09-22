@@ -131,10 +131,12 @@ const check = (name, ok, detail = "") => {
 check("manifest version 3", MANIFEST.version === 3, `v${MANIFEST.version}`);
 check("color rule locked", typeof COLORS.rule === "string" && COLORS.icons && Object.keys(COLORS.icons).length >= 15, COLORS.rule);
 
-const brandItems = (MANIFEST.groups.camera ?? []).filter((i) => i.official);
+const brandItems = (MANIFEST.groups.camera ?? []).filter((i) => i.official || i.color);
 const colorful = brandItems.filter((i) => i.color);
+const colorLock = (slug) =>
+  COLORS.icons?.[slug]?.colorful ? COLORS.icons[slug].hex : (COLORS.originalColorOverride?.[slug] ?? null);
 check("manifest has colorful brands", colorful.length >= 10, `${colorful.length}`);
-check("manifest colorful matches lock file", colorful.every((i) => COLORS.icons[i.slug]?.colorful && COLORS.icons[i.slug].hex === i.color), colorful.map((i) => i.slug).join(","));
+check("manifest colorful matches lock file", colorful.every((i) => colorLock(i.slug) === i.color), colorful.map((i) => i.slug).join(","));
 
 const fileVariants = { brand: ["", "-mono", "-light"], lockup: ["", "-mono", "-light"], series: ["", "-light"], game: ["", "-light"] };
 const read = (dir, sub, slug, variant) => {

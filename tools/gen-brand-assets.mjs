@@ -18,11 +18,17 @@
 // Icons are fetched through the GitHub Contents API (api.github.com) because
 // raw.githubusercontent.com is not always reachable; see tools/brand-colors.json
 // for the locked official hex snapshot.
-// Usage: node tools/gen-brand-assets.mjs
+// Usage: node tools/gen-brand-assets.mjs [--only slug[,slug]]
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
 import { Resvg } from "@resvg/resvg-js";
+
+const ONLY = (() => {
+  const i = process.argv.indexOf("--only");
+  return i >= 0 ? new Set(process.argv[i + 1].split(",")) : null;
+})();
+const wanted = (slug) => !ONLY || ONLY.has(slug);
 
 const FONT_DIR = "templates/assets/fonts";
 const SIZE = 512;
@@ -131,6 +137,8 @@ const COLORS = JSON.parse(readFileSync("tools/brand-colors.json", "utf8"));
 const colorFor = (slug) => {
   const entry = COLORS.icons?.[slug];
   if (entry?.colorful && !(COLORS.monoOverride ?? []).includes(slug)) return entry.hex;
+  const override = COLORS.originalColorOverride?.[slug];
+  if (override && !(COLORS.monoOverride ?? []).includes(slug)) return override;
   return "#000000";
 };
 const hasColor = (slug) => colorFor(slug) !== "#000000";
@@ -226,6 +234,7 @@ async function fetchIcon(slug) {
 const iconSlugs = [];
 const iconCredits = {};
 for (const slug of OFFICIAL_SLUGS) {
+  if (!wanted(slug)) continue;
   const svg = await fetchIcon(slug);
   if (!svg) {
     console.log(`brand ${slug}: icon fetch failed (fallback to wordmark)`);
@@ -248,6 +257,7 @@ console.log(`official icons: ${iconSlugs.length}/${OFFICIAL_SLUGS.length} (${ico
 const wordCredits = [];
 for (const w of WORDMARKS) {
   const kind = "brand";
+  if (!wanted(w.slug)) continue;
   if (iconSlugs.includes(w.slug)) {
     // Official Simple Icons mark wins for the "official" style (Q2 default).
     wordCredits.push({ slug: w.slug, kind, font: w.font, note: "official icon preferred" });
@@ -262,6 +272,7 @@ for (const w of WORDMARKS) {
 // ------------------------------------------------------------------- lockups
 const lockupCredits = [];
 for (const l of LOCKUPS) {
+  if (!wanted(l.slug)) continue;
   const entry = { ...l, kind: "lockup" };
   if (renderWordmark(entry)) lockupCredits.push({ slug: l.slug, font: l.font, colorful: hasColor(l.slug), hex: hasColor(l.slug) ? colorFor(l.slug) : null });
 }
@@ -270,11 +281,13 @@ console.log(`lockups: ${lockupCredits.length} (${lockupCredits.filter((l) => l.c
 // --------------------------------------------------------------- series/game
 for (const [kind, items] of [["series", SERIES], ["game", GAMES]]) {
   for (const item of items) {
+    if (!wanted(item.slug)) continue;
     if (renderWordmark({ ...item, kind })) console.log(`${kind} ${item.slug}.png`);
   }
 }
 
 // ------------------------------------------------------------------ credits
+if (!ONLY) {
 writeFileSync(
   join(DIRS.brand[0], "CREDITS.json"),
   JSON.stringify(
@@ -291,6 +304,7 @@ writeFileSync(
       variants: "primary (official color when colorful) + -mono + -light; 512px + 96px thumbs",
       colorRule: COLORS.rule,
       colorSource: COLORS.source,
+      originalColorOverride: COLORS.originalColorOverride ?? {},
       neutral: "brand/exif-auto (original EXIF marker for expression-based templates)",
     },
     null,
@@ -326,4 +340,5 @@ writeFileSync(join(DIRS.brand[1], "index.json"), JSON.stringify(manifest, null, 
 writeFileSync(join(DIRS.lockup[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
 console.log(`library manifest v3: camera ${manifest.groups.camera.length}, lens ${manifest.groups.lens.length}, series ${manifest.groups.series.length}, game ${manifest.groups.game.length}`);
 console.log(`colorful brands: ${cameraGroup.filter(hasColor).join(", ")}`);
-console.log("all brand assets done");
+}
+console.log(ONLY ? `only mode: regenerated ${[...ONLY].join(",")} (manifest/credits untouched)` : "all brand assets done");

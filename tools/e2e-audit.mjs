@@ -265,6 +265,24 @@ check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__boo
   check("wall -> editor: selecting a template enters editor", edit.wallHidden && edit.editorShown, JSON.stringify(edit));
   check("editor: controls column on the right", edit.right === true);
   check("editor: large preview viewport", edit.vpW > 600 && edit.vpH > 400, `${edit.vpW}x${edit.vpH}`);
+  const preview = await ev(`(async () => {
+    const img = document.querySelector("#canvasWrap img");
+    for (let i = 0; i < 60 && (!img || !img.naturalWidth); i++) await new Promise((r) => setTimeout(r, 100));
+    if (!img || !img.naturalWidth) return { noimg: true };
+    const vp = document.getElementById("viewport").getBoundingClientRect();
+    const ir = img.getBoundingClientRect();
+    return {
+      src: img.getAttribute("src"),
+      dx: Math.round((ir.x + ir.width / 2) - (vp.x + vp.width / 2)),
+      dy: Math.round((ir.y + ir.height / 2) - (vp.y + vp.height / 2)),
+      fully: ir.x >= vp.x - 1 && ir.y >= vp.y - 1 && ir.x + ir.width <= vp.x + vp.width + 1 && ir.y + ir.height <= vp.y + vp.height + 1,
+    };
+  })()`);
+  check(
+    "editor: template preview is centered and fully visible",
+    /\/previews\//.test(preview?.src ?? "") && Math.abs(preview?.dx ?? 999) <= 3 && Math.abs(preview?.dy ?? 999) <= 3 && preview?.fully === true,
+    JSON.stringify(preview),
+  );
   await shot("00-editor");
 
   await ev(`document.getElementById("backToWall").click()`);
@@ -2006,10 +2024,11 @@ const hexRgb = (h) => {
   })()`);
   const label = await waitLabel(40000);
   const info = await ev(`window.__fg.state.photos[0]?.exif ?? null`);
+  const diag = await ev(`({ mode: window.__fg.state.mode, pill: document.getElementById("statusText").textContent, label: document.getElementById("stageLabel").textContent, last: !!window.__fg.state.lastRender })`);
   check(
     "samples: chip loads the example photo with real EXIF",
     staged === true && label.includes("ms") && !!info?.model && !!info?.lens && !!info?.datetime,
-    `${label}; ${JSON.stringify({ staged, model: info?.model, lens: info?.lens, dt: info?.datetime })}`,
+    `${label}; ${JSON.stringify({ staged, ...diag, model: info?.model, lens: info?.lens, dt: info?.datetime })}`,
   );
 }
 
@@ -2650,13 +2669,16 @@ let EXIF_TEXT_ID = null;
       nikon: await sample("./brand/thumbs/nikon.png"),
       nikonMono: await sample("./brand/thumbs/nikon-mono.png"),
       sony: await sample("./brand/thumbs/sony.png"),
+      canon: await sample("./brand/thumbs/canon.png"),
       nikonLockup: await sample("./lockup/thumbs/nikon.png"),
+      canonLockup: await sample("./lockup/thumbs/canon.png"),
       series: await sample("./series/thumbs/sony-gm.png"),
     };
   })()`);
   check("v0.9 color: colorful brand thumb carries official color", (color?.nikon ?? 0) > 50, JSON.stringify(color));
   check("v0.9 color: mono variant stays monochrome", color?.nikonMono === 0, String(color?.nikonMono));
   check("v0.9 color: mono brand thumb stays monochrome", color?.sony === 0, String(color?.sony));
+  check("v0.9.2 color: canon wordmark carries the official red", (color?.canon ?? 0) > 50 && (color?.canonLockup ?? 0) > 50, `canon=${color?.canon} lockup=${color?.canonLockup}`);
   check("v0.9 color: lockup follows the brand color", (color?.nikonLockup ?? 0) > 50, String(color?.nikonLockup));
   check("v0.9 color: series emblems stay monochrome", color?.series === 0, String(color?.series));
 
@@ -2850,7 +2872,15 @@ let EXIF_TEXT_ID = null;
       if ((dbg.boxes ?? []).slice().sort().join("|") === expected && dbg.stageReady) break;
       await sleep(100);
     }
-    const img = document.querySelector("#canvasWrap img");
+    // v0.9.2: renders swap the stage <img>; wait for the live one to be loaded
+    // before deriving client coordinates from naturalWidth/Height.
+    let img = null;
+    for (let i = 0; i < 60; i++) {
+      const el = document.querySelector("#canvasWrap img");
+      if (el && el.complete && el.naturalWidth > 0) { img = el; break; }
+      await sleep(100);
+    }
+    if (!img) return { skip: true, reason: "no loaded stage image" };
     const r = img.getBoundingClientRect();
     const others = boxes.filter((b) => b.type !== "group");
     const inside = (b, x, y) => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h;
@@ -2868,6 +2898,7 @@ let EXIF_TEXT_ID = null;
     if (!pt) return { skip: true };
     const cx = r.left + (pt.x / img.naturalWidth) * r.width;
     const cy = r.top + (pt.y / img.naturalHeight) * r.height;
+    if (!Number.isFinite(cx) || !Number.isFinite(cy)) return { skip: true, reason: "non-finite point" };
     const vp = document.getElementById("viewport");
     const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 81, isPrimary: true });
     const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 81, isPrimary: true });
@@ -2877,10 +2908,17 @@ let EXIF_TEXT_ID = null;
     const first = window.__fgEditor.debug().selected[0];
     // v0.9.0 auto-pan may shift the stage after the first selection; re-derive
     // the client point from the same canvas coordinate for the second click.
-    const img2 = document.querySelector("#canvasWrap img");
+    let img2 = null;
+    for (let i = 0; i < 60; i++) {
+      const el = document.querySelector("#canvasWrap img");
+      if (el && el.complete && el.naturalWidth > 0) { img2 = el; break; }
+      await sleep(100);
+    }
+    if (!img2) return { skip: true, reason: "stage image lost before second click" };
     const r2 = img2.getBoundingClientRect();
     const cx2 = r2.left + (pt.x / img2.naturalWidth) * r2.width;
     const cy2 = r2.top + (pt.y / img2.naturalHeight) * r2.height;
+    if (!Number.isFinite(cx2) || !Number.isFinite(cy2)) return { skip: true, reason: "non-finite second point" };
     vp.dispatchEvent(pd(cx2, cy2));
     window.dispatchEvent(pu(cx2, cy2));
     await sleep(400);

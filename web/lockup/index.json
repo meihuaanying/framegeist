@@ -21,7 +21,7 @@
         "slug": "canon",
         "label": "Canon",
         "official": false,
-        "color": null
+        "color": "#C8102E"
       },
       {
         "slug": "dji",
@@ -197,7 +197,7 @@
         "slug": "canon",
         "label": "Canon",
         "official": false,
-        "color": null
+        "color": "#C8102E"
       },
       {
         "slug": "dji",

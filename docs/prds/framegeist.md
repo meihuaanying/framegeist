@@ -540,3 +540,10 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
   2. **墙顶品牌条移除**：删除 `#wallBrandStrip` 与 `buildWall()` 填充；灯箱 `#lbBrand` 与卡片标记保留。
   3. **ungroup 偶发假失败**：探针选「前两行顶层图层」会受跨次运行 localStorage 累积改动影响 → 改为稳定 id（brandmark/model）选层，产品逻辑未改。
   4. **补丁发布口径**：引擎/模板/资产零改动，wasm 字节与视觉基线不变；版本 0.9.1，重跑门禁 + E2E 271/271 后走同一 API 推送与 CI 发布链路。
+
+
+- **2026-09-22 ｜ v0.9.2 热修复（预览居中 + Canon 官方红） ｜** 用户反馈编辑器默认打开的模板预览未居中/被裁、Canon 徽标不对。发现与决策：
+  1. **双重居中是预览偏移根因**：`.canvas-wrap` 用 `grid + place-items:center` 居中子图，而缩放平移体系已由 `fitStage()` 的 `translate` 负责 → 小尺寸模板预览被二次居中（实测 +172/+99px）并溢出视口；移除 grid 居中后两种路径均精确居中，并新增 E2E 断言锁死。
+  2. **下架品牌可在「原创字标」上恢复官方色**：Canon 字形仍为本项目原创排版（不复制官方矢量），但主变体按公开官方红 `#C8102E`（Pantone 186 C）着色；新增 `tools/brand-colors.json -> originalColorOverride` 与生成器 `colorFor()` 覆盖；`check-brand-colors` 扩展为同时校验覆盖品牌（131/131）。
+  3. **生成器定向重渲**：`gen-brand-assets.mjs --only <slug>` 只重渲指定 slug 且不写 manifest/credits，避免全量运行时网络抖动把官方图标回退成字标而污染资产。
+  4. **资产变更的回归面**：Canon 出现在大量样片徽标层 → 样片全量重渲 + 视觉基线有意重生成（记录原因），E2E 新增 Canon 红断言（品牌 + lockup）。

@@ -3,7 +3,7 @@
 //   - fonts / wasm / favicon  → cache-first (immutable)
 //   - templates / layouts     → stale-while-revalidate
 //   - page shell (html/js/css/manifest/json) → network-first (fall back to cache offline)
-const VERSION = "framegeist-0.9.1";
+const VERSION = "framegeist-0.9.2";
 const PRECACHE = [
   "./",
   "./index.html",

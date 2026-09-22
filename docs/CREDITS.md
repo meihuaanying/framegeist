@@ -20,6 +20,9 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
   `templates/assets/brand/CREDITS.json`）。
 - **彩色判定阈值规则**（v0.9.0）：hex→HSL，`s ≥ 0.18 且 0.10 ≤ l ≤ 0.90` 判为彩色品牌（其主变体直接用官方 hex 绘制）；
   其余保持黑/白。允许通过 `tools/brand-colors.json` 的 `monoOverride` 名单人工覆盖（当前为空）。
+- **下架品牌官方色恢复**（v0.9.2）：Simple Icons 已下架的品牌中，Canon 使用公开的官方红（Pantone 186 C ≈ `#C8102E`）
+  为**原创排版字标**着色（`tools/brand-colors.json` 的 `originalColorOverride`；当前仅 canon）。字形仍为本项目原创，
+  不是官方矢量；`brand/canon` 与 `lockup/canon` 主变体为红，`-mono` 黑 / `-light` 白回退保留。
 - **变体矩阵**（v0.9.0）：`brand/<slug>.png` 主变体（彩色品牌=官方色，单色品牌=黑）· `brand/<slug>-mono.png`
   黑色单色（新增）· `brand/<slug>-light.png` 白色；`lockup/` 同品牌同色；`series/`、`game/` 仅黑/白两版。
   96px 缩略图 `*/thumbs/<slug>[-mono|-light].png` 与 512px 同源渲染。像素级校验门禁：

@@ -4,6 +4,10 @@
   "rule": "isColorful: s >= 0.18 && 0.10 <= l <= 0.90 (hex->HSL)",
   "generatedAt": "2026-09-21T02:51:18.722Z",
   "monoOverride": [],
+  "originalColorOverride": {
+    "canon": "#C8102E"
+  },
+  "originalColorOverrideNote": "Brands no longer present in Simple Icons keep original typographic wordmarks (not official artwork); this map gives them their well-known official color for the primary variant after user feedback (v0.9.2: canon red, Pantone 186 C).",
   "icons": {
     "sony": {
       "hex": "#FFFFFF",
