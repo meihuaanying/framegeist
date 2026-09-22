@@ -20,7 +20,7 @@
 >
 > 🩹 **v0.9.1 已发布（2026-09-22）**：修复 v0.9.0 侧栏「元素/画布/导出」三个 Tab 空白（`index.html` 两个 `<section>` 漏闭合导致面板嵌套 + insert/layers/props 三张卡误放画布面板）；按用户要求移除模板墙顶部品牌展示条（`#wallBrandStrip`；灯箱品牌条保留）；E2E 新增「每个 Tab 的面板真实可见」断言防回归，ungroup 用例改为稳定 id 选层。引擎/模板/资产零改动，wasm 与视觉基线不变。发布：本地 `92c1ac5` → 远端 `main` `70f3b38`（Git Data API），annotated tag `v0.9.1` → `1200705f`，CI/Pages/Release 全绿。详见 `docs/reports/v0.9.1/PROGRESS.md`。
 >
-> 🩹 **v0.9.2 已发布（2026-09-22）**：修复编辑器模板预览未居中/被裁（`.canvas-wrap` 的 grid 居中与 `fitStage()` 平移叠加）；Canon 徽标按官方红 `#C8102E` 着色（`originalColorOverride`；原创字标，非官方矢量）；`gen-brand-assets.mjs` 支持 `--only`；`check-brand-colors` 131/131；E2E **273/273**；样片重渲 + 视觉基线有意重生成（Canon 黑→红）。详见 `docs/reports/v0.9.2/PROGRESS.md`。
+> 🩹 **v0.9.2 已发布（2026-09-22）**：修复编辑器模板预览未居中/被裁（`.canvas-wrap` 的 grid 居中与 `fitStage()` 平移叠加）；Canon 徽标按官方红 `#C8102E` 着色（`originalColorOverride`；原创字标，非官方矢量）；`gen-brand-assets.mjs` 支持 `--only`；`check-brand-colors` 131/131；E2E **273/273**；样片重渲 + 视觉基线有意重生成（Canon 黑→红）。发布：本地 `72b046b` → 远端 `main` `41cd6bd`（Git Data API），annotated tag `v0.9.2` → `319cb7e2`，CI/Pages/Release 全绿。详见 `docs/reports/v0.9.2/PROGRESS.md`。
 >
 > ⚠️ **仓库状态提醒**：v0.9.0 与 v0.8.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.9.0 发布时 base = 远端 `ad09563` → 远端 `main` `c2e06a3`；本地 `001da88` 与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）；annotated tag `v0.9.0` → tag object `9ef6b75`；Release 说明由 `gh release edit` 注入；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
 >

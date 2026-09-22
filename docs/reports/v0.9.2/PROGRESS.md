@@ -32,3 +32,17 @@
 
 - E2E **273/273**（v0.9.1 的 271 + 预览居中 + Canon 红）；其余门禁与 Rust 工作区测试全绿。
 - 引擎、模板 JSON、WASM 包均未改（wasm 字节与 Golden 基线不变）。
+
+## 发布与验证 ✅ (2026-09-22)
+
+- **版本统一**：`Cargo.toml` / `tauri.conf.json` / `web/app.js APP_VERSION` / `web/sw.js VERSION` 全部 **0.9.2**。
+- **本地提交** `72b046b` → **Git Data API** 推送（214 条目；本地 diff 基准 `0f33a4c`，远端父提交 `b3f6468`，排除 workflow）→ 远端 `main` = **`41cd6bd`**；annotated tag `v0.9.2` → tag object `319cb7e2`（`refs/tags/v0.9.2`）。
+- **CI/Release/Pages（全绿）**：`ci`（windows test+clippy/golden、wasm 字节一致、三 target）✓、`pages` ✓、`release` ✓。Release 六资产：
+  `framegeist-cli-v0.9.2-win-x64.zip`（74.0 MB）、`framegeist-desktop-v0.9.2-win-x64.zip`（94.3 MB）、
+  `framegeist-templates-v0.9.2.fgpkg`（19.7 MB）、`FrameGeist-v0.9.2-win-x64-setup.exe`（NSIS，94.1 MB）、
+  `SHA256SUMS.txt`、`update.json`（`latest.version = v0.9.2`，192 模板）；说明经 `gh release edit --notes-file docs/releases/v0.9.2.md` 注入。
+  Release URL：https://github.com/meihuaanying/framegeist/releases/tag/v0.9.2
+- **Pages 验证**：`APP_VERSION="0.9.2"`；`sw.js` 缓存 `framegeist-0.9.2`；`styles.css` 中 `.canvas-wrap` 的 grid 居中规则已移除；
+  `brand/index.json` 的 canon `color="#C8102E"`（official=false）。
+- **交付**：本地桌面端 0.9.2 重建（2m05s）并启动（CDP 9333；就绪、192 套模板、五 Tab 面板齐全、无品牌条）。
+
