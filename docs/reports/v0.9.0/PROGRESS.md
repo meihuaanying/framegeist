@@ -57,3 +57,19 @@
   - 修复：`editor.js` debug 增 `boxes`/`stageReady` 只读字段；§81 改为轮询 overlay 与舞台一致后再点击，第二次点击按同一 canvas 坐标重算 client 点。
 - **性能**（CDP 真浏览器，`tools/perf-audit.mjs`）：24MP 预览 **171ms** / 导出 **914ms**；60MP 预览 **295ms** / 导出 **2256ms** —— **4/4** 达标（v0.8: 166/892/285/2277ms，无劣化）。
 - **人工审查**：`compare/camera.png`、`compare/colorwalk.png` 抽检（徽标变大、Nikon 黄色 / Canon 原创 mono 正常）；`brand/thumbs/nikon.png`（黄）、`sony.png`（黑）、`fujifilm.png`（红）抽样通过；5 Tab 截图归档 `docs/reports/v0.9.0/`。
+
+## M6 — 文档与发布 v0.9.0 ✅ (2026-09-22)
+
+- **版本统一**：workspace `Cargo.toml` / `tauri.conf.json` / `web/app.js APP_VERSION` / `web/sw.js VERSION` 全部 **0.9.0**（模板 `version 1.3.0` 随 M1）。
+- **文档**：`README.md`（彩色徽标/6.5% 尺寸/五 Tab/直操画布/库集成）；`docs/CREDITS.md`（19 官方图标 15 彩 4 单、阈值规则、`-mono`、下架品牌不臆造官方色、hex 元数据重绘声明）；`docs/TEMPLATE-SPEC.md`（6.5%/6%/44% + 回退链 + `tint:"color"` + `corner:"anchor"` + 图层字段优先）；`docs/DESIGN-LANGUAGE.md`（§3.6 彩色化与尺寸）；PRD Discoveries 7 条；`AGENTS.md` 状态；`docs/releases/v0.9.0.md`（含商标声明）。
+- **发布**：本地 commit `001da88` → **Git Data API** 推送（1375 blob；本地 diff 基准 `36709c1`，远端父提交 `ad09563`，排除 workflow）→ 远端 `main` = **`c2e06a3`**；annotated tag `v0.9.0` → tag object `9ef6b75`（`refs/tags/v0.9.0`）。
+- **CI/Release/Pages（tag 触发，全绿）**：`ci`（windows test+clippy/golden、wasm 字节一致、三 target）✓、`pages` ✓、`release` ✓。Release 六资产：
+  `framegeist-cli-v0.9.0-win-x64.zip`（74.0 MB）、`framegeist-desktop-v0.9.0-win-x64.zip`（94.3 MB）、
+  `framegeist-templates-v0.9.0.fgpkg`（19.7 MB）、`FrameGeist-v0.9.0-win-x64-setup.exe`（NSIS，94.0 MB）、
+  `SHA256SUMS.txt`、`update.json`（`latest.version = v0.9.0`，192 模板）；Release URL：https://github.com/meihuaanying/framegeist/releases/tag/v0.9.0
+  （CI 创建后按 v0.7/v0.8 惯例用 `gh release edit --notes-file docs/releases/v0.9.0.md` 注入说明）。
+- **Pages 验证**：`/` → 200、`/web/app.js` `APP_VERSION="0.9.0"`、`/web/sw.js` 缓存 `framegeist-0.9.0`、
+  `web/brand/index.json` **v3**（含 `color`，如 nikon `#FFE100`）、`brand/thumbs/nikon.png` 200、`brand/thumbs/sony.png` 200、
+  `lockup/thumbs/nikon.png` 200、`series/thumbs/sony-gm.png` 200、`previews/camera-baseplate-02.jpg` 200。
+- **交付**：本地桌面端 0.9.0 构建（3m36s）并启动（CDP 9333；标题「FrameGeist · 框灵」、状态「就绪」、192 套模板）。
+

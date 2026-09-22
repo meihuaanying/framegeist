@@ -18,7 +18,7 @@
 >
 > ✅ **v0.9.0 已发布（2026-09-22）**：彩色品牌徽标（Simple Icons 官方 hex 阈值规则：15 彩色 / 4 单色，`tint:"color"` 可强制，对比 <3:1 自动回退黑白 + 描边/底板）+ 徽标尺寸再提升（引擎默认 6.5% / 下限 6% / 最大宽 44%；192 套模板徽标层 ×1.3，1 套守卫例外）+ 侧边栏五 Tab（模板/照片/元素/画布/导出）与紧凑导出条（48px，零遮挡）+ 画布直操（点选穿透/Shift 多选/拖移/四角缩放/文本形状旋转/Delete/浮动工具条，手柄 ≥24px）+ 徽标库并入「添加元素」（分组过滤/组内搜索/收藏最近/EXIF 恢复/图层级单独覆盖）。门禁：cargo test/clippy/fmt、四 target、wasm 5,059,244 B（帧字节一致）、E2E **271/271**、性能 4/4（24MP 171/914ms，60MP 295/2256ms）、视觉基线 384 项有意重生成、对比图 25 分类、i18n 485/485、品牌色 128/128、字形 355 对、192/192 校验。详见 `docs/reports/v0.9.0/PROGRESS.md`。
 >
-> ⚠️ **仓库状态提醒**：v0.9.0 与 v0.8.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.9.0 发布时 base = 远端 `ad09563`；本地 `36709c1` 为 v0.8 收尾 docs），tag/Release 由 CI 产出，说明用 `gh release edit --notes-file` 注入；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
+> ⚠️ **仓库状态提醒**：v0.9.0 与 v0.8.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.9.0 发布时 base = 远端 `ad09563` → 远端 `main` `c2e06a3`；本地 `001da88` 与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）；annotated tag `v0.9.0` → tag object `9ef6b75`；Release 说明由 `gh release edit` 注入；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
 >
 > 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。
 >
