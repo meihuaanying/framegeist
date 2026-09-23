@@ -29,6 +29,39 @@ export class Engine {
             throw takeFromExternrefTable0(ret[0]);
         }
     }
+    /**
+     * v0.9.3 editor: canvas pixel size `[w, h]` for a photo + template +
+     * overrides (group ungroup / align math needs the canvas frame, not the
+     * stage image which may still show the unrendered source photo).
+     * @param {Uint8Array} photo
+     * @param {string} template_json
+     * @param {string} overrides_json
+     * @returns {string}
+     */
+    canvas_size(photo, template_json, overrides_json) {
+        let deferred5_0;
+        let deferred5_1;
+        try {
+            const ptr0 = passArray8ToWasm0(photo, wasm.__wbindgen_malloc);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(template_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len1 = WASM_VECTOR_LEN;
+            const ptr2 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+            const len2 = WASM_VECTOR_LEN;
+            const ret = wasm.engine_canvas_size(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2);
+            var ptr4 = ret[0];
+            var len4 = ret[1];
+            if (ret[3]) {
+                ptr4 = 0; len4 = 0;
+                throw takeFromExternrefTable0(ret[2]);
+            }
+            deferred5_0 = ptr4;
+            deferred5_1 = len4;
+            return getStringFromWasm0(ptr4, len4);
+        } finally {
+            wasm.__wbindgen_free(deferred5_0, deferred5_1, 1);
+        }
+    }
     clear_assets() {
         wasm.engine_clear_assets(this.__wbg_ptr);
     }
@@ -143,6 +176,25 @@ export class Engine {
         wasm.engine_register_asset(this.__wbg_ptr, ptr0, len0, ptr1, len1);
     }
     /**
+     * Render a collage (PRD C5).
+     * @param {Array<any>} photos
+     * @param {string} layout_json
+     * @param {string} format
+     * @param {boolean} preview
+     * @returns {Uint8Array}
+     */
+    render_collage(photos, layout_json, format, preview) {
+        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * Render a photo against a template (legacy signature).
      * @param {Uint8Array} photo
      * @param {string} template_json
@@ -158,25 +210,6 @@ export class Engine {
         const ptr2 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len2 = WASM_VECTOR_LEN;
         const ret = wasm.engine_render(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview);
-        if (ret[2]) {
-            throw takeFromExternrefTable0(ret[1]);
-        }
-        return takeFromExternrefTable0(ret[0]);
-    }
-    /**
-     * Render a collage (PRD C5).
-     * @param {Array<any>} photos
-     * @param {string} layout_json
-     * @param {string} format
-     * @param {boolean} preview
-     * @returns {Uint8Array}
-     */
-    render_collage(photos, layout_json, format, preview) {
-        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len1 = WASM_VECTOR_LEN;
-        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

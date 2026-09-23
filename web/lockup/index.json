@@ -1,16 +1,10 @@
 {
-  "version": 3,
+  "version": 4,
   "generatedAt": "2026-09-21T02:58:21.749Z",
   "neutral": "exif-auto",
   "colorRule": "isColorful: s >= 0.18 && 0.10 <= l <= 0.90 (hex->HSL)",
   "groups": {
     "camera": [
-      {
-        "slug": "apple",
-        "label": "Apple",
-        "official": true,
-        "color": null
-      },
       {
         "slug": "blackmagicdesign",
         "label": "Blackmagic",
@@ -42,28 +36,10 @@
         "color": "#FB0020"
       },
       {
-        "slug": "google",
-        "label": "Google",
-        "official": true,
-        "color": "#4285F4"
-      },
-      {
         "slug": "hasselblad",
         "label": "Hasselblad",
         "official": false,
         "color": null
-      },
-      {
-        "slug": "honor",
-        "label": "HONOR",
-        "official": true,
-        "color": null
-      },
-      {
-        "slug": "huawei",
-        "label": "Huawei",
-        "official": true,
-        "color": "#FF0000"
       },
       {
         "slug": "insta360",
@@ -78,40 +54,16 @@
         "color": "#E20612"
       },
       {
-        "slug": "motorola",
-        "label": "Motorola",
-        "official": true,
-        "color": "#E1140A"
-      },
-      {
         "slug": "nikon",
         "label": "Nikon",
         "official": true,
         "color": "#FFE100"
       },
       {
-        "slug": "nokia",
-        "label": "Nokia",
-        "official": true,
-        "color": "#005AFF"
-      },
-      {
         "slug": "olympus",
         "label": "OM System",
         "official": false,
         "color": null
-      },
-      {
-        "slug": "oneplus",
-        "label": "OnePlus",
-        "official": true,
-        "color": "#F5010C"
-      },
-      {
-        "slug": "oppo",
-        "label": "OPPO",
-        "official": true,
-        "color": "#2D683D"
       },
       {
         "slug": "panasonic",
@@ -138,12 +90,6 @@
         "color": null
       },
       {
-        "slug": "samsung",
-        "label": "Samsung",
-        "official": true,
-        "color": "#1428A0"
-      },
-      {
         "slug": "sigma",
         "label": "Sigma",
         "official": false,
@@ -162,16 +108,72 @@
         "color": null
       },
       {
-        "slug": "vivo",
-        "label": "vivo",
-        "official": true,
-        "color": "#415FFF"
-      },
-      {
         "slug": "zeiss",
         "label": "Zeiss",
         "official": false,
         "color": null
+      }
+    ],
+    "phone": [
+      {
+        "slug": "apple",
+        "label": "Apple",
+        "official": true,
+        "color": null
+      },
+      {
+        "slug": "google",
+        "label": "Google",
+        "official": true,
+        "color": "#4285F4"
+      },
+      {
+        "slug": "honor",
+        "label": "HONOR",
+        "official": true,
+        "color": null
+      },
+      {
+        "slug": "huawei",
+        "label": "Huawei",
+        "official": true,
+        "color": "#FF0000"
+      },
+      {
+        "slug": "motorola",
+        "label": "Motorola",
+        "official": true,
+        "color": "#E1140A"
+      },
+      {
+        "slug": "nokia",
+        "label": "Nokia",
+        "official": true,
+        "color": "#005AFF"
+      },
+      {
+        "slug": "oneplus",
+        "label": "OnePlus",
+        "official": true,
+        "color": "#F5010C"
+      },
+      {
+        "slug": "oppo",
+        "label": "OPPO",
+        "official": true,
+        "color": "#2D683D"
+      },
+      {
+        "slug": "samsung",
+        "label": "Samsung",
+        "official": true,
+        "color": "#1428A0"
+      },
+      {
+        "slug": "vivo",
+        "label": "vivo",
+        "official": true,
+        "color": "#415FFF"
       }
     ],
     "lens": [
@@ -179,12 +181,6 @@
         "slug": "7artisans",
         "label": "7Artisans",
         "official": false,
-        "color": null
-      },
-      {
-        "slug": "apple",
-        "label": "Apple",
-        "official": true,
         "color": null
       },
       {
@@ -218,28 +214,10 @@
         "color": "#FB0020"
       },
       {
-        "slug": "google",
-        "label": "Google",
-        "official": true,
-        "color": "#4285F4"
-      },
-      {
         "slug": "hasselblad",
         "label": "Hasselblad",
         "official": false,
         "color": null
-      },
-      {
-        "slug": "honor",
-        "label": "HONOR",
-        "official": true,
-        "color": null
-      },
-      {
-        "slug": "huawei",
-        "label": "Huawei",
-        "official": true,
-        "color": "#FF0000"
       },
       {
         "slug": "insta360",
@@ -266,40 +244,16 @@
         "color": null
       },
       {
-        "slug": "motorola",
-        "label": "Motorola",
-        "official": true,
-        "color": "#E1140A"
-      },
-      {
         "slug": "nikon",
         "label": "Nikon",
         "official": true,
         "color": "#FFE100"
       },
       {
-        "slug": "nokia",
-        "label": "Nokia",
-        "official": true,
-        "color": "#005AFF"
-      },
-      {
         "slug": "olympus",
         "label": "OM System",
         "official": false,
         "color": null
-      },
-      {
-        "slug": "oneplus",
-        "label": "OnePlus",
-        "official": true,
-        "color": "#F5010C"
-      },
-      {
-        "slug": "oppo",
-        "label": "OPPO",
-        "official": true,
-        "color": "#2D683D"
       },
       {
         "slug": "panasonic",
@@ -324,12 +278,6 @@
         "label": "Ricoh",
         "official": false,
         "color": null
-      },
-      {
-        "slug": "samsung",
-        "label": "Samsung",
-        "official": true,
-        "color": "#1428A0"
       },
       {
         "slug": "samyang",
@@ -378,12 +326,6 @@
         "label": "Viltrox",
         "official": false,
         "color": null
-      },
-      {
-        "slug": "vivo",
-        "label": "vivo",
-        "official": true,
-        "color": "#415FFF"
       },
       {
         "slug": "voigtlander",

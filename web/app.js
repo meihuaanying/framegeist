@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.9.2";
+const APP_VERSION = "0.9.3";
 
 /* ------------------------------------------------------------------ state */
 
@@ -704,7 +704,7 @@ function buildLayoutPicker() {
 }
 
 /* ------------------------------------------------------ badge library (v2) */
-const BRAND_LIB_FALLBACK = { version: 1, groups: { camera: [], lens: [], series: [], game: [] } };
+const BRAND_LIB_FALLBACK = { version: 1, groups: { camera: [], phone: [], lens: [], series: [], game: [] } };
 let brandLibData = BRAND_LIB_FALLBACK;
 const brandLibState = {
   group: localStorage.getItem("fg-brand-group") || "camera",
@@ -722,7 +722,7 @@ async function loadBrandLibrary() {
     const data = await (await fetch(BASE + "brand/index.json")).json();
     if (Array.isArray(data)) {
       const items = data.map((slug) => ({ slug, label: slug, official: false }));
-      brandLibData = { version: 1, groups: { camera: items, lens: items, series: [], game: [] } };
+      brandLibData = { version: 1, groups: { camera: items, phone: [], lens: items, series: [], game: [] } };
     } else {
       brandLibData = data;
     }
@@ -735,8 +735,8 @@ function badgeGroupsFor(target) {
   const asset = target?.asset ?? "";
   if (asset.includes("@builtin/series/")) return ["series"];
   if (asset.includes("@builtin/game/")) return ["game"];
-  if (asset.includes("@builtin/brand/") || asset.includes("@builtin/lockup/") || asset.includes("@user/")) return ["camera", "lens"];
-  return ["camera", "lens", "series", "game"];
+  if (asset.includes("@builtin/brand/") || asset.includes("@builtin/lockup/") || asset.includes("@user/")) return ["camera", "phone", "lens"];
+  return ["camera", "phone", "lens", "series", "game"];
 }
 function libThumb(item, group, style) {
   const dir = group === "series" ? "series" : group === "game" ? "game"
@@ -765,7 +765,7 @@ function currentBadgeSlug(target) {
   const m = /@(?:builtin\/(?:brand|lockup|series|game)|user)\/([a-z0-9-]+)/.exec(target?.asset ?? "");
   return m ? m[1] : null;
 }
-const BRAND_GROUPS = ["camera", "lens", "series", "game"];
+const BRAND_GROUPS = ["camera", "phone", "lens", "series", "game"];
 function brandGroupItems(group) {
   const groups = brandLibData.groups ?? {};
   const list = group === "all" ? BRAND_GROUPS : [group];

@@ -50,6 +50,12 @@ const LENS_ONLY = [
   "7artisans", "sirui", "yongnuo", "voigtlander",
 ];
 
+// v0.9.3: phone/tablet brands get their own library group (user request).
+const PHONE_SLUGS = [
+  "apple", "google", "honor", "huawei", "motorola", "nokia",
+  "oneplus", "oppo", "samsung", "vivo",
+];
+
 // Human-readable labels for the library grid (proper nouns stay as-is).
 const LABELS = {
   sony: "Sony", canon: "Canon", nikon: "Nikon", fujifilm: "Fujifilm", leica: "Leica",
@@ -65,7 +71,7 @@ const LABELS = {
 };
 
 const WORDMARKS = [
-  { slug: "canon", text: "Canon", font: "CormorantGaramond-600.ttf", weight: 600, spacing: 0 },
+  { slug: "canon", text: "Canon", font: "NotoSerifSC-700.otf", weight: 700, spacing: -2 },
   { slug: "ricoh", text: "RICOH", font: "Inter-700.ttf", weight: 700, spacing: 6 },
   { slug: "sigma", text: "SIGMA", font: "SpaceGrotesk-700.ttf", weight: 700, spacing: 8 },
   { slug: "zeiss", text: "ZEISS", font: "Inter-400.ttf", weight: 400, spacing: 14 },
@@ -312,11 +318,12 @@ writeFileSync(
   ) + "\n",
 );
 
-// -------------------------------------------------------- library manifest v3
+// -------------------------------------------------------- library manifest v4
 const allSlugs = Array.from(new Set([...iconSlugs, ...WORDMARKS.map((w) => w.slug)])).sort()
   .filter((s) => s !== "exif-auto");
-const cameraGroup = allSlugs.filter((s) => !LENS_ONLY.includes(s));
-const lensGroup = allSlugs;
+const cameraGroup = allSlugs.filter((s) => !LENS_ONLY.includes(s) && !PHONE_SLUGS.includes(s));
+const phoneGroup = allSlugs.filter((s) => PHONE_SLUGS.includes(s));
+const lensGroup = allSlugs.filter((s) => !PHONE_SLUGS.includes(s));
 const label = (slug) => LABELS[slug] ?? slug.replace(/(^|-)([a-z])/g, (_, p, c) => `${p ? " " : ""}${c.toUpperCase()}`);
 const item = (slug) => ({
   slug,
@@ -325,12 +332,13 @@ const item = (slug) => ({
   color: hasColor(slug) ? colorFor(slug) : null,
 });
 const manifest = {
-  version: 3,
+  version: 4,
   generatedAt: new Date().toISOString(),
   neutral: "exif-auto",
   colorRule: COLORS.rule,
   groups: {
     camera: cameraGroup.map(item),
+    phone: phoneGroup.map(item),
     lens: lensGroup.map(item),
     series: SERIES.map((s) => ({ slug: s.slug, label: s.text, official: false, color: null })),
     game: GAMES.map((g) => ({ slug: g.slug, label: g.slug.toUpperCase(), official: false, color: null })),
@@ -338,7 +346,7 @@ const manifest = {
 };
 writeFileSync(join(DIRS.brand[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
 writeFileSync(join(DIRS.lockup[1], "index.json"), JSON.stringify(manifest, null, 2) + "\n");
-console.log(`library manifest v3: camera ${manifest.groups.camera.length}, lens ${manifest.groups.lens.length}, series ${manifest.groups.series.length}, game ${manifest.groups.game.length}`);
+console.log(`library manifest v4: camera ${manifest.groups.camera.length}, phone ${manifest.groups.phone.length}, lens ${manifest.groups.lens.length}, series ${manifest.groups.series.length}, game ${manifest.groups.game.length}`);
 console.log(`colorful brands: ${cameraGroup.filter(hasColor).join(", ")}`);
 }
 console.log(ONLY ? `only mode: regenerated ${[...ONLY].join(",")} (manifest/credits untouched)` : "all brand assets done");

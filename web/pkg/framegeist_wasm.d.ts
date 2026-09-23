@@ -11,6 +11,12 @@ export class Engine {
      * Lazily register one font (selected family / uploaded font, v0.2.0).
      */
     add_font(family: string, bytes: Uint8Array): void;
+    /**
+     * v0.9.3 editor: canvas pixel size `[w, h]` for a photo + template +
+     * overrides (group ungroup / align math needs the canvas frame, not the
+     * stage image which may still show the unrendered source photo).
+     */
+    canvas_size(photo: Uint8Array, template_json: string, overrides_json: string): string;
     clear_assets(): void;
     /**
      * Registered font family names (normalized, lowercase).
@@ -39,13 +45,13 @@ export class Engine {
      */
     register_asset(name: string, bytes: Uint8Array): void;
     /**
-     * Render a photo against a template (legacy signature).
-     */
-    render(photo: Uint8Array, template_json: string, format: string, preview: boolean): Uint8Array;
-    /**
      * Render a collage (PRD C5).
      */
     render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
+    /**
+     * Render a photo against a template (legacy signature).
+     */
+    render(photo: Uint8Array, template_json: string, format: string, preview: boolean): Uint8Array;
     /**
      * v0.5.0 free collage: absolute-positioned photo items.
      */
@@ -74,6 +80,7 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_engine_free: (a: number, b: number) => void;
     readonly engine_add_font: (a: number, b: number, c: number, d: number, e: number) => [number, number];
+    readonly engine_canvas_size: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
     readonly engine_clear_assets: (a: number) => void;
     readonly engine_font_families: (a: number) => [number, number];
     readonly engine_layer_boxes: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
@@ -91,8 +98,8 @@ export interface InitOutput {
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __externref_table_dealloc: (a: number) => void;
-    readonly __externref_drop_slice: (a: number, b: number) => void;
     readonly __wbindgen_free: (a: number, b: number, c: number) => void;
+    readonly __externref_drop_slice: (a: number, b: number) => void;
     readonly __externref_table_alloc: () => number;
     readonly __wbindgen_start: () => void;
 }

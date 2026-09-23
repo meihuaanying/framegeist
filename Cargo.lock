@@ -1248,7 +1248,7 @@ dependencies = [
 
 [[package]]
 name = "framegeist-cli"
-version = "0.9.2"
+version = "0.9.3"
 dependencies = [
  "clap",
  "framegeist-core",
@@ -1263,7 +1263,7 @@ dependencies = [
 
 [[package]]
 name = "framegeist-core"
-version = "0.9.2"
+version = "0.9.3"
 dependencies = [
  "ab_glyph",
  "cosmic-text",
@@ -1282,7 +1282,7 @@ dependencies = [
 
 [[package]]
 name = "framegeist-desktop"
-version = "0.9.2"
+version = "0.9.3"
 dependencies = [
  "base64 0.22.1",
  "tauri",
@@ -1292,7 +1292,7 @@ dependencies = [
 
 [[package]]
 name = "framegeist-wasm"
-version = "0.9.2"
+version = "0.9.3"
 dependencies = [
  "framegeist-core",
  "js-sys",

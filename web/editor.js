@@ -487,6 +487,19 @@ function imgRect() {
   if (!img || !img.naturalWidth) return null;
   return { left: img.offsetLeft, top: img.offsetTop, width: img.offsetWidth, height: img.offsetHeight, nw: img.naturalWidth, nh: img.naturalHeight };
 }
+/// v0.9.3: engine canvas frame (w,h). The stage image may still show the
+/// unrendered source photo (different pixel size), so ask the engine first.
+function canvasFrame() {
+  const st = fg()?.state;
+  try {
+    if (st?.engine && st.photos?.length) {
+      const [w, h] = JSON.parse(st.engine.canvas_size(st.photos[0].bytes, fg().effectiveTemplateJson(), fg().buildOverridesJson()));
+      if (w > 0 && h > 0) return { w, h };
+    }
+  } catch { /* fall back to the stage image */ }
+  const r = imgRect();
+  return { w: r?.nw ?? 1600, h: r?.nh ?? 1200 };
+}
 function canvasToLocal(b, r) {
   return {
     x: r.left + (b.x / r.nw) * r.width,
@@ -1999,9 +2012,7 @@ async function ungroupSelected() {
   const groups = selectedLayers().filter(({ layer }) => layer.type === "group");
   if (!groups.length) { fg()?.toast?.("error", t("layers.ungroupHint")); return; }
   await refreshBoxes();
-  const r = imgRect();
-  const fw = r?.nw ?? 1600;
-  const fh = r?.nh ?? 1200;
+  const { w: fw, h: fh } = canvasFrame();
   const boxes = boxesById();
   edit((tpl) => {
     for (const { layer: g } of groups) {
@@ -2039,9 +2050,7 @@ function alignBoxes() {
 }
 async function applyBoxDeltas(moves) {
   if (!moves.length) return;
-  const r = imgRect();
-  const fw = r?.nw ?? 1600;
-  const fh = r?.nh ?? 1200;
+  const { w: fw, h: fh } = canvasFrame();
   edit((tpl) => {
     for (const m of moves) {
       if (!m.dx && !m.dy) continue;

@@ -22,6 +22,8 @@
 >
 > 🩹 **v0.9.2 已发布（2026-09-22）**：修复编辑器模板预览未居中/被裁（`.canvas-wrap` 的 grid 居中与 `fitStage()` 平移叠加）；Canon 徽标按官方红 `#C8102E` 着色（`originalColorOverride`；原创字标，非官方矢量）；`gen-brand-assets.mjs` 支持 `--only`；`check-brand-colors` 131/131；E2E **273/273**；样片重渲 + 视觉基线有意重生成（Canon 黑→红）。发布：本地 `72b046b` → 远端 `main` `41cd6bd`（Git Data API），annotated tag `v0.9.2` → `319cb7e2`，CI/Pages/Release 全绿。详见 `docs/reports/v0.9.2/PROGRESS.md`。
 >
+> 🩹 **v0.9.3 已发布（2026-09-22）**：Canon 字标换用 Noto Serif SC 700（贴近官方观感的原创排版，官方红不变）；徽章库清单升 **v4** 并新增「手机品牌」分组（相机 18 · 手机 10 · 镜头 28 · 系列 13 · 游戏 6，全部 75）；`check-brand-colors` 169/169；i18n 486/486；E2E **274/274**；样片重渲 + 视觉基线有意重生成（Canon 字形更换）。详见 `docs/reports/v0.9.3/PROGRESS.md`。
+>
 > ⚠️ **仓库状态提醒**：v0.9.0 与 v0.8.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.9.0 发布时 base = 远端 `ad09563` → 远端 `main` `c2e06a3`；本地 `001da88` 与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）；annotated tag `v0.9.0` → tag object `9ef6b75`；Release 说明由 `gh release edit` 注入；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
 >
 > 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。

@@ -124,7 +124,8 @@
     {
       "slug": "canon",
       "kind": "brand",
-      "font": "CormorantGaramond-600.ttf"
+      "font": "NotoSerifSC-700.otf",
+      "note": "official red (Pantone 186 C) wordmark, original typographic rendering"
     },
     {
       "slug": "ricoh",

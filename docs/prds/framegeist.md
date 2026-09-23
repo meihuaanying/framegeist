@@ -547,3 +547,10 @@ Push lightly on: assumptions (鸿蒙 Rust 链路 / HEIF 解码 / Motion Photo / 
   2. **下架品牌可在「原创字标」上恢复官方色**：Canon 字形仍为本项目原创排版（不复制官方矢量），但主变体按公开官方红 `#C8102E`（Pantone 186 C）着色；新增 `tools/brand-colors.json -> originalColorOverride` 与生成器 `colorFor()` 覆盖；`check-brand-colors` 扩展为同时校验覆盖品牌（131/131）。
   3. **生成器定向重渲**：`gen-brand-assets.mjs --only <slug>` 只重渲指定 slug 且不写 manifest/credits，避免全量运行时网络抖动把官方图标回退成字标而污染资产。
   4. **资产变更的回归面**：Canon 出现在大量样片徽标层 → 样片全量重渲 + 视觉基线有意重生成（记录原因），E2E 新增 Canon 红断言（品牌 + lockup）。
+
+
+- **2026-09-22 ｜ v0.9.3 热修复（Canon 官方字形 + 手机品牌分组） ｜** 用户提供官方图要求 Canon 字形贴近、徽章库手机品牌独立。发现与决策：
+  1. **字形选择以官方图对照**：在现有 OFL 字体中对比 Cormorant / Playfair / Fraunces / Noto Serif（400/600/700），选定 **Noto Serif SC 700**（厚重过渡衬线、中等对比）并收紧字距；仍为原创排版渲染，不复制官方矢量。
+  2. **库分组语义修正**：原 v3 的 camera 组混入手机品牌、lens 组等于全量（含手机）。v4 拆出 phone 组（10），相机 18 / 手机 10 / 镜头 28 / 系列 13 / 游戏 6（全部 75）；跨组重复的相机品牌（相机 ∩ 镜头）为既有行为，保留。
+  3. **兼容与门禁**：旧 v2/v3 清单读取回退保留；`check-brand-colors` 改为对相机+手机+镜头去重后的全部品牌做变体/颜色校验（169/169）；E2E 断言升级 v4/六 chip 并新增手机分组断言。
+  4. **资产变更回归面**：Canon 字形再次变更 → 样片全量重渲 + 视觉基线有意重生成（记录原因）。

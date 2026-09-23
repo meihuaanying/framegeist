@@ -128,10 +128,14 @@ const check = (name, ok, detail = "") => {
   if (!ok) failures.push(`${name} ${detail}`);
 };
 
-check("manifest version 3", MANIFEST.version === 3, `v${MANIFEST.version}`);
+check("manifest version 4", MANIFEST.version === 4, `v${MANIFEST.version}`);
 check("color rule locked", typeof COLORS.rule === "string" && COLORS.icons && Object.keys(COLORS.icons).length >= 15, COLORS.rule);
 
-const brandItems = (MANIFEST.groups.camera ?? []).filter((i) => i.official || i.color);
+const brandBySlug = new Map();
+for (const g of ["camera", "phone", "lens"]) {
+  for (const i of MANIFEST.groups[g] ?? []) if (!brandBySlug.has(i.slug)) brandBySlug.set(i.slug, i);
+}
+const brandItems = [...brandBySlug.values()];
 const colorful = brandItems.filter((i) => i.color);
 const colorLock = (slug) =>
   COLORS.icons?.[slug]?.colorful ? COLORS.icons[slug].hex : (COLORS.originalColorOverride?.[slug] ?? null);
@@ -165,8 +169,8 @@ for (const item of brandItems) {
   }
 }
 
-const lockupItems = (MANIFEST.groups.camera ?? []).filter((i) => i.slug);
-for (const item of lockupItems.slice(0, 40)) {
+const lockupItems = brandItems;
+for (const item of lockupItems.slice(0, 60)) {
   const primary = read("templates/assets/lockup", "", item.slug, "");
   const mono = read("templates/assets/lockup", "", item.slug, "-mono");
   if (item.color) {

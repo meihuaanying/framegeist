@@ -178,13 +178,15 @@ const inject = async (files, selector = "#fileInput") => {
   }
   throw new Error(`selector ${selector} not found`);
 };
-const waitLabel = async (timeoutMs = 60000) => {
-  await ev(`document.getElementById("stageLabel").textContent = "WAIT"`);
+const waitLabel = async (timeoutMs = 60000, prevLabel = null) => {
+  // With a baseline label we only wait for a NEW result; otherwise wipe the
+  // label first so a stale render cannot satisfy the wait.
+  if (prevLabel == null) await ev(`document.getElementById("stageLabel").textContent = "WAIT"`);
   const t0 = Date.now();
   while (Date.now() - t0 < timeoutMs) {
     const v = await ev(`document.getElementById("stageLabel").textContent`);
-    if (v && v.includes("ms")) return v;
-    if (v && v.includes("失败")) return v;
+    if (v && v !== prevLabel && v.includes("ms")) return v;
+    if (v && v !== prevLabel && v.includes("失败")) return v;
     await new Promise((r) => setTimeout(r, 180));
   }
   return "TIMEOUT";
@@ -2012,6 +2014,7 @@ const hexRgb = (h) => {
   const chips = await ev(`[...document.querySelectorAll("#sampleRow .sample-chip")].map((b) => b.textContent)`);
   check("samples: three sample photo chips render", chips?.length === 3, JSON.stringify(chips));
   await ev(`(async () => { await window.__fg.useTemplate("classic-watermark-single-row"); })()`);
+  const labelBefore = await ev(`document.getElementById("stageLabel").textContent`);
   await ev(`document.querySelectorAll("#sampleRow .sample-chip")[1].click()`);
   const staged = await ev(`(async () => {
     const t0 = Date.now();
@@ -2022,7 +2025,7 @@ const hexRgb = (h) => {
     }
     return false;
   })()`);
-  const label = await waitLabel(40000);
+  const label = await waitLabel(40000, labelBefore);
   const info = await ev(`window.__fg.state.photos[0]?.exif ?? null`);
   const diag = await ev(`({ mode: window.__fg.state.mode, pill: document.getElementById("statusText").textContent, label: document.getElementById("stageLabel").textContent, last: !!window.__fg.state.lastRender })`);
   check(
@@ -2529,10 +2532,11 @@ let EXIF_TEXT_ID = null;
 {
   const lib = await ev(`(async () => {
     const data = await (await fetch("./brand/index.json")).json();
-    const all = ["camera", "lens", "series", "game"].flatMap((g) => data.groups?.[g] ?? []);
+    const all = ["camera", "phone", "lens", "series", "game"].flatMap((g) => data.groups?.[g] ?? []);
     return {
       v: data.version,
       camera: data.groups?.camera?.length ?? 0,
+      phone: data.groups?.phone?.length ?? 0,
       lens: data.groups?.lens?.length ?? 0,
       series: data.groups?.series?.length ?? 0,
       game: data.groups?.game?.length ?? 0,
@@ -2540,7 +2544,7 @@ let EXIF_TEXT_ID = null;
       colorful: all.filter((i) => i.color).map((i) => i.slug),
     };
   })()`);
-  check("v0.9 badge lib: manifest v3 with four groups", lib?.v === 3 && lib.camera > 20 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
+  check("v0.9.3 badge lib: manifest v4 with five groups", lib?.v === 4 && lib.camera >= 15 && lib.phone >= 8 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
   check("v0.9 badge lib: neutral EXIF marker present", lib?.neutral === "exif-auto", String(lib?.neutral));
   check("v0.9 badge lib: colorful brands carry official hex", Array.isArray(lib?.colorful) && lib.colorful.length >= 10 && lib.colorful.includes("nikon"), JSON.stringify(lib?.colorful?.slice(0, 6)));
   check("v0.9 badge lib: mono brands carry no color", !(lib?.colorful ?? []).includes("sony"), JSON.stringify(lib?.colorful));
@@ -2581,8 +2585,8 @@ let EXIF_TEXT_ID = null;
     return { panelOpen, cells: cells.length, thumbs96, chips: chips.map((c) => c.textContent), afterApply, hasApplied: /@builtin\\/(brand|lockup)\\/canon/.test(json), afterAuto, favs, filtered };
   })()`);
   check("v0.9 badge lib: addBadge opens the integrated library", ed?.panelOpen === true, JSON.stringify(ed?.panelOpen));
-  check("v0.9 badge lib: grid renders 96px-thumb cells", (ed?.cells ?? 0) > 20 && ed.thumbs96 === ed.cells, JSON.stringify({ cells: ed?.cells, thumbs96: ed?.thumbs96 }));
-  check("v0.9 badge lib: five group chips (all + four)", ed?.chips?.length === 5, JSON.stringify(ed?.chips));
+  check("v0.9 badge lib: grid renders 96px-thumb cells", (ed?.cells ?? 0) >= 15 && ed.thumbs96 === ed.cells, JSON.stringify({ cells: ed?.cells, thumbs96: ed?.thumbs96 }));
+  check("v0.9 badge lib: six group chips (all + five)", ed?.chips?.length === 6, JSON.stringify(ed?.chips));
   check("v0.9 badge lib: click applies the brand to the target layer", /@builtin\/(brand|lockup)\/canon/.test(ed?.afterApply ?? "") && ed.hasApplied === true, JSON.stringify({ a: ed?.afterApply, j: ed?.hasApplied }));
   check("v0.9 badge lib: auto restores the EXIF expression", /@builtin\/(brand|lockup)\/\{exif\./.test(ed?.afterAuto ?? ""), String(ed?.afterAuto));
   check("v0.9 badge lib: favorites persist", (ed?.favs ?? 0) >= 1, String(ed?.favs));
@@ -2592,18 +2596,30 @@ let EXIF_TEXT_ID = null;
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const chips = [...document.querySelectorAll("#brandGroups .brand-chip")];
     const out = {};
-    for (const label of ["系列徽章", "游戏字标", "全部", "镜头品牌", "相机品牌"]) {
+    for (const label of ["系列徽章", "游戏字标", "全部", "镜头品牌", "相机品牌", "手机品牌"]) {
       chips.find((c) => c.textContent.startsWith(label))?.click();
       await sleep(250);
       out[label] = document.querySelectorAll("#brandLibGrid .brand-lib-cell").length;
+      if (label === "手机品牌") {
+        out.phoneTitles = [...document.querySelectorAll("#brandLibGrid .brand-lib-cell")].map((c) => (c.title || "").toLowerCase());
+      }
     }
+    // restore the camera group for the following style-switch probe
+    chips.find((c) => c.textContent.startsWith("相机品牌"))?.click();
+    await sleep(250);
     return out;
   })()`);
-  const counts = await ev(`(async () => { const d = await (await fetch("./brand/index.json")).json(); return { series: d.groups.series.length, game: d.groups.game.length, camera: d.groups.camera.length, lens: d.groups.lens.length, all: ["camera","lens","series","game"].reduce((n,g)=>n+d.groups[g].length,0) }; })()`);
+  const counts = await ev(`(async () => { const d = await (await fetch("./brand/index.json")).json(); const G=["camera","phone","lens","series","game"]; return { series: d.groups.series.length, game: d.groups.game.length, camera: d.groups.camera.length, phone: d.groups.phone.length, lens: d.groups.lens.length, all: G.reduce((n,g)=>n+d.groups[g].length,0) }; })()`);
   check(
     "v0.9 badge lib: group chips filter the grid",
-    filter?.["系列徽章"] === counts.series && filter?.["游戏字标"] === counts.game && filter?.["全部"] === counts.all && filter?.["镜头品牌"] === counts.lens && filter?.["相机品牌"] === counts.camera,
+    filter?.["系列徽章"] === counts.series && filter?.["游戏字标"] === counts.game && filter?.["全部"] === counts.all && filter?.["镜头品牌"] === counts.lens && filter?.["相机品牌"] === counts.camera && filter?.["手机品牌"] === counts.phone,
     JSON.stringify({ filter, counts }),
+  );
+  const PHONES = ["apple", "google", "honor", "huawei", "motorola", "nokia", "oneplus", "oppo", "samsung", "vivo"];
+  check(
+    "v0.9.3 badge lib: phone brands live in their own group",
+    Array.isArray(filter?.phoneTitles) && filter.phoneTitles.length === counts.phone && filter.phoneTitles.every((t) => PHONES.includes(t)),
+    JSON.stringify(filter?.phoneTitles),
   );
 
   const style = await ev(`(async () => {

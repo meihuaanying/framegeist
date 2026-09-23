@@ -189,6 +189,32 @@ impl Engine {
         core::boxes::layer_boxes_for_photo(photo, &template, &opts).map_err(js_err)
     }
 
+    /// v0.9.3 editor: canvas pixel size `[w, h]` for a photo + template +
+    /// overrides (group ungroup / align math needs the canvas frame, not the
+    /// stage image which may still show the unrendered source photo).
+    pub fn canvas_size(
+        &self,
+        photo: &[u8],
+        template_json: &str,
+        overrides_json: &str,
+    ) -> Result<String, JsError> {
+        let template = core::load_template_from_str(template_json).map_err(js_err)?;
+        let overrides = if overrides_json.trim().is_empty() {
+            None
+        } else {
+            Some(core::TemplateOverrides::from_json(overrides_json).map_err(js_err)?)
+        };
+        let opts = core::RenderOptions {
+            fonts: Some(self.fonts.clone()),
+            model_map: self.model_map.clone(),
+            assets: Some(self.assets.clone()),
+            overrides,
+            ..core::RenderOptions::default()
+        };
+        let (w, h) = core::boxes::canvas_size_for_photo(photo, &template, &opts).map_err(js_err)?;
+        Ok(format!("[{w},{h}]"))
+    }
+
     /// v0.5.0 free collage: absolute-positioned photo items.
     pub fn render_free_collage(
         &self,
