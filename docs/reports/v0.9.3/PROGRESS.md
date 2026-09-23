@@ -38,3 +38,16 @@
 
 - E2E **274/274**（v0.9.2 的 273 + 手机分组）；`check-i18n` 486/486；其余门禁与 Rust 工作区测试全绿。
 - 模板 JSON 未改；引擎核心未改（仅 wasm 新增只读 API，渲染输出不变）。
+
+## 发布与验证 ✅ (2026-09-22)
+
+- **版本统一**：`Cargo.toml` / `tauri.conf.json` / `web/app.js APP_VERSION` / `web/sw.js VERSION` 全部 **0.9.3**。
+- **本地提交** `566c322` → **Git Data API** 推送（348 条目；本地 diff 基准 `e189c29`，远端父提交 `f8de13a`，排除 workflow）→ 远端 `main` = **`5cfcacb`**；annotated tag `v0.9.3` → tag object `cd852382`（`refs/tags/v0.9.3`）。
+- **CI/Release/Pages（全绿）**：`ci`（windows test+clippy/golden、wasm 字节一致、三 target）✓、`pages` ✓、`release` ✓。Release 六资产：
+  `framegeist-cli-v0.9.3-win-x64.zip`（74.0 MB）、`framegeist-desktop-v0.9.3-win-x64.zip`（94.4 MB）、
+  `framegeist-templates-v0.9.3.fgpkg`（19.7 MB）、`FrameGeist-v0.9.3-win-x64-setup.exe`（NSIS，94.2 MB）、
+  `SHA256SUMS.txt`、`update.json`（`latest.version = v0.9.3`，192 模板）；说明经 `gh release edit --notes-file docs/releases/v0.9.3.md` 注入。
+  Release URL：https://github.com/meihuaanying/framegeist/releases/tag/v0.9.3
+- **Pages 验证**：`APP_VERSION="0.9.3"`；`sw.js` 缓存 `framegeist-0.9.3`；`brand/index.json` **v4**（camera 18 / phone 10 / lens 28）；
+  canon `color="#C8102E"`。
+- **交付**：本地桌面端 0.9.3 重建（3m25s）并启动（CDP 9333；就绪、192 套模板、徽章库「手机品牌 10」分组可见）。
