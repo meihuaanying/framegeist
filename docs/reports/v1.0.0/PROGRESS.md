@@ -79,9 +79,30 @@
 - [x] perf 4/4 复测（24MP / 60MP）。
 - [x] 版本号 0.9.4（四处）。
 - [x] 样片/基线零差异确认。
-- [ ] 文档（AGENTS.md 发布横幅 / PRD 历史条目 / 发布说明定稿）。
-- [ ] 提交推送 + tag v0.9.4 + Release 六资产 + Pages 验证 + 桌面端重建验证。
+- [x] 文档（AGENTS.md 发布横幅 / 发布说明定稿）。
+- [x] 提交推送 + tag v0.9.4 + Release 六资产 + Pages 验证 + 桌面端重建验证。
 
-## Step 2+ — v1.0.0 大版本（未开始）
+### 1.9 发布记录（v0.9.4，2026-09-24）
 
-- 排版自动拟合（2/3 规则、同侧 ≤3 行）、47 项徽标逐一核对（STOP 1：对照表先审）、竞品调研报告（STOP 2：v3 设计语言 + 5–8 套样张先审）。
+- 本地提交 `b8aaeae`（`fix(v0.9.4): unify canvas geometry, real mouse picking, drop auto-pan`）→ Git Data API 推送（diff 34 entries）→ 远端 `main` = `7d09ad0`。
+- 注解标签 `v0.9.4` → tag object `0642e31`；Release：https://github.com/meihuaanying/framegeist/releases/tag/v0.9.4
+- 工作流：main `ci` **35965718511** ✅ success；`pages` **35965718565** ✅ success（线上 `APP_VERSION 0.9.4`、`framegeist-0.9.4`）；`release` **35965788941** ✅ success（六资产齐全）；tag `ci` **35965788978**（4/5 job success，`test + clippy (windows)` 的「render template sample wall」步骤仍在跑）。
+- 六资产：`framegeist-cli-v0.9.4-win-x64.zip` 74.02 MB / `framegeist-desktop-v0.9.4-win-x64.zip` 94.38 MB / `FrameGeist-v0.9.4-win-x64-setup.exe` 94.17 MB / `framegeist-templates-v0.9.4.fgpkg` 19.75 MB / `SHA256SUMS.txt` / `update.json`（templates count 192）。
+- 哈希一致性：SHA256SUMS 四项（`3bbfe0fc` / `0f8ac370` / `81fa2b18` / `90d3fa04`）与 update.json 的 `win-x64-cli` / `win-x64` / `win-x64-installer` / `templates` 完全一致 ✅。
+- Release 说明：远端 `release.yml` 未含 notes-file 改动（workflow scope 限制），已按惯例手动注入 `gh release edit v0.9.4 --notes-file docs/releases/v0.9.4.md` ✅。
+- 桌面端门禁：重建后 `probe-desktop.mjs` **9/9** ✅（应用保持运行）。
+
+### 1.10 Step 1 结论
+
+v0.9.4 热修全部完成：坐标单一事实来源、真实鼠标点选/拖拽、取消自动平移 + 定位按钮、显示帧一致性守卫、blob 释放、真实输入 E2E **276/276**、perf 4/4、桌面端 9/9、六资产发布 + Pages 验证。
+
+## Step 2 — v1.0.0-A 竞品调研（已完成，2026-09-24）
+
+- 交付：`docs/reports/v1.0.0/RESEARCH.md`（8 家竞品逐一拆解 + 9 方对比总表 + 10 条可吸收结论 C1–C10）与 `docs/reports/v1.0.0/IMPROVEMENTS.md`（P1–P8 提案，含收益/成本/风险/红线）。
+- v1.0.0 拟实施三条低成本高收益提案：**P3 快捷键增强 + 速查表**、**P1 导出预设**、**P2 批量导出命名规则**（顺序 P3 → P1 → P2）；其余入 v1.1 backlog。
+- 红线：只动 `web/` UI 与设置组装层，不改 `crates/`、模板 JSON、渲染语义；i18n 4 locale 同步；每提案新增 E2E ≥2 条。
+
+## Step 3 — v1.0.0-B 设计语言 v3 + 引擎拟合能力（待开始 → STOP 1）
+
+- 引擎：`info_block`（side / fields / 2/3 拟合 / ≤3 行 / 字号求解）、DESIGN-LANGUAGE v3、5–8 套样张；完成后 **STOP 1 等用户审核**。
+- 已启动排版侦察（explore 子代理）：渲染文字链路、schema 字段、留白表达、v0.9 排版约定、侧向分布统计、相关测试基线。

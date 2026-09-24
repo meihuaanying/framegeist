@@ -24,9 +24,11 @@
 >
 > 🩹 **v0.9.3 已发布（2026-09-22）**：Canon 字标换用 Noto Serif SC 700（贴近官方观感的原创排版，官方红不变）；徽章库清单升 **v4** 并新增「手机品牌」分组（相机 18 · 手机 10 · 镜头 28 · 系列 13 · 游戏 6，全部 75）；修复取消分组位置漂移（wasm 新增 `canvas_size` API，不再依赖舞台图片尺寸）；`check-brand-colors` 169/169；i18n 486/486；E2E **274/274**；样片重渲 + 视觉基线有意重生成。发布：本地 `566c322` → 远端 `main` `5cfcacb`（Git Data API），annotated tag `v0.9.3` → `cd852382`，CI/Pages/Release 全绿。详见 `docs/reports/v0.9.3/PROGRESS.md`。
 >
+> 🩹 **v0.9.4 已发布（2026-09-24）**：画布坐标统一——`layer_boxes` / `canvas_size` 增加 `max_edge`，单次解码返回 `{frame, boxes}`（预览用 1600 cap、导出用全分辨率，各取自己显示帧的几何），形状层识别框完全镜像渲染器；**真实鼠标首次点击即选中/拖动**（舞台双缓冲复用、去掉视图过渡、pointerdown 改 window capture，修复浏览器命中测试过期吞事件）；**取消选中自动平移**并新增「定位到选中」按钮；显示帧一致性守卫（原图/模板预览期间叠加层隐藏、点选静默失效）；渲染 blob 按帧释放。E2E 画布交互全部改 **CDP 真实输入事件**，**276/276**；桌面端探针 9/9；perf 24MP 488/1733ms、60MP 581/3481ms；i18n 487/487、品牌色 169/169；样片与视觉基线零差异（渲染未改动）。发布：本地 `b8aaeae` → 远端 `main` `7d09ad0`（Git Data API），annotated tag `v0.9.4` → `0642e31`，CI/Pages/Release 全绿。详见 `docs/reports/v1.0.0/PROGRESS.md`。
+>
 > ⚠️ **仓库状态提醒**：v0.9.0 与 v0.8.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.9.0 发布时 base = 远端 `ad09563` → 远端 `main` `c2e06a3`；本地 `001da88` 与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）；annotated tag `v0.9.0` → tag object `9ef6b75`；Release 说明由 `gh release edit` 注入；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
 >
-> 🚧 **下一步**：等待用户下一轮 grill / 契约。候选方向：模板再扩容、桌面/移动端体验、社区模板导入导出。
+> 🚧 **下一步**：v1.0.0 大版本（契约 `docs/V1.0.0-CONSTRAINTS.md`）——信息块自动拟合排版（2/3 规则、同侧 ≤3 行）+ 全量 192 套重排（STOP 1：DESIGN-LANGUAGE v3 + 5–8 套样张先审）；47 项徽标逐一对官方核对（STOP 2：对照表先审后落地）；竞品调研（国内 4 + 国际 4）报告 + 高收益提案。
 >
 > 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.9.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；字形门禁 `node tools/check-glyph-coverage.mjs`；UI 对比度 `node tools/check-ui-contrast.mjs`；i18n 门禁 `node tools/check-i18n.mjs`；品牌色门禁 `node tools/check-brand-colors.mjs`；模板排版 `node tools/apply-v090-typography.mjs`（幂等 1.3.0）；字体管线 `node tools/fetch-fonts.mjs --fetch`（SHA256 pin 在 `tools/font-pins.json`）；push 代理不可用时加 `-c "http.https://github.com/.proxy="`，发布推送用 `node tools/gh-api-push.mjs`。
 >
