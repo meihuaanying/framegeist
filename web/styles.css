@@ -752,7 +752,10 @@ html[data-theme="dark"] .brand-strip img { filter: invert(1); }
   position: absolute; inset: 0; pointer-events: none; z-index: 5;
 }
 .edit-overlay .box {
-  position: absolute; border: 1.5px solid var(--accent-a);
+  position: absolute;
+  /* v0.9.4: border keeps a constant screen width under stage zoom (--inv-zoom),
+     same mechanism as the handles, so the overlay never turns sub-pixel. */
+  border: calc(1.5px * var(--inv-zoom, 1)) solid var(--accent-a);
   border-radius: 3px; pointer-events: none;
 }
 .edit-overlay .box.dim { border-color: color-mix(in srgb, var(--accent-a) 40%, transparent); }

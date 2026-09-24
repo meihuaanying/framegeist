@@ -10,6 +10,7 @@ const COALESCE_MS = 700;
 const S = {
   img: null,
   boxes: [],
+  boxFrame: null,  // v0.9.4: canvas frame the boxes are in ({w,h})
   selected: new Set(),
   cropMode: false,
   cropAspect: "free",
@@ -423,11 +424,8 @@ function select(id, additive = false) {
   buildLayersPanel();
   buildPropsPanel();
   drawOverlay();
-  // v0.9.0: bring the selected box into view so handles are reachable.
-  if (S.selected.has(id)) {
-    const b = S.boxes.find((x) => x.id === id);
-    if (b) fg()?.panIntoView?.(b);
-  }
+  // v0.9.4: no automatic panning on selection — the canvas must not jump.
+  // The manual「定位到选中」button (locateSelected) is the explicit fallback.
 }
 function selectedLayers() {
   return [...S.selected].map((id) => findLayer(id)).filter(Boolean);
@@ -447,12 +445,21 @@ function boxesById() {
 }
 async function refreshBoxes() {
   const st = fg()?.state;
-  if (!st?.engine || !st.photos.length || st.mode !== "frame") { S.boxes = []; return; }
+  if (!st?.engine || !st.photos.length || st.mode !== "frame") { S.boxes = []; S.boxFrame = null; return; }
   try {
-    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg().effectiveTemplateJson(), fg().buildOverridesJson()));
-    S.boxes = boxes;
+    // v0.9.4: boxes must be computed for the frame the editor is displaying
+    // (preview cap or export max edge) — one call returns frame + boxes.
+    const res = JSON.parse(st.engine.layer_boxes(
+      st.photos[0].bytes,
+      fg().effectiveTemplateJson(),
+      fg().buildOverridesJson(),
+      fg().displayMaxEdge(),
+    ));
+    S.boxes = Array.isArray(res?.boxes) ? res.boxes : [];
+    S.boxFrame = Array.isArray(res?.frame) ? { w: res.frame[0], h: res.frame[1] } : null;
   } catch {
     S.boxes = [];
+    S.boxFrame = null;
   }
 }
 
@@ -468,8 +475,8 @@ function ensureOverlay() {
   }
   return ov;
 }
-/** Handles + crop-rect drags. Re-bound whenever the overlay is recreated
- *  (setStage clears canvasWrap on every render). */
+/** Handles + crop-rect drags. v0.9.4: the overlay is created once and survives
+ *  re-renders (setStage no longer clears canvasWrap), so this binds once. */
 function bindOverlayPointer(overlay) {
   overlay.addEventListener("pointerdown", (e) => {
     const h = e.target.closest(".handle");
@@ -482,18 +489,52 @@ function bindOverlayPointer(overlay) {
     if (crop) beginCropDrag(e, crop);
   });
 }
+/* v0.9.4: the stage <img> is reused across renders (double-buffered setStage),
+   so ask the DOM for the live element instead of trusting a cached reference.
+   During a frame swap `naturalWidth` is briefly 0 while the old image stays
+   painted; the layout box (offsetWidth/Height) is the geometry actually shown,
+   and S.boxFrame still describes the painted frame until refreshBoxes runs. */
+function stageImg() {
+  return document.querySelector("#canvasWrap img") ?? S.img;
+}
 function imgRect() {
-  const img = S.img;
-  if (!img || !img.naturalWidth) return null;
-  return { left: img.offsetLeft, top: img.offsetTop, width: img.offsetWidth, height: img.offsetHeight, nw: img.naturalWidth, nh: img.naturalHeight };
+  const img = stageImg();
+  if (!img || !img.isConnected) return null;
+  const w = img.offsetWidth, h = img.offsetHeight;
+  if (!w || !h) return null;
+  const f = S.boxFrame;
+  const nw = f?.w ?? img.naturalWidth, nh = f?.h ?? img.naturalHeight;
+  if (!nw || !nh) return null;
+  return { left: img.offsetLeft, top: img.offsetTop, width: w, height: h, nw, nh };
+}
+/// v0.9.4: right after photos are injected the stage briefly shows the
+/// unrendered source photo (`showSource()`) while S.boxes still describe the
+/// rendered frame. Overlay, hit tests and locate are only meaningful when the
+/// displayed image IS the frame the boxes were computed for.
+function stageMatchesFrame() {
+  const img = stageImg();
+  if (!img || !img.isConnected || !img.naturalWidth) return false;
+  // v0.9.4: in free-collage mode the canvas is the free spec, not the template
+  // frame (`layer_boxes` does not apply → S.boxFrame stays null there). The raw
+  // flag can stay set after switching back to a frame template, so gate it on
+  // the active mode (same semantics as the render path's freeCollage check).
+  const st = fg()?.state;
+  if (st?.mode === "collage" && st.freeCollage) {
+    const spec = fg()?.freeSpec?.();
+    return !!(spec && img.naturalWidth === spec.width && img.naturalHeight === spec.height);
+  }
+  const f = S.boxFrame;
+  return !!(f && img.naturalWidth === f.w && img.naturalHeight === f.h);
 }
 /// v0.9.3: engine canvas frame (w,h). The stage image may still show the
 /// unrendered source photo (different pixel size), so ask the engine first.
+/// v0.9.4: prefer the frame that came back with the boxes (same decode).
 function canvasFrame() {
+  if (S.boxFrame) return { ...S.boxFrame };
   const st = fg()?.state;
   try {
     if (st?.engine && st.photos?.length) {
-      const [w, h] = JSON.parse(st.engine.canvas_size(st.photos[0].bytes, fg().effectiveTemplateJson(), fg().buildOverridesJson()));
+      const [w, h] = JSON.parse(st.engine.canvas_size(st.photos[0].bytes, fg().effectiveTemplateJson(), fg().buildOverridesJson(), fg().displayMaxEdge()));
       if (w > 0 && h > 0) return { w, h };
     }
   } catch { /* fall back to the stage image */ }
@@ -513,7 +554,11 @@ function drawOverlay() {
   if (!ov) return;
   ov.innerHTML = "";
   const st = fg()?.state;
+  // v0.9.4: the manual locate button is enabled only when there is a selection.
+  const locate = document.getElementById("locateSel");
+  if (locate) locate.disabled = !(st?.view === "editor" && st?.mode === "frame" && S.selected.size > 0);
   if (st?.view !== "editor") return;
+  if (!stageMatchesFrame()) { ov.innerHTML = ""; return; }
   const r = imgRect();
   if (!r) return;
   if (st.mode === "collage" && freeActive()) {
@@ -648,7 +693,7 @@ function beginDrag(kind, id, ev) {
   if (!hit || hit.layer.locked) return;
   const u = uiOf(fg().state.templateId);
   if (u.locked.includes(id)) return;
-  const visible = S.img.getBoundingClientRect();
+  const visible = (stageImg() ?? S.img).getBoundingClientRect();
   const d = {
     kind, id, startX: ev.clientX, startY: ev.clientY,
     visibleW: visible.width || r.width,
@@ -772,16 +817,45 @@ function endDrag() {
   S.drag = null;
   if (drag?.kind) {
     commitNow();
-    // v0.9.0: keep the (re)sized selection reachable — pan it back into view.
-    const id = drag.id;
-    setTimeout(() => {
-      const b = S.boxes.find((x) => x.id === id);
-      if (b) fg()?.panIntoView?.(b);
-    }, 250);
+    // v0.9.4: dragging never re-pans the stage (no zoom/pan side effects).
   }
 }
 
 /* ---------------------------------------------------------- property panel */
+/// v0.9.4: manual fallback for reaching a selection after the user zoomed or
+/// panned away — centers the selected box and then clamps only as far as the
+/// selection itself staying inside the viewport (24px margin). Never runs
+/// automatically, never pushes the selection back off-screen.
+function locateSelected() {
+  const st = fg()?.state;
+  const img = stageImg();
+  if (!st || !img || !img.offsetWidth || !S.selected.size) return false;
+  if (!stageMatchesFrame()) return false;
+  const boxes = [...S.selected].map((id) => boxesById().get(id)).filter(Boolean);
+  if (!boxes.length) return false;
+  const F = canvasFrame();
+  const x0 = Math.min(...boxes.map((b) => b.x));
+  const y0 = Math.min(...boxes.map((b) => b.y));
+  const x1 = Math.max(...boxes.map((b) => b.x + b.w));
+  const y1 = Math.max(...boxes.map((b) => b.y + b.h));
+  const vp = document.getElementById("viewport").getBoundingClientRect();
+  const z = st.zoom;
+  const s = z.scale;
+  const w = img.offsetWidth, h = img.offsetHeight;
+  const ox = img.offsetLeft * s, oy = img.offsetTop * s;
+  const lx0 = (x0 / F.w) * w, lx1 = (x1 / F.w) * w;
+  const ly0 = (y0 / F.h) * h, ly1 = (y1 / F.h) * h;
+  const M = 24;
+  let tx = vp.width / 2 - (ox + ((lx0 + lx1) / 2) * s);
+  let ty = vp.height / 2 - (oy + ((ly0 + ly1) / 2) * s);
+  const loX = M - ox - lx0 * s, hiX = vp.width - M - ox - lx1 * s;
+  if (loX <= hiX) tx = clamp(tx, loX, hiX);
+  const loY = M - oy - ly0 * s, hiY = vp.height - M - oy - ly1 * s;
+  if (loY <= hiY) ty = clamp(ty, loY, hiY);
+  st.zoom = { scale: s, tx, ty, autoFit: false };
+  fg().applyZoom?.();
+  return true;
+}
 function buildPropsPanel() {
   const body = document.getElementById("propsBody");
   if (!body) return;
@@ -1437,8 +1511,8 @@ function cropFill(axis) {
 function onStageDblClick(e) {
   const st = fg()?.state;
   if (!st || st.view !== "editor" || S.cropMode) return false;
-  if (!st.photos?.length || !S.img) return false;
-  const r = S.img.getBoundingClientRect();
+  if (!st.photos?.length || !stageImg()) return false;
+  const r = stageImg().getBoundingClientRect();
   if (!(e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom)) return false;
   if (freeActive()) {
     if (S.freeSel == null) return false;
@@ -1705,9 +1779,19 @@ function init() {
   ensureOverlay();
 
   // Stage pointer events for selection: clicking empty canvas deselects.
-  const viewport = document.getElementById("viewport");
-  viewport?.addEventListener("pointerdown", (e) => {
-    if (e.target.closest(".handle") || e.target.closest(".crop-rect")) return;
+  // v0.9.4: listen on window (capture) and resolve the element ourselves.
+  // A stale compositor hit test right after heavy updates can report the
+  // document root as the event target, which used to swallow real clicks and
+  // drags entirely; the app's own geometry decides what was pressed instead.
+  window.addEventListener("pointerdown", (e) => {
+    const vp = document.getElementById("viewport");
+    if (!vp) return;
+    const vpr = vp.getBoundingClientRect();
+    if (!vpr.width || !vpr.height) return;
+    if (e.clientX < vpr.left || e.clientX > vpr.right || e.clientY < vpr.top || e.clientY > vpr.bottom) return;
+    const under = document.elementFromPoint(e.clientX, e.clientY) ?? e.target;
+    if (under?.closest?.(".handle") || under?.closest?.(".crop-rect")) return;
+    if (!stageMatchesFrame()) return;
     if (fg()?.state?.mode === "collage" && freeActive()) {
       if (S.cropMode) return;
       const spec = fg().freeSpec();
@@ -1773,6 +1857,7 @@ function init() {
   if (fg()?.state?.mode === "collage" && freeActive()) buildFreeList();
 }
 function hitTest(b, e) {
+  if (!stageMatchesFrame()) return false;
   const r = imgRect();
   if (!r) return false;
   const wrap = document.getElementById("canvasWrap");
@@ -2274,7 +2359,7 @@ function beginFreeDrag(kind, idx, ev) {
   const spec = fg().freeSpec();
   if (!r || !spec) return;
   const item = spec.items[idx];
-  const visible = S.img.getBoundingClientRect();
+  const visible = (stageImg() ?? S.img).getBoundingClientRect();
   S.freeDrag = {
     kind, idx,
     startX: ev.clientX, startY: ev.clientY,
@@ -2486,6 +2571,26 @@ window.__fgEditor = {
   onStageDblClick,
   applyWatermarkSpacing,
   selectFirstText,
+  // v0.9.4: geometry/selection probes + the manual locate fallback.
+  boxes: () => S.boxes,
+  boxFrame: () => (S.boxFrame ? { ...S.boxFrame } : null),
+  stageMatchesFrame: () => stageMatchesFrame(),
+  selection: () => [...S.selected],
+  /// v0.9.4 E2E: boxes under a client point (same hitTest the stage uses).
+  hitAt: (clientX, clientY) => S.boxes.filter((b) => b.type !== "group" && hitTest(b, { clientX, clientY })).map((b) => b.id),
+  /// v0.9.4 E2E: a layer box in client (viewport) pixels for real input events.
+  boxClientRect(id) {
+    const b = boxesById().get(id);
+    const r = imgRect();
+    const img = stageImg();
+    if (!b || !r || !img || !stageMatchesFrame()) return null;
+    const c = canvasToLocal(b, r);
+    const ir = img.getBoundingClientRect();
+    const scale = ir.width / Math.max(1, r.width);
+    return { x: ir.left + c.x * scale, y: ir.top + c.y * scale, w: c.w * scale, h: c.h * scale };
+  },
+  refreshBoxes,
+  locateSelected,
   freeSelection: () => ({ a: S.freeSel, b: S.freeSelB }),
   onTemplateChanged() {
     trace("template-changed", fg()?.state?.templateId);
@@ -2530,15 +2635,19 @@ window.__fgEditor = {
   onStage(img) {
     S.img = img;
     updateExifHint();
-    if (!img) return;
-    const refresh = async () => {
-      await refreshBoxes();
-      drawOverlay();
-    };
-    img.addEventListener("load", refresh, { once: true });
-    refresh();
   },
+  // v0.9.4: boxes refresh once the new frame is actually painted (setStage
+  // keeps the previous frame on screen until then, so refreshing earlier
+  // would briefly describe a frame that is not displayed yet).
+  onStageLoaded: async () => { await refreshBoxes(); drawOverlay(); },
   refresh: async () => { await refreshBoxes(); drawOverlay(); },
+  freeState: () => ({
+    free: !!fg()?.state?.freeCollage,
+    sel: S.freeSel,
+    selB: S.freeSelB,
+    drag: S.freeDrag ? { kind: S.freeDrag.kind, idx: S.freeDrag.idx, startX: S.freeDrag.startX, startY: S.freeDrag.startY } : null,
+    items: (fg()?.freeSpec()?.items ?? []).map((it) => [it.x, it.y, it.w]),
+  }),
   debug: () => ({
     trace: TRACE.slice(-40),
     tplId: fg()?.state?.templateId ?? null,
@@ -2546,6 +2655,7 @@ window.__fgEditor = {
     base: (() => { try { return !!baseTemplate(); } catch (e) { return "ERR " + (e && e.message); } })(),
     boxes: S.boxes.map((b) => b.id),
     stageReady: !!(S.img && S.img.isConnected && S.img === document.querySelector("#canvasWrap img")),
+    stageMatches: stageMatchesFrame(),
     selected: [...S.selected],
     cropMode: S.cropMode,
     history: Object.fromEntries(Object.entries(S.history).map(([k, v]) => [k, { len: v.stack.length, index: v.index }])),

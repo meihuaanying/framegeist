@@ -66,10 +66,10 @@ const PHOTO_C = ABS("templates/assets/test-photos/sample-square.jpg");
 const PHOTO_D = ABS("templates/assets/test-photos/sample-noexif.png");
 
 const WATCHDOG = setTimeout(() => {
-  console.log("WATCHDOG: audit exceeded 15 minutes; results so far:");
+  console.log("WATCHDOG: audit exceeded 18 minutes; results so far:");
   console.log(results.map((r) => `${r.ok ? "PASS" : "FAIL"} ${r.name}`).join("\n"));
   process.exit(3);
-}, 15 * 60 * 1000);
+}, 18 * 60 * 1000);
 const results = [];
 const pageErrors = [];
 const check = (name, ok, detail = "") => {
@@ -79,11 +79,41 @@ const check = (name, ok, detail = "") => {
 
 const CDP_PORT = process.env.FG_CDP_PORT ?? "9223";
 const list = await fetch(`http://127.0.0.1:${CDP_PORT}/json/list`).then((r) => r.json());
-// Prefer the app page (Tauri or the local dev server); ignore Edge dialogs.
-const page =
-  list.find((t) => t.type === "page" && /framegeist|localhost|tauri\.localhost/i.test(t.url)) ??
-  list.find((t) => t.type === "page");
-if (!page) { console.error(`no page target on ${CDP_PORT}`); process.exit(2); }
+/* Prefer the app page (Tauri or the local dev server); ignore Edge dialogs.
+   v0.9.4: headless Edge often keeps several page targets alive (probes navigate
+   their own). Background targets reject Emulation.setDeviceMetricsOverride, and
+   attaching to one left the whole audit in a 360x505 viewport (mass layout
+   FAILs + crash). Probe candidates and keep the first that accepts the
+   1440x900 override; fall back to the first candidate. */
+const candidates = [
+  ...list.filter((t) => t.type === "page" && /framegeist|localhost|tauri\.localhost/i.test(t.url) && !/\/sw\.js(\?|$)/.test(t.url)),
+  ...list.filter((t) => t.type === "page" && !/framegeist|localhost|tauri\.localhost/i.test(t.url) && !/\/sw\.js(\?|$)/.test(t.url)),
+];
+if (!candidates.length) { console.error(`no page target on ${CDP_PORT}`); process.exit(2); }
+let page = candidates[0];
+for (const cand of candidates) {
+  const sock = new WebSocket(cand.webSocketDebuggerUrl);
+  let ok = false;
+  try {
+    let sid = 0;
+    const waiters = new Map();
+    const ssend = (m, p) => new Promise((res) => { const mid = ++sid; waiters.set(mid, res); sock.send(JSON.stringify({ id: mid, method: m, params: p ?? {} })); });
+    sock.onmessage = (e) => {
+      for (const line of String(e.data).split(/\n/)) {
+        try { const j = JSON.parse(line); if (j.id && waiters.has(j.id)) { waiters.get(j.id)(j); waiters.delete(j.id); } } catch { /* ignore */ }
+      }
+    };
+    await new Promise((res, rej) => { sock.onopen = res; sock.onerror = rej; setTimeout(rej, 3000); });
+    await ssend("Runtime.enable");
+    const o = await ssend("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+    if (!o.error) {
+      const r = await ssend("Runtime.evaluate", { expression: "innerWidth", returnByValue: true });
+      ok = r.result?.result?.value === 1440;
+    }
+  } catch { ok = false; }
+  try { sock.close(); } catch { /* ignore */ }
+  if (ok) { page = cand; break; }
+}
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 let id = 0;
 const pending = new Map();
@@ -178,19 +208,114 @@ const inject = async (files, selector = "#fileInput") => {
   }
   throw new Error(`selector ${selector} not found`);
 };
-const waitLabel = async (timeoutMs = 60000, prevLabel = null) => {
-  // With a baseline label we only wait for a NEW result; otherwise wipe the
-  // label first so a stale render cannot satisfy the wait.
-  if (prevLabel == null) await ev(`document.getElementById("stageLabel").textContent = "WAIT"`);
+let lastRenderReq = 0;
+const waitLabel = async (timeoutMs = 60000, _prevLabel = null) => {
+  /* v0.9.4: this used to wipe the label to "WAIT" first. A render triggered by a
+     synchronous `change` event can finish inside that very CDP call, so the wipe
+     landed *after* the fresh label and every such wait burned its whole timeout
+     (that is what pushed run 3 into the 15-minute watchdog). The app now exposes
+     monotonic renderReq/renderDone counters: a render is fresh exactly when a new
+     request exists and renderDone === renderReq. Deterministic, no DOM writes. */
   const t0 = Date.now();
   while (Date.now() - t0 < timeoutMs) {
-    const v = await ev(`document.getElementById("stageLabel").textContent`);
-    if (v && v !== prevLabel && v.includes("ms")) return v;
-    if (v && v !== prevLabel && v.includes("失败")) return v;
-    await new Promise((r) => setTimeout(r, 180));
+    const s = await ev(`(() => { const st = window.__fg?.state ?? {}; return { req: st.renderReq | 0, done: st.renderDone | 0, label: document.getElementById("stageLabel")?.textContent ?? "" }; })()`);
+    // A page reload (theme/locale tests) restarts the page-side counters, so a
+    // stale baseline would wait for a request number that can never arrive
+    // (run 4: the collage wait after the light-theme reload burned 30s + 60s).
+    if (s && s.req < lastRenderReq) lastRenderReq = 0;
+    if (s && s.req > lastRenderReq && s.done === s.req) {
+      lastRenderReq = s.req;
+      return s.label || "DONE";
+    }
+    await new Promise((r) => setTimeout(r, 150));
   }
   return "TIMEOUT";
 };
+
+/* ---- v0.9.4 canvas input helpers ----
+   The audit drives canvas interactions through real CDP input events. Synthetic
+   PointerEvent/MouseEvent dispatch used to be self-consistent with the (wrong)
+   coordinate mapping and therefore could not catch the v0.9.3 stage/box frame
+   mismatch. Input.dispatchMouseEvent goes through the browser's own hit test, so
+   a broken overlay or a stale frame fails the gate. */
+const mouse = (type, x, y, extra = {}) =>
+  sendT("Input.dispatchMouseEvent", { type, x, y, ...extra }, 15000);
+const clickAt = async (x, y) => {
+  await mouse("mouseMoved", x, y, { button: "none", buttons: 0 });
+  await mouse("mousePressed", x, y, { button: "left", buttons: 1, clickCount: 1 });
+  await new Promise((r) => setTimeout(r, 40));
+  await mouse("mouseReleased", x, y, { button: "left", buttons: 0, clickCount: 1 });
+  await new Promise((r) => setTimeout(r, 160));
+};
+const dblClickAt = async (x, y) => {
+  await mouse("mouseMoved", x, y, { button: "none", buttons: 0 });
+  for (const cc of [1, 2]) {
+    await mouse("mousePressed", x, y, { button: "left", buttons: 1, clickCount: cc });
+    await new Promise((r) => setTimeout(r, 30));
+    await mouse("mouseReleased", x, y, { button: "left", buttons: 0, clickCount: cc });
+    await new Promise((r) => setTimeout(r, 40));
+  }
+  await new Promise((r) => setTimeout(r, 200));
+};
+const dragAt = async (x0, y0, x1, y1, steps = 4) => {
+  await mouse("mouseMoved", x0, y0, { button: "none", buttons: 0 });
+  await mouse("mousePressed", x0, y0, { button: "left", buttons: 1, clickCount: 1 });
+  for (let i = 1; i <= steps; i++) {
+    await mouse("mouseMoved", x0 + ((x1 - x0) * i) / steps, y0 + ((y1 - y0) * i) / steps, { button: "left", buttons: 1 });
+    await new Promise((r) => setTimeout(r, 50));
+  }
+  await mouse("mouseReleased", x1, y1, { button: "left", buttons: 0, clickCount: 1 });
+  await new Promise((r) => setTimeout(r, 160));
+};
+/* v0.9.4: the stage is double-buffered; wait until the newest render is painted
+   and the editor boxes describe that exact frame before deriving coordinates. */
+/* Run a real drag and wait for the resulting render to land (new label + painted
+   stage + boxes). Returns false when no new render appeared. */
+const dragAndWait = async (x0, y0, x1, y1, timeoutMs = 20000) => {
+  const prev = await ev(`document.getElementById("stageLabel").textContent`);
+  await dragAt(x0, y0, x1, y1);
+  const label = await waitLabel(timeoutMs, prev);
+  if (label === "TIMEOUT") return false;
+  return waitStage(15000);
+};
+const waitStage = async (timeoutMs = 30000) => {
+  const t0 = Date.now();
+  while (Date.now() - t0 < timeoutMs) {
+    const ok = await ev(`(() => {
+      const st = window.__fg.state;
+      const im = document.querySelector("#canvasWrap img");
+      const f = window.__fgEditor?.boxFrame?.();
+      const painted = st.stageSeq == null || st.stagePainted === st.stageSeq;
+      return !!(painted && im && im.complete && im.naturalWidth > 0 && f && f.w === im.naturalWidth && f.h === im.naturalHeight);
+    })()`);
+    if (ok) return true;
+    await new Promise((r) => setTimeout(r, 150));
+  }
+  return false;
+};
+/* Stage image dimensions once the frame has actually decoded. naturalWidth stays 0 for
+   a moment after the render promise resolves (blob set, decode still pending), so never
+   read it directly right after waitLabel(). */
+const stageDims = async () => await ev(`(async () => {
+  const im = document.querySelector("#canvasWrap img");
+  for (let k = 0; k < 80 && !(im && im.naturalWidth > 0); k++) await new Promise((r) => setTimeout(r, 50));
+  return { w: im?.naturalWidth ?? 0, h: im?.naturalHeight ?? 0 };
+})()`);
+/* Boxes in the frame the editor displays (4-arg wasm API, maxEdge = display cap).
+   Pass 0 for full-resolution geometry assertions that must not depend on the
+   preview cap. Survives page reloads via addScriptToEvaluateOnNewDocument. */
+await send("Page.addScriptToEvaluateOnNewDocument", {
+  source: `window.__fgBoxes = (maxEdge) => {
+    const st = window.__fg.state;
+    const cap = maxEdge == null ? (window.__fg.displayMaxEdge ? window.__fg.displayMaxEdge() : 1600) : maxEdge;
+    return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson(), cap)).boxes;
+  };
+  window.__fgBoxesFrame = (maxEdge) => {
+    const st = window.__fg.state;
+    const cap = maxEdge == null ? (window.__fg.displayMaxEdge ? window.__fg.displayMaxEdge() : 1600) : maxEdge;
+    return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson(), cap)).frame;
+  };`,
+});
 
 /* ---- 0. boot ---- */
 // Warm reload on the clean network path (no stale service worker cache;
@@ -363,8 +488,8 @@ await shot("01-frame-dark-24mp");
 /* ---- 5. aspect override ---- */
 await ev(`document.getElementById("aspectSelect").value = "1:1"; document.getElementById("aspectSelect").dispatchEvent(new Event("change"))`);
 let l2 = await waitLabel(30000);
-const dims = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return [i.naturalWidth, i.naturalHeight]; })()`);
-check("aspect 1:1", dims && Math.abs(dims[0] - dims[1]) <= 2, JSON.stringify(dims));
+const dims0 = await stageDims();
+check("aspect 1:1", dims0.w > 0 && Math.abs(dims0.w - dims0.h) <= 2, JSON.stringify([dims0.w, dims0.h]));
 await ev(`document.getElementById("aspectSelect").value = "original"; document.getElementById("aspectSelect").dispatchEvent(new Event("change"))`);
 await waitLabel(30000);
 
@@ -837,47 +962,42 @@ await ev(`(async () => {
   check("editor: redo re-applies nudge", Math.abs(r.x3 - r.x1) < 0.0005, JSON.stringify(r));
 }
 
-/* 28. v0.5 editor: drag with snapping + commit */
+/* 28. v0.5 editor: drag with snapping + commit (v0.9.4: real CDP input) */
 {
-  const r = await ev(`(async () => {
+  const r = await ev(`(() => {
     const img = document.querySelector("#canvasWrap img");
-    const ov = document.querySelector(".edit-overlay");
-    const st = window.__fg.state;
-    if (!img || !ov) return { error: "no stage" };
-    const ready = async (ms) => {
-      const t0 = Date.now();
-      while (Date.now() - t0 < ms) {
-        if (img.complete && img.naturalWidth > 0 && ov.getBoundingClientRect().width > 10) return true;
-        await new Promise((r) => setTimeout(r, 100));
-      }
-      return false;
-    };
-    if (!(await ready(4000))) return { error: "stage not ready" };
+    if (!img) return { error: "no stage" };
     const row = document.querySelector("#layerList .layer-row.on") || document.querySelector("#layerList .layer-row");
     row.click();
     const id = row.dataset.id;
-    const rect = ov.getBoundingClientRect();
-    const boxes = JSON.parse(window.__fg.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
-    const b = boxes.find((x) => x.id === id);
-    if (!b) return { error: "no box" };
-    const sx = rect.left + ((b.x + b.w / 2) / img.naturalWidth) * rect.width;
-    const sy = rect.top + ((b.y + b.h / 2) / img.naturalHeight) * rect.height;
-    const tx = rect.left + rect.width / 2;
-    const ty = rect.top + rect.height / 2;
-    const viewport = document.getElementById("viewport");
-    viewport.dispatchEvent(new PointerEvent("pointerdown", { clientX: sx, clientY: sy, bubbles: true, button: 0, buttons: 1, cancelable: true }));
-    window.dispatchEvent(new PointerEvent("pointermove", { clientX: tx, clientY: ty, bubbles: true, buttons: 1 }));
-    window.dispatchEvent(new PointerEvent("pointerup", { clientX: tx, clientY: ty, bubbles: true }));
-    await new Promise((r) => setTimeout(r, 700));
-    const boxes2 = JSON.parse(window.__fg.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
-    const b2 = boxes2.find((x) => x.id === id);
-    return { cx: b2.x + b2.w / 2, cy: b2.y + b2.h / 2, W: img.naturalWidth, H: img.naturalHeight };
+    const f = window.__fgEditor.boxFrame();
+    const b = window.__fgBoxes().find((x) => x.id === id);
+    if (!b || !f) return { error: "no box" };
+    const rect = img.getBoundingClientRect();
+    return {
+      id,
+      sx: rect.left + ((b.x + b.w / 2) / f.w) * rect.width,
+      sy: rect.top + ((b.y + b.h / 2) / f.h) * rect.height,
+      tx: rect.left + rect.width / 2,
+      ty: rect.top + rect.height / 2,
+      W: f.w, H: f.h,
+    };
   })()`);
   if (r?.error) console.log("PROBE-WARN:", r.error);
+  let drag = null;
+  if (r && !r.error) {
+    const labelBefore = await ev(`document.getElementById("stageLabel").textContent`);
+    await dragAt(r.sx, r.sy, r.tx, r.ty);
+    await waitLabel(30000, labelBefore);
+    drag = await ev(`(() => {
+      const b = window.__fgBoxes().find((x) => x.id === ${JSON.stringify(r?.id ?? "")});
+      return b ? { cx: b.x + b.w / 2, cy: b.y + b.h / 2 } : null;
+    })()`);
+  }
   check(
     "editor: drag snaps layer to canvas center",
-    !!r && !r.error && Math.abs(r.cx - r.W / 2) < 5 && Math.abs(r.cy - r.H / 2) < 5,
-    JSON.stringify(r),
+    !!r && !r.error && !!drag && Math.abs(drag.cx - r.W / 2) < 5 && Math.abs(drag.cy - r.H / 2) < 5,
+    JSON.stringify({ ...r, drag }),
   );
 }
 
@@ -977,11 +1097,11 @@ await ev(`(async () => {
   const n = await ev(`(async () => {
     try {
       const st = window.__fg.state;
-      const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
-      return boxes.length;
+      const r = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson(), 1600));
+      return { n: r.boxes.length, frame: r.frame, capped: r.frame[0] <= 1600 && r.frame[1] <= 1600 };
     } catch (e) { return "ERR " + (e && (e.message || e.toString())); }
   })()`);
-  check("wasm: layer_boxes returns boxes", typeof n === "number" && n >= 2, String(n));
+  check("wasm: layer_boxes returns boxes + frame (v0.9.4 4-arg API)", typeof n === "object" && n.n >= 2 && Array.isArray(n.frame) && n.frame[0] > 0 && n.frame[1] > 0 && n.capped === true, JSON.stringify(n));
 }
 
 /* 35. v0.5 engine: stroke paints a ring (pixel assertion) */
@@ -1127,27 +1247,52 @@ await ev(`(async () => {
     JSON.stringify(boxes),
   );
 
-  const drag = await ev(`(async () => {
+  // v0.9.4: the viewport hit test grabs the TOPMOST item under the cursor, so
+  // drag the last (topmost) overlay box and detect which item actually moved.
+  const dragPrep = await ev(`(() => {
     const s = window.__fg.freeSpec();
-    const box = document.querySelector(".edit-overlay .box");
+    const all = [...document.querySelectorAll(".edit-overlay .box")];
+    const box = all[all.length - 1];
+    if (!box || !s?.items?.length) return { error: "no free item" };
     const br = box.getBoundingClientRect();
-    const cx = br.left + br.width / 2;
-    const cy = br.top + br.height / 2;
     const wrap = document.getElementById("canvasWrap");
     const wr = wrap.getBoundingClientRect();
     const scale = wr.width / wrap.offsetWidth;
-    const x0 = s.items[0].x, y0 = s.items[0].y;
-    document.getElementById("viewport").dispatchEvent(new PointerEvent("pointerdown", { clientX: cx, clientY: cy, bubbles: true, cancelable: true, pointerId: 1 }));
-    window.dispatchEvent(new PointerEvent("pointermove", { clientX: cx + 64 * scale, clientY: cy + 32 * scale, bubbles: true, cancelable: true, pointerId: 1 }));
-    window.dispatchEvent(new PointerEvent("pointerup", { clientX: cx + 64 * scale, clientY: cy + 32 * scale, bubbles: true, pointerId: 1 }));
-    await new Promise((r) => setTimeout(r, 400));
-    const nx = window.__fg.freeSpec().items[0].x, ny = window.__fg.freeSpec().items[0].y;
-    return { dx: +(nx - x0).toFixed(4), dy: +(ny - y0).toFixed(4) };
+    const cx = br.left + br.width / 2, cy = br.top + br.height / 2;
+    const vpr = document.getElementById("viewport").getBoundingClientRect();
+    return {
+      cx, cy, dx: 64 * scale, dy: 32 * scale,
+      win: [innerWidth, innerHeight],
+      vp: [Math.round(vpr.left), Math.round(vpr.top), Math.round(vpr.width), Math.round(vpr.height)],
+      box: [Math.round(br.left), Math.round(br.top), Math.round(br.width), Math.round(br.height)],
+      zoom: window.__fg.state.zoom,
+      sel: window.__fgEditor.selection(),
+      hit: window.__fgEditor.hitAt(cx, cy),
+      before: s.items.map((it) => [it.x, it.y]),
+    };
   })()`);
+  let drag = null;
+  if (dragPrep && !dragPrep.error) {
+    await dragAt(dragPrep.cx, dragPrep.cy, dragPrep.cx + dragPrep.dx, dragPrep.cy + dragPrep.dy);
+    drag = await ev(`(() => {
+      const s = window.__fg.freeSpec();
+      const before = ${JSON.stringify(dragPrep.before ?? [])};
+      let best = null;
+      s.items.forEach((it, i) => {
+        const b = before[i];
+        if (!b) return;
+        const d = Math.hypot(it.x - b[0], it.y - b[1]);
+        if (!best || d > best.d) best = { i, d: +d.toFixed(4), dx: +(it.x - b[0]).toFixed(4), dy: +(it.y - b[1]).toFixed(4) };
+      });
+      return best;
+    })()`);
+  } else if (dragPrep?.error) {
+    console.log("PROBE-WARN:", dragPrep.error);
+  }
   check(
     "free collage: drag moves item (64/32 canvas px)",
-    Math.abs(drag.dx - 0.04) < 0.005 && Math.abs(drag.dy - 0.027) < 0.006,
-    JSON.stringify(drag),
+    !!drag && Math.abs(drag.dx - 0.04) < 0.005 && Math.abs(drag.dy - 0.027) < 0.006,
+    JSON.stringify({ ...(drag ?? {}), prep: dragPrep && { cx: dragPrep.cx, cy: dragPrep.cy, dx: dragPrep.dx, dy: dragPrep.dy, win: dragPrep.win, vp: dragPrep.vp, box: dragPrep.box, zoom: dragPrep.zoom, sel: dragPrep.sel, hit: dragPrep.hit, err: dragPrep.error } }),
   );
 
   const addDel = await ev(`(async () => {
@@ -1300,7 +1445,7 @@ await ev(`(async () => {
       for (const b of list) { if (b.id === id) return b; for (const c of b.children ?? []) if (c.id === id) return c; }
       return null;
     };
-    const getBoxes = () => JSON.parse(window.__fg.engine.layer_boxes(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const getBoxes = () => window.__fgBoxes();
     const rows = [...document.querySelectorAll("#layerList .layer-row")];
     const top = rows.filter((x) => !x.querySelector(".indent"));
     if (top.length < 2) return { error: "need 2 top-level layers" };
@@ -1336,7 +1481,7 @@ await ev(`(async () => {
 {
   const r = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    const boxes = () => JSON.parse(window.__fg.engine.layer_boxes(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const boxes = () => window.__fgBoxes();
     const boxOf = (list, id) => list.find((b) => b.id === id) ?? null;
     document.getElementById("addText").click();
     await sleep(150);
@@ -1378,51 +1523,50 @@ await ev(`(async () => {
   check("editor: distribute equalizes gaps", !!r && r.gaps?.length === 2 && Math.abs(r.gaps[0] - r.gaps[1]) < 1.5, JSON.stringify(r));
 }
 
-/* 45. crop: double-click enters, fill width/height set the override */
+/* 45. crop: double-click enters, fill width/height set the override (real input) */
 {
-  const r = await ev(`(async () => {
+  const prep = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(120); }
     document.getElementById("cropReset").click();
     await sleep(300);
-    const stageImg = async () => {
-      for (let i = 0; i < 40; i++) {
-        const img = document.querySelector("#canvasWrap img");
-        if (img && img.complete && img.naturalWidth > 0 && img.getBoundingClientRect().width > 0) return img;
-        await sleep(150);
-      }
-      return document.querySelector("#canvasWrap img");
-    };
-    const img = await stageImg();
-    if (!img) return { error: "no stage img" };
-    const dbl = () => {
-      const rect = img.getBoundingClientRect();
-      document.getElementById("viewport").dispatchEvent(new MouseEvent("dblclick", {
-        clientX: rect.left + rect.width / 2, clientY: rect.top + rect.height / 2, bubbles: true, cancelable: true,
-      }));
-    };
-    dbl();
-    await sleep(200);
-    let entered = window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect");
-    if (!entered) {
-      if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(150); }
-      dbl();
-      await sleep(250);
-      entered = window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect");
+    let img = null;
+    for (let i = 0; i < 40; i++) {
+      const el = document.querySelector("#canvasWrap img");
+      if (el && el.complete && el.naturalWidth > 0 && el.getBoundingClientRect().width > 0) { img = el; break; }
+      await sleep(150);
     }
-    if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(120); }
-    const ui = () => JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId] ?? {};
-    document.getElementById("cropFillW").click();
-    await sleep(250);
-    const cropW = ui().crop ?? null;
-    const ovW = JSON.parse(window.__fg.buildOverridesJson() || "{}").crop ?? null;
-    document.getElementById("cropFillH").click();
-    await sleep(250);
-    const cropH = ui().crop ?? null;
-    document.getElementById("cropReset").click();
-    return { entered, cropW, cropH, ovW };
+    if (!img) return { error: "no stage img" };
+    const rect = img.getBoundingClientRect();
+    return { cx: rect.left + rect.width / 2, cy: rect.top + rect.height / 2 };
   })()`);
-  if (r?.error) console.log("PROBE-WARN:", r.error);
+  let r = null;
+  if (prep && !prep.error) {
+    await dblClickAt(prep.cx, prep.cy);
+    let entered = await ev(`window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect")`);
+    if (!entered) {
+      await ev(`(async () => { const sleep = (ms) => new Promise((r) => setTimeout(r, ms)); if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(150); } })()`);
+      await dblClickAt(prep.cx, prep.cy);
+      entered = await ev(`window.__fgEditor.debug().cropMode === true && !!document.querySelector(".edit-overlay .crop-rect")`);
+    }
+    const fills = await ev(`(async () => {
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      if (window.__fgEditor.debug().cropMode) { document.getElementById("cropToggle").click(); await sleep(120); }
+      const ui = () => JSON.parse(localStorage.getItem("fg-tpl-ui-v1") || "{}")[window.__fg.state.templateId] ?? {};
+      document.getElementById("cropFillW").click();
+      await sleep(250);
+      const cropW = ui().crop ?? null;
+      const ovW = JSON.parse(window.__fg.buildOverridesJson() || "{}").crop ?? null;
+      document.getElementById("cropFillH").click();
+      await sleep(250);
+      const cropH = ui().crop ?? null;
+      document.getElementById("cropReset").click();
+      return { cropW, cropH, ovW };
+    })()`);
+    r = { entered, ...(fills ?? {}) };
+  } else if (prep?.error) {
+    console.log("PROBE-WARN:", prep.error);
+  }
   check("editor: double-click on the photo enters crop", r?.entered === true, JSON.stringify(r).slice(0, 160));
   check("editor: crop fill-width sets w=1 (override + ui)", !!r?.cropW && Math.abs(r.cropW.w - 1) < 0.001 && Math.abs(r.cropW.x) < 0.001 && Math.abs(r.ovW?.w - 1) < 0.001, JSON.stringify(r?.cropW));
   check("editor: crop fill-height sets h=1", !!r?.cropH && Math.abs(r.cropH.h - 1) < 0.001 && Math.abs(r.cropH.y) < 0.001, JSON.stringify(r?.cropH));
@@ -1535,22 +1679,24 @@ const hexRgb = (h) => {
 
 /* 49. background eyedropper (canvas -> solid color) */
 {
-  const r = await ev(`(async () => {
+  const prep = await ev(`(() => {
     const btn = document.getElementById("bgEyedropper");
     btn.click();
     const active = btn.classList.contains("on") && document.getElementById("viewport").classList.contains("eyedropper");
     const hint = !document.getElementById("eyedropperHint").classList.contains("hidden");
     const img = document.querySelector("#canvasWrap img");
     const rect = img.getBoundingClientRect();
-    document.getElementById("viewport").dispatchEvent(new MouseEvent("click", {
-      clientX: rect.left + rect.width * 0.5, clientY: rect.top + rect.height * 0.995, bubbles: true, cancelable: true,
-    }));
-    await new Promise((x) => setTimeout(x, 500));
-    const s = JSON.parse(localStorage.getItem("fg-settings-v1") || "{}");
-    return { active, hint, bg: s.bgColor, off: !btn.classList.contains("on") };
+    return { active, hint, x: rect.left + rect.width * 0.5, y: rect.top + rect.height * 0.995 };
   })()`);
-  check("bg: eyedropper toggles on with hint", r?.active === true && r?.hint === true, JSON.stringify(r));
-  check("bg: eyedropper samples the rendered pixel", r?.off === true && dist(hexRgb(r?.bg), [0xd9, 0xc7, 0xa7]) < 40, JSON.stringify(r));
+  if (prep) await clickAt(prep.x, prep.y);
+  const r = await ev(`(async () => {
+    await new Promise((x) => setTimeout(x, 300));
+    const s = JSON.parse(localStorage.getItem("fg-settings-v1") || "{}");
+    return { bg: s.bgColor, off: !document.getElementById("bgEyedropper").classList.contains("on") };
+  })()`);
+  const merged = { ...prep, ...r };
+  check("bg: eyedropper toggles on with hint", merged?.active === true && merged?.hint === true, JSON.stringify(merged));
+  check("bg: eyedropper samples the rendered pixel", merged?.off === true && dist(hexRgb(merged?.bg), [0xd9, 0xc7, 0xa7]) < 40, JSON.stringify(merged));
   const esc = await ev(`(() => {
     const btn = document.getElementById("bgEyedropper");
     btn.click();
@@ -1562,11 +1708,11 @@ const hexRgb = (h) => {
 
 /* 50. canvas margin override */
 {
-  const before = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return { w: i.naturalWidth, h: i.naturalHeight }; })()`);
+  const before = await stageDims();
   await ev(`(() => { const r = document.getElementById("marginRange"); r.value = "0.15"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
   await waitLabel(30000);
   const ov = await ev(`JSON.parse(window.__fg.buildOverridesJson() || "{}").margin`);
-  const after = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return { w: i.naturalWidth, h: i.naturalHeight }; })()`);
+  const after = await stageDims();
   const bg = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1") || "{}").bgColor`);
   const corner = await ev(SAMPLE_PX(0.004, 0.004));
   check("margin: slider reaches overrides (0.15)", ov === 0.15, String(ov));
@@ -1574,7 +1720,7 @@ const hexRgb = (h) => {
   check("margin: new margin area samples the background", dist(corner, hexRgb(bg)) < 24, `${JSON.stringify(corner)} vs ${bg}`);
   await ev(`(() => { const r = document.getElementById("marginRange"); r.value = "0"; r.dispatchEvent(new Event("input")); r.dispatchEvent(new Event("change")); })()`);
   await waitLabel(30000);
-  const restored = await ev(`(() => { const i = document.querySelector("#canvasWrap img"); return { w: i.naturalWidth, h: i.naturalHeight }; })()`);
+  const restored = await stageDims();
   check("margin: reset restores margin 0 dimensions", restored.w === before.w && restored.h === before.h, `${restored.w}x${restored.h}`);
 }
 
@@ -1737,7 +1883,7 @@ const hexRgb = (h) => {
 
 /* 57. free collage: per-image crop targets the selected item */
 {
-  const r = await ev(`(async () => {
+  const prep = await ev(`(async () => {
     const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
     document.querySelector("#freeList .layer-row").click();
     await sleep(150);
@@ -1747,13 +1893,12 @@ const hexRgb = (h) => {
     await sleep(200);
     const rectEl = document.querySelector(".edit-overlay .crop-rect");
     const rectDrawn = !!rectEl;
-    if (rectEl) {
-      const br = rectEl.getBoundingClientRect();
-      const cx = br.left + br.width / 2, cy = br.top + br.height / 2;
-      rectEl.dispatchEvent(new PointerEvent("pointerdown", { clientX: cx, clientY: cy, bubbles: true, cancelable: true, pointerId: 11 }));
-      window.dispatchEvent(new PointerEvent("pointermove", { clientX: cx + 40, clientY: cy + 30, bubbles: true, pointerId: 11 }));
-      window.dispatchEvent(new PointerEvent("pointerup", { clientX: cx + 40, clientY: cy + 30, bubbles: true, pointerId: 11 }));
-    }
+    const br = rectEl?.getBoundingClientRect();
+    return { cardVisible, rectDrawn, before, pt: br ? { x: br.left + br.width / 2, y: br.top + br.height / 2 } : null };
+  })()`);
+  if (prep?.pt) await dragAt(prep.pt.x, prep.pt.y, prep.pt.x + 40, prep.pt.y + 30);
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
     await sleep(900);
     const crop = window.__fg.freeSpec().items[0].crop ?? null;
     const after = ${RENDER_HASH};
@@ -1762,16 +1907,17 @@ const hexRgb = (h) => {
     const cleared = window.__fg.freeSpec().items[0].crop ?? null;
     if (window.__fgEditor.debug().cropMode) document.getElementById("cropToggle").click();
     await sleep(150);
-    return { cardVisible, rectDrawn, crop, changed: before !== after, before, after, cleared };
+    return { crop, changed: null, after, cleared };
   })()`);
-  check("free collage: crop card available + overlay targets the item", r?.cardVisible === true && r?.rectDrawn === true, JSON.stringify(r).slice(0, 160));
+  const merged = { ...prep, ...r, changed: prep?.before != null && r?.after != null && prep.before !== r.after };
+  check("free collage: crop card available + overlay targets the item", merged?.cardVisible === true && merged?.rectDrawn === true, JSON.stringify(merged).slice(0, 160));
   check(
     "free collage: crop overlay drag writes a partial item crop",
-    !!r?.crop && r.crop.x > 0.09 && r.crop.y > 0.09 && r.crop.w < 0.999 && r.crop.h < 0.999,
-    JSON.stringify(r?.crop),
+    !!merged?.crop && merged.crop.x > 0.09 && merged.crop.y > 0.09 && merged.crop.w < 0.999 && merged.crop.h < 0.999,
+    JSON.stringify(merged?.crop),
   );
-  check("free collage: item crop changes rendered pixels", r?.changed === true, `${r?.before} -> ${r?.after}`);
-  check("free collage: crop reset clears the item crop", r?.cleared == null, JSON.stringify(r?.cleared));
+  check("free collage: item crop changes rendered pixels", merged?.changed === true, `${merged?.before} -> ${merged?.after}`);
+  check("free collage: crop reset clears the item crop", merged?.cleared == null, JSON.stringify(merged?.cleared));
 }
 
 /* ================= v0.5.0 M6 parity UI: watermark / insert / fuji / calendar ================= */
@@ -1835,7 +1981,7 @@ const hexRgb = (h) => {
     }
     if (row) { row.click(); await sleep(150); }
     const stored = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId] ?? "";
-    const boxes = JSON.parse(window.__fg.state.engine.layer_boxes(window.__fg.state.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const boxes = window.__fgBoxes();
     const box = row ? boxes.find((b) => b.id === row.dataset.id) ?? null : null;
     return { id: row?.dataset.id ?? null, hasAsset: stored.includes("@user/insert"), box, props: !!document.querySelector("#propsBody .props-grid") };
   })()`);
@@ -1844,44 +1990,54 @@ const hexRgb = (h) => {
   check("insert: image layer added with a @user asset", r?.id != null && r?.hasAsset === true, JSON.stringify(r).slice(0, 160));
   check("insert: image layer renders + is selectable", r?.box != null && r?.props === true, JSON.stringify(r?.box));
   check("insert: inserted image changes pixels", before !== after, `${before} -> ${after}`);
-  const drag = await ev(`(async () => {
-    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
-    const st = window.__fg.state;
+  const dragPrep = await ev(`(() => {
     const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => (x.dataset.id ?? "").startsWith("image-") && x.dataset.type === "image");
     if (!row) return { error: "no image row" };
     row.click();
     const id = row.dataset.id;
-    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson()));
+    const boxes = window.__fgBoxes();
     const b = boxes.find((x) => x.id === id);
     const img = document.querySelector("#canvasWrap img");
-    const ov = document.querySelector(".edit-overlay");
-    if (!b || !img || !ov) return { error: "no box/stage" };
-    const rect = ov.getBoundingClientRect();
+    const f = window.__fgEditor.boxFrame();
+    if (!b || !img || !f) return { error: "no box/stage" };
+    const rect = img.getBoundingClientRect();
     // The inserted image overlaps watermark text boxes; find a point owned only
     // by the image so the hit test picks it.
     const others = boxes.filter((x) => x.id !== id && x.type !== "group");
     const inside = (o, px, py) => px >= o.x && px <= o.x + o.w && py >= o.y && py <= o.y + o.h;
+    // v0.9.4: the selected layer draws 24px screen-space handles on its edges —
+    // stay >= 30 screen px inside the box so the drag starts as a move, not a scale.
+    const padX = (30 / rect.width) * f.w;
+    const padY = (30 / rect.height) * f.h;
+    const ix0 = b.x + padX, ix1 = b.x + b.w - padX;
+    const iy0 = b.y + padY, iy1 = b.y + b.h - padY;
     let pt = null;
-    for (let gy = 0; gy <= 12 && !pt; gy++) {
-      for (let gx = 1; gx < 20 && !pt; gx++) {
-        const px = b.x + (b.w * gx) / 20;
-        const py = b.y + (b.h * gy) / 12;
-        if (!others.some((o) => inside(o, px, py))) pt = { x: px, y: py };
+    if (ix1 > ix0 && iy1 > iy0) {
+      for (let gy = 0; gy <= 8 && !pt; gy++) {
+        for (let gx = 0; gx <= 8 && !pt; gx++) {
+          const px = ix0 + ((ix1 - ix0) * gx) / 8;
+          const py = iy0 + ((iy1 - iy0) * gy) / 8;
+          if (!others.some((o) => inside(o, px, py))) pt = { x: px, y: py };
+        }
       }
     }
-    if (!pt) pt = { x: b.x + 4, y: b.y + 4 };
-    const sx = rect.left + (pt.x / img.naturalWidth) * rect.width;
-    const sy = rect.top + (pt.y / img.naturalHeight) * rect.height;
-    document.getElementById("viewport").dispatchEvent(new PointerEvent("pointerdown", { clientX: sx, clientY: sy, bubbles: true, cancelable: true, button: 0, buttons: 1 }));
-    window.dispatchEvent(new PointerEvent("pointermove", { clientX: sx + 40, clientY: sy + 20, bubbles: true, buttons: 1 }));
-    window.dispatchEvent(new PointerEvent("pointerup", { clientX: sx + 40, clientY: sy + 20, bubbles: true }));
-    await sleep(500);
-    const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[st.templateId] ?? "{}";
-    const layer = (JSON.parse(raw).layers ?? []).find((l) => l.id === id);
-    return { ox: layer?.offset?.x ?? 0, oy: layer?.offset?.y ?? 0 };
+    if (!pt) pt = { x: b.x + b.w / 2, y: b.y + b.h / 2 };
+    return { id, sx: rect.left + (pt.x / f.w) * rect.width, sy: rect.top + (pt.y / f.h) * rect.height };
   })()`);
-  if (drag?.error) console.log("PROBE-WARN:", drag.error);
-  check("insert: inserted image drags on the stage", !!drag && !drag.error && (Math.abs(drag.ox) > 0.005 || Math.abs(drag.oy) > 0.005), JSON.stringify(drag));
+  let drag = null;
+  if (dragPrep && !dragPrep.error) {
+    await dragAt(dragPrep.sx, dragPrep.sy, dragPrep.sx + 40, dragPrep.sy + 20);
+    await new Promise((r) => setTimeout(r, 500));
+    drag = await ev(`(() => {
+      const st = window.__fg.state;
+      const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[st.templateId] ?? "{}";
+      const layer = (JSON.parse(raw).layers ?? []).find((l) => l.id === ${JSON.stringify(dragPrep.id)});
+      return { ox: layer?.offset?.x ?? 0, oy: layer?.offset?.y ?? 0 };
+    })()`);
+  } else if (dragPrep?.error) {
+    console.log("PROBE-WARN:", dragPrep.error);
+  }
+  check("insert: inserted image drags on the stage", !!drag && (Math.abs(drag.ox) > 0.005 || Math.abs(drag.oy) > 0.005), JSON.stringify(drag));
 }
 
 /* 60. EXIF: Fuji recipe group only shows present keys */
@@ -2704,7 +2860,7 @@ let EXIF_TEXT_ID = null;
     await fg.useTemplate("classic-watermark-single-row");
     await sleep(800);
     const st = fg.state;
-    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson()));
+    const boxes = window.__fgBoxes(0);
     const bmp = await createImageBitmap(new Blob([st.photos[0].bytes]));
     const badge = boxes.find((b) => b.id === "brandmark");
     const ratio = badge ? badge.h / bmp.height : 0;
@@ -2714,78 +2870,55 @@ let EXIF_TEXT_ID = null;
   })()`);
   check("v0.9 size: badge layers render at >= 6% photo height", (ed?.ratio ?? 0) >= 0.057, JSON.stringify(ed));
 
-  const inter = await ev(`(async () => {
+  const sel = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const fg = window.__fg;
-    const layerFont = () => {
-      const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"];
-      const t = raw ? JSON.parse(raw) : fg.currentTemplateObject();
-      const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } };
-      return find(t.layers)?.font?.size ?? null;
-    };
-    // select via the layer list (auto-pan should bring it into view)
+    // v0.9.4: selecting via the layer list must not pan the stage (auto-pan removed).
+    const zoom0 = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty, scale: fg.state.zoom.scale };
     [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
     await sleep(500);
+    const zoom1 = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty, scale: fg.state.zoom.scale };
     const handles = [...document.querySelectorAll(".edit-overlay .handle")].map((h) => { const r = h.getBoundingClientRect(); return { kind: h.dataset.kind, corner: h.dataset.corner ?? null, w: Math.round(r.width), h: Math.round(r.height), x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
     const corners = handles.filter((h) => h.kind === "scale").map((h) => h.corner).sort().join(",");
     const toolbar = [...document.querySelectorAll(".sel-toolbar button")].map((b) => b.dataset.act).join(",");
     const handleHit = handles.every((h) => h.w >= 24 && h.h >= 24);
     const inView = handles.every((h) => h.x > 0 && h.y > 0 && h.x < window.innerWidth && h.y < window.innerHeight);
-    // drag move
-    const boxOf = () => { const st = fg.state; return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson())).find((b) => b.id === "model"); };
-    const b0 = boxOf();
+    const b0 = window.__fgBoxes().find((b) => b.id === "model");
     const img = document.querySelector("#canvasWrap img");
     const r = img.getBoundingClientRect();
-    const toClient = (b) => ({ x: r.left + ((b.x + b.w / 2) / img.naturalWidth) * r.width, y: r.top + ((b.y + b.h / 2) / img.naturalHeight) * r.height });
-    const c0 = toClient(b0);
-    const vp = document.getElementById("viewport");
-    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 71, isPrimary: true });
-    const pm = (x, y) => new PointerEvent("pointermove", { clientX: x, clientY: y, bubbles: true, buttons: 1, pointerId: 71, isPrimary: true });
-    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 71, isPrimary: true });
-    vp.dispatchEvent(pd(c0.x, c0.y));
-    window.dispatchEvent(pm(c0.x + 40, c0.y - 20));
-    window.dispatchEvent(pu(c0.x + 40, c0.y - 20));
-    await sleep(700);
-    const b1 = boxOf();
-    const moved = Math.hypot(b1.x - b0.x, b1.y - b0.y) > 5;
-    // corner scale changes the font size (dispatch on the handle itself)
-    const font0 = layerFont();
-    const waitHandle = async (sel, ms = 8000) => {
-      for (let i = 0; i < Math.ceil(ms / 100); i++) {
-        const el = document.querySelector(sel);
-        if (el) return el;
-        await sleep(100);
-      }
-      return null;
+    const c0 = { x: r.left + ((b0.x + b0.w / 2) / img.naturalWidth) * r.width, y: r.top + ((b0.y + b0.h / 2) / img.naturalHeight) * r.height };
+    const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } };
+    const layerFont = () => {
+      const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"];
+      const t = raw ? JSON.parse(raw) : fg.currentTemplateObject();
+      return find(t.layers)?.font?.size ?? null;
     };
-    const seEl = await waitHandle(".edit-overlay .handle.h-se");
-    const h2 = seEl?.getBoundingClientRect();
-    const se2 = h2 ? { x: h2.x + h2.width / 2, y: h2.y + h2.height / 2 } : handles.find((h) => h.corner === "se");
-    const diag = { seRect: h2 ? { x: Math.round(h2.x), y: Math.round(h2.y) } : null, selected: window.__fgEditor.debug().selected, at: null };
-    if (h2) diag.at = (() => { const el = document.elementFromPoint(se2.x, se2.y); return el ? String(el.className || el.tagName).slice(0, 40) : null; })();
-    try {
-      seEl?.dispatchEvent(pd(se2.x, se2.y));
-      window.dispatchEvent(pm(se2.x + 50, se2.y + 30));
-      window.dispatchEvent(pu(se2.x + 50, se2.y + 30));
-    } catch (err) {
-      diag.err = String(err).slice(0, 80);
-    }
-    await sleep(900);
-    const font1 = layerFont();
-    // rotate
-    const rot0 = (() => { const t = fg.currentTemplateObject(); const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return find(t.layers)?.rotation ?? 0; })();
-    const rotEl = await waitHandle(".edit-overlay .handle.rot");
-    if (rotEl) {
-      const rr = rotEl.getBoundingClientRect();
-      const rx = rr.x + rr.width / 2, ry = rr.y + rr.height / 2;
-      rotEl.dispatchEvent(pd(rx, ry));
-      window.dispatchEvent(pm(rx + 30, ry + 20));
-      window.dispatchEvent(pu(rx + 30, ry + 20));
-      await sleep(900);
-    }
-    const readRot = () => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.rotation ?? 0 : 0; };
-    const rot1 = readRot();
-    // shift multi-select
+    return {
+      corners, toolbar, handleHit, inView,
+      noPan: zoom0.tx === zoom1.tx && zoom0.ty === zoom1.ty && zoom0.scale === zoom1.scale,
+      c0, b0: { x: b0.x, y: b0.y },
+      font0: layerFont(),
+      rot0: find(fg.currentTemplateObject().layers)?.rotation ?? 0,
+    };
+  })()`);
+  // real input: move drag, then corner scale, then rotate (fresh handle rects each time)
+  if (sel?.c0) await dragAndWait(sel.c0.x, sel.c0.y, sel.c0.x + 40, sel.c0.y - 20);
+  const afterMove = await ev(`(() => { const b = window.__fgBoxes().find((x) => x.id === "model"); return b ? { x: b.x, y: b.y } : null; })()`);
+  const se2 = await ev(`(() => { const el = document.querySelector(".edit-overlay .handle.h-se"); if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; })()`);
+  if (se2) await dragAndWait(se2.x, se2.y, se2.x + 50, se2.y + 30);
+  const font1 = await ev(`(() => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.font?.size ?? null : null; })()`);
+  const rot2 = await ev(`(() => { const el = document.querySelector(".edit-overlay .handle.rot"); if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; })()`);
+  if (rot2) await dragAndWait(rot2.x, rot2.y, rot2.x + 30, rot2.y + 20);
+  const rot1 = await ev(`(() => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.rotation ?? 0 : 0; })()`);
+  const inter0 = {
+    corners: sel?.corners, toolbar: sel?.toolbar, handleHit: sel?.handleHit, inView: sel?.inView, noPan: sel?.noPan,
+    moved: !!afterMove && !!sel?.b0 && Math.hypot(afterMove.x - sel.b0.x, afterMove.y - sel.b0.y) > 5,
+    font0: sel?.font0, font1, rot0: sel?.rot0, rot1,
+  };
+  const rest = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const fg = window.__fg;
+    // shift multi-select (layer list rows are plain DOM controls)
     const rows = [...document.querySelectorAll("#layerList .layer-row")];
     rows[0]?.click();
     rows[1]?.dispatchEvent(new MouseEvent("click", { bubbles: true, shiftKey: true }));
@@ -2816,17 +2949,40 @@ let EXIF_TEXT_ID = null;
     zoomDiag.label = zoomLabel;
     document.getElementById("zoomFit")?.click();
     await sleep(300);
-    return { corners, toolbar, handleHit, inView, moved, font0, font1, rot0, rot1, multi, before, afterDel, afterUndo, zoomLabel, stageSize, diag, zoomDiag };
+    return { multi, before, afterDel, afterUndo, zoomLabel, stageSize, zoomDiag };
   })()`);
+  const inter = { ...inter0, ...(rest ?? {}) };
+  check("v0.9 canvas: selecting via the layer list does not pan the stage", inter?.noPan === true, JSON.stringify({ noPan: inter?.noPan }));
   check("v0.9 canvas: four corner handles + rotation handle", inter?.corners === "ne,nw,se,sw" && (inter?.toolbar ?? "").includes("delete"), JSON.stringify({ corners: inter?.corners, toolbar: inter?.toolbar }));
   check("v0.9 canvas: handle hit areas are >= 24px", inter?.handleHit === true, JSON.stringify({ hit: inter?.handleHit }));
-  check("v0.9 canvas: selected handles are inside the viewport (auto-pan)", inter?.inView === true, JSON.stringify({ inView: inter?.inView }));
+  check("v0.9 canvas: selected handles are inside the viewport at fit zoom", inter?.inView === true, JSON.stringify({ inView: inter?.inView }));
   check("v0.9 canvas: drag moves the layer", inter?.moved === true, JSON.stringify({ moved: inter?.moved }));
-  check("v0.9 canvas: corner drag scales the text size", (inter?.font1 ?? 0) > (inter?.font0 ?? 0), JSON.stringify({ f0: inter?.font0, f1: inter?.font1, diag: inter?.diag }));
+  check("v0.9 canvas: corner drag scales the text size", (inter?.font1 ?? 0) > (inter?.font0 ?? 0), JSON.stringify({ f0: inter?.font0, f1: inter?.font1 }));
   check("v0.9 canvas: rotation handle changes rotation", Math.abs(inter?.rot1 ?? 0) > 0.5, JSON.stringify({ r0: inter?.rot0, r1: inter?.rot1 }));
   check("v0.9 canvas: shift multi-select selects two layers", inter?.multi === 2, String(inter?.multi));
   check("v0.9 canvas: toolbar delete + undo work", inter?.afterDel === inter?.before - 1 && inter?.afterUndo === inter?.before, JSON.stringify({ before: inter?.before, del: inter?.afterDel, undo: inter?.afterUndo }));
   check("v0.9 canvas: zoom select + canvas size indicator", inter?.zoomLabel === "100%" && /\d+ × \d+ px/.test(inter?.stageSize ?? ""), JSON.stringify({ z: inter?.zoomLabel, s: inter?.stageSize, d: inter?.zoomDiag }));
+
+  // v0.9.4: manual "locate selection" fallback (auto-pan is gone)
+  const locatePrep = await ev(`(async () => {
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
+    await sleep(300);
+    window.__fg.state.zoom = { scale: 4, tx: -8000, ty: -6000, autoFit: false };
+    window.__fg.applyZoom();
+    await sleep(200);
+    const vis = () => { const el = document.querySelector(".edit-overlay .box:not(.dim)"); const vp = document.getElementById("viewport").getBoundingClientRect(); const r = el?.getBoundingClientRect(); return !!(r && r.right > vp.left && r.left < vp.right && r.bottom > vp.top && r.top < vp.bottom); };
+    return { before: vis(), disabled: document.getElementById("locateSel").disabled };
+  })()`);
+  await ev(`document.getElementById("locateSel").click()`);
+  await new Promise((r) => setTimeout(r, 300));
+  const locate = {
+    ...locatePrep,
+    after: await ev(`(() => { const el = document.querySelector(".edit-overlay .box:not(.dim)"); const vp = document.getElementById("viewport").getBoundingClientRect(); const r = el?.getBoundingClientRect(); return !!(r && r.right > vp.left && r.left < vp.right && r.bottom > vp.top && r.top < vp.bottom); })()`),
+  };
+  check("v0.9 canvas: locate button brings the selection back", locate?.disabled === false && locate?.before === false && locate?.after === true, JSON.stringify(locate));
+  await ev(`window.__fg.fitStage()`);
+  await new Promise((r) => setTimeout(r, 200));
 
   const layout = await ev(`(() => {
     const side = document.querySelector(".sidebar");
@@ -2873,13 +3029,20 @@ let EXIF_TEXT_ID = null;
 
 /* 81. v0.9.0: pass-through, lock, export bar, badge insertion, dark thumbs */
 {
-  const pass = await ev(`(async () => {
+  const passPrep = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const fg = window.__fg;
-    await fg.useTemplate("classic-watermark-single-row");
-    await sleep(900);
+    const TPL = "classic-watermark-single-row";
+    await fg.useTemplate(TPL);
+    // v0.9.4: wait for the template switch + its render to actually land before
+    // reading boxes — a fixed sleep could capture the previous template's geometry.
+    for (let i = 0; i < 150; i++) {
+      const dbg = window.__fgEditor.debug();
+      if (fg.state.templateId === TPL && (dbg.boxes ?? []).length && dbg.stageReady && fg.state.stagePainted === fg.state.stageSeq) break;
+      await sleep(100);
+    }
     const st = fg.state;
-    const boxes = JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson()));
+    const boxes = window.__fgBoxes();
     // v0.9.0: the 24MP re-render is async; wait until the editor overlay tracks
     // the effective template and S.img is the live stage element (no fixed sleep).
     const expected = boxes.map((b) => b.id).sort().join("|");
@@ -2900,76 +3063,74 @@ let EXIF_TEXT_ID = null;
     const r = img.getBoundingClientRect();
     const others = boxes.filter((b) => b.type !== "group");
     const inside = (b, x, y) => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h;
+    // v0.9.4: the second click lands while the first click's selection handles
+    // (24x24 screen px, centred on the box corners/edges) are live and would
+    // swallow the press. Pick a point at least ~30 screen px inside BOTH boxes.
+    const f = window.__fgEditor.boxFrame();
+    const padX = f && r.width ? (30 / (r.width / f.w)) : 0;
+    const padY = f && r.height ? (30 / (r.height / f.h)) : 0;
     let pt = null;
     let ids = null;
     for (const a of others) {
       for (const b of others) {
         if (a.id === b.id) continue;
-        const x = Math.max(a.x, b.x) + 4;
-        const y = Math.max(a.y, b.y) + 2;
-        if (inside(a, x, y) && inside(b, x, y)) { pt = { x, y }; ids = [a.id, b.id]; break; }
+        const xlo = Math.max(a.x + padX, b.x + padX), xhi = Math.min(a.x + a.w - padX, b.x + b.w - padX);
+        const ylo = Math.max(a.y + padY, b.y + padY), yhi = Math.min(a.y + a.h - padY, b.y + b.h - padY);
+        if (xhi - xlo > 1 && yhi - ylo > 1) { pt = { x: (xlo + xhi) / 2, y: (ylo + yhi) / 2 }; ids = [a.id, b.id]; break; }
       }
       if (pt) break;
     }
-    if (!pt) return { skip: true };
-    const cx = r.left + (pt.x / img.naturalWidth) * r.width;
-    const cy = r.top + (pt.y / img.naturalHeight) * r.height;
-    if (!Number.isFinite(cx) || !Number.isFinite(cy)) return { skip: true, reason: "non-finite point" };
-    const vp = document.getElementById("viewport");
-    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 81, isPrimary: true });
-    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 81, isPrimary: true });
-    vp.dispatchEvent(pd(cx, cy));
-    window.dispatchEvent(pu(cx, cy));
-    await sleep(400);
-    const first = window.__fgEditor.debug().selected[0];
-    // v0.9.0 auto-pan may shift the stage after the first selection; re-derive
-    // the client point from the same canvas coordinate for the second click.
-    let img2 = null;
-    for (let i = 0; i < 60; i++) {
-      const el = document.querySelector("#canvasWrap img");
-      if (el && el.complete && el.naturalWidth > 0) { img2 = el; break; }
-      await sleep(100);
+    if (!pt) {
+      for (const a of others) {
+        for (const b of others) {
+          if (a.id === b.id) continue;
+          const x = Math.max(a.x, b.x) + 4;
+          const y = Math.max(a.y, b.y) + 2;
+          if (inside(a, x, y) && inside(b, x, y)) { pt = { x, y }; ids = [a.id, b.id]; break; }
+        }
+        if (pt) break;
+      }
     }
-    if (!img2) return { skip: true, reason: "stage image lost before second click" };
-    const r2 = img2.getBoundingClientRect();
-    const cx2 = r2.left + (pt.x / img2.naturalWidth) * r2.width;
-    const cy2 = r2.top + (pt.y / img2.naturalHeight) * r2.height;
-    if (!Number.isFinite(cx2) || !Number.isFinite(cy2)) return { skip: true, reason: "non-finite second point" };
-    vp.dispatchEvent(pd(cx2, cy2));
-    window.dispatchEvent(pu(cx2, cy2));
-    await sleep(400);
-    const second = window.__fgEditor.debug().selected[0];
-    return { ids, first, second, cycled: first !== second && ids.includes(first) && ids.includes(second) };
+    if (!pt) return { skip: true };
+    return { ids, pt };
   })()`);
+  let pass = { skip: passPrep?.skip === true, reason: passPrep?.reason };
+  if (passPrep && !passPrep.skip && passPrep.pt) {
+    // real input: two clicks at the same overlapping point cycle the layers
+    const pointAt = () => ev(`(() => { const im = document.querySelector("#canvasWrap img"); const f = window.__fgEditor.boxFrame(); if (!im || !f) return null; const r = im.getBoundingClientRect(); return { x: r.left + (${passPrep.pt.x} / f.w) * r.width, y: r.top + (${passPrep.pt.y} / f.h) * r.height }; })()`);
+    const p1 = await pointAt();
+    if (p1) await clickAt(p1.x, p1.y);
+    const first = await ev(`window.__fgEditor.debug().selected[0]`);
+    const p2 = await pointAt();
+    if (p2) await clickAt(p2.x, p2.y);
+    const second = await ev(`window.__fgEditor.debug().selected[0]`);
+    pass = { ...passPrep, first, second, cycled: first !== second && (passPrep.ids ?? []).includes(first) && (passPrep.ids ?? []).includes(second) };
+  }
   check("v0.9 canvas: click pass-through cycles overlapping layers", pass?.skip === true || pass?.cycled === true, JSON.stringify(pass));
 
-  const lock = await ev(`(async () => {
+  const lockPrep = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    const fg = window.__fg;
     [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
     await sleep(400);
-    const before = document.querySelector('#layerList .layer-row[data-id="model"]');
-    const off = before?.querySelector('button[data-act="lock"]');
-    off?.click();
-    await sleep(400);
-    const box = (() => { const st = fg.state; return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson())).find((b) => b.id === "model"); })();
-    const img = document.querySelector("#canvasWrap img");
-    const r = img.getBoundingClientRect();
-    const cx = r.left + ((box.x + box.w / 2) / img.naturalWidth) * r.width;
-    const cy = r.top + ((box.y + box.h / 2) / img.naturalHeight) * r.height;
-    const vp = document.getElementById("viewport");
-    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 82, isPrimary: true });
-    const pm = (x, y) => new PointerEvent("pointermove", { clientX: x, clientY: y, bubbles: true, buttons: 1, pointerId: 82, isPrimary: true });
-    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 82, isPrimary: true });
-    const b0 = { x: box.x, y: box.y };
-    vp.dispatchEvent(pd(cx, cy)); window.dispatchEvent(pm(cx + 60, cy + 40)); window.dispatchEvent(pu(cx + 60, cy + 40));
-    await sleep(700);
-    const b1 = (() => { const st = fg.state; return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, fg.effectiveTemplateJson(), fg.buildOverridesJson())).find((b) => b.id === "model"); })();
-    const lockedNoMove = Math.hypot(b1.x - b0.x, b1.y - b0.y) < 2;
     document.querySelector('#layerList .layer-row[data-id="model"] button[data-act="lock"]')?.click();
-    await sleep(300);
-    return { lockedNoMove };
+    await sleep(400);
+    const box = window.__fgBoxes().find((b) => b.id === "model");
+    const img = document.querySelector("#canvasWrap img");
+    const f = window.__fgEditor.boxFrame();
+    if (!box || !img || !f) return { error: "no box/stage" };
+    const r = img.getBoundingClientRect();
+    return { cx: r.left + ((box.x + box.w / 2) / f.w) * r.width, cy: r.top + ((box.y + box.h / 2) / f.h) * r.height, b0: { x: box.x, y: box.y } };
   })()`);
+  let lock = null;
+  if (lockPrep && !lockPrep.error) {
+    await dragAt(lockPrep.cx, lockPrep.cy, lockPrep.cx + 60, lockPrep.cy + 40);
+    await new Promise((r) => setTimeout(r, 700));
+    const b1 = await ev(`(() => { const b = window.__fgBoxes().find((x) => x.id === "model"); return b ? { x: b.x, y: b.y } : null; })()`);
+    await ev(`document.querySelector('#layerList .layer-row[data-id="model"] button[data-act="lock"]')?.click()`);
+    lock = { lockedNoMove: !!b1 && Math.hypot(b1.x - lockPrep.b0.x, b1.y - lockPrep.b0.y) < 2 };
+  } else if (lockPrep?.error) {
+    console.log("PROBE-WARN:", lockPrep.error);
+  }
   check("v0.9 canvas: locked layer resists dragging", lock?.lockedNoMove === true, JSON.stringify(lock));
 
   const bar = await ev(`(async () => {
@@ -3035,19 +3196,11 @@ let EXIF_TEXT_ID = null;
   })()`);
   check("v0.9 badge lib: favorites/recent quick row exists", (quick?.chips?.length ?? 0) >= 1, JSON.stringify(quick?.chips));
 
-  const pan = await ev(`(async () => {
-    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    const fg = window.__fg;
-    const vp = document.getElementById("viewport");
-    const before = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty };
-    const pd = (x, y) => new PointerEvent("pointerdown", { clientX: x, clientY: y, bubbles: true, cancelable: true, button: 0, buttons: 1, pointerId: 84, isPrimary: true });
-    const pm = (x, y) => new PointerEvent("pointermove", { clientX: x, clientY: y, bubbles: true, buttons: 1, pointerId: 84, isPrimary: true });
-    const pu = (x, y) => new PointerEvent("pointerup", { clientX: x, clientY: y, bubbles: true, button: 0, pointerId: 84, isPrimary: true });
-    vp.dispatchEvent(pd(60, 200)); window.dispatchEvent(pm(120, 260)); window.dispatchEvent(pu(120, 260));
-    await sleep(400);
-    const after = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty };
-    return { moved: Math.hypot(after.tx - before.tx, after.ty - before.ty) > 10 };
-  })()`);
+  const panBefore = await ev(`({ tx: window.__fg.state.zoom.tx, ty: window.__fg.state.zoom.ty })`);
+  await dragAt(60, 200, 120, 260);
+  await new Promise((r) => setTimeout(r, 400));
+  const panAfter = await ev(`({ tx: window.__fg.state.zoom.tx, ty: window.__fg.state.zoom.ty })`);
+  const pan = { moved: Math.hypot(panAfter.tx - panBefore.tx, panAfter.ty - panBefore.ty) > 10, panBefore, panAfter };
   check("v0.9 canvas: plain left drag on empty canvas does not pan", pan?.moved === false, JSON.stringify(pan));
 }
 

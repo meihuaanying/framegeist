@@ -341,12 +341,16 @@ fn run(args: &Args) -> Result<(), Error> {
             let (tpl, _src) = resolve_template(template)?;
             let bytes = std::fs::read(photo)?;
             let opts = build_opts(args, OutputFormat::Jpeg, false)?;
-            let boxes = framegeist_core::boxes::layer_boxes_for_photo(&bytes, &tpl, &opts)?;
-            let (w, h) = framegeist_core::boxes::canvas_size_for_photo(&bytes, &tpl, &opts)?;
+            // v0.9.4: one decode returns the frame the boxes were computed in.
+            let raw = framegeist_core::boxes::layer_boxes_frame_json(&bytes, &tpl, &opts)?;
+            let v = serde_json::from_str::<serde_json::Value>(&raw)
+                .map_err(|e| Error::TemplateJson(e.to_string()))?;
+            let frame = v["frame"].as_array().cloned().unwrap_or_default();
+            let w = frame.first().and_then(|x| x.as_u64()).unwrap_or(0);
+            let h = frame.get(1).and_then(|x| x.as_u64()).unwrap_or(0);
             let out = serde_json::json!({
                 "canvas": { "w": w, "h": h },
-                "boxes": serde_json::from_str::<serde_json::Value>(&boxes)
-                    .map_err(|e| Error::TemplateJson(e.to_string()))?,
+                "boxes": v["boxes"].clone(),
             });
             println!(
                 "{}",

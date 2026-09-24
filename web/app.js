@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.9.3";
+const APP_VERSION = "0.9.4";
 
 /* ------------------------------------------------------------------ state */
 
@@ -214,6 +214,12 @@ function exportMaxEdge() {
   const v = settings.exportSize;
   if (v === "custom") return Number(settings.exportCustom) || 0;
   return Number(v) || 0;
+}
+/* v0.9.4: the frame the stage currently displays. Editor boxes must be
+   computed with the same cap or they land at the wrong scale. */
+const PREVIEW_MAX_EDGE = 1600;
+function displayMaxEdge() {
+  return $("preview")?.checked === false ? exportMaxEdge() : PREVIEW_MAX_EDGE;
 }
 
 /* v0.6.0 Q10: export container formats (engine `parse_format` strings).
@@ -1060,13 +1066,39 @@ async function showSource() {
   setStage(state.sourceUrl, t("stage.original"));
 }
 
+/* v0.9.4: double-buffered stage. The previous frame stays visible until the
+   new one decodes (no innerHTML wipe, no blank flash, the overlay survives),
+   which also keeps canvas clicks working during a re-render. */
 function setStage(url, label) {
   const wrap = $("canvasWrap");
-  wrap.innerHTML = "";
-  const img = new Image();
-    img.onload = () => { img.classList.add("shown"); updateStageSize(); if (state.view === "editor" && state.zoom.autoFit) fitStage(); };
+  let img = wrap.querySelector("img");
+  if (!img) {
+    img = new Image();
+    wrap.appendChild(img);
+  }
+  // v0.9.4: the element is reused across renders — drop the template-preview
+  // marker so the DOM always describes what is actually displayed.
+  img.classList.remove("template-preview");
+  state.stageSeq = (state.stageSeq ?? 0) + 1;
+  const seq = state.stageSeq;
+  // v0.9.4: every render used to leak its full-size blob URL (the renderer's
+  // memory grew for the whole session). Keep only the URL on screen and revoke
+  // the previous one once the new frame has decoded.
+  const prevUrl = state.stageUrl;
+  state.stageUrl = url;
+  const dropPrev = () => {
+    if (prevUrl && prevUrl !== url && prevUrl !== state.sourceUrl) URL.revokeObjectURL(prevUrl);
+  };
+  img.onload = async () => {
+    img.classList.add("shown");
+    updateStageSize();
+    if (state.view === "editor" && state.zoom.autoFit) fitStage();
+    dropPrev();
+    try { await window.__fgEditor?.onStageLoaded?.(); } catch (e) { console.error("stage refresh:", e); }
+    state.stagePainted = seq;
+  };
+  img.onerror = () => { dropPrev(); };
   img.src = url;
-  wrap.appendChild(img);
   window.__fgEditor?.onStage?.(img);
   $("stagePlaceholder").classList.add("hidden");
   if (label) $("stageLabel").textContent = label;
@@ -1413,10 +1445,12 @@ async function ensureBuiltinAssets(templateJson) {
 async function fastPreviewRgba(photoBytes) {
   const blob = new Blob([photoBytes]);
   const bmp = await createImageBitmap(blob, { imageOrientation: "from-image" });
-  const cap = 1600;
+  const cap = PREVIEW_MAX_EDGE;
   const scale = Math.min(1, cap / Math.max(bmp.width, bmp.height));
-  const w = Math.max(1, Math.round(bmp.width * scale));
-  const h = Math.max(1, Math.round(bmp.height * scale));
+  // v0.9.4: ceil (not round) so preview dims match the engine decode exactly —
+  // boxes are computed from the same capped size.
+  const w = Math.max(1, Math.ceil(bmp.width * scale));
+  const h = Math.max(1, Math.ceil(bmp.height * scale));
   const canvas = new OffscreenCanvas(w, h);
   const ctx = canvas.getContext("2d");
   ctx.drawImage(bmp, 0, 0, w, h);
@@ -1429,6 +1463,13 @@ let renderToken = 0;
 async function renderNow() {
   if (!state.engine || !state.photos.length) { showTemplatePreview(); return; }
   const token = ++renderToken;
+  // v0.9.4: render request/completion counters. A render triggered by a
+  // synchronous `change` event can finish inside the very same task, so the
+  // test harness cannot rely on writing a sentinel into the stage label.
+  // renderReq increments when a render is asked for; renderDone only when the
+  // newest request finishes (success or error).
+  const req = (state.renderReq ?? 0) + 1;
+  state.renderReq = req;
   setStatus("busy", t("status.rendering"));
   const skeletonTimer = setTimeout(() => $("skeleton").classList.add("on"), 250);
   const t0 = performance.now();
@@ -1475,7 +1516,10 @@ async function renderNow() {
         ? `framegeist-free-collage.${ext}`
         : `framegeist-collage-${state.layoutId}.${ext}`;
     const url = URL.createObjectURL(new Blob([out], { type: EXPORT_FORMATS[fmt].mime }));
-    withViewTransition(() => setStage(url, `${t("stage.rendered")} · ${ms} ms · ${(out.length / 1024).toFixed(0)} KB`));
+    // v0.9.4: no view transition here. The stage is double-buffered (the old
+    // frame stays until the new one decodes), and a full-page view transition
+    // snapshot would swallow canvas clicks for its whole duration.
+    setStage(url, `${t("stage.rendered")} · ${ms} ms · ${(out.length / 1024).toFixed(0)} KB`);
     $("exportBtn").disabled = false;
     $("exportBatchBtn").classList.toggle("hidden", !(state.mode === "frame" && state.photos.length > 1));
     $("exportBatchBtn").textContent = t("btn.exportBatch", { n: state.photos.length });
@@ -1485,6 +1529,7 @@ async function renderNow() {
     setStatus("error", t("err.render"));
     toast("error", `${t("err.render")}: ${localizeEngineError(e)}`);
   } finally {
+    if (token === renderToken) state.renderDone = req;
     clearTimeout(skeletonTimer);
     $("skeleton").classList.remove("on");
   }
@@ -1572,6 +1617,8 @@ function wireViewport() {
   $("zoomOut").onclick = () => zoomBy(1 / 1.25);
   $("zoomFit").onclick = fitStage;
   $("zoomReset").onclick = () => { state.zoom = { scale: 1, tx: 0, ty: 0, autoFit: false }; applyZoom(); };
+  // v0.9.4: manual「定位到选中」— the only path that pans the stage for a selection.
+  $("locateSel")?.addEventListener("click", () => window.__fgEditor?.locateSelected?.());
   $("zoomSelect")?.addEventListener("change", (e) => {
     if (e.target.value === "fit") { fitStage(); return; }
     const scale = Number(e.target.value) || 1;
@@ -1584,20 +1631,8 @@ function wireViewport() {
   });
   new ResizeObserver(() => { if (state.zoom.autoFit) fitStage(); }).observe(vp);
 }
-/// v0.9.0: pan the stage so a canvas box becomes visible (selection feedback).
-function panIntoView(box, margin = 60) {
-  if (!box) return;
-  const vp = $("viewport").getBoundingClientRect();
-  const z = state.zoom;
-  const sx = vp.width / 2 - (box.x + box.w / 2) * z.scale;
-  const sy = vp.height / 2 - (box.y + box.h / 2) * z.scale;
-  const visible = box.x * z.scale + z.tx > -margin && box.y * z.scale + z.ty > -margin
-    && (box.x + box.w) * z.scale + z.tx < vp.width + margin
-    && (box.y + box.h) * z.scale + z.ty < vp.height + margin;
-  if (visible) return;
-  state.zoom = { ...z, tx: sx, ty: sy, autoFit: false };
-  applyZoom();
-}
+/* v0.9.4: automatic panning on selection is gone (selecting a layer must not
+   move the canvas). `locateSelected` in editor.js is the explicit fallback. */
 
 /* --------------------------------------------------------- download/save */
 function download(bytes, filename) {
@@ -2284,6 +2319,7 @@ if ("serviceWorker" in navigator
 
 /* --------------------------------------------------------------- lightbox */
 let lbId = null;
+let lbUrl = null;
 function lbList() { return filteredTemplates(); }
 function openLightbox(id) {
   lbId = id;
@@ -2297,18 +2333,20 @@ function openLightbox(id) {
   noticeEl.classList.toggle("hidden", !notice);
   const img = document.getElementById("lbImg");
   img.removeAttribute("src");
+  // v0.9.4: keep one lightbox blob at a time (was leaking one per open).
+  const setLbSrc = (u) => { if (lbUrl && lbUrl !== u) URL.revokeObjectURL(lbUrl); lbUrl = u; img.src = u; };
   (async () => {
     try {
       const res = await fetch(BASE + "previews/" + id + ".jpg");
       if (!res.ok) throw new Error("no preview");
-      img.src = URL.createObjectURL(await res.blob());
+      setLbSrc(URL.createObjectURL(await res.blob()));
     } catch {
       if (state.photos.length && state.engine) {
         try {
           const tplJson = await fetchTemplateJson(id);
           const out = state.engine.render_with_overrides(
             state.photos[0].bytes, JSON.stringify(tplJson), "jpeg", false, "", 640, settings.keepGps);
-          img.src = URL.createObjectURL(new Blob([out], { type: "image/jpeg" }));
+          setLbSrc(URL.createObjectURL(new Blob([out], { type: "image/jpeg" })));
         } catch { /* leave blank */ }
       }
     }
@@ -2428,7 +2466,10 @@ window.__fg = {
   fujiRows,
   templateCategory,
   setSideTab,
-  panIntoView,
+  // v0.9.4: zoom + frame probes for the editor and E2E.
+  applyZoom,
+  displayMaxEdge,
+  previewMaxEdge: PREVIEW_MAX_EDGE,
   // v0.9.0 badge properties panel bridge (global switch + color info).
   getShowLogo: () => settings.showLogo,
   setShowLogo: (v) => { settings.showLogo = !!v; saveSettings(); renderNow(); },

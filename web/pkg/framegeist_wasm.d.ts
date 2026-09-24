@@ -15,8 +15,9 @@ export class Engine {
      * v0.9.3 editor: canvas pixel size `[w, h]` for a photo + template +
      * overrides (group ungroup / align math needs the canvas frame, not the
      * stage image which may still show the unrendered source photo).
+     * v0.9.4: same `max_edge` contract as `layer_boxes`.
      */
-    canvas_size(photo: Uint8Array, template_json: string, overrides_json: string): string;
+    canvas_size(photo: Uint8Array, template_json: string, overrides_json: string, max_edge: number): string;
     clear_assets(): void;
     /**
      * Registered font family names (normalized, lowercase).
@@ -25,8 +26,11 @@ export class Engine {
     /**
      * v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
      * snapping guides). Photo bytes may be empty when `rgba` is provided.
+     * v0.9.4: `max_edge` must match the frame the editor is displaying
+     * (preview cap or export max edge) so boxes land on the rendered pixels.
+     * Returns `{"frame":[w,h],"boxes":[...]}`.
      */
-    layer_boxes(photo: Uint8Array, template_json: string, overrides_json: string): string;
+    layer_boxes(photo: Uint8Array, template_json: string, overrides_json: string, max_edge: number): string;
     /**
      * Register an optional model-map override (PRD B5).
      */
@@ -45,13 +49,13 @@ export class Engine {
      */
     register_asset(name: string, bytes: Uint8Array): void;
     /**
-     * Render a collage (PRD C5).
-     */
-    render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
-    /**
      * Render a photo against a template (legacy signature).
      */
     render(photo: Uint8Array, template_json: string, format: string, preview: boolean): Uint8Array;
+    /**
+     * Render a collage (PRD C5).
+     */
+    render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
     /**
      * v0.5.0 free collage: absolute-positioned photo items.
      */
@@ -80,10 +84,10 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_engine_free: (a: number, b: number) => void;
     readonly engine_add_font: (a: number, b: number, c: number, d: number, e: number) => [number, number];
-    readonly engine_canvas_size: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
+    readonly engine_canvas_size: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number, number];
     readonly engine_clear_assets: (a: number) => void;
     readonly engine_font_families: (a: number) => [number, number];
-    readonly engine_layer_boxes: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
+    readonly engine_layer_boxes: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number, number];
     readonly engine_load_model_map: (a: number, b: number, c: number) => [number, number];
     readonly engine_new: (a: number, b: number, c: number, d: number) => [number, number, number];
     readonly engine_probe_exif: (a: number, b: number, c: number) => [number, number, number, number];

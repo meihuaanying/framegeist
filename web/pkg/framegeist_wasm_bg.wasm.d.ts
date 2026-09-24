@@ -3,10 +3,10 @@
 export const memory: WebAssembly.Memory;
 export const __wbg_engine_free: (a: number, b: number) => void;
 export const engine_add_font: (a: number, b: number, c: number, d: number, e: number) => [number, number];
-export const engine_canvas_size: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
+export const engine_canvas_size: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number, number];
 export const engine_clear_assets: (a: number) => void;
 export const engine_font_families: (a: number) => [number, number];
-export const engine_layer_boxes: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number, number];
+export const engine_layer_boxes: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number, number];
 export const engine_load_model_map: (a: number, b: number, c: number) => [number, number];
 export const engine_new: (a: number, b: number, c: number, d: number) => [number, number, number];
 export const engine_probe_exif: (a: number, b: number, c: number) => [number, number, number, number];

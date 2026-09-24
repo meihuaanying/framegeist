@@ -33,12 +33,14 @@ export class Engine {
      * v0.9.3 editor: canvas pixel size `[w, h]` for a photo + template +
      * overrides (group ungroup / align math needs the canvas frame, not the
      * stage image which may still show the unrendered source photo).
+     * v0.9.4: same `max_edge` contract as `layer_boxes`.
      * @param {Uint8Array} photo
      * @param {string} template_json
      * @param {string} overrides_json
+     * @param {number} max_edge
      * @returns {string}
      */
-    canvas_size(photo, template_json, overrides_json) {
+    canvas_size(photo, template_json, overrides_json, max_edge) {
         let deferred5_0;
         let deferred5_1;
         try {
@@ -48,7 +50,7 @@ export class Engine {
             const len1 = WASM_VECTOR_LEN;
             const ptr2 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
             const len2 = WASM_VECTOR_LEN;
-            const ret = wasm.engine_canvas_size(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2);
+            const ret = wasm.engine_canvas_size(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, max_edge);
             var ptr4 = ret[0];
             var len4 = ret[1];
             if (ret[3]) {
@@ -78,12 +80,16 @@ export class Engine {
     /**
      * v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
      * snapping guides). Photo bytes may be empty when `rgba` is provided.
+     * v0.9.4: `max_edge` must match the frame the editor is displaying
+     * (preview cap or export max edge) so boxes land on the rendered pixels.
+     * Returns `{"frame":[w,h],"boxes":[...]}`.
      * @param {Uint8Array} photo
      * @param {string} template_json
      * @param {string} overrides_json
+     * @param {number} max_edge
      * @returns {string}
      */
-    layer_boxes(photo, template_json, overrides_json) {
+    layer_boxes(photo, template_json, overrides_json, max_edge) {
         let deferred5_0;
         let deferred5_1;
         try {
@@ -93,7 +99,7 @@ export class Engine {
             const len1 = WASM_VECTOR_LEN;
             const ptr2 = passStringToWasm0(overrides_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
             const len2 = WASM_VECTOR_LEN;
-            const ret = wasm.engine_layer_boxes(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2);
+            const ret = wasm.engine_layer_boxes(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, max_edge);
             var ptr4 = ret[0];
             var len4 = ret[1];
             if (ret[3]) {
@@ -176,25 +182,6 @@ export class Engine {
         wasm.engine_register_asset(this.__wbg_ptr, ptr0, len0, ptr1, len1);
     }
     /**
-     * Render a collage (PRD C5).
-     * @param {Array<any>} photos
-     * @param {string} layout_json
-     * @param {string} format
-     * @param {boolean} preview
-     * @returns {Uint8Array}
-     */
-    render_collage(photos, layout_json, format, preview) {
-        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len1 = WASM_VECTOR_LEN;
-        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
-        if (ret[2]) {
-            throw takeFromExternrefTable0(ret[1]);
-        }
-        return takeFromExternrefTable0(ret[0]);
-    }
-    /**
      * Render a photo against a template (legacy signature).
      * @param {Uint8Array} photo
      * @param {string} template_json
@@ -210,6 +197,25 @@ export class Engine {
         const ptr2 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len2 = WASM_VECTOR_LEN;
         const ret = wasm.engine_render(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
+     * Render a collage (PRD C5).
+     * @param {Array<any>} photos
+     * @param {string} layout_json
+     * @param {string} format
+     * @param {boolean} preview
+     * @returns {Uint8Array}
+     */
+    render_collage(photos, layout_json, format, preview) {
+        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

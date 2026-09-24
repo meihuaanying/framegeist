@@ -83,29 +83,11 @@ pub fn layer_boxes_for_photo(
     layer_boxes_json(template, &info, &rgba, opts)
 }
 
-/// Canvas size (px) for a photo + template + overrides (v0.8 QA helper).
-pub fn canvas_size_for_photo(
-    photo: &[u8],
-    template: &Template,
-    opts: &RenderOptions,
-) -> Result<(u32, u32), crate::Error> {
-    let rgba = crate::render::decode_oriented(photo, opts.max_edge, false, false)?;
-    let rgba = crate::render::apply_crop_public(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
-    let geo = crate::render::compute_geometry(template, &rgba, opts.overrides.as_ref());
-    Ok((geo.width, geo.height))
-}
-
-/// Compute editor boxes for a decoded photo + template + overrides.
-pub fn layer_boxes_json(
-    template: &Template,
-    info: &ExifInfo,
-    rgba: &RgbaImage,
-    opts: &RenderOptions,
-) -> Result<String, crate::Error> {
-    let overrides = opts.overrides.as_ref();
-    let geo = crate::render::compute_geometry(template, rgba, overrides);
-    // Aspect expansion uses the same formula as expand_to_aspect.
-    let (cw, ch) = match overrides.and_then(|o: &TemplateOverrides| o.aspect.as_deref()) {
+/// Canvas frame used by both boxes and `canvas_size`: base geometry plus the
+/// same aspect-expansion formula as `expand_to_aspect` (v0.9.4: one source, so
+/// the editor never mixes frames).
+fn canvas_frame(geo: &CanvasGeometry, overrides: Option<&TemplateOverrides>) -> (u32, u32) {
+    match overrides.and_then(|o| o.aspect.as_deref()) {
         Some(name) => match crate::template::aspect_ratio(name) {
             Some((tw, th)) => {
                 let (w, h) = (geo.width, geo.height);
@@ -122,7 +104,68 @@ pub fn layer_boxes_json(
             None => (geo.width, geo.height),
         },
         None => (geo.width, geo.height),
-    };
+    }
+}
+
+/// Canvas size (px) for a photo + template + overrides (v0.8 QA helper).
+pub fn canvas_size_for_photo(
+    photo: &[u8],
+    template: &Template,
+    opts: &RenderOptions,
+) -> Result<(u32, u32), crate::Error> {
+    let rgba = crate::render::decode_oriented(photo, opts.max_edge, false, false)?;
+    let rgba = crate::render::apply_crop_public(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
+    let geo = crate::render::compute_geometry(template, &rgba, opts.overrides.as_ref());
+    Ok(canvas_frame(&geo, opts.overrides.as_ref()))
+}
+
+/// Boxes + the canvas frame they were computed in, from one decode
+/// (v0.9.4 wasm-facing; the editor renders a capped preview frame, so boxes
+/// must be computed for the same `opts.max_edge`).
+pub fn layer_boxes_frame_json(
+    photo: &[u8],
+    template: &Template,
+    opts: &RenderOptions,
+) -> Result<String, crate::Error> {
+    let rgba = crate::render::decode_oriented(photo, opts.max_edge, false, false)?;
+    let rgba = crate::render::apply_crop_public(rgba, opts.overrides.as_ref().and_then(|o| o.crop));
+    let mut info = crate::exif::probe_exif(photo)?;
+    crate::render::apply_model_map(&mut info, &opts.model_map);
+    if let Some(map) = opts.overrides.as_ref().and_then(|o| o.exif.as_ref()) {
+        info.apply_overrides(map);
+    }
+    let (frame, boxes) = layer_boxes_in_frame(template, &info, &rgba, opts)?;
+    serde_json::to_string(&BoxesFrame { frame, boxes })
+        .map_err(|e| crate::Error::TemplateJson(e.to_string()))
+}
+
+#[derive(Serialize)]
+struct BoxesFrame {
+    frame: (u32, u32),
+    boxes: Vec<LayerBox>,
+}
+
+/// Compute editor boxes for a decoded photo + template + overrides.
+pub fn layer_boxes_json(
+    template: &Template,
+    info: &ExifInfo,
+    rgba: &RgbaImage,
+    opts: &RenderOptions,
+) -> Result<String, crate::Error> {
+    let (_, boxes) = layer_boxes_in_frame(template, info, rgba, opts)?;
+    serde_json::to_string(&boxes).map_err(|e| crate::Error::TemplateJson(e.to_string()))
+}
+
+/// Boxes + frame for an already-decoded photo (shared by the JSON entry points).
+fn layer_boxes_in_frame(
+    template: &Template,
+    info: &ExifInfo,
+    rgba: &RgbaImage,
+    opts: &RenderOptions,
+) -> Result<((u32, u32), Vec<LayerBox>), crate::Error> {
+    let overrides = opts.overrides.as_ref();
+    let geo = crate::render::compute_geometry(template, rgba, overrides);
+    let (cw, ch) = canvas_frame(&geo, overrides);
     let fonts = match &opts.fonts {
         Some(book) => book.clone(),
         None => match &opts.assets_dir {
@@ -150,7 +193,7 @@ pub fn layer_boxes_json(
             boxes.push(b);
         }
     }
-    serde_json::to_string(&boxes).map_err(|e| crate::Error::TemplateJson(e.to_string()))
+    Ok(((cw, ch), boxes))
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -252,40 +295,31 @@ fn layer_box(
             })
         }
         Layer::Shape(shape) => {
-            let (mut sw, mut sh) = match shape.shape {
+            // v0.9.4: mirror `draw_shape_layer` exactly — sizes are fractions of
+            // the *photo* (not the canvas) and `size` overrides the kind defaults.
+            let (default_w, default_h) = match shape.shape {
                 crate::template::ShapeKind::Line => (0.2, 0.0015),
                 crate::template::ShapeKind::Rect => (0.2, 0.2),
                 _ => (0.05, 0.05),
             };
-            if let Some(frame) = shape.frame.as_deref() {
-                let margin = shape.margin.unwrap_or(0.04) as f32;
-                let (x, y, w, h) = match frame {
-                    "opposite-h" => (
-                        margin * fw,
-                        margin * fh,
-                        fw * (1.0 - margin * 2.0),
-                        fh * (1.0 - margin * 2.0),
-                    ),
-                    "opposite-v" => (
-                        margin * fw,
-                        margin * fh,
-                        fw * (1.0 - margin * 2.0),
-                        fh * (1.0 - margin * 2.0),
-                    ),
-                    _ => (
-                        margin * fw,
-                        margin * fh,
-                        fw * (1.0 - margin * 2.0),
-                        fh * (1.0 - margin * 2.0),
-                    ),
-                };
+            if let Some(_frame) = shape.frame.as_deref() {
+                // v0.9.4: all frame roles are bounded by the margin rect drawn
+                // with `margin * photo_w` on both axes (renderer contract).
+                let margin = shape.margin.unwrap_or(0.04) as f32 * geo.photo_w as f32;
+                let x0 = margin;
+                let y0 = margin;
+                let x1 = geo.width as f32 - margin;
+                let y1 = geo.height as f32 - margin;
+                if x1 <= x0 || y1 <= y0 {
+                    return None;
+                }
                 return Some(LayerBox {
                     id: shape.id.clone(),
                     kind: "shape".into(),
-                    x: x + origin_x,
-                    y: y + origin_y,
-                    w,
-                    h,
+                    x: x0 + origin_x,
+                    y: y0 + origin_y,
+                    w: x1 - x0,
+                    h: y1 - y0,
                     anchor: anchor_name(shape.anchor).into(),
                     offset_x: shape.offset.x as f32,
                     offset_y: shape.offset.y as f32,
@@ -294,35 +328,24 @@ fn layer_box(
                     children: None,
                 });
             }
+            let mut sw = shape.size.width.unwrap_or(default_w) as f32 * geo.photo_w as f32;
+            let sh = shape.size.height.unwrap_or(default_h) as f32 * geo.photo_h as f32;
+            let mut sx_override: Option<f32> = None;
             if shape.span.as_deref() == Some("auto") {
-                let inset = shape.margin.unwrap_or(0.06) as f32;
-                sw = (1.0 - inset * 2.0).max(0.01);
-                let w = sw * fw;
-                let h = sh * geo.photo_h as f32;
-                return Some(LayerBox {
-                    id: shape.id.clone(),
-                    kind: "shape".into(),
-                    x: inset * fw + origin_x,
-                    y: place(fw, fh, w, h, shape.anchor, shape.offset.x, shape.offset.y).1
-                        + origin_y,
-                    w,
-                    h,
-                    anchor: anchor_name(shape.anchor).into(),
-                    offset_x: shape.offset.x as f32,
-                    offset_y: shape.offset.y as f32,
-                    rotation: shape.rotation as f32,
-                    z,
-                    children: None,
-                });
+                let inset = shape
+                    .margin
+                    .map(|m| m as f32 * geo.photo_w as f32)
+                    .unwrap_or(0.06 * geo.photo_w as f32);
+                sw = (geo.width as f32 - inset * 2.0).max(2.0);
+                sx_override = Some(inset);
             }
-            sw *= geo.photo_w as f32;
-            sh *= geo.photo_h as f32;
-            let (x, y) = place(fw, fh, sw, sh, shape.anchor, shape.offset.x, shape.offset.y);
+            let (px, py) = place(fw, fh, sw, sh, shape.anchor, shape.offset.x, shape.offset.y);
+            let sx = sx_override.unwrap_or(px);
             Some(LayerBox {
                 id: shape.id.clone(),
                 kind: "shape".into(),
-                x: x + origin_x,
-                y: y + origin_y,
+                x: sx + origin_x,
+                y: py + origin_y,
                 w: sw,
                 h: sh,
                 anchor: anchor_name(shape.anchor).into(),

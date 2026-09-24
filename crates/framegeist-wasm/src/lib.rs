@@ -166,12 +166,16 @@ impl Engine {
 
     /// v0.5.0 editor: layer bounding boxes as JSON (hit testing / handles /
     /// snapping guides). Photo bytes may be empty when `rgba` is provided.
+    /// v0.9.4: `max_edge` must match the frame the editor is displaying
+    /// (preview cap or export max edge) so boxes land on the rendered pixels.
+    /// Returns `{"frame":[w,h],"boxes":[...]}`.
     #[allow(clippy::too_many_arguments)]
     pub fn layer_boxes(
         &self,
         photo: &[u8],
         template_json: &str,
         overrides_json: &str,
+        max_edge: u32,
     ) -> Result<String, JsError> {
         let template = core::load_template_from_str(template_json).map_err(js_err)?;
         let overrides = if overrides_json.trim().is_empty() {
@@ -184,19 +188,22 @@ impl Engine {
             model_map: self.model_map.clone(),
             assets: Some(self.assets.clone()),
             overrides,
+            max_edge: if max_edge == 0 { None } else { Some(max_edge) },
             ..core::RenderOptions::default()
         };
-        core::boxes::layer_boxes_for_photo(photo, &template, &opts).map_err(js_err)
+        core::boxes::layer_boxes_frame_json(photo, &template, &opts).map_err(js_err)
     }
 
     /// v0.9.3 editor: canvas pixel size `[w, h]` for a photo + template +
     /// overrides (group ungroup / align math needs the canvas frame, not the
     /// stage image which may still show the unrendered source photo).
+    /// v0.9.4: same `max_edge` contract as `layer_boxes`.
     pub fn canvas_size(
         &self,
         photo: &[u8],
         template_json: &str,
         overrides_json: &str,
+        max_edge: u32,
     ) -> Result<String, JsError> {
         let template = core::load_template_from_str(template_json).map_err(js_err)?;
         let overrides = if overrides_json.trim().is_empty() {
@@ -209,6 +216,7 @@ impl Engine {
             model_map: self.model_map.clone(),
             assets: Some(self.assets.clone()),
             overrides,
+            max_edge: if max_edge == 0 { None } else { Some(max_edge) },
             ..core::RenderOptions::default()
         };
         let (w, h) = core::boxes::canvas_size_for_photo(photo, &template, &opts).map_err(js_err)?;
