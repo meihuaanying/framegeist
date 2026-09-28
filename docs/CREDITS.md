@@ -35,14 +35,18 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
   tokina、samyang、meike、7artisans、sirui、yongnuo、voigtlander、phaseone、blackmagicdesign 等；
   `lockup/` 为全品牌（42 slug）的原创排版款，供编辑器「官方/原创」风格切换。
 - **镜头系列徽章**（原创字标）：GM、G、L、RF L、S、ART、DG DN、APO、XCD、XF、BATIS、SP。
-- **游戏主题字标**（原创文字渲染，非官方素材；仅作风格标注）：
+- **游戏主题字标**（v1.0.0：官方标识经授权使用，其余为原创排印、不复制官方书法/插画；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
+- **官方标识授权说明**（v1.0.0）：部分品牌/系列/游戏标识由用户经授权提供，仅用于器材与作品信息的识别展示；
+  未提供官方素材的品牌保持原创排印。
 - **中性「EXIF」标**（v0.8.0）：`brand/exif-auto` 与 `-light` 变体，FrameGeist 原创排版，用于表达式徽标层的占位/卡片标记。
 - **v0.8.0 补充资产**：`series/leica-apo`（LEICA APO 系列徽章）、`brand|lockup/voigtlander`（福伦达）。
 - **相框线稿**（`templates/assets/frame/`）：camera-body / phone-frame / film-strip，FrameGeist 原创矢量（`tools/gen-frame-assets.mjs`）。
 - **商标声明**：各品牌字标/商标归其权利人所有，本项目仅作**器材信息识别展示**用途，
   不表示隶属、赞助或背书；原创 lockup 不复制官方图形徽记。彩色化仅使用 Simple Icons 的 hex 元数据与该库单色路径重绘，
   不引入多色官方插画。详见 `templates/assets/brand/CREDITS.json`。
+- **游戏 IP 声明**（v1.0.0）：游戏名称与标识（原神、绝区零、崩坏、明日方舟、燕云十六声、黑神话：悟空）
+  归各自权利人所有，经授权用于风格标注，不表示隶属、赞助或背书。
 
 ## 引擎字体（`templates/assets/fonts/`，v0.8.0：69 faces / 23 families）
 

@@ -6,8 +6,8 @@
       "zh": "夜行票·斜卡",
       "en": "Night Tilt"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "ticket"
@@ -44,109 +44,6 @@
       "rotation": -6
     },
     {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.135,
-        "y": 0.636
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.012,
-        "color": "#7C828B",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "rotation": -6,
-      "content": [
-        {
-          "expr": "'NIGHT PASS'",
-          "fallback": "TICKET"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "route",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.135,
-        "y": 0.655
-      },
-      "font": {
-        "family": [
-          "Bricolage Grotesque"
-        ],
-        "size": 0.0484,
-        "color": "#1C1F23",
-        "weight": 500
-      },
-      "letterSpacing": 0.04,
-      "rotation": -6,
-      "content": [
-        {
-          "expr": "'CHENGDU · LHASA'",
-          "fallback": "FROM · TO"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.135,
-        "y": 0.696
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#4A5057",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "rotation": -6,
-      "content": [
-        {
-          "expr": "date('YYYY.MM.DD HH:mm', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "station",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.135,
-        "y": 0.722
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.012,
-        "color": "#7C828B",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "rotation": -6,
-      "content": [
-        {
-          "expr": "'THIS STATION'",
-          "fallback": "STATION"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "barcode",
       "anchor": "top-left",
@@ -158,30 +55,6 @@
       "size": {
         "height": 0.042
       }
-    },
-    {
-      "type": "text",
-      "id": "serial",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.269,
-        "y": 0.803
-      },
-      "font": {
-        "family": [
-          "Bricolage Grotesque"
-        ],
-        "size": 0.0374,
-        "color": "#D8D5CE",
-        "weight": 500
-      },
-      "letterSpacing": 0.06,
-      "content": [
-        {
-          "expr": "'NO. 0007'",
-          "fallback": "TICKET NO."
-        }
-      ]
     },
     {
       "type": "image",
@@ -197,33 +70,6 @@
       }
     },
     {
-      "type": "text",
-      "id": "model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.069,
-        "y": 0.026
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0156,
-        "color": "#CFCCC6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
-          "fallback": "CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "top-left",
@@ -235,33 +81,7 @@
       "size": {
         "height": 0.06
       },
-      "attachTo": "model",
       "attachGap": 0.012
-    },
-    {
-      "type": "text",
-      "id": "topright",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.069,
-        "y": 0.028
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.012,
-        "color": "#6E737C",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'NIGHT RAIL · SLEEPER'",
-          "fallback": "NIGHT RAIL"
-        }
-      ]
     }
   ],
   "fields": {
@@ -282,5 +102,33 @@
       "type": "string",
       "source": "constant"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#1C1F23",
+    "font": {
+      "family": [
+        "Bricolage Grotesque",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'CHENGDU · LHASA'",
+        "fallback": "FROM · TO",
+        "role": "support"
+      },
+      {
+        "expr": "'NO. 0007'",
+        "fallback": "TICKET NO.",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
+        "fallback": "CAMERA",
+        "role": "detail"
+      }
+    ]
   }
 }

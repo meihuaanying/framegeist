@@ -6,8 +6,8 @@
       "zh": "压印浮雕",
       "en": "Letterpress Relief"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
@@ -74,168 +74,6 @@
       "opacity": 0.95
     },
     {
-      "type": "text",
-      "id": "press-title",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.065
-      },
-      "font": {
-        "family": [
-          "Geist"
-        ],
-        "size": 0.052,
-        "color": "#373A40",
-        "weight": 600
-      },
-      "letterSpacing": 0.1,
-      "effects": {
-        "relief": {
-          "mode": "letterpress",
-          "depth": 0.045,
-          "highlight": "#FFFFFF",
-          "shadow": "#8F8A7E",
-          "opacity": 0.65
-        }
-      },
-      "content": [
-        {
-          "expr": "'Pressed Light'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "press-title-zh",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.045
-      },
-      "font": {
-        "family": [
-          "Glow Sans SC"
-        ],
-        "size": 0.0286,
-        "color": "#4A4E55",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "effects": {
-        "relief": {
-          "mode": "letterpress",
-          "depth": 0.035,
-          "highlight": "#FFFFFF",
-          "shadow": "#8F8A7E",
-          "opacity": 0.7
-        }
-      },
-      "content": [
-        {
-          "expr": "'纸上年华'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "press-model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.07,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6E6A61",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "effects": {
-        "case": "upper",
-        "relief": {
-          "mode": "letterpress",
-          "depth": 0.03,
-          "highlight": "#FFFFFF",
-          "shadow": "#A9A498",
-          "opacity": 0.5
-        }
-      },
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Press No. 03')",
-          "fallback": "Press No. 03"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "press-params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.07,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6E6A61",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "Ink · Paper · Time"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "press-date",
-      "anchor": "top-center",
-      "offset": {
-        "x": 0,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6E6A61",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "center",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "Edition of One"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "bottom-right",
@@ -249,5 +87,34 @@
       "contrast": "auto",
       "z": 100
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#373A40",
+    "font": {
+      "family": [
+        "Glow Sans SC",
+        "Geist",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'Pressed Light'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'纸上年华'",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Press No. 03')",
+        "fallback": "Press No. 03",
+        "role": "detail"
+      }
+    ]
+  }
 }

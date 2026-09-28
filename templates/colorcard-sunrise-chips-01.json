@@ -6,8 +6,8 @@
       "zh": "暖阳色卡",
       "en": "Sunrise Chips"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorcard"
@@ -34,86 +34,6 @@
     }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.05,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#7A6A5D",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.05,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#9A8B7E",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.14
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0204,
-        "color": "#4A4038",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "center",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
     {
       "type": "palette",
       "id": "chips",
@@ -161,5 +81,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#4A4038",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

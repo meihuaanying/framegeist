@@ -6,8 +6,8 @@
       "zh": "铜版雕刻",
       "en": "Copperplate Etch"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "classic-watermark"
@@ -180,196 +180,6 @@
       "gap": 0.0035
     },
     {
-      "type": "text",
-      "id": "etch-eyebrow",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.06,
-        "y": 0.042
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#5A4632",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "effects": {
-        "case": "upper",
-        "relief": {
-          "mode": "engrave",
-          "depth": 0.04,
-          "highlight": "#FFF8E7",
-          "shadow": "#2A2118",
-          "opacity": 0.4
-        }
-      },
-      "content": [
-        {
-          "expr": "'Etched Plates · Volume Four'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "etch-model",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.06,
-        "y": 0.042
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#5A4632",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unrecorded Camera')",
-          "fallback": "Unrecorded Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "etch-title-zh",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.085
-      },
-      "font": {
-        "family": [
-          "Glow Sans SC"
-        ],
-        "size": 0.0308,
-        "color": "#4A3A28",
-        "weight": 500
-      },
-      "letterSpacing": 0.26,
-      "effects": {
-        "relief": {
-          "mode": "engrave",
-          "depth": 0.045,
-          "highlight": "#FFF9EC",
-          "shadow": "#241C12",
-          "opacity": 0.75
-        }
-      },
-      "content": [
-        {
-          "expr": "'静光手记'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "etch-title-en",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0462,
-        "color": "#2C2318",
-        "weight": 500
-      },
-      "letterSpacing": 0.13,
-      "effects": {
-        "case": "upper",
-        "relief": {
-          "mode": "engrave",
-          "depth": 0.05,
-          "highlight": "#FFFDF4",
-          "shadow": "#1A130C",
-          "opacity": 0.9
-        }
-      },
-      "content": [
-        {
-          "expr": "'Quiet Light Studies'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "etch-params",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.06,
-        "y": -0.013
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6B5136",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "Contact Print · Unnumbered"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "etch-plate",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.06,
-        "y": -0.013
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6B5136",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "Plate I · Archive Copy"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "top-right",
@@ -383,5 +193,33 @@
       "contrast": "auto",
       "z": 100
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#2C2318",
+    "font": {
+      "family": [
+        "Glow Sans SC",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'Quiet Light Studies'",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "'静光手记'",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "'Etched Plates · Volume Four'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
+  }
 }

@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "id": "v100-sample-right-rail",
+    "name": "Sample 04 · Right Rail",
+    "version": "1.0.0",
+    "minEngineVersion": "1.0.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.06,
+      "right": 0.26,
+      "bottom": 0.06,
+      "left": 0.06
+    },
+    "background": {
+      "type": "solid",
+      "color": "#101418"
+    }
+  },
+  "layers": [],
+  "infoBlock": {
+    "side": "right",
+    "align": "right",
+    "color": "#E9E4DA",
+    "font": {
+      "family": [
+        "BebasNeue"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'SONY A7R V')",
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.iso, 'ISO 100 · 1/500s')",
+        "role": "detail"
+      }
+    ]
+  }
+}

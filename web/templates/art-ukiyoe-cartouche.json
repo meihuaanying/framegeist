@@ -6,8 +6,8 @@
       "zh": "浮世绘题签",
       "en": "Ukiyo-e Cartouche"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
@@ -98,72 +98,6 @@
       "gap": 0.004
     },
     {
-      "type": "text",
-      "id": "ukiyo-title",
-      "anchor": "middle-center",
-      "offset": {
-        "x": 0.383,
-        "y": -0.005
-      },
-      "font": {
-        "family": [
-          "Noto Serif SC"
-        ],
-        "size": 0.0352,
-        "color": "#2B241C",
-        "weight": 500
-      },
-      "lineHeight": 1.05,
-      "letterSpacing": 0.1,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'潮'",
-          "fallback": null
-        },
-        {
-          "expr": "'汐'",
-          "fallback": null
-        },
-        {
-          "expr": "'绘'",
-          "fallback": null
-        },
-        {
-          "expr": "'卷'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "ukiyo-side",
-      "anchor": "middle-center",
-      "offset": {
-        "x": 0.346,
-        "y": 0.045
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#7A6A55",
-        "weight": 500
-      },
-      "letterSpacing": 0.24,
-      "rotation": -90,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "'The Floating World'",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "ukiyo-seal",
       "anchor": "middle-center",
@@ -179,95 +113,6 @@
       "tint": "auto"
     },
     {
-      "type": "text",
-      "id": "ukiyo-model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.05,
-        "y": -0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#5C5245",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Provincial Camera')",
-          "fallback": "Provincial Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "ukiyo-date",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#5C5245",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "center",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "The Tidal Suite"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "ukiyo-params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#5C5245",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "Hand-Cut · Provincial Print"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "top-right",
@@ -281,5 +126,33 @@
       "contrast": "auto",
       "z": 100
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#2B241C",
+    "font": {
+      "family": [
+        "Noto Serif SC",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'潮' · '汐' · '绘' · '卷'",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "'The Floating World'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Provincial Camera')",
+        "fallback": "Provincial Camera",
+        "role": "detail"
+      }
+    ]
+  }
 }

@@ -6,8 +6,8 @@
       "zh": "暗房立柱",
       "en": "Darkroom Pillar"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "film"
@@ -131,133 +131,6 @@
       "opacity": 0.75
     },
     {
-      "type": "text",
-      "id": "micro-top",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.1,
-        "y": 0.03
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#9A938A",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "content": [
-        {
-          "expr": "'DARKROOM · FIBER PRINT'",
-          "fallback": "DARKROOM"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date-top",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.1,
-        "y": 0.03
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0132,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.1,
-        "y": -0.0714
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0132,
-        "color": "#8F897C",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.1,
-        "y": -0.0489
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0156,
-        "color": "#CFC8BA",
-        "weight": 500
-      },
-      "letterSpacing": 0.1,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
-          "fallback": "CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "stock",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.1,
-        "y": -0.018
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0374,
-        "color": "#F1ECDF",
-        "weight": 500
-      },
-      "letterSpacing": 0.1,
-      "content": [
-        {
-          "expr": "'FG 400'",
-          "fallback": "FILM"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "brandmark",
       "anchor": "bottom-left",
@@ -269,7 +142,6 @@
       "size": {
         "height": 0.06
       },
-      "attachTo": "stock",
       "attachGap": 0.012
     }
   ],
@@ -291,5 +163,32 @@
       "type": "string",
       "source": "constant"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#F1ECDF",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'FG 400'",
+        "fallback": "FILM",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
+        "fallback": "CAMERA",
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

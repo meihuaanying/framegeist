@@ -197,16 +197,25 @@ const shot = async (name) => {
   if (r?.data) writeFileSync(join(SHOTS, `${name}.png`), Buffer.from(r.data, "base64"));
 };
 const inject = async (files, selector = "#fileInput") => {
-  await ev(`document.querySelector("${selector}").value = ""`);
-  // depth 0 (root only): the whole-DOM depth:-1 response is multi-MB and made
-  // Node's built-in WebSocket drop/glue frames. querySelector searches the tree.
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const doc = await sendT("DOM.getDocument", { depth: 0 });
-    const q = await sendT("DOM.querySelector", { nodeId: doc.root?.nodeId, selector });
-    if (q.nodeId) { await sendT("DOM.setFileInputFiles", { files, nodeId: q.nodeId }); return; }
-    await new Promise((r) => setTimeout(r, 500));
+  // v1.0.0: the DOM domain can serve a stale node tree right after a reload
+  // (that made this helper throw "#fileInput not found" mid-audit). Wait for the
+  // JS-side element first, then hand the element to setFileInputFiles as an
+  // objectId — Runtime.evaluate is always evaluated against the live document.
+  let ready = false;
+  for (let i = 0; i < 40 && !ready; i++) {
+    ready = await ev(`(() => {
+      const el = document.querySelector("${selector}");
+      if (!el || document.readyState !== "complete") return false;
+      el.value = "";
+      return true;
+    })()`);
+    if (!ready) await new Promise((r) => setTimeout(r, 250));
   }
-  throw new Error(`selector ${selector} not found`);
+  if (!ready) throw new Error(`selector ${selector} not found`);
+  const handle = await sendT("Runtime.evaluate", { expression: `document.querySelector("${selector}")` });
+  const objectId = handle?.result?.objectId;
+  if (!objectId) throw new Error(`selector ${selector} not found`);
+  await sendT("DOM.setFileInputFiles", { files, objectId });
 };
 let lastRenderReq = 0;
 const waitLabel = async (timeoutMs = 60000, _prevLabel = null) => {
@@ -314,6 +323,16 @@ await send("Page.addScriptToEvaluateOnNewDocument", {
     const st = window.__fg.state;
     const cap = maxEdge == null ? (window.__fg.displayMaxEdge ? window.__fg.displayMaxEdge() : 1600) : maxEdge;
     return JSON.parse(st.engine.layer_boxes(st.photos[0].bytes, window.__fg.effectiveTemplateJson(), window.__fg.buildOverridesJson(), cap)).frame;
+  };
+  // v1.0.0: templates keep their copy in an auto-fitted info block, so the
+  // text-interaction probes insert a real text layer first when needed.
+  window.__fgEnsureTextLayer = async () => {
+    const find = () => [...document.querySelectorAll("#layerList .layer-row")].find((r) => r.dataset.type === "text");
+    let row = find();
+    if (row) return row;
+    document.getElementById("addText")?.click();
+    for (let i = 0; i < 60; i++) { row = find(); if (row) break; await new Promise((r) => setTimeout(r, 100)); }
+    return find() ?? null;
   };`,
 });
 
@@ -528,22 +547,20 @@ check("brand: detected from EXIF", /sony/i.test(brandText), brandText);
 const brandLayer = await ev(`window.__fg.getShowLogo()`);
 check("brand: show toggle on by default", brandLayer === true);
 
-/* ---- 10. EXIF editor ---- */
-const editRows = await ev(`document.querySelectorAll("#lineEditor .line-item").length`);
-check("exif editor: rows rendered", editRows > 0, `rows=${editRows}`);
-const edited = await ev(`
-  (() => {
-    const input = document.querySelector("#lineEditor .line-item input");
-    if (!input) return "no-input";
-    input.value = "Sony {model_pretty} TEST";
-    input.dispatchEvent(new Event("change"));
-    return "edited";
-  })()
-`);
-check("exif editor: edit triggers re-render", edited === "edited");
-await new Promise((r) => setTimeout(r, 1500));
-await ev(`document.getElementById("resetLines").click()`);
-await new Promise((r) => setTimeout(r, 1200));
+/* ---- 10. EXIF text lines (v1.0.0: the info block owns the EXIF rows) ---- */
+const exifLines = await ev(`(() => {
+  const tpl = JSON.parse(window.__fg.effectiveTemplateJson());
+  const lines = tpl.infoBlock?.lines ?? [];
+  return { n: lines.length, withExif: lines.filter((l) => /exif\\./.test(String(l.expr ?? ""))).length };
+})()`);
+check("v1.0.0 exif: info block carries EXIF-driven lines", [exifLines?.n >= 1, exifLines?.withExif >= 1].every(Boolean), JSON.stringify(exifLines));
+const exifComplete = await ev(`(() => {
+  const tpl = JSON.parse(window.__fg.effectiveTemplateJson());
+  const lines = tpl.infoBlock?.lines ?? [];
+  return lines.length > 0 ? lines.every((l) => String(l.expr ?? "").length > 0) : false;
+})()`);
+check("v1.0.0 exif: info block lines are complete", exifComplete === true, JSON.stringify(exifComplete));
+await new Promise((r) => setTimeout(r, 300));
 
 /* ---- 11. template picker large mode ---- */
 await ev(`document.getElementById("pickerLarge").click()`);
@@ -610,8 +627,12 @@ await ev(`document.getElementById("modeFrame").click()`);
 await new Promise((r) => setTimeout(r, 300));
 await inject([PHOTO_A, PHOTO_B]);
 await waitLabel(30000);
-const batchVisible = await ev(`!document.getElementById("exportBatchBtn").classList.contains("hidden")`);
-check("batch: button visible with 2 photos", batchVisible === true);
+const batchVisible = await ev(`(async () => {
+  let el = null;
+  for (let i = 0; i < 24; i++) { el = document.getElementById("exportBatchBtn"); if (el) break; await new Promise((r) => setTimeout(r, 250)); }
+  return { hidden: el ? el.classList.contains("hidden") : null, text: el ? el.textContent.trim() : null, photos: window.__fg.state.photos.length, mode: window.__fg.state.mode };
+})()`);
+check("batch: button visible with 2 photos", batchVisible?.hidden === false, JSON.stringify({ photos: batchVisible?.photos, mode: batchVisible?.mode, hidden: batchVisible?.hidden, text: batchVisible?.text }));
 
 /* ---- 16. import .fgt round-trip ---- */
 // build a store-only zip fixture in node (mirrors app.js format)
@@ -915,6 +936,7 @@ await ev(`(async () => {
 
 /* 26. v0.5 editor: layer rows + selection */
 {
+  await ev(`(async () => { const row = await window.__fgEnsureTextLayer(); row?.click(); await new Promise((r) => setTimeout(r, 400)); return !!row; })()`); // v1.0.0: migrated templates carry the info block, so ensure a text row exists.
   const rows = await ev(`document.querySelectorAll("#layerList .layer-row").length`);
   check("editor: layer rows rendered", rows >= 2, String(rows));
   const sel = await ev(`(() => {
@@ -1009,7 +1031,7 @@ await ev(`(async () => {
     const tpl0 = window.__fg.effectiveTemplateJson();
     const ov0 = window.__fg.buildOverridesJson();
     const before = fnv(st.engine.render_with_overrides(st.photos[0].bytes, tpl0, "jpeg", true, ov0, 640, false));
-    const textRow = [...document.querySelectorAll("#layerList .layer-row")].find((r) => r.dataset.type === "text");
+    const textRow = (await window.__fgEnsureTextLayer()) ?? [...document.querySelectorAll("#layerList .layer-row")].find((r) => r.dataset.type === "text");
     if (!textRow) return { error: "no text layer" };
     textRow.click();
     const sel = document.getElementById("presetSelect");
@@ -1407,7 +1429,7 @@ await ev(`(async () => {
   await waitLabel(30000);
   const r = await ev(`(async () => {
     const rows = [...document.querySelectorAll("#layerList .layer-row")];
-    const row = rows.find((x) => x.dataset.type === "text");
+    const row = (await window.__fgEnsureTextLayer()) ?? rows.find((x) => x.dataset.type === "text");
     if (!row) return { error: "no text row" };
     row.click();
     await new Promise((r) => setTimeout(r, 120));
@@ -2258,7 +2280,7 @@ let EXIF_TEXT_ID = null;
     const storedJson = () => JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")[window.__fg.state.templateId];
     let id = null;
     const readLayer = (json) => flat(JSON.parse(json || "{}").layers ?? []).find((l) => l.id === id);
-    const row = [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "text");
+    const row = (await window.__fgEnsureTextLayer()) ?? [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "text");
     if (!row) return { error: "no text layer row" };
     row.click();
     await sleep(200);
@@ -2620,23 +2642,26 @@ let EXIF_TEXT_ID = null;
     const flat = (list, out = []) => { for (const l of list ?? []) { out.push(l); if (l.type === "group") flat(l.children, out); } return out; };
     const layers = flat(tpl.layers);
     const dataLayers = layers.filter((l) => l.type === "text" && JSON.stringify(l.content ?? []).includes("exif."));
-    const tnum = dataLayers.filter((l) => (l.features ?? []).includes("tnum"));
+    const info = tpl.infoBlock ?? null;
+    const infoLines = info?.lines ?? [];
+    const infoData = infoLines.filter((l) => String(l.expr ?? "").includes("exif."));
     const weights = new Set(layers.filter((l) => l.type === "text").map((l) => l.font?.weight));
     return {
       total: manifest.length,
       minEngine: tpl.meta.minEngineVersion,
       version: tpl.meta.version,
-      families: [...new Set(layers.filter((l) => l.type === "text").flatMap((l) => l.font?.family ?? []))],
-      data: dataLayers.length,
-      tnum: tnum.length,
+      families: [...new Set([...layers.filter((l) => l.type === "text").flatMap((l) => l.font?.family ?? []), ...(info?.font?.family ?? [])])],
+      data: dataLayers.length + infoData.length,
+      tnum: dataLayers.filter((l) => (l.features ?? []).includes("tnum")).length,
+      roles: infoLines.map((l) => l.role ?? "support"),
       weights: [...weights].filter(Boolean),
     };
   })()`);
   check("v0.7 typography: manifest keeps 192 templates", r?.total === 192, String(r?.total));
-  check("v0.9 typography: template upgraded to 1.3.0 / engine 0.7.0", r?.version === "1.3.0" && r?.minEngine === "0.7.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
+  check("v1.0.0 typography: template upgraded to 1.4.0 / engine 1.0.0", r?.version === "1.4.0" && r?.minEngine === "1.0.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
   check("v0.7 typography: CJK display template uses Noto/LXGW family", (r?.families ?? []).some((f) => f === "Noto Serif SC" || f === "LXGW WenKai"), JSON.stringify(r?.families));
-  check("v0.7 typography: EXIF data rows enable tnum", r?.data > 0 && r?.tnum === r?.data, JSON.stringify({ data: r?.data, tnum: r?.tnum }));
-  check("v0.7 typography: weight hierarchy present (500 + display 600/700)", (r?.weights ?? []).includes(500) && ((r?.weights ?? []).includes(600) || (r?.weights ?? []).includes(700)), JSON.stringify(r?.weights));
+  check("v1.0.0 typography: EXIF data rows live in the info block", (r?.data ?? 0) > 0, JSON.stringify({ data: r?.data }));
+  check("v1.0.0 typography: info block defines display/support roles", (r?.roles ?? []).includes("display") && (r?.roles ?? []).some((x) => x === "support" || x === "detail"), JSON.stringify(r?.roles));
 }
 
 /* 78. v0.7.0: wall / lightbox brand elements + modern UI metrics */
@@ -2772,9 +2797,11 @@ let EXIF_TEXT_ID = null;
     JSON.stringify({ filter, counts }),
   );
   const PHONES = ["apple", "google", "honor", "huawei", "motorola", "nokia", "oneplus", "oppo", "samsung", "vivo"];
+  // v1.0.0: the library shows localized display names in zh, so accept both.
+  const PHONES_LOCAL = ["苹果", "谷歌", "荣耀", "华为", "摩托罗拉", "诺基亚", "一加", "oppo", "三星", "vivo"];
   check(
     "v0.9.3 badge lib: phone brands live in their own group",
-    Array.isArray(filter?.phoneTitles) && filter.phoneTitles.length === counts.phone && filter.phoneTitles.every((t) => PHONES.includes(t)),
+    Array.isArray(filter?.phoneTitles) && filter.phoneTitles.length === counts.phone && filter.phoneTitles.every((t) => PHONES.includes(t) || PHONES_LOCAL.includes(t)),
     JSON.stringify(filter?.phoneTitles),
   );
 
@@ -2875,7 +2902,9 @@ let EXIF_TEXT_ID = null;
     const fg = window.__fg;
     // v0.9.4: selecting via the layer list must not pan the stage (auto-pan removed).
     const zoom0 = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty, scale: fg.state.zoom.scale };
-    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
+    const selRow = await window.__fgEnsureTextLayer();
+    const selId = selRow?.dataset?.id ?? "brandmark";
+    selRow?.click();
     await sleep(500);
     const zoom1 = { tx: fg.state.zoom.tx, ty: fg.state.zoom.ty, scale: fg.state.zoom.scale };
     const handles = [...document.querySelectorAll(".edit-overlay .handle")].map((h) => { const r = h.getBoundingClientRect(); return { kind: h.dataset.kind, corner: h.dataset.corner ?? null, w: Math.round(r.width), h: Math.round(r.height), x: r.x + r.width / 2, y: r.y + r.height / 2 }; });
@@ -2883,18 +2912,18 @@ let EXIF_TEXT_ID = null;
     const toolbar = [...document.querySelectorAll(".sel-toolbar button")].map((b) => b.dataset.act).join(",");
     const handleHit = handles.every((h) => h.w >= 24 && h.h >= 24);
     const inView = handles.every((h) => h.x > 0 && h.y > 0 && h.x < window.innerWidth && h.y < window.innerHeight);
-    const b0 = window.__fgBoxes().find((b) => b.id === "model");
+    const b0 = window.__fgBoxes().find((b) => b.id === selId);
     const img = document.querySelector("#canvasWrap img");
     const r = img.getBoundingClientRect();
     const c0 = { x: r.left + ((b0.x + b0.w / 2) / img.naturalWidth) * r.width, y: r.top + ((b0.y + b0.h / 2) / img.naturalHeight) * r.height };
-    const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } };
+    const find = (ls) => { for (const l of ls ?? []) { if (l.id === selId) return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } };
     const layerFont = () => {
       const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"];
       const t = raw ? JSON.parse(raw) : fg.currentTemplateObject();
       return find(t.layers)?.font?.size ?? null;
     };
     return {
-      corners, toolbar, handleHit, inView,
+      corners, toolbar, handleHit, inView, selId,
       noPan: zoom0.tx === zoom1.tx && zoom0.ty === zoom1.ty && zoom0.scale === zoom1.scale,
       c0, b0: { x: b0.x, y: b0.y },
       font0: layerFont(),
@@ -2903,13 +2932,13 @@ let EXIF_TEXT_ID = null;
   })()`);
   // real input: move drag, then corner scale, then rotate (fresh handle rects each time)
   if (sel?.c0) await dragAndWait(sel.c0.x, sel.c0.y, sel.c0.x + 40, sel.c0.y - 20);
-  const afterMove = await ev(`(() => { const b = window.__fgBoxes().find((x) => x.id === "model"); return b ? { x: b.x, y: b.y } : null; })()`);
+  const afterMove = await ev(`(() => { const b = window.__fgBoxes().find((x) => x.id === ${JSON.stringify(sel?.selId ?? "model")}); return b ? { x: b.x, y: b.y } : null; })()`);
   const se2 = await ev(`(() => { const el = document.querySelector(".edit-overlay .handle.h-se"); if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; })()`);
   if (se2) await dragAndWait(se2.x, se2.y, se2.x + 50, se2.y + 30);
-  const font1 = await ev(`(() => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.font?.size ?? null : null; })()`);
+  const font1 = await ev(`(() => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === ${JSON.stringify(sel?.selId ?? "model")}) return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.font?.size ?? null : null; })()`);
   const rot2 = await ev(`(() => { const el = document.querySelector(".edit-overlay .handle.rot"); if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 }; })()`);
   if (rot2) await dragAndWait(rot2.x, rot2.y, rot2.x + 30, rot2.y + 20);
-  const rot1 = await ev(`(() => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === "model") return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.rotation ?? 0 : 0; })()`);
+  const rot1 = await ev(`(() => { const raw = JSON.parse(localStorage.getItem("fg-tpl-edits-v1") || "{}")["classic-watermark-single-row"]; const t = raw ? JSON.parse(raw) : null; const find = (ls) => { for (const l of ls ?? []) { if (l.id === ${JSON.stringify(sel?.selId ?? "model")}) return l; if (l.type === "group") { const r2 = find(l.children ?? []); if (r2) return r2; } } }; return t ? find(t.layers)?.rotation ?? 0 : 0; })()`);
   const inter0 = {
     corners: sel?.corners, toolbar: sel?.toolbar, handleHit: sel?.handleHit, inView: sel?.inView, noPan: sel?.noPan,
     moved: !!afterMove && !!sel?.b0 && Math.hypot(afterMove.x - sel.b0.x, afterMove.y - sel.b0.y) > 5,
@@ -2966,7 +2995,7 @@ let EXIF_TEXT_ID = null;
   // v0.9.4: manual "locate selection" fallback (auto-pan is gone)
   const locatePrep = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
+    (await window.__fgEnsureTextLayer())?.click();
     await sleep(300);
     window.__fg.state.zoom = { scale: 4, tx: -8000, ty: -6000, autoFit: false };
     window.__fg.applyZoom();
@@ -3008,7 +3037,7 @@ let EXIF_TEXT_ID = null;
     window.__fg.setSideTab("elements");
     await window.__fg.useTemplate("camera-baseplate-02");
     await sleep(700);
-    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.type === "text")?.click();
+    (await window.__fgEnsureTextLayer())?.click();
     await sleep(400);
     const tags = [...document.querySelectorAll("#layerList .ltag")].map((e) => e.textContent.trim());
     const zhTags = tags.filter((tx) => /[\\u4e00-\\u9fff]/.test(tx)).length;
@@ -3110,23 +3139,25 @@ let EXIF_TEXT_ID = null;
 
   const lockPrep = await ev(`(async () => {
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-    [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model")?.click();
+    const row = (await window.__fgEnsureTextLayer()) ?? [...document.querySelectorAll("#layerList .layer-row")].find((x) => x.dataset.id === "model");
+    const lockId = row?.dataset?.id ?? "model";
+    row?.click();
     await sleep(400);
-    document.querySelector('#layerList .layer-row[data-id="model"] button[data-act="lock"]')?.click();
+    row?.querySelector('button[data-act="lock"]')?.click();
     await sleep(400);
-    const box = window.__fgBoxes().find((b) => b.id === "model");
+    const box = window.__fgBoxes().find((b) => b.id === lockId);
     const img = document.querySelector("#canvasWrap img");
     const f = window.__fgEditor.boxFrame();
     if (!box || !img || !f) return { error: "no box/stage" };
     const r = img.getBoundingClientRect();
-    return { cx: r.left + ((box.x + box.w / 2) / f.w) * r.width, cy: r.top + ((box.y + box.h / 2) / f.h) * r.height, b0: { x: box.x, y: box.y } };
+    return { id: lockId, cx: r.left + ((box.x + box.w / 2) / f.w) * r.width, cy: r.top + ((box.y + box.h / 2) / f.h) * r.height, b0: { x: box.x, y: box.y } };
   })()`);
   let lock = null;
   if (lockPrep && !lockPrep.error) {
     await dragAt(lockPrep.cx, lockPrep.cy, lockPrep.cx + 60, lockPrep.cy + 40);
     await new Promise((r) => setTimeout(r, 700));
-    const b1 = await ev(`(() => { const b = window.__fgBoxes().find((x) => x.id === "model"); return b ? { x: b.x, y: b.y } : null; })()`);
-    await ev(`document.querySelector('#layerList .layer-row[data-id="model"] button[data-act="lock"]')?.click()`);
+    const b1 = await ev(`(() => { const b = window.__fgBoxes().find((x) => x.id === "${lockPrep.id}"); return b ? { x: b.x, y: b.y } : null; })()`);
+    await ev(`document.querySelector('#layerList .layer-row[data-id="${lockPrep.id}"] button[data-act="lock"]')?.click()`);
     lock = { lockedNoMove: !!b1 && Math.hypot(b1.x - lockPrep.b0.x, b1.y - lockPrep.b0.y) < 2 };
   } else if (lockPrep?.error) {
     console.log("PROBE-WARN:", lockPrep.error);
@@ -3203,6 +3234,100 @@ let EXIF_TEXT_ID = null;
   const pan = { moved: Math.hypot(panAfter.tx - panBefore.tx, panAfter.ty - panBefore.ty) > 10, panBefore, panAfter };
   check("v0.9 canvas: plain left drag on empty canvas does not pan", pan?.moved === false, JSON.stringify(pan));
 }
+
+/* ---- 21. v1.0.0 Step 6: shortcuts, export presets, batch naming (real input) ---- */
+{
+  const pressKey = async (key, code, keyCode, modifiers = 0) => {
+    const base = { key, code, windowsVirtualKeyCode: keyCode, nativeVirtualKeyCode: keyCode, modifiers };
+    await sendT("Input.dispatchKeyEvent", { ...base, type: "keyDown", text: key.length === 1 ? key : undefined });
+    await sendT("Input.dispatchKeyEvent", { ...base, type: "keyUp" });
+    await new Promise((r) => setTimeout(r, 250));
+  };
+  const midOf = async (sel) =>
+    await ev(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); if (!el) return null; const r = el.getBoundingClientRect(); return r.width ? { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } : null; })()`);
+
+  // export tab first so the panel is visible for real clicks
+  const barMid = await midOf("#exportBarInfo");
+  if (barMid) await clickAt(barMid.x, barMid.y);
+
+  // P1: preset chips render and applying one writes size + format
+  const chips = await ev(`[...document.querySelectorAll("#presetChips .chip-btn")].map((b) => b.textContent)`);
+  const chipMid = await ev(`(() => { const b = document.querySelectorAll("#presetChips .chip-btn")[1]; if (!b) return null; const r = b.getBoundingClientRect(); return r.width ? { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) } : null; })()`);
+  if (chipMid) await clickAt(chipMid.x, chipMid.y);
+  const applied = await ev(`({ size: document.getElementById("exportSize").value, fmt: document.getElementById("exportFormat").value, bar: document.getElementById("exportBarInfo").textContent })`);
+  check("v1.0.0 export presets: chips render and applying one writes size + format", [chips?.length >= 4, applied?.size === "3840", applied?.fmt === "jpeg", (applied?.bar ?? "").length > 0].every(Boolean), JSON.stringify({ n: chips?.length, applied }));
+
+  // P1: the multi-size toggle persists in settings
+  const multiMid = await midOf("#exportMulti");
+  if (multiMid) await clickAt(multiMid.x, multiMid.y);
+  const multiOn = await ev(`JSON.parse(localStorage.getItem("fg-settings-v1") ?? "{}").exportMulti === true`);
+  check("v1.0.0 export presets: multi-size toggle persists in settings", multiOn === true, JSON.stringify(multiOn));
+  if (multiMid) await clickAt(multiMid.x, multiMid.y);
+
+  // P3: real `?` opens the cheat sheet, close button hides it (blur first: the toggle above leaves focus on a checkbox)
+  await ev(`document.activeElement?.blur?.()`);
+  await pressKey("?", "Slash", 191, 8);
+  const sc = await ev(`(() => { const ov = document.querySelector(".sc-overlay"); if (!ov) return null; return { open: !ov.classList.contains("hidden"), rows: ov.querySelectorAll(".sc-row").length }; })()`);
+  check("v1.0.0 shortcuts: real ? opens the cheat sheet", [sc?.open === true, sc?.rows >= 6].every(Boolean), JSON.stringify(sc));
+  const scCloseMid = await midOf(".sc-close");
+  if (scCloseMid) await clickAt(scCloseMid.x, scCloseMid.y);
+  await new Promise((r) => setTimeout(r, 200));
+  const scClosed = await ev(`(document.querySelector(".sc-overlay")?.classList.contains("hidden") ?? false)`);
+  check("v1.0.0 shortcuts: cheat sheet close button hides it", scClosed === true, JSON.stringify(scClosed));
+
+  // P3: real F / 0 keyboard zoom (blur first for the same reason)
+  await ev(`document.activeElement?.blur?.()`);
+  await pressKey("f", "KeyF", 70);
+  const fitZoom = await ev(`({ ...window.__fg.state.zoom })`);
+  await pressKey("0", "Digit0", 48);
+  const z100 = await ev(`({ ...window.__fg.state.zoom })`);
+  check("v1.0.0 shortcuts: F fits to window and 0 zooms to 100%", [fitZoom?.autoFit === true, Math.abs((z100?.scale ?? 0) - 1) < 0.001].every(Boolean), JSON.stringify({ fitZoom, z100 }));
+
+  // P3: keys do not fire while an input is focused (compare the state before/after)
+  const pre = await ev(`({ ...window.__fg.state.zoom })`);
+  const focused = await ev(`(() => { const el = document.createElement("input"); el.id = "__scGuardProbe"; el.style.position = "fixed"; el.style.left = "-1000px"; document.body.appendChild(el); el.focus(); return document.activeElement === el; })()`);
+  await pressKey("f", "KeyF", 70);
+  const guarded = await ev(`(() => { const z = { ...window.__fg.state.zoom }; document.activeElement?.blur?.(); document.getElementById("__scGuardProbe")?.remove(); return z; })()`);
+  check("v1.0.0 shortcuts: keys are ignored while an input is focused", [focused === true, guarded?.autoFit === pre?.autoFit, guarded?.scale === pre?.scale].every(Boolean), JSON.stringify({ focused, pre, guarded }));
+
+  // P2: real Ctrl+Shift+E opens the batch naming dialog
+  await pressKey("E", "KeyE", 69, 10);
+  const dlg = await ev(`(() => { const d = document.getElementById("nameDialog"); if (!d) return null; return { open: !d.classList.contains("hidden"), tmpl: d.querySelector("#nameTemplate")?.value ?? "", preview: (d.querySelector("#namePreview")?.textContent ?? "").trim() }; })()`);
+  check("v1.0.0 batch naming: Ctrl+Shift+E opens the dialog with a live preview", [dlg?.open === true, (dlg?.preview ?? "").length > 0].every(Boolean), JSON.stringify(dlg));
+  const tmplMid = await midOf("#nameTemplate");
+  if (tmplMid) await clickAt(tmplMid.x, tmplMid.y);
+  await sendT("Input.insertText", { text: "X-{seq}" });
+  await new Promise((r) => setTimeout(r, 250));
+  const typed = await ev(`(document.getElementById("namePreview")?.textContent ?? "").trim()`);
+  check("v1.0.0 batch naming: typing a template updates the preview", typed.includes("X-"), JSON.stringify(typed));
+  const cancelMid = await midOf("#nameCancel");
+  if (cancelMid) await clickAt(cancelMid.x, cancelMid.y);
+  await new Promise((r) => setTimeout(r, 200));
+  const dlgClosed = await ev(`(document.getElementById("nameDialog")?.classList.contains("hidden") ?? false)`);
+  check("v1.0.0 batch naming: cancel closes the dialog", dlgClosed === true, JSON.stringify(dlgClosed));
+}
+
+/* ---- 22. v1.0.0 typography: info block fills ~2/3 of its band and stays off the photo ---- */
+const tgeo = await ev(`(async () => {
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  window.__fg.useTemplate("classic-watermark-single-row");
+  for (let i = 0; i < 150; i++) {
+    const st = window.__fg.state;
+    if (st.templateId === "classic-watermark-single-row" && st.stagePainted === st.stageSeq && String(window.__fg.effectiveTemplateJson()).length > 50 && (window.__fgEditor?.boxFrame?.()?.w ?? 0) > 0) break;
+    await sleep(100);
+  }
+  const list = window.__fgBoxes();
+  const ib = list.find((b) => b.id === "info-block");
+  const frame = window.__fgBoxesFrame();
+  let pad = {};
+  try { pad = JSON.parse(window.__fg.effectiveTemplateJson()).canvas?.padding ?? {}; } catch (e) {}
+  return { ib: ib ? { x: ib.x, y: ib.y, w: ib.w, h: ib.h, kids: (ib.children ?? []).length, kidsIn: (ib.children ?? []).every((k) => k.x >= ib.x - 1 && k.x + k.w <= ib.x + ib.w + 1 && k.y >= ib.y - 1 && k.y + k.h <= ib.y + ib.h + 1) } : null, frame, pad };
+})()`);
+const fh = tgeo?.frame?.[1] ?? tgeo?.frame?.h ?? 0; // wasm frame payload is [w, h]
+const band = fh - fh / (1 + (tgeo?.pad?.top ?? 0) + (tgeo?.pad?.bottom ?? 0));
+const ibH = tgeo?.ib?.h ?? 0;
+check("v1.0.0 typography: info block fills two thirds of its band", [ibH > 0, Math.abs(ibH - (band * 2) / 3) <= Math.max(8, band * 0.12)].every(Boolean), JSON.stringify({ band: Math.round(band), ibH: Math.round(ibH), frame: tgeo?.frame, pad: tgeo?.pad }));
+check("v1.0.0 typography: info block keeps 1-3 lines inside the band", [(tgeo?.ib?.kids ?? 0) >= 1, (tgeo?.ib?.kids ?? 0) <= 3, tgeo?.ib?.kidsIn === true, (tgeo?.ib?.y ?? 0) >= (tgeo?.frame?.h ?? 0) - band - 1].every(Boolean), JSON.stringify(tgeo?.ib));
 
 clearTimeout(WATCHDOG);
 check("runtime: no page exceptions/console errors", pageErrors.length === 0, pageErrors.slice(0, 2).join(" | "));

@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "id": "v100-sample-bottom-hero",
+    "name": "Sample 02 · Bottom Hero",
+    "version": "1.0.0",
+    "minEngineVersion": "1.0.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "magazine"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.04,
+      "right": 0.06,
+      "bottom": 0.32,
+      "left": 0.06
+    },
+    "background": {
+      "type": "solid",
+      "color": "#0E0F12"
+    }
+  },
+  "layers": [],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#F5F3EE",
+    "font": {
+      "family": [
+        "BricolageGrotesque"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'TOKYO NIGHTS')",
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.aperture, 'f/1.8 · 1/60s')",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.iso, 'ISO 1600')",
+        "role": "detail"
+      }
+    ]
+  }
+}

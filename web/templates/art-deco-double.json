@@ -6,8 +6,8 @@
       "zh": "Art Deco 双线",
       "en": "Deco Double Line"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
@@ -107,146 +107,6 @@
       "opacity": 0.95
     },
     {
-      "type": "text",
-      "id": "deco-title",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0528,
-        "color": "#17150F",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "'Modern Lines'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "deco-title-zh",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.008
-      },
-      "font": {
-        "family": [
-          "Noto Serif SC"
-        ],
-        "size": 0.0242,
-        "color": "#8A6E2F",
-        "weight": 500
-      },
-      "letterSpacing": 0.32,
-      "content": [
-        {
-          "expr": "'摩登双线'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "deco-model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.055,
-        "y": 0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#55524A",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Anonymous Print')",
-          "fallback": "Anonymous Print"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "deco-date",
-      "anchor": "top-center",
-      "offset": {
-        "x": 0,
-        "y": 0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#55524A",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "center",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "Deco Study · 01"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "deco-params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.055,
-        "y": 0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#55524A",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "Geometry · Light · Order"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "bottom-right",
@@ -260,5 +120,33 @@
       "contrast": "auto",
       "z": 100
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#17150F",
+    "font": {
+      "family": [
+        "Noto Serif SC",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'Modern Lines'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'摩登双线'",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Anonymous Print')",
+        "fallback": "Anonymous Print",
+        "role": "detail"
+      }
+    ]
+  }
 }

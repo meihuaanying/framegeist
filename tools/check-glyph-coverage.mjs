@@ -93,6 +93,10 @@ function textLayers(node, out) {
   if (node.type === "text" && Array.isArray(node.content)) {
     out.push(node);
   }
+  // v1.0.0: infoBlock lines carry the literals now (auto-fitted info block).
+  if (node.infoBlock && Array.isArray(node.infoBlock.lines)) {
+    out.push({ font: node.infoBlock.font ?? {}, content: node.infoBlock.lines });
+  }
   for (const value of Object.values(node)) textLayers(value, out);
 }
 
@@ -116,7 +120,7 @@ for (const file of files) {
     continue;
   }
   const layers = [];
-  textLayers(tpl.layers ?? [], layers);
+  textLayers(tpl, layers); // v1.0.0: root walk also collects the info block
   for (const layer of layers) {
     const families = layer.font?.family ?? [];
     const chars = new Set();
@@ -127,8 +131,9 @@ for (const file of files) {
         }
       }
     }
-    for (const family of families) {
-      if (!filesByFamily.has(family)) continue; // unknown family: engine fallback, covered elsewhere
+    // v1.0.0: mirror the engine — only the first available family shapes the run.
+    const family = families.find((f) => filesByFamily.has(f));
+    if (family) {
       const covered = familyCoverage(family, filesByFamily.get(family));
       for (const ch of chars) {
         checked++;

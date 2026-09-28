@@ -3,9 +3,16 @@
 免费开源的本地照片边框/水印/拼图工具：一个 Rust 引擎（`framegeist-core`）驱动 CLI / Web / Windows 桌面端，
 同一模板四端像素级一致，**照片与元数据不出本机**（零上传、零账号）。
 
-## 功能亮点（v0.9.0）
+## 功能亮点（v1.0.0）
 
-- **192 套原创模板 / 25 分类**，按 DESIGN-LANGUAGE v2 排版：瑞士 / 编辑杂志 / 日系 / 潮牌 / 器材说明书五种风格体系。
+- **留白区自动排版 v3**（v1.0.0）：引擎新增 `infoBlock`——文字只出现在留白区（下 / 左 / 右单侧成组、≤3 行按
+  display / support / detail 角色），字号自动求解使文字块正好填满留白区 **2/3**（下侧取高、左右取宽），
+  行高 / 字距 / 对齐自动；192 套模板全量重排；识别框与渲染像素一致（±2px），文字永不覆盖照片。
+- **体验增强**（v1.0.0）：快捷键 + `?` 速查表；导出预设（4 内置 + 自定义，可一键导出 2K + 原图双尺寸）；
+  批量导出命名模板（`{name}`/`{tplName}`/`{size}` 等 token + 冲突策略）。
+- **徽标核对**（v1.0.0）：57 项品牌 / 系列 / 游戏徽标逐一对官方样式核对（颜色口径维持 Simple Icons；
+  官方标识经授权使用；浅底黄色徽标自动回退黑白变体保证可读性）。
+- **192 套原创模板 / 25 分类**，按 DESIGN-LANGUAGE v3 排版：瑞士 / 编辑杂志 / 日系 / 潮牌 / 器材说明书五种风格体系。
 - **彩色品牌徽标**（v0.9.0）：Simple Icons 官方 hex 经阈值规则判定（15 彩色 / 4 单色），主变体直接上官方色；
   局部背景对比不足 3:1（WCAG 1.4.11）自动回退黑白变体，仍不足加描边/底板；`tint:"color"` 可强制官方彩色，
   暗色主题缩略图与模板墙标记同步彩色。
@@ -42,11 +49,11 @@ cargo tauri build --bundles nsis                 # Windows 桌面安装包（在
 
 ## 文档
 
-- 执行契约：`AGENTS.md`、`docs/V0.9.0-CONSTRAINTS.md`
-- 设计语言：`docs/DESIGN-LANGUAGE.md`（排版系统 v2 + 徽标彩色规范）
+- 执行契约：`AGENTS.md`、`docs/V1.0.0-CONSTRAINTS.md`
+- 设计语言：`docs/DESIGN-LANGUAGE.md`（排版 v3 留白区自动拟合 + 徽标规范）
 - 模板规范：`docs/TEMPLATE-SPEC.md` · schema：`docs/schema/template.schema.json`
 - 许可与来源：`docs/CREDITS.md`、`docs/licenses/`
-- 进度报告：`docs/reports/v0.9.0/PROGRESS.md`（含每分类前后对比图 `docs/reports/v0.9.0/compare/`）
+- 进度报告：`docs/reports/v1.0.0/PROGRESS.md`（含对比图 `docs/reports/v1.0.0/compare/`）
 
 ## 许可
 

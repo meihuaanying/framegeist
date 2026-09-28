@@ -6,160 +6,55 @@
       "zh": "角标日历",
       "en": "Corner Day"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
   },
   "canvas": {
-    "mode": "overlay"
-  },
-  "layers": [
-    {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.04,
-        "y": 0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "opacity": 0.8,
-      "content": [
-        {
-          "expr": "'CALENDAR · FRAMEGEIST'",
-          "fallback": null
-        }
-      ]
+    "mode": "extend",
+    "padding": {
+      "bottom": 0.26
     },
-    {
-      "type": "text",
-      "id": "bigday",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.04,
-        "y": -0.045
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.186,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0.01,
-      "opacity": 0.92,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('DD', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "month",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.04,
-        "y": -0.215
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "opacity": 0.85,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('MMM', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "cndate",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.04,
-        "y": -0.045
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.0168,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0.05,
-      "opacity": 0.9,
-      "content": [
-        {
-          "expr": "date('YYYY年MM月DD日', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "weekday",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.04,
-        "y": -0.085
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "opacity": 0.85,
-      "content": [
-        {
-          "expr": "exif.weekday_cn",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
+    "background": {
+      "type": "solid",
+      "color": "#101418"
     }
-  ],
+  },
+  "layers": [],
   "fields": {
     "date": {
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "right",
+    "color": "auto",
+    "font": {
+      "family": [
+        "LXGW WenKai",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('DD', exif.datetime)",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "date('YYYY年MM月DD日', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "date('MMM', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

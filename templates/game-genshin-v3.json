@@ -6,8 +6,8 @@
       "zh": "原神 · 海报卡",
       "en": "Genshin · Poster Card"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "framegeist",
     "license": "CC0-1.0",
     "category": "game",
@@ -41,37 +41,6 @@
       }
     },
     {
-      "type": "text",
-      "id": "title",
-      "anchor": "bottom-center",
-      "font": {
-        "family": [
-          "Bricolage Grotesque"
-        ],
-        "size": 0.0264,
-        "weight": 500,
-        "color": "#3E6B5A"
-      },
-      "content": [
-        {
-          "expr": "exif.model_pretty",
-          "fallback": "Camera"
-        },
-        {
-          "expr": "exif.lens",
-          "fallback": null
-        }
-      ],
-      "offset": {
-        "x": 0,
-        "y": -0.08
-      },
-      "features": [
-        "tnum"
-      ],
-      "letterSpacing": 0
-    },
-    {
       "type": "image",
       "id": "brand",
       "asset": "@builtin/brand/{exif.brand_slug}",
@@ -83,30 +52,29 @@
         "x": 0,
         "y": -0.045
       }
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-center",
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.018,
-        "weight": 500,
-        "color": "#C9A227"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
-          "fallback": "framegeist"
-        }
-      ],
-      "offset": {
-        "x": 0,
-        "y": -0.012
-      },
-      "letterSpacing": 0.08
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#3E6B5A",
+    "font": {
+      "family": [
+        "Bricolage Grotesque",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "exif.model_pretty · exif.lens",
+        "fallback": "Camera",
+        "role": "support"
+      },
+      {
+        "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+        "fallback": "framegeist",
+        "role": "detail"
+      }
+    ]
+  }
 }

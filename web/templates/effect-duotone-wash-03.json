@@ -6,8 +6,8 @@
       "zh": "双色晕染",
       "en": "Duotone Wash"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "effect"
@@ -66,33 +66,6 @@
       "opacity": 0.14
     },
     {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.05,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "top-right",
@@ -105,85 +78,6 @@
         "height": 0.06
       },
       "tint": "auto"
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.05,
-        "y": -0.052
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0228,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.05,
-        "y": -0.028
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "lens",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.03
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0162,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "exif.lens",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     }
   ],
   "fields": {
@@ -196,5 +90,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'Camera')",
+        "fallback": "Camera",
+        "role": "support"
+      },
+      {
+        "expr": "exif.lens",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

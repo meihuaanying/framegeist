@@ -6,17 +6,21 @@
       "zh": "黑神话悟空 · 极简角标",
       "en": "Black Myth Wukong · Corner Mark"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "framegeist",
     "license": "CC0-1.0",
     "category": "game",
     "notice": "Unofficial fan-made design; game names and trademarks belong to their respective owners."
   },
   "canvas": {
-    "mode": "overlay",
+    "mode": "extend",
     "background": {
-      "type": "none"
+      "type": "solid",
+      "color": "#101418"
+    },
+    "padding": {
+      "bottom": 0.26
     }
   },
   "layers": [
@@ -33,30 +37,23 @@
         "y": -0.045
       },
       "opacity": 0.95
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0192,
-        "weight": 500,
-        "color": "auto"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
-          "fallback": "framegeist"
-        }
-      ],
-      "offset": {
-        "x": -0.025,
-        "y": -0.095
-      },
-      "letterSpacing": 0.08
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "right",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+        "fallback": "framegeist",
+        "role": "detail"
+      }
+    ]
+  }
 }

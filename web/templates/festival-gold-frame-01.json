@@ -6,8 +6,8 @@
       "zh": "庆典金框",
       "en": "Gold Frame"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "festival"
@@ -57,137 +57,6 @@
       },
       "color": "#F2C94C",
       "strokeWidth": 0.0012
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "anchor": "top-center",
-      "offset": {
-        "x": 0,
-        "y": 0.022
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.052,
-        "color": "#F2C94C",
-        "weight": 600
-      },
-      "letterSpacing": 0.02,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'喜乐常在'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.045,
-        "y": 0.026
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#F2C94C",
-        "weight": 500
-      },
-      "letterSpacing": 0.12,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.045,
-        "y": 0.026
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#F2C94C",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.075
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.054,
-        "color": "#F2C94C",
-        "weight": 400
-      },
-      "letterSpacing": 0.04,
-      "align": "center",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "micro",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.025
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "#F2C94C",
-        "weight": 500
-      },
-      "letterSpacing": 0.24,
-      "opacity": 0.9,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'CELEBRATION · FRAMEGEIST'",
-          "fallback": null
-        }
-      ]
     }
   ],
   "fields": {
@@ -204,5 +73,33 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#F2C94C",
+    "font": {
+      "family": [
+        "LXGW WenKai",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'喜乐常在'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      }
+    ]
   }
 }

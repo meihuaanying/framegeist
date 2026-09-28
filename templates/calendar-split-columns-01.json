@@ -6,8 +6,8 @@
       "zh": "双栏日历",
       "en": "Split Calendar"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -75,115 +75,6 @@
       "fontFamily": [
         "Inter"
       ]
-    },
-    {
-      "type": "text",
-      "id": "cndate",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0.25,
-        "y": -0.175
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.0192,
-        "color": "#373A40",
-        "weight": 400
-      },
-      "letterSpacing": 0.04,
-      "align": "center",
-      "content": [
-        {
-          "expr": "date('YYYY年MM月DD日', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "weekday",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0.25,
-        "y": -0.14
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "#6B7280",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "center",
-      "content": [
-        {
-          "expr": "exif.weekday_cn",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0.25,
-        "y": -0.095
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "#373A40",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "center",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0.25,
-        "y": -0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "center",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     }
   ],
   "fields": {
@@ -200,5 +91,33 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#373A40",
+    "font": {
+      "family": [
+        "LXGW WenKai",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('YYYY年MM月DD日', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "exif.weekday_cn",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      }
+    ]
   }
 }

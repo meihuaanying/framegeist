@@ -393,6 +393,52 @@
 | `dateLocale` | `zh` / `en` | **v0.6**：`date('LOCAL', …)` 的语言（编辑器随 UI 语言下发；CLI/桌面缺省输出中性 ISO） |
 | `exif` | `{model, lens, focal, aperture, shutter, iso, datetime, brand_slug, …}` 白名单键 | **v0.6**：预览用 EXIF 覆盖（无 EXIF 照片「填入示例」）；值为 ≤256 字符的字符串/数字/布尔，最多 48 键；不写入照片、不影响导出 |
 
+### 4.7 信息块 infoBlock（v1.0.0）
+
+模板可选的**信息块**：把一组文字字段交给引擎自动排版，填充画布留白区（`canvas.mode: extend` 的扩展边）。引擎按「留白区 2/3」规则自动求解字号与位置，模板作者只需声明**放哪一侧、放哪些字段**。
+
+```json
+{
+  "canvas": { "mode": "extend", "padding": { "bottom": 0.26 }, "background": { "type": "solid", "color": "#FFFFFF" } },
+  "infoBlock": {
+    "side": "bottom",
+    "font": { "family": ["Geist"] },
+    "align": "left",
+    "color": "auto",
+    "lines": [
+      { "expr": "if_empty(exif.model_pretty, 'FUJIFILM X-T5')", "role": "display" },
+      { "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO {iso}', exif)", "role": "support" },
+      { "expr": "if_empty(exif.datetime, '2026 · TOKYO')", "role": "detail" }
+    ]
+  },
+  "layers": []
+}
+```
+
+| 字段 | 类型 | 默认 | 说明 |
+|---|---|---|---|
+| `side` | `"left" \| "right" \| "bottom"` | 必填 | 信息块所在留白侧；`canvas.mode` 必须为 `extend` 且该侧 `padding` > 0 |
+| `font.family` | string[] 1–8 | 必填 | 字体候选（同文字层；角色字重缺面时按就近匹配） |
+| `font.weight` | int 100–900 | 角色默认 | 给定后覆盖所有行的角色字重 |
+| `lines[]` | 1–3 项 | 必填 | 自上而下；每项 `expr`（字段表达式，同 §4.3）、`fallback`（可为 null）、`role`（`display`/`support`/`detail`，默认 `support`） |
+| `align` | `"left" \| "center" \| "right"` | 下侧 `left`、右侧 `right`、左侧 `left` | 下侧：块在留白带内的横向落点 + 块内行对齐；左右侧：仅块内行对齐（块在带内居中） |
+| `fill` | 0.2–1.0 | `0.6667`（2/3） | 目标填充比：下侧按带高、左右侧按带宽 |
+| `sizeMin` / `sizeMax` | 0.001–0.5 | `0.0095` / `0.12` | 字号上下限（相对照片高），拟合结果夹在区间内 |
+| `lineHeight` | 0.5–4.0 | `1.25` | 行高倍率；行间空隙 = `(lineHeight − 1) × 字号`（夹在 0.15–0.6） |
+| `color` | `"auto"` 或 `#RRGGBB[AA]` | `"auto"` | `auto` 按每行背景亮度自动取黑/白；显式色值固定（`--text-color` 覆盖优先） |
+| `z` | int | 0 | 与图层同一绘制顺序（同 z 时排在所有 `layers[]` 之后） |
+
+**排版规则（引擎保证）**
+
+1. **单侧成组**：一个模板的信息块只在一侧；徽标等其它元素应与信息块同侧（设计语言 v3 §7）。
+2. **≤3 行**：`lines` 最多 3 项；空字符串行自动隐藏（整块为空则不绘制）。
+3. **2/3 拟合**：块的可见高度（下侧）或最宽行宽（左右侧）占留白带的 `fill`（默认 2/3）；字号确定性一次求解，再按两轴不溢出等比缩小。
+4. **不遮照片**：块只落在留白带内（下侧块从照片下缘之下开始）。
+5. **确定性**：同输入渲染字节一致；`boxes` 输出的 `info-block` 盒（`kind: "text"`，含逐行子盒 `info-block-<i>-<role>`）与渲染像素一致（±2px，Rust 测试守护）。
+6. **向后兼容**：未声明 `infoBlock` 的模板完全按原路径渲染（像素不变）。
+
+**识别框**：`framegeist boxes` 输出 `id: "info-block"` 的盒，`children` 为每行小盒，可直接用于排版几何断言。
+
 ## 8. 品牌/镜头/系列映射（v0.2.0+）
 
 `exif.lens_series`（v0.3.0）：由 LensModel 推断系列徽章 slug（`sony-gm / canon-l / nikon-s / sigma-art / sigma-dgdn / hasselblad-xcd / fujifilm-xf`），模板可引用 `@builtin/series/{exif.lens_series}`，无匹配留白。

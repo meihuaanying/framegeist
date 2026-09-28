@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "id": "v100-sample-bottom-classic",
+    "name": "Sample 01 · Bottom Classic",
+    "version": "1.0.0",
+    "minEngineVersion": "1.0.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "classic-watermark"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.04,
+      "right": 0.06,
+      "bottom": 0.26,
+      "left": 0.06
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#141414",
+    "font": {
+      "family": [
+        "Geist"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'FUJIFILM X-T5')",
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.focal, '23mm · f/1.4 · 1/250s')",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.iso, 'ISO 400')",
+        "role": "detail"
+      }
+    ]
+  }
+}

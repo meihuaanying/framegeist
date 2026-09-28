@@ -6,8 +6,8 @@
       "zh": "黑金一线",
       "en": "Gold Line"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "black-frame"
@@ -27,30 +27,6 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.05,
-        "y": 0.03
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "#D4A017",
-        "weight": 500
-      },
-      "letterSpacing": 0.24,
-      "content": [
-        {
-          "expr": "'GOLD EDGE'",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "shape",
       "id": "goldline",
       "anchor": "bottom-left",
@@ -65,86 +41,6 @@
       },
       "color": "#D4A017",
       "autoHide": true
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.05,
-        "y": -0.075
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.054,
-        "color": "#D4A017",
-        "weight": 400
-      },
-      "letterSpacing": 0.04,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.125
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "#E6E6E6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.075
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#9A9A9A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     },
     {
       "type": "image",
@@ -175,5 +71,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#D4A017",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}MM · F{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

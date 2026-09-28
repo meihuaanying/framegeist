@@ -6,8 +6,8 @@
       "zh": "右侧配方栏",
       "en": "Recipe Rails"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -83,421 +83,6 @@
       "size": {
         "height": 0.06
       }
-    },
-    {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.062
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'RECIPE CARD C5'",
-          "fallback": "RECIPE"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l1",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.782,
-        "y": 0.15
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'FILM SIMULATION'",
-          "fallback": "FILM"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v1",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.15
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0192,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'PROVIA'",
-          "fallback": "RECIPE"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l2",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.782,
-        "y": 0.245
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'WHITE BALANCE'",
-          "fallback": "WB"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v2",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.245
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0192,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'5200K'",
-          "fallback": "WB"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l3",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.782,
-        "y": 0.34
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'DYNAMIC RANGE'",
-          "fallback": "DR"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v3",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.34
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0192,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'DR200'",
-          "fallback": "DR"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l4",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.782,
-        "y": 0.435
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'GRAIN'",
-          "fallback": "GRAIN"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v4",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.435
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0192,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'WEAK SMALL'",
-          "fallback": "GRAIN"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l5",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.782,
-        "y": 0.53
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'HIGHLIGHT'",
-          "fallback": "HIGHLIGHT"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v5",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.53
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0192,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'0'",
-          "fallback": "0"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l6",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.782,
-        "y": 0.625
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'SHADOW'",
-          "fallback": "SHADOW"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v6",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.625
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0192,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'0'",
-          "fallback": "0"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.035,
-        "y": -0.072
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0156,
-        "color": "#F1EDE6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
-          "fallback": "CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.035,
-        "y": -0.046
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('ISO {iso} · {focal}mm f/{aperture}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.035,
-        "y": -0.022
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8D8A84",
-        "weight": 500
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     }
   ],
   "fields": {
@@ -518,5 +103,32 @@
       "type": "string",
       "source": "constant"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "right",
+    "color": "#F1EDE6",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'PROVIA'",
+        "fallback": "RECIPE",
+        "role": "detail"
+      },
+      {
+        "expr": "'5200K'",
+        "fallback": "WB",
+        "role": "detail"
+      },
+      {
+        "expr": "'DR200'",
+        "fallback": "DR",
+        "role": "detail"
+      }
+    ]
   }
 }

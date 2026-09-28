@@ -6,8 +6,8 @@
       "zh": "民国杂志铅字",
       "en": "Republican Letterpress"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -43,58 +43,6 @@
       "opacity": 1
     },
     {
-      "type": "text",
-      "id": "rep-masthead",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.06,
-        "y": 0.028
-      },
-      "font": {
-        "family": [
-          "Noto Serif SC"
-        ],
-        "size": 0.0528,
-        "color": "#23201B",
-        "weight": 500
-      },
-      "letterSpacing": 0.12,
-      "content": [
-        {
-          "expr": "'拾光画报'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "rep-masthead-en",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.06,
-        "y": 0.038
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "#6B655C",
-        "weight": 500
-      },
-      "letterSpacing": 0.3,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "'The Light Pictorial · Monthly'",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "shape",
       "id": "rep-red-rule",
       "anchor": "top-left",
@@ -128,147 +76,6 @@
       "autoHide": true
     },
     {
-      "type": "text",
-      "id": "rep-column-zh",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.06,
-        "y": 0.862
-      },
-      "font": {
-        "family": [
-          "Noto Serif SC"
-        ],
-        "size": 0.0186,
-        "color": "#3A3630",
-        "weight": 500
-      },
-      "lineHeight": 1.7,
-      "letterSpacing": 0.05,
-      "width": 0.22,
-      "content": [
-        {
-          "expr": "'一台旧相机，一卷慢风景；把光收进纸页，留给以后慢慢翻看。'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "rep-column-en",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.43,
-        "y": 0.862
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#555046",
-        "weight": 500
-      },
-      "lineHeight": 1.9,
-      "letterSpacing": 0.08,
-      "width": 0.28,
-      "content": [
-        {
-          "expr": "'Pictures gathered slowly, printed on warm paper, kept for the years ahead.'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "rep-model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.06,
-        "y": -0.025
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#555046",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Editorial Desk')",
-          "fallback": "Editorial Desk"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "rep-date",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.025
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#555046",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "center",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "First Issue"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "rep-params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.06,
-        "y": -0.025
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#555046",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "Letterpress · Two Columns"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "top-right",
@@ -282,5 +89,33 @@
       "contrast": "auto",
       "z": 100
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#23201B",
+    "font": {
+      "family": [
+        "Noto Serif SC",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'拾光画报'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'一台旧相机，一卷慢风景；把光收进纸页，留给以后慢慢翻看。'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "'The Light Pictorial · Monthly'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
+  }
 }

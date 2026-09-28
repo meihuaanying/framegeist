@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "id": "v100-sample-left-stack",
+    "name": "Sample 06 · Left Stack",
+    "version": "1.0.0",
+    "minEngineVersion": "1.0.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "master"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.08,
+      "right": 0.06,
+      "bottom": 0.08,
+      "left": 0.34
+    },
+    "background": {
+      "type": "solid",
+      "color": "#EDE8DF"
+    }
+  },
+  "layers": [],
+  "infoBlock": {
+    "side": "left",
+    "align": "left",
+    "color": "#22201C",
+    "font": {
+      "family": [
+        "CormorantGaramond"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'HASSELBLAD 907X')",
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.focal, 'XCD 45P')",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.iso, 'ISO 64')",
+        "role": "detail"
+      }
+    ]
+  }
+}

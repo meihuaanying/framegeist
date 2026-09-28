@@ -6,8 +6,8 @@
       "zh": "奶白配方卡",
       "en": "Recipe Hero"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "fuji"
@@ -53,239 +53,6 @@
       "size": {
         "height": 0.06
       }
-    },
-    {
-      "type": "text",
-      "id": "codeline",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.08,
-        "y": 0.038
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#6E6A62",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'RECIPE CARD C4 · VELVIA'",
-          "fallback": "RECIPE CARD"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "label",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.1,
-        "y": 0.772
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8C877D",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "content": [
-        {
-          "expr": "'FILM SIMULATION'",
-          "fallback": "FILM"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "hero",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.1,
-        "y": 0.79
-      },
-      "font": {
-        "family": [
-          "Geist"
-        ],
-        "size": 0.055,
-        "color": "#17181A",
-        "weight": 600
-      },
-      "letterSpacing": 0.02,
-      "content": [
-        {
-          "expr": "'VELVIA'",
-          "fallback": "RECIPE"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "secondary",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.1,
-        "y": 0.868
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#6E6A62",
-        "weight": 500
-      },
-      "letterSpacing": 0.1,
-      "content": [
-        {
-          "expr": "'WB AUTO · DR100 · GRAIN OFF · H+1 S-1'",
-          "fallback": "WB AUTO · DR100"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.1,
-        "y": 0.905
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0144,
-        "color": "#17181A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
-          "fallback": "CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.1,
-        "y": 0.905
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#6E6A62",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "isolabel",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.85,
-        "y": 0.775
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#8C877D",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "content": [
-        {
-          "expr": "'ISO'",
-          "fallback": "ISO"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "isovalue",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.85,
-        "y": 0.79
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.048,
-        "color": "#17181A",
-        "weight": 500
-      },
-      "letterSpacing": 0.02,
-      "content": [
-        {
-          "expr": "exif.iso",
-          "fallback": "200"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.85,
-        "y": 0.868
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#6E6A62",
-        "weight": 500
-      },
-      "letterSpacing": 0,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     }
   ],
   "fields": {
@@ -306,5 +73,33 @@
       "type": "string",
       "source": "constant"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#17181A",
+    "font": {
+      "family": [
+        "Geist",
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'VELVIA'",
+        "fallback": "RECIPE",
+        "role": "display"
+      },
+      {
+        "expr": "exif.iso",
+        "fallback": "200",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
+        "fallback": "CAMERA",
+        "role": "detail"
+      }
+    ]
   }
 }

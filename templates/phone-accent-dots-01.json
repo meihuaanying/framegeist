@@ -6,8 +6,8 @@
       "zh": "点睛彩条",
       "en": "Accent Dots"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -72,107 +72,6 @@
       "color": "#FBBF24"
     },
     {
-      "type": "text",
-      "id": "dotnote",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.121,
-        "y": -0.1124
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0114,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "content": [
-        {
-          "expr": "'TRIPLE CAMERA SYSTEM'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.0614,
-        "y": -0.0692
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0216,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
-          "fallback": "MOBILE CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params1",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.0614,
-        "y": -0.0872
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0144,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params2",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.0614,
-        "y": -0.0512
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0144,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "bottom-left",
@@ -212,5 +111,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#1A1A1A",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
+        "fallback": "MOBILE CAMERA",
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture}', exif)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

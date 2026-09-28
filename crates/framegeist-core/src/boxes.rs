@@ -193,6 +193,46 @@ fn layer_boxes_in_frame(
             boxes.push(b);
         }
     }
+    if let Some(ib) = &template.info_block {
+        // v1.0.0: the info block is solved by the same `text_fit` routine the
+        // renderer uses, so overlay geometry can never drift from the pixels.
+        let lines = crate::text_fit::block_lines(ib, info, locale);
+        if let Some(fit) = crate::text_fit::fit(ib, &lines, &geo, &mut shaper) {
+            boxes.push(LayerBox {
+                id: "info-block".into(),
+                kind: "text".into(),
+                x: fit.block.0,
+                y: fit.block.1,
+                w: fit.block.2,
+                h: fit.block.3,
+                anchor: "top-left".into(),
+                offset_x: 0.0,
+                offset_y: 0.0,
+                rotation: 0.0,
+                z: ib.z_value(),
+                children: Some(
+                    fit.lines
+                        .iter()
+                        .enumerate()
+                        .map(|(i, l)| LayerBox {
+                            id: format!("info-block-{i}-{}", l.role),
+                            kind: "text".into(),
+                            x: l.x,
+                            y: l.y,
+                            w: l.ink_w,
+                            h: l.ink_h,
+                            anchor: "top-left".into(),
+                            offset_x: 0.0,
+                            offset_y: 0.0,
+                            rotation: 0.0,
+                            z: ib.z_value(),
+                            children: None,
+                        })
+                        .collect(),
+                ),
+            });
+        }
+    }
     Ok(((cw, ch), boxes))
 }
 

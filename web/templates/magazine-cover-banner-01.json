@@ -6,8 +6,8 @@
       "zh": "午夜封面",
       "en": "Midnight Cover"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "magazine"
@@ -27,91 +27,6 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "title",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.045,
-        "y": 0.028
-      },
-      "font": {
-        "family": [
-          "Fraunces"
-        ],
-        "size": 0.055,
-        "color": "#FFFFFF",
-        "weight": 600
-      },
-      "letterSpacing": 0.06,
-      "effects": {
-        "shadow": {
-          "offsetX": 0.015,
-          "offsetY": 0.025,
-          "blur": 0.03,
-          "color": "#000000",
-          "opacity": 0.45
-        }
-      },
-      "content": [
-        {
-          "expr": "'LIGHT JOURNAL'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "sub",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.045,
-        "y": 0.088
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#B9BDC4",
-        "weight": 500
-      },
-      "letterSpacing": 0.26,
-      "content": [
-        {
-          "expr": "'PHOTOGRAPHY QUARTERLY'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.045,
-        "y": 0.088
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#B9BDC4",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "shape",
       "id": "rule",
       "anchor": "top-left",
@@ -125,85 +40,6 @@
         "height": 0.0015
       },
       "color": "#FFFFFF59"
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.045,
-        "y": -0.06
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0192,
-        "color": "#F5F5F7",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "lens",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.045,
-        "y": -0.026
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "#8A8F98",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "exif.lens",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.045,
-        "y": -0.058
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#8A8F98",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     },
     {
       "type": "image",
@@ -234,5 +70,33 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#FFFFFF",
+    "font": {
+      "family": [
+        "Fraunces",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'LIGHT JOURNAL'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      },
+      {
+        "expr": "exif.lens",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

@@ -106,3 +106,73 @@ v0.9.4 热修全部完成：坐标单一事实来源、真实鼠标点选/拖拽
 
 - 引擎：`info_block`（side / fields / 2/3 拟合 / ≤3 行 / 字号求解）、DESIGN-LANGUAGE v3、5–8 套样张；完成后 **STOP 1 等用户审核**。
 - 已启动排版侦察（explore 子代理）：渲染文字链路、schema 字段、留白表达、v0.9 排版约定、侧向分布统计、相关测试基线。
+
+### Step 3 完成记录（2026-09-24）
+
+- **引擎能力（已落地 + 测试 5/5）**：`InfoBlock` schema（`crates/framegeist-core/src/template.rs`，serde 名 `infoBlock`；`side` / `font.family` / `font.weight` / `lines[]`(expr,fallback,role) / `align` / `fill` / `sizeMin` / `sizeMax` / `lineHeight` / `color` / `z`）+ 校验 `validate_info_block`（≤3 行、单侧、extend + 该侧 padding>0 等）；共用求解器 `crates/framegeist-core/src/text_fit.rs`（角色字阶 display 1.00/600/−0.02、support 0.72/400/0、detail 0.58/400/+0.08；2/3 拟合；行距 =（lineHeight−1）×字号；clamp sizeMin 0.0095–sizeMax 0.12）；渲染 `render::draw_info_block`（z 语义接入 order 循环、legacy 模式跳过、auto 对比色）；几何 `boxes` 追加 `info-block` 盒 + 逐行子盒（`info-block-<i>-<role>`）。
+- **测试**：`crates/framegeist-cli/tests/engine_v100.rs` **5/5**（下侧 2/3 ±5px、左 2/3 ±5px、不越界/不遮照片、boxes↔像素 ±2px、4 行/side=top/无 padding/未知 role 被拒、无 infoBlock 时留白区无墨迹 + 两次渲染字节一致）。
+- **样张（STOP 1 审核件）**：`docs/reports/v1.0.0/samples/` 6 套草稿模板 + 7 张全尺寸渲染（s01-bottom-classic 横/竖、s02-bottom-hero、s03-left-caption、s04-right-rail、s05-bottom-minimal、s06-left-stack）；`node tools/validate-templates.mjs --dir docs/reports/v1.0.0/samples` → **6 ok / 0 failed**（schema + 引擎放行）；预览已展示给用户。
+- **设计语言 v3 草案**：`docs/reports/v1.0.0/DESIGN-LANGUAGE-v3-DRAFT.md`（不覆盖 v2）；**§10 五个待用户裁决的问题**：(1) 下侧默认横向落点 left vs center；(2) 左右侧块垂直居中 + 块内 align；(3) 字号上限 0.12 是否够（是否要 0.16）；(4) display 行优先机型还是日期/地点；(5) 深色模板是否纳入 v1.0.0。
+- **文档**：`docs/schema/template.schema.json` 增加根级 `infoBlock`（与 Rust 校验一致）；`docs/TEMPLATE-SPEC.md` 新增 §4.7 信息块 infoBlock（v1.0.0）。
+- **用户指示（@1447@ 原话）**：「按计划继续推进，注意测试和检查」→ 视为样张与 v3 方向默认通过（5 问保持待裁决），继续 Step 4（47 项徽标审计 → STOP 2）。
+- **兼容性**：无 `infoBlock` 的旧模板渲染字节不变（golden + 新增 opt-in 测试双重证据）。
+
+## Step 4 — v1.0.0-C 徽标审计 + STOP 2 裁决（已完成）
+
+### 4.1 审计交付物
+- `docs/reports/v1.0.0/brand-audit.md`：47 项（camera 18 + phone 10 + series 13 + game 6）逐行对照——官方样式参考 / 来源（含可达性标注「待核实」）/ 当前实现（`web/brand/<slug>{,-mono,-light}.png` + `tools/brand-colors.json`）/ 差异 / 拟改 / 素材许可 / 风险；附录 A 官网可达性实测、附录 B Simple Icons 成员核验。
+- 分类统计：保留不动 22 / 仅颜色 6 / 字形重排 19 / 待官方截图定案 24 / 口径待裁决 4；三处「标签 vs 画面」不一致（olympus、panasonic、wwmeet）与黄色徽标对比度问题（nikon/insta360 ≈1.2–1.3:1）已单独列出。
+- `docs/reports/v1.0.0/brand-audit-lens.md`：Q12 扩围的 10 个纯镜头品牌补充审计（子代理产出）。
+- `docs/reports/v1.0.0/brand-delivery-checklist.md`：官方素材交付清单（第一优先 21 项 = Q8；第二优先 4 个手机品牌；第三优先 10 个镜头品牌）+ 交付目录与命名约定。
+
+### 4.2 STOP 2 十二问裁决（用户逐条答复，2026-09-24）
+1. 颜色口径：**维持 Simple Icons**（6 项颜色不改，「仅颜色」类作废）。
+2. 徽标形态：**使用官方标识**（用户声明有授权；官方素材由用户提供；CREDITS 记「官方标识经授权使用」）。
+3. 手机品牌中文名：**仅界面显示名加中文**（画面保持官方拉丁字标）。
+4. 旧品牌名：**保留 OLYMPUS / Panasonic**（画面文字不改）。
+5. 系列点缀色：**全部引入官方点缀色**（13 个系列徽章 + manifest v5 + 门禁同步）。
+6. Canon 系列：**只保留 L**（去掉 RF 前缀，配官方红）。
+7. 游戏字标：**官方标识 + 排印兜底**（不复制官方书法/插画；中文界面可加中文行）。
+8. 官方素材：**一次性提供 21 项**（交付方式与清单见 checklist）。
+9. ricoh/zeiss 官方色：**授权按官网取色**（记录采样来源，写入 `brand-colors.json`）。
+10. 黄色徽标：**浅底强制 `-mono`**（深色模板保留官方黄）。
+11. 商标声明：**补充游戏 IP 专门声明**（CREDITS + 免责声明）。
+12. 镜头品牌：**本轮一并核对**（审计范围 47 → 57 项）。
+
+### 4.3 后续（Step 5 前置）
+- 用户提供官方素材（`brand-official-inbox/`，已 gitignore）后：`gen-brand-assets.mjs` 接入 + manifest v5 + 系列点缀色变体 + 模板引用与 `check-brand-colors` 门禁同步。
+- 界面层：zh-CN/zh-TW 徽章库显示名本地化；浅底自动 `-mono`；CREDITS/免责声明补充。
+- 之后进入 Step 5：全量 192 套重排（info_block 迁移）+ 样片/基线/对比图重生成 + 全量门禁 + v1.0.0 发布。
+
+## Step 5 — v1.0.0-D 全量重排 + 门禁 + 发布（进行中）
+
+### 5.1 迁移工具与全量落地（2026-09-25）
+- 工具：`tools/apply-v100-typography.mjs`（默认 dry run；`--apply` 写入；`--only <ids>`；`--force` 忽略幂等标记）。规则：焦点（字号最大）文字层决定侧向（top/middle → bottom）；≤3 行按字号排序映射角色（≥0.05 display、<0.022 detail、其余 support）；行表达式 = 该层 content 的 expr 以 ` · ` 连接；移除全部文字层、剥除指向它们的 `attachTo`；必要时画布改 extend + 该侧 padding（bottom 0.26 / left·right 0.28）+ 背景（按文字色明暗选 #FFFFFF/#101418）；`meta.version = 1.4.0`、`minEngineVersion = 1.0.0`；每套经 CLI `boxes` 几何守卫（info-block 盒在留白带内、子盒 1–3 且不越界），失败自动回滚。
+- 结果：`--apply` → **migrated 192 / skipped 0 / failed 0**；侧向 bottom 189 / right 2 / left 1（侧栏保侧：calendar-rail-date-01、festival-dragon-boat-01、portfolio-vertical-scroll-01）；报告 `docs/reports/v1.0.0/typography-v100-report.json`。
+- 校验：`node tools/validate-templates.mjs --all` → **192 ok / 0 failed**；pilot 6 套抽检渲染（`target/preview-v100-migrated/`，含侧栏两套）已展示。
+- 界面层随迁：徽章库手机品牌显示名本地化（Q3，`brandLabel()` + i18n 10 键/语言，check-i18n 497/497）；浅底黄色强制 `-mono` 由既有 3:1 对比度门实现并有回归测试（`engine_v100.rs` 6/6）。
+- 进行中：样片/预览/缩略图重渲（`tools/gen-samples.mjs`）→ 视觉基线重生成（`visual-regression --update`）→ 对比图 → JS 七项 check → E2E（同步模板相关断言）→ perf/桌面端 → 全量门禁 → 发布 v1.0.0。
+
+### 5.2 CJK 字体修复与门禁恢复（2026-09-25）
+
+- **真实问题**：首轮迁移把焦点层的拉丁字体当作整块字体，而合并行含 CJK 字面量 → `art-*` / `calendar-*` / `festival-*` / `magazine-*` / `portfolio-*` / `colorwalk-*` / `personal-cn-*` 等模板缺字 ✗。
+- **修复**：`tools/apply-v100-typography.mjs` 的 `infoBlock.font.family` 改为「含非 ASCII 字面量的层字体优先 + 被选层字体并集（≤8）」，并删除块级 weight 覆盖（让角色字重同时作用于拟合测量与渲染）；`git checkout HEAD -- templates` 后重做迁移 → **APPLY: migrated 192 / skipped 0 / failed 0**（侧向 bottom 189 / left 1 / right 2）✓。
+- **glyph 门禁**：`tools/check-glyph-coverage.mjs` 两处修复——① 入口从 `tpl.layers` 改为根遍历（收集 `infoBlock` 伪层）；② 只检查首个可用 family（与引擎 `family_for` 语义一致，消除次级 family 的假阳性）→ **192 templates / 279 family/char pairs / 0 missing** ✓（此前 0 / 35 / 157 分别是入口 bug 与假阳性）。
+- **重生成**：样片/预览/缩略图 192/192（576 张）✓；视觉基线 384 ✓；对比图 25 类 / 150 组 ✓（`docs/reports/v1.0.0/compare`，before v0.9.4 左 / after v1.0.0 右）。
+- **E2E 同步**：迁移后模板不再含文字层 → 新增注入助手 `window.__fgEnsureTextLayer()`（无文字行时点 `#addText` 并轮询等待），修补 4 处（check 29 预设箔金、图层重命名、EXIF 字段芯片、zh-CN i18n 属性标签；对齐/分布探针自建文字层无需改）→ 迁移后第一轮全量 E2E 已启动（`target/e2e-v100-run1.log`）。
+- **待办**：E2E 结果 → perf 4/4 → 桌面端 9/9 → 全量门禁（fmt/clippy/test/四 target/wasm 帧一致/七项 check）→ 版本号四处 1.0.0 + 文档 → 发布（六资产 + Pages + 桌面端）。
+
+### 5.3 体验三项（Step 6）与 E2E 收尾（2026-09-28）
+
+- **Step 6 实施（P3 + P1 + P2）**：`web/app.js` 新增快捷键与速查表（`SHORTCUTS` 表：E 导出 / Ctrl+Shift+E 批量 / F 适应 / 0 100% / +− 缩放 / L 定位 / ? 速查；输入框聚焦或 Alt 按下时不触发）、导出预设（4 内置 + 自定义，写回 `#exportSize`/`#exportFormat`，导出栏显示「预设名 · 格式」）、批量导出命名对话框（token `{name}{tpl}{tplName}{date}{seq}{size}{fmt}` + 实时预览 + 冲突策略 sequence/overwrite/skip）；`web/index.html` 加 `#presetChips`、`#exportMulti`、设置「导出预设」节；`web/styles.css` 加 `.sc-overlay/.sc-card/.sc-row/.name-preview`；`web/i18n.js` 524/524。
+- **真实页面探针**（`target/probe-step6.mjs`，CDP 真实按键/点击）：预设 chip 4 项、点击后 size 3840 / bar「社媒 · 4K · JPEG」、速查浮层 8 行（含 Ctrl+Shift+E）、批量对话框可见 + 预览 + 取消关闭 ✓（全部通过）。
+- **E2E 新增 11 项断言**（Step 6 九项 + 排版几何两项）→ 期望 287；run5 = **281/287**：原有 276 项全过，6 项新检查失败 → 两类根因：① 快捷键检查焦点残留在 `#exportMulti`（输入守卫吞键）→ 按键前 blur + 输入守卫改为前后状态对比；② 排版几何检查取不到 `info-block` 盒 → **`web/` 侧模板镜像与 wasm 引擎陈旧**（迁移只改 `templates/`，`web/templates/` 与 `web/pkg` 未更新；SW 亦缓存旧模板）→ 已 `node tools/gen-templates.mjs`（192 套镜像）与 `node tools/wasm-build.mjs`（EXIT=0，smoke: frames byte-identical）。
+- **几何验证**（`target/probe-typometry.mjs`）：清 caches/SW + 注入照片 → 模板 version 1.4.0、引擎接受 `infoBlock`（err null）、`info-block` 盒 x=0,y=1217,w=500.9,h=68（children 2），frame 1600×1302、padding.bottom 0.085 → 留白带 102px，盒高 68px = 2/3 带高 ✓。
+- **待办**：全量 E2E 重跑（run6，预期 287/287）→ perf 4/4 → 桌面端重建 + 探针 9/9 → 全量门禁 → 版本号四处 1.0.0 + 文档 → 发布（六资产 + Pages + 桌面端）。
+
+### 5.4 E2E 迁移适配与 run7 根因（2026-09-28）
+
+- **run6 = 269/287** 的 18 项失败全部属迁移适配（模板不再含文字层）→ 审计侧修补：`__fgEnsureTextLayer()` 在 `exif editor` / `editor layer rows` / canvas 选择 / zh 属性标签等处「ensure + 点击」；`v0.7/v0.9 typography` 探针与断言改为 v1.0.0 语义（模板 1.4.0 / 引擎 1.0.0 / 字体家族含 infoBlock / EXIF 行在 info block / display+support 角色）。
+- **run7 = 273/287** 的 14 项失败 → 四个根因（`target/probe-run7sites.mjs` 实测）：① canvas `sel` 探针丢了 `selId` 定义（`b0` undefined → `b0.x` 抛错 → 载荷 `{}`）→ 恢复 `selRow/selId/click`；② 排版几何等待调用了不存在的 `window.__fg.boxFrame` → TypeError → 载荷 `{band:0,ibH:0}` → 改用 `window.__fgEditor?.boxFrame?.()`；③ `batch: button visible` 读数在元素未就绪时返回 undefined（探针证明按钮本身可见）→ 改为轮询 + 诊断 payload；④ `exif editor rows` / `editor layer rows` 只 ensure 不点击 → 补 `.click()`（迁移后 `classic-watermark-single-row` 仅 1 层 brandmark + infoBlock，ensure 后为 2 层，满足 ≥2 断言）。
+- **环境**：run7 启动脚本曾自我终止（WMI 过滤匹配到自身命令行里的 `--remote-debugging-port=9237`）→ 过滤改为 `Name='msedge.exe'`；审计日志改用 `Out-File -Encoding utf8`（PS5 的 `*>` 写 UTF-16LE）。
+- **待办**：run8 全量 E2E（预期 287/287）→ perf 4/4 → 桌面端重建 + 探针 9/9 → 全量门禁 → 版本号四处 1.0.0 + 文档 → 发布（六资产 + Pages + 桌面端）。

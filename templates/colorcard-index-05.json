@@ -6,8 +6,8 @@
       "zh": "索引色带",
       "en": "Index Row"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorcard"
@@ -35,58 +35,6 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.05,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "#6B7280",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.05,
-        "y": 0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "shape",
       "id": "rule",
       "anchor": "middle-center",
@@ -101,33 +49,6 @@
       },
       "color": "#AEB7C2",
       "opacity": 0.95
-    },
-    {
-      "type": "text",
-      "id": "index",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.05,
-        "y": -0.05
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "content": [
-        {
-          "expr": "'PALETTE 05'",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     },
     {
       "type": "palette",
@@ -171,5 +92,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#6B7280",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "'PALETTE 05'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

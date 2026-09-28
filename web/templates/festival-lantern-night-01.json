@@ -6,14 +6,21 @@
       "zh": "灯会之夜",
       "en": "Night Lanterns"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "festival"
   },
   "canvas": {
-    "mode": "overlay"
+    "mode": "extend",
+    "padding": {
+      "bottom": 0.26
+    },
+    "background": {
+      "type": "solid",
+      "color": "#101418"
+    }
   },
   "layers": [
     {
@@ -75,32 +82,6 @@
       "tint": "auto"
     },
     {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.04,
-        "y": 0.038
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "opacity": 0.85,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'LANTERN NIGHT · FRAMEGEIST'",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "seal",
       "anchor": "bottom-left",
@@ -112,61 +93,6 @@
       "size": {
         "height": 0.06
       }
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.04,
-        "y": -0.1
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.05,
-        "color": "auto",
-        "weight": 600
-      },
-      "letterSpacing": 0.02,
-      "opacity": 0.95,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'灯会'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.04,
-        "y": -0.04
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0456,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0.06,
-      "opacity": 0.9,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     }
   ],
   "fields": {
@@ -174,5 +100,33 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "right",
+    "color": "auto",
+    "font": {
+      "family": [
+        "LXGW WenKai",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'灯会'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "'LANTERN NIGHT · FRAMEGEIST'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

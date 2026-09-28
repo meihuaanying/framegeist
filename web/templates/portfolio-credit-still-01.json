@@ -6,95 +6,23 @@
       "zh": "片尾小字",
       "en": "Still Credits"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "portfolio"
   },
   "canvas": {
-    "mode": "overlay"
+    "mode": "extend",
+    "padding": {
+      "bottom": 0.26
+    },
+    "background": {
+      "type": "solid",
+      "color": "#101418"
+    }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "stillno",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.035,
-        "y": 0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "opacity": 0.8,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'STILL FRAME 01'",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "credit-main",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.035,
-        "y": -0.045
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "opacity": 0.9,
-      "content": [
-        {
-          "expr": "'A PHOTOGRAPH BY FRAMEGEIST'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "credit-sub",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.035,
-        "y": -0.078
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.1,
-      "opacity": 0.85,
-      "content": [
-        {
-          "expr": "fmt('{model_pretty} · {focal}MM · F{aperture} · {shutter}', exif)",
-          "fallback": null
-        }
-      ]
-    },
     {
       "type": "image",
       "id": "v7-brand-badge",
@@ -120,5 +48,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'A PHOTOGRAPH BY FRAMEGEIST'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{model_pretty} · {focal}MM · F{aperture} · {shutter}', exif)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "'STILL FRAME 01'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

@@ -6,8 +6,8 @@
       "zh": "极简单行",
       "en": "Minimal Line"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -27,31 +27,6 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.032
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0144,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.1,
-      "align": "center",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "MOBILE IMAGING"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "bottom-left",
@@ -60,7 +35,6 @@
         "height": 0.06
       },
       "tint": "auto",
-      "attachTo": "params",
       "attachGap": 0.014
     }
   ],
@@ -69,5 +43,22 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#6B7280",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": "MOBILE IMAGING",
+        "role": "detail"
+      }
+    ]
   }
 }

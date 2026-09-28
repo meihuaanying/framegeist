@@ -30,3 +30,6 @@ debug.log
 
 # Python bytecode caches
 __pycache__/
+
+# v1.0.0: inbox for user-provided official brand artwork (never shipped)
+brand-official-inbox/

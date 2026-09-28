@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "0.9.4";
+const APP_VERSION = "1.0.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -777,6 +777,13 @@ function brandGroupItems(group) {
   const list = group === "all" ? BRAND_GROUPS : [group];
   return list.flatMap((g) => (groups[g] ?? []).map((i) => ({ ...i, group: g })));
 }
+/// v1.0.0 (Q3): localized display name for a brand item. Chinese UI shows
+/// 华为/荣耀/… while the artwork keeps the official Latin wordmark.
+function brandLabel(item) {
+  const key = `brand.${item.slug}`;
+  const name = t(key);
+  return name === key ? (item.label ?? item.slug) : name;
+}
 /// v0.9.0: render a library grid from ALREADY filtered items (group + query).
 function renderLibGrid(grid, items) {
   const style = brandStyleNow();
@@ -792,8 +799,8 @@ function renderLibGrid(grid, items) {
   for (const item of items) {
     const cell = document.createElement("div");
     cell.className = `brand-lib-cell${item.slug === activeSlug ? " on" : ""}`;
-    cell.title = item.label ?? item.slug;
-    cell.innerHTML = `<img loading="lazy" decoding="async" src="${libThumb(item, item.group, style)}" alt="${escapeHtml(String(item.label ?? item.slug))}">` +
+    cell.title = brandLabel(item);
+    cell.innerHTML = `<img loading="lazy" decoding="async" src="${libThumb(item, item.group, style)}" alt="${escapeHtml(brandLabel(item))}">` +
       `<span class="fav${brandLibState.fav.has(item.slug) ? " on" : ""}">★</span>`;
     cell.querySelector(".fav").onclick = (e) => {
       e.stopPropagation();
@@ -841,7 +848,7 @@ function renderBrandLibrary() {
     for (const item of picks) {
       const b = document.createElement("button");
       b.className = "brand-chip ghost";
-      b.textContent = item.label ?? item.slug;
+      b.textContent = brandLabel(item);
       b.onclick = () => applyBrandChoice(item, item.group);
       quick.appendChild(b);
     }
@@ -849,7 +856,7 @@ function renderBrandLibrary() {
   // v0.9.0 filter fix: group chips + search both apply to the grid.
   const pool = brandGroupItems(brandLibState.group);
   const q = brandLibState.query.trim().toLowerCase();
-  const items = q ? pool.filter((i) => i.slug.includes(q) || String(i.label).toLowerCase().includes(q)) : pool;
+  const items = q ? pool.filter((i) => i.slug.includes(q) || brandLabel(i).toLowerCase().includes(q)) : pool;
   renderLibGrid($("brandLibGrid"), items);
   const tgt = $("brandLibTarget");
   if (tgt) tgt.textContent = target ? (target.label || target.id) : t("brandLib.noLayer");
@@ -865,7 +872,7 @@ function applyBrandChoice(item, group) {
   if (!window.__fgEditor?.setBadgeAsset?.(asset)) return;
   brandLibState.recent = [item.slug, ...brandLibState.recent.filter((s) => s !== item.slug)];
   saveBrandLib();
-  toast("ok", t("brandLib.applied", { name: item.label ?? item.slug }));
+  toast("ok", t("brandLib.applied", { name: brandLabel(item) }));
   rebuildBrandViews();
 }
 function rebuildBrandViews() {
@@ -1709,6 +1716,247 @@ async function exportBatch() {
   toast("ok", t("toast.batchDone", { n: ok }));
   setTimeout(() => { $("progressWrap").classList.add("hidden"); $("progressBar").style.width = "0%"; }, 1000);
 }
+
+/* ---- v1.0.0 Step 6: keyboard shortcuts, export presets, batch naming ---- */
+
+// P3: one table drives both the key handler and the cheat sheet.
+const SHORTCUTS = [
+  { keys: ["E"], i18n: "sc.export", run: () => exportCurrent() },
+  { keys: ["E"], ctrl: true, shift: true, i18n: "sc.exportBatch", run: () => openNameDialog() },
+  { keys: ["F"], i18n: "sc.fit", run: () => { state.zoom.autoFit = true; fitStage(); } },
+  { keys: ["0"], i18n: "sc.zoom100", run: () => { state.zoom.autoFit = false; state.zoom.scale = 1; applyZoom(); } },
+  { keys: ["+"], i18n: "sc.zoomIn", run: () => $("zoomIn")?.click() },
+  { keys: ["-"], i18n: "sc.zoomOut", run: () => $("zoomOut")?.click() },
+  { keys: ["L"], i18n: "sc.locate", run: () => window.__fgEditor?.locateSelected?.() },
+  { keys: ["?"], shift: true, i18n: "sc.help", run: () => toggleShortcuts() },
+];
+const IS_MAC = /Mac|iPhone|iPad/.test(navigator.platform ?? "");
+const keyLabel = (s) => `${s.ctrl ? (IS_MAC ? "⌘" : "Ctrl") + "+" : ""}${s.shift && s.keys[0] !== "?" ? "Shift+" : ""}${s.keys[0]}`;
+function shortcutFor(e) {
+  const key = e.key.length === 1 ? e.key.toUpperCase() : e.key;
+  return SHORTCUTS.find((s) => s.keys[0].toUpperCase() === key && !!s.ctrl === (e.ctrlKey || e.metaKey) && (s.shift === undefined || s.shift === e.shiftKey));
+}
+function onShortcutKey(e) {
+  const el = e.target;
+  if (el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName ?? ""))) return;
+  if (e.altKey) return;
+  const s = shortcutFor(e);
+  if (!s || (s.ctrl && !(e.ctrlKey || e.metaKey))) return;
+  e.preventDefault();
+  s.run();
+}
+let scOverlay = null;
+function toggleShortcuts(force) {
+  if (!scOverlay) {
+    scOverlay = document.createElement("div");
+    scOverlay.className = "sc-overlay hidden";
+    scOverlay.innerHTML = `<div class="sc-card"><h3></h3><div class="sc-list"></div><button class="btn small ghost sc-close" type="button"></button></div>`;
+    document.body.appendChild(scOverlay);
+    scOverlay.addEventListener("click", (ev) => {
+      if (ev.target === scOverlay || ev.target.closest(".sc-close")) scOverlay.classList.add("hidden");
+    });
+  }
+  scOverlay.querySelector("h3").textContent = t("sc.title");
+  scOverlay.querySelector(".sc-close").textContent = t("btn.close");
+  scOverlay.querySelector(".sc-list").innerHTML = SHORTCUTS.map((s) => `<div class="sc-row"><span>${t(s.i18n)}</span><kbd>${keyLabel(s)}</kbd></div>`).join("");
+  const hidden = scOverlay.classList.contains("hidden");
+  scOverlay.classList.toggle("hidden", force === true ? false : force === false ? true : !hidden);
+}
+
+// P1: export presets (built-ins + user saved), stored in settings.
+const BUILTIN_PRESETS = [
+  { id: "wechat-2k", name: "preset.wechat2k", size: "2048", format: "jpeg" },
+  { id: "social-4k", name: "preset.social4k", size: "3840", format: "jpeg" },
+  { id: "archive-orig", name: "preset.archive", size: "0", format: "png" },
+  { id: "web-4k", name: "preset.web4k", size: "3840", format: "webp" },
+];
+const allPresets = () => [...BUILTIN_PRESETS, ...(settings.exportPresets ?? [])];
+const activePreset = () => allPresets().find((p) => p.id === settings.activePreset) ?? null;
+const currentExportSize = () => $("exportSize")?.value ?? settings.exportSize ?? "0";
+function applyPreset(id) {
+  const p = allPresets().find((x) => x.id === id);
+  if (!p) return;
+  settings.activePreset = id;
+  settings.exportSize = p.size;
+  settings.exportFormat = p.format;
+  saveSettings();
+  if ($("exportSize")) $("exportSize").value = p.size;
+  if ($("exportFormat")) $("exportFormat").value = p.format;
+  $("exportCustom")?.classList.add("hidden");
+  updateExportBarInfo();
+  refreshPresetUI();
+}
+function saveCurrentPreset() {
+  const list = settings.exportPresets ?? (settings.exportPresets = []);
+  const name = `${t("preset.custom")} ${list.length + 1}`;
+  list.push({ id: `custom-${Date.now().toString(36)}`, name, size: currentExportSize(), format: exportFormat() });
+  saveSettings();
+  refreshPresetUI();
+  toast("ok", t("preset.saved", { name }));
+}
+function deletePreset(id) {
+  settings.exportPresets = (settings.exportPresets ?? []).filter((p) => p.id !== id);
+  if (settings.activePreset === id) settings.activePreset = "";
+  saveSettings();
+  refreshPresetUI();
+}
+function presetChip(p, withDelete) {
+  const on = settings.activePreset === p.id ? " on" : "";
+  const del = withDelete ? `<button class="chip-del" data-del="${p.id}" title="✕">✕</button>` : "";
+  return `<span class="preset-chip${on}"><button class="chip-btn" data-preset="${p.id}">${t(p.name)}</button>${del}</span>`;
+}
+function refreshPresetUI() {
+  if ($("presetChips")) $("presetChips").innerHTML = allPresets().map((p) => presetChip(p, false)).join("");
+  if ($("presetList")) $("presetList").innerHTML = allPresets().map((p) => presetChip(p, !BUILTIN_PRESETS.includes(p))).join("");
+}
+function initPresetUI() {
+  for (const id of ["presetChips", "presetList"]) {
+    $(id)?.addEventListener("click", (e) => {
+      const del = e.target.closest("[data-del]");
+      if (del) { deletePreset(del.dataset.del); return; }
+      const btn = e.target.closest("[data-preset]");
+      if (btn) applyPreset(btn.dataset.preset);
+    });
+  }
+  $("presetSave")?.addEventListener("click", saveCurrentPreset);
+  refreshPresetUI();
+}
+
+// P1b: multi-size export (2K + original) reuses the current settings.
+async function exportCurrentMulti() {
+  if (!state.photos.length) return;
+  const sizes = ["2048", "0"];
+  const ojson = renderOverridesJson();
+  const tpl = effectiveTemplateJson();
+  const fmt = exportFormat();
+  state.usedNames.clear();
+  $("progressWrap").classList.remove("hidden");
+  let ok = 0;
+  for (let i = 0; i < sizes.length; i++) {
+    const cap = Number(sizes[i]) || 0;
+    const out = state.engine.render_with_overrides(state.photos[0].bytes, tpl, fmt, false, ojson, cap, settings.keepGps);
+    const name = uniqueName(state.lastRenderName.replace(/(\.[a-z0-9]+)$/i, `-${cap ? sizes[i] : "orig"}$1`));
+    if (await saveBytes(out, name, { dialog: false })) ok++;
+    $("progressBar").style.width = `${Math.round(((i + 1) / sizes.length) * 100)}%`;
+  }
+  setStatus("ready", t("status.ready"));
+  toast("ok", t("toast.multiDone", { n: ok }));
+  setTimeout(() => { $("progressWrap").classList.add("hidden"); $("progressBar").style.width = "0%"; }, 1000);
+}
+
+// P2: batch export naming (tokens + conflict policy), remembered in settings.
+function sizeLabel(v) {
+  const n = Number(v) || 0;
+  if (!n) return t("export.original");
+  if (n >= 6144) return "6K";
+  if (n >= 3840) return "4K";
+  if (n >= 2048) return "2K";
+  return `${n}px`;
+}
+function buildExportName(tplStr, i) {
+  const photo = state.photos[i] ?? { name: "photo" };
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const map = {
+    name: stem(photo.name),
+    tpl: state.templateId ?? "template",
+    tplName: state.templateName ?? state.templateId ?? "template",
+    date: `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`,
+    seq: String(i + 1).padStart(2, "0"),
+    size: sizeLabel(currentExportSize()),
+    fmt: EXPORT_FORMATS[exportFormat()].ext,
+  };
+  let out = String(tplStr || "{name}_{tplName}_{size}").replace(/\{(\w+)\}/g, (m, k) => (k in map ? map[k] : m));
+  out = out.replace(/[\\/:*?"<>|]/g, "-").slice(0, 180);
+  return `${out}.${map.fmt}`;
+}
+function conflictName(name, policy) {
+  if (policy === "overwrite") return name;
+  if (policy === "skip" && state.usedNames.has(name)) return null;
+  return uniqueName(name);
+}
+async function runBatchWithNaming() {
+  const photos = state.photos.slice();
+  const tplStr = $("nameTemplate")?.value ?? settings.batchName;
+  const policy = $("nameConflict")?.value ?? settings.batchConflict;
+  settings.batchName = tplStr;
+  settings.batchConflict = policy;
+  saveSettings();
+  const tpl = effectiveTemplateJson();
+  const ojson = renderOverridesJson();
+  const fmt = exportFormat();
+  state.usedNames.clear();
+  $("progressWrap").classList.remove("hidden");
+  let ok = 0;
+  for (let i = 0; i < photos.length; i++) {
+    try {
+      const out = state.engine.render_with_overrides(photos[i].bytes, tpl, fmt, false, ojson, exportMaxEdge(), settings.keepGps);
+      const name = conflictName(buildExportName(tplStr, i), policy);
+      if (name && (await saveBytes(out, name, { dialog: false }))) ok++;
+    } catch (e) { toast("error", `${photos[i].name}: ${localizeEngineError(e)}`); }
+    $("progressBar").style.width = `${Math.round(((i + 1) / photos.length) * 100)}%`;
+    setStatus("busy", `${i + 1}/${photos.length}`);
+    await sleep(180);
+  }
+  setStatus("ready", t("status.ready"));
+  toast("ok", t("toast.batchDone", { n: ok }));
+  setTimeout(() => { $("progressWrap").classList.add("hidden"); $("progressBar").style.width = "0%"; }, 1000);
+}
+function updateNamePreview() {
+  const box = $("namePreview");
+  if (!box) return;
+  const n = Math.max(Math.min(state.photos.length, 3), 1);
+  box.textContent = Array.from({ length: n }, (_, i) => buildExportName($("nameTemplate")?.value, i)).join("\n");
+}
+function ensureNameDialog() {
+  if ($("nameDialog")) return;
+  const dlg = document.createElement("div");
+  dlg.id = "nameDialog";
+  dlg.className = "sc-overlay hidden";
+  dlg.innerHTML = `<div class="sc-card"><h3>${t("batch.title")}</h3><label class="row"><span>${t("batch.template")}</span><input id="nameTemplate" type="text" spellcheck="false"></label><div class="muted">${t("batch.tokens")}</div><pre id="namePreview" class="name-preview"></pre><label class="row"><span>${t("batch.conflict")}</span><select id="nameConflict"><option value="sequence">${t("batch.seq")}</option><option value="overwrite">${t("batch.over")}</option><option value="skip">${t("batch.skip")}</option></select></label><div class="btn-row"><button class="btn small" id="nameGo">${t("batch.go")}</button><button class="btn small ghost" id="nameCancel">${t("btn.cancel")}</button></div></div>`;
+  document.body.appendChild(dlg);
+  // v1.0.0: dialog controls live in lazy markup, so bind them here (runs once, guarded above).
+  $("nameCancel")?.addEventListener("click", closeNameDialog);
+  $("nameGo")?.addEventListener("click", () => { closeNameDialog(); runBatchWithNaming(); });
+  $("nameTemplate")?.addEventListener("input", updateNamePreview);
+}
+
+function openNameDialog() {
+  ensureNameDialog();
+  const dlg = $("nameDialog");
+  if (!dlg) { exportBatch(); return; }
+  $("nameTemplate").value = settings.batchName ?? "{name}_{tplName}_{size}";
+  $("nameConflict").value = settings.batchConflict ?? "sequence";
+  updateNamePreview();
+  dlg.classList.remove("hidden");
+}
+function closeNameDialog() { $("nameDialog")?.classList.add("hidden"); }
+
+function initV100Features() {
+  window.addEventListener("keydown", onShortcutKey, true);
+  $("shortcutsBtn")?.addEventListener("click", () => toggleShortcuts(true));
+  initPresetUI();
+  const multi = $("exportMulti");
+  if (multi) {
+    multi.checked = !!settings.exportMulti;
+    multi.addEventListener("change", () => { settings.exportMulti = multi.checked; saveSettings(); });
+  }
+  // v1.0.0: capture-phase handlers survive the app's own late `onclick` wiring (init binds at 2322-2323).
+  const exportBtnV100 = $("exportBtn");
+  if (exportBtnV100) exportBtnV100.addEventListener("click", (ev) => { ev.stopImmediatePropagation(); ev.preventDefault(); (settings.exportMulti ? exportCurrentMulti() : exportCurrent()); }, true);
+  const batchBtnV100 = $("exportBatchBtn");
+  if (batchBtnV100) batchBtnV100.addEventListener("click", (ev) => { ev.stopImmediatePropagation(); ev.preventDefault(); openNameDialog(); }, true);
+  // v1.0.0: dialog control bindings live in ensureNameDialog() (lazy markup).
+  const origBar = updateExportBarInfo;
+  updateExportBarInfo = function () {
+    origBar();
+    const p = activePreset();
+    if (p && $("exportBarInfo")) $("exportBarInfo").textContent = `${t(p.name)} · ${exportFormat().toUpperCase()}`;
+  };
+  refreshPresetUI();
+}
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initV100Features);
+else initV100Features();
 
 /* ----------------------------------------------------- save/import .fgt */
 function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "template"; }

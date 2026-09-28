@@ -6,8 +6,8 @@
       "zh": "骑行数据行",
       "en": "Ride Stats"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "sports"
@@ -27,30 +27,6 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "eyebrow",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.069,
-        "y": 0.0182
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "content": [
-        {
-          "expr": "'RIDE DATA'",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "top-right",
@@ -63,33 +39,6 @@
         "height": 0.06
       },
       "tint": "auto"
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.069,
-        "y": -0.074
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#373A40",
-        "weight": 400
-      },
-      "letterSpacing": 0.06,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "RIDE DAY"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     },
     {
       "type": "shape",
@@ -107,33 +56,6 @@
       "color": "#E4E6EA"
     },
     {
-      "type": "text",
-      "id": "stat1",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.3,
-        "y": -0.074
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#373A40",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "'AVG 32.6 KM/H'",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "shape",
       "id": "rule2",
       "anchor": "bottom-left",
@@ -147,58 +69,6 @@
         "height": 0.03
       },
       "color": "#E4E6EA"
-    },
-    {
-      "type": "text",
-      "id": "stat2",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.52,
-        "y": -0.074
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#373A40",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "'CLIMB 1250 M'",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.069,
-        "y": -0.0742
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     }
   ],
   "fields": {
@@ -210,5 +80,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#373A40",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": "RIDE DAY",
+        "role": "detail"
+      },
+      {
+        "expr": "'AVG 32.6 KM/H'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "'CLIMB 1250 M'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

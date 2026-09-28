@@ -24,6 +24,14 @@ const ev = async (expr) => {
   return r.result?.value;
 };
 
+// Wait for the app to boot: a fresh profile's first paint can take a while,
+// and the probe below dereferences window.__fg immediately.
+for (let i = 0; i < 120; i++) {
+  const ready = await ev(`!!(window.__fg && window.__fg.engine)`).catch(() => false);
+  if (ready) break;
+  await new Promise((r) => setTimeout(r, 500));
+}
+
 const res = await ev(`
   (async () => {
     const engine = window.__fg.engine;

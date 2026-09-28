@@ -6,48 +6,23 @@
       "zh": "仅版权微字",
       "en": "Quiet Copyright"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "minimal"
   },
   "canvas": {
-    "mode": "overlay",
+    "mode": "extend",
     "background": {
-      "type": "none"
+      "type": "solid",
+      "color": "#101418"
+    },
+    "padding": {
+      "bottom": 0.26
     }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "copyright",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.028,
-        "y": -0.028
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0156,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "opacity": 0.8,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('(C) YYYY', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
     {
       "type": "image",
       "id": "v7-brand-badge",
@@ -68,5 +43,22 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "right",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('(C) YYYY', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

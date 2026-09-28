@@ -15,6 +15,9 @@ pub struct Template {
     pub layers: Vec<Layer>,
     #[serde(default)]
     pub fields: HashMap<String, FieldDef>,
+    /// v1.0.0 optional auto-fitted info block (whitespace region typography).
+    #[serde(default, rename = "infoBlock")]
+    pub info_block: Option<InfoBlock>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Deserialize)]
@@ -314,6 +317,116 @@ pub struct TextLayer {
     /// v0.5.0: explicit stacking order (lower paints first); ties keep array order.
     #[serde(default)]
     pub z: Option<i32>,
+}
+
+/// v1.0.0: auto-fitted information block (DESIGN-LANGUAGE v3).
+///
+/// One block of 1–3 text lines that lives entirely inside a single whitespace
+/// band created by `canvas.mode: "extend"` (left / right / bottom padding) and
+/// is scaled so the block fills ~2/3 of that band. The solver is shared by the
+/// renderer and the layer-box API (`crate::text_fit`), so previews, exports and
+/// hit-testing always agree.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct InfoBlock {
+    /// Whitespace band the block occupies: "left" | "right" | "bottom".
+    pub side: String,
+    pub font: InfoBlockFont,
+    /// 1–3 lines, painted top-to-bottom in array order.
+    pub lines: Vec<InfoLine>,
+    /// Line alignment ("left"|"center"|"right"); defaults to the side.
+    #[serde(default)]
+    pub align: Option<String>,
+    /// Fraction of the band the block should fill (0.2–1.0, default 2/3).
+    #[serde(default)]
+    pub fill: Option<f64>,
+    /// Font-size bounds, relative to the photo height (defaults 0.0095 / 0.08).
+    #[serde(rename = "sizeMin", default)]
+    pub size_min: Option<f64>,
+    #[serde(rename = "sizeMax", default)]
+    pub size_max: Option<f64>,
+    /// Multiplier for the line advance (default 1.25).
+    #[serde(rename = "lineHeight", default)]
+    pub line_height: Option<f64>,
+    /// Text colour: "#RRGGBB" / "#RRGGBBAA" / "auto" (default).
+    #[serde(default)]
+    pub color: Option<String>,
+    /// v0.5.0-style stacking order (lower paints first).
+    #[serde(default)]
+    pub z: Option<i32>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct InfoBlockFont {
+    /// Font family candidates, best first (same resolution rules as text layers).
+    pub family: Vec<String>,
+    #[serde(default)]
+    pub weight: Option<u32>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct InfoLine {
+    /// Expression, same grammar as `TextLayer.content[].expr`.
+    pub expr: String,
+    /// Shown when the expression evaluates to an empty value (null hides the line).
+    #[serde(default)]
+    pub fallback: Option<String>,
+    /// Semantic role: "display" (largest) | "support" | "detail" (smallest).
+    #[serde(default)]
+    pub role: Option<String>,
+}
+
+/// Whitespace band occupied by an [`InfoBlock`].
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Side {
+    Left,
+    Right,
+    Bottom,
+}
+
+impl InfoBlock {
+    pub fn fill_ratio(&self) -> f64 {
+        self.fill.unwrap_or(2.0 / 3.0)
+    }
+
+    pub fn size_min_ratio(&self) -> f64 {
+        self.size_min.unwrap_or(0.0095)
+    }
+
+    pub fn size_max_ratio(&self) -> f64 {
+        self.size_max.unwrap_or(0.12)
+    }
+
+    pub fn line_height_value(&self) -> f64 {
+        self.line_height.unwrap_or(1.25)
+    }
+
+    pub fn align_value(&self) -> &str {
+        self.align.as_deref().unwrap_or(if self.side == "right" {
+            "right"
+        } else {
+            "left"
+        })
+    }
+
+    pub fn color_value(&self) -> &str {
+        self.color.as_deref().unwrap_or("auto")
+    }
+
+    pub fn z_value(&self) -> i32 {
+        self.z.unwrap_or(0)
+    }
+
+    pub fn side_enum(&self) -> Option<Side> {
+        match self.side.as_str() {
+            "left" => Some(Side::Left),
+            "right" => Some(Side::Right),
+            "bottom" => Some(Side::Bottom),
+            _ => None,
+        }
+    }
 }
 
 /// v0.5.0 text art presets and primitives (frameelf feature parity, visual
@@ -1268,12 +1381,105 @@ fn validate_semantics(t: &Template) -> Result<()> {
         range_check("canvas.shadow.offsetY", shadow.offset_y, -0.5, 0.5)?;
     }
 
+    if let Some(ib) = &t.info_block {
+        validate_info_block(ib, &t.canvas)?;
+    }
+
     for (i, layer) in t.layers.iter().enumerate() {
         validate_layer(layer, i)?;
     }
     let mut text_ids: std::collections::HashSet<&str> = std::collections::HashSet::new();
     collect_text_ids(&t.layers, &mut text_ids);
     validate_attach_all(&t.layers, &text_ids)?;
+    Ok(())
+}
+
+/// v1.0.0: `info_block` (auto-fitted whitespace-region typography) checks.
+fn validate_info_block(ib: &InfoBlock, canvas: &Canvas) -> Result<()> {
+    if ib.lines.is_empty() || ib.lines.len() > 3 {
+        return Err(Error::SchemaViolation(format!(
+            "infoBlock.lines must have 1-3 entries, got {}",
+            ib.lines.len()
+        )));
+    }
+    let side = ib.side_enum().ok_or_else(|| {
+        Error::SchemaViolation(format!(
+            "infoBlock.side {:?} must be one of left/right/bottom",
+            ib.side
+        ))
+    })?;
+    if ib.font.family.is_empty() || ib.font.family.len() > 8 {
+        return Err(Error::SchemaViolation(
+            "infoBlock.font.family must have 1-8 entries".into(),
+        ));
+    }
+    for (i, family) in ib.font.family.iter().enumerate() {
+        if family.is_empty() || family.chars().count() > 64 {
+            return Err(Error::SchemaViolation(format!(
+                "infoBlock.font.family[{i}] must be 1-64 characters"
+            )));
+        }
+    }
+    if let Some(weight) = ib.font.weight {
+        range_check("infoBlock.font.weight", weight as f64, 100.0, 900.0)?;
+    }
+    for (i, line) in ib.lines.iter().enumerate() {
+        if line.expr.trim().is_empty() {
+            return Err(Error::SchemaViolation(format!(
+                "infoBlock.lines[{i}].expr must not be empty"
+            )));
+        }
+        if let Some(role) = &line.role {
+            if !matches!(role.as_str(), "display" | "support" | "detail") {
+                return Err(Error::SchemaViolation(format!(
+                    "infoBlock.lines[{i}].role {role:?} must be display/support/detail"
+                )));
+            }
+        }
+    }
+    if let Some(align) = &ib.align {
+        if !matches!(align.as_str(), "left" | "center" | "right") {
+            return Err(Error::SchemaViolation(format!(
+                "infoBlock.align {align:?} must be left/center/right"
+            )));
+        }
+    }
+    if let Some(fill) = ib.fill {
+        range_check("infoBlock.fill", fill, 0.2, 1.0)?;
+    }
+    let min = ib.size_min.unwrap_or(0.0095);
+    let max = ib.size_max.unwrap_or(0.08);
+    range_check("infoBlock.sizeMin", min, 0.001, 0.5)?;
+    range_check("infoBlock.sizeMax", max, 0.001, 0.5)?;
+    if min >= max {
+        return Err(Error::SchemaViolation(format!(
+            "infoBlock.sizeMin {min} must be smaller than sizeMax {max}"
+        )));
+    }
+    if let Some(lh) = ib.line_height {
+        range_check("infoBlock.lineHeight", lh, 0.5, 4.0)?;
+    }
+    let color = ib.color_value();
+    if !color.eq_ignore_ascii_case("auto") {
+        parse_hex_color(color)?;
+    }
+    if canvas.mode != CanvasMode::Extend {
+        return Err(Error::SchemaViolation(
+            "infoBlock requires canvas.mode \"extend\" (whitespace region)".into(),
+        ));
+    }
+    let p = &canvas.padding;
+    let side_pad = match side {
+        Side::Left => p.left,
+        Side::Right => p.right,
+        Side::Bottom => p.bottom,
+    };
+    if side_pad <= 0.0 {
+        return Err(Error::SchemaViolation(format!(
+            "infoBlock side {:?} needs a positive canvas.padding value",
+            ib.side
+        )));
+    }
     Ok(())
 }
 

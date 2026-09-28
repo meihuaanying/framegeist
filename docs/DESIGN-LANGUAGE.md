@@ -1,4 +1,4 @@
-# FrameGeist 设计语言规范 v0.7.0（排版现代化 / DESIGN-LANGUAGE v2）
+# FrameGeist 设计语言规范（DESIGN-LANGUAGE v2 + v1.0.0 排版 v3 增补）
 
 > 来源：2026-09 对 frameelf Web 编辑器 22 分类 217 套边框水印的逐类研究（研究语料仅存于临时目录，**不入仓、不复制**）。
 > 本文件蒸馏的是**设计语言**（网格/字阶/层级/间距/点缀系统），不是具体版式。所有 FrameGeist 模板必须是**原创构图**：
@@ -103,7 +103,17 @@
 - 模糊自身铺底（`background: blur`）+ 圆角投影照片（canvas radius/shadow）；或色域渐变延伸（tint）。
 - 变体：镜像倒影/双色渐变/暗角卡片。
 
-## 3. 排版系统 v2（v0.7.0 起强制执行，v0.8.0 尺寸上调）
+## 3. 排版系统 v3（v1.0.0 起：infoBlock 留白区自动拟合）
+
+> v1.0.0 起，模板正文信息由单一 `infoBlock` 承载，引擎按下列规则自动求解字号与位置；下列 3.0 的 v2 规则继续适用于徽标、形层与界面文案。完整规范见 `docs/reports/v1.0.0/DESIGN-LANGUAGE-v3-DRAFT.md`。
+
+- **单一侧成组**：文字集中在留白区的一侧（`left` / `right` / `bottom`，不含上侧）；同侧随附的徽标与文字同侧。
+- **≤3 行角色**：`display` 1.00 / 600 / −0.02em；`support` 0.72 / 400 / 0；`detail` 0.58 / 400 / +0.08em。
+- **填满 2/3**：可见文字块占留白区 2/3（下侧按高度、左/右按宽度），字号自动求解并夹在 `sizeMin` 0.0095 / `sizeMax` 0.12（照片高分数）。
+- **行高**：默认 1.25；行间空隙 =（lineHeight − 1）× 字号，夹 0.15–0.6。
+- **红线**：文字永不覆盖照片像素、不越出留白区；输出确定；识别框与渲染像素一致（±2px）。
+
+### 3.0 历史：v2 规则（v0.7.0 起，v0.8.0 尺寸上调）
 
 > 字体全部 OFL，`templates/assets/fonts/fonts.json`（69 faces / 23 families）；`font.weight` 400–700
 > 由引擎按 OS/2 精确选面。EXIF 数值行默认 **Inter tabular（OpenType `tnum`）**；JetBrains Mono

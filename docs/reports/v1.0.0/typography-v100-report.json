@@ -1,0 +1,1928 @@
+{
+  "generatedAt": "2026-09-25T01:15:48.240Z",
+  "apply": true,
+  "entries": [
+    {
+      "id": "art-copperplate-etch",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "art-deco-double",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "art-gilt-foil",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "art-letterpress-relief",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "art-republican-press",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "art-ukiyoe-cartouche",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "art-vermilion-seal",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/display/detail"
+    },
+    {
+      "id": "art-woodtype-press",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "black-frame-charcoal-split-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "black-frame-gold-line-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "black-frame-inner-rule-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "black-frame-mono-slate-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "black-frame-side-stack-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "black-frame-two-line-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "blur-bg-brandbar-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "blur-bg-card-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "blur-bg-center-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "blur-bg-topcap-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-center-caption-01",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 1,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "borderless-corner-stack-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-date-hero-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "borderless-dot-corners-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-geo-pin-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": true,
+      "attachStripped": 2,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-lowleft-pair-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-one-liner-01",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 1,
+      "roles": "detail"
+    },
+    {
+      "id": "borderless-quad-anchors-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-right-roll-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 1,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-signoff-block-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "borderless-vertical-spine-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "calendar-center-rule-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "calendar-corner-day-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "calendar-portrait-stack-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "calendar-rail-date-01",
+      "side": "right",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "calendar-split-columns-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "calendar-strip-date-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "camera-baseplate-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "camera-corner-body-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "camera-lens-dial-06",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "camera-retro-sidecar-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "camera-ricoh-slimline-08",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "camera-series-emblem-07",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "camera-stencil-mono-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "camera-topdeck-bar-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "classic-watermark-black-bar",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "classic-watermark-brand-center",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "classic-watermark-date-right",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "classic-watermark-double-row",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "classic-watermark-hairline-thin",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "classic-watermark-mono-stack",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "classic-watermark-red-dot",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "classic-watermark-single-row",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "colorcard-column-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorcard-cream-date-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "colorcard-diamonds-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorcard-index-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorcard-sunrise-chips-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorcard-tint-chips-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-chip-strip-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-corner-blocks-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-dot-cluster-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-frame-quad-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-pastel-card-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-rainbow-lines-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-split-duo-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorful-sticker-date-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorwalk-blur-stage-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorwalk-ribbon-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorwalk-round-card-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "colorwalk-single-line-01",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "colorwalk-tint-seam-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "colorwalk-top-field-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "colorwalk-vbar-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "colorwalk-verse-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "drone-aerial-editorial-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "drone-altitude-hero-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "drone-geoblock-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "drone-skybar-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "drone-topline-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "effect-duotone-wash-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "effect-float-card-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "effect-minimal-shadow-08",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "effect-mirror-pool-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "effect-paper-stack-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "effect-polaroid-float-06",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "effect-top-gradient-band-07",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "effect-vignette-card-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "festival-dragon-boat-01",
+      "side": "left",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "festival-gold-frame-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/display/detail"
+    },
+    {
+      "id": "festival-lantern-night-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "festival-lantern-warm-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "festival-moon-full-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "festival-spring-gold-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/display/detail"
+    },
+    {
+      "id": "film-darkroom-pillar-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "film-diptych-hairline-07",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "film-led-datestamp-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "film-mono-roll-06",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "film-positive-print-08",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "film-serif-stock-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "film-sprocket-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "film-sprocket-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "fuji-recipe-band-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 16,
+      "dropped": 13,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "fuji-recipe-column-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 17,
+      "dropped": 14,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "fuji-recipe-hero-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 9,
+      "dropped": 6,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "fuji-recipe-panel-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 14,
+      "dropped": 11,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "fuji-recipe-rails-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 16,
+      "dropped": 13,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "game-arknights-v1",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "game-arknights-v2",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "game-arknights-v3",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "game-genshin-v1",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "game-genshin-v2",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "game-genshin-v3",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "game-honkai-v1",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "game-honkai-v2",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "game-honkai-v3",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "game-wukong-v1",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "game-wukong-v2",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "game-wukong-v3",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "game-wwmeet-v1",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "game-wwmeet-v2",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "game-wwmeet-v3",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "game-zzz-v1",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "game-zzz-v2",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "game-zzz-v3",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "magazine-cover-banner-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "magazine-double-rule-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "magazine-gallery-left-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "magazine-index-column-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "magazine-poster-manifesto-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "magazine-triptych-slices-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "master-cream-dot-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 11,
+      "dropped": 8,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "master-crown-wordmark-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "master-ivory-plate-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 10,
+      "dropped": 7,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "master-noir-plate-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 10,
+      "dropped": 7,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "master-seal-frame-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 10,
+      "dropped": 7,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "master-three-column-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 9,
+      "dropped": 6,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/support"
+    },
+    {
+      "id": "minimal-brand-right",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "minimal-center-line",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "minimal-copyright",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "minimal-corner-mono",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "minimal-letterbox",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "minimal-model-stack",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "minimal-portrait-line",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail"
+    },
+    {
+      "id": "minimal-topright-date",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail"
+    },
+    {
+      "id": "personal-avatar-ring-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "personal-cn-inscription-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "personal-credit-social-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "personal-micro-copyright-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "personal-name-columns-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "personal-polaroid-script-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "personal-script-signature-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "personal-triptych-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "phone-accent-dots-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "phone-camera-ui-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 10,
+      "dropped": 7,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "phone-dual-optics-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "phone-midnight-bar-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "phone-minimal-line-01",
+      "side": "bottom",
+      "lines": 1,
+      "textLayers": 1,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail"
+    },
+    {
+      "id": "phone-paper-spec-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 12,
+      "dropped": 9,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "phone-shot-on-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "phone-side-rail-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "phone-studio-card-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "phone-vendor-bar-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "polaroid-classic-script-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "polaroid-duo-stamps-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "polaroid-pastel-ring-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "polaroid-stamp-postcard-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "polaroid-tilt-plate-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "portfolio-atelier-plate-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 8,
+      "dropped": 5,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "portfolio-credit-still-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": true,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "portfolio-double-rule-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "portfolio-marginalia-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 9,
+      "dropped": 6,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "portfolio-noir-matte-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "portfolio-vertical-scroll-01",
+      "side": "right",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "portfolio-wall-label-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 8,
+      "dropped": 5,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "sports-alt-badge-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 6,
+      "dropped": 3,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "sports-big-trail-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "display/detail/detail"
+    },
+    {
+      "id": "sports-finish-line-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "sports-ride-stats-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "sports-side-rail-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "ticket-boarding-pass-03",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 13,
+      "dropped": 10,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/display/detail"
+    },
+    {
+      "id": "ticket-night-tilt-05",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "ticket-park-pass-04",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 8,
+      "dropped": 5,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "support/support/detail"
+    },
+    {
+      "id": "ticket-stub-horizontal-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 7,
+      "dropped": 4,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "ticket-vertical-rail-02",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 9,
+      "dropped": 6,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "display/support/detail"
+    },
+    {
+      "id": "white-border-centered-lockup",
+      "side": "bottom",
+      "lines": 2,
+      "textLayers": 2,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail"
+    },
+    {
+      "id": "white-border-editorial-01",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 5,
+      "dropped": 2,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "white-border-letterhead",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "white-border-linen-dot",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "support/detail/detail"
+    },
+    {
+      "id": "white-border-passport-mono",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "white-border-quiet-stack",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "white-border-ruled-band",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "white-border-top-note",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 4,
+      "dropped": 1,
+      "canvasChange": false,
+      "attachStripped": 1,
+      "roles": "detail/detail/detail"
+    },
+    {
+      "id": "white-border-twin-columns",
+      "side": "bottom",
+      "lines": 3,
+      "textLayers": 3,
+      "dropped": 0,
+      "canvasChange": false,
+      "attachStripped": 0,
+      "roles": "detail/detail/detail"
+    }
+  ],
+  "skipped": [],
+  "failed": []
+}

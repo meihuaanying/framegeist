@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "id": "v100-sample-left-caption",
+    "name": "Sample 03 · Left Caption",
+    "version": "1.0.0",
+    "minEngineVersion": "1.0.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "portfolio"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.06,
+      "right": 0.06,
+      "bottom": 0.06,
+      "left": 0.3
+    },
+    "background": {
+      "type": "solid",
+      "color": "#F4F1EC"
+    }
+  },
+  "layers": [],
+  "infoBlock": {
+    "side": "left",
+    "align": "left",
+    "color": "#1A1714",
+    "font": {
+      "family": [
+        "Fraunces"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'MAMIYA RB67')",
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.focal, '90mm f/3.8')",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.iso, 'Portra 400')",
+        "role": "detail"
+      }
+    ]
+  }
+}

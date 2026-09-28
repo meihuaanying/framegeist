@@ -6,8 +6,8 @@
       "zh": "无缝色延",
       "en": "Seamless Walk"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorwalk"
@@ -26,34 +26,6 @@
   },
   "layers": [
     {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.0455,
-        "y": 0.013
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "opacity": 0.9,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "bottom-right",
@@ -66,58 +38,6 @@
         "height": 0.06
       },
       "tint": "auto"
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.0455,
-        "y": -0.096
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.024,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.0455,
-        "y": -0.0675
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "opacity": 0.85,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     }
   ],
   "fields": {
@@ -134,5 +54,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "support"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

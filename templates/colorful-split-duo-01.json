@@ -6,8 +6,8 @@
       "zh": "双色分割",
       "en": "Duo Split"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorful"
@@ -42,116 +42,6 @@
       "color": "#E63946"
     },
     {
-      "type": "text",
-      "id": "title",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.045,
-        "y": -0.105
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0192,
-        "color": "#E63946",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'COLOR DIARY'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "issue",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.045,
-        "y": -0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "#6B7280",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "lineHeight": 1.55,
-      "opacity": 0.95,
-      "align": "right",
-      "content": [
-        {
-          "expr": "'Nº 07'",
-          "fallback": null
-        },
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.045,
-        "y": -0.095
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0216,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.045,
-        "y": -0.052
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "top-right",
@@ -180,5 +70,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#1A1A1A",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      },
+      {
+        "expr": "'COLOR DIARY'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

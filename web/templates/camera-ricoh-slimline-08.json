@@ -6,8 +6,8 @@
       "zh": "顶置细条参数",
       "en": "Slimline Bar"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "camera"
@@ -58,58 +58,6 @@
       "color": "#C8102E"
     },
     {
-      "type": "text",
-      "id": "model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.058,
-        "y": 0.085
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0156,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.14,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.058,
-        "y": 0.085
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0138,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "bottom-left",
@@ -122,59 +70,6 @@
         "height": 0.06
       },
       "tint": "auto"
-    },
-    {
-      "type": "text",
-      "id": "slimline",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.048
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#B4B8BE",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'SLIMLINE'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.055,
-        "y": -0.045
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0138,
-        "color": "#8E9298",
-        "weight": 500
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     }
   ],
   "fields": {
@@ -187,5 +82,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#1A1A1A",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

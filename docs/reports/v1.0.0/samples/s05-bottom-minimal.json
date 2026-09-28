@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "id": "v100-sample-bottom-minimal",
+    "name": "Sample 05 · Bottom Minimal",
+    "version": "1.0.0",
+    "minEngineVersion": "1.0.0",
+    "author": "FrameGeist",
+    "license": "CC0-1.0",
+    "category": "minimal"
+  },
+  "canvas": {
+    "mode": "extend",
+    "padding": {
+      "top": 0.05,
+      "right": 0.08,
+      "bottom": 0.2,
+      "left": 0.08
+    },
+    "background": {
+      "type": "solid",
+      "color": "#FFFFFF"
+    }
+  },
+  "layers": [],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#111111",
+    "font": {
+      "family": [
+        "InstrumentSans"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'X100VI')",
+        "role": "display"
+      },
+      {
+        "expr": "if_empty(exif.shutter, '1/250s · f/2.8 · ISO 320')",
+        "role": "support"
+      }
+    ]
+  }
+}

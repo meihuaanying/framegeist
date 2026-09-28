@@ -6,8 +6,8 @@
       "zh": "黑神话悟空 · 主题边框",
       "en": "Black Myth Wukong · Hero Frame"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "framegeist",
     "license": "CC0-1.0",
     "category": "game",
@@ -41,37 +41,6 @@
       }
     },
     {
-      "type": "text",
-      "id": "title",
-      "anchor": "bottom-left",
-      "font": {
-        "family": [
-          "Bricolage Grotesque"
-        ],
-        "size": 0.027,
-        "weight": 500,
-        "color": "#D4A017"
-      },
-      "content": [
-        {
-          "expr": "exif.model_pretty",
-          "fallback": "Camera"
-        },
-        {
-          "expr": "exif.lens",
-          "fallback": null
-        }
-      ],
-      "offset": {
-        "x": 0.03,
-        "y": -0.05
-      },
-      "features": [
-        "tnum"
-      ],
-      "letterSpacing": 0
-    },
-    {
       "type": "image",
       "id": "brand",
       "asset": "@builtin/brand/{exif.brand_slug}-light",
@@ -79,59 +48,35 @@
         "height": 0.06
       },
       "anchor": "bottom-left",
-      "attachTo": "title",
       "attachGap": 0.01
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0204,
-        "weight": 500,
-        "color": "#D4A017"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
-          "fallback": "framegeist"
-        }
-      ],
-      "offset": {
-        "x": -0.03,
-        "y": -0.055
-      },
-      "letterSpacing": 0.08
-    },
-    {
-      "type": "text",
-      "id": "accent",
-      "anchor": "bottom-left",
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.014,
-        "weight": 400,
-        "color": "#8C2F22"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "2026.09.12"
-        }
-      ],
-      "offset": {
-        "x": 0.03,
-        "y": -0.095
-      },
-      "features": [
-        "tnum"
-      ],
-      "letterSpacing": 0
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#D4A017",
+    "font": {
+      "family": [
+        "Bricolage Grotesque",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "exif.model_pretty · exif.lens",
+        "fallback": "Camera",
+        "role": "support"
+      },
+      {
+        "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+        "fallback": "framegeist",
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": "2026.09.12",
+        "role": "detail"
+      }
+    ]
+  }
 }

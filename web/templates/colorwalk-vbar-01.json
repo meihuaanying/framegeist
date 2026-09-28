@@ -6,8 +6,8 @@
       "zh": "左侧色柱",
       "en": "Side Column"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "colorwalk"
@@ -42,102 +42,6 @@
       "opacity": 0.9
     },
     {
-      "type": "text",
-      "id": "date",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.0354,
-        "y": 0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "opacity": 0.85,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "paramstack",
-      "anchor": "middle-left",
-      "offset": {
-        "x": 0.0693,
-        "y": -0.031
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "auto",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "lineHeight": 1.95,
-      "opacity": 0.85,
-      "content": [
-        {
-          "expr": "fmt('FOCAL {focal}MM', exif)",
-          "fallback": null
-        },
-        {
-          "expr": "fmt('F {aperture}', exif)",
-          "fallback": null
-        },
-        {
-          "expr": "exif.shutter",
-          "fallback": null
-        },
-        {
-          "expr": "fmt('ISO{iso}', exif)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.0693,
-        "y": -0.093
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0192,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "bottom-right",
@@ -166,5 +70,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      },
+      {
+        "expr": "date('LOCAL', exif.datetime)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('FOCAL {focal}MM', exif) · fmt('F {aperture}', exif) · exif.shutter · fmt('ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

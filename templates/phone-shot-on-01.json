@@ -6,97 +6,23 @@
       "zh": "居中出品",
       "en": "Shot On Center"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
   },
   "canvas": {
-    "mode": "overlay"
+    "mode": "extend",
+    "padding": {
+      "bottom": 0.26
+    },
+    "background": {
+      "type": "solid",
+      "color": "#101418"
+    }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "shoton",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.1445
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0132,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.3,
-      "opacity": 0.85,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'SHOT ON'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.089
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0242,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.06,
-      "opacity": 0.95,
-      "align": "center",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
-          "fallback": "MOBILE CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.049
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0144,
-        "color": "auto",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "opacity": 0.85,
-      "align": "center",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
     {
       "type": "image",
       "id": "v7-brand-badge",
@@ -122,5 +48,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
+        "fallback": "MOBILE CAMERA",
+        "role": "support"
+      },
+      {
+        "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "'SHOT ON'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

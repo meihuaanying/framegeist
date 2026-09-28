@@ -6,8 +6,8 @@
       "zh": "中秋月满",
       "en": "Full Moon"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "festival"
@@ -26,33 +26,6 @@
     }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.045,
-        "y": 0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "#9C8A68",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "content": [
-        {
-          "expr": "'MID-AUTUMN · 2026'",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
     {
       "type": "shape",
       "id": "moon",
@@ -82,111 +55,6 @@
         "height": 0.0015
       },
       "color": "#8A6F3A"
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.112
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.065,
-        "color": "#E8C66A",
-        "weight": 600
-      },
-      "letterSpacing": 0.02,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'团圆'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "phrase",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.068
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.0168,
-        "color": "#D9C9A8",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "center",
-      "content": [
-        {
-          "expr": "'月满人间 · 团圆安康'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.045,
-        "y": -0.028
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0138,
-        "color": "#B9A88A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "date",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.045,
-        "y": -0.028
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#9C8A68",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
     }
   ],
   "fields": {
@@ -199,5 +67,33 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#E8C66A",
+    "font": {
+      "family": [
+        "LXGW WenKai",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'团圆'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'月满人间 · 团圆安康'",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      }
+    ]
   }
 }

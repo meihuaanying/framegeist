@@ -6,8 +6,8 @@
       "zh": "朱文印章",
       "en": "Vermilion Seal"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -76,185 +76,6 @@
       "strokeWidth": 0.0009
     },
     {
-      "type": "text",
-      "id": "seal-title",
-      "anchor": "middle-center",
-      "offset": {
-        "x": 0,
-        "y": 0.3914
-      },
-      "font": {
-        "family": [
-          "Noto Serif SC"
-        ],
-        "size": 0.055,
-        "color": "#FFF7F0",
-        "weight": 600
-      },
-      "letterSpacing": 0.02,
-      "align": "center",
-      "effects": {
-        "stroke": {
-          "width": 0.035,
-          "color": "#FFF7F0"
-        },
-        "relief": {
-          "mode": "emboss",
-          "depth": 0.05,
-          "highlight": "#FFD9DE",
-          "shadow": "#7A0A1C",
-          "opacity": 0.9
-        }
-      },
-      "content": [
-        {
-          "expr": "'朱文印章'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "seal-heading-zh",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.05,
-        "y": 0.018
-      },
-      "font": {
-        "family": [
-          "Noto Serif SC"
-        ],
-        "size": 0.0528,
-        "color": "#23201B",
-        "weight": 500
-      },
-      "letterSpacing": 0.12,
-      "content": [
-        {
-          "expr": "'朱痕记'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "seal-heading-en",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.05,
-        "y": 0.026
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "#6B5F52",
-        "weight": 500
-      },
-      "letterSpacing": 0.28,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "'Vermilion Impression · Studio Proof'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "seal-model",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.05,
-        "y": 0.055
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.015,
-        "color": "#6B5F52",
-        "weight": 500
-      },
-      "letterSpacing": 0.28,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'House Imprint')",
-          "fallback": "House Imprint"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "seal-date",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.05,
-        "y": -0.018
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6B5F52",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": "Sealed Edition"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "seal-params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.018
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6B5F52",
-        "weight": 500
-      },
-      "letterSpacing": 0.24,
-      "align": "right",
-      "effects": {
-        "case": "upper"
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM · F/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": "Imprint · Hand-Finished"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "bottom-right",
@@ -268,5 +89,33 @@
       "contrast": "auto",
       "z": 100
     }
-  ]
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#FFF7F0",
+    "font": {
+      "family": [
+        "Noto Serif SC",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'朱文印章'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'朱痕记'",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "'Vermilion Impression · Studio Proof'",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
+  }
 }

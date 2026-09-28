@@ -491,6 +491,8 @@
       <summary data-i18n="side.export">导出</summary>
       <div class="body">
         <label class="muted"><input type="checkbox" id="preview" checked> <span data-i18n="btn.preview">快速预览采样</span></label>
+        <div class="chips" id="presetChips"></div>
+        <label class="muted"><input type="checkbox" id="exportMulti"> <span data-i18n="export.multi"></span></label>
         <label class="row" style="margin:0"><span data-i18n="export.size">输出尺寸</span>
           <select id="exportSize" style="width:auto">
             <option value="0" data-i18n="export.original">原图</option>
@@ -620,6 +622,14 @@
             <option value="webp">WebP</option>
           </select>
         </label>
+      </section>
+      <section>
+        <h3 data-i18n="settings.presets"></h3>
+        <div class="chips" id="presetList"></div>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn small ghost" id="presetSave" data-i18n="preset.save"></button>
+          <button class="btn small ghost" id="shortcutsBtn" data-i18n="sc.title"></button>
+        </div>
       </section>
       <section>
         <h3 data-i18n="settings.defaults"></h3>

@@ -6,8 +6,8 @@
       "zh": "票根·右侧竖卡",
       "en": "Vertical Rail"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "ticket"
@@ -88,30 +88,6 @@
       "color": "#D5DCD4"
     },
     {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.077
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.012,
-        "color": "#82868C",
-        "weight": 500
-      },
-      "letterSpacing": 0.22,
-      "content": [
-        {
-          "expr": "'TICKET STUB'",
-          "fallback": "TICKET"
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "barcode",
       "anchor": "top-left",
@@ -123,129 +99,6 @@
       "size": {
         "height": 0.05
       }
-    },
-    {
-      "type": "text",
-      "id": "serial",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.148
-      },
-      "font": {
-        "family": [
-          "Bricolage Grotesque"
-        ],
-        "size": 0.0308,
-        "color": "#26292B",
-        "weight": 500
-      },
-      "letterSpacing": 0.06,
-      "content": [
-        {
-          "expr": "'NO. 0917'",
-          "fallback": "TICKET NO."
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "stubdate",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.19
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#5F656C",
-        "weight": 400
-      },
-      "letterSpacing": 0,
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "route",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.38
-      },
-      "font": {
-        "family": [
-          "Bricolage Grotesque"
-        ],
-        "size": 0.0506,
-        "color": "#26292B",
-        "weight": 500
-      },
-      "letterSpacing": 0.04,
-      "content": [
-        {
-          "expr": "'BEIJING · XIAN'",
-          "fallback": "FROM · TO"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "station",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.47
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "#82868C",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "content": [
-        {
-          "expr": "'THIS STATION'",
-          "fallback": "STATION"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.58
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.012,
-        "color": "#5F656C",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter}', exif)",
-          "fallback": null
-        }
-      ]
     },
     {
       "type": "shape",
@@ -263,57 +116,6 @@
       "color": "#D5D1C8"
     },
     {
-      "type": "text",
-      "id": "terms",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.7277,
-        "y": 0.74
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0114,
-        "color": "#82868C",
-        "weight": 500
-      },
-      "letterSpacing": 0.16,
-      "content": [
-        {
-          "expr": "'VALID ONE WAY ONLY'",
-          "fallback": "VALID"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.0625,
-        "y": 0.026
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0156,
-        "color": "#3A3F46",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
-          "fallback": "CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
       "type": "image",
       "id": "brand",
       "anchor": "top-left",
@@ -325,33 +127,7 @@
       "size": {
         "height": 0.06
       },
-      "attachTo": "model",
       "attachGap": 0.012
-    },
-    {
-      "type": "text",
-      "id": "topright",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.0625,
-        "y": 0.028
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.012,
-        "color": "#6E7468",
-        "weight": 500
-      },
-      "letterSpacing": 0.1,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture}', exif)",
-          "fallback": null
-        }
-      ]
     }
   ],
   "fields": {
@@ -372,5 +148,33 @@
       "type": "string",
       "source": "constant"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#26292B",
+    "font": {
+      "family": [
+        "Bricolage Grotesque",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'BEIJING · XIAN'",
+        "fallback": "FROM · TO",
+        "role": "display"
+      },
+      {
+        "expr": "'NO. 0917'",
+        "fallback": "TICKET NO.",
+        "role": "support"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'UNKNOWN CAMERA')",
+        "fallback": "CAMERA",
+        "role": "detail"
+      }
+    ]
   }
 }

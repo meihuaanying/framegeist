@@ -1287,6 +1287,70 @@ fn render_shape(
     }
 }
 
+/// v1.0.0: paints an auto-fitted info block. One shape call per line at the
+/// solved size keeps the pixels identical to the geometry `text_fit::fit`
+/// reports to `boxes` (single source of truth, see the v0.9.4 frame-drift fix).
+#[allow(clippy::too_many_arguments)]
+fn draw_info_block(
+    canvas: &mut RgbaImage,
+    block: &crate::template::InfoBlock,
+    fit: &crate::text_fit::InfoFit,
+    shaper: &mut crate::text_shape::Shaper,
+    overrides: Option<&TemplateOverrides>,
+    opts: &RenderOptions,
+) {
+    let manual = overrides.and_then(|o| o.text_color.as_deref());
+    let spec = block.color_value();
+    let force_auto = manual.is_none() && spec.eq_ignore_ascii_case("auto");
+    let base = if let Some(m) = manual {
+        crate::template::parse_hex_color(m).unwrap_or([0, 0, 0, 255])
+    } else if force_auto {
+        [17, 17, 17, 255]
+    } else {
+        crate::template::parse_hex_color(spec).unwrap_or([0, 0, 0, 255])
+    };
+    let resources = opts.assets_dir.as_deref();
+    let line_height = block.line_height_value() as f32;
+    let margin = 4.0f32;
+    for line in &fit.lines {
+        let request = crate::text_shape::ShapeRequest {
+            text: &line.text,
+            families: &block.font.family,
+            weight: Some(line.weight),
+            size_px: line.size_px,
+            line_height,
+            letter_spacing_em: line.tracking_em,
+            align: "left",
+            max_width: None,
+            features: &[],
+        };
+        let Some(raster) = shaper.shape(&request) else {
+            continue;
+        };
+        let color = if manual.is_none() {
+            let bg = region_luminance(
+                canvas,
+                (line.x - margin).round() as i32,
+                (line.y - margin).round() as i32,
+                raster.width + (margin * 2.0) as u32,
+                raster.height + (margin * 2.0) as u32,
+            );
+            adapt_text_color(base, bg, force_auto)
+        } else {
+            base
+        };
+        let (block_img, pad_x, pad_y) =
+            crate::text_art::compose_text_layer(&raster, None, color, 1.0, opts, resources);
+        composite_over(
+            canvas,
+            &block_img,
+            (line.x - pad_x as f32).round() as i32,
+            (line.y - pad_y as f32).round() as i32,
+            1.0,
+        );
+    }
+}
+
 /// Dispatch: v0.5.0 cosmic-text path when a shaper is available; legacy
 /// ab_glyph path when `--legacy-text-renderer` is active (render parity gate).
 #[allow(clippy::too_many_arguments)]
@@ -2900,9 +2964,30 @@ pub fn render_rgba_with_image(
         .enumerate()
         .map(|(i, l)| (layer_z(l), i))
         .collect();
+    // v1.0.0: solve the optional info block once; renderer and `boxes` share
+    // text_fit::fit so the painted pixels and reported geometry cannot drift.
+    let info_block = match (template.info_block.as_ref(), shaper.as_mut()) {
+        (Some(ib), Some(sh)) => {
+            let locale = overrides
+                .and_then(|o| o.date_locale.as_deref())
+                .unwrap_or("");
+            let lines = crate::text_fit::block_lines(ib, info, locale);
+            crate::text_fit::fit(ib, &lines, &geo, sh).map(|fit| (ib, fit))
+        }
+        _ => None,
+    };
+    if let Some((ib, _)) = &info_block {
+        order.push((ib.z_value(), template.layers.len()));
+    }
     order.sort_by_key(|(z, i)| (*z, *i));
     let mut deferred_badges: Vec<&Layer> = Vec::new();
     for (_z, idx) in order {
+        if idx == template.layers.len() {
+            if let (Some((ib, fit)), Some(sh)) = (info_block.as_ref(), shaper.as_mut()) {
+                draw_info_block(&mut canvas, ib, fit, sh, overrides, opts);
+            }
+            continue;
+        }
         let layer = &template.layers[idx];
         if matches!(layer, Layer::Image(img) if img.attach_to.is_some()) {
             deferred_badges.push(layer);

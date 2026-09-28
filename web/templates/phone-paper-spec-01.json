@@ -6,8 +6,8 @@
       "zh": "纸感规格",
       "en": "Paper Spec"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "phone"
@@ -26,58 +26,6 @@
     }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.069,
-        "y": 0.032
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "content": [
-        {
-          "expr": "'MOBILE IMAGING'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "tdate",
-      "anchor": "top-right",
-      "offset": {
-        "x": -0.069,
-        "y": 0.032
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.012,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0,
-      "align": "right",
-      "content": [
-        {
-          "expr": "date('LOCAL', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
     {
       "type": "shape",
       "id": "specline",
@@ -107,57 +55,6 @@
         "height": 0.014
       },
       "color": "#E10600"
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.0886,
-        "y": -0.1323
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0216,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
-          "fallback": "MOBILE CAMERA"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.069,
-        "y": -0.1045
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0144,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     },
     {
       "type": "shape",
@@ -205,201 +102,6 @@
       "color": "#DADDE2"
     },
     {
-      "type": "text",
-      "id": "v1",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.5172,
-        "y": -0.124
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0168,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('{focal}mm', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v2",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.6121,
-        "y": -0.124
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0168,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('f/{aperture}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v3",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.7069,
-        "y": -0.124
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0168,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.03,
-      "content": [
-        {
-          "expr": "exif.shutter",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "v4",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.8017,
-        "y": -0.124
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0168,
-        "color": "#1A1A1A",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "content": [
-        {
-          "expr": "fmt('ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l1",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.5172,
-        "y": -0.099
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0114,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.14,
-      "content": [
-        {
-          "expr": "'FOCAL'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l2",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.6121,
-        "y": -0.099
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0114,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.14,
-      "content": [
-        {
-          "expr": "'APERTURE'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l3",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.7069,
-        "y": -0.099
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0114,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.14,
-      "content": [
-        {
-          "expr": "'SHUTTER'",
-          "fallback": null
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "l4",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.8017,
-        "y": -0.099
-      },
-      "font": {
-        "family": [
-          "Geist Mono"
-        ],
-        "size": 0.0114,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.14,
-      "content": [
-        {
-          "expr": "'ISO'",
-          "fallback": null
-        }
-      ]
-    },
-    {
       "type": "image",
       "id": "v7-brand-badge",
       "anchor": "bottom-right",
@@ -428,5 +130,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "left",
+    "color": "#1A1A1A",
+    "font": {
+      "family": [
+        "Geist Mono"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "if_empty(exif.model_pretty, 'MOBILE CAMERA')",
+        "fallback": "MOBILE CAMERA",
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('{focal}mm', exif)",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "fmt('f/{aperture}', exif)",
+        "fallback": null,
+        "role": "detail"
+      }
+    ]
   }
 }

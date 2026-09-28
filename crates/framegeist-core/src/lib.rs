@@ -20,6 +20,7 @@ pub mod sandbox;
 pub mod template;
 pub mod text;
 pub mod text_art;
+pub mod text_fit;
 pub mod text_shape;
 
 pub use encode::{encode_jpeg_quality100, encode_png, splice_exif_app1, splice_png_exif};

@@ -6,8 +6,8 @@
       "zh": "夜墨衬板",
       "en": "Noir Plate"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "master"
@@ -41,30 +41,6 @@
       "tint": "auto"
     },
     {
-      "type": "text",
-      "id": "script",
-      "anchor": "top-center",
-      "offset": {
-        "x": 0,
-        "y": 0.07
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0264,
-        "color": "#F2F0EC",
-        "weight": 500
-      },
-      "align": "center",
-      "content": [
-        {
-          "expr": "'Atelier'"
-        }
-      ],
-      "letterSpacing": 0
-    },
-    {
       "type": "shape",
       "id": "rule",
       "anchor": "bottom-left",
@@ -78,228 +54,6 @@
         "height": 0.0014
       },
       "color": "#FFFFFF2E"
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.15
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0156,
-        "color": "#F2F0EC",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "center",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "val-focal",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.07265,
-        "y": -0.098
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0228,
-        "color": "#F2F0EC",
-        "weight": 500
-      },
-      "content": [
-        {
-          "expr": "fmt('{focal}MM', exif)",
-          "fallback": "--"
-        }
-      ],
-      "letterSpacing": 0.08
-    },
-    {
-      "type": "text",
-      "id": "val-aperture",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.291,
-        "y": -0.098
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0228,
-        "color": "#F2F0EC",
-        "weight": 500
-      },
-      "content": [
-        {
-          "expr": "fmt('F{aperture}', exif)",
-          "fallback": "--"
-        }
-      ],
-      "letterSpacing": 0.08
-    },
-    {
-      "type": "text",
-      "id": "val-shutter",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.509,
-        "y": -0.098
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0228,
-        "color": "#F2F0EC",
-        "weight": 400
-      },
-      "content": [
-        {
-          "expr": "exif.shutter",
-          "fallback": "--"
-        }
-      ],
-      "features": [
-        "tnum"
-      ],
-      "letterSpacing": 0
-    },
-    {
-      "type": "text",
-      "id": "val-iso",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.728,
-        "y": -0.098
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0228,
-        "color": "#F2F0EC",
-        "weight": 400
-      },
-      "content": [
-        {
-          "expr": "exif.iso",
-          "fallback": "--"
-        }
-      ],
-      "features": [
-        "tnum"
-      ],
-      "letterSpacing": 0
-    },
-    {
-      "type": "text",
-      "id": "lab-focal",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.07265,
-        "y": -0.066
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "content": [
-        {
-          "expr": "'FL'"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "lab-aperture",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.291,
-        "y": -0.066
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "content": [
-        {
-          "expr": "'Aperture'"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "lab-shutter",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.509,
-        "y": -0.066
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "content": [
-        {
-          "expr": "'Shutter'"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "lab-iso",
-      "anchor": "bottom-left",
-      "offset": {
-        "x": 0.728,
-        "y": -0.066
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0132,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.18,
-      "content": [
-        {
-          "expr": "'ISO'"
-        }
-      ]
     },
     {
       "type": "shape",
@@ -371,5 +125,32 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#F2F0EC",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "'Atelier'",
+        "fallback": null,
+        "role": "support"
+      },
+      {
+        "expr": "fmt('{focal}MM', exif)",
+        "fallback": "--",
+        "role": "support"
+      },
+      {
+        "expr": "fmt('F{aperture}', exif)",
+        "fallback": "--",
+        "role": "support"
+      }
+    ]
   }
 }

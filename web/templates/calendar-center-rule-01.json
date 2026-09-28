@@ -6,8 +6,8 @@
       "zh": "居中日历",
       "en": "Center Day Rules"
     },
-    "version": "1.3.0",
-    "minEngineVersion": "0.7.0",
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
     "author": "FrameGeist",
     "license": "CC0-1.0",
     "category": "calendar"
@@ -26,30 +26,6 @@
     }
   },
   "layers": [
-    {
-      "type": "text",
-      "id": "topnote",
-      "anchor": "top-left",
-      "offset": {
-        "x": 0.05,
-        "y": 0.035
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#9AA0A6",
-        "weight": 500
-      },
-      "letterSpacing": 0.2,
-      "content": [
-        {
-          "expr": "'CALENDAR · FRAMEGEIST'",
-          "fallback": null
-        }
-      ]
-    },
     {
       "type": "calendar",
       "id": "monthgrid",
@@ -100,120 +76,6 @@
         "height": 0.0015
       },
       "color": "#D8D2C6"
-    },
-    {
-      "type": "text",
-      "id": "bigday",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.08
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.18,
-        "color": "#1A1A1A",
-        "weight": 400
-      },
-      "letterSpacing": 0.01,
-      "align": "center",
-      "content": [
-        {
-          "expr": "date('DD', exif.datetime)",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "dateweek",
-      "anchor": "bottom-center",
-      "offset": {
-        "x": 0,
-        "y": -0.042
-      },
-      "font": {
-        "family": [
-          "LXGW WenKai"
-        ],
-        "size": 0.0192,
-        "color": "#373A40",
-        "weight": 400
-      },
-      "letterSpacing": 0.06,
-      "lineHeight": 1.5,
-      "align": "center",
-      "content": [
-        {
-          "expr": "date('YYYY年MM月DD日', exif.datetime)",
-          "fallback": null
-        },
-        {
-          "expr": "exif.weekday_cn",
-          "fallback": null
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "model",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.105
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0144,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
-          "fallback": "Camera"
-        }
-      ],
-      "features": [
-        "tnum"
-      ]
-    },
-    {
-      "type": "text",
-      "id": "params",
-      "anchor": "bottom-right",
-      "offset": {
-        "x": -0.05,
-        "y": -0.065
-      },
-      "font": {
-        "family": [
-          "Inter"
-        ],
-        "size": 0.0126,
-        "color": "#6B7280",
-        "weight": 500
-      },
-      "letterSpacing": 0.08,
-      "align": "right",
-      "content": [
-        {
-          "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
-          "fallback": null
-        }
-      ]
     }
   ],
   "fields": {
@@ -230,5 +92,33 @@
       "type": "string",
       "source": "exif"
     }
+  },
+  "infoBlock": {
+    "side": "bottom",
+    "align": "center",
+    "color": "#1A1A1A",
+    "font": {
+      "family": [
+        "LXGW WenKai",
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "date('DD', exif.datetime)",
+        "fallback": null,
+        "role": "display"
+      },
+      {
+        "expr": "date('YYYY年MM月DD日', exif.datetime) · exif.weekday_cn",
+        "fallback": null,
+        "role": "detail"
+      },
+      {
+        "expr": "if_empty(exif.model_pretty, 'Unknown Camera')",
+        "fallback": "Camera",
+        "role": "detail"
+      }
+    ]
   }
 }
