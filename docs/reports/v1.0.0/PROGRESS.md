@@ -181,10 +181,10 @@ v0.9.4 热修全部完成：坐标单一事实来源、真实鼠标点选/拖拽
 
 - **本地提交** `8708de63dfca379942260ef9731187897f911083`（父 `4060b5d`，1237 项：192 套迁移模板 + 576 张样片 + web 资产镜像 + 基线 + 文档）→ **远端 `main` `62a5c69d544e3e8f4928d9f283a86e809324baa7`**（Git Data API 推送；templates 576/576、web 582/582）。
 - **注解标签** `v1.0.0` → tag object `c955c821f1fe995c14c33dfd422fd78788caeac4`（`gh api git/tags` + `git/refs`；首次尝试因 `Out-File` 写入 UTF-8 BOM 被拒 → 改 `[System.IO.File]::WriteAllText` 无 BOM）。
-- **工作流（2026-09-28）**：main push → ci `36388379833` / pages `36388379861`；tag v1.0.0 → ci `36388415172` / **release `36388415276` = completed/success** ✓。
+- **工作流（2026-09-28）**：main push → ci `36388379833` / pages `36388379861`；tag v1.0.0 → ci `36388415172` / **release `36388415276`**；收尾文档推送 → ci `36391168448` / pages `36391168353`、ci `36391780046` / pages `36391779987` —— **全部 completed/success ✓**。
 - **Release**：https://github.com/meihuaanying/framegeist/releases/tag/v1.0.0 ；六资产 `framegeist-cli-v1.0.0-win-x64.zip` 77,603,403 B / `framegeist-desktop-v1.0.0-win-x64.zip` 101,379,959 B / `FrameGeist-v1.0.0-win-x64-setup.exe` 101,360,697 B / `framegeist-templates-v1.0.0.fgpkg` 20,674,803 B（count 192）/ `SHA256SUMS.txt` / `update.json`；**哈希一致 ✓**（SHA256SUMS 四项 = update.json 四项：cli `ffdf7bef…`、desktop `1f09678a…`、setup `2e3d90ed…`、templates `244ae14b…`）；说明注入 `gh release edit v1.0.0 --notes-file docs/releases/v1.0.0.md`（body 3549 字符）。
 - **Pages 验证** ✓：线上 `app.js` `APP_VERSION = "1.0.0"`、`sw.js` 缓存名 `framegeist-1.0.0`。
 - **门禁**：E2E **287/287**（真实 CDP 输入 + 11 项 v1.0.0 新断言；run5 281 → run6 269 → run7 273 → run8 283 → run9 287）；perf **4/4**（24MP 506/965ms、60MP 626/2374ms）；桌面端重建 + 探针 **9/9**；fmt/clippy/test/四 target/wasm 帧字节一致；JS 七项（i18n 524/524、品牌色 169/169、对比度、字形 192/279/0、UTF-8 933/0、模板 192/192）；样片 576、基线 384、对比图 25 类 150 组。
 - **文档**：README 亮点页改 v1.0.0；AGENTS.md v1.0.0 横幅（含哈希）与「下一步 = v1.1 backlog」；release notes（`docs/releases/v1.0.0.md`）。
-- **收尾文档推送**：本地 `426e0e1`（AGENTS v1.0.0 横幅 + 本节）→ 远端 `main` `4e130cd737095d8b22ef63288840db8647098b51`（Git Data API；推送工具首次 PATCH 报 422「not a fast forward」，但远端 ref 已指向新提交，对照远端 commit/patch 确认内容一致）；main push 触发 ci `36391168448` / pages `36391168353`（pages ✅）。
+- **收尾文档推送**：本地 `426e0e1`（AGENTS v1.0.0 横幅 + 本节）→ 远端 `main` `4e130cd737095d8b22ef63288840db8647098b51`（Git Data API；推送工具首次 PATCH 报 422「not a fast forward」，但远端 ref 已指向新提交，对照远端 commit/patch 确认内容一致）；main push 触发 ci `36391168448` / pages `36391168353` —— 两者均 completed/success ✓。
 - **v1.1 跟进**：官方素材 `brand-official-inbox/` 落地（57 项审计；`brand-audit-lens.md` 的 11 问待裁决）；info-block 行编辑 UI；调研提案 P4–P8。
