@@ -104,7 +104,6 @@ const SERIES = [
   { slug: "sony-gm", text: "GM", font: "Geist-700.ttf", weight: 700, spacing: 2 },
   { slug: "sony-g", text: "G", font: "Geist-600.ttf", weight: 600, spacing: 0 },
   { slug: "canon-l", text: "L", font: "InstrumentSerif-400.ttf", weight: 400, spacing: 0 },
-  { slug: "canon-rf-l", text: "RF L", font: "Geist-600.ttf", weight: 600, spacing: 4 },
   { slug: "nikon-s", text: "S", font: "Geist-700.ttf", weight: 700, spacing: 0 },
   { slug: "sigma-art", text: "ART", font: "Geist-700.ttf", weight: 700, spacing: 6 },
   { slug: "sigma-dgdn", text: "DG DN", font: "Geist-500.ttf", weight: 500, spacing: 4 },

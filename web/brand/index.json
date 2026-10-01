@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "generatedAt": "2026-09-21T02:58:21.749Z",
   "neutral": "exif-auto",
   "colorRule": "isColorful: s >= 0.18 && 0.10 <= l <= 0.90 (hex->HSL)",
@@ -9,7 +9,9 @@
         "slug": "blackmagicdesign",
         "label": "Blackmagic",
         "official": true,
-        "color": "#FFA200"
+        "officialAsset": "blackmagicdesign.svg",
+        "sourceUrl": "http://www.blackmagicdesign.com/images/common/logos/gf-logo-lg.svg?_v=1602569175",
+        "lightOfficial": true
       },
       {
         "slug": "canon",
@@ -27,7 +29,8 @@
         "slug": "epson",
         "label": "Epson",
         "official": true,
-        "color": "#003399"
+        "officialAsset": "epson.png",
+        "sourceUrl": "https://epson.com/global/common/images/logo.png"
       },
       {
         "slug": "fujifilm",
@@ -45,19 +48,26 @@
         "slug": "insta360",
         "label": "Insta360",
         "official": true,
-        "color": "#FFEE00"
+        "color": "#FFEE00",
+        "officialAsset": "insta360.svg",
+        "sourceUrl": "https://wassets.insta360.com/common/c8fed7f221e64e7d82f009b18965fb8f/white-sc.svg"
       },
       {
         "slug": "leica",
         "label": "Leica",
         "official": true,
-        "color": "#E20612"
+        "color": "#E20713",
+        "officialAsset": "leica.svg",
+        "sourceUrl": "https://leica-camera.com/themes/custom/leica_redesign_theme/logo.svg"
       },
       {
         "slug": "nikon",
         "label": "Nikon",
         "official": true,
-        "color": "#FFE100"
+        "color": "#FEE316",
+        "officialAsset": "nikon.svg",
+        "sourceUrl": "https://www.nikon.com/etc.clientlibs/nikoncore/clientlibs/clientlib-site/resources/img/logo.svg",
+        "tintSkipped": true
       },
       {
         "slug": "olympus",
@@ -81,7 +91,9 @@
         "slug": "phaseone",
         "label": "Phase One",
         "official": false,
-        "color": null
+        "color": "#00B9F2",
+        "officialAsset": "phaseone.svg",
+        "sourceUrl": "inline@https://www.phaseone.com/knowledge-hub/press-releases/"
       },
       {
         "slug": "ricoh",
@@ -99,7 +111,8 @@
         "slug": "sony",
         "label": "Sony",
         "official": true,
-        "color": null
+        "officialAsset": "sony.svg",
+        "sourceUrl": "https://www.sony.com/en/template/2023/img/logo.svg"
       },
       {
         "slug": "tamron",
@@ -111,7 +124,9 @@
         "slug": "zeiss",
         "label": "Zeiss",
         "official": false,
-        "color": null
+        "color": "#102EB3",
+        "officialAsset": "zeiss.svg",
+        "sourceUrl": "https://www.zeiss.com/etc.clientlibs/zeiss-aem-app/jupiter/clientlibs/jupiter-components.app/resources/assets/icons/symbols/zeiss-logo.svg"
       }
     ],
     "phone": [
@@ -125,19 +140,24 @@
         "slug": "google",
         "label": "Google",
         "official": true,
-        "color": "#4285F4"
+        "officialAsset": "google.png",
+        "sourceUrl": "https://www.gstatic.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+        "lightOfficial": true
       },
       {
         "slug": "honor",
         "label": "HONOR",
         "official": true,
-        "color": null
+        "officialAsset": "honor.svg",
+        "sourceUrl": "https://www-file.honor.com/content/dam/honor/common/logo/honor-logo-black.svg"
       },
       {
         "slug": "huawei",
         "label": "Huawei",
         "official": true,
-        "color": "#FF0000"
+        "color": "#CE0E2D",
+        "officialAsset": "huawei.svg",
+        "sourceUrl": "https://consumer.huawei.com/etc/designs/huawei-cbg-site/clientlib-campaign-v4/common-v4/images/logo.svg"
       },
       {
         "slug": "motorola",
@@ -149,7 +169,9 @@
         "slug": "nokia",
         "label": "Nokia",
         "official": true,
-        "color": "#005AFF"
+        "color": "#005AFF",
+        "officialAsset": "nokia.svg",
+        "sourceUrl": "https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg"
       },
       {
         "slug": "oneplus",
@@ -161,19 +183,23 @@
         "slug": "oppo",
         "label": "OPPO",
         "official": true,
-        "color": "#2D683D"
+        "officialAsset": "oppo.svg",
+        "sourceUrl": "inline@https://www.oppo.com/cn/"
       },
       {
         "slug": "samsung",
         "label": "Samsung",
         "official": true,
-        "color": "#1428A0"
+        "officialAsset": "samsung.svg",
+        "sourceUrl": "inline@https://www.samsung.com.cn/",
+        "lightOfficial": true
       },
       {
         "slug": "vivo",
         "label": "vivo",
         "official": true,
-        "color": "#415FFF"
+        "officialAsset": "vivo.svg",
+        "sourceUrl": "inline@https://www.vivo.com/en"
       }
     ],
     "lens": [
@@ -181,13 +207,17 @@
         "slug": "7artisans",
         "label": "7Artisans",
         "official": false,
-        "color": null
+        "color": "#D61518",
+        "officialAsset": "7artisans.png",
+        "sourceUrl": "https://www.7artisans.com/Images/logo.png?t=20260915163633"
       },
       {
         "slug": "blackmagicdesign",
         "label": "Blackmagic",
         "official": true,
-        "color": "#FFA200"
+        "officialAsset": "blackmagicdesign.svg",
+        "sourceUrl": "http://www.blackmagicdesign.com/images/common/logos/gf-logo-lg.svg?_v=1602569175",
+        "lightOfficial": true
       },
       {
         "slug": "canon",
@@ -205,7 +235,8 @@
         "slug": "epson",
         "label": "Epson",
         "official": true,
-        "color": "#003399"
+        "officialAsset": "epson.png",
+        "sourceUrl": "https://epson.com/global/common/images/logo.png"
       },
       {
         "slug": "fujifilm",
@@ -223,7 +254,9 @@
         "slug": "insta360",
         "label": "Insta360",
         "official": true,
-        "color": "#FFEE00"
+        "color": "#FFEE00",
+        "officialAsset": "insta360.svg",
+        "sourceUrl": "https://wassets.insta360.com/common/c8fed7f221e64e7d82f009b18965fb8f/white-sc.svg"
       },
       {
         "slug": "laowa",
@@ -235,19 +268,27 @@
         "slug": "leica",
         "label": "Leica",
         "official": true,
-        "color": "#E20612"
+        "color": "#E20713",
+        "officialAsset": "leica.svg",
+        "sourceUrl": "https://leica-camera.com/themes/custom/leica_redesign_theme/logo.svg"
       },
       {
         "slug": "meike",
         "label": "Meike",
         "official": false,
-        "color": null
+        "color": "#014099",
+        "officialAsset": "meike.png",
+        "sourceUrl": "https://meikeglobal.com/",
+        "lightOfficial": true
       },
       {
         "slug": "nikon",
         "label": "Nikon",
         "official": true,
-        "color": "#FFE100"
+        "color": "#FEE316",
+        "officialAsset": "nikon.svg",
+        "sourceUrl": "https://www.nikon.com/etc.clientlibs/nikoncore/clientlibs/clientlib-site/resources/img/logo.svg",
+        "tintSkipped": true
       },
       {
         "slug": "olympus",
@@ -271,7 +312,9 @@
         "slug": "phaseone",
         "label": "Phase One",
         "official": false,
-        "color": null
+        "color": "#00B9F2",
+        "officialAsset": "phaseone.svg",
+        "sourceUrl": "inline@https://www.phaseone.com/knowledge-hub/press-releases/"
       },
       {
         "slug": "ricoh",
@@ -295,13 +338,16 @@
         "slug": "sirui",
         "label": "Sirui",
         "official": false,
-        "color": null
+        "color": "#0C4DA2",
+        "officialAsset": "sirui.png",
+        "sourceUrl": "https://www.sirui.com/static/img/logo.png"
       },
       {
         "slug": "sony",
         "label": "Sony",
         "official": true,
-        "color": null
+        "officialAsset": "sony.svg",
+        "sourceUrl": "https://www.sony.com/en/template/2023/img/logo.svg"
       },
       {
         "slug": "tamron",
@@ -319,19 +365,23 @@
         "slug": "ttartisan",
         "label": "TTArtisan",
         "official": false,
-        "color": null
+        "officialAsset": "ttartisan.png",
+        "sourceUrl": "https://www.ttartisan.com/static/upload/image/20241224/1735025319693036.png"
       },
       {
         "slug": "viltrox",
         "label": "Viltrox",
         "official": false,
-        "color": null
+        "officialAsset": "viltrox.png",
+        "sourceUrl": "https://cdn.shopify.com/s/files/1/0104/0380/7298/files/logo_557cb041-10ff-4a6b-83fd-cd96d60fb19e.png?v=1709278158&amp;width=600"
       },
       {
         "slug": "voigtlander",
         "label": "Voigtlander",
         "official": false,
-        "color": null
+        "officialAsset": "voigtlander.svg",
+        "sourceUrl": "https://www.cosina.co.jp/wp/wp-content/uploads/2021/08/logo-voigtlander.svg",
+        "lightOfficial": true
       },
       {
         "slug": "yongnuo",
@@ -343,7 +393,9 @@
         "slug": "zeiss",
         "label": "Zeiss",
         "official": false,
-        "color": null
+        "color": "#102EB3",
+        "officialAsset": "zeiss.svg",
+        "sourceUrl": "https://www.zeiss.com/etc.clientlibs/zeiss-aem-app/jupiter/clientlibs/jupiter-components.app/resources/assets/icons/symbols/zeiss-logo.svg"
       }
     ],
     "series": [
@@ -366,16 +418,12 @@
         "color": null
       },
       {
-        "slug": "canon-rf-l",
-        "label": "RF L",
-        "official": false,
-        "color": null
-      },
-      {
         "slug": "nikon-s",
         "label": "S",
         "official": false,
-        "color": null
+        "officialAsset": "nikon-s.svg",
+        "sourceUrl": "https://imaging.nikon.com/imaging/lineup/lens/z-mount/",
+        "accent": "#FFE100"
       },
       {
         "slug": "sigma-art",

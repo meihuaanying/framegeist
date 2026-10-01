@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "1.0.0";
+const APP_VERSION = "1.1.0";
 
 /* ------------------------------------------------------------------ state */
 

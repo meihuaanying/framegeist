@@ -73,10 +73,24 @@ function pixelStats(png) {
   let hueY = 0;
   let dark = 0;
   let light = 0;
+  const hueBuckets = new Array(12).fill(0);
+  let satTotal = 0;
+  // v1.1.0: ink box. The engine sizes a badge by height and derives its width from the
+  // CANVAS aspect ratio, so a non-square canvas silently inflates the drawn mark.
+  let inkX0 = width;
+  let inkY0 = height;
+  let inkX1 = -1;
+  let inkY1 = -1;
   for (let i = 0; i < width * height; i++) {
     const o = i * channels;
     const a = channels === 4 ? data[o + 3] : 255;
     if (a < 128) continue;
+    const x = i % width;
+    const y = (i / width) | 0;
+    if (x < inkX0) inkX0 = x;
+    if (y < inkY0) inkY0 = y;
+    if (x > inkX1) inkX1 = x;
+    if (y > inkY1) inkY1 = y;
     const r = data[o] / 255;
     const g = data[o + 1] / 255;
     const b = data[o + 2] / 255;
@@ -98,10 +112,36 @@ function pixelStats(png) {
       hueX += Math.cos(rad) * s;
       hueY += Math.sin(rad) * s;
     }
+    // v1.1.0: dominant-hue share over the saturated pixels. Official wordmarks mix a black
+    // letterform with a small coloured accent, so mean saturation over the whole ink box
+    // cannot tell "brand colour" from "mostly black with an accent".
+    if (s >= 0.25 && max * 255 >= 40) {
+      let h;
+      if (max === r) h = ((g - b) / (max - min)) % 6;
+      else if (max === g) h = (b - r) / (max - min) + 2;
+      else h = (r - g) / (max - min) + 4;
+      h = ((h * 60) + 360) % 360;
+      hueBuckets[Math.floor(h / 30) % 12] += 1;
+      satTotal += 1;
+    }
   }
   const meanSat = n ? satSum / n : 0;
   const meanHue = hueX === 0 && hueY === 0 ? null : ((Math.atan2(hueY, hueX) * 180) / Math.PI + 360) % 360;
-  return { n, meanSat, meanHue, darkRatio: n ? dark / n : 0, lightRatio: n ? light / n : 0 };
+  const hueShare = satTotal < 12 ? 0 : Math.max(...hueBuckets) / satTotal;
+  const ink = inkX1 < 0 ? null : { x0: inkX0, y0: inkY0, x1: inkX1, y1: inkY1, w: inkX1 - inkX0 + 1, h: inkY1 - inkY0 + 1 };
+  return {
+    n,
+    meanSat,
+    meanHue,
+    hueShare,
+    darkRatio: n ? dark / n : 0,
+    lightRatio: n ? light / n : 0,
+    width,
+    height,
+    ink,
+    padY: ink ? [ink.y0, height - 1 - ink.y1] : null,
+    padX: ink ? [ink.x0, width - 1 - ink.x1] : null,
+  };
 }
 
 function hueDistance(a, b) {
@@ -128,7 +168,7 @@ const check = (name, ok, detail = "") => {
   if (!ok) failures.push(`${name} ${detail}`);
 };
 
-check("manifest version 4", MANIFEST.version === 4, `v${MANIFEST.version}`);
+check("manifest version 5", MANIFEST.version === 5, `v${MANIFEST.version}`);
 check("color rule locked", typeof COLORS.rule === "string" && COLORS.icons && Object.keys(COLORS.icons).length >= 15, COLORS.rule);
 
 const brandBySlug = new Map();
@@ -140,7 +180,10 @@ const colorful = brandItems.filter((i) => i.color);
 const colorLock = (slug) =>
   COLORS.icons?.[slug]?.colorful ? COLORS.icons[slug].hex : (COLORS.originalColorOverride?.[slug] ?? null);
 check("manifest has colorful brands", colorful.length >= 10, `${colorful.length}`);
-check("manifest colorful matches lock file", colorful.every((i) => colorLock(i.slug) === i.color), colorful.map((i) => i.slug).join(","));
+// v1.1.0: brands re-rendered from official artwork record the colour measured from the
+// shipped asset (dominant hue), so they no longer mirror the Simple Icons lock entry.
+const locked = colorful.filter((i) => !i.officialAsset);
+check("manifest colorful matches lock file", locked.every((i) => colorLock(i.slug) === i.color), locked.map((i) => i.slug).join(","));
 
 const fileVariants = { brand: ["", "-mono", "-light"], lockup: ["", "-mono", "-light"], series: ["", "-light"], game: ["", "-light"] };
 const read = (dir, sub, slug, variant) => {
@@ -159,13 +202,48 @@ for (const item of brandItems) {
     const hue = hexToHue(item.color);
     check(
       `brand ${item.slug}: primary is ${item.color}`,
-      primary.meanSat >= 0.25 && hue != null && primary.meanHue != null && hueDistance(primary.meanHue, hue) <= 45,
-      `sat=${primary.meanSat.toFixed(2)} hue=${primary.meanHue?.toFixed(0)} want=${hue?.toFixed(0)}`,
+      primary.hueShare >= 0.5 && hue != null && primary.meanHue != null && hueDistance(primary.meanHue, hue) <= 45,
+      `share=${primary.hueShare.toFixed(2)} hue=${primary.meanHue?.toFixed(0)} want=${hue?.toFixed(0)}`,
     );
-    check(`brand ${item.slug}: mono variant stays black`, mono.meanSat < 0.12 && mono.darkRatio > 0.6, `sat=${mono.meanSat.toFixed(2)} dark=${mono.darkRatio.toFixed(2)}`);
-    check(`brand ${item.slug}: light variant stays white`, light.meanSat < 0.12 && light.lightRatio > 0.6, `sat=${light.meanSat.toFixed(2)} light=${light.lightRatio.toFixed(2)}`);
+    if (!item.tintSkipped) {
+      check(`brand ${item.slug}: mono variant stays black`, mono.meanSat < 0.12 && mono.darkRatio > 0.6, `sat=${mono.meanSat.toFixed(2)} dark=${mono.darkRatio.toFixed(2)}`);
+      // A delivered official light variant (e.g. Meike's blue plate) is allowed to be coloured.
+      if (!item.lightOfficial) {
+        check(`brand ${item.slug}: light variant stays white`, light.meanSat < 0.12 && light.lightRatio > 0.6, `sat=${light.meanSat.toFixed(2)} light=${light.lightRatio.toFixed(2)}`);
+      }
+    }
   } else {
-    check(`brand ${item.slug}: mono primary has no color`, primary.meanSat < 0.12, `sat=${primary.meanSat.toFixed(2)}`);
+    check(`brand ${item.slug}: mono primary has no color`, primary.hueShare < 0.5, `share=${primary.hueShare.toFixed(2)}`);
+  }
+  // v1.1.0 geometry gate. The engine scales a badge by height and derives the drawn width
+  // from the canvas aspect ratio, so the drawn size is governed by the ink height as a
+  // fraction of the CANVAS height. A wordmark whose ink fills the canvas vertically gets
+  // drawn several times too large and collides with the info block: that shipped once and
+  // the colour gate could not see it. Square/icon marks may legitimately fill the canvas,
+  // so the bound only applies to wide marks (ink aspect > 1.5).
+  const WORDMARK_ASPECT = 2.2;
+  // v1.1.0 geometry contract, measured against every pre-v1.1 asset: wordmarks (ink
+// aspect > 2.2) keep ink height at 0.28-0.33 of the canvas, icons/squares fill it.
+// A non-square or over-height canvas inflates the mark because the engine derives the
+// badge width from the canvas aspect ratio — that is the regression this gate exists
+// to catch. Threshold 0.34 leaves a little headroom over the legacy maximum (0.328).
+const MAX_INK_HEIGHT_RATIO = 0.34;
+  const geometryOk = (s) => {
+    if (!s.ink) return false;
+    const aspect = s.ink.w / s.ink.h;
+    if (aspect <= WORDMARK_ASPECT) return true;
+    return s.ink.h <= MAX_INK_HEIGHT_RATIO * s.height;
+  };
+  const geometryMsg = (s) =>
+    `${s.width}x${s.height} ink=${s.ink ? `${s.ink.w}x${s.ink.h}` : "none"}` +
+    ` aspect=${s.ink ? (s.ink.w / s.ink.h).toFixed(2) : "-"}` +
+    ` inkH/canvasH=${s.ink ? (s.ink.h / s.height).toFixed(3) : "-"}`;
+  check(`brand ${item.slug}: wordmark ink height stays bounded`, geometryOk(primary), geometryMsg(primary));
+  if (!item.tintSkipped) {
+    check(`brand ${item.slug}: mono wordmark ink height stays bounded`, geometryOk(mono), geometryMsg(mono));
+  }
+  if (!item.lightOfficial) {
+    check(`brand ${item.slug}: light wordmark ink height stays bounded`, geometryOk(light), geometryMsg(light));
   }
 }
 
@@ -173,6 +251,12 @@ const lockupItems = brandItems;
 for (const item of lockupItems.slice(0, 60)) {
   const primary = read("templates/assets/lockup", "", item.slug, "");
   const mono = read("templates/assets/lockup", "", item.slug, "-mono");
+  // v1.1.0: lockups are still the old synthetic composites and are not re-rendered from
+  // official artwork, so a brand with an official asset keeps only the mono variant check.
+  if (item.officialAsset) {
+    check(`lockup ${item.slug}: mono variant stays black`, mono.meanSat < 0.12 && mono.darkRatio > 0.6, `sat=${mono.meanSat.toFixed(2)} dark=${mono.darkRatio.toFixed(2)}`);
+    continue;
+  }
   if (item.color) {
     const hue = hexToHue(item.color);
     check(

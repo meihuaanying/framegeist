@@ -34,17 +34,27 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
   canon、ricoh、sigma、zeiss、hasselblad、olympus、pentax、tamron、viltrox、laowa、ttartisan、
   tokina、samyang、meike、7artisans、sirui、yongnuo、voigtlander、phaseone、blackmagicdesign 等；
   `lockup/` 为全品牌（42 slug）的原创排版款，供编辑器「官方/原创」风格切换。
-- **镜头系列徽章**（原创字标）：GM、G、L、RF L、S、ART、DG DN、APO、XCD、XF、BATIS、SP。
+- **镜头系列徽章**（原创字标）：GM、G、L、S、ART、DG DN、APO、XCD、XF、BATIS、SP。
+  v1.1.0：Canon 系列只保留 L（去掉 RF 前缀，配官方红）；Nikon S 采用官方 S-Line 标识与官方点缀色 `#FFE100`；
+  其余系列徽章官方未发布独立徽标图，暂保留原创单色版。
 - **游戏主题字标**（v1.0.0：官方标识经授权使用，其余为原创排印、不复制官方书法/插画；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
 - **官方标识授权说明**（v1.0.0）：部分品牌/系列/游戏标识由用户经授权提供，仅用于器材与作品信息的识别展示；
   未提供官方素材的品牌保持原创排印。
+- **v1.1.0 官方品牌素材**：22 个品牌徽标换用官方标识（由你交付到 `brand-official-inbox/`，该目录已 gitignore、
+  不随包分发），每个文件的来源 URL 记录在 `brand-official-inbox/SOURCES.json`（tier：官网 / 官网内联 SVG / 站点图标），
+  并写入 `tools/brand-colors.json` 的 `officialAsset` 与 `web/brand/index.json`（manifest v5）的 `officialAsset`/`sourceUrl`。
+  涉及 Google 官方四色、Leica 官方红圆、ZEISS 官方蓝盾、HUAWEI 官方红、Nokia 官方蓝、insta360 官方黄、
+  7artisans 官方红、Phase One、SIRUI、Meike、Samsung、Oppo、vivo、Honor、Epson、Sony、Blackmagic Design、
+  Viltrox、TTArtisan、Nikon（黄底方块）及 Voigtländer 官方书法体。
+  **商标归各权利人所有，经授权仅作器材信息识别展示。**
 - **中性「EXIF」标**（v0.8.0）：`brand/exif-auto` 与 `-light` 变体，FrameGeist 原创排版，用于表达式徽标层的占位/卡片标记。
 - **v0.8.0 补充资产**：`series/leica-apo`（LEICA APO 系列徽章）、`brand|lockup/voigtlander`（福伦达）。
 - **相框线稿**（`templates/assets/frame/`）：camera-body / phone-frame / film-strip，FrameGeist 原创矢量（`tools/gen-frame-assets.mjs`）。
 - **商标声明**：各品牌字标/商标归其权利人所有，本项目仅作**器材信息识别展示**用途，
-  不表示隶属、赞助或背书；原创 lockup 不复制官方图形徽记。彩色化仅使用 Simple Icons 的 hex 元数据与该库单色路径重绘，
-  不引入多色官方插画。详见 `templates/assets/brand/CREDITS.json`。
+  不表示隶属、赞助或背书。未提供官方素材的品牌：彩色化仅使用 Simple Icons 的 hex 元数据与该库单色路径重绘，
+  原创 lockup 不复制官方图形徽记。v1.1.0 起，22 个品牌使用你经授权提供的**官方标识本身**
+  （含多色官方形态，如 Google 官方四色与 Leica 官方红圆），来源见上。详见 `templates/assets/brand/CREDITS.json`。
 - **游戏 IP 声明**（v1.0.0）：游戏名称与标识（原神、绝区零、崩坏、明日方舟、燕云十六声、黑神话：悟空）
   归各自权利人所有，经授权用于风格标注，不表示隶属、赞助或背书。
 

@@ -2725,7 +2725,7 @@ let EXIF_TEXT_ID = null;
       colorful: all.filter((i) => i.color).map((i) => i.slug),
     };
   })()`);
-  check("v0.9.3 badge lib: manifest v4 with five groups", lib?.v === 4 && lib.camera >= 15 && lib.phone >= 8 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
+  check("v1.1 badge lib: manifest v5 with five groups", lib?.v === 5 && lib.camera >= 15 && lib.phone >= 8 && lib.lens > 20 && lib.series >= 10 && lib.game >= 5, JSON.stringify(lib));
   check("v0.9 badge lib: neutral EXIF marker present", lib?.neutral === "exif-auto", String(lib?.neutral));
   check("v0.9 badge lib: colorful brands carry official hex", Array.isArray(lib?.colorful) && lib.colorful.length >= 10 && lib.colorful.includes("nikon"), JSON.stringify(lib?.colorful?.slice(0, 6)));
   check("v0.9 badge lib: mono brands carry no color", !(lib?.colorful ?? []).includes("sony"), JSON.stringify(lib?.colorful));

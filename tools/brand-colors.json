@@ -5,7 +5,17 @@
   "generatedAt": "2026-09-21T02:51:18.722Z",
   "monoOverride": [],
   "originalColorOverride": {
-    "canon": "#C8102E"
+    "canon": "#C8102E",
+    "7artisans": "#D61518",
+    "huawei": "#CE0E2D",
+    "insta360": "#FFEE00",
+    "leica": "#E20713",
+    "meike": "#014099",
+    "nikon": "#FEE316",
+    "nokia": "#005AFF",
+    "phaseone": "#00B9F2",
+    "sirui": "#0C4DA2",
+    "zeiss": "#102EB3"
   },
   "originalColorOverrideNote": "Brands no longer present in Simple Icons keep original typographic wordmarks (not official artwork); this map gives them their well-known official color for the primary variant after user feedback (v0.9.2: canon red, Pantone 186 C).",
   "icons": {
@@ -103,6 +113,118 @@
       "hex": "#FFA200",
       "colorful": true,
       "title": "Blackmagic Design"
+    }
+  },
+  "officialAsset": {
+    "7artisans": {
+      "file": "7artisans.png",
+      "sourceUrl": "https://www.7artisans.com/Images/logo.png?t=20260915163633",
+      "tier": "official-site"
+    },
+    "blackmagicdesign": {
+      "file": "blackmagicdesign.svg",
+      "sourceUrl": "http://www.blackmagicdesign.com/images/common/logos/gf-logo-lg.svg?_v=1602569175",
+      "tier": "official-site"
+    },
+    "epson": {
+      "file": "epson.png",
+      "sourceUrl": "https://epson.com/global/common/images/logo.png",
+      "tier": "official-site"
+    },
+    "google": {
+      "file": "google.png",
+      "sourceUrl": "https://www.gstatic.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
+      "tier": "official-site"
+    },
+    "honor": {
+      "file": "honor.svg",
+      "sourceUrl": "https://www-file.honor.com/content/dam/honor/common/logo/honor-logo-black.svg",
+      "tier": "official-site"
+    },
+    "huawei": {
+      "file": "huawei.svg",
+      "sourceUrl": "https://consumer.huawei.com/etc/designs/huawei-cbg-site/clientlib-campaign-v4/common-v4/images/logo.svg",
+      "tier": "official-site"
+    },
+    "insta360": {
+      "file": "insta360.svg",
+      "sourceUrl": "https://wassets.insta360.com/common/c8fed7f221e64e7d82f009b18965fb8f/white-sc.svg",
+      "tier": "official-site"
+    },
+    "leica": {
+      "file": "leica.svg",
+      "sourceUrl": "https://leica-camera.com/themes/custom/leica_redesign_theme/logo.svg",
+      "tier": "official-site"
+    },
+    "meike": {
+      "file": "meike.png",
+      "sourceUrl": "https://meikeglobal.com/",
+      "tier": "official-site"
+    },
+    "nikon": {
+      "file": "nikon.svg",
+      "sourceUrl": "https://www.nikon.com/etc.clientlibs/nikoncore/clientlibs/clientlib-site/resources/img/logo.svg",
+      "tier": "official-site"
+    },
+    "nokia": {
+      "file": "nokia.svg",
+      "sourceUrl": "https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg",
+      "tier": "official-site"
+    },
+    "oppo": {
+      "file": "oppo.svg",
+      "sourceUrl": "inline@https://www.oppo.com/cn/",
+      "tier": "official-inline-svg"
+    },
+    "phaseone": {
+      "file": "phaseone.svg",
+      "sourceUrl": "inline@https://www.phaseone.com/knowledge-hub/press-releases/",
+      "tier": "official-inline-svg"
+    },
+    "samsung": {
+      "file": "samsung.svg",
+      "sourceUrl": "inline@https://www.samsung.com.cn/",
+      "tier": "official-inline-svg"
+    },
+    "sirui": {
+      "file": "sirui.png",
+      "sourceUrl": "https://www.sirui.com/static/img/logo.png",
+      "tier": "official-site"
+    },
+    "sony": {
+      "file": "sony.svg",
+      "sourceUrl": "https://www.sony.com/en/template/2023/img/logo.svg",
+      "tier": "official-site"
+    },
+    "ttartisan": {
+      "file": "ttartisan.png",
+      "sourceUrl": "https://www.ttartisan.com/static/upload/image/20241224/1735025319693036.png",
+      "tier": "official-site"
+    },
+    "viltrox": {
+      "file": "viltrox.png",
+      "sourceUrl": "https://cdn.shopify.com/s/files/1/0104/0380/7298/files/logo_557cb041-10ff-4a6b-83fd-cd96d60fb19e.png?v=1709278158&amp;width=600",
+      "tier": "official-site"
+    },
+    "vivo": {
+      "file": "vivo.svg",
+      "sourceUrl": "inline@https://www.vivo.com/en",
+      "tier": "official-inline-svg"
+    },
+    "voigtlander": {
+      "file": "voigtlander.svg",
+      "sourceUrl": "https://www.cosina.co.jp/wp/wp-content/uploads/2021/08/logo-voigtlander.svg",
+      "tier": "official-site"
+    },
+    "zeiss": {
+      "file": "zeiss.svg",
+      "sourceUrl": "https://www.zeiss.com/etc.clientlibs/zeiss-aem-app/jupiter/clientlibs/jupiter-components.app/resources/assets/icons/symbols/zeiss-logo.svg",
+      "tier": "official-site"
+    },
+    "nikon-s": {
+      "file": "nikon-s.svg",
+      "sourceUrl": "https://imaging.nikon.com/imaging/lineup/lens/z-mount/",
+      "tier": "official-site"
     }
   }
 }
