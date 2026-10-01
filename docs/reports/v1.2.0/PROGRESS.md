@@ -181,3 +181,30 @@ fontdb/usvg tree，**只有进程退出才归还 OS**，`global.gc()` 无效。
 1. **不臆造官方素材**：官方没发布就不发布，`recolour-with-accent = 0` 是取证结论而非偷懒；
 2. **素材到位即可上色**：引擎 `-accent` 面 + 门禁就位，将来你给出官方彩色系列徽章，
    一次 `import-brand-inbox --accent` 即可全部上屏，且不会破坏排版。
+
+## 8. 发布记录（v1.2.0）
+
+- 本地提交 `3e19ca9`（parent `7550c62` = v1.1.0 收尾提交），工作树干净。
+- Git Data API 推送：remote-base `943703f2` → 远端 `main` = **`c5a7a5dea4bc5630adaed8b2e118066d9f9863d1`**。
+- 标签 `v1.2.0` → **`c5a7a5d`**。
+  ⚠️ **本版是轻量标签（lightweight）**：注解标签的 `POST /git/tags` 接口在本机被 GitHub 以
+  422 拒绝（`For 'properties/object', … is not a string / "type" wasn't supplied`），
+  请求体已用 `gh api --verbose` 自证是合法 JSON（`{"tag","message","object":{"sha","type"}}`），
+  `gh --input` / `--input -` / `-f object[sha]` / `-f object[type]` 四种写法均被同样拒绝，
+  属服务端参数校验异常；`POST /git/refs`（单层参数）正常，故退回轻量标签。
+  影响范围仅限标签对象类型：`ref_name` 仍为 `v1.2.0`，Release 工作流与产物完全一致，
+  版本说明改由 `docs/releases/v1.2.0.md` 注入。后续版本若需注解标签，可在 GitHub UI 端补。
+- 触发的工作流：main push → ci `36903723616` ✅ / pages `36903723806` ✅；tag push → ci `36903932187` ✅ / release `36903932562` ✅（**四个全部 success**）。
+- Release：https://github.com/meihuaanying/framegeist/releases/tag/v1.2.0 ，六资产与哈希
+
+  | 资产 | 字节 | sha256 |
+  | --- | --- | --- |
+  | `framegeist-cli-v1.2.0-win-x64.zip` | 77,503,262 | `d0c54ae7fc138e26e52ff7273affc84c51122f609c16ca0cb69ab1b23c182b2a` |
+  | `framegeist-desktop-v1.2.0-win-x64.zip` | 101,355,892 | `4ffdd3a73fbe6faf76ba88adb6462fe3300fb80ccac11371ed753ce900e358b6` |
+  | `FrameGeist-v1.2.0-win-x64-setup.exe` | 101,337,737 | `7cc53fcafe312fea96e197245a7cde44efe3ad36ba97bd264a3ede5c06269b2a` |
+  | `framegeist-templates-v1.2.0.fgpkg` | 20,674,803 | `9e8e9e5ce0173fa6e5c26ed90f9c09114328691c407b337c84f2868ad0cfa5f3` |
+  | `SHA256SUMS.txt` / `update.json` | 406 / 1350 | — |
+
+  **SHA256SUMS.txt ↔ update.json 四项哈希与体积逐一相符** ✅（update.json `schemaVersion 1` / `channel stable` / `generatedAt 2026-10-01T18:27:21Z` / `templates.count 192`）。
+- Release 说明：工作流只写了自动 changelog → `gh release edit v1.2.0 --notes-file docs/releases/v1.2.0.md` → body **5827 字符** ✅。
+- Pages 验证：线上 `APP_VERSION = "1.2.0"`、`sw.js` 缓存名 `framegeist-1.2.0`、`web/brand/index.json` = manifest v5（series 12 枚、`nikon-s.accent = #FFE100`）✅。
