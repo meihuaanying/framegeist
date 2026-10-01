@@ -2368,6 +2368,79 @@ fn ink_stats(rgba: &RgbaImage) -> (f32, f32) {
     ((lum / n.max(1.0)) as f32, (chroma / n.max(1.0)) as f32)
 }
 
+/// Which face of a badge asset the renderer paints.
+///
+/// v1.2.0: `Accent` is the official-colour face of an otherwise monochrome mark
+/// (`<slug>-accent.png`, produced by `tools/import-brand-inbox.mjs` as a pure
+/// recolour of the official mono mark, so the geometry — and therefore the
+/// layout — is identical to the mono face). It only wins when the accent clears
+/// the WCAG 1.4.11 non-text contrast floor against the local background, or
+/// when the layer explicitly asks for colour (`contrast: "color"` /
+/// `tint: "color"`), mirroring the rule the primary face already follows.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BadgeFace {
+    /// The asset referenced by the template (official colour for colourful brands).
+    Primary,
+    /// `<slug>-accent.png` — official mark recoloured with the brand accent.
+    Accent,
+    /// `<slug>-mono.png` — black.
+    Mono,
+    /// `<slug>-light.png` — white.
+    Light,
+}
+
+/// Best 1.4.11 contrast ratio of each candidate face against the local background.
+#[derive(Debug, Clone, Copy)]
+pub struct BadgeScores {
+    pub color: f32,
+    pub accent: f32,
+    pub dark: f32,
+    pub light: f32,
+}
+
+/// Which candidate faces actually exist on disk.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct BadgeAvailability {
+    pub mono: bool,
+    pub light: bool,
+    pub accent: bool,
+}
+
+/// Contrast floor from WCAG 1.4.11 (non-text contrast) used for colour faces.
+pub const BADGE_COLOR_FLOOR: f32 = 3.0;
+
+/// Pick the face to paint. Pure policy so the decision table is unit-testable
+/// without shipping fixture assets; the caller does the I/O.
+#[allow(clippy::too_many_arguments)]
+pub fn pick_badge_face(
+    mode: &str,
+    tint_hint: Option<&str>,
+    primary_colorful: bool,
+    scores: BadgeScores,
+    available: BadgeAvailability,
+    want_light: bool,
+) -> BadgeFace {
+    let color_requested = mode == "color" || tint_hint == Some("color");
+    if primary_colorful && (color_requested || scores.color >= BADGE_COLOR_FLOOR) {
+        return BadgeFace::Primary;
+    }
+    if !primary_colorful
+        && available.accent
+        && (color_requested || scores.accent >= BADGE_COLOR_FLOOR)
+    {
+        return BadgeFace::Accent;
+    }
+    if want_light && available.light {
+        return BadgeFace::Light;
+    }
+    if !want_light && available.mono {
+        return BadgeFace::Mono;
+    }
+    // Pre-v0.9 asset sets shipped a single face: keep whatever is loaded rather
+    // than dropping the mark.
+    BadgeFace::Primary
+}
+
 /// Translucent rounded plate behind a badge (contrast protection).
 fn draw_badge_plate(
     canvas: &mut RgbaImage,
@@ -2642,20 +2715,27 @@ fn draw_image_layer(
         // v0.9.0 variant matrix: `<slug>.png` (official color for colorful
         // brands), `<slug>-mono.png` (black), `<slug>-light.png` (white).
         let mono_path = format!("{base_path}-mono");
+        // v1.2.0: the optional official-accent face of a monochrome mark.
+        let accent_path = format!("{base_path}-accent");
         let load_stats = |p: &str| {
             resolve_asset_bytes(opts, p)
                 .and_then(|b| image::load_from_memory(&b).ok())
                 .map(|i| ink_stats(&i.to_rgba8()))
         };
+        let accent_rgba = resolve_asset_bytes(opts, &accent_path)
+            .and_then(|b| image::load_from_memory(&b).ok())
+            .map(|i| i.to_rgba8());
         let (dark_ink, _) = load_stats(&mono_path)
             .or_else(|| load_stats(&base_path))
             .unwrap_or((0.02, 0.0));
         let (light_ink, _) = load_stats(&format!("{base_path}-light")).unwrap_or((0.98, 0.0));
+        let accent_ink = accent_rgba.as_ref().map(|a| ink_stats(a).0);
         let (primary_ink, primary_chroma) = ink_stats(&rgba);
         let primary_colorful = primary_chroma >= 0.25;
         let score = |lum: f32| contrast_ratio(lum, p10).min(contrast_ratio(lum, p90));
         let (color_score, dark_score, light_score) =
             (score(primary_ink), score(dark_ink), score(light_ink));
+        let accent_score = accent_ink.map(score).unwrap_or(0.0);
         let tint_hint = ov
             .and_then(|o| o.brand_contrast.as_deref())
             .or(layer.tint.as_deref());
@@ -2671,39 +2751,70 @@ fn draw_image_layer(
                 _ => (p10 + p90) / 2.0 < 0.5,
             },
         };
-        // v0.9.0: keep the official color when it is requested explicitly or
-        // when it clears the WCAG 1.4.11 non-text contrast floor (3:1) against
-        // the local background; otherwise fall back to the black/white
-        // variants (old behaviour).
-        let color_requested = mode == "color" || tint_hint == Some("color");
-        let use_color = primary_colorful && (color_requested || color_score >= 3.0);
+        let face = pick_badge_face(
+            mode,
+            tint_hint,
+            primary_colorful,
+            BadgeScores {
+                color: color_score,
+                accent: accent_score,
+                dark: dark_score,
+                light: light_score,
+            },
+            BadgeAvailability {
+                mono: resolve_asset_bytes(opts, &mono_path).is_some(),
+                light: resolve_asset_bytes(opts, &format!("{base_path}-light")).is_some(),
+                accent: accent_rgba.is_some(),
+            },
+            want_light,
+        );
         let best_score;
-        if use_color {
-            best_score = color_score;
-            chosen_ink = Some(primary_ink);
-            chosen_light = primary_ink > 0.55;
-        } else {
-            let target = if want_light {
-                format!("{base_path}-light")
-            } else {
-                mono_path.clone()
-            };
-            if let Some(bytes) = resolve_asset_bytes(opts, &target) {
-                if let Ok(li) = image::load_from_memory(&bytes) {
-                    rgba = li.to_rgba8();
+        match face {
+            BadgeFace::Primary => {
+                best_score = color_score;
+                chosen_ink = Some(primary_ink);
+                chosen_light = primary_ink > 0.55;
+            }
+            BadgeFace::Accent => {
+                if let Some(face_img) = accent_rgba {
+                    rgba = face_img;
                 }
-            } else if !want_light {
-                // No -mono file (pre-v0.9 asset set): fall back to the primary.
-                if let Some(db) = resolve_asset_bytes(opts, &base_path) {
-                    if let Ok(di) = image::load_from_memory(&db) {
-                        rgba = di.to_rgba8();
+                best_score = accent_score;
+                chosen_ink = accent_ink;
+                chosen_light = accent_ink.map(|ink| ink > 0.55).unwrap_or(false);
+            }
+            BadgeFace::Mono | BadgeFace::Light => {
+                let target = if face == BadgeFace::Light {
+                    format!("{base_path}-light")
+                } else {
+                    mono_path.clone()
+                };
+                if let Some(bytes) = resolve_asset_bytes(opts, &target) {
+                    if let Ok(li) = image::load_from_memory(&bytes) {
+                        rgba = li.to_rgba8();
+                    }
+                } else if face == BadgeFace::Mono {
+                    // No -mono file (pre-v0.9 asset set): fall back to the primary.
+                    if let Some(db) = resolve_asset_bytes(opts, &base_path) {
+                        if let Ok(di) = image::load_from_memory(&db) {
+                            rgba = di.to_rgba8();
+                        }
                     }
                 }
+                best_score = if face == BadgeFace::Light {
+                    light_score
+                } else {
+                    dark_score
+                };
+                chosen_light = want_light;
+                chosen_ink = Some(if face == BadgeFace::Light {
+                    light_ink
+                } else {
+                    dark_ink
+                });
             }
-            best_score = if want_light { light_score } else { dark_score };
-            chosen_light = want_light;
-            chosen_ink = Some(if want_light { light_ink } else { dark_ink });
         }
+        let color_requested = mode == "color" || tint_hint == Some("color");
         if best_score < 4.5 && (mode == "auto" || mode == "color") && !color_requested {
             need_stroke = true;
         }

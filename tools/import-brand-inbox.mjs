@@ -12,6 +12,8 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { inflateSync, deflateSync } from "node:zlib";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 import { Resvg } from "@resvg/resvg-js";
 
 const ROOT = process.cwd();
@@ -383,28 +385,25 @@ function writeAsset(rel, png) {
   writeFileSync(full, png);
 }
 
+// v1.2.0: @resvg/resvg-js has no dispose API, so its Rust-side allocations are only
+// returned to the OS when the process exits (docs/reports/v1.2.0/incident-resvg-leak.md).
+// Every brand is therefore imported in its own short-lived child process; this parent
+// only aggregates the report and keeps ownership of the JSON files.
+const SELF = fileURLToPath(import.meta.url);
+const RENDER_ONE = (() => {
+  const i = process.argv.indexOf("--render-one");
+  return i >= 0 ? process.argv[i + 1] : null;
+})();
+
 // ---------------------------------------------------------------- main
 const sources = JSON.parse(readFileSync(path.join(INBOX, "SOURCES.json"), "utf8"));
-const report = {
-  generatedAt: new Date().toISOString(),
-  dry: DRY,
-  applied: [],
-  skipped: SKIPS,
-  removed: REMOVE,
-  colors: {},
-  manifestVersion: 5,
-};
 
-const slugs = Object.keys(PICKS).filter((s) => only.length === 0 || only.includes(s));
-for (const slug of slugs) {
+function importBrand(slug) {
   const pick = PICKS[slug];
   const dir = pick.dir ?? "brand";
   const entry = (sources.brands ?? {})[slug] ?? (sources.series ?? {})[slug] ?? [];
   const primary = entry[0];
-  if (!primary) {
-    report.applied.push({ slug, error: "not present in SOURCES.json" });
-    continue;
-  }
+  if (!primary) return { slug, error: "not present in SOURCES.json" };
   const art = artwork(primary.file);
   const baseMode = pick.base ?? "original";
   const baseTint = baseMode === "original" ? null : baseMode === "black" ? [0, 0, 0] : hexTriplet(baseMode);
@@ -457,10 +456,9 @@ for (const slug of slugs) {
     const hue = dominantHue(baseImg, inkBox(baseImg));
     if (hue && hue.share >= DOMINANT_HUE_SHARE) color = hue.hex;
   }
-  if (color) report.colors[slug] = color;
 
   const mainW = Number(written[0].png.readUInt32BE(16));
-  report.applied.push({
+  return {
     slug,
     dir,
     source: primary.file,
@@ -479,8 +477,48 @@ for (const slug of slugs) {
       const t = written.find((w) => w.file === `thumbs/${slug}.png`);
       return `${t.png.readUInt32BE(16)}x${t.png.readUInt32BE(20)}`;
     })(),
-  });
-  if (!DRY) continue;
+  };
+}
+
+if (RENDER_ONE) {
+  const entry = importBrand(RENDER_ONE);
+  console.log(`RENDER_OK ${JSON.stringify(entry)}`);
+  process.exit(0);
+}
+
+const report = {
+  generatedAt: new Date().toISOString(),
+  dry: DRY,
+  applied: [],
+  skipped: SKIPS,
+  removed: REMOVE,
+  colors: {},
+  manifestVersion: 5,
+};
+
+const slugs = Object.keys(PICKS).filter((s) => only.length === 0 || only.includes(s));
+for (const slug of slugs) {
+  let entry;
+  try {
+    const args = ["--max-old-space-size=1024", SELF, "--render-one", slug];
+    if (DRY) args.push("--dry");
+    if (only.length) args.push("--only", only.join(","));
+    const out = execFileSync(process.execPath, args, {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "inherit"],
+    });
+    const line = out.split("\n").find((l) => l.startsWith("RENDER_OK "));
+    if (!line) throw new Error("child produced no RENDER_OK marker");
+    entry = JSON.parse(line.slice("RENDER_OK ".length));
+  } catch (e) {
+    entry = { slug, error: e.message };
+  }
+  if (entry.error) {
+    report.applied.push(entry);
+    continue;
+  }
+  if (entry.color) report.colors[slug] = entry.color;
+  report.applied.push(entry);
 }
 
 for (const [slug, reason] of Object.entries(REMOVE)) {

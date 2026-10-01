@@ -5,6 +5,8 @@
 //   --before defaults to .cache/v061-samples (snapshot of the pre-M2 samples)
 import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 import { Resvg } from "@resvg/resvg-js";
 
 const args = process.argv.slice(2);
@@ -21,6 +23,16 @@ const GAP = 26;
 const PAD = 22;
 const HEAD = 34;
 const LABEL_H = 26;
+
+// v1.2.0: one sheet per short-lived child process — resvg never releases its native
+// allocations (docs/reports/v1.2.0/incident-resvg-leak.md), so a 25-sheet run would
+// otherwise grow the process monotonically. `--render-one <category>` renders a single
+// sheet and exits; the parent only counts what was produced.
+const SELF = fileURLToPath(import.meta.url);
+const RENDER_ONE = (() => {
+  const i = args.indexOf("--render-one");
+  return i >= 0 ? args[i + 1] : null;
+})();
 
 mkdirSync(OUT, { recursive: true });
 
@@ -53,7 +65,9 @@ function esc(s) {
 
 let sheets = 0;
 let images = 0;
-for (const [cat, list] of [...byCat.entries()].sort()) {
+
+function renderSheet(cat) {
+  const list = byCat.get(cat) ?? [];
   const ids = list.map((t) => t.id).sort();
   const pick = ids.length >= 3 ? [ids[0], ids[Math.floor(ids.length / 2)], ids[ids.length - 1]] : ids;
   const rows = [];
@@ -67,7 +81,7 @@ for (const [cat, list] of [...byCat.entries()].sort()) {
     const as = jpegSize(a);
     rows.push({ id, before: b, after: a, bw: bs.w, bh: bs.h, aw: as.w, ah: as.h });
   }
-  if (!rows.length) continue;
+  if (!rows.length) return 0;
   const rowW = THUMB * 2 + GAP;
   const bodyH = rows.reduce((sum, r) => sum + HEAD + Math.round((THUMB * r.bh) / r.bw) + LABEL_H + 16, 0);
   const width = rowW + PAD * 2;
@@ -88,7 +102,6 @@ for (const [cat, list] of [...byCat.entries()].sort()) {
   svg += `<text x="${PAD}" y="${y + 16}" font-family="Inter" font-size="13" fill="#6B7280">${BEFORE_LABEL}</text>`;
   svg += `<text x="${PAD + THUMB + GAP}" y="${y + 16}" font-family="Inter" font-size="13" fill="#6B7280">${AFTER_LABEL}</text>`;
     y += LABEL_H;
-    images += 2;
   }
   svg += `</svg>`;
   const resvg = new Resvg(svg, {
@@ -97,7 +110,27 @@ for (const [cat, list] of [...byCat.entries()].sort()) {
   });
   const png = resvg.render().asPng();
   writeFileSync(join(OUT, `${cat}.png`), png);
-  sheets++;
   console.log(`${cat}: ${rows.length} templates -> ${cat}.png`);
+  return rows.length;
+}
+
+if (RENDER_ONE) {
+  const n = renderSheet(RENDER_ONE);
+  console.log(`RENDER_OK ${RENDER_ONE} ${n}`);
+  process.exit(0);
+}
+
+for (const cat of [...byCat.keys()].sort()) {
+  const out = execFileSync(process.execPath, ["--max-old-space-size=1024", SELF, ...args, "--render-one", cat], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "inherit"],
+  });
+  for (const line of out.split("\n")) if (line && !line.startsWith("RENDER_OK")) console.log(line);
+  const m = out.match(/^RENDER_OK (\S+) (\d+)$/m);
+  const n = m ? Number(m[2]) : 0;
+  if (n > 0) {
+    sheets++;
+    images += n * 2;
+  }
 }
 console.log(`\ncompare sheets: ${sheets} categories, ${images} before/after pairs -> ${OUT}`);

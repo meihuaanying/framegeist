@@ -182,6 +182,25 @@ export class Engine {
         wasm.engine_register_asset(this.__wbg_ptr, ptr0, len0, ptr1, len1);
     }
     /**
+     * Render a collage (PRD C5).
+     * @param {Array<any>} photos
+     * @param {string} layout_json
+     * @param {string} format
+     * @param {boolean} preview
+     * @returns {Uint8Array}
+     */
+    render_collage(photos, layout_json, format, preview) {
+        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len1 = WASM_VECTOR_LEN;
+        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return takeFromExternrefTable0(ret[0]);
+    }
+    /**
      * Render a photo against a template (legacy signature).
      * @param {Uint8Array} photo
      * @param {string} template_json
@@ -197,25 +216,6 @@ export class Engine {
         const ptr2 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len2 = WASM_VECTOR_LEN;
         const ret = wasm.engine_render(this.__wbg_ptr, ptr0, len0, ptr1, len1, ptr2, len2, preview);
-        if (ret[2]) {
-            throw takeFromExternrefTable0(ret[1]);
-        }
-        return takeFromExternrefTable0(ret[0]);
-    }
-    /**
-     * Render a collage (PRD C5).
-     * @param {Array<any>} photos
-     * @param {string} layout_json
-     * @param {string} format
-     * @param {boolean} preview
-     * @returns {Uint8Array}
-     */
-    render_collage(photos, layout_json, format, preview) {
-        const ptr0 = passStringToWasm0(layout_json, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        const ptr1 = passStringToWasm0(format, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len1 = WASM_VECTOR_LEN;
-        const ret = wasm.engine_render_collage(this.__wbg_ptr, photos, ptr0, len0, ptr1, len1, preview);
         if (ret[2]) {
             throw takeFromExternrefTable0(ret[1]);
         }

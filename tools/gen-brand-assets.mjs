@@ -19,8 +19,10 @@
 // raw.githubusercontent.com is not always reachable; see tools/brand-colors.json
 // for the locked official hex snapshot.
 // Usage: node tools/gen-brand-assets.mjs [--only slug[,slug]]
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { Resvg } from "@resvg/resvg-js";
 
@@ -29,6 +31,23 @@ const ONLY = (() => {
   return i >= 0 ? new Set(process.argv[i + 1].split(",")) : null;
 })();
 const wanted = (slug) => !ONLY || ONLY.has(slug);
+
+// v1.2.0: @resvg/resvg-js has no dispose API — every `new Resvg(...)` leaks its
+// Rust-side fontdb/usvg tree for the lifetime of the process, and JS GC never
+// returns it to the OS. A full library run renders ~500 times, which is what
+// drove a node process to 128 GB committed and the machine into a blue screen
+// (docs/reports/v1.2.0/incident-resvg-leak.md). So every asset is rendered in
+// its own short-lived child process: the parent only enumerates work and
+// aggregates results, and each child returns all native memory on exit.
+const SELF = fileURLToPath(import.meta.url);
+const RENDER_ONE = (() => {
+  const i = process.argv.indexOf("--render-one");
+  return i >= 0 ? { kind: process.argv[i + 1], slug: process.argv[i + 2] } : null;
+})();
+const SVG_FILE = (() => {
+  const i = process.argv.indexOf("--svg-file");
+  return i >= 0 ? process.argv[i + 1] : null;
+})();
 
 const FONT_DIR = "templates/assets/fonts";
 const SIZE = 512;
@@ -188,6 +207,51 @@ function renderWordmark(entry) {
   });
 }
 
+// v1.2.0: centre on the ink bounding box, not the em box.
+// `dominant-baseline="central"` centres the em box, so faces with asymmetric
+// ascenders/descenders (CJK brush faces, Oswald's caps) ended up a few percent
+// off-centre inside the 512px canvas — wwmeet sat 17px low, arknights 21px.
+// Ink-centred placement makes every series/game badge optically centred and
+// gives tools/check-brand-colors.mjs an exact invariant to assert.
+const inkOffsetCache = new Map();
+function inkOffset(entry, width, fontSize) {
+  const key = `${entry.slug}:${fontSize}:${width}`;
+  const cached = inkOffsetCache.get(key);
+  if (cached) return cached;
+  const fontPath = join(FONT_DIR, entry.font);
+  const probe = new Resvg(wordmarkSvgRaw(entry, width, fontSize, "#000000", 0, 0), {
+    font: { fontFiles: [fontPath], loadSystemFonts: false, defaultFontFamily: "Wordmark" },
+  }).render();
+  // Copy the render out of resvg before scanning it: reading `.pixels` lazily
+  // inside the loop kills the process outright (silent exit 1, no message).
+  const px = Uint8Array.from(probe.pixels);
+  let x0 = probe.width, y0 = probe.height, x1 = -1, y1 = -1;
+  for (let y = 0; y < probe.height; y++) {
+    for (let x = 0; x < probe.width; x++) {
+      if (px[(y * probe.width + x) * 4 + 3] > 8) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+    }
+  }
+  const offset =
+    x1 < 0
+      ? { dx: 0, dy: 0 }
+      : { dx: (width - (x0 + x1)) / 2, dy: (SIZE - (y0 + y1)) / 2 };
+  inkOffsetCache.set(key, offset);
+  return offset;
+}
+
+function wordmarkSvgRaw(entry, width, fontSize, color, dx, dy) {
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${SIZE}" width="${width}" height="${SIZE}">` +
+    `<text x="${(width / 2 + dx).toFixed(2)}" y="${(SIZE / 2 + dy).toFixed(2)}" fill="${color}" font-family="Wordmark" font-size="${fontSize}" ` +
+    `font-weight="${entry.weight}" letter-spacing="${entry.spacing}" text-anchor="middle" dominant-baseline="central">${entry.text}</text></svg>`
+  );
+}
+
 function wordmarkSvg(entry) {
   const H = SIZE;
   const ratio = entry.size ?? 0.42;
@@ -195,10 +259,72 @@ function wordmarkSvg(entry) {
   const fontSize = Math.round(H * ratio);
   const perChar = cjk ? 1.05 : 0.62;
   const width = Math.round(entry.text.length * fontSize * perChar + entry.spacing * entry.text.length + 40);
-  return (color) =>
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${H}" width="${width}" height="${H}">` +
-    `<text x="50%" y="50%" fill="${color}" font-family="Wordmark" font-size="${fontSize}" ` +
-    `font-weight="${entry.weight}" letter-spacing="${entry.spacing}" text-anchor="middle" dominant-baseline="central">${entry.text}</text></svg>`;
+  const { dx, dy } = inkOffset(entry, width, fontSize);
+  return (color) => wordmarkSvgRaw(entry, width, fontSize, color, dx, dy);
+}
+
+// ------------------------------------------------- isolated single-asset render
+// Child mode (`--render-one <kind> <slug> [--svg-file <path>]`): render exactly
+// one asset and exit, so the OS reclaims every resvg allocation immediately.
+// It never writes CREDITS.json or the library manifest — that stays in the
+// parent, which keeps the "render is isolated, semantics unchanged" contract.
+if (RENDER_ONE) {
+  const { kind, slug } = RENDER_ONE;
+  let mode = "wordmark";
+  let ok = false;
+  if (kind === "brand" && SVG_FILE && existsSync(SVG_FILE)) {
+    const svg = readFileSync(SVG_FILE, "utf8");
+    const withFill = (color) =>
+      svg.replace("<svg ", `<svg fill="${color}" `).replace(/fill="currentColor"/g, `fill="${color}"`);
+    mode = "official";
+    ok = writeVariants({ kind, slug }, (color, size) => {
+      const resvg = new Resvg(withFill(color), { fitTo: { mode: "height", value: size } });
+      return resvg.render().asPng();
+    });
+  } else {
+    const table =
+      kind === "lockup" ? LOCKUPS : kind === "series" ? SERIES : kind === "game" ? GAMES : WORDMARKS;
+    const entry = table.find((e) => e.slug === slug);
+    if (entry) ok = renderWordmark({ ...entry, kind });
+  }
+  console.log(`RENDER_OK ${kind} ${slug} ${mode} ${ok ? 1 : 0}`);
+  process.exit(0);
+}
+
+const RENDER_OK = /^RENDER_OK (\S+) (\S+) (\S+) (\S+)$/m;
+
+// Parent side: fan out one child per asset. Rendering parameters are untouched,
+// so the produced bytes are identical to an in-process run.
+function renderIsolated(kind, slug, svg) {
+  const args = ["--max-old-space-size=1024", SELF, "--render-one", kind, slug];
+  let tmp = null;
+  if (svg) {
+    tmp = join(tmpdir(), `fg-brand-${slug}.svg`);
+    writeFileSync(tmp, svg);
+    args.push("--svg-file", tmp);
+  }
+  try {
+    const out = execFileSync(process.execPath, args, {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "inherit"],
+    });
+    for (const line of out.split("\n")) {
+      if (line && !line.startsWith("RENDER_OK")) console.log(line);
+    }
+    const m = out.match(RENDER_OK);
+    return { ok: Boolean(m) && m[4] === "1", mode: m ? m[3] : "wordmark" };
+  } catch (e) {
+    console.log(`${kind} ${slug}: isolated render failed (${e.status ?? e.message})`);
+    return { ok: false, mode: "wordmark" };
+  } finally {
+    if (tmp) {
+      try {
+        unlinkSync(tmp);
+      } catch {
+        /* best effort */
+      }
+    }
+  }
 }
 
 // ---------------------------------------------------------------- official
@@ -245,13 +371,8 @@ for (const slug of OFFICIAL_SLUGS) {
     console.log(`brand ${slug}: icon fetch failed (fallback to wordmark)`);
     continue;
   }
-  const withFill = (color) =>
-    svg.replace("<svg ", `<svg fill="${color}" `).replace(/fill="currentColor"/g, `fill="${color}"`);
-  const ok = writeVariants({ kind: "brand", slug }, (color, size) => {
-    const resvg = new Resvg(withFill(color), { fitTo: { mode: "height", value: size } });
-    return resvg.render().asPng();
-  });
-  if (ok) {
+  const r = renderIsolated("brand", slug, svg);
+  if (r.ok) {
     iconSlugs.push(slug);
     iconCredits[slug] = { hex: COLORS.icons?.[slug]?.hex ?? "#000000", colorful: hasColor(slug), title: COLORS.icons?.[slug]?.title ?? slug };
   }
@@ -268,7 +389,7 @@ for (const w of WORDMARKS) {
     wordCredits.push({ slug: w.slug, kind, font: w.font, note: "official icon preferred" });
     continue;
   }
-  if (renderWordmark({ ...w, kind })) {
+  if (renderIsolated("brand", w.slug).ok) {
     wordCredits.push({ slug: w.slug, kind, font: w.font });
     console.log(`brand wordmark ${w.slug}.png`);
   }
@@ -278,8 +399,7 @@ for (const w of WORDMARKS) {
 const lockupCredits = [];
 for (const l of LOCKUPS) {
   if (!wanted(l.slug)) continue;
-  const entry = { ...l, kind: "lockup" };
-  if (renderWordmark(entry)) lockupCredits.push({ slug: l.slug, font: l.font, colorful: hasColor(l.slug), hex: hasColor(l.slug) ? colorFor(l.slug) : null });
+  if (renderIsolated("lockup", l.slug).ok) lockupCredits.push({ slug: l.slug, font: l.font, colorful: hasColor(l.slug), hex: hasColor(l.slug) ? colorFor(l.slug) : null });
 }
 console.log(`lockups: ${lockupCredits.length} (${lockupCredits.filter((l) => l.colorful).length} colorful)`);
 
@@ -287,7 +407,7 @@ console.log(`lockups: ${lockupCredits.length} (${lockupCredits.filter((l) => l.c
 for (const [kind, items] of [["series", SERIES], ["game", GAMES]]) {
   for (const item of items) {
     if (!wanted(item.slug)) continue;
-    if (renderWordmark({ ...item, kind })) console.log(`${kind} ${item.slug}.png`);
+    if (renderIsolated(kind, item.slug).ok) console.log(`${kind} ${item.slug}.png`);
   }
 }
 

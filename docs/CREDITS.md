@@ -37,8 +37,17 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
 - **镜头系列徽章**（原创字标）：GM、G、L、S、ART、DG DN、APO、XCD、XF、BATIS、SP。
   v1.1.0：Canon 系列只保留 L（去掉 RF 前缀，配官方红）；Nikon S 采用官方 S-Line 标识与官方点缀色 `#FFE100`；
   其余系列徽章官方未发布独立徽标图，暂保留原创单色版。
+  v1.2.0 更正：Canon L 的 `L` 徽章是**黑色**（非官方红），`web/brand/index.json` 中 `canon-l.color` 保持 `null`；
+  Nikon S 的 `#FFE100` 目前是 manifest 元数据，画面仍为官方单色标识（引擎 `-accent` 面已就绪，
+  一旦有官方彩色徽标或你确认点缀色即可上屏）。
 - **游戏主题字标**（v1.0.0：官方标识经授权使用，其余为原创排印、不复制官方书法/插画；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
+  v1.2.0 取证结论：六个游戏官方**均未发布可直接获取的独立字标文件**（HoYoverse 官网 4 个 JS 包共 1,055,178 字节
+  对 genshin/zzz/honkai 的图片引用数为 0，Steam 无原神条目，Epic 商店页 403），因此全部沿用**原创排印**；
+  Steam 商店 capsule 图仅 231×87，用于 6% 照片高的水印会明显偏糊，故不采用。字体与官方字标的对应关系：
+  ARKNIGHTS 用 **Oswald 600**（与该游戏官网字标所用 `Oswald-Bold` 同源，OFL）、
+  燕云十六声用 MaShanZheng（中文毛笔风）、ZZZ 用 Unbounded 700、GENSHIN 用 Cormorant Garamond 700、
+  HONKAI 用 Geist 600、WUKONG 用 Oswald 700。
 - **官方标识授权说明**（v1.0.0）：部分品牌/系列/游戏标识由用户经授权提供，仅用于器材与作品信息的识别展示；
   未提供官方素材的品牌保持原创排印。
 - **v1.1.0 官方品牌素材**：22 个品牌徽标换用官方标识（由你交付到 `brand-official-inbox/`，该目录已 gitignore、

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T21:50:37.369Z",
+  "generatedAt": "2026-10-01T13:39:15.981Z",
   "items": {
     "templates/samples/art-copperplate-etch.jpg": {
       "dhash": "8e65794941616561",
@@ -13,12 +13,12 @@
       "dhash": "4f61392163410101",
       "mean": [
         164.076,
-        163.673,
+        163.672,
         158.601
       ]
     },
     "templates/samples/art-gilt-foil.jpg": {
-      "dhash": "7063e1f0f0f8f8f8",
+      "dhash": "7073e1f0f0f8f8f8",
       "mean": [
         105.536,
         96.618,
@@ -34,7 +34,7 @@
       ]
     },
     "templates/samples/art-republican-press.jpg": {
-      "dhash": "010f4f4f7f7f7f9d",
+      "dhash": "090f4f4f7f7f7f9d",
       "mean": [
         145.148,
         165.077,
@@ -236,9 +236,9 @@
     "templates/samples/calendar-center-rule-01.jpg": {
       "dhash": "0f2d39337171797d",
       "mean": [
-        176.286,
-        176.504,
-        176.08
+        176.285,
+        176.503,
+        176.079
       ]
     },
     "templates/samples/calendar-corner-day-01.jpg": {
@@ -252,17 +252,17 @@
     "templates/samples/calendar-portrait-stack-01.jpg": {
       "dhash": "497b7d352161797f",
       "mean": [
-        197.909,
-        179.258,
-        161.482
+        197.994,
+        179.337,
+        161.548
       ]
     },
     "templates/samples/calendar-rail-date-01.jpg": {
       "dhash": "3d33330305253939",
       "mean": [
-        177.293,
-        175.232,
-        156.373
+        177.294,
+        175.233,
+        156.374
       ]
     },
     "templates/samples/calendar-split-columns-01.jpg": {
@@ -276,9 +276,9 @@
     "templates/samples/calendar-strip-date-01.jpg": {
       "dhash": "0111010911111101",
       "mean": [
-        171.983,
-        169.527,
-        168.003
+        171.904,
+        169.448,
+        167.926
       ]
     },
     "templates/samples/camera-baseplate-02.jpg": {
@@ -582,7 +582,7 @@
       "mean": [
         105.186,
         105.924,
-        106.693
+        106.692
       ]
     },
     "templates/samples/drone-aerial-editorial-01.jpg": {
@@ -692,9 +692,9 @@
     "templates/samples/festival-dragon-boat-01.jpg": {
       "dhash": "2123236363636363",
       "mean": [
-        185.255,
-        145.61,
-        131.988
+        185.267,
+        145.623,
+        132
       ]
     },
     "templates/samples/festival-gold-frame-01.jpg": {
@@ -844,17 +844,17 @@
     "templates/samples/game-arknights-v1.jpg": {
       "dhash": "dfd4c5e4fefefcbc",
       "mean": [
-        80.663,
-        83.232,
-        81.882
+        80.666,
+        83.238,
+        81.889
       ]
     },
     "templates/samples/game-arknights-v2.jpg": {
       "dhash": "1020000300000000",
       "mean": [
         86.289,
-        86.051,
-        85.457
+        86.052,
+        85.458
       ]
     },
     "templates/samples/game-arknights-v3.jpg": {
@@ -868,24 +868,24 @@
     "templates/samples/game-genshin-v1.jpg": {
       "dhash": "6121717171f17171",
       "mean": [
-        166.764,
+        166.763,
         162.307,
-        143.552
+        143.551
       ]
     },
     "templates/samples/game-genshin-v2.jpg": {
       "dhash": "18800302e2a60a00",
       "mean": [
-        118.306,
-        113.316,
-        112.803
+        118.308,
+        113.318,
+        112.804
       ]
     },
     "templates/samples/game-genshin-v3.jpg": {
       "dhash": "0f2727150505050d",
       "mean": [
         169.506,
-        177.809,
+        177.808,
         176.175
       ]
     },
@@ -893,8 +893,8 @@
       "dhash": "b9b898ecececfcec",
       "mean": [
         114.486,
-        120.867,
-        114.836
+        120.866,
+        114.835
       ]
     },
     "templates/samples/game-honkai-v2.jpg": {
@@ -908,7 +908,7 @@
     "templates/samples/game-honkai-v3.jpg": {
       "dhash": "f0f6fefcfefefcf4",
       "mean": [
-        79.658,
+        79.657,
         88.389,
         98.792
       ]
@@ -916,17 +916,17 @@
     "templates/samples/game-wukong-v1.jpg": {
       "dhash": "eff8b0b0a4a4e6a4",
       "mean": [
-        87.087,
-        86.997,
-        61.448
+        87.089,
+        86.999,
+        61.45
       ]
     },
     "templates/samples/game-wukong-v2.jpg": {
       "dhash": "18f0f0f070f0e9cc",
       "mean": [
-        92.771,
-        85.59,
-        69.821
+        92.772,
+        85.591,
+        69.822
       ]
     },
     "templates/samples/game-wukong-v3.jpg": {
@@ -940,16 +940,16 @@
     "templates/samples/game-wwmeet-v1.jpg": {
       "dhash": "5071611194416161",
       "mean": [
-        144.592,
-        156.548,
-        156.683
+        144.59,
+        156.546,
+        156.682
       ]
     },
     "templates/samples/game-wwmeet-v2.jpg": {
       "dhash": "1070f0e0603a0bc4",
       "mean": [
-        104.289,
-        102.73,
+        104.288,
+        102.729,
         105.284
       ]
     },
@@ -957,8 +957,8 @@
       "dhash": "0f55573333717169",
       "mean": [
         154.653,
-        156.373,
-        151.356
+        156.372,
+        151.355
       ]
     },
     "templates/samples/game-zzz-v1.jpg": {
@@ -973,7 +973,7 @@
       "dhash": "18c97f1fe33e07a2",
       "mean": [
         135.912,
-        125.521,
+        125.522,
         114.372
       ]
     },
@@ -982,7 +982,7 @@
       "mean": [
         117.267,
         94.8,
-        79.828
+        79.829
       ]
     },
     "templates/samples/magazine-cover-banner-01.jpg": {
@@ -1018,7 +1018,7 @@
       ]
     },
     "templates/samples/magazine-poster-manifesto-01.jpg": {
-      "dhash": "4323332303070303",
+      "dhash": "4333332303070303",
       "mean": [
         197.633,
         192.296,
@@ -1772,9 +1772,9 @@
     "web/previews/calendar-center-rule-01.jpg": {
       "dhash": "0f3939337171797d",
       "mean": [
-        176.222,
-        176.442,
-        176.029
+        176.221,
+        176.441,
+        176.028
       ]
     },
     "web/previews/calendar-corner-day-01.jpg": {
@@ -1788,17 +1788,17 @@
     "web/previews/calendar-portrait-stack-01.jpg": {
       "dhash": "497b7d352161797d",
       "mean": [
-        198.027,
-        179.397,
-        161.629
+        197.956,
+        179.332,
+        161.574
       ]
     },
     "web/previews/calendar-rail-date-01.jpg": {
       "dhash": "3d33330305253939",
       "mean": [
-        177.301,
-        175.243,
-        156.383
+        177.298,
+        175.24,
+        156.381
       ]
     },
     "web/previews/calendar-split-columns-01.jpg": {
@@ -1812,9 +1812,9 @@
     "web/previews/calendar-strip-date-01.jpg": {
       "dhash": "0111010911111101",
       "mean": [
-        171.732,
-        169.266,
-        167.735
+        171.916,
+        169.45,
+        167.917
       ]
     },
     "web/previews/camera-baseplate-02.jpg": {
@@ -2228,9 +2228,9 @@
     "web/previews/festival-dragon-boat-01.jpg": {
       "dhash": "2323236363636363",
       "mean": [
-        185.249,
-        145.598,
-        131.97
+        185.254,
+        145.603,
+        131.974
       ]
     },
     "web/previews/festival-gold-frame-01.jpg": {
@@ -2244,7 +2244,7 @@
     "web/previews/festival-lantern-night-01.jpg": {
       "dhash": "234dcdcd4d4d4f8e",
       "mean": [
-        106.276,
+        106.277,
         79.431,
         67.206
       ]
@@ -2380,25 +2380,25 @@
     "web/previews/game-arknights-v1.jpg": {
       "dhash": "ded4c5e4fefefcbc",
       "mean": [
-        80.631,
-        83.198,
-        81.841
+        80.63,
+        83.199,
+        81.843
       ]
     },
     "web/previews/game-arknights-v2.jpg": {
       "dhash": "1020000300000000",
       "mean": [
-        86.237,
-        86.007,
-        85.408
+        86.234,
+        86.003,
+        85.404
       ]
     },
     "web/previews/game-arknights-v3.jpg": {
       "dhash": "f09a8eeedcd0c4d4",
       "mean": [
-        118.533,
-        85.427,
-        68.107
+        118.534,
+        85.429,
+        68.109
       ]
     },
     "web/previews/game-genshin-v1.jpg": {
@@ -2428,7 +2428,7 @@
     "web/previews/game-honkai-v1.jpg": {
       "dhash": "b9b898ecececfcec",
       "mean": [
-        114.502,
+        114.501,
         120.863,
         114.819
       ]
@@ -2453,55 +2453,55 @@
       "dhash": "eff0b0b0a4a4e6a4",
       "mean": [
         87.067,
-        86.992,
-        61.469
+        86.991,
+        61.468
       ]
     },
     "web/previews/game-wukong-v2.jpg": {
       "dhash": "18f0f0f070f0e9cc",
       "mean": [
-        92.709,
-        85.539,
-        69.768
+        92.707,
+        85.537,
+        69.765
       ]
     },
     "web/previews/game-wukong-v3.jpg": {
       "dhash": "f0b4d0f0f0f0b0b0",
       "mean": [
-        75.456,
+        75.457,
         69.951,
-        54.754
+        54.755
       ]
     },
     "web/previews/game-wwmeet-v1.jpg": {
       "dhash": "5071611194416161",
       "mean": [
-        144.586,
-        156.546,
-        156.686
+        144.583,
+        156.544,
+        156.685
       ]
     },
     "web/previews/game-wwmeet-v2.jpg": {
       "dhash": "1070f0e0603a0bc4",
       "mean": [
-        104.214,
-        102.662,
-        105.213
+        104.211,
+        102.659,
+        105.21
       ]
     },
     "web/previews/game-wwmeet-v3.jpg": {
       "dhash": "0f55573333717169",
       "mean": [
-        154.72,
-        156.439,
-        151.42
+        154.719,
+        156.438,
+        151.419
       ]
     },
     "web/previews/game-zzz-v1.jpg": {
       "dhash": "f7f0f2b2969ef0e6",
       "mean": [
         98.047,
-        82.701,
+        82.7,
         63.287
       ]
     },
@@ -2510,7 +2510,7 @@
       "mean": [
         135.836,
         125.457,
-        114.307
+        114.306
       ]
     },
     "web/previews/game-zzz-v3.jpg": {
@@ -2870,7 +2870,7 @@
       "mean": [
         152.458,
         152.009,
-        149.906
+        149.907
       ]
     },
     "web/previews/portfolio-credit-still-01.jpg": {
@@ -2908,9 +2908,9 @@
     "web/previews/portfolio-vertical-scroll-01.jpg": {
       "dhash": "3139393d393939b9",
       "mean": [
-        219.894,
-        231.463,
-        239.189
+        219.889,
+        231.459,
+        239.184
       ]
     },
     "web/previews/portfolio-wall-label-01.jpg": {

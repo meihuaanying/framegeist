@@ -270,11 +270,27 @@ for (const item of lockupItems.slice(0, 60)) {
   check(`lockup ${item.slug}: mono variant stays black`, mono.meanSat < 0.12, `sat=${mono.meanSat.toFixed(2)}`);
 }
 
+// v1.2.0 centring contract: series/game badges are wordmarks rendered into a
+// 512px canvas, and the engine draws that whole canvas — so an off-centre ink
+// box shifts the mark on the photo. `dominant-baseline="central"` centres the
+// em box, not the ink, which left wwmeet 17px low and arknights 21px low;
+// tools/gen-brand-assets.mjs now measures the ink box and offsets by it, so every
+// face is ink-centred to within a pixel.
+const CENTRE_TOLERANCE_PX = 2;
 for (const group of ["series", "game"]) {
   for (const item of MANIFEST.groups[group] ?? []) {
     const primary = read(`templates/assets/${group}`, "", item.slug, "");
     read(`templates/assets/${group}`, "", item.slug, "-light");
     check(`${group} ${item.slug}: stays mono`, primary.meanSat < 0.12, `sat=${primary.meanSat.toFixed(2)}`);
+    const padX = primary.padX ?? [];
+    const padY = primary.padY ?? [];
+    const dx = padX.length === 2 ? Math.abs(padX[0] - padX[1]) : Infinity;
+    const dy = padY.length === 2 ? Math.abs(padY[0] - padY[1]) : Infinity;
+    check(
+      `${group} ${item.slug}: ink is centred in its canvas`,
+      primary.ink != null && dx <= CENTRE_TOLERANCE_PX && dy <= CENTRE_TOLERANCE_PX,
+      `padX=${padX[0]}/${padX[1]} padY=${padY[0]}/${padY[1]} tol=${CENTRE_TOLERANCE_PX}`,
+    );
   }
 }
 
