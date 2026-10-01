@@ -92,14 +92,16 @@ manifest 版本 4→5；官方素材品牌跳过「manifest 彩色 = Simple Icon
 - **说明注入**：远端 `release.yml` 不含 notes-file 步骤 → `gh release edit v1.1.0 --notes-file docs/releases/v1.1.0.md`，body 由 86 字符（自动 changelog）变为 **3480 字符**。
 - **Pages 验证**：线上 `app.js` 的 `APP_VERSION = "1.1.0"`、`sw.js` 缓存名 `framegeist-1.1.0`、`web/brand/index.json` 为 **manifest v5**（series 12 枚，`nikon-s.accent = #FFE100`）✅。
 - **发布包抽查**：`framegeist-templates-v1.1.0.fgpkg`（zip 容器，293 项）中 `canon-rf-l` 条目数 **0** ✅（裁决 6 的移除已随包生效）；品牌资产不随模板包分发，而在 CLI/桌面端包内（其哈希与 v1.0.0 不同，已随新资产更新）。
+- **一处需要说清的落差（`accent` 现阶段是元数据）**：manifest 里 `nikon-s.accent = #FFE100` 记录的是裁决 5 要求的尼康官方品牌黄，但**本次交付的 S-Line 官方标识本身是单色黑字标**（实测 `nikon-s.png` 墨迹全黑），且全部 12 枚同级系列徽章（`canon-l` / `sony-gm` / `sigma-art` / `zeiss-batis` / `leica-apo` / `tamron-sp` …）主资产同样是黑色 —— 仓库既有约定就是**系列徽章一律单色、由引擎按背景对比度选黑/白变体**。引擎侧 `use_color = primary_colorful && (color_requested || color_score >= 3.0)`（`render.rs:2679`）只会对**带色主资产**渲染彩色，因此今天画面上呈现的仍是官方单色标识，`accent` 尚未被任何代码消费。补齐需要引擎支持 `-color` 官方配色变体，已列入 v1.2 backlog；在此之前文档与 release notes 均已按此口径写明，避免读者误以为黄色已上屏。
 - **★ CI 失败与修复（真实发现，非环境抖动）**：main push 的 ci `36798868703` 在 `cargo test` 步骤失败 —— `calendar_binding_guides_add_small_decoration` 报 `binding is a decoration, not a fill (changed 4034 px)`，而**同一提交的 tag run 全绿**。根因：该断言用硬编码 `changed < 4000` 像素上限，而日历网格位置来自**文字栅格化度量**，不同机器 / 优化级别会有几百像素的舍入差（本机 debug 与 release 均通过，CI 恰好 4034）。这不是产品回归，而是门禁写法脆弱。修复：上限改为**画布占比 10%**（`frame_px / 10`）并保留 > 20 px 的下限 —— 真正的「填充」回归会重绘整个日历区域，语义不变而对舍入噪声免疫。本地验证 `engine_v050` debug 14/14、release 14/14、`cargo fmt --check` 通过，修复以 `9773cd4` 推送。
-- **待办**：该修复推送触发的 ci / pages 全部转绿后，收尾记录提交并推送。
+- **修复已验证 ✅**：本地 `engine_v050` debug 14/14、release 14/14、`cargo fmt --check` 通过，修复以 `9773cd4` 推送（远端 `main` `885f3241`）；文档收尾以 `8179130` 推送（远端 `main` `bf942c9`）。两个推送触发的 ci **36807448910**（@885f324）与 **36807562826**（@bf942c9）均 **completed / success**，pages **36807562864**（@bf942c9）success（@885f324 的 pages `36807448905` 因被新推送取代而 cancelled，属正常行为）。**v1.1.0 发布链与全部收尾推送现已终态全绿。**
+- **纪律**：像素级断言的阈值必须与画布面积成比例，不能用硬编码绝对像素数 —— 否则跨机器 / 优化级别的文字栅格化舍入差会造成假失败。
 
-## 2. 状态总览（已完成 / 仅剩 CI 复核）
+## 2. 状态总览（已全部完成）
 - ✅ E2E 全量 **287/287**（run3，真实 CDP 输入）
 - ✅ 样片 **576 张**、视觉基线 **384 项**、对比图 **25 类 / 150 组**（v1.0.0 → v1.1.0，已逐类目视复核）
 - ✅ 全量门禁：模板校验 192 ok、fmt / clippy -D warnings / test、三 cross target、wasm 帧字节一致、JS 六项（i18n 524/524、品牌色 250/250、UI 对比度、字形 192/279/0、UTF-8 948/0、照片唯一性）
 - ✅ 桌面端重建 + CDP 探针 **9/9**（版本 1.1.0）
 - ✅ 版本号四处 1.1.0 + `docs/releases/v1.1.0.md` + `AGENTS.md` 横幅 + `CREDITS.md` 三处
 - ✅ 提交推送 + 注解 tag `v1.1.0` + Release 六资产（哈希一致、说明已注入）+ Pages 验证
-- ⏳ 仅剩：`9773cd4` 修复推送触发的 ci / pages 转绿后，收尾本节并推送
+- ✅ CI 门禁脆弱性修复（`9773cd4`）+ 收尾文档提交（`8179130`），两次推送的 ci / pages 全部 success

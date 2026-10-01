@@ -32,7 +32,7 @@
 >
 > ⚠️ **仓库状态提醒**：v0.9.0 与 v0.8.0 相同，本机 `github.com` 直连被阻断，远端 `main` 由 **Git Data API** 推送（v0.9.0 发布时 base = 远端 `ad09563` → 远端 `main` `c2e06a3`；本地 `001da88` 与远端树一致，仅 `.github/workflows/release.yml` 的 notes-file 改动未上远端）；annotated tag `v0.9.0` → tag object `9ef6b75`；Release 说明由 `gh release edit` 注入；**禁止修改 `.github/workflows/*`**（token 缺 `workflow` scope，ref 更新会 404）。
 >
-> 🚧 **下一步**：v1.2（backlog）—— 剩余素材缺口（12 枚系列徽章官方点缀色、samyang / yongnuo 镜头字标、锁附式 lockup 尚未由官方素材重渲；Voigtländer 书法体如改用文本渲染需先扩字体字符子集）+ info-block 行编辑 UI（当前 EXIF 行编辑仅对普通文字层生效）+ 徽标库直接编辑 info block 文案 + 竞品提案 P4–P8（模板收藏 / 品牌包 / 留白可视化与遮挡提示 / 粘贴落点导入 / 长按对比原图）。
+> 🚧 **下一步**：v1.2（backlog）—— **引擎支持 `-color` 官方配色变体**（现 `use_color = primary_colorful && …`，单色主资产无法上色；manifest 的 `series accent` 因此仍是元数据，v1.1.0 的 S-Line 画面为官方单色标识）+ 剩余素材缺口（12 枚系列徽章官方点缀色、samyang / yongnuo 镜头字标、lockup 尚未由官方素材重渲；Voigtländer 书法体如改用文本渲染需先扩字体字符子集）+ info-block 行编辑 UI（当前 EXIF 行编辑仅对普通文字层生效）+ 徽标库直接编辑 info block 文案 + 竞品提案 P4–P8（模板收藏 / 品牌包 / 留白可视化与遮挡提示 / 粘贴落点导入 / 长按对比原图）。
 >
 > 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.9.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；字形门禁 `node tools/check-glyph-coverage.mjs`；UI 对比度 `node tools/check-ui-contrast.mjs`；i18n 门禁 `node tools/check-i18n.mjs`；品牌色门禁 `node tools/check-brand-colors.mjs`；模板排版 `node tools/apply-v090-typography.mjs`（幂等 1.3.0）；字体管线 `node tools/fetch-fonts.mjs --fetch`（SHA256 pin 在 `tools/font-pins.json`）；push 代理不可用时加 `-c "http.https://github.com/.proxy="`，发布推送用 `node tools/gh-api-push.mjs`。
 >
