@@ -49,13 +49,13 @@ export class Engine {
      */
     register_asset(name: string, bytes: Uint8Array): void;
     /**
-     * Render a collage (PRD C5).
-     */
-    render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
-    /**
      * Render a photo against a template (legacy signature).
      */
     render(photo: Uint8Array, template_json: string, format: string, preview: boolean): Uint8Array;
+    /**
+     * Render a collage (PRD C5).
+     */
+    render_collage(photos: Array<any>, layout_json: string, format: string, preview: boolean): Uint8Array;
     /**
      * v0.5.0 free collage: absolute-positioned photo items.
      */
