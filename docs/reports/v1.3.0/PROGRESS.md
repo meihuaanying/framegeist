@@ -121,7 +121,7 @@ E2E 第 83 项用 `performance.getEntriesByType("resource")` 断言 base/-light/
 
 ## 4. 门禁变化
 
-`tools/check-brand-colors.mjs` **268 → 271 项**，新增三项 accent 契约（遍历
+`tools/check-brand-colors.mjs` **268 → 275 项**，新增三项 accent 契约（遍历
 `MANIFEST.groups` 里所有带 `item.accent` 的条目）：
 
 1. `accentAsset` 与 `-accent` 文件存在性**双向一致**（声明有却没有 / 没声明却有都算失败）；
