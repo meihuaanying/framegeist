@@ -6,7 +6,7 @@ const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.4.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -400,6 +400,9 @@ function effectiveTemplateJson() {
   for (const layer of clone.layers ?? []) {
     if (layer.type === "text" && edits[layer.id]) layer.content = edits[layer.id];
   }
+  // v1.4.0: the info block lives on the template root, not in `layers`, so the loop
+  // above can never reach it — apply its edits explicitly.
+  if (clone.infoBlock?.lines && edits[INFO_BLOCK_KEY]) clone.infoBlock.lines = edits[INFO_BLOCK_KEY];
   // v0.7.0 Q2: "original" style switches official marks to typographic lockups.
   const brandStyle = loadOverrides(state.templateId).brandStyle ?? "official";
   if (brandStyle === "original") {
@@ -1196,21 +1199,35 @@ function showFujiGroup(info) {
 
 /* ----------------------------------------------------------- line editor UI */
 const EDITABLE_FIELDS = ["model_pretty", "make", "lens", "focal", "aperture", "shutter", "iso", "datetime", "brand_slug", "lens_slug"];
+// v1.4.0: `infoBlock` is a top-level template field, not a layer, so its lines were
+// unreachable from the line editor (v1.0.0 migration debt). Keying the edits under
+// this synthetic id lets one editor drive both shapes: `InfoLine` and a text layer's
+// `content[]` item are the same shape (`{ expr, fallback?, role? }`), and only the
+// info block carries `role`.
+const INFO_BLOCK_KEY = "infoBlock";
+const INFO_ROLES = [["display", "exifEdit.roleDisplay"], ["support", "exifEdit.roleSupport"], ["detail", "exifEdit.roleDetail"]];
+// The engine rejects an info block with 0 or 4+ lines (`validate_info_block`), so the
+// editor must never let the user cross that boundary.
+const INFO_MIN_LINES = 1;
+const INFO_MAX_LINES = 3;
 function buildLineEditor() {
   const box = $("lineEditor");
   box.innerHTML = "";
   const tpl = currentTemplateObject();
   if (!tpl) return;
-  const edits = getLayerEdits(state.templateId);
-  let textLayers = (tpl.layers ?? []).filter((l) => l.type === "text");
-  for (const layer of textLayers) {
-    const items = edits[layer.id] ?? layer.content;
+  const put = (key, items, rebuild) => {
+    setLayerEdits(state.templateId, { ...getLayerEdits(state.templateId), [key]: items });
+    if (rebuild) buildLineEditor();
+    renderNow();
+  };
+  const group = (label, key, items, opts) => {
+    const roles = opts?.roles ?? null;
     const div = document.createElement("div");
     div.style.marginBottom = "8px";
     const head = document.createElement("div");
     head.className = "muted";
     head.style.margin = "4px 0 4px";
-    head.textContent = `${layer.id}`;
+    head.textContent = label;
     div.appendChild(head);
     items.forEach((item, idx) => {
       const row = document.createElement("div");
@@ -1227,39 +1244,83 @@ function buildLineEditor() {
         input.type = "text";
         input.value = text;
         input.onchange = () => {
-          const newItems = [...items];
-          newItems[idx] = textToItem(input.value, item.fallback);
-          const e = { ...edits, [layer.id]: newItems };
-          setLayerEdits(state.templateId, e);
-          renderNow();
+          const rebuilt = textToItem(input.value, item.fallback);
+          // keep the semantic role across a text edit (only info blocks have one)
+          const next = [...items];
+          next[idx] = item.role ? { ...rebuilt, role: item.role } : rebuilt;
+          put(key, next, false);
         };
         row.appendChild(input);
+      }
+      if (roles) {
+        const sel = document.createElement("select");
+        sel.className = "info-role";
+        sel.title = t("exifEdit.role");
+        for (const [value, labelKey] of roles) {
+          const o = document.createElement("option");
+          o.value = value;
+          o.textContent = t(labelKey);
+          if ((item.role ?? "support") === value) o.selected = true;
+          sel.appendChild(o);
+        }
+        sel.onchange = () => {
+          const next = [...items];
+          next[idx] = { ...item, role: sel.value };
+          put(key, next, true);
+        };
+        row.appendChild(sel);
       }
       const mk = (label, fn, title) => {
         const b = document.createElement("button");
         b.className = "mini"; b.textContent = label; b.title = title ?? "";
         b.onclick = fn;
         row.appendChild(b);
+        return b;
       };
-      mk("↑", () => moveLine(edits, layer.id, items, idx, -1));
-      mk("↓", () => moveLine(edits, layer.id, items, idx, +1));
-      mk("✕", () => {
-        const newItems = items.filter((_, i) => i !== idx);
-        setLayerEdits(state.templateId, { ...edits, [layer.id]: newItems });
-        buildLineEditor(); renderNow();
-      }, "delete");
+      mk("↑", () => {
+        const j = idx - 1;
+        if (j < 0) return;
+        const next = [...items];
+        [next[idx], next[j]] = [next[j], next[idx]];
+        put(key, next, true);
+      });
+      mk("↓", () => {
+        const j = idx + 1;
+        if (j >= items.length) return;
+        const next = [...items];
+        [next[idx], next[j]] = [next[j], next[idx]];
+        put(key, next, true);
+      });
+      const del = mk("✕", () => put(key, items.filter((_, i) => i !== idx), true), "delete");
+      if (items.length <= (opts?.min ?? 0)) del.disabled = true;
       div.appendChild(row);
     });
     const add = document.createElement("button");
     add.className = "mini"; add.style.width = "auto"; add.style.padding = "0 8px";
     add.textContent = t("exifEdit.add");
+    if (items.length >= (opts?.max ?? Infinity)) {
+      add.disabled = true;
+      add.title = t("exifEdit.maxLines");
+    }
     add.onclick = () => {
-      const newItems = [...items, { expr: "'新文字'", fallback: null }];
-      setLayerEdits(state.templateId, { ...edits, [layer.id]: newItems });
-      buildLineEditor(); renderNow();
+      const fresh = { expr: "'新文字'", fallback: null };
+      put(key, [...items, roles ? { ...fresh, role: "detail" } : fresh], true);
     };
     div.appendChild(add);
     box.appendChild(div);
+  };
+
+  const edits = getLayerEdits(state.templateId);
+  for (const layer of (tpl.layers ?? []).filter((l) => l.type === "text")) {
+    group(layer.id, layer.id, edits[layer.id] ?? layer.content ?? [], {});
+  }
+  const ib = tpl.infoBlock;
+  if (ib?.lines?.length) {
+    group(t("exifEdit.infoBlock"), INFO_BLOCK_KEY, edits[INFO_BLOCK_KEY] ?? ib.lines, {
+      roles: INFO_ROLES,
+      min: INFO_MIN_LINES,
+      max: INFO_MAX_LINES,
+    });
   }
   // field chips
   const chips = $("fieldChips");
@@ -1278,15 +1339,6 @@ function buildLineEditor() {
     chips.appendChild(b);
   }
 }
-function moveLine(edits, layerId, items, idx, dir) {
-  const j = idx + dir;
-  if (j < 0 || j >= items.length) return;
-  const newItems = [...items];
-  [newItems[idx], newItems[j]] = [newItems[j], newItems[idx]];
-  setLayerEdits(state.templateId, { ...edits, [layerId]: newItems });
-  buildLineEditor(); renderNow();
-}
-
 /* ------------------------------------------------------------- tweaks UI */
 function updateTweakUI() {
   const o = state.templateId ? loadOverrides(state.templateId) : {};
@@ -1421,8 +1473,20 @@ function requestFontWarmup() {
 function renderOverridesJson() { return buildOverridesJson(); }
 
 const builtinAssetCache = new Set();
-/// Fetch and register built-in image assets (@builtin/<kind>/<slug>[-light].png)
-/// on demand — the WASM engine has no filesystem (v0.3.0 T-A fix).
+/// Faces that actually reached the engine, for the E2E gate: `performance`
+/// entries cannot prove registration (the cache dedupes by slug, so an asset
+/// requested by an earlier test produces no new network entry).
+const registeredBuiltinAssets = new Set();
+/// Every face the engine may pick between, in load order. The primary face and
+/// its light variant cover the common case; `-mono` backs the v0.9 "colourful
+/// mark below 3:1 falls back to black" contract and `-accent` backs the v1.4.0
+/// official accent face — neither was ever registered here, so both were dead
+/// code in the browser (only the CLI, which falls back to disk, could use them).
+/// `res.ok` keeps absent faces a no-op, so the matrix may stay a superset.
+const BUILTIN_FACES = ["", "-light", "-mono", "-accent"];
+/// Fetch and register built-in image assets
+/// (@builtin/<kind>/<slug>{,-light,-mono,-accent}.png) on demand — the WASM
+/// engine has no filesystem (v0.3.0 T-A fix).
 async function ensureBuiltinAssets(templateJson) {
   const wanted = new Set();
   for (const m of String(templateJson).matchAll(/@builtin\/([a-z]+)\/([a-z0-9-]+)/g)) {
@@ -1436,7 +1500,7 @@ async function ensureBuiltinAssets(templateJson) {
     if (builtinAssetCache.has(key)) continue;
     builtinAssetCache.add(key);
     const [kind, slug] = key.split("/");
-    for (const variant of ["", "-light"]) {
+    for (const variant of BUILTIN_FACES) {
       try {
         const res = await fetch(`${BASE}${kind}/${slug}${variant}.png`);
         if (!res.ok) continue;
@@ -1444,6 +1508,7 @@ async function ensureBuiltinAssets(templateJson) {
           `@builtin/${kind}/${slug}${variant}`,
           new Uint8Array(await res.arrayBuffer()),
         );
+        registeredBuiltinAssets.add(`${kind}/${slug}${variant}`);
       } catch { /* missing asset -> blank slot (by design) */ }
     }
   }
@@ -2704,6 +2769,9 @@ async function clearScope(name) {
 window.__fg = {
   state, renderNow, fitStage, showWall, showEditor, useTemplate, buildWall, toast, t,
   currentTemplateObject, effectiveTemplateJson, buildOverridesJson,
+  // v1.4.0: which built-in faces reached the engine (see ensureBuiltinAssets).
+  registeredBuiltinAssets: () => [...registeredBuiltinAssets].sort(),
+  ensureBuiltinAssets,
   loadOverrides, pushOverride, syncBrandUI, syncCanvasUI,
   openLightbox, closeLightbox, ensureFont,
   freeActive: () => state.freeCollage,

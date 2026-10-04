@@ -1885,5 +1885,125 @@
     "orientation": null,
     "sha256": "e6df29120e7d1eab9ed9d40d2d4cc831443bad2621cc5c3e93128c5878db7c96",
     "exif_source": "canon-r7"
+  },
+  "series-canon-l-01": {
+    "file": "showcase/series-canon-l-01.jpg",
+    "source": "picsum:893",
+    "author": "Samuel Zeller",
+    "orientation": "landscape",
+    "luminance": 0.2946,
+    "saturation": 0,
+    "sha256": "e9577909e20c0371bf5e7e3e03015fbf8a8ca8ac689486297a8594d14fd48ee1",
+    "exif_source": "nikon-z6ii"
+  },
+  "series-fujifilm-xf-01": {
+    "file": "showcase/series-fujifilm-xf-01.jpg",
+    "source": "picsum:483",
+    "author": "Paulo Simões Mendes",
+    "orientation": "landscape",
+    "luminance": 0.3748,
+    "saturation": 0.2554,
+    "sha256": "9f554e7302c3f1850e0e6958dc68b9cadbdf03d6ae33534e70aef3e76f2a52e9",
+    "exif_source": "canon-r7"
+  },
+  "series-hasselblad-xcd-01": {
+    "file": "showcase/series-hasselblad-xcd-01.jpg",
+    "source": "picsum:173",
+    "author": "Linh Nguyen",
+    "orientation": "landscape",
+    "luminance": 0.6229,
+    "saturation": 0.3689,
+    "sha256": "c367e0ad9ed1d96846cd4c588e5e542c30b806af1cb0c8fcd77e08c17301f054",
+    "exif_source": "nikon-z6ii"
+  },
+  "series-leica-apo-01": {
+    "file": "showcase/series-leica-apo-01.jpg",
+    "source": "picsum:858",
+    "author": "Taylor Jacobs",
+    "orientation": "landscape",
+    "luminance": 0.6181,
+    "saturation": 0.1766,
+    "sha256": "3b6e89dcfcd7104d05dfef8b900177a941b9b56f410a00df8438e6c1ac50be56",
+    "exif_source": "canon-r7"
+  },
+  "series-nikon-s-01": {
+    "file": "showcase/series-nikon-s-01.jpg",
+    "source": "picsum:853",
+    "author": "Stephen Radford",
+    "orientation": "landscape",
+    "luminance": 0.6616,
+    "saturation": 0.299,
+    "sha256": "9e0a960db6e779c109d7cd10eef8fd2f3516294b6e2481fd5ea090811523d447",
+    "exif_source": "nikon-z6ii"
+  },
+  "series-sigma-apo-01": {
+    "file": "showcase/series-sigma-apo-01.jpg",
+    "source": "picsum:110",
+    "author": "Kenneth Thewissen",
+    "orientation": "landscape",
+    "luminance": 0.4212,
+    "saturation": 0.6078,
+    "sha256": "2b62e164db38d30d1c7961fbd039021066986cd905b0578f052774aee7c93e9e",
+    "exif_source": "canon-r7"
+  },
+  "series-sigma-art-01": {
+    "file": "showcase/series-sigma-art-01.jpg",
+    "source": "picsum:255",
+    "author": "Jon Ottosson",
+    "orientation": "landscape",
+    "luminance": 0.6274,
+    "saturation": 0.1908,
+    "sha256": "9f002cb438d9b5611146be1c1df82c423bce952cffc2ae18545b146f52878931",
+    "exif_source": "nikon-z6ii"
+  },
+  "series-sigma-dgdn-01": {
+    "file": "showcase/series-sigma-dgdn-01.jpg",
+    "source": "picsum:301",
+    "author": "Tirza van Dijk",
+    "orientation": "landscape",
+    "luminance": 0.4766,
+    "saturation": 0.371,
+    "sha256": "63d8525e8d848876036fda17e20838c0526d9cb9b1a73f1b3188d0caa9d63a0f",
+    "exif_source": "canon-r7"
+  },
+  "series-sony-g-01": {
+    "file": "showcase/series-sony-g-01.jpg",
+    "source": "picsum:82",
+    "author": "Rula Sibai",
+    "orientation": "landscape",
+    "luminance": 0.4911,
+    "saturation": 0.3896,
+    "sha256": "d3578f4c97354a429a93238c47176246e8e4c86449de5204ff973084f6e78b23",
+    "exif_source": "nikon-z6ii"
+  },
+  "series-sony-gm-01": {
+    "file": "showcase/series-sony-gm-01.jpg",
+    "source": "picsum:227",
+    "author": "Andrea Boldizsar",
+    "orientation": "landscape",
+    "luminance": 0.4187,
+    "saturation": 0.389,
+    "sha256": "6b36feacfc1575b20029dcb3070f9dddc466ab0ef5a474ba492fa65cf5aba25a",
+    "exif_source": "canon-r7"
+  },
+  "series-tamron-sp-01": {
+    "file": "showcase/series-tamron-sp-01.jpg",
+    "source": "picsum:602",
+    "author": "margot pandone",
+    "orientation": "landscape",
+    "luminance": 0.3888,
+    "saturation": 0.317,
+    "sha256": "f5b0d6e2f6d6c59fb99bb1cab97346b102ae8e5496b5409ca8972c9103596e5e",
+    "exif_source": "nikon-z6ii"
+  },
+  "series-zeiss-batis-01": {
+    "file": "showcase/series-zeiss-batis-01.jpg",
+    "source": "picsum:16",
+    "author": "Paul Jarvis",
+    "orientation": "landscape",
+    "luminance": 0.5399,
+    "saturation": 0.3814,
+    "sha256": "e3219f8a7ad78c1a6edf829e76548b4751b74d379620b14dbcb2f293a9bb76a1",
+    "exif_source": "canon-r7"
   }
 }
