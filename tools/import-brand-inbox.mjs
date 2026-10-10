@@ -101,6 +101,25 @@ const COLOR_HINTS = {
 // verified accent; the remaining 12 series badges stay monochrome until official artwork
 // ships, so they get no accent entry and keep the current look.
 const SERIES_ACCENT = { "nikon-s": "#FFE100" };
+// v1.3.0: official accent faces. `--accent slug=HEX,…` (or an `accent` field on a
+// SOURCES.json entry) declares the *official* accent colour of an otherwise monochrome
+// mark; the importer then writes `<slug>-accent.png` as a pure recolour of the base face —
+// bit-identical geometry, so the engine can swap faces with zero layout change
+// (crates/framegeist-core/src/render.rs → `pick_badge_face`).
+const ACCENT_CLI = (() => {
+  const i = process.argv.indexOf("--accent");
+  const out = {};
+  if (i < 0) return out;
+  for (const pair of String(process.argv[i + 1] ?? "").split(",")) {
+    const [slug, hex] = pair.split("=");
+    if (slug && /^#[0-9a-fA-F]{6}$/.test(hex ?? "")) out[slug.trim()] = hex.trim().toUpperCase();
+    else console.warn(`--accent: ignored "${pair}" (want slug=#RRGGBB)`);
+  }
+  return out;
+})();
+// Share of opaque ink pixels that must sit within one colour for the mark to count as
+// monochrome. Two-tone and coloured official marks score far below this.
+const MONO_SHARE = 0.95;
 
 // A colour is only declared when one hue clearly dominates the mark's saturated pixels.
 const DOMINANT_HUE_SHARE = 0.5;
@@ -398,6 +417,35 @@ const RENDER_ONE = (() => {
 // ---------------------------------------------------------------- main
 const sources = JSON.parse(readFileSync(path.join(INBOX, "SOURCES.json"), "utf8"));
 
+/// Share of opaque ink pixels lying within `tol` of the mean ink colour. A monochrome
+/// official mark scores ~1.0; a two-tone or coloured one scores far lower, and recolouring
+/// it would destroy the very colour we are trying to reproduce.
+function monochromeShare(png) {
+  const img = pngDecode(png);
+  if (!img) return 0;
+  const box = inkBox(img);
+  if (box.w <= 0 || box.h <= 0) return 0;
+  const seen = [];
+  let sr = 0, sg = 0, sb = 0;
+  for (let y = box.y; y < box.y + box.h; y++) {
+    for (let x = box.x; x < box.x + box.w; x++) {
+      if (img.alpha(x, y) < 200) continue;
+      const [r, g, b] = img.rgb(x, y);
+      seen.push(r, g, b);
+      sr += r; sg += g; sb += b;
+    }
+  }
+  const n = seen.length / 3;
+  if (n === 0) return 0;
+  const mr = sr / n, mg = sg / n, mb = sb / n;
+  let hit = 0;
+  for (let i = 0; i < seen.length; i += 3) {
+    const dr = seen[i] - mr, dg = seen[i + 1] - mg, db = seen[i + 2] - mb;
+    if (Math.sqrt(dr * dr + dg * dg + db * db) <= 32) hit++;
+  }
+  return hit / n;
+}
+
 function importBrand(slug) {
   const pick = PICKS[slug];
   const dir = pick.dir ?? "brand";
@@ -438,6 +486,25 @@ function importBrand(slug) {
   }
   written.push(emit(`thumbs/${slug}.png`, art.svg, measured.ink, thumbH, baseTint));
 
+  // v1.3.0: the optional official accent face — a pure recolour of the base face, so the
+  // ink box is bit-identical and swapping faces cannot move a single pixel of layout.
+  // Guards, in order: an opaque raster badge (skipTints) has no separable ink; a mark that
+  // is not monochrome already carries its own official colour and must ship untouched.
+  const accentHex = ACCENT_CLI[slug] ?? primary.accent ?? SERIES_ACCENT[slug] ?? null;
+  let accentFace = null;
+  if (accentHex) {
+    if (pick.skipTints) accentFace = { hex: accentHex, asset: false, method: "skipped-opaque-badge" };
+    else {
+      const mono = monochromeShare(written[0].png);
+      if (mono < MONO_SHARE) {
+        accentFace = { hex: accentHex, asset: false, method: `skipped-not-monochrome(${(mono * 100).toFixed(1)}%)` };
+      } else {
+        written.push(emit(`${slug}-accent.png`, art.svg, measured.ink, MAIN_H, hexTriplet(accentHex)));
+        accentFace = { hex: accentHex, asset: true, method: `recolour(${(mono * 100).toFixed(1)}%)` };
+      }
+    }
+  }
+
   if (!DRY) {
     for (const w of written) {
       if (dir === "brand") {
@@ -468,6 +535,8 @@ function importBrand(slug) {
     light: pick.light ?? "white",
     lightOfficial: Boolean(pick.light),
     tintSkipped: Boolean(pick.skipTints),
+    accent: accentFace?.hex ?? null,
+    accentFace,
     color: color ?? null,
     sampled: color ?? null,
     ink: `${measured.ink.w}x${measured.ink.h}`,
@@ -503,6 +572,9 @@ for (const slug of slugs) {
     const args = ["--max-old-space-size=1024", SELF, "--render-one", slug];
     if (DRY) args.push("--dry");
     if (only.length) args.push("--only", only.join(","));
+    // v1.3.0: the accent declaration lives on the parent, so hand it to every child.
+    const accentArg = process.argv[process.argv.indexOf("--accent") + 1];
+    if (accentArg) args.push("--accent", accentArg);
     const out = execFileSync(process.execPath, args, {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "inherit"],
@@ -564,8 +636,17 @@ if (!DRY) {
         else delete item.lightOfficial;
         if (info.tintSkipped) item.tintSkipped = true;
         else delete item.tintSkipped;
+        // v1.3.0: an accent *face* is only promised when the asset actually exists, so the
+        // manifest tells the colour gate which of the two states we are in. `accent` alone
+        // stays metadata (the v1.1.0 Nikon S case: declared colour, official mono artwork).
+        if (info.accentFace?.asset) {
+          item.accent = info.accentFace.hex;
+          item.accentAsset = true;
+        } else {
+          delete item.accentAsset;
+        }
       }
-      if (group === "series" && SERIES_ACCENT[item.slug]) item.accent = SERIES_ACCENT[item.slug];
+      if (!item.accentAsset && group === "series" && SERIES_ACCENT[item.slug]) item.accent = SERIES_ACCENT[item.slug];
       if (REMOVE[item.slug]) delete item.accent;
     }
   }

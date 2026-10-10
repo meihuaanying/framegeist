@@ -37,7 +37,8 @@ pub use render::{
     render_with_report, OutputFormat, RenderOptions, Sampling,
 };
 pub use template::{
-    load_template, load_template_from_str, Category, License, Template, TemplateOverrides,
+    eval_asset_path, is_asset_path, load_template, load_template_from_str, Category, License,
+    Template, TemplateOverrides,
 };
 
 pub fn render_collage(photos: &[&[u8]], layout: &Layout, opts: &RenderOptions) -> Result<Vec<u8>> {

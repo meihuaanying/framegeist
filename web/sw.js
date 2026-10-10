@@ -3,7 +3,12 @@
 //   - fonts / wasm / favicon  → cache-first (immutable)
 //   - templates / layouts     → stale-while-revalidate
 //   - page shell (html/js/css/manifest/json) → network-first (fall back to cache offline)
-const VERSION = "framegeist-1.4.0";
+// v1.5.0: the cache bucket is named after the same constant the UI reports in
+// Settings/About; keeping one literal in web/version.js stops the two from
+// drifting apart. Loaded as a classic script because a service worker cannot
+// import an ES module.
+importScripts("./version.js");
+const VERSION = `framegeist-${self.FG_VERSION}`;
 const PRECACHE = [
   "./",
   "./index.html",
@@ -11,6 +16,7 @@ const PRECACHE = [
   "./app.js",
   "./editor.js",
   "./i18n.js",
+  "./version.js",
   "./pkg/framegeist_wasm.js",
   "./pkg/framegeist_wasm_bg.wasm",
   "./templates.json",
@@ -31,7 +37,15 @@ const SHELL_RE = /\.(?:html|js|css|json|webmanifest|svg)$/;
 
 self.addEventListener("install", (e) => {
   if (IS_TAURI) { self.skipWaiting(); return; }
-  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
+  // v1.5.0 audit: `cache.addAll` rejects the whole batch on the first failure, so
+  // one unavailable precache URL (a font that moved, an optional asset) kept
+  // install pending forever and the worker never took over. Fetch each entry
+  // independently so one 404 cannot block activation.
+  e.waitUntil(
+    caches.open(VERSION)
+      .then((c) => Promise.allSettled(PRECACHE.map((url) => c.add(url))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (e) => {
@@ -53,7 +67,11 @@ self.addEventListener("fetch", (e) => {
   if (IS_TAURI) return;
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== self.location.origin) return;
-  if (url.pathname.includes("/api.github.com")) return;
+  // Never cache the GitHub API. `pathname.includes` also matched any *local*
+  // path that merely contained that substring (a template id, a query echo),
+  // which silently skipped caching for it. Match the host, and the same-origin
+  // proxy prefix if one is ever added.
+  if (url.hostname === "api.github.com" || url.hostname.endsWith(".api.github.com")) return;
 
   const isTemplateOrLayout = url.pathname.includes("/templates/") || url.pathname.includes("/layouts/");
   const isShell = e.request.mode === "navigate" || SHELL_RE.test(url.pathname);
@@ -63,10 +81,19 @@ self.addEventListener("fetch", (e) => {
       if (isTemplateOrLayout) {
         // stale-while-revalidate
         const cached = await cache.match(e.request);
-        const refresh = fetch(e.request).then((r) => r.ok && cache.put(e.request, r.clone())).catch(() => {});
+        // v1.5.0: `refresh` used to resolve to whatever `cache.put` returns --
+        // `undefined` for a miss-safe put, a boolean from `r.ok && ...` -- and
+        // never to a Response. The cache-miss path therefore always fell
+        // through to a *second* network request for the same asset. Return the
+        // response and keep the put as a side effect.
+        const refresh = fetch(e.request)
+          .then((r) => {
+            if (r.ok) cache.put(e.request, r.clone());
+            return r;
+          })
+          .catch(() => null);
         if (cached) { e.waitUntil(refresh); return cached; }
-        const res = await refresh;
-        return res || fetch(e.request);
+        return (await refresh) || fetch(e.request);
       }
       if (isShell) {
         // network-first: always pick up new builds when online

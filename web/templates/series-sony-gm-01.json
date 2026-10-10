@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "id": "series-sony-gm-01",
+    "name": "Sony G Master · Corner Mark",
+    "nameI18n": {
+      "zh": "索尼 G Master · 角标",
+      "en": "Sony G Master · Corner Mark"
+    },
+    "version": "1.4.0",
+    "minEngineVersion": "1.0.0",
+    "author": "framegeist",
+    "license": "CC0-1.0",
+    "category": "camera",
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners."
+  },
+  "canvas": {
+    "mode": "extend",
+    "background": {
+      "type": "solid",
+      "color": "#101418"
+    },
+    "padding": {
+      "bottom": 0.26
+    }
+  },
+  "layers": [
+    {
+      "type": "image",
+      "id": "series-mark",
+      "asset": "@builtin/series/sony-gm",
+      "size": {
+        "height": 0.06
+      },
+      "anchor": "bottom-right",
+      "offset": {
+        "x": -0.025,
+        "y": -0.055
+      },
+      "opacity": 0.95
+    }
+  ],
+  "infoBlock": {
+    "side": "bottom",
+    "align": "right",
+    "color": "auto",
+    "font": {
+      "family": [
+        "Inter"
+      ]
+    },
+    "lines": [
+      {
+        "expr": "fmt('{focal}mm f/{aperture} {shutter} ISO{iso}', exif)",
+        "fallback": "framegeist",
+        "role": "detail"
+      }
+    ]
+  }
+}

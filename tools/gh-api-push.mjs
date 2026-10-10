@@ -42,6 +42,30 @@ const api = async (method, path, body) => {
 };
 
 const CACHE = join(tmpdir(), `fg-gh-api-entries-${target.slice(0, 8)}.json`);
+// v1.4.0: the uploaded delta is `localBase..target` applied on top of the remote
+// tree, so `localBase` must already be published. Passing an unpushed commit
+// silently ships only the last segment: v1.3.0 lost the accent assets, the host
+// fix and the gate; v1.4.0 lost all twelve templates -- and because the dropped
+// set included `web/app.js`, the deployed Pages site stayed on v1.2.0 while every
+// workflow still reported success. Refuse rather than push a partial tree.
+try {
+  execFileSync("git", ["rev-parse", "--verify", `${localBase}^{commit}`], { encoding: "utf8" });
+} catch {
+  console.error(`local-base ${localBase} is not a commit in this repository`);
+  process.exit(2);
+}
+// The remote head is read through the API, not `git ls-remote`: direct git
+// access to github.com is blocked on this machine, which is the whole reason
+// this Data-API pusher exists.
+const headRef = await api("GET", `/repos/${REPO}/git/ref/heads/${branch}`);
+if (headRef.object.sha !== remoteBase) {
+  console.error(
+    `remote ${branch} head moved: base ${remoteBase} is not the current head (${headRef.object.sha}).\n` +
+      `Re-read the head and retry, otherwise the tree is built on a stale base.`,
+  );
+  process.exit(2);
+}
+console.log(`remote ${branch} head verified: ${remoteBase}`);
 let entries;
 try {
   entries = JSON.parse(readFileSync(CACHE, "utf8"));
@@ -66,13 +90,39 @@ if (!entries) {
       return true;
     });
   console.log(`diff ${localBase}..${target}: ${diff.length} entries (workflows excluded)`);
+  // v1.4.0: `--include=a,b` forces paths into the entry set even when the net
+  // diff does not mention them. Needed to repair a remote that a partial push
+  // left holding intermediate blobs: those paths look unchanged between
+  // local-base and target, so a net diff never overwrites them. The tree
+  // equality guard below still decides whether the repair was complete.
+  const includeArg = process.argv.find((a) => a.startsWith("--include="));
+  if (includeArg) {
+    const forced = includeArg
+      .slice("--include=".length)
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const known = new Set(diff.map((d) => d.file));
+    for (const file of forced) {
+      if (known.has(file)) continue;
+      diff.push({ status: "M", file });
+    }
+    console.log(`forced ${forced.length} path(s) via --include; diff now ${diff.length} entries`);
+  }
   entries = [];
   let done = 0;
   const handle = async ({ status, file }) => {
     if (status === "D") {
       entries.push({ path: file, mode: "100644", type: "blob", sha: null });
     } else {
-      const buf = readFileSync(file);
+      // Read the blob out of git, never from the working tree: on Windows the
+      // checkout is CRLF, so uploading the file on disk produced blobs whose sha
+      // differed from the committed content and the remote tree never matched the
+      // target. `git cat-file` gives exactly the bytes the commit references.
+      const buf = execFileSync("git", ["cat-file", "blob", `${target}:${file}`], {
+        encoding: "buffer",
+        maxBuffer: 256 * 1024 * 1024,
+      });
       const blob = await api("POST", `/repos/${REPO}/git/blobs`, {
         content: buf.toString("base64"),
         encoding: "base64",
@@ -126,6 +176,36 @@ for (const [dir, list] of byDir) {
 }
 const rootBase = await buildTree(baseCommit.commit.tree.sha, root, "(root)");
 const tree = await api("POST", `/repos/${REPO}/git/trees`, { base_tree: rootBase, tree: subEntries });
+// v1.4.0: the definitive guard. The uploaded delta is applied to whatever the
+// remote base holds, so the resulting root tree must equal the target commit's
+// tree. If it does not, some committed path never made it into the upload --
+// abort before the branch is moved, so a partial push can never look green.
+const wantTree = execFileSync("git", ["rev-parse", `${target}^{tree}`], { encoding: "utf8" }).trim();
+if (tree.sha !== wantTree) {
+  // Workflow files are skipped on purpose (the token has no `workflow` scope),
+  // so a mismatch that is *only* those paths is expected and acceptable.
+  const blobMap = async (sha) => {
+    const t = await api("GET", `/repos/${REPO}/git/trees/${sha}?recursive=1`);
+    return new Map(t.tree.filter((x) => x.type === "blob").map((x) => [x.path, x.sha]));
+  };
+  const [built, want] = [await blobMap(tree.sha), await blobMap(wantTree)];
+  const paths = new Set([...built.keys(), ...want.keys()]);
+  const off = [];
+  for (const p of paths) if (built.get(p) !== want.get(p)) off.push(p);
+  const real = off.filter((p) => !p.startsWith(".github/workflows/"));
+  if (real.length) {
+    console.error(
+      `REFUSING to update ${branch}: ${real.length} path(s) would differ from ${target}.\n` +
+        `  ${real.slice(0, 6).join("\n  ")}${real.length > 6 ? "\n  ..." : ""}\n` +
+        `local-base (${localBase}) does not describe what the remote already has. Find the last\n` +
+        `published commit and pass it as local-base, or force the paths with --include=...`,
+    );
+    process.exit(3);
+  }
+  console.log(`tree matches ${target} except ${off.length} skipped workflow path(s)`);
+} else {
+  console.log(`tree verified against ${target}: ${tree.sha}`);
+}
 const commit = await api("POST", `/repos/${REPO}/git/commits`, {
   message,
   tree: tree.sha,

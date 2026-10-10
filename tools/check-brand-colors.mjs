@@ -4,7 +4,7 @@
 // non-interlaced) so the gate has zero runtime dependencies.
 //
 // Usage: node tools/check-brand-colors.mjs
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { inflateSync } from "node:zlib";
 
 const COLORS = JSON.parse(readFileSync("tools/brand-colors.json", "utf8"));
@@ -290,6 +290,91 @@ for (const group of ["series", "game"]) {
       `${group} ${item.slug}: ink is centred in its canvas`,
       primary.ink != null && dx <= CENTRE_TOLERANCE_PX && dy <= CENTRE_TOLERANCE_PX,
       `padX=${padX[0]}/${padX[1]} padY=${padY[0]}/${padY[1]} tol=${CENTRE_TOLERANCE_PX}`,
+    );
+  }
+}
+
+// v1.3.0 accent contract: an accent face is a *pure recolour* of the base face — same
+// canvas, same ink box, one flat colour — so `render.rs pick_badge_face` can swap faces
+// without any possibility of moving a mark. The manifest separates a shipped face
+// (`accentAsset`, written by tools/import-brand-inbox.mjs --accent) from a colour that is
+// only declared metadata (nikon-s in v1.1.0, before an accent face existed), and this
+// gate keeps those two promises honest in both directions.
+for (const [group, items] of Object.entries(MANIFEST.groups ?? {})) {
+  for (const item of items) {
+    if (!item.accent) continue;
+    const base = read(`templates/assets/${group}`, "", item.slug, "");
+    const accent = read(`templates/assets/${group}`, "", item.slug, "-accent");
+    const shipped = Boolean(item.accentAsset);
+    const present = accent.ink != null;
+    check(
+      `${group} ${item.slug}: accent face exists exactly when the manifest declares one`,
+      shipped === present,
+      `accentAsset=${shipped} file=${present}`,
+    );
+    if (!shipped) continue;
+    const sameGeometry =
+      JSON.stringify(accent.ink) === JSON.stringify(base.ink) &&
+      JSON.stringify(accent.padX) === JSON.stringify(base.padX) &&
+      JSON.stringify(accent.padY) === JSON.stringify(base.padY);
+    check(
+      `${group} ${item.slug}: accent face keeps the base geometry`,
+      sameGeometry,
+      `base=${base.ink} padX=${base.padX} padY=${base.padY} accent=${accent.ink} padX=${accent.padX} padY=${accent.padY}`,
+    );
+    const hue = hexToHue(item.accent);
+    check(
+      `${group} ${item.slug}: accent face carries ${item.accent}`,
+      hue != null && accent.meanHue != null && hueDistance(accent.meanHue, hue) <= 45 && accent.meanSat >= 0.2,
+      `sat=${accent.meanSat.toFixed(2)}`,
+    );
+  }
+}
+
+// v1.3.0: the browser loads badge faces from `web/<kind>/` (BASE resolves to the app
+// directory), which is a hand-made mirror of `templates/assets/<kind>/`. Nothing kept
+// them in step: the accent face shipped without reaching the browser, and canon-rf-l
+// survived in web/ after v1.1.0 dropped it. Compare both directions so neither a new
+// face that never made it into the web build nor an orphan can slip through again.
+for (const kind of ["brand", "lockup", "series", "game"]) {
+  const faces = (dir) => {
+    try {
+      return readdirSync(dir, { withFileTypes: true })
+        .filter((e) => e.isFile() && e.name.endsWith(".png"))
+        .map((e) => e.name)
+        .sort();
+    } catch {
+      return [];
+    }
+  };
+  const engine = faces(`templates/assets/${kind}`);
+  const web = faces(`web/${kind}`);
+  const missing = engine.filter((f) => !web.includes(f));
+  const orphan = web.filter((f) => !engine.includes(f));
+  check(
+    `mirror ${kind}: web/ mirrors templates/assets/${kind} file for file`,
+    missing.length === 0 && orphan.length === 0,
+    `missing=${JSON.stringify(missing.slice(0, 3))} orphan=${JSON.stringify(orphan.slice(0, 3))}`,
+  );
+}
+
+// v1.4.0: a badge that no template references has no render path at all -- that
+// is exactly how the v1.3.0 accent face shipped "working" but stayed invisible:
+// every series/game badge must be used by at least one template. (brand slugs are
+// exempt: templates reference them through the `{exif.brand_slug}` placeholder.)
+{
+  const sources = [];
+  for (const f of readdirSync("templates")) {
+    if (!f.endsWith(".json")) continue;
+    sources.push(readFileSync(`templates/${f}`, "utf8"));
+  }
+  const corpus = sources.join("\n");
+  for (const kind of ["series", "game"]) {
+    const orphans = (MANIFEST.groups[kind] ?? []).filter((i) => !corpus.includes(`@builtin/${kind}/${i.slug}`));
+    check(
+      `${kind}: every badge is referenced by a template`,
+      orphans.length === 0,
+      `${MANIFEST.groups[kind]?.length ?? 0} badges, unreferenced=${JSON.stringify(orphans.map((i) => i.slug))}`,
     );
   }
 }

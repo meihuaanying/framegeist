@@ -160,6 +160,22 @@
     ]
   },
   {
+    "id": "series-canon-l-01",
+    "name": "Canon L Series · Corner Mark",
+    "names": {
+      "zh": "佳能 L 系列 · 角标",
+      "en": "Canon L Series · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "canon-l",
+        "kind": "series"
+      }
+    ]
+  },
+  {
     "id": "camera-corner-body-03",
     "name": "Corner Body",
     "names": {
@@ -176,6 +192,54 @@
     ]
   },
   {
+    "id": "series-fujifilm-xf-01",
+    "name": "Fujifilm XF · Corner Mark",
+    "names": {
+      "zh": "富士 XF · 角标",
+      "en": "Fujifilm XF · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "fujifilm-xf",
+        "kind": "series"
+      }
+    ]
+  },
+  {
+    "id": "series-hasselblad-xcd-01",
+    "name": "Hasselblad XCD · Corner Mark",
+    "names": {
+      "zh": "哈苏 XCD · 角标",
+      "en": "Hasselblad XCD · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "hasselblad-xcd",
+        "kind": "series"
+      }
+    ]
+  },
+  {
+    "id": "series-leica-apo-01",
+    "name": "Leica APO-Summicron · Corner Mark",
+    "names": {
+      "zh": "徕卡 APO-Summicron · 角标",
+      "en": "Leica APO-Summicron · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "leica-apo",
+        "kind": "series"
+      }
+    ]
+  },
+  {
     "id": "camera-lens-dial-06",
     "name": "Lens Dial",
     "names": {
@@ -188,6 +252,22 @@
       {
         "slug": "exif-auto",
         "kind": "brand"
+      }
+    ]
+  },
+  {
+    "id": "series-nikon-s-01",
+    "name": "Nikon S-Line · Corner Mark",
+    "names": {
+      "zh": "尼康 S-Line · 角标",
+      "en": "Nikon S-Line · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "nikon-s",
+        "kind": "series"
       }
     ]
   },
@@ -224,6 +304,54 @@
     ]
   },
   {
+    "id": "series-sigma-apo-01",
+    "name": "Sigma APO · Corner Mark",
+    "names": {
+      "zh": "适马 APO · 角标",
+      "en": "Sigma APO · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "sigma-apo",
+        "kind": "series"
+      }
+    ]
+  },
+  {
+    "id": "series-sigma-art-01",
+    "name": "Sigma ART · Corner Mark",
+    "names": {
+      "zh": "适马 ART · 角标",
+      "en": "Sigma ART · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "sigma-art",
+        "kind": "series"
+      }
+    ]
+  },
+  {
+    "id": "series-sigma-dgdn-01",
+    "name": "Sigma DG DN · Corner Mark",
+    "names": {
+      "zh": "适马 DG DN · 角标",
+      "en": "Sigma DG DN · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "sigma-dgdn",
+        "kind": "series"
+      }
+    ]
+  },
+  {
     "id": "camera-ricoh-slimline-08",
     "name": "Slimline Bar",
     "names": {
@@ -236,6 +364,38 @@
       {
         "slug": "exif-auto",
         "kind": "brand"
+      }
+    ]
+  },
+  {
+    "id": "series-sony-g-01",
+    "name": "Sony G · Corner Mark",
+    "names": {
+      "zh": "索尼 G · 角标",
+      "en": "Sony G · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "sony-g",
+        "kind": "series"
+      }
+    ]
+  },
+  {
+    "id": "series-sony-gm-01",
+    "name": "Sony G Master · Corner Mark",
+    "names": {
+      "zh": "索尼 G Master · 角标",
+      "en": "Sony G Master · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "sony-gm",
+        "kind": "series"
       }
     ]
   },
@@ -256,6 +416,22 @@
     ]
   },
   {
+    "id": "series-tamron-sp-01",
+    "name": "Tamron SP · Corner Mark",
+    "names": {
+      "zh": "腾龙 SP · 角标",
+      "en": "Tamron SP · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "tamron-sp",
+        "kind": "series"
+      }
+    ]
+  },
+  {
     "id": "camera-topdeck-bar-01",
     "name": "Top Deck Plate",
     "names": {
@@ -268,6 +444,22 @@
       {
         "slug": "exif-auto",
         "kind": "brand"
+      }
+    ]
+  },
+  {
+    "id": "series-zeiss-batis-01",
+    "name": "Zeiss Batis · Corner Mark",
+    "names": {
+      "zh": "蔡司 Batis · 角标",
+      "en": "Zeiss Batis · Corner Mark"
+    },
+    "notice": "Unofficial fan-made design; lens-series names and trademarks belong to their respective owners.",
+    "category": "camera",
+    "marks": [
+      {
+        "slug": "zeiss-batis",
+        "kind": "series"
       }
     ]
   },

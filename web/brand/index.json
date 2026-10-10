@@ -423,7 +423,8 @@
         "official": false,
         "officialAsset": "nikon-s.svg",
         "sourceUrl": "https://imaging.nikon.com/imaging/lineup/lens/z-mount/",
-        "accent": "#FFE100"
+        "accent": "#FFE100",
+        "accentAsset": true
       },
       {
         "slug": "sigma-art",

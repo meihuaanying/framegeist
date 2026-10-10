@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T13:39:15.981Z",
+  "generatedAt": "2026-10-03T13:30:04.715Z",
   "items": {
     "templates/samples/art-copperplate-etch.jpg": {
       "dhash": "8e65794941616561",
@@ -13,7 +13,7 @@
       "dhash": "4f61392163410101",
       "mean": [
         164.076,
-        163.672,
+        163.673,
         158.601
       ]
     },
@@ -34,7 +34,7 @@
       ]
     },
     "templates/samples/art-republican-press.jpg": {
-      "dhash": "090f4f4f7f7f7f9d",
+      "dhash": "010f4f4f7f7f7f9d",
       "mean": [
         145.148,
         165.077,
@@ -236,9 +236,9 @@
     "templates/samples/calendar-center-rule-01.jpg": {
       "dhash": "0f2d39337171797d",
       "mean": [
-        176.285,
-        176.503,
-        176.079
+        176.286,
+        176.504,
+        176.08
       ]
     },
     "templates/samples/calendar-corner-day-01.jpg": {
@@ -252,17 +252,17 @@
     "templates/samples/calendar-portrait-stack-01.jpg": {
       "dhash": "497b7d352161797f",
       "mean": [
-        197.994,
-        179.337,
-        161.548
+        197.909,
+        179.258,
+        161.482
       ]
     },
     "templates/samples/calendar-rail-date-01.jpg": {
       "dhash": "3d33330305253939",
       "mean": [
-        177.294,
-        175.233,
-        156.374
+        177.293,
+        175.232,
+        156.373
       ]
     },
     "templates/samples/calendar-split-columns-01.jpg": {
@@ -582,7 +582,7 @@
       "mean": [
         105.186,
         105.924,
-        106.692
+        106.693
       ]
     },
     "templates/samples/drone-aerial-editorial-01.jpg": {
@@ -692,9 +692,9 @@
     "templates/samples/festival-dragon-boat-01.jpg": {
       "dhash": "2123236363636363",
       "mean": [
-        185.267,
-        145.623,
-        132
+        185.266,
+        145.621,
+        131.999
       ]
     },
     "templates/samples/festival-gold-frame-01.jpg": {
@@ -734,7 +734,7 @@
       "mean": [
         158.329,
         50.486,
-        36.944
+        36.945
       ]
     },
     "templates/samples/film-darkroom-pillar-03.jpg": {
@@ -1018,7 +1018,7 @@
       ]
     },
     "templates/samples/magazine-poster-manifesto-01.jpg": {
-      "dhash": "4333332303070303",
+      "dhash": "4323332303070303",
       "mean": [
         197.633,
         192.296,
@@ -1372,9 +1372,9 @@
     "templates/samples/portfolio-vertical-scroll-01.jpg": {
       "dhash": "3139393d393939b9",
       "mean": [
-        219.874,
-        231.454,
-        239.181
+        219.867,
+        231.447,
+        239.174
       ]
     },
     "templates/samples/portfolio-wall-label-01.jpg": {
@@ -1383,6 +1383,102 @@
         209.633,
         213.125,
         222.895
+      ]
+    },
+    "templates/samples/series-canon-l-01.jpg": {
+      "dhash": "0000e0c0c0c0b0e0",
+      "mean": [
+        63.354,
+        63.965,
+        64.98
+      ]
+    },
+    "templates/samples/series-fujifilm-xf-01.jpg": {
+      "dhash": "00a2a2a6c20002c0",
+      "mean": [
+        72.71,
+        81.488,
+        90.864
+      ]
+    },
+    "templates/samples/series-hasselblad-xcd-01.jpg": {
+      "dhash": "0080f0e8e8c0c0c0",
+      "mean": [
+        147.008,
+        127.832,
+        108.325
+      ]
+    },
+    "templates/samples/series-leica-apo-01.jpg": {
+      "dhash": "00882c3838337262",
+      "mean": [
+        128.669,
+        131.414,
+        117.746
+      ]
+    },
+    "templates/samples/series-nikon-s-01.jpg": {
+      "dhash": "00303830b0c8f0f0",
+      "mean": [
+        124.242,
+        141.353,
+        150.949
+      ]
+    },
+    "templates/samples/series-sigma-apo-01.jpg": {
+      "dhash": "0098f8f8d9d1c0e0",
+      "mean": [
+        110.862,
+        87.829,
+        48.161
+      ]
+    },
+    "templates/samples/series-sigma-art-01.jpg": {
+      "dhash": "00d0f070b137338f",
+      "mean": [
+        134.051,
+        131.915,
+        120.21
+      ]
+    },
+    "templates/samples/series-sigma-dgdn-01.jpg": {
+      "dhash": "001050c4c0e8a1a1",
+      "mean": [
+        131.45,
+        92.318,
+        96.058
+      ]
+    },
+    "templates/samples/series-sony-g-01.jpg": {
+      "dhash": "00993971514051d1",
+      "mean": [
+        101.25,
+        103.925,
+        114.082
+      ]
+    },
+    "templates/samples/series-sony-gm-01.jpg": {
+      "dhash": "002cfce0e0e0e060",
+      "mean": [
+        80.146,
+        91.316,
+        94.112
+      ]
+    },
+    "templates/samples/series-tamron-sp-01.jpg": {
+      "dhash": "00b0f0e1e0e0e0c0",
+      "mean": [
+        87.642,
+        82.498,
+        74.809
+      ]
+    },
+    "templates/samples/series-zeiss-batis-01.jpg": {
+      "dhash": "00c29888c0c0c080",
+      "mean": [
+        91.231,
+        119.247,
+        128.305
       ]
     },
     "templates/samples/sports-alt-badge-01.jpg": {
@@ -1542,7 +1638,7 @@
       "mean": [
         132.42,
         138.65,
-        134.95
+        134.949
       ]
     },
     "web/previews/art-deco-double.jpg": {
@@ -1589,7 +1685,7 @@
       "dhash": "971f1d7d79797939",
       "mean": [
         148.691,
-        128.189,
+        128.19,
         123.838
       ]
     },
@@ -1772,9 +1868,9 @@
     "web/previews/calendar-center-rule-01.jpg": {
       "dhash": "0f3939337171797d",
       "mean": [
-        176.221,
-        176.441,
-        176.028
+        176.222,
+        176.442,
+        176.029
       ]
     },
     "web/previews/calendar-corner-day-01.jpg": {
@@ -1788,17 +1884,17 @@
     "web/previews/calendar-portrait-stack-01.jpg": {
       "dhash": "497b7d352161797d",
       "mean": [
-        197.956,
-        179.332,
-        161.574
+        198.043,
+        179.411,
+        161.642
       ]
     },
     "web/previews/calendar-rail-date-01.jpg": {
       "dhash": "3d33330305253939",
       "mean": [
-        177.298,
-        175.24,
-        156.381
+        177.3,
+        175.242,
+        156.383
       ]
     },
     "web/previews/calendar-split-columns-01.jpg": {
@@ -1812,9 +1908,9 @@
     "web/previews/calendar-strip-date-01.jpg": {
       "dhash": "0111010911111101",
       "mean": [
-        171.916,
-        169.45,
-        167.917
+        171.728,
+        169.263,
+        167.732
       ]
     },
     "web/previews/camera-baseplate-02.jpg": {
@@ -2114,7 +2210,7 @@
       ]
     },
     "web/previews/colorwalk-verse-01.jpg": {
-      "dhash": "0e6b617171f2f0e0",
+      "dhash": "0e6f617171f2f0e0",
       "mean": [
         104.804,
         105.541,
@@ -2228,9 +2324,9 @@
     "web/previews/festival-dragon-boat-01.jpg": {
       "dhash": "2323236363636363",
       "mean": [
-        185.254,
-        145.603,
-        131.974
+        185.313,
+        145.661,
+        132.029
       ]
     },
     "web/previews/festival-gold-frame-01.jpg": {
@@ -2244,7 +2340,7 @@
     "web/previews/festival-lantern-night-01.jpg": {
       "dhash": "234dcdcd4d4d4f8e",
       "mean": [
-        106.277,
+        106.276,
         79.431,
         67.206
       ]
@@ -2252,7 +2348,7 @@
     "web/previews/festival-lantern-warm-01.jpg": {
       "dhash": "01313d7d7d7d7d7d",
       "mean": [
-        158.406,
+        158.405,
         133.808,
         118.792
       ]
@@ -2908,9 +3004,9 @@
     "web/previews/portfolio-vertical-scroll-01.jpg": {
       "dhash": "3139393d393939b9",
       "mean": [
-        219.889,
-        231.459,
-        239.184
+        219.904,
+        231.473,
+        239.199
       ]
     },
     "web/previews/portfolio-wall-label-01.jpg": {
@@ -2919,6 +3015,102 @@
         209.658,
         213.151,
         222.914
+      ]
+    },
+    "web/previews/series-canon-l-01.jpg": {
+      "dhash": "0080e0c0c0c0b0e0",
+      "mean": [
+        63.323,
+        63.935,
+        64.952
+      ]
+    },
+    "web/previews/series-fujifilm-xf-01.jpg": {
+      "dhash": "00a2a2a6c20002c0",
+      "mean": [
+        72.677,
+        81.453,
+        90.831
+      ]
+    },
+    "web/previews/series-hasselblad-xcd-01.jpg": {
+      "dhash": "0080f0e8e8c0c0c0",
+      "mean": [
+        146.953,
+        127.785,
+        108.282
+      ]
+    },
+    "web/previews/series-leica-apo-01.jpg": {
+      "dhash": "00882c3838337262",
+      "mean": [
+        128.612,
+        131.361,
+        117.692
+      ]
+    },
+    "web/previews/series-nikon-s-01.jpg": {
+      "dhash": "00303830b0c8f0f0",
+      "mean": [
+        124.195,
+        141.305,
+        150.898
+      ]
+    },
+    "web/previews/series-sigma-apo-01.jpg": {
+      "dhash": "0098f8f8d9d1c0e0",
+      "mean": [
+        110.816,
+        87.791,
+        48.134
+      ]
+    },
+    "web/previews/series-sigma-art-01.jpg": {
+      "dhash": "00d0f070b117338f",
+      "mean": [
+        134,
+        131.866,
+        120.161
+      ]
+    },
+    "web/previews/series-sigma-dgdn-01.jpg": {
+      "dhash": "001050c4c0e8a1a1",
+      "mean": [
+        131.398,
+        92.283,
+        96.024
+      ]
+    },
+    "web/previews/series-sony-g-01.jpg": {
+      "dhash": "00993971514051d1",
+      "mean": [
+        101.207,
+        103.885,
+        114.037
+      ]
+    },
+    "web/previews/series-sony-gm-01.jpg": {
+      "dhash": "002cfce0e0e0e060",
+      "mean": [
+        80.108,
+        91.278,
+        94.077
+      ]
+    },
+    "web/previews/series-tamron-sp-01.jpg": {
+      "dhash": "00b0f0e1e0e0e0c0",
+      "mean": [
+        87.596,
+        82.459,
+        74.766
+      ]
+    },
+    "web/previews/series-zeiss-batis-01.jpg": {
+      "dhash": "00c29888c0c0c080",
+      "mean": [
+        91.19,
+        119.201,
+        128.254
       ]
     },
     "web/previews/sports-alt-badge-01.jpg": {

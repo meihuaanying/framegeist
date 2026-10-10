@@ -85,12 +85,20 @@ const list = await fetch(`http://127.0.0.1:${CDP_PORT}/json/list`).then((r) => r
    attaching to one left the whole audit in a 360x505 viewport (mass layout
    FAILs + crash). Probe candidates and keep the first that accepts the
    1440x900 override; fall back to the first candidate. */
+const isAppUrl = (t) => /framegeist|localhost|127\.0\.0\.1|\[::1\]|tauri\.localhost/i.test(t.url);
+const isUsable = (t) => t.type === "page" && !/\/sw\.js(\?|$)/.test(t.url);
 const candidates = [
-  ...list.filter((t) => t.type === "page" && /framegeist|localhost|tauri\.localhost/i.test(t.url) && !/\/sw\.js(\?|$)/.test(t.url)),
-  ...list.filter((t) => t.type === "page" && !/framegeist|localhost|tauri\.localhost/i.test(t.url) && !/\/sw\.js(\?|$)/.test(t.url)),
+  ...list.filter((t) => isUsable(t) && isAppUrl(t)),
+  ...list.filter((t) => isUsable(t) && !isAppUrl(t)),
 ];
 if (!candidates.length) { console.error(`no page target on ${CDP_PORT}`); process.exit(2); }
 let page = candidates[0];
+// v1.5.0 audit: the probe only checked that a target would accept the viewport
+// override, which every ordinary tab does. Pointed at a browser whose first page
+// was some unrelated site, the audit attached to that tab and every `ev()` came
+// back undefined -- silently grading an empty page. A target is only accepted if
+// it is actually the FrameGeist shell.
+let appFound = false;
 for (const cand of candidates) {
   const sock = new WebSocket(cand.webSocketDebuggerUrl);
   let ok = false;
@@ -109,10 +117,26 @@ for (const cand of candidates) {
     if (!o.error) {
       const r = await ssend("Runtime.evaluate", { expression: "innerWidth", returnByValue: true });
       ok = r.result?.result?.value === 1440;
+      if (ok) {
+        // Right viewport is necessary but not sufficient: it must be *our* shell.
+        const a = await ssend("Runtime.evaluate", {
+          expression: '!!(document.getElementById("wall") && window.__fg)',
+          returnByValue: true,
+        });
+        if (a.result?.result?.value === true) { appFound = true; ok = true; }
+        else ok = false;
+      }
     }
   } catch { ok = false; }
   try { sock.close(); } catch { /* ignore */ }
   if (ok) { page = cand; break; }
+}
+if (!appFound) {
+  console.error(`no FrameGeist page target on ${CDP_PORT}.`);
+  console.error("Start one with its own profile so the audit cannot land on another tab:");
+  console.error('  msedge --headless=new --user-data-dir=%TEMP%\\fg-e2e --remote-debugging-port=9237 http://localhost:8350/web/');
+  console.error("open page targets seen:\n  " + list.filter(isUsable).map((t) => t.url).join("\n  "));
+  process.exit(2);
 }
 const ws = new WebSocket(page.webSocketDebuggerUrl);
 let id = 0;
@@ -184,9 +208,22 @@ await send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, dev
 const ev = async (expr) => {
   // 90s: a single wasm render can block the main thread for a long time when
   // the build machine is busy (parallel workstreams compile wasm/cargo).
-  const timeout = new Promise((resolve) => setTimeout(() => resolve({ result: { value: undefined } }), 90000));
+  const timeout = new Promise((resolve) => setTimeout(() => resolve({ timedOut: true }), 90000));
   const call = send("Runtime.evaluate", { expression: expr, returnByValue: true, awaitPromise: true });
   const r = await Promise.race([call, timeout]);
+  // v1.5.0 audit: a thrown expression used to come back as a bare `undefined`,
+  // identical to a timeout, so the audit reported `undefined` as a check detail
+  // and then crashed on the first property access. Say what actually happened.
+  if (r.timedOut) {
+    console.log("EVAL-TIMEOUT:", String(expr).slice(0, 160).replace(/\s+/g, " "));
+    return undefined;
+  }
+  const ex = r.exceptionDetails;
+  if (ex) {
+    const detail = ex.exception?.description ?? ex.text ?? JSON.stringify(ex);
+    console.log("EVAL-THREW:", String(expr).slice(0, 160).replace(/\s+/g, " "), "->", detail);
+    return undefined;
+  }
   return r.result?.value;
 };
 /* Fire a Runtime.evaluate that navigates; the reply is usually lost, so don't
@@ -369,7 +406,7 @@ check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__boo
     tabs: document.querySelectorAll("#wallCats button").length,
   }))()`);
   check("wall: opens as first view", wall.view === "wall" && !wall.wallHidden && wall.editorHidden, JSON.stringify(wall));
-  check("wall: 192 templates counted", /192/.test(wall.count), wall.count);
+  check("wall: 204 templates counted", /204/.test(wall.count), wall.count);
   check("wall: 27 category tabs (all+mine+25)", wall.tabs === 27, String(wall.tabs));
 
   const cards = await ev(`
@@ -387,7 +424,7 @@ check("boot: <=2s", (await ev("window.__bootMs")) > 0 && (await ev("window.__boo
 
   const manifest = JSON.parse(readFileSync("web/templates.json", "utf8"));
   const ENUM = new Set(["white-border", "camera", "phone", "drone", "fuji", "film", "colorwalk", "colorful", "classic-watermark", "portfolio", "black-frame", "sports", "calendar", "magazine", "minimal", "borderless", "master", "personal", "polaroid", "festival", "effect", "colorcard", "blur-bg", "ticket", "game"]);
-  check("library: 192 templates in manifest", manifest.length === 192, String(manifest.length));
+  check("library: 204 templates in manifest", manifest.length === 204, String(manifest.length));
   check("library: categories within v0.4 enum", manifest.every((t) => ENUM.has(t.category)), manifest.filter((t) => !ENUM.has(t.category)).map((t) => t.category).join(",") || "ok");
   check("library: bilingual names complete", manifest.every((t) => t.names?.zh && t.names?.en));
   const previews = readdirSync("web/previews").filter((f) => f.endsWith(".jpg")).length;
@@ -723,7 +760,7 @@ function makeFgt(jsonBuf) {
 /* 18. library: 130 templates incl. game category + notice */
 {
   const count = await ev(`window.__fg.state.templates.length`);
-  check("library: 192 templates", count === 192, String(count));
+  check("library: 204 templates", count === 204, String(count));
   const hasGame = await ev(`window.__fg.state.templates.some(t => t.category === "game")`);
   check("library: game category present", hasGame === true);
   const chip = await ev(`[...document.querySelectorAll("#catChips button")].some(b => b.textContent.includes("游戏"))`);
@@ -2657,7 +2694,7 @@ let EXIF_TEXT_ID = null;
       weights: [...weights].filter(Boolean),
     };
   })()`);
-  check("v0.7 typography: manifest keeps 192 templates", r?.total === 192, String(r?.total));
+  check("v0.7 typography: manifest keeps 204 templates", r?.total === 204, String(r?.total));
   check("v1.0.0 typography: template upgraded to 1.4.0 / engine 1.0.0", r?.version === "1.4.0" && r?.minEngine === "1.0.0", JSON.stringify({ v: r?.version, e: r?.minEngine }));
   check("v0.7 typography: CJK display template uses Noto/LXGW family", (r?.families ?? []).some((f) => f === "Noto Serif SC" || f === "LXGW WenKai"), JSON.stringify(r?.families));
   check("v1.0.0 typography: EXIF data rows live in the info block", (r?.data ?? 0) > 0, JSON.stringify({ data: r?.data }));
@@ -3328,6 +3365,252 @@ const band = fh - fh / (1 + (tgeo?.pad?.top ?? 0) + (tgeo?.pad?.bottom ?? 0));
 const ibH = tgeo?.ib?.h ?? 0;
 check("v1.0.0 typography: info block fills two thirds of its band", [ibH > 0, Math.abs(ibH - (band * 2) / 3) <= Math.max(8, band * 0.12)].every(Boolean), JSON.stringify({ band: Math.round(band), ibH: Math.round(ibH), frame: tgeo?.frame, pad: tgeo?.pad }));
 check("v1.0.0 typography: info block keeps 1-3 lines inside the band", [(tgeo?.ib?.kids ?? 0) >= 1, (tgeo?.ib?.kids ?? 0) <= 3, tgeo?.ib?.kidsIn === true, (tgeo?.ib?.y ?? 0) >= (tgeo?.frame?.h ?? 0) - band - 1].every(Boolean), JSON.stringify(tgeo?.ib));
+
+/* ---- 82. v1.3.0: info-block lines are editable (role select / reorder / add / reset) */
+{
+  await inject([PHOTO_A]);
+  await waitLabel(40000);
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    await window.__fg.useTemplate("classic-watermark-single-row");
+    await sleep(800);
+    // buildLineEditor() runs on template select; if a path skipped it, force it via a
+    // layer-row click (same entry point the existing EXIF text-layer test uses).
+    const group = () => [...document.querySelectorAll("#lineEditor > div")].find((g) => g.querySelector(".line-item select.info-role"));
+    if (!group()) {
+      const row = document.querySelector("#layerList .layer-row");
+      if (row) row.click();
+      await sleep(400);
+    }
+    const lines = () => { try { return JSON.parse(window.__fg.effectiveTemplateJson()).infoBlock?.lines ?? []; } catch (e) { return []; } };
+    if (!group()) return { error: "no info-block group in #lineEditor" };
+    // Every mutation calls buildLineEditor(), which wipes and rebuilds #lineEditor — so
+    // each helper must re-query the live group instead of holding a detached node.
+    const rows = () => [...(group()?.querySelectorAll(".line-item") ?? [])];
+    const sels = () => [...(group()?.querySelectorAll("select.info-role") ?? [])];
+    const addBtn = () => [...(group()?.querySelectorAll("button.mini") ?? [])].pop();
+    const miniOf = (i, label) => [...(rows()[i]?.querySelectorAll("button.mini") ?? [])].find((b) => b.textContent === label);
+    const lines0 = lines();
+    const roles0 = sels().map((s) => s.value);
+    const roleLabels = sels()[0] ? [...sels()[0].options].map((o) => o.textContent.trim()) : [];
+    const hash0 = ${RENDER_HASH};
+    // 1. role select
+    const s0 = sels()[0];
+    const wantRole = s0.value === "display" ? "support" : "display";
+    s0.value = wantRole;
+    s0.dispatchEvent(new Event("change"));
+    await sleep(900);
+    const lines1 = lines();
+    const hash1 = ${RENDER_HASH};
+    // 2. reorder
+    let swapped = null;
+    if (lines1.length >= 2) {
+      miniOf(1, "↑").click();
+      await sleep(900);
+      const lines2 = lines();
+      swapped = { ok: lines2.length === lines1.length && lines2[0]?.expr === lines1[1]?.expr && lines2[1]?.expr === lines1[0]?.expr, before: lines1.map((l) => l.expr), after: lines2.map((l) => l.expr) };
+    }
+    // 3. grow to the 3-line engine ceiling, then prove the add button is disabled there
+    const before = lines().length;
+    let guard = 0;
+    while (lines().length < 3 && guard++ < 4) { addBtn().click(); await sleep(700); }
+    const atMax = lines().length;
+    const addDisabled = addBtn().disabled === true;
+    const addedRoles = lines().slice(before).map((l) => l.role ?? null);
+    // 4. reset
+    document.getElementById("resetLines").click();
+    await sleep(900);
+    const linesEnd = lines();
+    const hashEnd = ${RENDER_HASH};
+    return {
+      n0: lines0.length, roles0, roleLabels, n1: lines1.length, hash0, hash1, hashEnd,
+      roleLanded: lines1[0]?.role === wantRole,
+      pixelChanged: hash0 !== hash1,
+      swapped, before, atMax, addDisabled, addedRoles,
+      minDisabled: rows().length === lines0.length ? true : null,
+      restored: JSON.stringify(linesEnd) === JSON.stringify(lines0),
+      hashRestored: hashEnd === hash0,
+      endRoles: linesEnd.map((l) => l.role ?? null),
+    };
+  })()`);
+  if (r?.error) console.log("PROBE-WARN:", r.error);
+  check("v1.3.0 info block: editor renders one role select per line", !r?.error && r.n0 > 0 && r.roles0.length === r.n0, JSON.stringify({ n0: r?.n0, roles: r?.roles0 }));
+  check(
+    "v1.3.0 info block: role options resolve through i18n",
+    Array.isArray(r?.roleLabels) && r.roleLabels.length === 3 && r.roleLabels.every((s) => s && !s.startsWith("exif.")),
+    JSON.stringify(r?.roleLabels),
+  );
+  check("v1.3.0 info block: role select lands in the effective template", r?.roleLanded === true, JSON.stringify({ roles0: r?.roles0 }));
+  check("v1.3.0 info block: changing a role repaints the info block", r?.pixelChanged === true, `${r?.hash0} -> ${r?.hash1}`);
+  check(
+    "v1.3.0 info block: arrow reorders lines",
+    r?.swapped?.ok === true,
+    JSON.stringify(r?.swapped),
+  );
+  check(
+    "v1.3.0 info block: add stops at the engine's 3-line ceiling",
+    r?.atMax === 3 && r?.addDisabled === true && (r?.addedRoles?.length ?? 0) === 3 - (r?.before ?? 0) && r.addedRoles.every((x) => x === "detail"),
+    JSON.stringify({ before: r?.before, atMax: r?.atMax, addDisabled: r?.addDisabled, addedRoles: r?.addedRoles }),
+  );
+  check("v1.3.0 info block: reset restores the template's own lines", r?.restored === true && r?.hashRestored === true, JSON.stringify({ endRoles: r?.endRoles, hash0: r?.hash0, hashEnd: r?.hashEnd }));
+}
+
+/* ---- 83. v1.3.0: the host registers every built-in badge face (-mono/-accent/-light) */
+{
+  await inject([PHOTO_A]);
+  const r = await ev(`(async () => {
+    const sleep = (ms) => new Promise((x) => setTimeout(x, ms));
+    await window.__fg.useTemplate("classic-watermark-single-row");
+    await sleep(600);
+    // Ask the host for the exact assets this test cares about. Using the loader itself
+    // (instead of scraping performance entries, which the slug-level cache dedupes away)
+    // is what proves the faces actually reached the WASM engine.
+    const ask = ["@builtin/brand/sony", "@builtin/series/nikon-s", "@builtin/game/arknights"];
+    await window.__fg.ensureBuiltinAssets(JSON.stringify({ layers: ask.map((a) => ({ asset: a })) }));
+    await sleep(400);
+    const reg = new Set(window.__fg.registeredBuiltinAssets());
+    const has = (k) => reg.has(k);
+    return {
+      brand: [has("brand/sony"), has("brand/sony-light"), has("brand/sony-mono")],
+      series: [has("series/nikon-s"), has("series/nikon-s-light"), has("series/nikon-s-accent")],
+      game: [has("game/arknights"), has("game/arknights-light"), has("game/arknights-mono"), has("game/arknights-accent")],
+      count: reg.size,
+      sample: [...reg].filter((k) => k.includes("sony") || k.includes("nikon") || k.includes("arknights")).sort(),
+    };
+  })()`);
+  check(
+    "v1.3.0 asset faces: brand badges register base + -light + -mono",
+    Array.isArray(r?.brand) && r.brand.length === 3 && r.brand.every(Boolean),
+    JSON.stringify(r?.brand),
+  );
+  check(
+    "v1.3.0 asset faces: the series accent face reaches the engine",
+    Array.isArray(r?.series) && r.series.every(Boolean),
+    JSON.stringify(r?.sample),
+  );
+  check(
+    "v1.3.0 asset faces: absent faces stay unregistered instead of failing the load",
+    Array.isArray(r?.game) && r.game[0] === true && r.game[1] === true && r.game[2] === false && r.game[3] === false,
+    JSON.stringify(r?.game),
+  );
+}
+
+/* ---- v1.5.0: a saved template must render what the canvas showed --------- */
+// `buildSavedTemplate` walked only top-level layers and never wrote the info
+// block back, so a saved .fgt could render differently from the canvas it was
+// saved from. The round trip is asserted on pixels, not on JSON shape: render
+// the edited template, save it, reload the saved copy and compare.
+const saved = await ev(`(async () => {
+  const fg = window.__fg;
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const base = "classic-watermark-single-row";
+  await fg.useTemplate(base);
+  await sleep(500);
+  // buildSavedTemplate deliberately bakes the current look (font family,
+  // font-size scale, text colour, padding scale) into the saved JSON. Neutralise
+  // the per-template overrides first so the only differences left between the two
+  // renders are the edits under test.
+  const prevOverrides = fg.loadOverrides(base);
+  // buildSavedTemplate bakes the current look into the saved JSON, so both renders
+  // only agree when that bake is the identity. Every knob is pinned -- including
+  // the font family, which must be non-empty: an empty string is falsy, so the
+  // fallback picks the UI default and that changes
+  // glyph rasterisation (that alone moved the PNG by 28 KB). Extra families in a
+  // layer's stack are CJK fallbacks; pinning the primary is pixel-neutral here.
+  const tpl = fg.currentTemplateObject();
+  if (!tpl?.infoBlock?.lines?.length) return { skipped: "no infoBlock in " + base };
+  fg.saveOverrides(base, {
+    fontFamily: tpl.infoBlock.font?.family?.[0] ?? "",
+    fontSizeScale: 1,
+    paddingScale: 1,
+    useColor: false,
+    textColor: "#111111",
+  });
+  await sleep(200);
+
+  // Render through the engine directly so both sides go through identical code.
+  const shot = async (json) => {
+    const b = await fg.engine.render_with_overrides(
+      fg.state.photos[0].bytes, json, "png", false, "", 480, false);
+    let hash = 2166136261;
+    const u = new Uint8Array(b);
+    for (let i = 0; i < u.length; i++) { hash ^= u[i]; hash = Math.imul(hash, 16777619) >>> 0; }
+    return { len: u.length, hash };
+  };
+
+  // Baseline first: without it a broken harness would compare two undefined
+  // values and report a pass. The edit must demonstrably move pixels.
+  const baselineShot = await shot(fg.effectiveTemplateJson());
+
+  // Edit the info block the way the line editor does: every line preserved, only
+  // line 0 rewritten. (All 204 shipped templates carry their typography in
+  // infoBlock; none of them has a text layer, at the top level or inside a group,
+  // so this is the only edit path the library actually exercises.)
+  const edits = fg.getLayerEdits(base) ?? {};
+  const ibKey = "infoBlock";
+  const next = { ...edits };
+  next[ibKey] = tpl.infoBlock.lines.map((l, i) =>
+    i === 0 ? { ...l, expr: "'FrameGeist E2E'", fallback: "FrameGeist E2E" } : l);
+  fg.setLayerEdits(base, next);
+  await sleep(600);
+
+  const edited = fg.effectiveTemplateJson();
+  const editedShot = await shot(edited);
+
+  const { id, obj } = fg.buildSavedTemplate("e2e-roundtrip");
+  fg.addUserTemplate(obj);
+  await fg.useTemplate(id);
+  await sleep(600);
+  const reloaded = fg.effectiveTemplateJson();
+  const reloadedShot = await shot(reloaded);
+
+  const savedLines = obj.infoBlock?.lines?.[0]?.fallback ?? null;
+  const ej = JSON.parse(edited);
+  const rj = JSON.parse(reloaded);
+  const diag = {
+    stateId: fg.state.templateId,
+    lineCount: obj.infoBlock?.lines?.length ?? null,
+    ovr: fg.loadOverrides(base),
+    padEdited: ej.canvas?.padding,
+    padReloaded: rj.canvas?.padding,
+    canvasEdited: [ej.canvas?.width, ej.canvas?.height, ej.canvas?.mode],
+    canvasReloaded: [rj.canvas?.width, rj.canvas?.height, rj.canvas?.mode],
+    bgEdited: JSON.stringify(ej.canvas?.background),
+    bgReloaded: JSON.stringify(rj.canvas?.background),
+    layersEdited: (ej.layers ?? []).map((l) => l.type).join("+"),
+    layersReloaded: (rj.layers ?? []).map((l) => l.type).join("+"),
+    layersSaved: (obj.layers ?? []).map((l) => l.type).join("+"),
+    ibSaved: JSON.stringify(obj.infoBlock ?? null),
+  };
+  fg.removeUserTemplate(id);
+  fg.setLayerEdits(base, null);
+  fg.saveOverrides(base, prevOverrides);
+  await fg.useTemplate(base);
+  await sleep(300);
+
+  return { baselineShot, editedShot, reloadedShot, savedLines, id, diag };
+})()`);
+const shotEq = (a, b) => !!a && !!b && a.len === b.len && a.hash === b.hash;
+check(
+  "v1.5.0 save round trip: the harness really rendered both sides",
+  !!saved?.baselineShot && !!saved?.editedShot && !!saved?.reloadedShot && !saved?.skipped,
+  `${JSON.stringify(saved?.baselineShot)} -> ${JSON.stringify(saved?.editedShot)} vs ${JSON.stringify(saved?.reloadedShot)}${saved?.skipped ? ` [${saved.skipped}]` : ""}`,
+);
+check(
+  "v1.5.0 save round trip: the info-block edit changes the render",
+  shotEq(saved?.baselineShot, saved?.editedShot) === false,
+  `baseline ${JSON.stringify(saved?.baselineShot)} vs edited ${JSON.stringify(saved?.editedShot)}`,
+);
+check(
+  "v1.5.0 save round trip: the saved template renders pixel-identical",
+  shotEq(saved?.editedShot, saved?.reloadedShot),
+  `edited ${JSON.stringify(saved?.editedShot)} vs reloaded ${JSON.stringify(saved?.reloadedShot)}`,
+);
+check(
+  "v1.5.0 save round trip: the info-block edit is inside the saved .fgt",
+  saved?.savedLines === "FrameGeist E2E" && saved?.diag?.lineCount === 2,
+  `infoBlock.lines[0].fallback = ${JSON.stringify(saved?.savedLines)} :: ${JSON.stringify(saved?.diag)}`,
+);
 
 clearTimeout(WATCHDOG);
 check("runtime: no page exceptions/console errors", pageErrors.length === 0, pageErrors.slice(0, 2).join(" | "));

@@ -149,33 +149,70 @@ fn value_range(endian: Endian, typ: u16, count: u32, value: [u8; 4]) -> Option<(
     Some((endian.u32_from_bytes(value) as usize, size))
 }
 
+/// Zero `[s, e)` of the TIFF payload, clamped to the payload and to the 8-byte
+/// header offset the scrubber must never touch.
+fn zero_range(out: &mut [u8], s: usize, e: usize, tiff_len: usize) {
+    let s = s.max(8).min(tiff_len);
+    let e = e.min(tiff_len);
+    if s < e {
+        out[s..e].fill(0);
+    }
+}
+
 /// Zero the wipe ranges, minus everything still referenced by surviving tags.
+///
+/// v1.5.0 audit: the previous loop rebuilt a segment list once per (wipe, keep)
+/// pair, and the segment list itself grew with the number of overlapping keeps.
+/// That is quadratic in the number of surviving tags, and a large EXIF block
+/// with many tags made sanitising visibly slow. The union of the keep set is now
+/// built once (sorted + merged) and each wipe range walks it, which is
+/// O((W + K) log K) and produces exactly the same bytes: a byte is zeroed iff no
+/// keep range covers it.
 fn scrub_ranges(out: &mut [u8], scrub: &Scrub, tiff_len: usize) {
-    for &(start, len) in &scrub.wipe {
-        let mut segments = vec![(start, start.saturating_add(len))];
-        for &(ks, kl) in &scrub.keep {
-            let ke = ks.saturating_add(kl);
-            let mut next = Vec::new();
-            for (s, e) in segments {
-                if ke <= s || ks >= e {
-                    next.push((s, e));
-                    continue;
-                }
-                if s < ks {
-                    next.push((s, ks));
-                }
-                if e > ke {
-                    next.push((ke, e));
-                }
-            }
-            segments = next;
+    if scrub.wipe.is_empty() {
+        return;
+    }
+    let mut keep: Vec<(usize, usize)> = scrub
+        .keep
+        .iter()
+        .map(|&(ks, kl)| {
+            let s = ks.min(tiff_len);
+            let e = ks.saturating_add(kl).min(tiff_len);
+            (s, e)
+        })
+        .filter(|&(s, e)| s < e)
+        .collect();
+    keep.sort_unstable();
+    let mut merged: Vec<(usize, usize)> = Vec::with_capacity(keep.len());
+    for (s, e) in keep {
+        // Disjoint union: extend the previous range when they touch or overlap.
+        match merged.last_mut() {
+            Some(last) if s <= last.1 => last.1 = last.1.max(e),
+            _ => merged.push((s, e)),
         }
-        for (s, e) in segments {
-            let s = s.max(8).min(tiff_len);
-            let e = e.min(tiff_len);
-            if s < e {
-                out[s..e].fill(0);
+    }
+    for &(start, len) in &scrub.wipe {
+        let w_end = start.saturating_add(len);
+        if w_end <= 8 || start >= tiff_len {
+            continue;
+        }
+        // First merged range that can overlap this wipe. Ends are increasing too (the
+        // union is disjoint and sorted), so the first range ending after `start` is
+        // the first one that can cover any byte of the wipe.
+        let mut i = merged.partition_point(|&(_, e)| e <= start);
+        let mut cursor = start;
+        while i < merged.len() && merged[i].0 < w_end {
+            let (ks, ke) = merged[i];
+            if ke > cursor {
+                if cursor < ks {
+                    zero_range(out, cursor, ks, tiff_len);
+                }
+                cursor = ke;
             }
+            i += 1;
+        }
+        if cursor < w_end {
+            zero_range(out, cursor, w_end, tiff_len);
         }
     }
 }
@@ -543,6 +580,110 @@ pub fn sanitize_exif_block(raw: &[u8], keep_gps: bool) -> Result<SanitizedExif> 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// Reference implementation: the naive per-(wipe, keep) segment walk the
+    /// optimised version replaced. Kept as the oracle for the equivalence test.
+    fn scrub_ranges_reference(out: &mut [u8], scrub: &Scrub, tiff_len: usize) {
+        for &(start, len) in &scrub.wipe {
+            let mut segments = vec![(start, start.saturating_add(len))];
+            for &(ks, kl) in &scrub.keep {
+                let ke = ks.saturating_add(kl);
+                let mut next = Vec::new();
+                for (s, e) in segments {
+                    if ke <= s || ks >= e {
+                        next.push((s, e));
+                        continue;
+                    }
+                    if s < ks {
+                        next.push((s, ks));
+                    }
+                    if e > ke {
+                        next.push((ke, e));
+                    }
+                }
+                segments = next;
+            }
+            for (s, e) in segments {
+                zero_range(out, s, e, tiff_len);
+            }
+        }
+    }
+
+    #[test]
+    fn scrub_ranges_matches_the_naive_implementation() {
+        // Deterministic pseudo-random ranges: many overlapping wipes and keeps so
+        // the split/merge logic is actually exercised.
+        let mut seed = 0x2545_f491_4f6c_dd1d_u64;
+        let mut next = || {
+            seed ^= seed << 13;
+            seed ^= seed >> 7;
+            seed ^= seed << 17;
+            seed
+        };
+        for case in 0..64u32 {
+            let tiff_len = 4096 + (case as usize * 97);
+            let mut keep: Vec<(usize, usize)> = Vec::new();
+            for _ in 0..40 {
+                let s = (next() as usize) % tiff_len;
+                keep.push((s, s + 1 + (next() as usize % 64)));
+            }
+            let mut wipe: Vec<(usize, usize)> = Vec::new();
+            for _ in 0..12 {
+                let s = (next() as usize) % tiff_len;
+                wipe.push((s, 1 + (next() as usize % 512)));
+            }
+            let scrub = Scrub { wipe, keep };
+
+            let mut fast = vec![0xA5u8; tiff_len];
+            scrub_ranges(&mut fast, &scrub, tiff_len);
+            let mut slow = vec![0xA5u8; tiff_len];
+            scrub_ranges_reference(&mut slow, &scrub, tiff_len);
+            if fast != slow {
+                let at = fast
+                    .iter()
+                    .zip(slow.iter())
+                    .position(|(a, b)| a != b)
+                    .unwrap_or(0);
+                panic!(
+                    "case {case} diverged at byte {at} of {tiff_len}; \
+                     wipe={:?} keep={:?}",
+                    scrub.wipe, scrub.keep
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn scrubbing_a_large_block_stays_fast() {
+        // The defect was quadratic in the number of surviving tags: a large block
+        // with many keeps took long enough to be noticeable. 40 000 keeps over a
+        // 1 MiB payload finishes in milliseconds now.
+        let tiff_len = 1 << 20;
+        let keep: Vec<(usize, usize)> = (0..40_000)
+            .map(|i| (i * 25, 20))
+            .filter(|&(s, _)| s + 20 <= tiff_len)
+            .collect();
+        let wipe: Vec<(usize, usize)> = (0..64)
+            .map(|i| (i * 4096, 3000))
+            .filter(|&(s, l)| s + l <= tiff_len)
+            .collect();
+        let scrub = Scrub { wipe, keep };
+        let mut out = vec![0xA5u8; tiff_len];
+        let started = std::time::Instant::now();
+        scrub_ranges(&mut out, &scrub, tiff_len);
+        let elapsed = started.elapsed();
+        assert!(
+            elapsed.as_millis() < 500,
+            "scrubbing took {elapsed:?}, expected well under 500ms"
+        );
+        // And it still did the work: some bytes must be zero, and the bytes a keep
+        // range protects must survive.
+        assert!(out.contains(&0), "nothing was scrubbed");
+        assert!(
+            out[0..20].iter().all(|&b| b != 0),
+            "a keep range inside the first wipe was destroyed"
+        );
+    }
 
     fn be(endian: Endian, v: u16) -> Vec<u8> {
         match endian {

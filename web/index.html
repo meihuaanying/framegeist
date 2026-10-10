@@ -24,8 +24,8 @@
   </div>
   <span class="spacer"></span>
   <span class="pill busy" id="statusPill"><span class="dot"></span><span id="statusText" aria-live="polite" data-i18n="status.boot">引擎加载中…</span></span>
-  <button class="icon-btn" id="settingsBtn" data-i18n-title="settings.title" title="设置">⚙</button>
-        <button class="icon-btn" id="themeBtn" data-i18n-title="theme.auto" title="跟随系统">◐</button>
+  <button class="icon-btn" id="settingsBtn" data-i18n-title="settings.title" title="设置" data-i18n-aria-label="settings.title">⚙</button>
+        <button class="icon-btn" id="themeBtn" data-i18n-title="theme.auto" title="跟随系统" data-i18n-aria-label="theme.auto">◐</button>
   <button class="icon-btn" id="langBtn">EN</button>
 </header>
 
@@ -37,7 +37,7 @@
       <span class="spacer" style="flex:1"></span>
       <button class="btn small ghost" id="wallImport" style="width:auto;padding:0 14px" data-i18n="wall.import">导入照片</button>
       <div class="search-wrap wall-search">
-        <input type="search" id="wallSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…">
+        <input type="search" id="wallSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…" data-i18n-aria-label="search.templates">
       </div>
     </div>
     <div class="wall-tabs" id="wallCats"></div>
@@ -77,15 +77,15 @@
       <summary data-i18n="panel.template">模板</summary>
       <div class="body">
         <div class="search-wrap">
-          <input type="search" id="tplSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…">
+          <input type="search" id="tplSearch" data-i18n-placeholder="search.templates" placeholder="搜索模板…" data-i18n-aria-label="search.templates">
         </div>
         <div class="cat-chips" id="catChips"></div>
         <div class="pinned" id="pinned"><span data-i18n="panel.template">模板</span>: <b id="pinnedName">—</b><span class="spacer" style="flex:1"></span><span class="muted" id="pinnedCat"></span></div>
         <div class="picker-head">
           <span class="muted" id="tplCount"></span>
           <span class="spacer"></span>
-          <button class="icon-btn" id="pickerCompact" data-i18n-title="picker.compact">▦</button>
-          <button class="icon-btn" id="pickerLarge" data-i18n-title="picker.large">▤</button>
+          <button class="icon-btn" id="pickerCompact" data-i18n-title="picker.compact" data-i18n-aria-label="picker.compact">▦</button>
+          <button class="icon-btn" id="pickerLarge" data-i18n-title="picker.large" data-i18n-aria-label="picker.large">▤</button>
         </div>
         <div class="grid" id="templateGrid"></div>
       </div>
@@ -98,7 +98,7 @@
         <div id="freePanel" class="hidden">
           <div class="field">
             <label><span data-i18n="free.canvas">画布比例</span></label>
-            <select id="freeAspect">
+            <select id="freeAspect" data-i18n-aria-label="free.canvas">
               <option value="4:3">4:3</option>
               <option value="3:2">3:2</option>
               <option value="1:1">1:1</option>
@@ -108,44 +108,44 @@
           </div>
           <div class="field">
             <label><span data-i18n="free.background">背景</span></label>
-            <input type="color" id="freeBg" value="#FFFFFF">
+            <input type="color" id="freeBg" value="#FFFFFF" data-i18n-aria-label="free.background">
           </div>
           <div class="layer-list" id="freeList"></div>
           <div class="btn-row" style="margin-top:6px">
             <button class="btn small" id="freeAdd" data-i18n="free.add">加照片</button>
             <button class="btn small" id="freeSwap" data-i18n="free.swap" data-i18n-title="free.swapHint" title="交换">交换</button>
-            <button class="btn small" id="freeFront" data-i18n-title="layers.top" title="置顶">⤒</button>
-            <button class="btn small" id="freeBack" data-i18n-title="layers.bottom" title="置底">⤓</button>
+            <button class="btn small" id="freeFront" data-i18n-title="layers.top" title="置顶" data-i18n-aria-label="layers.top">⤒</button>
+            <button class="btn small" id="freeBack" data-i18n-title="layers.bottom" title="置底" data-i18n-aria-label="layers.bottom">⤓</button>
           </div>
           <div class="btn-row" style="margin-top:6px">
-            <button class="btn small" id="freeDel" data-i18n-title="layers.delete" title="删除">✕</button>
+            <button class="btn small" id="freeDel" data-i18n-title="layers.delete" title="删除" data-i18n-aria-label="layers.delete">✕</button>
             <button class="btn small" id="freeRelayout" data-i18n="free.relayout" data-i18n-title="free.relayoutHint" title="重排">重排</button>
           </div>
           <div class="field" style="margin-top:8px">
             <label><span data-i18n="free.radius">圆角</span><b id="freeRadiusVal">0%</b></label>
-            <input type="range" id="freeRadius" min="0" max="0.5" step="0.01" value="0">
+            <input type="range" id="freeRadius" min="0" max="0.5" step="0.01" value="0" data-i18n-aria-label="free.radius">
           </div>
           <div class="field">
             <label><span data-i18n="free.stroke">描边宽度</span><b id="freeStrokeVal">0px</b></label>
-            <input type="range" id="freeStrokeW" min="0" max="64" step="1" value="0">
+            <input type="range" id="freeStrokeW" min="0" max="64" step="1" value="0" data-i18n-aria-label="free.stroke">
           </div>
           <div class="color-row">
             <span class="muted" data-i18n="free.strokeColor">描边颜色</span>
-            <input type="color" id="freeStrokeColor" value="#FFFFFF">
+            <input type="color" id="freeStrokeColor" value="#FFFFFF" data-i18n-aria-label="free.strokeColor">
           </div>
           <div class="field" style="margin-top:8px">
             <label><span data-i18n="free.gap">间隔</span><b id="freeGapVal">2%</b></label>
-            <input type="range" id="freeGap" min="0" max="0.2" step="0.005" value="0.02">
+            <input type="range" id="freeGap" min="0" max="0.2" step="0.005" value="0.02" data-i18n-aria-label="free.gap">
           </div>
           <div class="field">
             <label><span data-i18n="free.margin">边距</span><b id="freeMarginVal">2%</b></label>
-            <input type="range" id="freeMargin" min="0" max="0.2" step="0.005" value="0.02">
+            <input type="range" id="freeMargin" min="0" max="0.2" step="0.005" value="0.02" data-i18n-aria-label="free.margin">
           </div>
           <div class="muted" id="freeHint" data-i18n="free.hint">画布上拖动移动，角点缩放，顶部圆点旋转</div>
         </div>
         <div id="layoutPicker">
           <div class="search-wrap">
-            <input type="search" id="layoutSearch" data-i18n-placeholder="search.layouts" placeholder="搜索布局…">
+            <input type="search" id="layoutSearch" data-i18n-placeholder="search.layouts" placeholder="搜索布局…" data-i18n-aria-label="search.layouts">
           </div>
           <div class="layout-grid" id="layoutGrid"></div>
         </div>
@@ -158,13 +158,13 @@
       <summary data-i18n="panel.canvas">画布</summary>
       <div class="body">
         <label class="row"><span data-i18n="canvas.aspect">比例</span></label>
-        <select id="aspectSelect">
+        <select id="aspectSelect" data-i18n-aria-label="canvas.aspect">
           <option value="original" data-i18n="canvas.aspectOriginal">原图</option>
           <option value="1:1">1:1</option><option value="4:3">4:3</option><option value="3:2">3:2</option>
           <option value="16:9">16:9</option><option value="9:16">9:16</option>
         </select>
         <label class="row"><span data-i18n="canvas.background">背景填充</span></label>
-        <select id="bgSelect">
+        <select id="bgSelect" data-i18n-aria-label="canvas.background">
           <option value="default" data-i18n="canvas.bgDefault">模板默认</option>
           <option value="blur" data-i18n="canvas.bgBlur">模糊</option>
           <option value="tint" data-i18n="canvas.bgTint">自动取色</option>
@@ -175,8 +175,8 @@
         <div class="swatches" id="bgSwatches"></div>
         <div class="color-row" style="margin-top:4px">
           <span class="muted" data-i18n="canvas.bgColor">背景色</span>
-          <input type="color" id="bgColor" value="#FFFFFF">
-          <button class="icon-btn" id="bgEyedropper" data-i18n-title="canvas.eyedropper" title="画布取色">💧</button>
+          <input type="color" id="bgColor" value="#FFFFFF" data-i18n-aria-label="canvas.bgColor">
+          <button class="icon-btn" id="bgEyedropper" data-i18n-title="canvas.eyedropper" title="画布取色" data-i18n-aria-label="canvas.eyedropper">💧</button>
           <span class="spacer" style="flex:1"></span>
           <button class="btn small ghost" id="uploadBg" style="width:auto;padding:0 10px" data-i18n="canvas.uploadBg">上传背景图</button>
         </div>
@@ -184,7 +184,7 @@
         <input type="file" id="bgFile" accept="image/*" hidden>
         <div class="field" style="margin-top:8px">
           <label><span data-i18n="canvas.margin">边距</span><b id="marginVal">0%</b></label>
-          <input type="range" id="marginRange" min="0" max="0.5" step="0.005" value="0">
+          <input type="range" id="marginRange" min="0" max="0.5" step="0.005" value="0" data-i18n-aria-label="canvas.margin">
         </div>
         <div class="btn-row" style="margin-top:10px">
           <button class="btn small" id="flipH" data-i18n="canvas.flipH">水平翻转</button>
@@ -201,41 +201,41 @@
         <p class="muted card-hint" data-i18n="card.lowSpecHint">低配设备建议关闭阴影</p>
         <div class="field">
           <label><span data-i18n="card.radius">圆角</span><b id="cardRadiusVal">6%</b></label>
-          <input type="range" id="cardRadius" min="0" max="0.25" step="0.005" value="0.06">
+          <input type="range" id="cardRadius" min="0" max="0.25" step="0.005" value="0.06" data-i18n-aria-label="card.radius">
         </div>
         <label class="row"><input type="checkbox" id="cardShadowOn" checked><span data-i18n="card.shadow">外阴影</span></label>
         <div class="field">
           <label><span data-i18n="card.shadowBlur">阴影模糊</span><b id="cardBlurVal">12%</b></label>
-          <input type="range" id="cardBlur" min="0" max="0.5" step="0.005" value="0.12">
+          <input type="range" id="cardBlur" min="0" max="0.5" step="0.005" value="0.12" data-i18n-aria-label="card.shadowBlur">
         </div>
         <div class="field">
           <label><span data-i18n="card.shadowOpacity">阴影不透明度</span><b id="cardOpacityVal">35%</b></label>
-          <input type="range" id="cardOpacity" min="0" max="1" step="0.01" value="0.35">
+          <input type="range" id="cardOpacity" min="0" max="1" step="0.01" value="0.35" data-i18n-aria-label="card.shadowOpacity">
         </div>
         <div class="field">
           <label><span data-i18n="card.offsetX">阴影水平偏移</span><b id="cardDxVal">1%</b></label>
-          <input type="range" id="cardDx" min="-0.5" max="0.5" step="0.005" value="0.01">
+          <input type="range" id="cardDx" min="-0.5" max="0.5" step="0.005" value="0.01" data-i18n-aria-label="card.offsetX">
         </div>
         <div class="field">
           <label><span data-i18n="card.offsetY">阴影垂直偏移</span><b id="cardDyVal">2%</b></label>
-          <input type="range" id="cardDy" min="-0.5" max="0.5" step="0.005" value="0.02">
+          <input type="range" id="cardDy" min="-0.5" max="0.5" step="0.005" value="0.02" data-i18n-aria-label="card.offsetY">
         </div>
         <div class="field">
           <label><span data-i18n="card.border">边框宽度</span><b id="cardBorderVal">0%</b></label>
-          <input type="range" id="cardBorder" min="0" max="0.05" step="0.001" value="0">
+          <input type="range" id="cardBorder" min="0" max="0.05" step="0.001" value="0" data-i18n-aria-label="card.border">
         </div>
         <div class="color-row">
           <span class="muted" data-i18n="card.borderColor">边框颜色</span>
-          <input type="color" id="cardBorderColor" value="#FFFFFF">
+          <input type="color" id="cardBorderColor" value="#FFFFFF" data-i18n-aria-label="card.borderColor">
         </div>
         <label class="row"><input type="checkbox" id="cardInnerOn"><span data-i18n="card.innerShadow">内阴影</span></label>
         <div class="field">
           <label><span data-i18n="card.innerBlur">内阴影模糊</span><b id="cardInnerBlurVal">10%</b></label>
-          <input type="range" id="cardInnerBlur" min="0" max="0.5" step="0.005" value="0.1">
+          <input type="range" id="cardInnerBlur" min="0" max="0.5" step="0.005" value="0.1" data-i18n-aria-label="card.innerBlur">
         </div>
         <div class="field">
           <label><span data-i18n="card.innerOpacity">内阴影不透明度</span><b id="cardInnerOpacityVal">30%</b></label>
-          <input type="range" id="cardInnerOpacity" min="0" max="1" step="0.01" value="0.3">
+          <input type="range" id="cardInnerOpacity" min="0" max="1" step="0.01" value="0.3" data-i18n-aria-label="card.innerOpacity">
         </div>
       </div>
     </details>
@@ -253,23 +253,23 @@
         <div class="frame-grid" id="frameGrid"></div>
         <div class="field">
           <label><span data-i18n="frame.scale">相框缩放</span><b id="frameScaleVal">100%</b></label>
-          <input type="range" id="frameScale" min="0.5" max="1.5" step="0.01" value="1">
+          <input type="range" id="frameScale" min="0.5" max="1.5" step="0.01" value="1" data-i18n-aria-label="frame.scale">
         </div>
         <div class="field">
           <label><span data-i18n="frame.inset">窗口内缩</span><b id="frameInsetVal">0%</b></label>
-          <input type="range" id="frameInset" min="0" max="0.2" step="0.005" value="0">
+          <input type="range" id="frameInset" min="0" max="0.2" step="0.005" value="0" data-i18n-aria-label="frame.inset">
         </div>
         <div class="field">
           <label><span data-i18n="frame.offsetX">水平偏移</span><b id="frameOffsetXVal">0%</b></label>
-          <input type="range" id="frameOffsetX" min="-1" max="1" step="0.01" value="0">
+          <input type="range" id="frameOffsetX" min="-1" max="1" step="0.01" value="0" data-i18n-aria-label="frame.offsetX">
         </div>
         <div class="field">
           <label><span data-i18n="frame.offsetY">垂直偏移</span><b id="frameOffsetYVal">0%</b></label>
-          <input type="range" id="frameOffsetY" min="-1" max="1" step="0.01" value="0">
+          <input type="range" id="frameOffsetY" min="-1" max="1" step="0.01" value="0" data-i18n-aria-label="frame.offsetY">
         </div>
         <div class="field">
           <label><span data-i18n="frame.rotation">旋转</span><b id="frameRotationVal">0°</b></label>
-          <input type="range" id="frameRotation" min="-180" max="180" step="1" value="0">
+          <input type="range" id="frameRotation" min="-180" max="180" step="1" value="0" data-i18n-aria-label="frame.rotation">
         </div>
         <input type="file" id="frameFile" accept="image/png" hidden>
       </div>
@@ -288,7 +288,7 @@
         </div>
         <div class="field" style="margin-top:6px">
           <label><span data-i18n="crop.aspect">比例锁定</span></label>
-          <select id="cropAspect">
+          <select id="cropAspect" data-i18n-aria-label="crop.aspect">
             <option value="free" data-i18n="crop.free">自由</option>
             <option value="1:1">1:1</option>
             <option value="4:3">4:3</option>
@@ -307,29 +307,29 @@
       <summary data-i18n="layers.title">图层</summary>
       <div class="body">
         <div class="btn-row" style="margin-bottom:6px">
-          <button class="btn small" id="editUndo" data-i18n-title="layers.undo" title="撤销">↶</button>
-          <button class="btn small" id="editRedo" data-i18n-title="layers.redo" title="重做">↷</button>
+          <button class="btn small" id="editUndo" data-i18n-title="layers.undo" title="撤销" data-i18n-aria-label="layers.undo">↶</button>
+          <button class="btn small" id="editRedo" data-i18n-title="layers.redo" title="重做" data-i18n-aria-label="layers.redo">↷</button>
         </div>
         <div class="layer-list" id="layerList"></div>
         <div class="btn-row" style="margin-top:6px">
-          <button class="btn small" id="layerUp" data-i18n-title="layers.up" title="上移">↑</button>
-          <button class="btn small" id="layerDown" data-i18n-title="layers.down" title="下移">↓</button>
-          <button class="btn small" id="layerTop" data-i18n-title="layers.top" title="置顶">⤒</button>
-          <button class="btn small" id="layerBottom" data-i18n-title="layers.bottom" title="置底">⤓</button>
-          <button class="btn small" id="layerDup" data-i18n-title="layers.duplicate" title="复制">⧉</button>
-          <button class="btn small" id="layerGroup" data-i18n-title="layers.group" title="编组">▣</button>
-          <button class="btn small" id="layerUngroup" data-i18n-title="layers.ungroup" title="取消编组" disabled>▢</button>
-          <button class="btn small" id="layerDel" data-i18n-title="layers.delete" title="删除">✕</button>
+          <button class="btn small" id="layerUp" data-i18n-title="layers.up" title="上移" data-i18n-aria-label="layers.up">↑</button>
+          <button class="btn small" id="layerDown" data-i18n-title="layers.down" title="下移" data-i18n-aria-label="layers.down">↓</button>
+          <button class="btn small" id="layerTop" data-i18n-title="layers.top" title="置顶" data-i18n-aria-label="layers.top">⤒</button>
+          <button class="btn small" id="layerBottom" data-i18n-title="layers.bottom" title="置底" data-i18n-aria-label="layers.bottom">⤓</button>
+          <button class="btn small" id="layerDup" data-i18n-title="layers.duplicate" title="复制" data-i18n-aria-label="layers.duplicate">⧉</button>
+          <button class="btn small" id="layerGroup" data-i18n-title="layers.group" title="编组" data-i18n-aria-label="layers.group">▣</button>
+          <button class="btn small" id="layerUngroup" data-i18n-title="layers.ungroup" title="取消编组" disabled data-i18n-aria-label="layers.ungroup">▢</button>
+          <button class="btn small" id="layerDel" data-i18n-title="layers.delete" title="删除" data-i18n-aria-label="layers.delete">✕</button>
         </div>
         <div class="btn-row align-row" style="margin-top:6px">
-          <button class="btn small" id="alignLeft" data-i18n-title="layers.alignLeft" title="左对齐">⇤</button>
-          <button class="btn small" id="alignCenterH" data-i18n-title="layers.alignCenterH" title="水平居中">↔</button>
-          <button class="btn small" id="alignRight" data-i18n-title="layers.alignRight" title="右对齐">⇥</button>
-          <button class="btn small" id="alignTop" data-i18n-title="layers.alignTop" title="顶对齐">⇡</button>
-          <button class="btn small" id="alignMiddleV" data-i18n-title="layers.alignMiddleV" title="垂直居中">↕</button>
-          <button class="btn small" id="alignBottom" data-i18n-title="layers.alignBottom" title="底对齐">⇣</button>
-          <button class="btn small" id="distributeH" data-i18n-title="layers.distributeH" title="水平分布">⋯</button>
-          <button class="btn small" id="distributeV" data-i18n-title="layers.distributeV" title="垂直分布">⋮</button>
+          <button class="btn small" id="alignLeft" data-i18n-title="layers.alignLeft" title="左对齐" data-i18n-aria-label="layers.alignLeft">⇤</button>
+          <button class="btn small" id="alignCenterH" data-i18n-title="layers.alignCenterH" title="水平居中" data-i18n-aria-label="layers.alignCenterH">↔</button>
+          <button class="btn small" id="alignRight" data-i18n-title="layers.alignRight" title="右对齐" data-i18n-aria-label="layers.alignRight">⇥</button>
+          <button class="btn small" id="alignTop" data-i18n-title="layers.alignTop" title="顶对齐" data-i18n-aria-label="layers.alignTop">⇡</button>
+          <button class="btn small" id="alignMiddleV" data-i18n-title="layers.alignMiddleV" title="垂直居中" data-i18n-aria-label="layers.alignMiddleV">↕</button>
+          <button class="btn small" id="alignBottom" data-i18n-title="layers.alignBottom" title="底对齐" data-i18n-aria-label="layers.alignBottom">⇣</button>
+          <button class="btn small" id="distributeH" data-i18n-title="layers.distributeH" title="水平分布" data-i18n-aria-label="layers.distributeH">⋯</button>
+          <button class="btn small" id="distributeV" data-i18n-title="layers.distributeV" title="垂直分布" data-i18n-aria-label="layers.distributeV">⋮</button>
         </div>
       </div>
     </details>
@@ -355,7 +355,7 @@
           </label>
           <div class="muted" id="brandDetected" style="margin:4px 0 8px"></div>
           <label class="row"><span data-i18n="brandLib.target">作用图层</span><b class="muted" id="brandLibTarget">—</b></label>
-          <input type="search" id="brandSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…">
+          <input type="search" id="brandSearch" data-i18n-placeholder="brandLib.search" placeholder="搜索品牌…" data-i18n-aria-label="brandLib.search">
           <div class="brand-lib-groups" id="brandGroups"></div>
           <div class="brand-lib-quick" id="brandQuick"></div>
           <div class="brand-lib-grid" id="brandLibGrid"></div>
@@ -369,7 +369,7 @@
         </div>
         <div class="field" style="margin-top:10px">
           <label><span data-i18n="insert.preset">文字样式预设</span></label>
-          <select id="presetSelect">
+          <select id="presetSelect" data-i18n-aria-label="insert.preset">
             <option value="" data-i18n="insert.presetNone">选择预设并应用</option>
             <option value="copperplate" data-i18n="insert.presetCopperplate">铜版雕刻</option>
             <option value="gilt" data-i18n="insert.presetGilt">烫金箔</option>
@@ -397,23 +397,23 @@
       <div class="body">
         <div class="field">
           <label><span data-i18n="tweak.size">文字大小</span><b id="sizeVal">100%</b></label>
-          <input type="range" id="sizeRange" min="0.5" max="2" step="0.05" value="1">
+          <input type="range" id="sizeRange" min="0.5" max="2" step="0.05" value="1" data-i18n-aria-label="tweak.size">
         </div>
         <div class="field">
           <label><span data-i18n="tweak.padding">内边距</span><b id="padVal">100%</b></label>
-          <input type="range" id="padRange" min="0.5" max="2" step="0.05" value="1">
+          <input type="range" id="padRange" min="0.5" max="2" step="0.05" value="1" data-i18n-aria-label="tweak.padding">
         </div>
         <div class="field">
           <div class="color-row">
-            <input type="checkbox" id="useColor">
+            <input type="checkbox" id="useColor" data-i18n-aria-label="tweak.color">
             <span data-i18n="tweak.color">文字颜色</span>
             <span class="spacer" style="flex:1"></span>
-            <input type="color" id="colorPick" value="#111111" disabled>
+            <input type="color" id="colorPick" value="#111111" disabled data-i18n-aria-label="tweak.color">
           </div>
         </div>
         <label class="row"><span data-i18n="tweak.font">字体</span></label>
         <div style="display:flex;gap:6px">
-          <select id="fontSelect" style="flex:1"></select>
+          <select id="fontSelect" style="flex:1" data-i18n-aria-label="tweak.font"></select>
           <button class="btn small" id="uploadFont" style="width:auto;padding:0 10px" data-i18n="tweak.uploadFont">上传字体</button>
           <input type="file" id="fontFile" accept=".ttf,.otf" hidden>
         </div>
@@ -426,15 +426,15 @@
       <div class="body">
         <div class="field">
           <label><span data-i18n="wm.height">高度</span><b id="wmSizeVal">100%</b></label>
-          <input type="range" id="wmSize" min="0.5" max="2" step="0.05" value="1">
+          <input type="range" id="wmSize" min="0.5" max="2" step="0.05" value="1" data-i18n-aria-label="wm.height">
         </div>
         <div class="field">
           <label><span data-i18n="wm.padding">边距</span><b id="wmPadVal">100%</b></label>
-          <input type="range" id="wmPad" min="0.5" max="2" step="0.05" value="1">
+          <input type="range" id="wmPad" min="0.5" max="2" step="0.05" value="1" data-i18n-aria-label="wm.padding">
         </div>
         <div class="field">
           <label><span data-i18n="wm.spacing">间隔</span><b id="wmSpacingVal">0.00</b></label>
-          <input type="range" id="wmSpacing" min="-0.02" max="0.1" step="0.005" value="0">
+          <input type="range" id="wmSpacing" min="-0.02" max="0.1" step="0.005" value="0" data-i18n-aria-label="wm.spacing">
         </div>
         <p class="muted" data-i18n="wm.perElementHint">选中元素后可在元素属性中单独调整</p>
         <button class="btn small" id="wmSelectFirst" data-i18n="wm.selectFirst">选择第一个文字元素</button>
@@ -455,7 +455,7 @@
           <button class="btn small" id="saveTemplate" data-i18n="exifEdit.save">保存为模板</button>
         </div>
         <div id="saveRow" class="hidden" style="margin-top:8px">
-          <input type="text" id="saveName" data-i18n-placeholder="exifEdit.namePrompt" placeholder="模板名称">
+          <input type="text" id="saveName" data-i18n-placeholder="exifEdit.namePrompt" placeholder="模板名称" data-i18n-aria-label="exifEdit.namePrompt">
           <div class="btn-row" style="margin-top:6px">
             <button class="btn small primary" id="confirmSave" data-i18n="exifEdit.save">保存为模板</button>
             <button class="btn small ghost" id="cancelSave" data-i18n-title="btn.cancel" data-i18n-aria-label="btn.cancel" aria-label="取消">✕</button>
@@ -532,16 +532,16 @@
   <section class="workspace">
     <div class="stage-card">
       <div class="stage-head">
-        <button class="icon-btn" id="backToWall" data-i18n-title="editor.back" title="返回模板墙">←</button>
+        <button class="icon-btn" id="backToWall" data-i18n-title="editor.back" title="返回模板墙" data-i18n-aria-label="editor.back">←</button>
         <span id="stageLabel" data-i18n="stage.placeholder">拖入一张照片开始</span>
         <span class="spacer"></span>
         <span class="stage-size muted" id="stageSize"></span>
-        <button class="icon-btn" id="zoomOut" data-i18n-title="stage.zoomOut">−</button>
+        <button class="icon-btn" id="zoomOut" data-i18n-title="stage.zoomOut" data-i18n-aria-label="stage.zoomOut">−</button>
         <span class="zoom-label" id="zoomLabel">100%</span>
-        <button class="icon-btn" id="zoomIn" data-i18n-title="stage.zoomIn">＋</button>
-        <button class="icon-btn" id="zoomFit" data-i18n-title="stage.fit">⤢</button>
-        <button class="icon-btn" id="zoomReset" data-i18n-title="stage.reset">↺</button>
-        <button class="icon-btn" id="locateSel" data-i18n-title="stage.locate" title="定位到选中" disabled>◎</button>
+        <button class="icon-btn" id="zoomIn" data-i18n-title="stage.zoomIn" data-i18n-aria-label="stage.zoomIn">＋</button>
+        <button class="icon-btn" id="zoomFit" data-i18n-title="stage.fit" data-i18n-aria-label="stage.fit">⤢</button>
+        <button class="icon-btn" id="zoomReset" data-i18n-title="stage.reset" data-i18n-aria-label="stage.reset">↺</button>
+        <button class="icon-btn" id="locateSel" data-i18n-title="stage.locate" title="定位到选中" disabled data-i18n-aria-label="stage.locate">◎</button>
         <select id="zoomSelect" class="zoom-select" data-i18n-aria-label="stage.zoom" aria-label="缩放">
           <option value="fit" data-i18n="stage.fit">适应窗口</option>
           <option value="0.5">50%</option>
@@ -567,9 +567,9 @@
       <b id="lbName">—</b>
       <span class="muted" id="lbCat"></span>
       <span class="spacer" style="flex:1"></span>
-      <button class="icon-btn" id="lbPrev" data-i18n-title="lightbox.prev">‹</button>
-      <button class="icon-btn" id="lbNext" data-i18n-title="lightbox.next">›</button>
-      <button class="icon-btn" id="lbClose" data-i18n-title="lightbox.close">✕</button>
+      <button class="icon-btn" id="lbPrev" data-i18n-title="lightbox.prev" data-i18n-aria-label="lightbox.prev">‹</button>
+      <button class="icon-btn" id="lbNext" data-i18n-title="lightbox.next" data-i18n-aria-label="lightbox.next">›</button>
+      <button class="icon-btn" id="lbClose" data-i18n-title="lightbox.close" data-i18n-aria-label="lightbox.close">✕</button>
     </div>
     <div class="lb-stage"><img id="lbImg" alt=""></div>
     <div class="lb-foot">
@@ -588,7 +588,7 @@
     <div class="lb-head">
       <b id="settingsTitle" data-i18n="settings.title">设置</b>
       <span class="spacer" style="flex:1"></span>
-      <button class="icon-btn" id="settingsClose" data-i18n-title="settings.close">✕</button>
+      <button class="icon-btn" id="settingsClose" data-i18n-title="settings.close" data-i18n-aria-label="settings.close">✕</button>
     </div>
     <div class="settings-body">
       <section>
@@ -637,7 +637,7 @@
           <select id="setDefaultFont" style="width:auto"></select>
         </label>
         <div class="field"><label><span data-i18n="settings.defaultFontSize"></span><b id="setSizeVal">100%</b></label>
-          <input type="range" id="setDefaultSize" min="0.5" max="2" step="0.05" value="1"></div>
+          <input type="range" id="setDefaultSize" min="0.5" max="2" step="0.05" value="1" data-i18n-aria-label="settings.defaultFontSize"></div>
         <label class="row"><input type="checkbox" id="setDefaultColorOn"><span data-i18n="settings.defaultColor"></span>
           <input type="color" id="setDefaultColor" value="#111111"></label>
         <label class="row"><input type="checkbox" id="setDefaultLogo"><span data-i18n="settings.defaultLogo"></span></label>

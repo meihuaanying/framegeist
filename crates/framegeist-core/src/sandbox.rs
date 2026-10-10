@@ -11,6 +11,25 @@ use serde_json::Value;
 
 const FORBIDDEN_SUBSTRINGS: [&str; 3] = ["http://", "https://", "file://"];
 
+/// v1.5.0: schemes that must never appear in a template string. `:` on its own is
+/// fine (real templates contain `fmt('... f/{aperture} ...')`, `date('YYYY-MM-DD
+/// HH:mm', ...)` and literals such as `'12:30'`), so only the scheme prefixes are
+/// matched. `://` catches unknown schemes generically.
+const FORBIDDEN_SCHEMES: [&str; 8] = [
+    "data:",
+    "javascript:",
+    "vbscript:",
+    "blob:",
+    "ftp:",
+    "file:",
+    "http:",
+    "https:",
+];
+
+/// v1.5.0: bound for a single template string. `load_template_from_str` also caps
+/// the whole document; this keeps direct `check()` callers bounded too.
+pub const MAX_STRING_LEN: usize = 64 * 1024;
+
 fn walk_strings(value: &Value, f: &mut impl FnMut(&str)) {
     match value {
         Value::String(s) => f(s),
@@ -20,17 +39,58 @@ fn walk_strings(value: &Value, f: &mut impl FnMut(&str)) {
     }
 }
 
+/// v1.5.0: classify one string. `http://`/`https://`/`file://` keep their original
+/// message so existing tests and docs stay accurate; everything else is reported
+/// as path or scheme abuse.
+fn string_violations(s: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    if s.chars().count() > MAX_STRING_LEN {
+        out.push(format!(
+            "string exceeds {} characters (got {})",
+            MAX_STRING_LEN,
+            s.chars().count()
+        ));
+        return out;
+    }
+    for bad in FORBIDDEN_SUBSTRINGS {
+        if s.contains(bad) {
+            out.push(format!("forbidden substring {bad:?} in string {s:?}"));
+        }
+    }
+    let lower = s.to_ascii_lowercase();
+    // Backslashes: Windows separators, UNC paths and `..\` traversal all of which
+    // the forward-slash-only rule below could not see.
+    if s.contains('\\') {
+        out.push(format!("backslash in string {s:?}"));
+    }
+    // Traversal by path segment, not by substring: catches bare `..`, `foo/..`
+    // and `a/../b` alike, and keeps matching the previous `/../` behaviour.
+    if s.split('/').any(|seg| seg == "..") {
+        out.push(format!("path traversal in string {s:?}"));
+    }
+    // Absolute locations: rooted paths (and `//host` on POSIX) plus Windows drives.
+    if s.starts_with('/') || s.starts_with('\\') || s.as_bytes().get(1) == Some(&b':') {
+        out.push(format!("absolute path in string {s:?}"));
+    }
+    // Percent-encoded separators/dots (`%2e%2e%2f`) decode to the rules above.
+    if lower.contains("%2e") || lower.contains("%2f") {
+        out.push(format!("percent-encoded traversal in string {s:?}"));
+    }
+    for scheme in FORBIDDEN_SCHEMES {
+        if lower.contains(scheme) {
+            out.push(format!("forbidden scheme {scheme:?} in string {s:?}"));
+        }
+    }
+    if s.contains("://") {
+        out.push(format!("forbidden scheme in string {s:?}"));
+    }
+    out
+}
+
 pub fn check(value: &Value) -> Result<()> {
     let mut violations: Vec<String> = Vec::new();
     walk_strings(value, &mut |s: &str| {
-        for bad in FORBIDDEN_SUBSTRINGS {
-            if s.contains(bad) {
-                violations.push(format!("forbidden substring {bad:?} in string {s:?}"));
-            }
-        }
-        if s.starts_with("../") || s.contains("/../") {
-            violations.push(format!("path traversal in string {s:?}"));
-        }
+        violations.extend(string_violations(s))
     });
     if violations.is_empty() {
         Ok(())
@@ -183,6 +243,68 @@ pub fn validate_expr(expr: &str) -> Result<()> {
     )))
 }
 
+/// Separator the shipped templates use to put several expressions on one line:
+/// U+00B7 MIDDLE DOT with a single space on each side.
+const EXPR_JOINER: char = '\u{b7}';
+
+/// v1.4.0 audit: split a line expression on its ` · ` joiners.
+///
+/// Quote-aware, because the same sequence occurs *inside* literals —
+/// `fmt('01 · CAMERA · {model_pretty}', exif)` is one atom, not three. Returns
+/// `Err` when a joiner outside quotes is not exactly ` · `, so ` ·`, `x ·y` and
+/// `x· y` cannot smuggle text through.
+fn split_expr_atoms(expr: &str) -> Result<Vec<&str>> {
+    let mut atoms: Vec<&str> = Vec::new();
+    let mut start = 0usize;
+    let mut in_quote = false;
+    let mut prev: Option<char> = None;
+    let mut iter = expr.char_indices().peekable();
+    while let Some((i, c)) = iter.next() {
+        match c {
+            '\'' => in_quote = !in_quote,
+            EXPR_JOINER if !in_quote => {
+                let spaced_before = prev == Some(' ');
+                let spaced_after = matches!(iter.peek(), Some((_, ' ')));
+                if !spaced_before || !spaced_after {
+                    return Err(Error::SandboxViolation(format!(
+                        "expression joiner must be ` · ` (U+00B7 with one space each side): {expr:?}"
+                    )));
+                }
+                // `prev` is an ASCII space, so `i - 1` is a char boundary.
+                atoms.push(expr[start..i - 1].trim());
+                // Skip the dot's two UTF-8 bytes and the following space.
+                iter.next();
+                start = i + '·'.len_utf8() + 1;
+            }
+            _ => {}
+        }
+        prev = Some(c);
+    }
+    atoms.push(expr[start..].trim());
+    Ok(atoms)
+}
+
+/// Grammar check for an `infoBlock` line expression.
+///
+/// v1.4.0 audit: `validate_info_block` used to accept any non-empty string, so
+/// `if_empty(exif.model, )` and `fmt(')` survived loading and then panicked
+/// `eval_expr_locale` (CLI exit 101). Validating each line with `validate_expr`
+/// alone would fail the other way: 28 of the 204 shipped templates put several
+/// expressions on one line joined by ` · `, for example
+/// ```text
+/// fmt('{focal}MM', exif) · fmt('F{aperture}', exif) · exif.shutter · fmt('ISO{iso}', exif)
+/// ```
+/// The evaluator returns `None` for such a sequence — the line then falls back
+/// to its `fallback` text, which is what those templates have always rendered —
+/// so the joiner belongs to the grammar we must accept, not to the errors we
+/// must raise. Split quote-aware and validate every atom.
+pub fn validate_info_expr(expr: &str) -> Result<()> {
+    for atom in split_expr_atoms(expr)? {
+        validate_expr(atom)?;
+    }
+    Ok(())
+}
+
 /// Evaluate an expression against EXIF info. Returns None when any
 /// referenced field is missing; the template's `fallback` then applies.
 pub fn eval_expr(expr: &str, info: &ExifInfo) -> Option<String> {
@@ -203,6 +325,12 @@ pub fn eval_expr_locale(expr: &str, info: &ExifInfo, locale: &str) -> Option<Str
         let (key, literal) = inner.split_once(", ")?;
         let key = key.strip_prefix("exif.")?;
         let value = info.get(key);
+        // v1.5.0 hardening: the fallback must be a quoted literal. `validate_expr`
+        // enforces this, but infoBlock expressions historically bypassed it, and
+        // slicing a bare `x` / empty string here panicked the renderer.
+        if literal.len() < 2 || !literal.starts_with('\'') || !literal.ends_with('\'') {
+            return None;
+        }
         let literal = &literal[1..literal.len() - 1];
         return Some(
             value
@@ -229,6 +357,12 @@ pub fn eval_expr_locale(expr: &str, info: &ExifInfo, locale: &str) -> Option<Str
     if expr.starts_with("fmt(") && expr.ends_with(')') {
         let inner = &expr[4..expr.len() - 1];
         let close = inner.rfind('\'')?;
+        // v1.5.0 hardening: `fmt(')` leaves inner == "'" and close == 0, so the
+        // slice below used to panic. A missing terminator is a malformed
+        // expression, not a fatal error: return None and let the fallback apply.
+        if close < 1 || inner.len() < 2 {
+            return None;
+        }
         let literal = inner[1..close].to_string();
         let mut out = String::with_capacity(literal.len() + 16);
         let mut rest = literal.as_str();
@@ -433,5 +567,72 @@ mod tests {
         assert!(validate_expr("fmt('a'); drop").is_err());
         assert!(validate_expr("fmt('{../path}', exif)").is_err());
         assert!(validate_expr("system('rm -rf')").is_err());
+    }
+
+    // ---- v1.4.0 audit: `check` used to match only a leading `../` or an inner
+    // `/../`, so `..\`, a bare `..`, percent-encoded traversal, absolute paths and
+    // foreign URL schemes all sailed through into template strings.
+    #[test]
+    fn check_rejects_traversal_absolute_paths_and_foreign_schemes() {
+        let cases = [
+            ("windows backslash traversal", "..\\secret.png"),
+            ("bare dot dot", ".."),
+            ("trailing dot dot segment", "foo/.."),
+            ("inner dot dot segment", "a/../b"),
+            ("absolute posix path", "/etc/passwd"),
+            ("windows drive path", "C:\\Windows\\system32"),
+            ("unc share", "\\\\server\\share"),
+            ("percent encoded dots", "%2e%2e/%2e%2e/etc/passwd"),
+            ("percent encoded slash", "a%2f..%2fb"),
+            ("uppercase percent encoding", "%2E%2E%2F"),
+            ("data url", "data:text/html;base64,PHNjcmlwdD4="),
+            ("javascript url", "javascript:alert(1)"),
+            ("vbscript url", "vbscript:msgbox(1)"),
+            ("blob url", "blob:https://example.com/uuid"),
+            ("ftp url", "ftp://example.com/x.png"),
+            ("file url", "file:///etc/passwd"),
+            ("protocol relative", "//evil.example/x.png"),
+            ("http url", "http://example.com/x.png"),
+            ("https url", "https://example.com/x.png"),
+        ];
+        for (name, payload) in cases {
+            let doc = serde_json::json!({ "layers": [{ "asset": payload }] });
+            assert!(
+                check(&doc).is_err(),
+                "{name} ({payload:?}) must be rejected"
+            );
+        }
+    }
+
+    #[test]
+    fn check_accepts_the_strings_real_templates_use() {
+        // The tightened rules must not touch these: colons appear inside format
+        // patterns and time literals, so a naive "contains `:`" rule would break
+        // every single template in the library.
+        for payload in [
+            "fmt('{focal}mm · f/{aperture} · {shutter} · ISO{iso}', exif)",
+            "date('LOCAL', exif.datetime)",
+            "date('YYYY-MM-DD HH:mm', exif.datetime)",
+            "'12:30'",
+            "'f/1.8'",
+            "@builtin/brand/{exif.brand_slug}",
+            "@builtin/series/sony-gm",
+            "FrameGeist photo frame",
+        ] {
+            let doc = serde_json::json!({ "layers": [{ "asset": payload }] });
+            assert!(
+                check(&doc).is_ok(),
+                "{payload:?} must stay legal, got {:?}",
+                check(&doc)
+            );
+        }
+    }
+
+    #[test]
+    fn check_bounds_string_length() {
+        let ok = "a".repeat(MAX_STRING_LEN);
+        assert!(check(&serde_json::json!({ "s": ok })).is_ok());
+        let too_long = "a".repeat(MAX_STRING_LEN + 1);
+        assert!(check(&serde_json::json!({ "s": too_long })).is_err());
     }
 }

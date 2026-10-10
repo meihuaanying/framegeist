@@ -224,8 +224,11 @@ pub(crate) fn compute_geometry(
         CanvasMode::Overlay | CanvasMode::Cover => (0, 0, 0, 0),
     };
     CanvasGeometry {
-        width: w + pad_left + pad_right,
-        height: h + pad_top + pad_bottom,
+        // v1.5.0 audit: plain `+` panics on overflow in debug and wraps in
+        // release. A padded canvas near u32::MAX would then produce a bogus
+        // geometry instead of a diagnostic, so clamp explicitly.
+        width: w.saturating_add(pad_left).saturating_add(pad_right),
+        height: h.saturating_add(pad_top).saturating_add(pad_bottom),
         pad_left,
         pad_top,
         photo_w: w,
@@ -289,14 +292,41 @@ pub(crate) fn resolve_asset_bytes(opts: &RenderOptions, path: &str) -> Option<Ve
         .or_else(|| path.strip_prefix("assets/"))
     {
         let candidate = dir.join(rel);
-        if candidate.is_file() {
-            return std::fs::read(candidate).ok();
+        if let Some(bytes) = read_contained(dir, &candidate) {
+            return Some(bytes);
         }
         let with_png = dir.join(format!("{rel}.png"));
-        if with_png.is_file() {
-            return std::fs::read(with_png).ok();
+        if let Some(bytes) = read_contained(dir, &with_png) {
+            return Some(bytes);
         }
     }
+    None
+}
+
+/// Read `candidate` only if it really lives inside `root`.
+///
+/// v1.4.0 audit: `dir.join(rel)` trusted the caller. A relative path that escaped
+/// the asset root (`../`, or a Windows rooted path that `join` replaces `dir`
+/// with) made the renderer read arbitrary files on disk. Both sides are
+/// canonicalized -- which also resolves symlinks -- and containment is checked on
+/// the canonical form, so neither `..` nor a junction can walk out.
+#[cfg(not(target_arch = "wasm32"))]
+fn read_contained(root: &std::path::Path, candidate: &std::path::Path) -> Option<Vec<u8>> {
+    if !candidate.is_file() {
+        return None;
+    }
+    let root_real = std::fs::canonicalize(root).ok()?;
+    let file_real = std::fs::canonicalize(candidate).ok()?;
+    if !file_real.starts_with(&root_real) {
+        return None;
+    }
+    std::fs::read(file_real).ok()
+}
+
+/// wasm has no filesystem to escape: the host registers every asset it wants in
+/// `RenderOptions::assets`, and the map lookup above already answered.
+#[cfg(target_arch = "wasm32")]
+fn read_contained(_root: &std::path::Path, _candidate: &std::path::Path) -> Option<Vec<u8>> {
     None
 }
 
@@ -3511,4 +3541,68 @@ pub(crate) fn encode_output_public(
     opts: &RenderOptions,
 ) -> Result<(Vec<u8>, Option<crate::exif::MetadataReport>)> {
     encode_output(canvas, photo, opts)
+}
+
+#[cfg(all(test, not(target_arch = "wasm32")))]
+mod containment_tests {
+    use super::read_contained;
+
+    /// A minimal valid PNG (1x1) so the assertions test path containment rather
+    /// than file format.
+    const PNG: &[u8] = &[
+        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44,
+        0x52, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06, 0x00, 0x00, 0x00, 0x1F,
+        0x15, 0xC4, 0x89, 0x00, 0x00, 0x00, 0x0A, 0x49, 0x44, 0x41, 0x54, 0x78, 0x9C, 0x63, 0x00,
+        0x01, 0x00, 0x00, 0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00, 0x00, 0x00, 0x00, 0x49,
+        0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82,
+    ];
+
+    /// Creates `root` and a sibling directory next to it, returns both.
+    ///
+    /// `name` keeps each test in its own tree: the three tests run in parallel
+    /// on one thread pool, so a shared directory made them delete each other's
+    /// fixtures mid-run.
+    fn sandbox(name: &str) -> (std::path::PathBuf, std::path::PathBuf) {
+        let base = std::env::temp_dir().join(format!("fg-contain-{}-{name}", std::process::id()));
+        let root = base.join("assets");
+        let outside = base.join("outside");
+        let _ = std::fs::remove_dir_all(&base);
+        std::fs::create_dir_all(&root).unwrap();
+        std::fs::create_dir_all(&outside).unwrap();
+        std::fs::write(root.join("ok.png"), PNG).unwrap();
+        std::fs::write(outside.join("secret.png"), PNG).unwrap();
+        (root, outside)
+    }
+
+    #[test]
+    fn reads_files_inside_the_root() {
+        let (root, _outside) = sandbox("inside");
+        assert!(read_contained(&root, &root.join("ok.png")).is_some());
+        let _ = std::fs::remove_dir_all(root.parent().unwrap());
+    }
+
+    #[test]
+    fn refuses_traversal_out_of_the_root() {
+        let (root, _outside) = sandbox("traversal");
+        for rel in [
+            "../outside/secret.png",
+            "..\\outside\\secret.png",
+            "nope/../../outside/secret.png",
+        ] {
+            let candidate = root.join(rel);
+            assert!(
+                read_contained(&root, &candidate).is_none(),
+                "{rel} must not be readable through the asset root"
+            );
+        }
+        let _ = std::fs::remove_dir_all(root.parent().unwrap());
+    }
+
+    #[test]
+    fn refuses_absolute_and_missing_paths() {
+        let (root, outside) = sandbox("absolute");
+        assert!(read_contained(&root, &outside.join("secret.png")).is_none());
+        assert!(read_contained(&root, &root.join("absent.png")).is_none());
+        let _ = std::fs::remove_dir_all(root.parent().unwrap());
+    }
 }

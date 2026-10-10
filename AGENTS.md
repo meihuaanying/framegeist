@@ -7,6 +7,32 @@
 > ✅ **v0.6.1 已发布（2026-09-16）**：v0.6.0 因 `web/app.js` 编码损坏（PowerShell ANSI 往返，桌面端/网页端卡「引擎加载中」）已由 v0.6.1 修复；v0.6.0 Release 已标注「请勿使用」。报告：`docs/reports/v0.6.0/README.md`、进度 `PROGRESS.md`（含事故复盘）。
 >
 > ⚠️ **铁律**：禁止用 PowerShell `Set-Content/Out-File/Get-Content|Set-Content` 改写含非 ASCII 的仓库文件（会用 ANSI 编码破坏 UTF-8 并吞引号）；统一用 Edit 工具或 Node 脚本。**发布前必须跑 `node tools/check-utf8.mjs`**。
+
+> 🚦 **发布前必跑门禁清单（v1.5.0 起）**：`.github/workflows/ci.yml` 只跑 Rust 门禁（发布 token 无 workflow scope，改 workflow 推上去会 404），因此下列门禁靠约定执行——已固化成一条命令：
+>
+> ```bash
+> node tools/check-all-gates.mjs               # 全部无需浏览器的门禁
+> node tools/check-all-gates.mjs --with-browser # 另加 E2E + perf（需 CDP）
+> node tools/check-all-gates.mjs --only utf8,i18n,visual-regression   # 只跑其中几项
+> ```
+>
+> | 门禁 | 命令 | 期望 | 是否进 CI |
+> | --- | --- | --- | --- |
+> | UTF-8 编码 | `node tools/check-utf8.mjs` | `0 broken` | ❌ 未进 |
+> | i18n 对齐 | `node tools/check-i18n.mjs` | `0 failure`，zh/en 同步 | ❌ 未进 |
+> | 模板校验 | `node tools/validate-templates.mjs --all` | `204 ok, 0 failed` | ❌ 未进 |
+> | 品牌色契约 | `node tools/check-brand-colors.mjs` | `277/277` | ❌ 未进 |
+> | 字形覆盖 | `node tools/check-glyph-coverage.mjs` | `0 missing` | ❌ 未进 |
+> | UI 对比度 | `node tools/check-ui-contrast.mjs` | `all pass` | ❌ 未进 |
+> | 照片唯一性 | `node tools/check-photo-uniqueness.mjs` | `all pass` | ❌ 未进 |
+> | 格式 | `cargo fmt --all --check` | 无输出 | ✅ 已进 |
+> | Clippy | `cargo clippy --workspace --all-targets -- -D warnings` | clean | ✅ 已进 |
+> | 单元/集成测试 | `cargo test --release --workspace` | 全 ok | ✅ 已进 |
+> | 视觉基线 | `node tools/visual-regression.mjs` | `408/408`，**禁止 `--update`** | ❌ 未进 |
+> | E2E | `FG_CDP_PORT=9237 node tools/e2e-audit.mjs target/e2e-shots` | `299/299` | ❌ 未进 |
+> | 性能 | `FG_CDP_PORT=9237 node tools/perf-audit.mjs` | `4/4` | ❌ 未进 |
+>
+> ⚠️ 两个纪律：① **视觉基线禁止 `--update`**——改基线必须是一次显式、被记录的动作；② 改 Rust 源码后跑任何 JS 门禁前，先 `cargo build --release --workspace`（`validate-templates.mjs` 是 shell out 调 `target/release/framegeist.exe`，只编 core 会拿到旧二进制）。
 >
 > ✅ **v0.7.0 已发布（2026-09-18）**：品牌徽标系统 v2（官方/原创可切换 + 42 品牌/12 系列 + 可见性规则）+ 排版现代化（11 组 OFL 新字体 + 静态多字重 + DESIGN-LANGUAGE v2 + 192 套分类化重排）+ UI/墙/灯箱现代化；E2E 218/218；wasm 5,058,173 B。Release（六资产）与 Pages 已验证。详见 `docs/reports/v0.7.0/PROGRESS.md`。
 >

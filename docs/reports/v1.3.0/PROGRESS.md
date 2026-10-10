@@ -186,4 +186,81 @@ E2E 第 83 项用 `performance.getEntriesByType("resource")` 断言 base/-light/
 
 ## 8. 发布记录
 
-- 待补：commit / 远端 main / 轻量标签 / 工作流 / 六资产哈希 / Pages 验证。
+- 本地提交链：`3b8bb76`（accent 链路 + 宿主面修复 + accent 资产）→ `e1e8991`（行编辑器 + E2E + 版本号 1.3.0 + 镜像门禁 + 文档）→ `4d0e887`（门禁数字）→ `6c19966`（门禁数字校正 275）。
+- Git Data API 推送：remote-base `37e78f5` → 远端 `main` = `81c4d02`（标签提交）→ 文档修正后 **`b561880`**。
+- 标签 `v1.3.0` → **`81c4d025f97c5abf7875a76a507811a5d1a61aac`**（轻量标签，`POST /git/refs` 单层参数；
+  注解标签接口 `POST /git/tags` 在本机仍被服务端 422 拒绝，证据同 v1.2.0 §8）。
+- 工作流全绿：tag 推送 → ci `36948301974` ✅ / release `36948301971` ✅；main 推送 → ci `36950898746` ✅ /
+  pages `36950898812` ✅；另手动 `workflow_dispatch` pages `37111266314` ✅。
+- Release：https://github.com/meihuaanying/framegeist/releases/tag/v1.3.0
+
+  | 资产 | 字节 | sha256 |
+  | --- | --- | --- |
+  | `framegeist-cli-v1.3.0-win-x64.zip` | 77,503,267 | `c7e45454d76d642519186ad3b031b2b9d80b42c744e0d92103f036b3fd9755de` |
+  | `framegeist-desktop-v1.3.0-win-x64.zip` | 101,355,610 | `53d3c3471b45b943eae0214f771922fdbf88e7158e31bc95b14602ad7ad379d1` |
+  | `FrameGeist-v1.3.0-win-x64-setup.exe` | 101,334,915 | `2b71c61f036119d9aaacde05a338b594a9d10e81046a36578dc362d307bc8f5d` |
+  | `framegeist-templates-v1.3.0.fgpkg` | 20,674,803 | `dd67fe84551a4d70fe0a213b7bc1f160b0b6cf44b646529e2a6b36e8f4180720` |
+  | `SHA256SUMS.txt` / `update.json` | 406 / 1350 | — |
+
+  **四项 sha256 与体积在 `SHA256SUMS.txt`、`update.json`（`latest.platforms` 三项 + 顶层 `templates`）、
+  以及 asset `digest` 三处完全一致** ✅；说明已用 `gh release edit --notes-file` 注入 **2992 字符**。
+  （`update.json` 的模板条目在**顶层** `templates` 字段，不是 `latest.templates`。）
+
+### ⚠️ 未闭环：GitHub Pages 线上仍是 v1.2.0
+
+**现象**：站点 https://meihuaanying.github.io/framegeist/ 仍返回 v1.2.0 的内容 ——
+`web/app.js` 里 `APP_VERSION = "1.2.0"`、`web/sw.js` 缓存名 `framegeist-1.2.0`、
+`web/brand/index.json` 的 nikon-s 无 `accentAsset`；并且 v1.3.0 新增的
+`web/series/nikon-s-accent.png` **404**，而本版已删除的 `web/series/canon-rf-l.png` 仍 **200**。
+
+**已排除的可能**（逐项实测）：
+- 不是 CDN 延迟：距部署创建已 **31 小时**（10-02 01:25Z → 10-03 08:51Z），期间每 2 分钟轮询 20 次，
+  加随机 query 绕过缓存，结果不变；
+- 不是工作流失败：三次部署（tag 推送、main 推送、`workflow_dispatch` 手动）全部 `success`；
+- 不是部署没创建：`deployments` 里有 `6799075261`（10-02 01:25Z）与手动重跑的 `6825584638`
+  （10-03 08:54Z），sha 均为 `b561880…`，`deployments/statuses` 最终态均为 `success`；
+- 不是 payload 指错：`deploy-pages` 日志显示
+  `Creating Pages deployment with payload: { artifact_id: 11270032584, pages_build_version: "b561880ce31f…" }`
+  并 `Reported success!`；
+- 不是 Pages 配置异常：`build_type = workflow`、`source = { branch: main, path: "/" }`、
+  `github-pages` 环境 **0 条保护规则 / 0 个 reviewer**；
+- 不是 `site/` 目录冲突：仓库 `site/` 下**不存在** `web/`，所以
+  `cp -r site/* upload/` 后再 `cp -r web upload/web` 不会套娃成 `upload/web/web`。
+
+**结论**：GitHub 侧接受了部署并回报成功，但未把新产物切到线上（站点仍指向 v1.2.0 那次部署，
+即 10-01 18:47Z 的 `37e78f5`）。这是仓库之外的问题，本机无法进一步推进；
+`.github/workflows/*` 按项目纪律禁改，且当前 token 也无 `workflow` scope。
+
+**影响范围**：网页版用户暂时仍拿到 v1.2.0；**桌面端与 Release 完全不受影响**（两者都已验证 1.3.0）。
+**后续动作**：等服务端恢复后重跑一次 `gh workflow run pages.yml --ref main`，
+再用两个信号确认落地 —— `web/series/nikon-s-accent.png` 返回 200 且
+`web/series/canon-rf-l.png` 返回 404（这两个信号对缓存与版本都唯一）。
+
+## 9. ⚠️ 更正：本节对 Pages 的归因是错的（2026-10-04）
+
+§8 把「Pages 线上仍是 v1.2.0」归因为 GitHub 侧未切换部署。**这个结论不成立，真实原因在本地。**
+
+`tools/gh-api-push.mjs` 上传的增量是 `git diff <local-base> <target>`，然后叠加到远端基线树
+上；而我在 v1.3.0 的两次推送里都把 `local-base` 写成了一个**从未推送过**的本地 commit
+（第一次 `3b8bb76`、第二次 `e1e8991`）。工具当时**不做任何校验**，于是只上传了最后那一小段增量，
+把 `3b8bb76` 里的内容整体丢弃——包括 `web/app.js`、`web/series/nikon-s-accent.png`、
+`templates/assets/series/nikon-s-accent.png`、镜像门禁与 accent 契约。
+
+远端树因此停在 v1.2.0 的内容，**Pages 忠实地部署了它**。所有工作流仍然 success（它们不校验树内容），
+部署记录也真的 success（payload 的 sha 正确，只是那个 sha 的树本身是残缺的）。
+我据此排除掉 CDN 延迟、工作流失败、环境保护、`site/` 冲突……却漏了「远端树本身就不对」这一种可能，
+因为所有证据都在自洽地指向服务端。
+
+第二个独立缺陷同期也在起作用：工具从**工作区**读字节上传，而 Windows 工作区是 CRLF，
+因此凡是用编辑器/脚本改过的文件，其 blob sha 与提交内容不同 —— 远端树**永远不可能**等于目标树。
+
+**工具已加固**（`e066793`，见 `tools/gh-api-push.mjs`）：
+① 通过 API 校验分支 head 仍等于给定 base（`git ls-remote` 在本机不可达）；
+② blob 一律用 `git cat-file blob <target>:<path>` 从 git 读取；
+③ 构造出的根树必须与目标树一致，否则**在移动分支之前**中止并列出差异路径
+   （workflow 文件仍按既有约定跳过，因 token 无 `workflow` scope）；
+④ 新增 `--include=a,b`，用于修复被早期不完整推送留下中间态 blob 的路径。
+
+**教训**：推送链路的门禁必须校验「结果」而不是「过程」——本次所有既有信号（工作流 success、
+部署 success、sha 正确）都通过了，唯独「远端树 == 本地目标树」这一条能发现它。
+这条校验现在就是工具的一部分。

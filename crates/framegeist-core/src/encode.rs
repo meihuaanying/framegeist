@@ -102,10 +102,30 @@ pub fn splice_png_exif(png: &mut Vec<u8>, exif_tiff: &[u8]) -> Result<()> {
         return Err(Error::Encode("not a PNG stream".into()));
     }
     // eXIf is allowed anywhere after IHDR; place it right after the first chunk.
+    // v1.5.0 audit: the declared chunk length was trusted and the chunk type was
+    // never checked, so a stream whose first chunk is not IHDR -- or whose length
+    // field is bogus -- yielded an arbitrary splice offset. Silent corruption in
+    // the best case, an out-of-bounds insert once the offset wrapped.
+    if png[12..16] != *b"IHDR" {
+        return Err(Error::Encode("PNG does not start with IHDR".into()));
+    }
     let ihdr_len = u32::from_be_bytes([png[8], png[9], png[10], png[11]]) as usize;
+    if ihdr_len != 13 {
+        return Err(Error::Encode(format!(
+            "PNG IHDR must carry exactly 13 bytes, got {ihdr_len}"
+        )));
+    }
     let insert_at = 8 + 12 + ihdr_len;
     if insert_at > png.len() {
         return Err(Error::Encode("PNG stream truncated (bad IHDR)".into()));
+    }
+    // v1.5.0 audit: `exif_tiff.len() as u32` truncated above 4 GiB, so the chunk
+    // header could claim a shorter length than the bytes actually written. Bound
+    // it first, the same way the JPEG branch below bounds its segment.
+    if exif_tiff.len() > u32::MAX as usize - 12 {
+        return Err(Error::Encode(
+            "EXIF payload too large for a PNG chunk".into(),
+        ));
     }
     let mut chunk = Vec::with_capacity(12 + exif_tiff.len());
     chunk.extend_from_slice(&(exif_tiff.len() as u32).to_be_bytes());

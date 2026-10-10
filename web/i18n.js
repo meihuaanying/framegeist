@@ -524,6 +524,14 @@ export const dict = {
     "theme.auto": "主题：跟随系统",
     "theme.light": "主题：浅色",
     "theme.dark": "主题：深色",
+    "exifEdit.infoBlock": "信息块（自动排版）",
+    "exifEdit.role": "层级",
+    "exifEdit.roleDisplay": "主标题",
+    "exifEdit.roleSupport": "副标题",
+    "exifEdit.roleDetail": "细节",
+    "exifEdit.maxLines": "信息块最多 3 行",
+    "style.presetApplied": "已应用样式预设",
+    "layer.newTextExpr": "'新文字'",
     "lang.toggle": "EN",
   },
   en: {
@@ -1049,6 +1057,14 @@ export const dict = {
     "theme.auto": "Theme: auto",
     "theme.light": "Theme: light",
     "theme.dark": "Theme: dark",
+    "exifEdit.infoBlock": "Info block (auto-typed)",
+    "exifEdit.role": "Role",
+    "exifEdit.roleDisplay": "Display",
+    "exifEdit.roleSupport": "Support",
+    "exifEdit.roleDetail": "Detail",
+    "exifEdit.maxLines": "Info block takes at most 3 lines",
+    "style.presetApplied": "Style preset applied",
+    "layer.newTextExpr": "'New text'",
     "lang.toggle": "中",
   },
 };
@@ -1056,23 +1072,39 @@ export const dict = {
 let lang = "zh";
 export function currentLang() { return lang; }
 
+/**
+ * v1.5.0: `lang` used to be taken straight from `localStorage["fg-lang"]` and
+ * then indexed as `dict[lang][key]`. One bad value -- a stale "en-US", a hand
+ * edit, a browser that stored a full locale -- made the very first `t()` call
+ * throw, which blanked the whole UI. Reduce to a dictionary we actually have,
+ * accepting the primary subtag of a locale ("en-US" -> "en").
+ */
+function normalizeLang(v) {
+  if (typeof v !== "string") return null;
+  const k = v.trim().toLowerCase();
+  if (dict[k]) return k;
+  const primary = k.split("-")[0];
+  return primary && dict[primary] ? primary : null;
+}
+
 export function initI18n() {
   const stored = localStorage.getItem("fg-lang");
-  const nav = (navigator.language || "zh").toLowerCase();
-  lang = stored ?? (nav.startsWith("zh") ? "zh" : "en");
+  const nav = navigator.language || "zh";
+  lang = normalizeLang(stored) ?? normalizeLang(nav) ?? "zh";
   applyI18n();
   return lang;
 }
 
 export function setLang(next) {
-  lang = next;
-  localStorage.setItem("fg-lang", next);
+  lang = normalizeLang(next) ?? "zh";
+  localStorage.setItem("fg-lang", lang);
   applyI18n();
   window.dispatchEvent(new CustomEvent("fg-lang-changed"));
 }
 
 export function t(key, vars) {
-  let s = dict[lang][key] ?? dict.zh[key] ?? key;
+  const d = dict[lang] ?? dict.zh;
+  let s = d[key] ?? dict.zh[key] ?? key;
   if (vars) for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, v);
   return s;
 }
@@ -1100,7 +1132,7 @@ export function localizeEngineError(e) {
     const parsed = JSON.parse(raw);
     if (parsed && parsed.code) {
       const key = `err.engine.${parsed.code}`;
-      const known = dict[lang][key] ?? dict.zh[key];
+      const known = (dict[lang] ?? dict.zh)[key] ?? dict.zh[key];
       if (known) return `${known}`;
       return parsed.message ?? raw;
     }

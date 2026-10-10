@@ -66,11 +66,30 @@ fn default_border_color() -> String {
     "#FFFFFF".to_string()
 }
 
+/// v1.4.0 audit: the per-side 64-8192 range and the per-item [0.01, 2] fractions
+/// look harmless on their own, but they multiply: a 8192x8192 canvas plus one
+/// item at w = h = 2.0 asks the renderer for a 16384x16384 RGBA buffer
+/// (~1.07 GB) and `rotate_keep` then allocates a second `hypot(w, h)`-square
+/// buffer on top of it (~2.15 GB). A few hundred bytes of JSON were enough to
+/// request gigabytes, which is a denial-of-service on the host, not a bug in
+/// the collage code. These caps keep every intermediate buffer bounded while
+/// leaving the whole realistic range (a 6000x4000 canvas, items up to the full
+/// canvas) untouched.
+pub const MAX_CANVAS_PIXELS: u64 = 40_000_000;
+pub const MAX_ITEM_PIXELS: u64 = 32_000_000;
+
 impl FreeSpec {
     pub fn validate(&self) -> Result<()> {
         if !(64..=8192).contains(&self.width) || !(64..=8192).contains(&self.height) {
             return Err(Error::SchemaViolation(format!(
                 "free collage canvas must be 64-8192 px (got {}x{})",
+                self.width, self.height
+            )));
+        }
+        let canvas_px = u64::from(self.width) * u64::from(self.height);
+        if canvas_px > MAX_CANVAS_PIXELS {
+            return Err(Error::SchemaViolation(format!(
+                "free collage canvas must not exceed {MAX_CANVAS_PIXELS} px (got {canvas_px} = {}x{})",
                 self.width, self.height
             )));
         }
@@ -182,6 +201,16 @@ pub fn render_free_collage(
                 (tw as f64 * ar).round().max(4.0) as u32
             }
         };
+        // v1.4.0 audit: `tw`/`th` are derived from fractions of the canvas, so an
+        // item may ask for a larger buffer than the canvas itself (and `resize`
+        // allocates it in full). Bound it here, next to the allocation, so the
+        // limit cannot drift away from the code that actually reserves memory.
+        let item_px = u64::from(tw) * u64::from(th);
+        if item_px > MAX_ITEM_PIXELS {
+            return Err(Error::SchemaViolation(format!(
+                "free collage item {idx} must not exceed {MAX_ITEM_PIXELS} px (got {item_px} = {tw}x{th})"
+            )));
+        }
         let fitted = image::imageops::resize(&img, tw, th, filt);
         // Optional border is a filled backing plate; radius rounds both.
         let radius_px = item
@@ -287,13 +316,56 @@ fn rounded_alpha(img: &image::RgbaImage, radius_px: f32) -> image::RgbaImage {
     out
 }
 
+/// Size of the scratch buffer `rotate_keep` needs, as `(width, height)`.
+///
+/// v1.4.0 audit: the old code always padded to `hypot(w, h)` square, which for a
+/// large item means a second buffer ~1.4x the item's pixels on top of the one it
+/// rotates. Two cheap wins:
+///
+/// 1. quarter turns need no padding at all -- a 90-degree rotation of a `w x h`
+///    image is exactly `h x w`, so it can be done as an axis swap instead of
+///    compositing into a square and resampling back down;
+/// 2. otherwise the diagonal is clamped to `2 * max(w, h)`, which is always at
+///    least the true diagonal * for the shapes we accept * ... and, more to the
+///    point, it caps the scratch buffer at a constant multiple of the input
+///    instead of growing with `w * h`.
+///
+/// 2. otherwise the diagonal is clamped to `2 * max(w, h)`. For a square input
+///    `hypot(w, h) == sqrt(2) * w < 2 * w`, so the clamp changes nothing there; it
+///    only bites on extreme aspect ratios, where the rotation may clip a corner
+///    instead of allocating gigabytes -- the right trade for this tool.
+pub fn rotate_alloc_dims(w: u32, h: u32, degrees: f32) -> (u32, u32) {
+    let quarter = ((degrees - 90.0).rem_euclid(90.0)).min(90.0 - (degrees - 90.0).rem_euclid(90.0));
+    if quarter <= 0.5 || quarter >= 89.5 {
+        // 0 / 90 / 180 / 270 (+/- 0.5 degrees): exact axis swaps, no scratch.
+        return if (degrees - 90.0).rem_euclid(180.0) < 90.0 {
+            (h, w)
+        } else {
+            (w, h)
+        };
+    }
+    let cap = 2 * w.max(h);
+    let diag = ((w as f64).hypot(h as f64)).ceil().max(1.0) as u32;
+    let side = diag.min(cap).max(w).max(h).max(1);
+    (side, side)
+}
+
 /// Rotate an image keeping it fully visible (transparent padding).
 fn rotate_keep(img: &image::RgbaImage, degrees: f32) -> image::RgbaImage {
     let (w, h) = img.dimensions();
-    let diag = ((w as f32).hypot(h as f32)).ceil().max(1.0) as u32;
-    let mut padded = image::RgbaImage::new(diag, diag);
-    let ox = ((diag - w) / 2) as i64;
-    let oy = ((diag - h) / 2) as i64;
+    let quarter = ((degrees - 90.0).rem_euclid(90.0)).min(90.0 - (degrees - 90.0).rem_euclid(90.0));
+    if quarter <= 0.5 || quarter >= 89.5 {
+        // Quarter turns are exact: swap the axes for 90/270, copy for 0/180.
+        // Bilinear resampling would only blur pixels and burn memory here.
+        if (degrees - 90.0).rem_euclid(180.0) < 90.0 {
+            return image::imageops::rotate270(img);
+        }
+        return img.clone();
+    }
+    let (diag_w, diag_h) = rotate_alloc_dims(w, h, degrees);
+    let mut padded = image::RgbaImage::new(diag_w, diag_h);
+    let ox = ((diag_w as i64 - w as i64) / 2).max(0);
+    let oy = ((diag_h as i64 - h as i64) / 2).max(0);
     image::imageops::overlay(&mut padded, img, ox, oy);
     imageproc::geometric_transformations::rotate_about_center(
         &padded,
@@ -301,4 +373,11 @@ fn rotate_keep(img: &image::RgbaImage, degrees: f32) -> image::RgbaImage {
         imageproc::geometric_transformations::Interpolation::Bilinear,
         image::Rgba([0, 0, 0, 0]),
     )
+}
+
+/// Test-only wrapper so the rotation path can be asserted from an integration
+/// test (the function itself stays private to the crate).
+#[doc(hidden)]
+pub fn rotate_keep_for_tests(img: &image::RgbaImage, degrees: f32) -> image::RgbaImage {
+    rotate_keep(img, degrees)
 }

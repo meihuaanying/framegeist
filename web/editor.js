@@ -1289,7 +1289,7 @@ function applyPreset(key) {
     if (!hit) return;
     hit.layer.effects = { ...(hit.layer.effects ?? {}), ...structuredClone(preset) };
   });
-  fg()?.toast?.("ok", "已应用样式预设");
+  fg()?.toast?.("ok", t("style.presetApplied"));
 }
 
 /* -------------------------------------------------------------- insert */
@@ -1315,7 +1315,7 @@ function insertText() {
     return {
       type: "text", id, anchor: "middle-center", offset: { x: 0, y: 0 },
       font: { family: ["Inter"], size: 0.04, color: "#111111" },
-      lineHeight: 1.3, content: [{ expr: "'NEW TEXT'" }],
+      lineHeight: 1.3, content: [{ expr: t("layer.newTextExpr") }],
     };
   });
 }

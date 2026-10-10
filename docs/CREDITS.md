@@ -40,6 +40,11 @@ FrameGeist 本体代码为 MIT。以下随包分发的素材均为可商用许�
   v1.2.0 更正：Canon L 的 `L` 徽章是**黑色**（非官方红），`web/brand/index.json` 中 `canon-l.color` 保持 `null`；
   Nikon S 的 `#FFE100` 目前是 manifest 元数据，画面仍为官方单色标识（引擎 `-accent` 面已就绪，
   一旦有官方彩色徽标或你确认点缀色即可上屏）。
+  **v1.3.0 更正：已上屏** —— `tools/import-brand-inbox.mjs --accent` 生成
+  `templates/assets/series/nikon-s-accent.png`：素材本身是单色标识（不透明墨迹均值色一致率 100%），
+  accent 面 = 把这层单色字标整体替换为 Nikon 官方点缀黄 `#FFE100`，**几何与官方字标逐像素一致**
+  （canvas 512×512、ink 512×112、上下留白 200/200），仅换颜色；深色底自动上屏、
+  浅色底按 3:1 对比门禁自动回退黑白。这是 v1.1.0 记录该色值以来第一次真实生效。
 - **游戏主题字标**（v1.0.0：官方标识经授权使用，其余为原创排印、不复制官方书法/插画；仅作风格标注）：
   GENSHIN、ZZZ、HONKAI、ARKNIGHTS、燕云十六声、WUKONG。
   v1.2.0 取证结论：六个游戏官方**均未发布可直接获取的独立字标文件**（HoYoverse 官网 4 个 JS 包共 1,055,178 字节

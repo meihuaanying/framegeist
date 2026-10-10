@@ -1,12 +1,15 @@
 import init, { Engine } from "./pkg/framegeist_wasm.js";
 import { initI18n, setLang, t, currentLang, localizeEngineError, applyI18n } from "./i18n.js";
 import "./editor.js";
+// v1.5.0: the version literal lives in one place (see web/version.js) because
+// the service worker's cache bucket is named after the same string.
+import "./version.js";
 
 const $ = (id) => document.getElementById(id);
 const BASE = new URL(".", document.baseURI).href;
 const CC_REPO = "meihuaanying/framegeist";
 const IS_TAURI = !!window.__TAURI__;
-const APP_VERSION = "1.4.0";
+const APP_VERSION = self.FG_VERSION ?? "0.0.0";
 
 /* ------------------------------------------------------------------ state */
 
@@ -379,11 +382,18 @@ function textToItem(text, fallback) {
 
 /* ------------------------------------------------------------ templates */
 async function fetchTemplateJson(id) {
-  if (state.templateCache.has(id)) return state.templateCache.get(id);
-  const user = state.userTemplates.find((u) => u.id === id);
-  const json = user ? JSON.stringify(user.json) : await (await fetch(BASE + `templates/${id}.json`)).text();
-  const obj = JSON.parse(json);
-  state.templateCache.set(id, obj);
+  let obj = state.templateCache.get(id);
+  if (!obj) {
+    const user = state.userTemplates.find((u) => u.id === id);
+    const json = user ? JSON.stringify(user.json) : await (await fetch(BASE + `templates/${id}.json`)).text();
+    obj = JSON.parse(json);
+    state.templateCache.set(id, obj);
+  }
+  // v1.5.0: `state.templateName` was read by the `{tplName}` export token but
+  // never written anywhere, so batch names always used the raw template id.
+  // Track it wherever a template becomes the current one -- including the
+  // cache-hit path, which is the common case when switching back and forth.
+  state.templateName = tplName(obj);
   return obj;
 }
 function currentTemplateObject() {
@@ -397,7 +407,10 @@ function effectiveTemplateJson() {
   // v0.5.0: apply canvas-editor template edits (layers/canvas/frame) first.
   window.__fgEditor?.applyEdits?.(state.templateId, clone);
   const edits = getLayerEdits(state.templateId);
-  for (const layer of clone.layers ?? []) {
+  // v1.5.0: groups are flattened -- a text layer inside `group.children` is a
+  // text layer. (Harmless while the line editor only offers top-level layers,
+  // and correct as soon as it does not.)
+  for (const layer of allLayers(clone.layers)) {
     if (layer.type === "text" && edits[layer.id]) layer.content = edits[layer.id];
   }
   // v1.4.0: the info block lives on the template root, not in `layers`, so the loop
@@ -464,6 +477,35 @@ function tplName(tpl) {
   return tpl.names?.[currentLang()] ?? tpl.name ?? tpl.id;
 }
 
+// v1.5.0: one reveal-on-scroll observer per grid, shared across rebuilds.
+// `buildTemplatePicker` and `buildWall` are re-entered on every keystroke of the
+// search box, and each used to construct a fresh IntersectionObserver that was
+// never disconnected. Every keystroke therefore stranded an observer holding a
+// strong reference to each cell it had observed -- cells `innerHTML = ""` had
+// already detached -- and the list grew for the life of the page. Reusing one
+// instance and disconnecting before a rebuild drops those references together
+// with the old cells.
+const revealObservers = new Map();
+function revealObserver(key, options) {
+  const root = options.root ?? null;
+  let entry = revealObservers.get(key);
+  if (!entry || entry.root !== root) {
+    entry?.io.disconnect();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add("in");
+        io.unobserve(e.target);
+      }
+    }, options);
+    entry = { io, root };
+    revealObservers.set(key, entry);
+  } else {
+    // Drop every observed cell before the grid is emptied.
+    entry.io.disconnect();
+  }
+  return entry.io;
+}
 function thumbSrc(tpl) {
   return state.userTemplates.some((u) => u.id === tpl.id) ? null : `./thumbs/${tpl.id}.jpg`;
 }
@@ -489,9 +531,7 @@ function buildTemplatePicker() {
   const grid = $("templateGrid");
   grid.className = `grid${pickerMode === "large" ? " large" : ""}`;
   grid.innerHTML = "";
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-  }, { root: grid, rootMargin: "80px" });
+  const io = revealObserver("picker", { root: grid, rootMargin: "80px" });
   for (const tpl of list) {
     const cell = document.createElement("div");
     cell.className = `thumb${tpl.id === state.templateId ? " on" : ""}`;
@@ -657,6 +697,9 @@ function buildWall() {
   }
   grid.dataset.skeleton = "0";
   grid.innerHTML = "";
+  // Disconnect before the early return below, so an emptied wall does not leave
+  // the previous run's cells observed.
+  const io = revealObserver("wall", { rootMargin: "140px" });
   if (!list.length) {
     const empty = document.createElement("div");
     empty.className = "wall-empty";
@@ -664,18 +707,18 @@ function buildWall() {
     grid.appendChild(empty);
     return;
   }
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-  }, { rootMargin: "140px" });
   for (const tpl of list) {
     const cell = document.createElement("div");
     cell.className = `wall-card${tpl.id === state.templateId ? " on" : ""}`;
     cell.tabIndex = 0;
+    // v1.5.0: a focusable div with a click handler is a button to a keyboard
+    // user but nothing to a screen reader unless it says so.
+    cell.setAttribute("role", "button");
     const src = thumbSrc(tpl) ? `./previews/${tpl.id}.jpg` : null;
     const catLabel = t("cat." + tpl.category) !== `cat.${tpl.category}` ? t("cat." + tpl.category) : (tpl.category ?? "");
     const marks = Array.isArray(tpl.marks) ? tpl.marks.slice(0, 3) : [];
     const marksHtml = marks.length
-      ? `<div class="wall-marks">${marks.map((m) => `<img loading="lazy" decoding="async" src="./${m.kind}/thumbs/${markSlugVariant(m.slug)}.png" alt="">`).join("")}</div>`
+      ? `<div class="wall-marks">${marks.map((m) => `<img loading="lazy" decoding="async" src="./${encodeURIComponent(m.kind)}/thumbs/${encodeURIComponent(markSlugVariant(m.slug))}.png" alt="">`).join("")}</div>`
       : "";
     cell.innerHTML = (src
       ? `<img loading="lazy" src="${src}" alt="${escapeHtml(tplName(tpl))}">`
@@ -684,6 +727,8 @@ function buildWall() {
       `<div class="wall-name"><b>${escapeHtml(tplName(tpl))}</b><span class="wall-cat"></span></div>` +
       `<div class="wall-actions"><button class="use">${t("wall.use")}</button><button class="icon" title="${t("wall.preview")}">⤢</button></div>`;
     cell.querySelector(".wall-cat").textContent = catLabel;
+    // Readable name for the role above: the template plus its category.
+    cell.setAttribute("aria-label", `${tplName(tpl)} · ${catLabel || t("wall.use")}`);
     cell.onclick = (e) => {
       if (e.target.classList.contains("icon")) { e.stopPropagation(); openLightbox(tpl.id); return; }
       useTemplate(tpl.id);
@@ -1303,7 +1348,7 @@ function buildLineEditor() {
       add.title = t("exifEdit.maxLines");
     }
     add.onclick = () => {
-      const fresh = { expr: "'新文字'", fallback: null };
+      const fresh = { expr: t("layer.newTextExpr"), fallback: null };
       put(key, [...items, roles ? { ...fresh, role: "detail" } : fresh], true);
     };
     div.appendChild(add);
@@ -1867,8 +1912,12 @@ function deletePreset(id) {
 }
 function presetChip(p, withDelete) {
   const on = settings.activePreset === p.id ? " on" : "";
-  const del = withDelete ? `<button class="chip-del" data-del="${p.id}" title="✕">✕</button>` : "";
-  return `<span class="preset-chip${on}"><button class="chip-btn" data-preset="${p.id}">${t(p.name)}</button>${del}</span>`;
+  // v1.5.0 audit: preset names come from localStorage (user-editable) and were
+  // interpolated into HTML unescaped, so a renamed preset could inject markup.
+  const del = withDelete
+    ? `<button class="chip-del" data-del="${escapeHtml(p.id)}" title="✕">✕</button>`
+    : "";
+  return `<span class="preset-chip${on}"><button class="chip-btn" data-preset="${escapeHtml(p.id)}">${escapeHtml(t(p.name))}</button>${del}</span>`;
 }
 function refreshPresetUI() {
   if ($("presetChips")) $("presetChips").innerHTML = allPresets().map((p) => presetChip(p, false)).join("");
@@ -2026,11 +2075,39 @@ else initV100Features();
 /* ----------------------------------------------------- save/import .fgt */
 function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "template"; }
 
+/**
+ * Every layer in a template, groups flattened.
+ *
+ * v1.5.0: saving used to iterate `base.layers` and only rewrite top-level
+ * `type === "text"` layers. Two things were silently dropped from the `.fgt`:
+ * text inside a group (it is reached through `group.children`), and the
+ * info block (keyed separately by INFO_BLOCK_KEY and rendered by the engine,
+ * not by a layer). Re-loading the saved template therefore reverted those
+ * edits while the canvas still showed them.
+ */
+function allLayers(layers) {
+  const out = [];
+  const walk = (list) => {
+    for (const layer of list ?? []) {
+      out.push(layer);
+      if (layer.type === "group") walk(layer.children);
+    }
+  };
+  walk(layers);
+  return out;
+}
+
 function buildSavedTemplate(name) {
-  const base = structuredClone(currentTemplateObject());
+  // Start from the *effective* template -- canvas-editor edits, line edits, info
+  // block edits and brand lockups already applied -- rather than from the raw
+  // JSON. Cloning currentTemplateObject() looks equivalent but is not: the canvas
+  // editor keeps its layer list in localStorage and applyEdits merges it in, so
+  // saving from the raw object silently dropped every canvas edit and wrote a
+  // .fgt that rendered differently from the canvas it was saved from.
+  const base = JSON.parse(effectiveTemplateJson());
   const o = loadOverrides(state.templateId);
   const family = o.fontFamily || settings.fontFamily;
-  for (const layer of base.layers ?? []) {
+  for (const layer of allLayers(base.layers)) {
     if (layer.type === "text") {
       layer.font.family = family ? [family] : layer.font.family;
       layer.font.size = Math.min(0.5, layer.font.size * (o.fontSizeScale ?? 1));
@@ -2044,8 +2121,13 @@ function buildSavedTemplate(name) {
     }
   }
   const edits = getLayerEdits(state.templateId);
-  for (const layer of base.layers ?? []) {
-    if (layer.type === "text" && edits[layer.id]) layer.content = edits[layer.id];
+  for (const layer of allLayers(base.layers)) {
+    if (layer.type === "text" && edits[layer.id]) layer.content = structuredClone(edits[layer.id]);
+  }
+  // The info block is not a layer: its lines are edited under INFO_BLOCK_KEY and
+  // rendered from `infoBlock.lines`, so they have to be written back by hand.
+  if (base.infoBlock?.lines && edits[INFO_BLOCK_KEY]) {
+    base.infoBlock.lines = structuredClone(edits[INFO_BLOCK_KEY]);
   }
   const id = `user-${slugify(name)}-${Math.random().toString(36).slice(2, 6)}`;
   base.meta = { ...base.meta, id, name, author: base.meta.author ?? "user", license: "CC0-1.0", version: "0.1.0", minEngineVersion: "0.1.0" };
@@ -2165,7 +2247,14 @@ async function importTemplateFile(file) {
     }
     state.engine.validate_template(json);
     const obj = JSON.parse(json);
-    const id = obj.meta.id;
+    // v1.5.0 audit: `meta.id` came straight out of the file and became a
+    // localStorage key, a DOM id, a cache key and part of the thumbnail URL
+    // path. Anything path-like or script-like in it was carried into all of them.
+    // The engine's own template ids are lowercase slugs, so require exactly that.
+    const id = obj.meta?.id;
+    if (typeof id !== "string" || !/^[a-z0-9-]{1,64}$/.test(id)) {
+      throw new Error(`meta.id must match ^[a-z0-9-]{1,64}$ (got ${JSON.stringify(id)})`);
+    }
     state.userTemplates = state.userTemplates.filter((u) => u.id !== id);
     state.userTemplates.push({ id, name: obj.meta.name, category: obj.meta.category ?? "user", json: obj });
     localStorage.setItem(LS.userTpl, JSON.stringify(state.userTemplates));
@@ -2633,7 +2722,50 @@ if ("serviceWorker" in navigator
 /* --------------------------------------------------------------- lightbox */
 let lbId = null;
 let lbUrl = null;
+// v1.5.0: monotonic ticket for openLightbox's async body, so a superseded
+// preview/render cannot overwrite the image the user is actually looking at.
+let lbSeq = 0;
 function lbList() { return filteredTemplates(); }
+// v1.5.0: focus handling for the two `aria-modal="true"` dialogs.
+// Both were announced as modal but nothing moved focus into them, so keyboard
+// users stayed on the trigger *behind* the overlay and Tab walked the entire
+// page instead of the dialog. `trapFocus` moves focus in, cycles Tab inside,
+// and `releaseFocus` hands it back to whatever opened the dialog.
+const FOCUSABLE_SEL = [
+  "a[href]", "button:not([disabled])", "input:not([disabled])",
+  "select:not([disabled])", "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+const activeDialogTraps = new WeakMap();
+function trapFocus(dialog) {
+  if (!dialog) return;
+  releaseFocus(dialog);
+  const returnTo = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const onKey = (e) => {
+    if (e.key !== "Tab") return;
+    const items = [...dialog.querySelectorAll(FOCUSABLE_SEL)];
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+  document.addEventListener("keydown", onKey, true);
+  activeDialogTraps.set(dialog, () => {
+    document.removeEventListener("keydown", onKey, true);
+    activeDialogTraps.delete(dialog);
+    if (returnTo && returnTo.isConnected) returnTo.focus();
+  });
+  (dialog.querySelector(FOCUSABLE_SEL) ?? dialog).focus?.();
+}
+function releaseFocus(dialog) {
+  activeDialogTraps.get(dialog)?.();
+}
 function openLightbox(id) {
   lbId = id;
   const list = lbList();
@@ -2648,17 +2780,28 @@ function openLightbox(id) {
   img.removeAttribute("src");
   // v0.9.4: keep one lightbox blob at a time (was leaking one per open).
   const setLbSrc = (u) => { if (lbUrl && lbUrl !== u) URL.revokeObjectURL(lbUrl); lbUrl = u; img.src = u; };
+  // v1.5.0: the async body below captures `id`, but nothing checked that it was
+  // still the wanted image before touching the DOM. Arrow-key navigation starts
+  // a second, faster render while the first is still in flight, and the older
+  // response would then win -- showing the previous template under the new
+  // caption. A monotonically increasing ticket drops superseded work.
+  const seq = ++lbSeq;
+  const stale = () => lbId !== id || seq !== lbSeq;
   (async () => {
     try {
       const res = await fetch(BASE + "previews/" + id + ".jpg");
       if (!res.ok) throw new Error("no preview");
-      setLbSrc(URL.createObjectURL(await res.blob()));
+      const blob = await res.blob();
+      if (stale()) return;
+      setLbSrc(URL.createObjectURL(blob));
     } catch {
+      if (stale()) return;
       if (state.photos.length && state.engine) {
         try {
           const tplJson = await fetchTemplateJson(id);
           const out = state.engine.render_with_overrides(
             state.photos[0].bytes, JSON.stringify(tplJson), "jpeg", false, "", 640, settings.keepGps);
+          if (stale()) return;
           setLbSrc(URL.createObjectURL(new Blob([out], { type: "image/jpeg" })));
         } catch { /* leave blank */ }
       }
@@ -2666,9 +2809,12 @@ function openLightbox(id) {
   })();
   renderBrandStrip(document.getElementById("lbBrand"), templateBrandSlugs(id));
   withViewTransition(() => document.getElementById("lightbox").classList.remove("hidden"));
+  trapFocus(document.getElementById("lightbox"));
 }
 function closeLightbox() {
-  document.getElementById("lightbox").classList.add("hidden");
+  const dlg = document.getElementById("lightbox");
+  releaseFocus(dlg);
+  dlg.classList.add("hidden");
   lbId = null;
 }
 function navLightbox(dir) {
@@ -2720,8 +2866,13 @@ function openSettings() {
     document.getElementById("storageInfo").textContent = t("settings.storage", { v });
   });
   withViewTransition(() => document.getElementById("settings").classList.remove("hidden"));
+  trapFocus(document.getElementById("settings"));
 }
-function closeSettings() { document.getElementById("settings").classList.add("hidden"); }
+function closeSettings() {
+  const dlg = document.getElementById("settings");
+  releaseFocus(dlg);
+  dlg.classList.add("hidden");
+}
 
 async function clearScope(name) {
   if (!confirm(t("settings.confirmClear"))) return false;
@@ -2772,8 +2923,23 @@ window.__fg = {
   // v1.4.0: which built-in faces reached the engine (see ensureBuiltinAssets).
   registeredBuiltinAssets: () => [...registeredBuiltinAssets].sort(),
   ensureBuiltinAssets,
-  loadOverrides, pushOverride, syncBrandUI, syncCanvasUI,
+  loadOverrides, pushOverride, saveOverrides, syncBrandUI, syncCanvasUI,
   openLightbox, closeLightbox, ensureFont,
+  // v1.5.0: save/load round-trip hooks. `buildSavedTemplate` used to drop text
+  // inside groups and the info block, so a saved template rendered differently
+  // from the canvas it was saved from; the E2E audit asserts the round trip.
+  buildSavedTemplate,
+  setLayerEdits,
+  getLayerEdits,
+  addUserTemplate: (obj) => {
+    state.userTemplates.push({ id: obj.meta.id, name: obj.meta.name, category: obj.meta.category ?? "user", json: obj });
+    state.templateCache.set(obj.meta.id, obj);
+    return obj.meta.id;
+  },
+  removeUserTemplate: (id) => {
+    state.userTemplates = state.userTemplates.filter((u) => u.id !== id);
+    state.templateCache.delete(id);
+  },
   freeActive: () => state.freeCollage,
   freeSpec: () => state.freeSpec,
   updateFreeSpec,

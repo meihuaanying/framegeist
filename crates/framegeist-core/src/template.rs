@@ -1255,18 +1255,56 @@ fn is_layer_id(s: &str) -> bool {
     !s.is_empty() && s.len() <= 64 && s.chars().all(|c| c.is_ascii_alphanumeric() || c == '-')
 }
 
-fn is_asset_path(s: &str) -> bool {
-    let stripped = s
-        .replace("{exif.brand_slug}", "sony")
-        .replace("{exif.lens_slug}", "sony")
-        .replace("{exif.lens_series}", "sony-gm");
+/// The only `{...}` tokens an asset path may carry.
+///
+/// v1.4.0 audit: the whitelist used to be applied by `.replace()` on the three
+/// known placeholders while the character class still admitted `{` and `}`, so
+/// `assets/{exif.make}` passed validation verbatim. `eval_asset_path` then
+/// substituted raw EXIF bytes (`Make` is attacker-controlled) into the path and
+/// the renderer read files outside `templates/assets/`. Asset paths must
+/// therefore interpolate *only* slugs the engine normalises to a known set.
+const ASSET_PATH_TOKENS: [&str; 3] = [
+    "{exif.brand_slug}",
+    "{exif.lens_slug}",
+    "{exif.lens_series}",
+];
+
+/// Values substituted while validating, chosen so the resulting path keeps the
+/// shape of a real one.
+const ASSET_PATH_TOKEN_SAMPLES: [&str; 3] = ["sony", "sony", "sony-gm"];
+
+pub fn is_asset_path(s: &str) -> bool {
+    // Reject any brace pair that is not one of the whitelisted tokens.
+    let mut probe = s;
+    while let Some(open) = probe.find('{') {
+        let after = &probe[open + 1..];
+        let close = match after.find('}') {
+            Some(c) => c,
+            None => return false,
+        };
+        let token = &after[..close];
+        match ASSET_PATH_TOKENS
+            .iter()
+            .position(|t| &t[1..t.len() - 1] == token)
+        {
+            Some(_) => probe = &after[close + 1..],
+            None => return false,
+        }
+    }
+    if probe.contains('{') || probe.contains('}') {
+        return false;
+    }
+    let stripped = ASSET_PATH_TOKENS
+        .iter()
+        .zip(ASSET_PATH_TOKEN_SAMPLES)
+        .fold(s.to_string(), |acc, (tok, sample)| acc.replace(tok, sample));
     (stripped.starts_with("@builtin/")
         || stripped.starts_with("@user/")
         || stripped.starts_with("assets/"))
         && stripped.len() <= 200
-        && stripped.chars().all(|c| {
-            c.is_ascii_alphanumeric() || matches!(c, '/' | '.' | '_' | '{' | '}' | '-' | '@')
-        })
+        && stripped
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || matches!(c, '/' | '.' | '_' | '-' | '@'))
         && !stripped.contains("..")
 }
 
@@ -1278,7 +1316,17 @@ pub fn eval_asset_path(path: &str, info: &crate::exif::ExifInfo) -> Option<Strin
         let after = &rest[open + 1..];
         let close = after.find('}')?;
         let token = &after[..close];
-        let key = token.strip_prefix("exif.")?;
+        // v1.4.0 audit: only the three slug placeholders are interpolable. Any
+        // other `{exif.*}` token used to resolve through `ExifInfo::get`, which
+        // hands back raw EXIF bytes (`Make`, `Model`, `Lens`, ...). Those are
+        // camera-supplied strings, so they are the injection point: a template
+        // could name `assets/{exif.make}` and read outside the asset root.
+        let key = match token {
+            "exif.brand_slug" => "brand_slug",
+            "exif.lens_slug" => "lens_slug",
+            "exif.lens_series" => "lens_series",
+            _ => return None,
+        };
         let val = info.get(key)?;
         if val.is_empty() {
             return None;
@@ -1288,6 +1336,11 @@ pub fn eval_asset_path(path: &str, info: &crate::exif::ExifInfo) -> Option<Strin
         rest = &after[close + 1..];
     }
     out.push_str(rest);
+    // Defensive: even a whitelisted slug must not carry separators, and the
+    // finished path must not escape the asset root.
+    if out.split('/').any(|seg| seg == ".." || seg.contains('\\')) {
+        return None;
+    }
     Some(out)
 }
 
@@ -1429,6 +1482,18 @@ fn validate_info_block(ib: &InfoBlock, canvas: &Canvas) -> Result<()> {
                 "infoBlock.lines[{i}].expr must not be empty"
             )));
         }
+        // v1.4.0 audit fix: `validate_exprs` only walks text layers, so info-block
+        // lines reached the renderer unvalidated and `text_fit::block_lines` fed them
+        // straight to `eval_expr_locale` -- where `if_empty(exif.model, )` and
+        // `fmt(')` sliced out of range and panicked the whole render. Validate them
+        // against the same whitelist grammar here, at load time. `validate_info_expr`
+        // (not `validate_expr`) because a line may join several expressions with
+        // ` · `, which 28 shipped templates do.
+        crate::sandbox::validate_info_expr(&line.expr).map_err(|e| {
+            Error::SchemaViolation(format!(
+                "infoBlock.lines[{i}].expr is not a valid expression: {e}"
+            ))
+        })?;
         if let Some(role) = &line.role {
             if !matches!(role.as_str(), "display" | "support" | "detail") {
                 return Err(Error::SchemaViolation(format!(
