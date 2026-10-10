@@ -12,4 +12,4 @@
 // ES module (`sw.js` is registered without `{type:"module"}`), so it reaches the
 // value through `importScripts`, while `app.js` reaches the same global through a
 // side-effect import.
-self.FG_VERSION = "1.4.0";
+self.FG_VERSION = "1.5.0";
