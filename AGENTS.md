@@ -78,7 +78,20 @@
 > $env:FG_CDP_PORT=9241; node tools/e2e-audit.mjs target/e2e-shots
 > $env:FG_CDP_PORT=9241; node tools/perf-audit.mjs
 > ```
-> ⚠️ **GitHub `PATCH /git/refs` 返回 404 不代表没有写权限**：同值 PATCH 恒返回 200，指向旧提交返回 422。真正的区分是「目标提交的树是否含 `.github/`」——缺少 `workflow` scope 时，含 `.github/` 的 ref 更新一律被拒并伪装成 404。远端 `.github/workflows` 因此缺失，CI / Pages / 自动发版都不触发；补齐 scope 后从 tag `v1.4.0` 取回 `release.yml`（blob `148acea6…`）即可恢复。
+> ⚠️ **`PATCH /git/refs` 返回 404 不代表没有写权限**：同值 PATCH 恒返回 200，指向旧提交返回 422。真正的判别是「目标提交的树是否含 `.github/`」——缺 `workflow` scope 时，含 `.github/` 的 ref 更新一律被拒并**伪装成 404**；`POST /git/refs` 同理。
+>
+> ⚠️ **远端 `.github/workflows` 当前缺失**（本次修复无法携带，否则整棵提交被拒）。后果：CI、Pages、自动发版都不触发，发布必须本地进行。**恢复步骤**（需要含 `workflow` scope 的 token）：
+> ```bash
+> # 1. 取回 v1.5.0 之前的 workflow（仍可从 tag v1.4.0 读到）
+> gh api repos/meihuaanying/framegeist/contents/.github/workflows/release.yml?ref=v1.4.0 --jq .content \
+>   | node -e "const b=[];process.stdin.on('data',c=>b.push(c)).on('end',()=>process.stdout.write(Buffer.from(b.join('').trim(),'base64')))" > .github/workflows/release.yml
+> # 2. 用带 workflow scope 的 token 推回（git push 或 GitHub Desktop，API 会被拒）
+> git push origin HEAD:main
+> ```
+>
+> 发布链工具（**不要重写**，v1.4.0 的残缺树就是重写的产物）：
+> - `node tools/publish-tree.mjs <ref> <branch> <message-file> [--dry]` — 经 Git Data API 发布已提交的树；**分支只在构造出的根树与 `git rev-parse <ref>^{tree}` 逐路径相符后才移动**，自动跳过 `.github/**`、按 sha 复用未改目录、blob 一律取 `git cat-file blob` 字节（工作区是 CRLF 会污染远端）。
+> - `node tools/stage-release.mjs v1.5.0` — 按 release 工作流打包六资产；要求安装包版本唯一匹配（bundle 目录会累积历史安装包），并断言模板包与仓库的 204 套完全一致、`update.json` 计数相符。
 
 ## 项目一句话
 
