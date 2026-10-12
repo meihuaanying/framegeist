@@ -2131,6 +2131,22 @@ function buildSavedTemplate(name) {
   }
   const id = `user-${slugify(name)}-${Math.random().toString(36).slice(2, 6)}`;
   base.meta = { ...base.meta, id, name, author: base.meta.author ?? "user", license: "CC0-1.0", version: "0.1.0", minEngineVersion: "0.1.0" };
+  // The look is baked into this file, so the override layer must not apply it a
+  // second time. A fresh template has no stored overrides, and `loadOverrides`
+  // falls back to `settings.*` for those -- which re-scales the baked font size
+  // (a template saved at defaultFontSize 1.2 renders at 1.44, then 1.728, once
+  // per save/open round trip) and overwrites the baked family with whatever the
+  // global selector currently says. `saveOverrides` drops an entry that equals
+  // the defaults, which would land us back on `settings.*`, so pin the identity
+  // with an explicit marker instead.
+  saveOverrides(id, {
+    fontSizeScale: 1,
+    paddingScale: 1,
+    useColor: false,
+    textColor: "#111111",
+    fontFamily: "",
+    baked: true,
+  });
   return { id, obj: base };
 }
 

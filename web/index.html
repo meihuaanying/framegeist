@@ -66,7 +66,7 @@
         <div data-i18n="drop.main">拖入照片，或点击选择</div>
         <div class="hint" data-i18n="drop.hint">JPEG / PNG / WebP / TIFF / HEIC（HEIC 首次解码需联网一次）；拼图模式可多选</div>
       </label>
-      <input type="file" id="fileInput" accept="image/*,.heic,.heif" multiple hidden>
+      <input type="file" id="fileInput" accept="image/*,.heic,.heif" multiple hidden aria-hidden="true">
       <div class="file-meta" id="fileMeta"></div>
       <div class="sample-row" id="sampleRow"></div>
     </div>
@@ -181,7 +181,7 @@
           <button class="btn small ghost" id="uploadBg" style="width:auto;padding:0 10px" data-i18n="canvas.uploadBg">上传背景图</button>
         </div>
         <p class="muted hidden" id="eyedropperHint" data-i18n="canvas.eyedropperHint">点击画布取样颜色</p>
-        <input type="file" id="bgFile" accept="image/*" hidden>
+        <input type="file" id="bgFile" accept="image/*" hidden aria-hidden="true">
         <div class="field" style="margin-top:8px">
           <label><span data-i18n="canvas.margin">边距</span><b id="marginVal">0%</b></label>
           <input type="range" id="marginRange" min="0" max="0.5" step="0.005" value="0" data-i18n-aria-label="canvas.margin">
@@ -271,7 +271,7 @@
           <label><span data-i18n="frame.rotation">旋转</span><b id="frameRotationVal">0°</b></label>
           <input type="range" id="frameRotation" min="-180" max="180" step="1" value="0" data-i18n-aria-label="frame.rotation">
         </div>
-        <input type="file" id="frameFile" accept="image/png" hidden>
+        <input type="file" id="frameFile" accept="image/png" hidden aria-hidden="true">
       </div>
     </details>
 
@@ -365,7 +365,7 @@
             <button class="btn small" id="uploadLogo" data-i18n="brand.uploadCustom">上传自定义</button>
             <button class="btn small ghost" id="clearLogo" data-i18n="canvas.clearBg">清除</button>
           </div>
-          <input type="file" id="logoFile" accept="image/*" hidden>
+          <input type="file" id="logoFile" accept="image/*" hidden aria-hidden="true">
         </div>
         <div class="field" style="margin-top:10px">
           <label><span data-i18n="insert.preset">文字样式预设</span></label>
@@ -381,7 +381,7 @@
             <option value="seal" data-i18n="insert.presetSeal">朱文印章</option>
           </select>
         </div>
-        <input type="file" id="imgInsertFile" accept="image/*" hidden>
+        <input type="file" id="imgInsertFile" accept="image/*" hidden aria-hidden="true">
       </div>
     </details>
 
@@ -415,7 +415,7 @@
         <div style="display:flex;gap:6px">
           <select id="fontSelect" style="flex:1" data-i18n-aria-label="tweak.font"></select>
           <button class="btn small" id="uploadFont" style="width:auto;padding:0 10px" data-i18n="tweak.uploadFont">上传字体</button>
-          <input type="file" id="fontFile" accept=".ttf,.otf" hidden>
+          <input type="file" id="fontFile" accept=".ttf,.otf" hidden aria-hidden="true">
         </div>
         <button class="btn small ghost" id="resetTweaks" style="margin-top:8px" data-i18n="tweak.reset">重置微调</button>
       </div>
@@ -462,7 +462,7 @@
           </div>
         </div>
         <button class="btn small ghost" id="importTemplate" style="margin-top:6px" data-i18n="exifEdit.import">导入 .fgt</button>
-        <input type="file" id="fgtFile" accept=".fgt,.json,.zip" hidden>
+        <input type="file" id="fgtFile" accept=".fgt,.json,.zip" hidden aria-hidden="true">
       </div>
     </details>
 

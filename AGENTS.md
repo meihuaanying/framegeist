@@ -29,8 +29,8 @@
 > | Clippy | `cargo clippy --workspace --all-targets -- -D warnings` | clean | ✅ 已进 |
 > | 单元/集成测试 | `cargo test --release --workspace` | 全 ok | ✅ 已进 |
 > | 视觉基线 | `node tools/visual-regression.mjs` | `408/408`，**禁止 `--update`** | ❌ 未进 |
-> | E2E | `FG_CDP_PORT=9237 node tools/e2e-audit.mjs target/e2e-shots` | `299/299` | ❌ 未进 |
-> | 性能 | `FG_CDP_PORT=9237 node tools/perf-audit.mjs` | `4/4` | ❌ 未进 |
+> | E2E | `FG_CDP_PORT=9241 node tools/e2e-audit.mjs target/e2e-shots` | `302/302` | ❌ 未进 |
+> | perf | `FG_CDP_PORT=9241 node tools/perf-audit.mjs` | `4/4` | ❌ 未进 |
 >
 > ⚠️ 两个纪律：① **视觉基线禁止 `--update`**——改基线必须是一次显式、被记录的动作；② 改 Rust 源码后跑任何 JS 门禁前，先 `cargo build --release --workspace`（`validate-templates.mjs` 是 shell out 调 `target/release/framegeist.exe`，只编 core 会拿到旧二进制）。
 >
@@ -70,6 +70,15 @@
 > 🔧 **环境速查**：本地预览 `node tools/serve.mjs 8350`（8101–8200 为 Windows 排除端口）；E2E `FG_CDP_PORT=9237 node tools/e2e-audit.mjs docs/reports/v0.9.0`；**wasm 重建请用 `node tools/wasm-build.mjs`**（cargo +simd128 → wasm-bindgen → wasm-opt -O2 → smoke）；样片重渲 `node tools/gen-samples.mjs`；视觉回归 `node tools/visual-regression.mjs`（重生成基线需 `--update` 并记录原因）；字形门禁 `node tools/check-glyph-coverage.mjs`；UI 对比度 `node tools/check-ui-contrast.mjs`；i18n 门禁 `node tools/check-i18n.mjs`；品牌色门禁 `node tools/check-brand-colors.mjs`；模板排版 `node tools/apply-v090-typography.mjs`（幂等 1.3.0）；字体管线 `node tools/fetch-fonts.mjs --fetch`（SHA256 pin 在 `tools/font-pins.json`）；push 代理不可用时加 `-c "http.https://github.com/.proxy="`，发布推送用 `node tools/gh-api-push.mjs`。
 >
 > ⚠️ **v0.7.0 工程备注**：字体源（可变字体/发布包，~650MB）在 `templates/assets/fonts/source/`（gitignored、**不入分发**，M5 打包需排除）；模板重排脚本 `tools/apply-v070-typography.mjs`（幂等，`--force` 可重放）；对比图工具 `tools/make-compare-sheets.mjs`（before 快照在 `.cache/v061-samples/`）。
+> ✅ **v1.5.0 已发布（2026-10-11）**：模板沙箱加固（infoBlock 表达式校验 + panic 根治 / 资产路径白名单与包含性 / `check` 穿越与 scheme 加严 / 自由拼图像素预算）+ Web 8 项（Observer 泄漏、保存丢编辑、SW 二次请求、`{tplName}`、灯箱竞态、i18n 崩溃、硬编码字符串、可访问性 77 处）+ 加固 8 项（饱和加法 / EXIF 边界 / `scrub_ranges` 降复杂度 / 逃生口收口 / 版本同源 / manifest 图标 / 桌面路径校验 / 门禁 runner）+ 保存模板不再被全局设置二次施加外观。E2E **302/302**、perf **4/4**、门禁全绿、视觉基线 **408/408 零漂移**。发布说明 `docs/releases/v1.5.0.md`。
+>
+> ⚠️ **E2E / perf 必须用隔离的 headless Edge**：`FG_CDP_PORT=9237` 是日常浏览器的调试端口，连上去会操作用户自己的标签页，整个审计作废。改用固定 profile 起无头实例：
+> ```powershell
+> Start-Process "$env:ProgramFiles (x86)\Microsoft\Edge\Application\msedge.exe" -ArgumentList "--headless=new","--remote-debugging-port=9241","--user-data-dir=D:\FrameGeist\target\edge-cdp-profile","--no-first-run","--no-default-browser-check","http://localhost:8350/web/"
+> $env:FG_CDP_PORT=9241; node tools/e2e-audit.mjs target/e2e-shots
+> $env:FG_CDP_PORT=9241; node tools/perf-audit.mjs
+> ```
+> ⚠️ **GitHub `PATCH /git/refs` 返回 404 不代表没有写权限**：同值 PATCH 恒返回 200，指向旧提交返回 422。真正的区分是「目标提交的树是否含 `.github/`」——缺少 `workflow` scope 时，含 `.github/` 的 ref 更新一律被拒并伪装成 404。远端 `.github/workflows` 因此缺失，CI / Pages / 自动发版都不触发；补齐 scope 后从 tag `v1.4.0` 取回 `release.yml`（blob `148acea6…`）即可恢复。
 
 ## 项目一句话
 
